@@ -2,6 +2,7 @@ package fr.army.events;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -23,9 +24,9 @@ public class PlayerChat implements Listener {
             return;
         }
 
-        App.instance.getLogger().info("Chat 2");
         Player player = event.getPlayer();
-        PlayerInteractEvent.getHandlerList().unregister(this);
+        PlayerInteractEvent.getHandlerList();
+        HandlerList.unregisterAll(this);
         player.sendMessage("Goood");
     }
 }
