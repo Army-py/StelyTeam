@@ -8,6 +8,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import fr.army.App;
 
 public class InventoryClick implements Listener{
+    public static Listener listener;
     
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event){
@@ -21,7 +22,8 @@ public class InventoryClick implements Listener{
         if (event.getCurrentItem().getItemMeta().getDisplayName().equals(App.config.getString("createTeam.itemName"))){
             player.closeInventory();
             
-            // player.openInventory(App.teamManager.createTeamInventory());
+            listener = new PlayerChat(player.getName());
+            App.instance.getServer().getPluginManager().registerEvents(listener, App.instance);
         }
     }
 }
