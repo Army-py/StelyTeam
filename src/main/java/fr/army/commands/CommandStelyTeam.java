@@ -4,26 +4,20 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.Inventory;
 
 import fr.army.App;
-import fr.army.events.PlayerChat;
 import fr.army.utils.InventoryGenerator;
 
-
-
 public class CommandStelyTeam implements CommandExecutor {
+    // private PlayerChat playerChat;
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(sender instanceof Player){
             Player player = (Player) sender;
             
-            System.out.println(App.playersCreateTeam.toString());
             if(App.playersCreateTeam.contains(player.getName())){
-                App.playersCreateTeam.remove(player.getName());
-                player.sendMessage("Vous avez annulé la création de team");
                 return true;
             }
 

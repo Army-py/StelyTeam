@@ -11,8 +11,8 @@ sql:
 
 
 # Nombre maximum de caracteres dans les noms de team
-teamNameLimit: 12
-teamPrefixLimit: 12
+teamNameMaxLength: 12
+teamPrefixMaxLength: 12
 
 
 # Prix des différentes actions
@@ -68,9 +68,9 @@ admin:
     lore:
       - "§aMenu du membre de"
       - "§ala team"
-  back:
-    itemName: "§5§lRetour"
-    itemType: ARROW
+  close:
+    itemName: "§5§lFermer"
+    itemType: BARRIER
     slot: 26
 
 

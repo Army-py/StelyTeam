@@ -33,19 +33,30 @@ public class PlayerChat implements Listener {
         Player player = event.getPlayer();
 
         String message = event.getMessage();
-        teamInfos.add(message);
-        
-        player.sendMessage("Goood");
-        count ++;
-        if(count == 2){
-            createTeam();
-            App.playersCreateTeam.remove(App.playersCreateTeam.indexOf(playername));
-            HandlerList.unregisterAll(this);
+
+        System.out.println(count);
+        if(message.length() > App.config.getInt("teamNameMaxLength")){
+            if(count == 0){
+                player.sendMessage("Le nom de team est trop long");
+                count--;
+            }else if (count == 1){
+                player.sendMessage("Le préfixe de team est trop long");
+                count--;
+            }
+        }else{
+            teamInfos.add(message);
+
+            if(count == 0){
+                player.sendMessage("Envoie le préfixe de team");
+            }else if (count == 1){
+                player.sendMessage("Team créé !");
+                App.sqlManager.insertTeam(teamInfos.get(0), teamInfos.get(1), playername);
+                App.playersCreateTeam.remove(App.playersCreateTeam.indexOf(playername));
+                HandlerList.unregisterAll(this);
+            }else{
+                count = -1;
+            }
         }
-    }
-
-
-    private void createTeam(){
-        App.sqlManager.insertTeam(teamInfos.get(0), teamInfos.get(1), playername);
+        count ++;
     }
 }
