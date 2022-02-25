@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Objects;
 
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -17,6 +18,8 @@ public class App extends JavaPlugin {
     public static App instance;
     public static YamlConfiguration config;
     public static SQLManager sqlManager;
+
+    public static ArrayList<String> playersCreateTeam = new ArrayList<String>();
 
 
     @Override

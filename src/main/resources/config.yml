@@ -50,7 +50,7 @@ createTeam:
   itemType: RED_BANNER
   slot: 13
   lore: 
-    - "§aPrix : %createTeam%€"
+    - "§aPrix : %price%€"
 
 
 admin:

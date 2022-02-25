@@ -1,6 +1,9 @@
 package fr.army.utils;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -16,8 +19,6 @@ public class InventoryGenerator {
 	String nom;
 	Inventory inventaire;
 
-	HashMap<Integer, ItemStack> items;
-
 	
 	public static Inventory createTeamInventory() {
 		Integer slots = 27;
@@ -28,12 +29,36 @@ public class InventoryGenerator {
         Integer slot = App.config.getInt("createTeam.slot");
         Material material = Material.getMaterial(App.config.getString("createTeam.itemType"));
         String name = App.config.getString("createTeam.itemName");
+        List<String> lore = App.config.getStringList("createTeam.lore");
 
-        inventory.setItem(slot, ItemBuilder.getItem(material, name));
+        Integer createTeamPrice = App.config.getInt("prices.createTeam");
+
+        Collections.replaceAll(lore, "%price%", createTeamPrice.toString());
+
+        inventory.setItem(slot, ItemBuilder.getItem(material, name, lore));
 		
 		return inventory;
 	}
 
+
+    public static Inventory createAdminInventory() {
+        Integer slots = 27;
+        Inventory inventory = Bukkit.createInventory(null, slots, App.config.getString("inventoriesName.admin"));
+
+        emptyCases(inventory, slots);
+
+        for(String str : App.config.getConfigurationSection("admin").getKeys(false)){
+            Integer slot = App.config.getInt("admin."+str+".slot");
+            Material material = Material.getMaterial(App.config.getString("admin."+str+".itemType"));
+            String name = App.config.getString("admin."+str+".itemName");
+            if(App.config.getStringList("admin."+str+".lore").size() > 0){
+                inventory.setItem(slot, ItemBuilder.getItem(material, name, App.config.getStringList("admin."+str+".lore")));
+            }else{
+                inventory.setItem(slot, ItemBuilder.getItem(material, name, null));
+            }
+        }
+        return inventory;
+    }
 
 	// public void createParticleInventory() {
 	// 	Integer slots = App.config.getInt("inventories.particles.slots");

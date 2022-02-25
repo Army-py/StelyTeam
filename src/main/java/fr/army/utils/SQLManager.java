@@ -134,7 +134,7 @@ public class SQLManager {
     public void insertTeam(String teamID, String teamPrefix, String owner){
         if(isConnected()){
             try {
-                PreparedStatement queryTeam = connection.prepareStatement("INSERT INTO teams (ID_team, prefixteam, owner, money, datecrration, nivraux, teamcompte) VALUES (?, ?, ?, ?, ?, ?, ?)");
+                PreparedStatement queryTeam = connection.prepareStatement("INSERT INTO teams (ID_team, prefixteam, owner, money, datecreation, niveaux, teamcompte) VALUES (?, ?, ?, ?, ?, ?, ?)");
                 queryTeam.setString(1, teamID);
                 queryTeam.setString(2, teamPrefix);
                 queryTeam.setString(3, owner);
