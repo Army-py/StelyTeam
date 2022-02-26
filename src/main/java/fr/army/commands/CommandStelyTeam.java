@@ -20,12 +20,18 @@ public class CommandStelyTeam implements CommandExecutor {
             if(App.playersCreateTeam.contains(player.getName())){
                 return true;
             }
-
-            if(!App.sqlManager.isMember(player.getName())){
-                Inventory inventory = InventoryGenerator.createTeamInventory();
-                player.openInventory(inventory);
-            }else if(App.sqlManager.isOwner(player.getName())){
+            
+            if(App.sqlManager.isOwner(player.getName())){
                 Inventory inventory = InventoryGenerator.createAdminInventory();
+                player.openInventory(inventory);
+            }else if (App.sqlManager.isMember(player.getName())){
+                Inventory inventory = InventoryGenerator.createMemberInventory();
+                player.openInventory(inventory);
+            }else if (App.sqlManager.isAdmin(player.getName())){
+                Inventory inventory = InventoryGenerator.createAdminInventory();
+                player.openInventory(inventory);
+            }else{
+                Inventory inventory = InventoryGenerator.createTeamInventory();
                 player.openInventory(inventory);
             }
         }

@@ -2,6 +2,8 @@ package fr.army.events;
 
 
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -34,15 +36,12 @@ public class PlayerChat implements Listener {
 
         String message = event.getMessage();
 
-        System.out.println(count);
-        if(message.length() > App.config.getInt("teamNameMaxLength")){
-            if(count == 0){
-                player.sendMessage("Le nom de team est trop long");
-                count--;
-            }else if (count == 1){
-                player.sendMessage("Le préfixe de team est trop long");
-                count--;
-            }
+        if(count == 0 && nameTeamIsTooLong(message)){
+            player.sendMessage("Le nom de team est trop long");
+            count--;
+        }else if(count == 1 && prefixTeamIsTooLong(message)){
+            player.sendMessage("Le préfixe de team est trop long");
+            count--;
         }else{
             teamInfos.add(message);
 
@@ -58,5 +57,19 @@ public class PlayerChat implements Listener {
             }
         }
         count ++;
+    }
+
+    private boolean nameTeamIsTooLong(String teamName){
+        return teamName.length() > App.config.getInt("teamNameMaxLength");
+    }
+
+    private boolean prefixTeamIsTooLong(String prefixTeam){
+        Pattern pattern = Pattern.compile("§.");
+        Matcher matcher = pattern.matcher(prefixTeam);
+        int colors = 0;
+        while (matcher.find()) {
+            colors++;
+        }
+        return prefixTeam.length() - colors * pattern.pattern().length() > App.config.getInt("teamPrefixMaxLength");
     }
 }

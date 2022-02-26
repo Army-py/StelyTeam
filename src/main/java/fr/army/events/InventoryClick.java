@@ -4,8 +4,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.Inventory;
 
 import fr.army.App;
+import fr.army.utils.InventoryGenerator;
 
 public class InventoryClick implements Listener{    
     @EventHandler
@@ -19,10 +21,16 @@ public class InventoryClick implements Listener{
         Player player = (Player) event.getWhoClicked();
         if (event.getCurrentItem().getItemMeta().getDisplayName().equals(App.config.getString("createTeam.itemName"))){
             player.closeInventory();
-            App.playersCreateTeam.add(event.getWhoClicked().getName());
+            App.playersCreateTeam.add(player.getName());
             player.sendMessage("Envoie un nom de team");
 
             App.instance.getServer().getPluginManager().registerEvents(new PlayerChat(player.getName()), App.instance);
+        }else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(App.config.getString("admin.manage.itemName"))){
+            Inventory inventory = InventoryGenerator.createManageInventory();
+            player.openInventory(inventory);
+        }else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(App.config.getString("admin.member.itemName"))){
+            Inventory inventory = InventoryGenerator.createMemberInventory();
+            player.openInventory(inventory);
         }
     }
 }

@@ -83,8 +83,27 @@ public class SQLManager {
     public boolean isMember(String playername){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("SELECT ID_pseudo FROM pseudos WHERE ID_pseudo = ?");
+                PreparedStatement query = connection.prepareStatement("SELECT ID_pseudo FROM pseudos WHERE ID_pseudo = ? AND confiance = ?");
                 query.setString(1, playername);
+                query.setInt(2, 0);
+                ResultSet result = query.executeQuery();
+                boolean isParticipant = result.next();
+                query.close();
+                return isParticipant;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+
+    public boolean isAdmin(String playername){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT ID_pseudo FROM pseudos WHERE ID_pseudo = ? AND confiance = ?");
+                query.setString(1, playername);
+                query.setInt(2, 1);
                 ResultSet result = query.executeQuery();
                 boolean isParticipant = result.next();
                 query.close();

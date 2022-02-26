@@ -1,9 +1,13 @@
 package fr.army.utils;
 
+import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.function.UnaryOperator;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -29,11 +33,13 @@ public class InventoryGenerator {
         Integer slot = App.config.getInt("createTeam.slot");
         Material material = Material.getMaterial(App.config.getString("createTeam.itemType"));
         String name = App.config.getString("createTeam.itemName");
-        List<String> lore = App.config.getStringList("createTeam.lore");
+        List<String> lore = new ArrayList<>();
 
         Integer createTeamPrice = App.config.getInt("prices.createTeam");
 
-        Collections.replaceAll(lore, "%price%", createTeamPrice.toString());
+        for (String loreLine : App.config.getStringList("createTeam.lore")) {
+            lore.add(loreLine.replace("%price%", NumberFormat.getNumberInstance(Locale.US).format(createTeamPrice)));
+        }
 
         inventory.setItem(slot, ItemBuilder.getItem(material, name, lore));
 		
@@ -53,6 +59,46 @@ public class InventoryGenerator {
             String name = App.config.getString("admin."+str+".itemName");
             if(App.config.getStringList("admin."+str+".lore").size() > 0){
                 inventory.setItem(slot, ItemBuilder.getItem(material, name, App.config.getStringList("admin."+str+".lore")));
+            }else{
+                inventory.setItem(slot, ItemBuilder.getItem(material, name, null));
+            }
+        }
+        return inventory;
+    }
+
+
+    public static Inventory createManageInventory() {
+        Integer slots = 54;
+        Inventory inventory = Bukkit.createInventory(null, slots, App.config.getString("inventoriesName.manage"));
+
+        emptyCases(inventory, slots);
+
+        for(String str : App.config.getConfigurationSection("manage").getKeys(false)){
+            Integer slot = App.config.getInt("manage."+str+".slot");
+            Material material = Material.getMaterial(App.config.getString("manage."+str+".itemType"));
+            String name = App.config.getString("manage."+str+".itemName");
+            if(App.config.getStringList("manage."+str+".lore").size() > 0){
+                inventory.setItem(slot, ItemBuilder.getItem(material, name, App.config.getStringList("manage."+str+".lore")));
+            }else{
+                inventory.setItem(slot, ItemBuilder.getItem(material, name, null));
+            }
+        }
+        return inventory;
+    }
+
+
+    public static Inventory createMemberInventory() {
+        Integer slots = 54;
+        Inventory inventory = Bukkit.createInventory(null, slots, App.config.getString("inventoriesName.member"));
+
+        emptyCases(inventory, slots);
+
+        for(String str : App.config.getConfigurationSection("member").getKeys(false)){
+            Integer slot = App.config.getInt("member."+str+".slot");
+            Material material = Material.getMaterial(App.config.getString("member."+str+".itemType"));
+            String name = App.config.getString("member."+str+".itemName");
+            if(App.config.getStringList("member."+str+".lore").size() > 0){
+                inventory.setItem(slot, ItemBuilder.getItem(material, name, App.config.getStringList("member."+str+".lore")));
             }else{
                 inventory.setItem(slot, ItemBuilder.getItem(material, name, null));
             }
