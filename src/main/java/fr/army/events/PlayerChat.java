@@ -50,7 +50,7 @@ public class PlayerChat implements Listener {
             }else if (count == 1){
                 player.sendMessage("Team créé !");
                 App.sqlManager.insertTeam(teamInfos.get(0), teamInfos.get(1), playername);
-                App.playersCreateTeam.remove(App.playersCreateTeam.indexOf(playername));
+                App.playersCreateTeam.remove(playername);
                 HandlerList.unregisterAll(this);
             }else{
                 count = -1;

@@ -19,14 +19,25 @@ public class InventoryClick implements Listener{
         event.setCancelled(true);
 
         Player player = (Player) event.getWhoClicked();
-        if (event.getCurrentItem().getItemMeta().getDisplayName().equals(App.config.getString("createTeam.itemName"))){
-            player.closeInventory();
-            App.playersCreateTeam.add(player.getName());
-            player.sendMessage("Envoie un nom de team");
 
-            App.instance.getServer().getPluginManager().registerEvents(new PlayerChat(player.getName()), App.instance);
+        if (event.getCurrentItem().getItemMeta().getDisplayName().equals(App.config.getString("confirmInventory.confirm.itemName"))){
+            if (App.playersCreateTeam.contains(player.getName())){
+                player.closeInventory();
+                player.sendMessage("Envoie un nom de team");
+                App.instance.getServer().getPluginManager().registerEvents(new PlayerChat(player.getName()), App.instance);
+            }
+        }else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(App.config.getString("confirmInventory.cancel.itemName"))){
+            if (App.playersCreateTeam.contains(player.getName())){
+                App.playersCreateTeam.remove(player.getName());
+                Inventory inventory = InventoryGenerator.createTeamInventory();
+                player.openInventory(inventory);
+            }
+        }else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(App.config.getString("createTeam.itemName"))){
+            Inventory confirmInventory = InventoryGenerator.createConfirmInventory();
+            player.openInventory(confirmInventory);
+            App.playersCreateTeam.add(player.getName());            
         }else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(App.config.getString("admin.manage.itemName"))){
-            Inventory inventory = InventoryGenerator.createManageInventory();
+            Inventory inventory = InventoryGenerator.createManageInventory(player.getName());
             player.openInventory(inventory);
         }else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(App.config.getString("admin.member.itemName"))){
             Inventory inventory = InventoryGenerator.createMemberInventory();

@@ -43,6 +43,7 @@ inventoriesName:
   teamMembers: "§5§lMembres"
   upgradeTotalMembers: "§5§lAméliorer le nombre de membres"
   manageTeamMoney: "§5§lGérer l'argent de la team"
+  confirmInventory: "§5§lConfirmation"
 
 
 createTeam:
@@ -75,49 +76,6 @@ admin:
 
 
 manage:
-  editName:
-    itemName: "§5§lModifier le nom"
-    itemType: PAPER
-    slot: 32
-    rank: 2
-    lore:
-      - "§aModifier le nom unique"
-      - "§ade la team"
-      - "§aPrix : %editTeam%€"
-  editPrefix:
-    itemName: "§5§lModifier le préfixe"
-    itemType: NAMETAG
-    slot: 41
-    rank: 2
-    lore:
-      - "§aModifier le nom de la"
-      - "§ateam qui s'affiche dans"
-      - "§ale tchat"
-      - "§aPrix : %editTeam%€"
-  editOwner:
-    itemName: "§5§lChanger de créateur"
-    itemType: DIAMOND
-    slot: 16
-    rank: 2
-    lore:
-      - "§aModifier le créateur"
-      - "§ade la team"
-  addAdmin:
-    itemName: "§5§lAjouter un admin"
-    itemType: GOLD_INGOT
-    slot: 25
-    rank: 2
-    lore:
-      - "§aAjouter un admin à"
-      - "§ala team"
-  removeAdmin:
-    itemName: "§5§lRetirer un admin"
-    itemType: RAW_GOLD
-    slot: 34
-    rank: 2
-    lore:
-      - "§aRetirer un admin à"
-      - "§ala team"
   addMember:
     itemName: "§5§lAjouter un membre"
     itemType: IRON_INGOT
@@ -166,16 +124,59 @@ manage:
     lore:
       - "§aAméliorer le nombre de"
       - "§amembres dans la team"
+  editName:
+    itemName: "§5§lModifier le nom"
+    itemType: PAPER
+    slot: 31
+    rank: 2
+    lore:
+      - "§aModifier le nom unique"
+      - "§ade la team"
+      - "§aPrix : %editTeam%€"
+  editPrefix:
+    itemName: "§5§lModifier le préfixe"
+    itemType: NAME_TAG
+    slot: 40
+    rank: 2
+    lore:
+      - "§aModifier le nom de la"
+      - "§ateam qui s'affiche dans"
+      - "§ale tchat"
+      - "§aPrix : %editTeam%€"
+  editOwner:
+    itemName: "§5§lChanger de créateur"
+    itemType: DIAMOND
+    slot: 15
+    rank: 2
+    lore:
+      - "§aModifier le créateur"
+      - "§ade la team"
+  addAdmin:
+    itemName: "§5§lAjouter un admin"
+    itemType: GOLD_INGOT
+    slot: 24
+    rank: 2
+    lore:
+      - "§aAjouter un admin à"
+      - "§ala team"
+  removeAdmin:
+    itemName: "§5§lRetirer un admin"
+    itemType: RAW_GOLD
+    slot: 33
+    rank: 2
+    lore:
+      - "§aRetirer un admin à"
+      - "§ala team"
   removeTeam:
     itemName: "§5§lSupprimer la team"
-    itemType: COMPOST
+    itemType: COMPOSTER
     slot: 42
     rank: 2
     lore:
       - "§aSupprimer la team"
-  back:
-    itemName: "§5§lRetour"
-    itemType: ARROW
+  close:
+    itemName: "§5§lFermer"
+    itemType: BARRIER
     slot: 53
 
 
@@ -206,8 +207,12 @@ member:
       - "§ade la team"
   leaveTeam:
     itemName: "§5§lQuitter la team"
-    itemType: BARRIER
+    itemType: DARK_OAK_DOOR
     slot: 15
+  close:
+    itemName: "§5§lFermer"
+    itemType: BARRIER
+    slot: 26
 
 
 upgradeTotalMembers:
@@ -289,3 +294,14 @@ manageTeamMoney:
     itemType: PAPER
     slot: 15
     money: 500000
+
+
+confirmInventory:
+  confirm:
+    itemName: "§a§lConfirmer"
+    itemType: LIME_STAINED_GLASS_PANE
+    slots: [13]
+  cancel:
+    itemName: "§c§lAnnuler"
+    itemType: RED_STAINED_GLASS_PANE
+    slots: [9, 10, 11, 12, 14, 15, 16, 17]

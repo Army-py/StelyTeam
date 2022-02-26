@@ -2,12 +2,8 @@ package fr.army.utils;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.function.UnaryOperator;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -67,7 +63,7 @@ public class InventoryGenerator {
     }
 
 
-    public static Inventory createManageInventory() {
+    public static Inventory createManageInventory(String playername) {
         Integer slots = 54;
         Inventory inventory = Bukkit.createInventory(null, slots, App.config.getString("inventoriesName.manage"));
 
@@ -75,12 +71,22 @@ public class InventoryGenerator {
 
         for(String str : App.config.getConfigurationSection("manage").getKeys(false)){
             Integer slot = App.config.getInt("manage."+str+".slot");
-            Material material = Material.getMaterial(App.config.getString("manage."+str+".itemType"));
-            String name = App.config.getString("manage."+str+".itemName");
-            if(App.config.getStringList("manage."+str+".lore").size() > 0){
-                inventory.setItem(slot, ItemBuilder.getItem(material, name, App.config.getStringList("manage."+str+".lore")));
-            }else{
-                inventory.setItem(slot, ItemBuilder.getItem(material, name, null));
+            if (App.sqlManager.isOwner(playername)){
+                Material material = Material.getMaterial(App.config.getString("manage."+str+".itemType"));
+                String name = App.config.getString("manage."+str+".itemName");
+                if(App.config.getStringList("manage."+str+".lore").size() > 0){
+                    inventory.setItem(slot, ItemBuilder.getItem(material, name, App.config.getStringList("manage."+str+".lore")));
+                }else{
+                    inventory.setItem(slot, ItemBuilder.getItem(material, name, null));
+                }
+            }else if (App.config.getInt("manage."+str+".rank") == 1 && App.sqlManager.isAdmin(playername)){
+                Material material = Material.getMaterial(App.config.getString("manage."+str+".itemType"));
+                String name = App.config.getString("manage."+str+".itemName");
+                if(App.config.getStringList("manage."+str+".lore").size() > 0){
+                    inventory.setItem(slot, ItemBuilder.getItem(material, name, App.config.getStringList("manage."+str+".lore")));
+                }else{
+                    inventory.setItem(slot, ItemBuilder.getItem(material, name, null));
+                }
             }
         }
         return inventory;
@@ -88,7 +94,7 @@ public class InventoryGenerator {
 
 
     public static Inventory createMemberInventory() {
-        Integer slots = 54;
+        Integer slots = 27;
         Inventory inventory = Bukkit.createInventory(null, slots, App.config.getString("inventoriesName.member"));
 
         emptyCases(inventory, slots);
@@ -100,6 +106,24 @@ public class InventoryGenerator {
             if(App.config.getStringList("member."+str+".lore").size() > 0){
                 inventory.setItem(slot, ItemBuilder.getItem(material, name, App.config.getStringList("member."+str+".lore")));
             }else{
+                inventory.setItem(slot, ItemBuilder.getItem(material, name, null));
+            }
+        }
+        return inventory;
+    }
+
+
+    public static Inventory createConfirmInventory() {
+        Integer slots = 27;
+        Inventory inventory = Bukkit.createInventory(null, slots, App.config.getString("inventoriesName.confirmInventory"));
+
+        emptyCases(inventory, slots);
+
+        for(String str : App.config.getConfigurationSection("confirmInventory").getKeys(false)){
+            Material material = Material.getMaterial(App.config.getString("confirmInventory."+str+".itemType"));
+            String name = App.config.getString("confirmInventory."+str+".itemName");
+
+            for(Integer slot : App.config.getIntegerList("confirmInventory."+str+".slots")){
                 inventory.setItem(slot, ItemBuilder.getItem(material, name, null));
             }
         }
