@@ -11,7 +11,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import fr.army.commands.CommandStelyTeam;
-import fr.army.events.InventoryClick;
+import fr.army.events.InventoryClickManager;
 import fr.army.utils.SQLManager;
 
 public class App extends JavaPlugin {
@@ -20,6 +20,10 @@ public class App extends JavaPlugin {
     public static SQLManager sqlManager;
 
     public static ArrayList<String> playersCreateTeam = new ArrayList<String>();
+
+    public static ArrayList<String> playersJoinTeam = new ArrayList<String>();
+    public static ArrayList<String> teamsJoinTeam = new ArrayList<String>();
+    
 
 
     @Override
@@ -39,7 +43,7 @@ public class App extends JavaPlugin {
         }
         
         getCommand("stelyteam").setExecutor(new CommandStelyTeam());
-        getServer().getPluginManager().registerEvents(new InventoryClick(), this);
+        getServer().getPluginManager().registerEvents(new InventoryClickManager(), this);
 
         getLogger().info("StelyTeam ON");
     }

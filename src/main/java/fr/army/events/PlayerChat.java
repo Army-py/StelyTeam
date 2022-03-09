@@ -10,8 +10,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.inventory.Inventory;
 
 import fr.army.App;
+import fr.army.utils.InventoryGenerator;
 
 
 public class PlayerChat implements Listener {

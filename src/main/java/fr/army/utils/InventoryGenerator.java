@@ -71,22 +71,16 @@ public class InventoryGenerator {
 
         for(String str : App.config.getConfigurationSection("manage").getKeys(false)){
             Integer slot = App.config.getInt("manage."+str+".slot");
+            Material material = Material.getMaterial(App.config.getString("manage."+str+".itemType"));
+            String name = App.config.getString("manage."+str+".itemName");
             if (App.sqlManager.isOwner(playername)){
-                Material material = Material.getMaterial(App.config.getString("manage."+str+".itemType"));
-                String name = App.config.getString("manage."+str+".itemName");
                 if(App.config.getStringList("manage."+str+".lore").size() > 0){
                     inventory.setItem(slot, ItemBuilder.getItem(material, name, App.config.getStringList("manage."+str+".lore")));
-                }else{
-                    inventory.setItem(slot, ItemBuilder.getItem(material, name, null));
-                }
+                }else inventory.setItem(slot, ItemBuilder.getItem(material, name, null));
             }else if (App.config.getInt("manage."+str+".rank") == 1 && App.sqlManager.isAdmin(playername)){
-                Material material = Material.getMaterial(App.config.getString("manage."+str+".itemType"));
-                String name = App.config.getString("manage."+str+".itemName");
                 if(App.config.getStringList("manage."+str+".lore").size() > 0){
                     inventory.setItem(slot, ItemBuilder.getItem(material, name, App.config.getStringList("manage."+str+".lore")));
-                }else{
-                    inventory.setItem(slot, ItemBuilder.getItem(material, name, null));
-                }
+                }else inventory.setItem(slot, ItemBuilder.getItem(material, name, null));
             }
         }
         return inventory;
@@ -130,44 +124,7 @@ public class InventoryGenerator {
         return inventory;
     }
 
-	// public void createParticleInventory() {
-	// 	Integer slots = App.config.getInt("inventories.particles.slots");
-	// 	Inventory inventaire = Bukkit.createInventory(null, slots, nom);
-	// 	this.inventaire = inventaire;
-	// 	for(int i = 0; i < slots; i++) {
-	// 		inventaire.setItem(i, vitredeco());
-	// 	}
 
-	// 	for(String str : App.config.getConfigurationSection("particles").getKeys(false)){
-	// 		Integer slot = App.config.getInt("particles."+str+".slot");
-	// 		Material material = Material.getMaterial(App.config.getString("particles."+str+".itemType"));
-	// 		String name = App.config.getString("particles."+str+".itemName");
-
-	// 		inventaire.setItem(slot, ItemBuilder.getItem(material, name));
-	// 	}
-	// 	player.openInventory(inventaire);
-	// }
-
-
-	// public void createSoundInventory() {
-	// 	Integer slots = App.config.getInt("inventories.sounds.slots");
-	// 	Inventory inventaire = Bukkit.createInventory(null, slots, nom);
-	// 	this.inventaire = inventaire;
-	// 	for(int i = 0; i < slots; i++) {
-	// 		inventaire.setItem(i, vitredeco());
-	// 	}
-		
-	// 	for(String str : App.config.getConfigurationSection("sounds").getKeys(false)){
-	// 		Integer slot = App.config.getInt("sounds."+str+".slot");
-	// 		Material material = Material.getMaterial(App.config.getString("sounds."+str+".itemType"));
-	// 		String name = App.config.getString("sounds."+str+".itemName");
-
-	// 		inventaire.setItem(slot, ItemBuilder.getItem(material, name));
-	// 	}
-	// 	player.openInventory(inventaire);
-	// }
-
-	
 	public static void emptyCases(Inventory inventory, Integer slots) {
 		ItemStack item = new ItemStack(Material.getMaterial(App.config.getString("emptyCase")), 1);
 		ItemMeta meta = item.getItemMeta();

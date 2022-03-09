@@ -178,6 +178,7 @@ manage:
     itemName: "§5§lFermer"
     itemType: BARRIER
     slot: 53
+    rank: 1
 
 
 member:

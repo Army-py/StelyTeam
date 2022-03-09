@@ -8,9 +8,6 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
-
-import org.bukkit.entity.Player;
 
 import fr.army.App;
 
@@ -313,6 +310,24 @@ public class SQLManager {
                 e.printStackTrace();
             }
         }
+    }
+
+
+    public String getTeamIDFromOwner(String owner){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT ID_team FROM teams WHERE owner = ?");
+                query.setString(1, owner);
+                ResultSet result = query.executeQuery();
+                if(result.next()){
+                    return result.getString("ID_team");
+                }
+                query.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 
 
