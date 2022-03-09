@@ -17,15 +17,10 @@ public class CreateTeamInventory {
 
 
     public void onInventoryClick(){
-        if(event.getCurrentItem() == null || !App.config.getConfigurationSection("inventoriesName").getValues(true).containsValue(event.getView().getTitle())){
-            return;
-        }
-
-        event.setCancelled(true);
-
         Player player = (Player) event.getWhoClicked();
+        String itemName = event.getCurrentItem().getItemMeta().getDisplayName();
 
-        if (event.getCurrentItem().getItemMeta().getDisplayName().equals(App.config.getString("createTeam.itemName"))){
+        if (itemName.equals(App.config.getString("createTeam.itemName"))){
             Inventory confirmInventory = InventoryGenerator.createConfirmInventory();
             player.openInventory(confirmInventory);
             App.playersCreateTeam.add(player.getName());

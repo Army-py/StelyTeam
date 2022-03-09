@@ -16,22 +16,18 @@ public class MemberInventory {
     }
 
     public void onInventoryClick(){
-        if(event.getCurrentItem() == null || !App.config.getConfigurationSection("inventoriesName").getValues(true).containsValue(event.getView().getTitle())){
-            return;
-        }
-
-        event.setCancelled(true);
-
         Player player = (Player) event.getWhoClicked();
+        String itemName = event.getCurrentItem().getItemMeta().getDisplayName();
+        String inventoryName = event.getView().getTitle();
 
         // Fermeture ou retour en arrière de l'inventaire
         if (App.sqlManager.isOwner(player.getName()) || App.sqlManager.isAdmin(player.getName())){
-            if (event.getCurrentItem().getItemMeta().getDisplayName().equals(App.config.getString("member.close.itemName")) && event.getView().getTitle().equals(App.config.getString("inventoriesName.member"))){
+            if (itemName.equals(App.config.getString("member.close.itemName")) && inventoryName.equals(App.config.getString("inventoriesName.member"))){
                 Inventory inventory = InventoryGenerator.createAdminInventory();
                 player.openInventory(inventory);
             }
         }else if (App.sqlManager.isMember(player.getName())){
-            if (event.getCurrentItem().getItemMeta().getDisplayName().equals(App.config.getString("member.close.itemName")) && event.getView().getTitle().equals(App.config.getString("inventoriesName.member"))){
+            if (itemName.equals(App.config.getString("member.close.itemName")) && inventoryName.equals(App.config.getString("inventoriesName.member"))){
                 player.closeInventory();
             }
         }

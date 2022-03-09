@@ -17,22 +17,17 @@ public class ConfirmInventory {
 
 
     public void onInventoryClick(){
-        if(event.getCurrentItem() == null || !App.config.getConfigurationSection("inventoriesName").getValues(true).containsValue(event.getView().getTitle())){
-            return;
-        }
-
-        event.setCancelled(true);
-
         Player player = (Player) event.getWhoClicked();
+        String itemName = event.getCurrentItem().getItemMeta().getDisplayName();
 
         // Ouverture des inventaires
-        if (event.getCurrentItem().getItemMeta().getDisplayName().equals(App.config.getString("confirmInventory.confirm.itemName"))){
+        if (itemName.equals(App.config.getString("confirmInventory.confirm.itemName"))){
             if (App.playersCreateTeam.contains(player.getName())){
                 player.closeInventory();
                 player.sendMessage("Envoie un nom de team");
                 App.instance.getServer().getPluginManager().registerEvents(new PlayerChat(player.getName()), App.instance);
             }
-        }else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(App.config.getString("confirmInventory.cancel.itemName"))){
+        }else if (itemName.equals(App.config.getString("confirmInventory.cancel.itemName"))){
             if (App.playersCreateTeam.contains(player.getName())){
                 App.playersCreateTeam.remove(player.getName());
                 Inventory inventory = InventoryGenerator.createTeamInventory();
@@ -41,7 +36,7 @@ public class ConfirmInventory {
         }
 
 
-        if (event.getCurrentItem().getItemMeta().getDisplayName().equals(App.config.getString("confirmInventory.confirm.itemName"))){
+        if (itemName.equals(App.config.getString("confirmInventory.confirm.itemName"))){
             if (App.playersJoinTeam.contains(player.getName())){
                 player.closeInventory();
                 App.sqlManager.insertMember(player.getName(), App.teamsJoinTeam.get(App.playersJoinTeam.indexOf(player.getName())));
@@ -49,7 +44,7 @@ public class ConfirmInventory {
                 App.playersJoinTeam.remove(player.getName());
                 App.teamsJoinTeam.remove(App.playersJoinTeam.indexOf(player.getName()));
             }
-        }else if (event.getCurrentItem().getItemMeta().getDisplayName().equals(App.config.getString("confirmInventory.cancel.itemName"))){
+        }else if (itemName.equals(App.config.getString("confirmInventory.cancel.itemName"))){
             if (App.playersJoinTeam.contains(player.getName())){
                 App.playersJoinTeam.remove(player.getName());
                 App.teamsJoinTeam.remove(App.playersJoinTeam.indexOf(player.getName()));
