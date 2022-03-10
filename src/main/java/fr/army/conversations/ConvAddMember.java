@@ -1,4 +1,4 @@
-package fr.army.events;
+package fr.army.conversations;
 
 import org.bukkit.Bukkit;
 import org.bukkit.conversations.ConversationContext;
@@ -7,6 +7,7 @@ import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
+import fr.army.App;
 import fr.army.utils.InventoryGenerator;
 
 public class ConvAddMember extends StringPrompt {
@@ -20,6 +21,7 @@ public class ConvAddMember extends StringPrompt {
 
         Inventory inventory = InventoryGenerator.createConfirmInventory();
         player.openInventory(inventory);
+        App.playersJoinTeam.add(player.getName());
         return null;
     }
 

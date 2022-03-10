@@ -7,7 +7,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
 import fr.army.App;
-import fr.army.events.ConvAddMember;
+import fr.army.conversations.ConvAddMember;
 import fr.army.utils.InventoryGenerator;
 
 
@@ -35,6 +35,7 @@ public class ManageInventory {
         // Liaisin des items avec leur fonction
         if (itemName.equals(App.config.getString("manage.addMember.itemName"))){
             player.closeInventory();
+            App.teamsJoinTeam.add(App.sqlManager.getTeamIDFromOwner(player.getName()));
             getNameInput(player);
         }
     }
