@@ -35,10 +35,7 @@ public class ConfirmInventory {
                 Inventory inventory = InventoryGenerator.createTeamInventory();
                 player.openInventory(inventory);
             }
-        }
-
-
-        if (App.playersJoinTeam.contains(player.getName())){
+        }else if (App.playersJoinTeam.contains(player.getName())){
             if (itemName.equals(App.config.getString("confirmInventory.confirm.itemName"))){
                 player.closeInventory();
                 App.sqlManager.insertMember(player.getName(), App.teamsJoinTeam.get(App.playersJoinTeam.indexOf(player.getName())));
@@ -49,6 +46,37 @@ public class ConfirmInventory {
                 player.closeInventory();
                 App.teamsJoinTeam.remove(App.playersJoinTeam.indexOf(player.getName()));
                 App.playersJoinTeam.remove(player.getName());
+            }
+        }else if (App.teamsKickTeam.contains(App.sqlManager.getTeamIDFromOwner(player.getName()))){
+            String teamID = App.sqlManager.getTeamIDFromOwner(player.getName());
+            String member = App.playersKickTeam.get(App.teamsKickTeam.indexOf(teamID));
+            if (itemName.equals(App.config.getString("confirmInventory.confirm.itemName"))){
+                player.closeInventory();
+                App.sqlManager.removeMember(member, teamID);
+                player.sendMessage("Tu as retiré " + member + " de la team");
+                App.playersKickTeam.remove(member);
+                App.teamsKickTeam.remove(teamID);
+            }else if (itemName.equals(App.config.getString("confirmInventory.cancel.itemName"))){
+                player.closeInventory();
+                App.playersKickTeam.remove(member);
+                App.teamsKickTeam.remove(teamID);
+            }
+        }else if (App.playersBuyTeamBank.contains(player.getName())){
+            if (itemName.equals(App.config.getString("confirmInventory.confirm.itemName"))){
+                player.closeInventory();
+                String teamID = App.sqlManager.getTeamIDFromPlayer(player.getName());
+                App.sqlManager.updateUnlockTeamBank(teamID);
+                player.sendMessage("Tu as debloqué le compte de la team");
+                App.playersBuyTeamBank.remove(player.getName());
+
+                Inventory inventory = InventoryGenerator.createManageInventory(player.getName());
+                player.openInventory(inventory);
+            }else if (itemName.equals(App.config.getString("confirmInventory.cancel.itemName"))){
+                player.closeInventory();
+                App.playersBuyTeamBank.remove(player.getName());
+
+                Inventory inventory = InventoryGenerator.createManageInventory(player.getName());
+                player.openInventory(inventory);
             }
         }
     }

@@ -1,9 +1,6 @@
 package fr.army.utils;
 
-import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -29,15 +26,9 @@ public class InventoryGenerator {
         Integer slot = App.config.getInt("createTeam.slot");
         Material material = Material.getMaterial(App.config.getString("createTeam.itemType"));
         String name = App.config.getString("createTeam.itemName");
-        List<String> lore = new ArrayList<>();
+        List<String> lore = App.config.getStringList("createTeam.lore");
 
-        Integer createTeamPrice = App.config.getInt("prices.createTeam");
-
-        for (String loreLine : App.config.getStringList("createTeam.lore")) {
-            lore.add(loreLine.replace("%price%", NumberFormat.getNumberInstance(Locale.US).format(createTeamPrice)));
-        }
-
-        inventory.setItem(slot, ItemBuilder.getItem(material, name, lore));
+        inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, false));
 		
 		return inventory;
 	}
@@ -53,11 +44,8 @@ public class InventoryGenerator {
             Integer slot = App.config.getInt("admin."+str+".slot");
             Material material = Material.getMaterial(App.config.getString("admin."+str+".itemType"));
             String name = App.config.getString("admin."+str+".itemName");
-            if(App.config.getStringList("admin."+str+".lore").size() > 0){
-                inventory.setItem(slot, ItemBuilder.getItem(material, name, App.config.getStringList("admin."+str+".lore")));
-            }else{
-                inventory.setItem(slot, ItemBuilder.getItem(material, name, null));
-            }
+            List<String> lore = App.config.getStringList("admin."+str+".lore");
+            inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, false));
         }
         return inventory;
     }
@@ -73,14 +61,20 @@ public class InventoryGenerator {
             Integer slot = App.config.getInt("manage."+str+".slot");
             Material material = Material.getMaterial(App.config.getString("manage."+str+".itemType"));
             String name = App.config.getString("manage."+str+".itemName");
+            List<String> lore = App.config.getStringList("manage."+str+".lore");
+            ItemStack item = ItemBuilder.getItem(material, name, lore, false);
+            
+            if (str.equals("teamBank")){
+                String teamID = App.sqlManager.getTeamIDFromPlayer(playername);
+                item = ItemBuilder.getItem(material, name, lore, App.sqlManager.hasUnlockedTeamBank(teamID));
+            }
+            
+
             if (App.sqlManager.isOwner(playername)){
-                if(App.config.getStringList("manage."+str+".lore").size() > 0){
-                    inventory.setItem(slot, ItemBuilder.getItem(material, name, App.config.getStringList("manage."+str+".lore")));
-                }else inventory.setItem(slot, ItemBuilder.getItem(material, name, null));
-            }else if (App.config.getInt("manage."+str+".rank") == 1 && App.sqlManager.isAdmin(playername)){
-                if(App.config.getStringList("manage."+str+".lore").size() > 0){
-                    inventory.setItem(slot, ItemBuilder.getItem(material, name, App.config.getStringList("manage."+str+".lore")));
-                }else inventory.setItem(slot, ItemBuilder.getItem(material, name, null));
+                inventory.setItem(slot, item);
+            }
+            if (App.config.getInt("manage."+str+".rank") == 1){
+                inventory.setItem(slot,  item);
             }
         }
         return inventory;
@@ -97,11 +91,9 @@ public class InventoryGenerator {
             Integer slot = App.config.getInt("member."+str+".slot");
             Material material = Material.getMaterial(App.config.getString("member."+str+".itemType"));
             String name = App.config.getString("member."+str+".itemName");
-            if(App.config.getStringList("member."+str+".lore").size() > 0){
-                inventory.setItem(slot, ItemBuilder.getItem(material, name, App.config.getStringList("member."+str+".lore")));
-            }else{
-                inventory.setItem(slot, ItemBuilder.getItem(material, name, null));
-            }
+            List<String> lore = App.config.getStringList("member."+str+".lore");
+            
+            inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, false));
         }
         return inventory;
     }
@@ -116,9 +108,34 @@ public class InventoryGenerator {
         for(String str : App.config.getConfigurationSection("confirmInventory").getKeys(false)){
             Material material = Material.getMaterial(App.config.getString("confirmInventory."+str+".itemType"));
             String name = App.config.getString("confirmInventory."+str+".itemName");
+            List<String> lore = App.config.getStringList("confirmInventory."+str+".lore");
 
             for(Integer slot : App.config.getIntegerList("confirmInventory."+str+".slots")){
-                inventory.setItem(slot, ItemBuilder.getItem(material, name, null));
+                inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, false));
+            }
+        }
+        return inventory;
+    }
+
+
+    public static Inventory createUpgradeMembersInventory(String playername) {
+        Integer slots = 27;
+        String teamID = App.sqlManager.getTeamIDFromPlayer(playername);
+        Integer level = App.sqlManager.getTeamLevel(teamID);
+        Inventory inventory = Bukkit.createInventory(null, slots, App.config.getString("inventoriesName.upgradeTotalMembers"));
+
+        emptyCases(inventory, slots);
+
+        for(String str : App.config.getConfigurationSection("upgradeTotalMembers").getKeys(false)){
+            Integer slot = App.config.getInt("upgradeTotalMembers."+str+".slot");
+            Material material = Material.getMaterial(App.config.getString("upgradeTotalMembers."+str+".itemType"));
+            String name = App.config.getString("upgradeTotalMembers."+str+".itemName");
+            List<String> lore = App.config.getStringList("upgradeTotalMembers."+str+".lore");
+
+            if (level >= App.config.getInt("upgradeTotalMembers."+str+".level") && !str.equals("close")){
+                inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, true));
+            }else{
+                inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, false));
             }
         }
         return inventory;

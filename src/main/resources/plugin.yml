@@ -6,3 +6,4 @@ api-version: 1.16
 commands:
   stelyteam:
     description: "StelyTeam"
+    usage: "/stelyteam <option>"

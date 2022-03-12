@@ -95,12 +95,47 @@ public class SQLManager {
     }
 
 
+    public boolean isMemberInTeam(String playername, String team_id){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT ID_pseudo FROM pseudos WHERE ID_pseudo = ? AND ID_team = ?");
+                query.setString(1, playername);
+                query.setString(2, team_id);
+                ResultSet result = query.executeQuery();
+                boolean isParticipant = result.next();
+                query.close();
+                return isParticipant;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+
     public boolean isAdmin(String playername){
         if(isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("SELECT ID_pseudo FROM pseudos WHERE ID_pseudo = ? AND confiance = ?");
                 query.setString(1, playername);
                 query.setInt(2, 1);
+                ResultSet result = query.executeQuery();
+                boolean isParticipant = result.next();
+                query.close();
+                return isParticipant;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+
+    public boolean hasUnlockedTeamBank(String teamID){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT ID_team FROM teams WHERE ID_team = ? AND teamcompte = 1");
+                query.setString(1, teamID);
                 ResultSet result = query.executeQuery();
                 boolean isParticipant = result.next();
                 query.close();
@@ -281,6 +316,35 @@ public class SQLManager {
     }
 
 
+    public void updateUnlockTeamBank(String teamID){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("UPDATE teams SET teamcompte = ? WHERE ID_team = ?");
+                query.setInt(1, 1);
+                query.setString(2, teamID);
+                query.executeUpdate();
+                query.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    public void incrementTeamLevel(String teamID){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("UPDATE teams SET niveaux = niveaux + 1 WHERE ID_team = ?");
+                query.setString(1, teamID);
+                query.executeUpdate();
+                query.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
     public void setTeamAdmin(String teamID, String playername){
         if(isConnected()){
             try {
@@ -321,6 +385,42 @@ public class SQLManager {
                 ResultSet result = query.executeQuery();
                 if(result.next()){
                     return result.getString("ID_team");
+                }
+                query.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+
+    public String getTeamIDFromPlayer(String playername){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT ID_team FROM pseudos WHERE ID_pseudo = ?");
+                query.setString(1, playername);
+                ResultSet result = query.executeQuery();
+                if(result.next()){
+                    return result.getString("ID_team");
+                }
+                query.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+
+    public Integer getTeamLevel(String teamID){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT niveaux FROM teams WHERE ID_team = ?");
+                query.setString(1, teamID);
+                ResultSet result = query.executeQuery();
+                if(result.next()){
+                    return result.getInt("niveaux");
                 }
                 query.close();
             } catch (SQLException e) {

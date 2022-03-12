@@ -10,20 +10,24 @@ import java.util.Objects;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import fr.army.commands.CommandStelyTeam;
+import fr.army.commands.CmdStelyTeam;
 import fr.army.events.InventoryClickManager;
 import fr.army.utils.SQLManager;
+import fr.army.utils.SQLiteManager;
 
 public class App extends JavaPlugin {
     public static App instance;
     public static YamlConfiguration config;
     public static SQLManager sqlManager;
+    public static SQLiteManager sqliteManager;
 
     public static ArrayList<String> playersCreateTeam = new ArrayList<String>();
 
     public static ArrayList<String> playersJoinTeam = new ArrayList<String>();
     public static ArrayList<String> teamsJoinTeam = new ArrayList<String>();
-    
+    public static ArrayList<String> playersKickTeam = new ArrayList<String>();
+    public static ArrayList<String> teamsKickTeam = new ArrayList<String>();
+    public static ArrayList<String> playersBuyTeamBank = new ArrayList<String>();
 
 
     @Override
@@ -34,15 +38,19 @@ public class App extends JavaPlugin {
         config = initFile(this.getDataFolder(), "config.yml");
 
         App.sqlManager = new SQLManager();
+        App.sqliteManager = new SQLiteManager();
         try {
             sqlManager.connect();
+            sqliteManager.connect();
             this.getLogger().info("SQL connectée au plugin !");
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
             getServer().getPluginManager().disablePlugin(this);
         }
+        sqliteManager.createTables();
         
-        getCommand("stelyteam").setExecutor(new CommandStelyTeam());
+        getCommand("stelyteam").setExecutor(new CmdStelyTeam());
+        getCommand("stelyteam").setTabCompleter(new CmdStelyTeam());
         getServer().getPluginManager().registerEvents(new InventoryClickManager(), this);
 
         getLogger().info("StelyTeam ON");

@@ -10,7 +10,7 @@ import org.bukkit.inventory.Inventory;
 import fr.army.App;
 import fr.army.utils.InventoryGenerator;
 
-public class ConvAddMember extends StringPrompt {
+public class ConvEditTeamID extends StringPrompt {
 
     @Override
     public Prompt acceptInput(ConversationContext con, String answer) {

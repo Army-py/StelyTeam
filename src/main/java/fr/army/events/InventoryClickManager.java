@@ -10,6 +10,7 @@ import fr.army.events.InventoryClick.ConfirmInventory;
 import fr.army.events.InventoryClick.CreateTeamInventory;
 import fr.army.events.InventoryClick.ManageInventory;
 import fr.army.events.InventoryClick.MemberInventory;
+import fr.army.events.InventoryClick.UpgradeMembersInventory;
 
 
 public class InventoryClickManager implements Listener{    
@@ -30,6 +31,8 @@ public class InventoryClickManager implements Listener{
             new ManageInventory(event).onInventoryClick();
         }else if (event.getView().getTitle().equals(App.config.getString("inventoriesName.member"))){
             new MemberInventory(event).onInventoryClick();
+        }else if (event.getView().getTitle().equals(App.config.getString("inventoriesName.upgradeTotalMembers"))){
+            new UpgradeMembersInventory(event).onInventoryClick();
         }
     }
 }

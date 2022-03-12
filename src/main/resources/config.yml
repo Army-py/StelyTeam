@@ -41,7 +41,7 @@ inventoriesName:
   manage: "§5§lGérer la team"
   member: "§5§lMenu Membre"
   teamMembers: "§5§lMembres"
-  upgradeTotalMembers: "§5§lAméliorer le nombre de membres"
+  upgradeTotalMembers: "§5§lNombre de membres"
   manageTeamMoney: "§5§lGérer l'argent de la team"
   confirmInventory: "§5§lConfirmation"
 
@@ -51,7 +51,7 @@ createTeam:
   itemType: RED_BANNER
   slot: 13
   lore: 
-    - "§aPrix : %price%€"
+    - "§aPrix : 100,000€"
 
 
 admin:
@@ -115,7 +115,7 @@ manage:
     lore:
       - "§aCréer le compte banquaire"
       - "§ade la team"
-      - "§aPrix : %teamBank%"
+      - "§aPrix : 1,000,000€"
   updateMembers:
     itemName: "§5§lAjouter des places"
     itemType: TOTEM_OF_UNDYING
@@ -132,7 +132,7 @@ manage:
     lore:
       - "§aModifier le nom unique"
       - "§ade la team"
-      - "§aPrix : %editTeam%€"
+      - "§aPrix : 5,000€"
   editPrefix:
     itemName: "§5§lModifier le préfixe"
     itemType: NAME_TAG
@@ -142,7 +142,7 @@ manage:
       - "§aModifier le nom de la"
       - "§ateam qui s'affiche dans"
       - "§ale tchat"
-      - "§aPrix : %editTeam%€"
+      - "§aPrix : 5,000€"
   editOwner:
     itemName: "§5§lChanger de créateur"
     itemType: DIAMOND
@@ -201,7 +201,7 @@ member:
       - "§adans la team"
   removeTeamMoney:
     itemName: "§5§lRetrait d'argent"
-    itemType: GOLD_INGOT
+    itemType: PAPER
     slot: 14
     lore:
       - "§aRetirer de l'argent"
@@ -221,32 +221,41 @@ upgradeTotalMembers:
     itemName: "§5§l11 places"
     itemType: IRON_INGOT
     slot: 11
+    level: 1
     lore:
-      - "§aPrix : %upgradeLevelOne%€"
+      - "§aPrix : 2,500,000€"
   levelTwo:
     itemName: "§5§l12 places"
     itemType: GOLD_INGOT
     slot: 12
+    level: 2
     lore:
-      - "§aPrix : %upgradeLevelTwo%€"
+      - "§aPrix : 5,000,000€"
   levelThree:
     itemName: "§5§l13 places"
     itemType: DIAMOND
     slot: 13
+    level: 3
     lore:
-      - "§aPrix : %upgradeLevelThree%€"
+      - "§aPrix : 10,000,000€"
   levelFour:
     itemName: "§5§l14 places"
     itemType: EMERALD
     slot: 14
+    level: 4
     lore:
-      - "§aPrix : %upgradeLevelFour%€"
+      - "§aPrix : 15,000,000€"
   levelFive:
     itemName: "§5§l15 places"
     itemType: NETHERITE_INGOT
     slot: 15
+    level: 5
     lore:
-      - "§aPrix : %upgradeLevelFive%€"
+      - "§aPrix : 25,000,000€"
+  close:
+    itemName: "§5§lFermer"
+    itemType: BARRIER
+    slot: 26
 
 
 manageTeamMoney:
