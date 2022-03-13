@@ -1,4 +1,4 @@
-package fr.army.utils;
+package fr.army.stelyteam.utils;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import fr.army.App;
+import fr.army.stelyteam.App;
 
 public class SQLManager {
     

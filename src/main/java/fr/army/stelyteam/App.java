@@ -1,4 +1,4 @@
-package fr.army;
+package fr.army.stelyteam;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,10 +10,10 @@ import java.util.Objects;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import fr.army.commands.CmdStelyTeam;
-import fr.army.events.InventoryClickManager;
-import fr.army.utils.SQLManager;
-import fr.army.utils.SQLiteManager;
+import fr.army.stelyteam.commands.CmdStelyTeam;
+import fr.army.stelyteam.events.InventoryClickManager;
+import fr.army.stelyteam.utils.SQLManager;
+import fr.army.stelyteam.utils.SQLiteManager;
 
 public class App extends JavaPlugin {
     public static App instance;

@@ -1,4 +1,4 @@
-package fr.army.conversations;
+package fr.army.stelyteam.conversations;
 
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
@@ -6,8 +6,8 @@ import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
-import fr.army.App;
-import fr.army.utils.InventoryGenerator;
+import fr.army.stelyteam.App;
+import fr.army.stelyteam.utils.InventoryGenerator;
 
 public class ConvRemoveMember extends StringPrompt {
 

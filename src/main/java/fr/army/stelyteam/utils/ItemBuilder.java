@@ -1,4 +1,4 @@
-package fr.army.utils;
+package fr.army.stelyteam.utils;
 
 import java.util.List;
 

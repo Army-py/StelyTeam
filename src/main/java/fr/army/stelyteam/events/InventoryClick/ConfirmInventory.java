@@ -1,12 +1,12 @@
-package fr.army.events.InventoryClick;
+package fr.army.stelyteam.events.InventoryClick;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
-import fr.army.App;
-import fr.army.events.PlayerChat;
-import fr.army.utils.InventoryGenerator;
+import fr.army.stelyteam.App;
+import fr.army.stelyteam.events.PlayerChat;
+import fr.army.stelyteam.utils.InventoryGenerator;
 
 public class ConfirmInventory {
     private InventoryClickEvent event;

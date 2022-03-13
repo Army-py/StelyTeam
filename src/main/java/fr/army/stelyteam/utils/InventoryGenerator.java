@@ -1,4 +1,4 @@
-package fr.army.utils;
+package fr.army.stelyteam.utils;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import fr.army.App;
+import fr.army.stelyteam.App;
 
 public class InventoryGenerator {
     Player player;

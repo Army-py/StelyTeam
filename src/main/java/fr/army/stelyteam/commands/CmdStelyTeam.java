@@ -1,4 +1,4 @@
-package fr.army.commands;
+package fr.army.stelyteam.commands;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +13,8 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
-import fr.army.App;
-import fr.army.utils.InventoryGenerator;
+import fr.army.stelyteam.App;
+import fr.army.stelyteam.utils.InventoryGenerator;
 
 public class CmdStelyTeam implements CommandExecutor, TabCompleter {
     // private PlayerChat playerChat;

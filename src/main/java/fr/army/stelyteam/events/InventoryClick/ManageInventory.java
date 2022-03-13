@@ -1,4 +1,4 @@
-package fr.army.events.InventoryClick;
+package fr.army.stelyteam.events.InventoryClick;
 
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationFactory;
@@ -7,10 +7,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
-import fr.army.App;
-import fr.army.conversations.ConvAddMember;
-import fr.army.conversations.ConvRemoveMember;
-import fr.army.utils.InventoryGenerator;
+import fr.army.stelyteam.App;
+import fr.army.stelyteam.conversations.ConvAddMember;
+import fr.army.stelyteam.conversations.ConvRemoveMember;
+import fr.army.stelyteam.utils.InventoryGenerator;
 
 
 public class ManageInventory {

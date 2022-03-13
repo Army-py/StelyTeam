@@ -1,4 +1,4 @@
-package fr.army.utils;
+package fr.army.stelyteam.utils;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import fr.army.App;
+import fr.army.stelyteam.App;
 
 public class SQLiteManager {
     private String database;
