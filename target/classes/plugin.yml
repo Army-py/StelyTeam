@@ -1,9 +1,0 @@
-name: StelyTeam
-author: Army_
-version: "1.0"
-main: fr.army.App
-api-version: 1.16
-commands:
-  stelyteam:
-    description: "StelyTeam"
-    usage: "/stelyteam <option>"

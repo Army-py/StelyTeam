@@ -1,0 +1,11 @@
+# IDE configuration files and folders
+
+# VSCode
+/.vscode/
+
+# Idea
+/.idea/
+*.iml
+
+# Maven target folder
+/target/
