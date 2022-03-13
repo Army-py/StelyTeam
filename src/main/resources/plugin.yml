@@ -1,8 +1,8 @@
 name: StelyTeam
 author: Army_
-version: "1.0"
-main: fr.army.App
-api-version: 1.16
+version: "${project.version}"
+main: fr.army.stelyteam.StelyTeamPlugin
+api-version: "1.16"
 commands:
   stelyteam:
     description: "StelyTeam"
