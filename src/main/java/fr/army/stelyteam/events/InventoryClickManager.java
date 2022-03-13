@@ -5,12 +5,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.events.InventoryClick.AdminInventory;
-import fr.army.stelyteam.events.InventoryClick.ConfirmInventory;
-import fr.army.stelyteam.events.InventoryClick.CreateTeamInventory;
-import fr.army.stelyteam.events.InventoryClick.ManageInventory;
-import fr.army.stelyteam.events.InventoryClick.MemberInventory;
-import fr.army.stelyteam.events.InventoryClick.UpgradeMembersInventory;
+import fr.army.stelyteam.events.inventoryclick.AdminInventory;
+import fr.army.stelyteam.events.inventoryclick.ConfirmInventory;
+import fr.army.stelyteam.events.inventoryclick.CreateTeamInventory;
+import fr.army.stelyteam.events.inventoryclick.ManageInventory;
+import fr.army.stelyteam.events.inventoryclick.MemberInventory;
+import fr.army.stelyteam.events.inventoryclick.UpgradeMembersInventory;
 
 
 public class InventoryClickManager implements Listener{    

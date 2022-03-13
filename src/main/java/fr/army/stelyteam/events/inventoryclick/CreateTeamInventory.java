@@ -1,4 +1,4 @@
-package fr.army.stelyteam.events.InventoryClick;
+package fr.army.stelyteam.events.inventoryclick;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;

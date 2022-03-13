@@ -1,4 +1,4 @@
-package fr.army.stelyteam.events.InventoryClick;
+package fr.army.stelyteam.events.inventoryclick;
 
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationFactory;
