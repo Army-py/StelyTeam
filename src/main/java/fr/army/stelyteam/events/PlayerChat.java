@@ -1,18 +1,16 @@
 package fr.army.stelyteam.events;
 
 
-import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import fr.army.stelyteam.StelyTeamPlugin;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-import fr.army.stelyteam.StelyTeamPlugin;
-
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PlayerChat implements Listener {
     private String playername;
@@ -33,7 +31,6 @@ public class PlayerChat implements Listener {
         event.setCancelled(true);
 
         Player player = event.getPlayer();
-
         String message = event.getMessage();
 
         if(count == 0 && nameTeamIsTooLong(message)){

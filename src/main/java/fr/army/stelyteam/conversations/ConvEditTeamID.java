@@ -1,41 +1,36 @@
 package fr.army.stelyteam.conversations;
 
-import org.bukkit.Bukkit;
+import fr.army.stelyteam.StelyTeamPlugin;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-
-import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.utils.InventoryGenerator;
 
 public class ConvEditTeamID extends StringPrompt {
 
     @Override
     public Prompt acceptInput(ConversationContext con, String answer) {
-        Player player = Bukkit.getPlayer(answer);
-        if (player == null) {
-            // author.sendMessage("Ce joueur n'existe pas");
-            con.getForWhom().sendRawMessage("Ce joueur n'existe pas");
-            return null;
-        }
-        
-        if (StelyTeamPlugin.sqlManager.isMember(player.getName())) {
-            con.getForWhom().sendRawMessage("Ce joueur est déjà dans une team");
-            return null;
+        Player author = (Player) con.getForWhom();
+
+        if (nameTeamIsTooLong(answer)) {
+            con.getForWhom().sendRawMessage("Le nom est trop long");
+            return this;
         }
 
-        con.getForWhom().sendRawMessage("L'invitation a été envoyée");
-        Inventory inventory = InventoryGenerator.createConfirmInventory();
-        player.openInventory(inventory);
-        StelyTeamPlugin.playersJoinTeam.add(player.getName());
+        String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromOwner(author.getName());
+
+        con.getForWhom().sendRawMessage("Le nom a été changé par " + answer);
+        StelyTeamPlugin.sqlManager.updateTeamID(teamID, answer, author.getName());
         return null;
     }
 
     @Override
     public String getPromptText(ConversationContext arg0) {
-        return "Envoie le pseudo du joueur à ajouter";
+        return "Envoie le nouveau nom de team";
     }
 
+
+    private boolean nameTeamIsTooLong(String teamName){
+        return teamName.length() > StelyTeamPlugin.config.getInt("teamNameMaxLength");
+    }
 }

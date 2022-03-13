@@ -1,16 +1,17 @@
 package fr.army.stelyteam.events.inventoryclick;
 
+import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.conversations.ConvAddMember;
+import fr.army.stelyteam.conversations.ConvEditTeamID;
+import fr.army.stelyteam.conversations.ConvEditTeamPrefix;
+import fr.army.stelyteam.conversations.ConvRemoveMember;
+import fr.army.stelyteam.utils.InventoryGenerator;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationFactory;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
-
-import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.conversations.ConvAddMember;
-import fr.army.stelyteam.conversations.ConvRemoveMember;
-import fr.army.stelyteam.utils.InventoryGenerator;
 
 
 public class ManageInventory {
@@ -86,6 +87,12 @@ public class ManageInventory {
         }else if (itemName.equals(StelyTeamPlugin.config.getString("manage.updateMembers.itemName"))){
             Inventory inventory = InventoryGenerator.createUpgradeMembersInventory(player.getName());
             player.openInventory(inventory);
+        }else if (itemName.equals(StelyTeamPlugin.config.getString("manage.editName.itemName"))){
+            player.closeInventory();
+            getNameInput(player, new ConvEditTeamID());
+        }else if (itemName.equals(StelyTeamPlugin.config.getString("manage.editPrefix.itemName"))){
+            player.closeInventory();
+            getNameInput(player, new ConvEditTeamPrefix());
         }
     }
 
