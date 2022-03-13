@@ -7,7 +7,7 @@ import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
-import fr.army.stelyteam.App;
+import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.utils.InventoryGenerator;
 
 public class ConvAddMember extends StringPrompt {
@@ -21,7 +21,7 @@ public class ConvAddMember extends StringPrompt {
             return null;
         }
         
-        if (App.sqlManager.isMember(player.getName())) {
+        if (StelyTeamPlugin.sqlManager.isMember(player.getName())) {
             con.getForWhom().sendRawMessage("Ce joueur est déjà dans une team");
             return null;
         }
@@ -29,7 +29,7 @@ public class ConvAddMember extends StringPrompt {
         con.getForWhom().sendRawMessage("L'invitation a été envoyée");
         Inventory inventory = InventoryGenerator.createConfirmInventory();
         player.openInventory(inventory);
-        App.playersJoinTeam.add(player.getName());
+        StelyTeamPlugin.playersJoinTeam.add(player.getName());
         return null;
     }
 

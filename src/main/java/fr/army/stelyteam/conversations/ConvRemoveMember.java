@@ -6,7 +6,7 @@ import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
-import fr.army.stelyteam.App;
+import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.utils.InventoryGenerator;
 
 public class ConvRemoveMember extends StringPrompt {
@@ -14,15 +14,15 @@ public class ConvRemoveMember extends StringPrompt {
     @Override
     public Prompt acceptInput(ConversationContext con, String answer) {
         Player author = (Player) con.getForWhom();
-        String teamID = App.sqlManager.getTeamIDFromOwner(author.getName());
-        if (!App.sqlManager.isMemberInTeam(answer, teamID)){
+        String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromOwner(author.getName());
+        if (!StelyTeamPlugin.sqlManager.isMemberInTeam(answer, teamID)){
             con.getForWhom().sendRawMessage("Le joueur n'est pas dans ta team");
             return null;
         }
 
         Inventory inventory = InventoryGenerator.createConfirmInventory();
         author.openInventory(inventory);
-        App.playersKickTeam.add(answer);
+        StelyTeamPlugin.playersKickTeam.add(answer);
         return null;
     }
 

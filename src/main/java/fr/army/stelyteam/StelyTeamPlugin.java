@@ -15,8 +15,8 @@ import fr.army.stelyteam.events.InventoryClickManager;
 import fr.army.stelyteam.utils.SQLManager;
 import fr.army.stelyteam.utils.SQLiteManager;
 
-public class App extends JavaPlugin {
-    public static App instance;
+public class StelyTeamPlugin extends JavaPlugin {
+    public static StelyTeamPlugin instance;
     public static YamlConfiguration config;
     public static SQLManager sqlManager;
     public static SQLiteManager sqliteManager;
@@ -37,8 +37,8 @@ public class App extends JavaPlugin {
 
         config = initFile(this.getDataFolder(), "config.yml");
 
-        App.sqlManager = new SQLManager();
-        App.sqliteManager = new SQLiteManager();
+        StelyTeamPlugin.sqlManager = new SQLManager();
+        StelyTeamPlugin.sqliteManager = new SQLiteManager();
         try {
             sqlManager.connect();
             sqliteManager.connect();

@@ -9,7 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import fr.army.stelyteam.App;
+import fr.army.stelyteam.StelyTeamPlugin;
 
 public class SQLManager {
     
@@ -39,7 +39,7 @@ public class SQLManager {
 
     public void connect() throws ClassNotFoundException, SQLException{
         if(!isConnected()){
-            this.connection = DriverManager.getConnection("jdbc:sqlite:"+App.instance.getDataFolder().getAbsolutePath()+"/"+this.database);
+            this.connection = DriverManager.getConnection("jdbc:sqlite:"+ StelyTeamPlugin.instance.getDataFolder().getAbsolutePath()+"/"+this.database);
         }
     }
 

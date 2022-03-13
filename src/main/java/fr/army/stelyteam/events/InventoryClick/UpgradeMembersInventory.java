@@ -4,7 +4,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
-import fr.army.stelyteam.App;
+import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.utils.InventoryGenerator;
 
 
@@ -19,17 +19,17 @@ public class UpgradeMembersInventory {
         Player player = (Player) event.getWhoClicked();
         String itemName = event.getCurrentItem().getItemMeta().getDisplayName();
 
-        String teamID = App.sqlManager.getTeamIDFromPlayer(player.getName());
-        Integer level = App.sqlManager.getTeamLevel(teamID);
+        String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(player.getName());
+        Integer level = StelyTeamPlugin.sqlManager.getTeamLevel(teamID);
 
         
         // Gestion des items
-        if (!itemName.equals(App.config.getString("upgradeTotalMembers.close.itemName"))){
-            for(String str : App.config.getConfigurationSection("upgradeTotalMembers").getKeys(false)){
-                String name = App.config.getString("upgradeTotalMembers."+str+".itemName");
+        if (!itemName.equals(StelyTeamPlugin.config.getString("upgradeTotalMembers.close.itemName"))){
+            for(String str : StelyTeamPlugin.config.getConfigurationSection("upgradeTotalMembers").getKeys(false)){
+                String name = StelyTeamPlugin.config.getString("upgradeTotalMembers."+str+".itemName");
                 
-                if (itemName.equals(name) && level+1 == App.config.getInt("upgradeTotalMembers."+str+".level")){
-                    App.sqlManager.incrementTeamLevel(teamID);
+                if (itemName.equals(name) && level+1 == StelyTeamPlugin.config.getInt("upgradeTotalMembers."+str+".level")){
+                    StelyTeamPlugin.sqlManager.incrementTeamLevel(teamID);
                     player.sendMessage("Vous avez atteint le niveau "+(level+1));
 
                     Inventory inventory = InventoryGenerator.createUpgradeMembersInventory(player.getName());

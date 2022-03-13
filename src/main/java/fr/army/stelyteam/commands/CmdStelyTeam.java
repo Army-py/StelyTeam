@@ -13,7 +13,7 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
-import fr.army.stelyteam.App;
+import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.utils.InventoryGenerator;
 
 public class CmdStelyTeam implements CommandExecutor, TabCompleter {
@@ -24,18 +24,18 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
         if(sender instanceof Player){
             Player player = (Player) sender;
             
-            if(App.playersCreateTeam.contains(player.getName())){
+            if(StelyTeamPlugin.playersCreateTeam.contains(player.getName())){
                 return true;
             }
             
             if (args.length == 0){
-                if(App.sqlManager.isOwner(player.getName())){
+                if(StelyTeamPlugin.sqlManager.isOwner(player.getName())){
                     Inventory inventory = InventoryGenerator.createAdminInventory();
                     player.openInventory(inventory);
-                }else if (App.sqlManager.isMember(player.getName())){
+                }else if (StelyTeamPlugin.sqlManager.isMember(player.getName())){
                     Inventory inventory = InventoryGenerator.createMemberInventory();
                     player.openInventory(inventory);
-                }else if (App.sqlManager.isAdmin(player.getName())){
+                }else if (StelyTeamPlugin.sqlManager.isAdmin(player.getName())){
                     Inventory inventory = InventoryGenerator.createAdminInventory();
                     player.openInventory(inventory);
                 }else{
@@ -44,15 +44,15 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
                 }
             }else{
                 if (args[0].equals("home")){
-                    String teamID = App.sqlManager.getTeamIDFromOwner(player.getName());
-                    if (!App.sqliteManager.isSet(teamID)){
+                    String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromOwner(player.getName());
+                    if (!StelyTeamPlugin.sqliteManager.isSet(teamID)){
                         player.sendMessage("Le home de team n'est pas défini");
                     }else{
-                        World world = Bukkit.getWorld(App.sqliteManager.getWorld(teamID));
-                        double x = App.sqliteManager.getX(teamID);
-                        double y = App.sqliteManager.getY(teamID);
-                        double z = App.sqliteManager.getZ(teamID);
-                        float yaw = (float) App.sqliteManager.getYaw(teamID);
+                        World world = Bukkit.getWorld(StelyTeamPlugin.sqliteManager.getWorld(teamID));
+                        double x = StelyTeamPlugin.sqliteManager.getX(teamID);
+                        double y = StelyTeamPlugin.sqliteManager.getY(teamID);
+                        double z = StelyTeamPlugin.sqliteManager.getZ(teamID);
+                        float yaw = (float) StelyTeamPlugin.sqliteManager.getYaw(teamID);
                         Location location = new Location(world, x, y, z, yaw, 0);
                         player.teleport(location);
                         player.sendMessage("Téléportation au home");

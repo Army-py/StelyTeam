@@ -11,7 +11,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-import fr.army.stelyteam.App;
+import fr.army.stelyteam.StelyTeamPlugin;
 
 
 public class PlayerChat implements Listener {
@@ -25,7 +25,7 @@ public class PlayerChat implements Listener {
 
     @EventHandler
     public void PlayerChatEvent(AsyncPlayerChatEvent event){
-        App.instance.getLogger().info(playername);
+        StelyTeamPlugin.instance.getLogger().info(playername);
         if(!event.getPlayer().getName().equals(playername)){
             return;
         }
@@ -49,8 +49,8 @@ public class PlayerChat implements Listener {
                 player.sendMessage("Envoie le préfixe de team");
             }else if (count == 1){
                 player.sendMessage("Team créé !");
-                App.sqlManager.insertTeam(teamInfos.get(0), teamInfos.get(1), playername);
-                App.playersCreateTeam.remove(playername);
+                StelyTeamPlugin.sqlManager.insertTeam(teamInfos.get(0), teamInfos.get(1), playername);
+                StelyTeamPlugin.playersCreateTeam.remove(playername);
                 HandlerList.unregisterAll(this);
             }else{
                 count = -1;
@@ -60,7 +60,7 @@ public class PlayerChat implements Listener {
     }
 
     private boolean nameTeamIsTooLong(String teamName){
-        return teamName.length() > App.config.getInt("teamNameMaxLength");
+        return teamName.length() > StelyTeamPlugin.config.getInt("teamNameMaxLength");
     }
 
     private boolean prefixTeamIsTooLong(String prefixTeam){
@@ -70,6 +70,6 @@ public class PlayerChat implements Listener {
         while (matcher.find()) {
             colors++;
         }
-        return prefixTeam.length() - colors * pattern.pattern().length() > App.config.getInt("teamPrefixMaxLength");
+        return prefixTeam.length() - colors * pattern.pattern().length() > StelyTeamPlugin.config.getInt("teamPrefixMaxLength");
     }
 }

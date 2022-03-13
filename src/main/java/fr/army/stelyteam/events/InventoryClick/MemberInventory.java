@@ -4,7 +4,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
-import fr.army.stelyteam.App;
+import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.utils.InventoryGenerator;
 
 
@@ -21,13 +21,13 @@ public class MemberInventory {
         String inventoryName = event.getView().getTitle();
 
         // Fermeture ou retour en arrière de l'inventaire
-        if (App.sqlManager.isOwner(player.getName()) || App.sqlManager.isAdmin(player.getName())){
-            if (itemName.equals(App.config.getString("member.close.itemName")) && inventoryName.equals(App.config.getString("inventoriesName.member"))){
+        if (StelyTeamPlugin.sqlManager.isOwner(player.getName()) || StelyTeamPlugin.sqlManager.isAdmin(player.getName())){
+            if (itemName.equals(StelyTeamPlugin.config.getString("member.close.itemName")) && inventoryName.equals(StelyTeamPlugin.config.getString("inventoriesName.member"))){
                 Inventory inventory = InventoryGenerator.createAdminInventory();
                 player.openInventory(inventory);
             }
-        }else if (App.sqlManager.isMember(player.getName())){
-            if (itemName.equals(App.config.getString("member.close.itemName")) && inventoryName.equals(App.config.getString("inventoriesName.member"))){
+        }else if (StelyTeamPlugin.sqlManager.isMember(player.getName())){
+            if (itemName.equals(StelyTeamPlugin.config.getString("member.close.itemName")) && inventoryName.equals(StelyTeamPlugin.config.getString("inventoriesName.member"))){
                 player.closeInventory();
             }
         }

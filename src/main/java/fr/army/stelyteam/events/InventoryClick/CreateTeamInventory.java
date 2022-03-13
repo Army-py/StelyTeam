@@ -4,7 +4,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
-import fr.army.stelyteam.App;
+import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.utils.InventoryGenerator;
 
 
@@ -20,10 +20,10 @@ public class CreateTeamInventory {
         Player player = (Player) event.getWhoClicked();
         String itemName = event.getCurrentItem().getItemMeta().getDisplayName();
 
-        if (itemName.equals(App.config.getString("createTeam.itemName"))){
+        if (itemName.equals(StelyTeamPlugin.config.getString("createTeam.itemName"))){
             Inventory confirmInventory = InventoryGenerator.createConfirmInventory();
             player.openInventory(confirmInventory);
-            App.playersCreateTeam.add(player.getName());
+            StelyTeamPlugin.playersCreateTeam.add(player.getName());
         }
     }
 }
