@@ -259,15 +259,15 @@ public class SQLManager {
         if(isConnected()){
             try {
                 PreparedStatement queryTeam = connection.prepareStatement("UPDATE teams SET ID_team = ? WHERE ID_team = ? AND owner = ?");
-                queryTeam.setString(1, teamID);
-                queryTeam.setString(2, newTeamID);
+                queryTeam.setString(1, newTeamID);
+                queryTeam.setString(2, teamID);
                 queryTeam.setString(3, owner);
                 queryTeam.executeUpdate();
                 queryTeam.close();
 
                 PreparedStatement queryMember = connection.prepareStatement("UPDATE pseudos SET ID_team = ? WHERE ID_team = ?");
-                queryMember.setString(1, teamID);
-                queryMember.setString(2, newTeamID);
+                queryMember.setString(1, newTeamID);
+                queryMember.setString(2, teamID);
                 queryMember.executeUpdate();
                 queryMember.close();
             } catch (SQLException e) {
@@ -383,10 +383,12 @@ public class SQLManager {
                 PreparedStatement query = connection.prepareStatement("SELECT ID_team FROM teams WHERE owner = ?");
                 query.setString(1, owner);
                 ResultSet result = query.executeQuery();
+                String teamID = null;
                 if(result.next()){
-                    return result.getString("ID_team");
+                    teamID = result.getString("ID_team");
                 }
                 query.close();
+                return teamID;
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -401,10 +403,12 @@ public class SQLManager {
                 PreparedStatement query = connection.prepareStatement("SELECT ID_team FROM pseudos WHERE ID_pseudo = ?");
                 query.setString(1, playername);
                 ResultSet result = query.executeQuery();
+                String teamID = null;
                 if(result.next()){
-                    return result.getString("ID_team");
+                    teamID = result.getString("ID_team");
                 }
                 query.close();
+                return teamID;
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -419,10 +423,12 @@ public class SQLManager {
                 PreparedStatement query = connection.prepareStatement("SELECT niveaux FROM teams WHERE ID_team = ?");
                 query.setString(1, teamID);
                 ResultSet result = query.executeQuery();
+                Integer level = null;
                 if(result.next()){
-                    return result.getInt("niveaux");
+                    level = result.getInt("niveaux");
                 }
                 query.close();
+                return level;
             } catch (SQLException e) {
                 e.printStackTrace();
             }

@@ -142,6 +142,9 @@ public class InventoryGenerator {
     }
 
 
+    // public static Inventory createMembersHeadInventory
+
+
 	public static void emptyCases(Inventory inventory, Integer slots) {
 		ItemStack item = new ItemStack(Material.getMaterial(App.config.getString("emptyCase")), 1);
 		ItemMeta meta = item.getItemMeta();

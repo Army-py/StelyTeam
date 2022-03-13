@@ -9,6 +9,8 @@ import org.bukkit.inventory.Inventory;
 
 import fr.army.App;
 import fr.army.conversations.ConvAddMember;
+import fr.army.conversations.ConvEditTeamID;
+import fr.army.conversations.ConvEditTeamPrefix;
 import fr.army.conversations.ConvRemoveMember;
 import fr.army.utils.InventoryGenerator;
 
@@ -86,6 +88,12 @@ public class ManageInventory {
         }else if (itemName.equals(App.config.getString("manage.updateMembers.itemName"))){
             Inventory inventory = InventoryGenerator.createUpgradeMembersInventory(player.getName());
             player.openInventory(inventory);
+        }else if (itemName.equals(App.config.getString("manage.editName.itemName"))){
+            player.closeInventory();
+            getNameInput(player, new ConvEditTeamID());
+        }else if (itemName.equals(App.config.getString("manage.editPrefix.itemName"))){
+            player.closeInventory();
+            getNameInput(player, new ConvEditTeamPrefix());
         }
     }
 
