@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import fr.army.stelyteam.api.StelyTeamAPI;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -20,6 +21,8 @@ public class StelyTeamPlugin extends JavaPlugin {
     public static YamlConfiguration config;
     public static SQLManager sqlManager;
     public static SQLiteManager sqliteManager;
+
+    private StelyTeamAPI stelyTeamApi;
 
     public static ArrayList<String> playersCreateTeam = new ArrayList<String>();
 
@@ -53,6 +56,8 @@ public class StelyTeamPlugin extends JavaPlugin {
         getCommand("stelyteam").setTabCompleter(new CmdStelyTeam());
         getServer().getPluginManager().registerEvents(new InventoryClickManager(), this);
 
+        stelyTeamApi = new StelyTeamAPI();
+
         getLogger().info("StelyTeam ON");
     }
 
@@ -73,5 +78,9 @@ public class StelyTeamPlugin extends JavaPlugin {
             }
         }
         return YamlConfiguration.loadConfiguration(file);
+    }
+
+    public StelyTeamAPI getAPI() {
+        return stelyTeamApi;
     }
 }
