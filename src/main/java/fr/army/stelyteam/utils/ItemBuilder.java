@@ -2,11 +2,9 @@ package fr.army.stelyteam.utils;
 
 import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -37,7 +35,7 @@ public class ItemBuilder {
 	}
 
 
-	public static ItemStack getPlayerHead(Player player, List<String> lore) {
+	public static ItemStack getPlayerHead(OfflinePlayer player, String name, List<String> lore) {
 		ItemStack item = new ItemStack(Material.PLAYER_HEAD, 1);
 		SkullMeta meta = (SkullMeta) item.getItemMeta();
 		meta.setOwningPlayer(player);
@@ -52,7 +50,7 @@ public class ItemBuilder {
 			meta.setLore(loreList);
 		}
 
-		meta.setDisplayName(player.getName());
+		meta.setDisplayName(name);
 		item.setItemMeta(meta);
 		return item;
 	}

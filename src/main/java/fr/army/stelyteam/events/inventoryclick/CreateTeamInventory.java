@@ -20,7 +20,7 @@ public class CreateTeamInventory {
         Player player = (Player) event.getWhoClicked();
         String itemName = event.getCurrentItem().getItemMeta().getDisplayName();
 
-        if (itemName.equals(StelyTeamPlugin.config.getString("createTeam.itemName"))){
+        if (itemName.equals(StelyTeamPlugin.config.getString("inventories.createTeam.itemName"))){
             Inventory confirmInventory = InventoryGenerator.createConfirmInventory();
             player.openInventory(confirmInventory);
             StelyTeamPlugin.playersCreateTeam.add(player.getName());

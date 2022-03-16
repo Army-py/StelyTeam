@@ -18,16 +18,15 @@ public class MemberInventory {
     public void onInventoryClick(){
         Player player = (Player) event.getWhoClicked();
         String itemName = event.getCurrentItem().getItemMeta().getDisplayName();
-        String inventoryName = event.getView().getTitle();
 
         // Fermeture ou retour en arrière de l'inventaire
         if (StelyTeamPlugin.sqlManager.isOwner(player.getName()) || StelyTeamPlugin.sqlManager.isAdmin(player.getName())){
-            if (itemName.equals(StelyTeamPlugin.config.getString("member.close.itemName")) && inventoryName.equals(StelyTeamPlugin.config.getString("inventoriesName.member"))){
+            if (itemName.equals(StelyTeamPlugin.config.getString("inventories.member.close.itemName"))){
                 Inventory inventory = InventoryGenerator.createAdminInventory();
                 player.openInventory(inventory);
             }
         }else if (StelyTeamPlugin.sqlManager.isMember(player.getName())){
-            if (itemName.equals(StelyTeamPlugin.config.getString("member.close.itemName")) && inventoryName.equals(StelyTeamPlugin.config.getString("inventoriesName.member"))){
+            if (itemName.equals(StelyTeamPlugin.config.getString("inventories.member.close.itemName"))){
                 player.closeInventory();
             }
         }

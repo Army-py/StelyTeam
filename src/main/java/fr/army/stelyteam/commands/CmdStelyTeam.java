@@ -27,6 +27,10 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
             if(StelyTeamPlugin.playersCreateTeam.contains(player.getName())){
                 return true;
             }
+
+            if (!StelyTeamPlugin.sqliteManager.isRegistered(player.getName())) {
+                StelyTeamPlugin.sqliteManager.registerPlayer(player);
+            }
             
             if (args.length == 0){
                 if(StelyTeamPlugin.sqlManager.isOwner(player.getName())){
