@@ -1,0 +1,346 @@
+# Prefixe devant les messages envoyés
+prefix: "§7[§5StelyTeam§7]"
+
+# Connection à la base de donnée
+sql:
+  host: "localhost"
+  database: "bungeecord_StelyTeam"
+  user: "username"
+  password: "password"
+  port: 3306
+
+
+# Nombre maximum de caracteres dans les noms de team
+teamNameMaxLength: 12
+teamPrefixMaxLength: 12
+
+
+# Prix des différentes actions
+prices:
+  createTeam: 100000
+  editTeam: 5000
+  teamBank: 1000000
+  upgradeLevelOne: 2500000
+  upgradeLevelTwo: 5000000
+  upgradeLevelThree: 10000000
+  upgradeLevelFour: 15000000
+  upgradeLevelFive: 25000000
+
+
+# Item à la place des cases vide
+emptyCase: BLACK_STAINED_GLASS_PANE
+
+
+# Titre des menus et leur nombre de slots
+# Le nombre de slots peut être augmenté en fonction du tombre d'item dans le menu *
+# * Respecter le nombre de slots en fonction de la taille d'une ligne de coffre (9 * nombre de lignes)
+inventoriesName:
+  createTeam: "§5§lCréer une team"
+  owner: "§5§lCréateur"
+  admin: "§5§lAdministrateur"
+  manage: "§5§lGérer la team"
+  member: "§5§lMenu Membre"
+  teamMembers: "§5§lMembres"
+  editMembers: "§5§lGestion des membres"
+  upgradeTotalMembers: "§5§lNombre de membres"
+  manageTeamMoney: "§5§lGérer l'argent de la team"
+  confirmInventory: "§5§lConfirmation"
+
+
+editMembersLores:
+  owner: 
+    - "§lCréateur"
+  admin:
+    - "§lAdmin §r> §oMembre"
+    - "Clique droit"
+  member:
+    - "§lMembre §r> §oAdmin"
+    - "Clique gauche"
+
+
+rankColors:
+  owner: "§5"
+  admin: "§6"
+  member: "§7"
+
+
+inventories:
+  createTeam:
+    itemName: "§5§lCréer une team"
+    itemType: RED_BANNER
+    slot: 13
+    lore: 
+      - "§aPrix : 100,000€"
+
+
+  admin:
+    manage:
+      itemName: "§5§lMenu Gestion"
+      itemType: BOOK
+      slot: 12
+      lore:
+        - "§aGérer les différents"
+        - "§aparamètres de la team"
+    member:
+      itemName: "§5§lMenu Membre"
+      itemType: PAPER
+      slot: 14
+      lore:
+        - "§aMenu du membre de"
+        - "§ala team"
+    close:
+      itemName: "§5§lFermer"
+      itemType: BARRIER
+      slot: 26
+
+
+  manage:
+    editMembers:
+      itemName: "§5§lGestion des membres"
+      itemType: WRITABLE_BOOK
+      slot: 11
+      rank: 1
+      lore:
+        - "§aGérer les membres de la"
+        - "§ateam"
+    removeMember:
+      itemName: "§5§lRetirer un membre"
+      itemType: RAW_IRON
+      slot: 20
+      rank: 1
+      lore:
+        - "§aRetirer un membre de"
+        - "§ala team"
+    setTeamHome:
+      itemName: "§5§lCréer un home"
+      itemType: RED_BED
+      slot: 20
+      rank: 1
+      lore:
+        - "§aCréer le home de team"
+    removeTeamHome:
+      itemName: "§5§lRetirer le home"
+      itemType: BLACK_BED
+      slot: 29
+      rank: 1
+      lore:
+        - "§aRetirer le home de team"
+    teamBank:
+      buyBank:
+      itemName: "§5§lOuvrir le compte"
+      itemType: GOLD_BLOCK
+      slot: 38
+      rank: 1
+      lore:
+        - "§aCréer le compte banquaire"
+        - "§ade la team"
+        - "§aPrix : 1,000,000€"
+    updateTotalMembers:
+      itemName: "§5§lAjouter des places"
+      itemType: TOTEM_OF_UNDYING
+      slot: 13
+      rank: 1
+      lore:
+        - "§aAméliorer le nombre de"
+        - "§amembres dans la team"
+    editName:
+      itemName: "§5§lModifier le nom"
+      itemType: PAPER
+      slot: 22
+      rank: 2
+      lore:
+        - "§aModifier le nom unique"
+        - "§ade la team"
+        - "§aPrix : 5,000€"
+    editPrefix:
+      itemName: "§5§lModifier le préfixe"
+      itemType: NAME_TAG
+      slot: 31
+      rank: 2
+      lore:
+        - "§aModifier le nom de la"
+        - "§ateam qui s'affiche dans"
+        - "§ale tchat"
+        - "§aPrix : 5,000€"
+    editOwner:
+      itemName: "§5§lChanger de créateur"
+      itemType: DIAMOND
+      slot: 40
+      rank: 2
+      lore:
+        - "§aModifier le créateur"
+        - "§ade la team"
+    removeTeam:
+      itemName: "§5§lSupprimer la team"
+      itemType: COMPOSTER
+      slot: 15
+      rank: 2
+      lore:
+        - "§aSupprimer la team"
+    close:
+      itemName: "§5§lFermer"
+      itemType: BARRIER
+      slot: 53
+      rank: 1
+
+
+  member:
+    members:
+      itemName: "§5§lMembres"
+      itemType: TOTEM_OF_UNDYING
+      slot: 11
+    teamBank:
+      itemName: "§5§lArgent de la team"
+      itemType: EMERALD
+      slot: 12
+      lore:
+        - "§aMontant : %teamMoney%€"
+    addTeamMoney:
+      itemName: "§5§lAjout d'argent"
+      itemType: GOLD_NUGGET
+      slot: 13
+      lore:
+        - "§aAjouter de l'argent"
+        - "§adans la team"
+    removeTeamMoney:
+      itemName: "§5§lRetrait d'argent"
+      itemType: PAPER
+      slot: 14
+      lore:
+        - "§aRetirer de l'argent"
+        - "§ade la team"
+    leaveTeam:
+      itemName: "§5§lQuitter la team"
+      itemType: DARK_OAK_DOOR
+      slot: 15
+    close:
+      itemName: "§5§lFermer"
+      itemType: BARRIER
+      slot: 26
+
+
+  upgradeTotalMembers:
+    levelOne:
+      itemName: "§5§l11 places"
+      itemType: IRON_INGOT
+      slot: 11
+      level: 1
+      lore:
+        - "§aPrix : 2,500,000€"
+    levelTwo:
+      itemName: "§5§l12 places"
+      itemType: GOLD_INGOT
+      slot: 12
+      level: 2
+      lore:
+        - "§aPrix : 5,000,000€"
+    levelThree:
+      itemName: "§5§l13 places"
+      itemType: DIAMOND
+      slot: 13
+      level: 3
+      lore:
+        - "§aPrix : 10,000,000€"
+    levelFour:
+      itemName: "§5§l14 places"
+      itemType: EMERALD
+      slot: 14
+      level: 4
+      lore:
+        - "§aPrix : 15,000,000€"
+    levelFive:
+      itemName: "§5§l15 places"
+      itemType: NETHERITE_INGOT
+      slot: 15
+      level: 5
+      lore:
+        - "§aPrix : 25,000,000€"
+    close:
+      itemName: "§5§lFermer"
+      itemType: BARRIER
+      slot: 26
+
+
+  manageTeamMoney:
+    payeentOne:
+      itemName: "§5§l1 000€"
+      itemType: PAPER
+      slot: 11
+      money: 1000
+    paymentTwo:
+      itemName: "§5§l2 000€"
+      itemType: PAPER
+      slot: 12
+      money: 2000
+    paymentThree:
+      itemName: "§5§l5 000€"
+      itemType: PAPER
+      slot: 13
+      money: 5000
+    paymentFour:
+      itemName: "§5§l10 000€"
+      itemType: PAPER
+      slot: 14
+      money: 10000
+    paymentFive:
+      itemName: "§5§l20 000€"
+      itemType: PAPER
+      slot: 15
+      money: 20000
+    paymentSix:
+      itemName: "§5§l50 000€"
+      itemType: PAPER
+      slot: 15
+      money: 50000
+    paymentSeven:
+      itemName: "§5§l100 000€"
+      itemType: PAPER
+      slot: 15
+      money: 100000
+    paymentEight:
+      itemName: "§5§l200 000€"
+      itemType: PAPER
+      slot: 15
+      money: 200000
+    paymentNine:
+      itemName: "§5§l500 000€"
+      itemType: PAPER
+      slot: 15
+      money: 500000
+
+
+  confirmInventory:
+    confirm:
+      itemName: "§a§lConfirmer"
+      itemType: LIME_STAINED_GLASS_PANE
+      slots: [13]
+    cancel:
+      itemName: "§c§lAnnuler"
+      itemType: RED_STAINED_GLASS_PANE
+      slots: [9, 10, 11, 12, 14, 15, 16, 17]
+
+
+  teamMembers:
+    close:
+      itemName: "§5§lFermer"
+      itemType: BARRIER
+      slot: 26
+
+
+  editMembers:
+    addMember:
+      itemName: "§5§lAjouter un membre"
+      itemType: GOLD_INGOT
+      slot: 27
+      lore:
+        - "§aAjouter un membre à la team"
+    removeMember:
+      itemName: "§5§lRetirer un membre"
+      itemType: RAW_GOLD
+      slot: 28
+      lore:
+        - "§aRetirer un membre de la team"
+    close:
+      itemName: "§5§lFermer"
+      itemType: BARRIER
+      slot: 35
