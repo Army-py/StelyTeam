@@ -30,5 +30,10 @@ public class MemberInventory {
                 player.closeInventory();
             }
         }
+
+        if (itemName.equals(StelyTeamPlugin.config.getString("inventories.member.members.itemName"))){
+            Inventory inventory = InventoryGenerator.createMembersInventory(player.getName());
+            player.openInventory(inventory);
+        }
     }
 }

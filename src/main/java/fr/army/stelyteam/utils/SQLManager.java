@@ -469,6 +469,26 @@ public class SQLManager {
     }
 
 
+    public Integer getTeamMoney(String teamID){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT money FROM teams WHERE ID_team = ?");
+                query.setString(1, teamID);
+                ResultSet result = query.executeQuery();
+                Integer level = null;
+                if(result.next()){
+                    level = result.getInt("money");
+                }
+                query.close();
+                return level;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+
     public ArrayList<String> getMembers(String teamID){
         if(isConnected()){
             try {

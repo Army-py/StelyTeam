@@ -96,6 +96,10 @@ public class InventoryGenerator {
             String name = StelyTeamPlugin.config.getString("inventories.member."+str+".itemName");
             List<String> lore = StelyTeamPlugin.config.getStringList("inventories.member."+str+".lore");
             
+            if (name.equals(StelyTeamPlugin.config.getString("inventories.member.teamBank.itemName"))){
+                
+            }
+
             inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, false));
         }
         return inventory;
@@ -154,8 +158,23 @@ public class InventoryGenerator {
         Integer headSlot = 0;
         for(String str : StelyTeamPlugin.sqlManager.getMembers(teamID)){
             UUID playerUUID = StelyTeamPlugin.sqliteManager.getUUID(str);
+            String itemName;
+            OfflinePlayer member;
+
+            if (playerUUID == null){ 
+                member = Bukkit.getOfflinePlayer(str);
+                if (member == null) continue;
+            }else member = Bukkit.getOfflinePlayer(playerUUID);
+
+            if (StelyTeamPlugin.sqlManager.isOwner(str)){
+                itemName = StelyTeamPlugin.config.getString("rankColors.owner")+str;
+            }else if (StelyTeamPlugin.sqlManager.isAdmin(str)){
+                itemName = StelyTeamPlugin.config.getString("rankColors.admin")+str;
+            }else{
+                itemName = StelyTeamPlugin.config.getString("rankColors.member")+str;
+            }
             
-            // inventory.setItem(headSlot, ItemBuilder.getPlayerHead(Bukkit.getOfflinePlayer(playerUUID), null));
+            inventory.setItem(headSlot, ItemBuilder.getPlayerHead(member, itemName, Collections.emptyList()));
             headSlot ++;
         }
 
@@ -163,7 +182,10 @@ public class InventoryGenerator {
             Integer slot = StelyTeamPlugin.config.getInt("inventories.teamMembers."+str+".slot");
             Material material = Material.getMaterial(StelyTeamPlugin.config.getString("inventories.teamMembers."+str+".itemType"));
             String name = StelyTeamPlugin.config.getString("inventories.teamMembers."+str+".itemName");
-            List<String> lore = StelyTeamPlugin.config.getStringList("inventories.teamMembers."+str+".lore");
+            List<String> lore;
+
+            if (StelyTeamPlugin.sqlManager.isOwner(playername)) lore = StelyTeamPlugin.config.getStringList("inventories.teamMembers."+str+".lore");
+            else lore = Collections.emptyList();
             
             inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, false));
         }
