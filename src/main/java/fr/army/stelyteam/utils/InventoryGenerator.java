@@ -24,7 +24,7 @@ public class InventoryGenerator {
 
 	
 	public static Inventory createTeamInventory() {
-		Integer slots = 27;
+		Integer slots = StelyTeamPlugin.config.getInt("inventories.slots.createTeam");
 		Inventory inventory = Bukkit.createInventory(null, slots, StelyTeamPlugin.config.getString("inventoriesName.createTeam"));
 		
         emptyCases(inventory, slots);
@@ -41,7 +41,7 @@ public class InventoryGenerator {
 
 
     public static Inventory createAdminInventory() {
-        Integer slots = 27;
+        Integer slots = StelyTeamPlugin.config.getInt("inventories.slots.admin");
         Inventory inventory = Bukkit.createInventory(null, slots, StelyTeamPlugin.config.getString("inventoriesName.admin"));
 
         emptyCases(inventory, slots);
@@ -58,7 +58,7 @@ public class InventoryGenerator {
 
 
     public static Inventory createManageInventory(String playername) {
-        Integer slots = 54;
+        Integer slots = StelyTeamPlugin.config.getInt("inventories.slots.manage");
         Inventory inventory = Bukkit.createInventory(null, slots, StelyTeamPlugin.config.getString("inventoriesName.manage"));
 
         emptyCases(inventory, slots);
@@ -88,7 +88,7 @@ public class InventoryGenerator {
 
 
     public static Inventory createMemberInventory(String playername) {
-        Integer slots = 27;
+        Integer slots = StelyTeamPlugin.config.getInt("inventories.slots.member");
         String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(playername);
         Inventory inventory = Bukkit.createInventory(null, slots, StelyTeamPlugin.config.getString("inventoriesName.member"));
 
@@ -111,7 +111,7 @@ public class InventoryGenerator {
 
 
     public static Inventory createConfirmInventory() {
-        Integer slots = 27;
+        Integer slots = StelyTeamPlugin.config.getInt("inventories.slots.confirmInventory");
         Inventory inventory = Bukkit.createInventory(null, slots, StelyTeamPlugin.config.getString("inventoriesName.confirmInventory"));
 
         emptyCases(inventory, slots);
@@ -130,7 +130,7 @@ public class InventoryGenerator {
 
 
     public static Inventory createUpgradeTotalMembersInventory(String playername) {
-        Integer slots = 27;
+        Integer slots = StelyTeamPlugin.config.getInt("inventories.slots.upgradeTotalMembers");
         String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(playername);
         Integer level = StelyTeamPlugin.sqlManager.getTeamLevel(teamID);
         Inventory inventory = Bukkit.createInventory(null, slots, StelyTeamPlugin.config.getString("inventoriesName.upgradeTotalMembers"));
@@ -154,7 +154,7 @@ public class InventoryGenerator {
 
 
     public static Inventory createMembersInventory(String playername) {
-        Integer slots = 27;
+        Integer slots = StelyTeamPlugin.config.getInt("inventories.slots.teamMembers");
         String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(playername);
         Inventory inventory = Bukkit.createInventory(null, slots, StelyTeamPlugin.config.getString("inventoriesName.teamMembers"));
 
@@ -196,7 +196,7 @@ public class InventoryGenerator {
 
 
     public static Inventory createEditMembersInventory(String playername) {
-        Integer slots = 36;
+        Integer slots = StelyTeamPlugin.config.getInt("inventories.slots.editMembers");
         String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(playername);
         Inventory inventory = Bukkit.createInventory(null, slots, StelyTeamPlugin.config.getString("inventoriesName.editMembers"));
 

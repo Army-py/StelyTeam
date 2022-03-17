@@ -39,25 +39,35 @@ emptyCase: BLACK_STAINED_GLASS_PANE
 # * Respecter le nombre de slots en fonction de la taille d'une ligne de coffre (9 * nombre de lignes)
 inventoriesName:
   createTeam: "§5§lCréer une team"
-  owner: "§5§lCréateur"
   admin: "§5§lAdministrateur"
   manage: "§5§lGérer la team"
   member: "§5§lMenu Membre"
   teamMembers: "§5§lMembres"
   editMembers: "§5§lGestion des membres"
   upgradeTotalMembers: "§5§lNombre de membres"
-  manageTeamMoney: "§5§lGérer l'argent de la team"
   confirmInventory: "§5§lConfirmation"
 
 
+inventoriesSlots:
+  createTeam: 27
+  admin: 27
+  manage: 54
+  member: 27
+  teamMembers: 27
+  editMembers: 36
+  upgradeTotalMembers: 27
+  confirmInventory: 27
+
+
+# Description des items en fonction des grades, dans le menu d'éition des membres
 editMembersLores:
   owner: 
-    - "§lCréateur"
+    - "§5Créateur"
   admin:
-    - "§lAdmin §r> §oMembre"
+    - "§6Admin §r> §oMembre"
     - "Clique droit"
   member:
-    - "§lMembre §r> §oAdmin"
+    - "§7Membre §r> §oAdmin"
     - "Clique gauche"
 
 
@@ -262,54 +272,6 @@ inventories:
       itemName: "§5§lFermer"
       itemType: BARRIER
       slot: 26
-
-
-  manageTeamMoney:
-    payeentOne:
-      itemName: "§5§l1 000€"
-      itemType: PAPER
-      slot: 11
-      money: 1000
-    paymentTwo:
-      itemName: "§5§l2 000€"
-      itemType: PAPER
-      slot: 12
-      money: 2000
-    paymentThree:
-      itemName: "§5§l5 000€"
-      itemType: PAPER
-      slot: 13
-      money: 5000
-    paymentFour:
-      itemName: "§5§l10 000€"
-      itemType: PAPER
-      slot: 14
-      money: 10000
-    paymentFive:
-      itemName: "§5§l20 000€"
-      itemType: PAPER
-      slot: 15
-      money: 20000
-    paymentSix:
-      itemName: "§5§l50 000€"
-      itemType: PAPER
-      slot: 15
-      money: 50000
-    paymentSeven:
-      itemName: "§5§l100 000€"
-      itemType: PAPER
-      slot: 15
-      money: 100000
-    paymentEight:
-      itemName: "§5§l200 000€"
-      itemType: PAPER
-      slot: 15
-      money: 200000
-    paymentNine:
-      itemName: "§5§l500 000€"
-      itemType: PAPER
-      slot: 15
-      money: 500000
 
 
   confirmInventory:
