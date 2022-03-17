@@ -14,6 +14,9 @@ sql:
 teamNameMaxLength: 12
 teamPrefixMaxLength: 12
 
+# Argent maximal d'une team
+teamMaxMoney: 10000000
+
 
 # Prix des différentes actions
 prices:
@@ -202,7 +205,7 @@ inventories:
       lore:
         - "§aAjouter de l'argent"
         - "§adans la team"
-    removeTeamMoney:
+    WithdrawTeamMoney:
       itemName: "§5§lRetrait d'argent"
       itemType: PAPER
       slot: 14

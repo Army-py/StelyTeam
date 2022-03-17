@@ -361,6 +361,36 @@ public class SQLManager {
     }
 
 
+    public void incrementTeamMoney(String teamID, int money){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("UPDATE teams SET money = money + ? WHERE ID_team = ?");
+                query.setInt(1, money);
+                query.setString(2, teamID);
+                query.executeUpdate();
+                query.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    public void decrementTeamMoney(String teamID, int money){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("UPDATE teams SET money = money - ? WHERE ID_team = ?");
+                query.setInt(1, money);
+                query.setString(2, teamID);
+                query.executeUpdate();
+                query.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
     public void promoteToAdmin(String teamID, String playername){
         if(isConnected()){
             try {

@@ -38,7 +38,7 @@ public class ItemBuilder {
 	public static ItemStack getPlayerHead(OfflinePlayer player, String name, List<String> lore) {
 		ItemStack item = new ItemStack(Material.PLAYER_HEAD, 1);
 		SkullMeta meta = (SkullMeta) item.getItemMeta();
-		meta.setOwningPlayer(player);
+		if (player != null) meta.setOwningPlayer(player);
 		meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 		meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
 		meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);

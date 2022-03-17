@@ -17,7 +17,6 @@ import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.utils.InventoryGenerator;
 
 public class CmdStelyTeam implements CommandExecutor, TabCompleter {
-    // private PlayerChat playerChat;
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -33,19 +32,17 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
             }
             
             if (args.length == 0){
+                Inventory inventory;
                 if(StelyTeamPlugin.sqlManager.isOwner(player.getName())){
-                    Inventory inventory = InventoryGenerator.createAdminInventory();
-                    player.openInventory(inventory);
+                    inventory = InventoryGenerator.createAdminInventory();
                 }else if (StelyTeamPlugin.sqlManager.isMember(player.getName())){
-                    Inventory inventory = InventoryGenerator.createMemberInventory();
-                    player.openInventory(inventory);
+                    inventory = InventoryGenerator.createMemberInventory(player.getName());
                 }else if (StelyTeamPlugin.sqlManager.isAdmin(player.getName())){
-                    Inventory inventory = InventoryGenerator.createAdminInventory();
-                    player.openInventory(inventory);
+                    inventory = InventoryGenerator.createAdminInventory();
                 }else{
-                    Inventory inventory = InventoryGenerator.createTeamInventory();
-                    player.openInventory(inventory);
+                    inventory = InventoryGenerator.createTeamInventory();
                 }
+                player.openInventory(inventory);
             }else{
                 if (args[0].equals("home")){
                     String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromOwner(player.getName());

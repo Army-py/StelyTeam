@@ -24,13 +24,11 @@ public class AdminInventory {
             Inventory inventory = InventoryGenerator.createManageInventory(player.getName());
             player.openInventory(inventory);
         }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.admin.member.itemName"))){
-            Inventory inventory = InventoryGenerator.createMemberInventory();
+            Inventory inventory = InventoryGenerator.createMemberInventory(player.getName());
             player.openInventory(inventory);
-        }
-
-
+            
         // Fermeture ou retour en arrière de l'inventaire
-        if (itemName.equals(StelyTeamPlugin.config.getString("inventories.admin.close.itemName"))){
+        }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.admin.close.itemName"))){
             player.closeInventory();
         }
     }

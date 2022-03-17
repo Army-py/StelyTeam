@@ -20,7 +20,7 @@ public class ConvEditTeamPrefix extends StringPrompt {
             return this;
         }
 
-        String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromOwner(author.getName());
+        String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(author.getName());
 
         con.getForWhom().sendRawMessage("Le préfixe a été changé par " + answer);
         StelyTeamPlugin.sqlManager.updateTeamPrefix(teamID, answer, author.getName());

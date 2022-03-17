@@ -33,6 +33,8 @@ public class StelyTeamPlugin extends JavaPlugin {
     public static ArrayList<String> playersEditTeamPrefix = new ArrayList<String>();
     public static ArrayList<String> playersEditTeamOwner = new ArrayList<String>();
     public static ArrayList<String> playersDeleteTeam = new ArrayList<String>();
+    public static ArrayList<String> playersAddTeamMoney = new ArrayList<String>();
+    public static ArrayList<String> playersWithdrawTeamMoney = new ArrayList<String>();
 
 
     @Override

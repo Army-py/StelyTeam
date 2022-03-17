@@ -16,14 +16,11 @@ public class ConvEditOwner extends StringPrompt {
     public Prompt acceptInput(ConversationContext con, String answer) {
         Player player = Bukkit.getPlayer(answer);
         Player author = (Player) con.getForWhom();
-        String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromOwner(author.getName());
+        String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(author.getName());
         if (player == null) {
-            // author.sendMessage("Ce joueur n'existe pas");
             con.getForWhom().sendRawMessage("Ce joueur n'existe pas");
             return null;
-        }
-        
-        if (!StelyTeamPlugin.sqlManager.isMemberInTeam(player.getName(), teamID)) {
+        }else if (!StelyTeamPlugin.sqlManager.isMemberInTeam(player.getName(), teamID)) {
             con.getForWhom().sendRawMessage("Ce joueur n'est pas dans ta team");
             return null;
         }

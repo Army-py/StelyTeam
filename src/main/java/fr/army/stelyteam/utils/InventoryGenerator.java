@@ -1,7 +1,10 @@
 package fr.army.stelyteam.utils;
 
+import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -84,8 +87,9 @@ public class InventoryGenerator {
     }
 
 
-    public static Inventory createMemberInventory() {
+    public static Inventory createMemberInventory(String playername) {
         Integer slots = 27;
+        String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(playername);
         Inventory inventory = Bukkit.createInventory(null, slots, StelyTeamPlugin.config.getString("inventoriesName.member"));
 
         emptyCases(inventory, slots);
@@ -97,7 +101,7 @@ public class InventoryGenerator {
             List<String> lore = StelyTeamPlugin.config.getStringList("inventories.member."+str+".lore");
             
             if (name.equals(StelyTeamPlugin.config.getString("inventories.member.teamBank.itemName"))){
-                
+                lore = replaceInLore(lore, "%teamMoney%", IntegerToString(StelyTeamPlugin.sqlManager.getTeamMoney(teamID)));
             }
 
             inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, false));
@@ -161,10 +165,8 @@ public class InventoryGenerator {
             String itemName;
             OfflinePlayer member;
 
-            if (playerUUID == null){ 
-                member = Bukkit.getOfflinePlayer(str);
-                if (member == null) continue;
-            }else member = Bukkit.getOfflinePlayer(playerUUID);
+            if (playerUUID == null) member = Bukkit.getOfflinePlayer(str);
+            else member = Bukkit.getOfflinePlayer(playerUUID);
 
             if (StelyTeamPlugin.sqlManager.isOwner(str)){
                 itemName = StelyTeamPlugin.config.getString("rankColors.owner")+str;
@@ -206,10 +208,8 @@ public class InventoryGenerator {
             List<String> lore;
             OfflinePlayer member;
 
-            if (playerUUID == null){ 
-                member = Bukkit.getOfflinePlayer(str);
-                if (member == null) continue;
-            }else member = Bukkit.getOfflinePlayer(playerUUID);
+            if (playerUUID == null) member = Bukkit.getOfflinePlayer(str);
+            else member = Bukkit.getOfflinePlayer(playerUUID);
 
             if (StelyTeamPlugin.sqlManager.isOwner(str)){
                 lore = StelyTeamPlugin.config.getStringList("editMembersLores.owner");
@@ -238,6 +238,20 @@ public class InventoryGenerator {
             inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, false));
         }
         return inventory;
+    }
+
+
+    private static List<String> replaceInLore(List<String> lore, String value, String replace){
+        List<String> newLore = new ArrayList<>();
+        for(String str : lore){
+            newLore.add(str.replace(value, replace));
+        }
+        return newLore;
+    }
+
+
+    private static String IntegerToString(Integer value){
+        return NumberFormat.getNumberInstance(Locale.US).format(value);
     }
 
 

@@ -22,7 +22,7 @@ public class MembersInventory {
 
         // Fermeture ou retour en arrière de l'inventaire
         if (itemName.equals(StelyTeamPlugin.config.getString("inventories.teamMembers.close.itemName"))){
-            Inventory inventory = InventoryGenerator.createMembersInventory(player.getName());
+            Inventory inventory = InventoryGenerator.createMemberInventory(player.getName());
             player.openInventory(inventory);
         }
     }

@@ -6,13 +6,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.events.inventoryclick.AdminInventory;
-import fr.army.stelyteam.events.inventoryclick.ConfirmInventory;
-import fr.army.stelyteam.events.inventoryclick.CreateTeamInventory;
-import fr.army.stelyteam.events.inventoryclick.EditMembersInventory;
-import fr.army.stelyteam.events.inventoryclick.ManageInventory;
-import fr.army.stelyteam.events.inventoryclick.MemberInventory;
-import fr.army.stelyteam.events.inventoryclick.UpgradeMembersInventory;
+import fr.army.stelyteam.events.inventoryclick.*;
 
 
 public class InventoryClickManager implements Listener{    
@@ -42,7 +36,7 @@ public class InventoryClickManager implements Listener{
         }else if (event.getView().getTitle().equals(StelyTeamPlugin.config.getString("inventoriesName.editMembers"))){
             new EditMembersInventory(event).onInventoryClick();
         }else if (event.getView().getTitle().equals(StelyTeamPlugin.config.getString("inventoriesName.teamMembers"))){
-            new MemberInventory(event).onInventoryClick();
+            new MembersInventory(event).onInventoryClick();
         }
     }
 }

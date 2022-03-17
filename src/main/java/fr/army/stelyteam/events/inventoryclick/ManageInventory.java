@@ -1,10 +1,7 @@
 package fr.army.stelyteam.events.inventoryclick;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.conversations.ConvAddMember;
-import fr.army.stelyteam.conversations.ConvEditTeamID;
-import fr.army.stelyteam.conversations.ConvEditTeamPrefix;
-import fr.army.stelyteam.conversations.ConvRemoveMember;
+
 import fr.army.stelyteam.utils.InventoryGenerator;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationFactory;
@@ -93,10 +90,10 @@ public class ManageInventory {
             StelyTeamPlugin.playersDeleteTeam.add(player.getName());
             Inventory inventory = InventoryGenerator.createConfirmInventory();
             player.openInventory(inventory);
-        }
+        
 
         // Fermeture ou retour en arrière de l'inventaire
-        if (itemName.equals(StelyTeamPlugin.config.getString("inventories.manage.close.itemName"))){
+        }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.manage.close.itemName"))){
             Inventory inventory = InventoryGenerator.createAdminInventory();
             player.openInventory(inventory);
         }

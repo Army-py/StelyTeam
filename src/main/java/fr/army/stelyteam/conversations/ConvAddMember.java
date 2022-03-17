@@ -16,12 +16,9 @@ public class ConvAddMember extends StringPrompt {
     public Prompt acceptInput(ConversationContext con, String answer) {
         Player player = Bukkit.getPlayer(answer);
         if (player == null) {
-            // author.sendMessage("Ce joueur n'existe pas");
             con.getForWhom().sendRawMessage("Ce joueur n'existe pas");
             return null;
-        }
-        
-        if (StelyTeamPlugin.sqlManager.isMember(player.getName())) {
+        }else if (StelyTeamPlugin.sqlManager.isMember(player.getName())) {
             con.getForWhom().sendRawMessage("Ce joueur est déjà dans une team");
             return null;
         }

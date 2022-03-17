@@ -34,17 +34,16 @@ public class EditMembersInventory {
             Inventory inventory = InventoryGenerator.createManageInventory(player.getName());
             player.openInventory(inventory);
             return;
-        }
-
-        if (itemName.equals(StelyTeamPlugin.config.getString("inventories.editMembers.addMember.itemName"))){
+        }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.editMembers.addMember.itemName"))){
             player.closeInventory();
             StelyTeamPlugin.teamsJoinTeam.add(StelyTeamPlugin.sqlManager.getTeamIDFromOwner(player.getName()));
             getNameInput(player, new ConvAddMember());
-
+            return;
         }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.editMembers.removeMember.itemName"))){
             player.closeInventory();
             StelyTeamPlugin.teamsKickTeam.add(StelyTeamPlugin.sqlManager.getTeamIDFromOwner(player.getName()));
             getNameInput(player, new ConvRemoveMember());
+            return;
         }
 
         itemName = removeFirstColors(event.getCurrentItem().getItemMeta().getDisplayName());
