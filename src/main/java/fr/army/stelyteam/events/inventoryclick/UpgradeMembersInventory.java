@@ -24,15 +24,15 @@ public class UpgradeMembersInventory {
 
         
         // Gestion des items
-        if (!itemName.equals(StelyTeamPlugin.config.getString("upgradeTotalMembers.close.itemName"))){
-            for(String str : StelyTeamPlugin.config.getConfigurationSection("upgradeTotalMembers").getKeys(false)){
-                String name = StelyTeamPlugin.config.getString("upgradeTotalMembers."+str+".itemName");
+        if (!itemName.equals(StelyTeamPlugin.config.getString("inventories.upgradeTotalMembers.close.itemName"))){
+            for(String str : StelyTeamPlugin.config.getConfigurationSection("inventories.upgradeTotalMembers").getKeys(false)){
+                String name = StelyTeamPlugin.config.getString("inventories.upgradeTotalMembers."+str+".itemName");
                 
-                if (itemName.equals(name) && level+1 == StelyTeamPlugin.config.getInt("upgradeTotalMembers."+str+".level")){
+                if (itemName.equals(name) && level+1 == StelyTeamPlugin.config.getInt("inventories.upgradeTotalMembers."+str+".level")){
                     StelyTeamPlugin.sqlManager.incrementTeamLevel(teamID);
                     player.sendMessage("Vous avez atteint le niveau "+(level+1));
 
-                    Inventory inventory = InventoryGenerator.createUpgradeMembersInventory(player.getName());
+                    Inventory inventory = InventoryGenerator.createUpgradeTotalMembersInventory(player.getName());
                     player.openInventory(inventory);
                     break;
                 }

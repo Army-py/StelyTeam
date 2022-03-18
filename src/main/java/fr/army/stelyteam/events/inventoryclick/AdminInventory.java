@@ -18,23 +18,18 @@ public class AdminInventory {
     public void onInventoryClick(){
         Player player = (Player) event.getWhoClicked();
         String itemName = event.getCurrentItem().getItemMeta().getDisplayName();
-        String inventoryName = event.getView().getTitle();
 
         // Ouverture des inventaires
-        if (itemName.equals(StelyTeamPlugin.config.getString("admin.manage.itemName"))){
+        if (itemName.equals(StelyTeamPlugin.config.getString("inventories.admin.manage.itemName"))){
             Inventory inventory = InventoryGenerator.createManageInventory(player.getName());
             player.openInventory(inventory);
-        }else if (itemName.equals(StelyTeamPlugin.config.getString("admin.member.itemName"))){
-            Inventory inventory = InventoryGenerator.createMemberInventory();
+        }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.admin.member.itemName"))){
+            Inventory inventory = InventoryGenerator.createMemberInventory(player.getName());
             player.openInventory(inventory);
-        }
-
-
+            
         // Fermeture ou retour en arrière de l'inventaire
-        if (StelyTeamPlugin.sqlManager.isOwner(player.getName()) || StelyTeamPlugin.sqlManager.isAdmin(player.getName())){
-            if (itemName.equals(StelyTeamPlugin.config.getString("admin.close.itemName")) && inventoryName.equals(StelyTeamPlugin.config.getString("inventoriesName.admin"))){
-                player.closeInventory();
-            }
+        }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.admin.close.itemName"))){
+            player.closeInventory();
         }
     }
 }

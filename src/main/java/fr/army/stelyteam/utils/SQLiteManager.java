@@ -5,6 +5,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.UUID;
+
+import org.bukkit.entity.Player;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 
@@ -45,10 +48,25 @@ public class SQLiteManager {
     }
 
 
+    public void disconnect(Connection connection) {
+        if(connection != null){
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
     public void createTables(){
         if (isConnected()){
             try {
-                PreparedStatement queryPlayers = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'homes' ('id' INTEGER, 'team_id' TEXT, world TEXT, 'x' REAL, 'y' REAL, 'z' REAL, 'yaw' REAL, PRIMARY KEY('id' AUTOINCREMENT));");
+                PreparedStatement queryHomes = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'homes' ('id' INTEGER, 'team_id' TEXT, world TEXT, 'x' REAL, 'y' REAL, 'z' REAL, 'yaw' REAL, PRIMARY KEY('id' AUTOINCREMENT));");
+                queryHomes.executeUpdate();
+                queryHomes.close();
+
+                PreparedStatement queryPlayers = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'players' ('uuid' TEXT, 'playername' TEXT, PRIMARY KEY('uuid'));");
                 queryPlayers.executeUpdate();
                 queryPlayers.close();
             } catch (Exception e){
@@ -224,5 +242,58 @@ public class SQLiteManager {
             }
         }
         return 0;
+    }
+
+
+    public void registerPlayer(Player player){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("INSERT INTO players VALUES (?, ?)");
+                query.setString(1, player.getUniqueId().toString());
+                query.setString(2, player.getName());
+                query.executeUpdate();
+                query.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    public boolean isRegistered(String playername){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT playername FROM players WHERE playername = ?");
+                query.setString(1, playername);
+                ResultSet result = query.executeQuery();
+                boolean isParticipant = result.next();
+                query.close();
+                return isParticipant;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+
+    public UUID getUUID(String playername){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT uuid FROM players WHERE playername = ?");
+                query.setString(1, playername);
+                ResultSet result = query.executeQuery();
+                boolean isParticipant = result.next();
+                UUID uuid = null;
+                if(isParticipant){
+                    uuid = UUID.fromString(result.getString("uuid"));
+                }
+                query.close();
+                return uuid;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 }

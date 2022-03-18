@@ -31,6 +31,13 @@ public class StelyTeamPlugin extends JavaPlugin {
     public static ArrayList<String> playersKickTeam = new ArrayList<String>();
     public static ArrayList<String> teamsKickTeam = new ArrayList<String>();
     public static ArrayList<String> playersBuyTeamBank = new ArrayList<String>();
+    public static ArrayList<String> playersUpgradeTotalMembers = new ArrayList<String>();
+    public static ArrayList<String> playersEditTeamName = new ArrayList<String>();
+    public static ArrayList<String> playersEditTeamPrefix = new ArrayList<String>();
+    public static ArrayList<String> playersEditTeamOwner = new ArrayList<String>();
+    public static ArrayList<String> playersDeleteTeam = new ArrayList<String>();
+    public static ArrayList<String> playersAddTeamMoney = new ArrayList<String>();
+    public static ArrayList<String> playersWithdrawTeamMoney = new ArrayList<String>();
 
 
     @Override
@@ -65,6 +72,8 @@ public class StelyTeamPlugin extends JavaPlugin {
     @Override
     public void onDisable() {
         // sqlite.close();
+        sqlManager.disconnect();
+        sqliteManager.disconnect();
         getLogger().info("StelyTeam OFF");
     }
 

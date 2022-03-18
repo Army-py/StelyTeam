@@ -17,7 +17,7 @@ public class ConvEditTeamID extends StringPrompt {
             return this;
         }
 
-        String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromOwner(author.getName());
+        String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(author.getName());
 
         con.getForWhom().sendRawMessage("Le nom a été changé par " + answer);
         StelyTeamPlugin.sqlManager.updateTeamID(teamID, answer, author.getName());

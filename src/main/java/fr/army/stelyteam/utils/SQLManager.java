@@ -60,6 +60,17 @@ public class SQLManager {
     }
 
 
+    public void disconnect(Connection connection) {
+        if(connection != null){
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
     public boolean isOwner(String playername){
         if(isConnected()){
             try {
@@ -228,11 +239,16 @@ public class SQLManager {
     public void removeTeam(String teamID, String owner){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("DELETE FROM teams WHERE ID_team = ? AND owner = ?");
-                query.setString(1, teamID);
-                query.setString(2, owner);
-                query.executeUpdate();
-                query.close();
+                PreparedStatement queryTeams = connection.prepareStatement("DELETE FROM teams WHERE ID_team = ? AND owner = ?");
+                queryTeams.setString(1, teamID);
+                queryTeams.setString(2, owner);
+                queryTeams.executeUpdate();
+                queryTeams.close();
+
+                PreparedStatement queryMembers = connection.prepareStatement("DELETE FROM pseudos WHERE ID_team = ?");
+                queryMembers.setString(1, teamID);
+                queryMembers.executeUpdate();
+                queryMembers.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -345,13 +361,59 @@ public class SQLManager {
     }
 
 
-    public void setTeamAdmin(String teamID, String playername){
+    public void incrementTeamMoney(String teamID, int money){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("UPDATE pseudos SET confiance = ? WHERE ID_team = ?");
-                query.setString(1, teamID);
-                query.setInt(2, 1);
-                query.setString(3, teamID);
+                PreparedStatement query = connection.prepareStatement("UPDATE teams SET money = money + ? WHERE ID_team = ?");
+                query.setInt(1, money);
+                query.setString(2, teamID);
+                query.executeUpdate();
+                query.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    public void decrementTeamMoney(String teamID, int money){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("UPDATE teams SET money = money - ? WHERE ID_team = ?");
+                query.setInt(1, money);
+                query.setString(2, teamID);
+                query.executeUpdate();
+                query.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    public void promoteToAdmin(String teamID, String playername){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("UPDATE pseudos SET confiance = ? WHERE ID_team = ? AND ID_pseudo = ?");
+                query.setInt(1, 1);
+                query.setString(2, teamID);
+                query.setString(3, playername);
+                query.executeUpdate();
+                query.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    public void demoteToMember(String teamID, String playername){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("UPDATE pseudos SET confiance = ? WHERE ID_team = ? AND ID_pseudo = ?");
+                query.setInt(1, 0);
+                query.setString(2, teamID);
+                query.setString(3, playername);
                 query.executeUpdate();
                 query.close();
             } catch (SQLException e) {
@@ -437,10 +499,30 @@ public class SQLManager {
     }
 
 
+    public Integer getTeamMoney(String teamID){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT money FROM teams WHERE ID_team = ?");
+                query.setString(1, teamID);
+                ResultSet result = query.executeQuery();
+                Integer level = null;
+                if(result.next()){
+                    level = result.getInt("money");
+                }
+                query.close();
+                return level;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+
     public ArrayList<String> getMembers(String teamID){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("SELECT ID_pseudo FROM pseudos WHERE ID_team = ?");
+                PreparedStatement query = connection.prepareStatement("SELECT ID_pseudo FROM pseudos WHERE ID_team = ? ORDER BY confiance DESC");
                 query.setString(1, teamID);
 
                 ResultSet result = query.executeQuery();

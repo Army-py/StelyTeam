@@ -1,10 +1,7 @@
 package fr.army.stelyteam.events.inventoryclick;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.conversations.ConvAddMember;
-import fr.army.stelyteam.conversations.ConvEditTeamID;
-import fr.army.stelyteam.conversations.ConvEditTeamPrefix;
-import fr.army.stelyteam.conversations.ConvRemoveMember;
+
 import fr.army.stelyteam.utils.InventoryGenerator;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationFactory;
@@ -25,28 +22,14 @@ public class ManageInventory {
     public void onInventoryClick(){
         Player player = (Player) event.getWhoClicked();
         String itemName = event.getCurrentItem().getItemMeta().getDisplayName();
-        String inventoryName = event.getView().getTitle();
 
-        // Fermeture ou retour en arrière de l'inventaire
-        if (StelyTeamPlugin.sqlManager.isOwner(player.getName()) || StelyTeamPlugin.sqlManager.isAdmin(player.getName())){
-            if (itemName.equals(StelyTeamPlugin.config.getString("manage.close.itemName")) && inventoryName.equals(StelyTeamPlugin.config.getString("inventoriesName.manage"))){
-                Inventory inventory = InventoryGenerator.createAdminInventory();
-                player.openInventory(inventory);
-            }
-        }
-
+        
         // Liaisin des items avec leur fonction
-        if (itemName.equals(StelyTeamPlugin.config.getString("manage.addMember.itemName"))){
-            player.closeInventory();
-            StelyTeamPlugin.teamsJoinTeam.add(StelyTeamPlugin.sqlManager.getTeamIDFromOwner(player.getName()));
-            getNameInput(player, new ConvAddMember());
+        if (itemName.equals(StelyTeamPlugin.config.getString("inventories.manage.editMembers.itemName"))){
+            Inventory inventory = InventoryGenerator.createEditMembersInventory(player.getName());
+            player.openInventory(inventory);
 
-        }else if (itemName.equals(StelyTeamPlugin.config.getString("manage.removeMember.itemName"))){
-            player.closeInventory();
-            StelyTeamPlugin.teamsKickTeam.add(StelyTeamPlugin.sqlManager.getTeamIDFromOwner(player.getName()));
-            getNameInput(player, new ConvRemoveMember());
-
-        }else if (itemName.equals(StelyTeamPlugin.config.getString("manage.setTeamHome.itemName"))){
+        }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.manage.setTeamHome.itemName"))){
             player.closeInventory();
             String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromOwner(player.getName());
             String worldName = player.getWorld().getName();
@@ -63,8 +46,8 @@ public class ManageInventory {
                 StelyTeamPlugin.sqliteManager.addHome(teamID, worldName, x, y, z, yaw);
                 player.sendMessage("Le home a été créé");
             }
-
-        }else if (itemName.equals(StelyTeamPlugin.config.getString("manage.removeTeamHome.itemName"))){
+            
+        }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.manage.removeTeamHome.itemName"))){
             player.closeInventory();
             String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromOwner(player.getName());
 
@@ -75,27 +58,47 @@ public class ManageInventory {
                 player.sendMessage("Le home n'a pas été défini");
             }
             
-        }else if (itemName.equals(StelyTeamPlugin.config.getString("manage.teamBank.itemName"))){
+        }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.manage.teamBank.itemName"))){
             String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(player.getName());
-
+            
             if (!StelyTeamPlugin.sqlManager.hasUnlockedTeamBank(teamID)){
                 player.closeInventory();
                 StelyTeamPlugin.playersBuyTeamBank.add(player.getName());
                 Inventory inventory = InventoryGenerator.createConfirmInventory();
                 player.openInventory(inventory);
             }
-        }else if (itemName.equals(StelyTeamPlugin.config.getString("manage.updateMembers.itemName"))){
-            Inventory inventory = InventoryGenerator.createUpgradeMembersInventory(player.getName());
+        }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.manage.updateTotalMembers.itemName"))){
+            Inventory inventory = InventoryGenerator.createUpgradeTotalMembersInventory(player.getName());
             player.openInventory(inventory);
-        }else if (itemName.equals(StelyTeamPlugin.config.getString("manage.editName.itemName"))){
+        }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.manage.editName.itemName"))){
             player.closeInventory();
-            getNameInput(player, new ConvEditTeamID());
-        }else if (itemName.equals(StelyTeamPlugin.config.getString("manage.editPrefix.itemName"))){
+            StelyTeamPlugin.playersEditTeamName.add(player.getName());
+            Inventory inventory = InventoryGenerator.createConfirmInventory();
+            player.openInventory(inventory);
+        }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.manage.editPrefix.itemName"))){
             player.closeInventory();
-            getNameInput(player, new ConvEditTeamPrefix());
+            StelyTeamPlugin.playersEditTeamPrefix.add(player.getName());
+            Inventory inventory = InventoryGenerator.createConfirmInventory();
+            player.openInventory(inventory);
+        }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.manage.editOwner.itemName"))){
+            player.closeInventory();
+            StelyTeamPlugin.playersEditTeamOwner.add(player.getName());
+            Inventory inventory = InventoryGenerator.createConfirmInventory();
+            player.openInventory(inventory);
+        }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.manage.removeTeam.itemName"))){
+            player.closeInventory();
+            StelyTeamPlugin.playersDeleteTeam.add(player.getName());
+            Inventory inventory = InventoryGenerator.createConfirmInventory();
+            player.openInventory(inventory);
+        
+
+        // Fermeture ou retour en arrière de l'inventaire
+        }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.manage.close.itemName"))){
+            Inventory inventory = InventoryGenerator.createAdminInventory();
+            player.openInventory(inventory);
         }
     }
-
+    
 
     public void getNameInput(Player player, Prompt prompt) {
         ConversationFactory cf = new ConversationFactory(StelyTeamPlugin.instance);
