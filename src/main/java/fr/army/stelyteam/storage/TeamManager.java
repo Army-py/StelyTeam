@@ -83,4 +83,20 @@ public class TeamManager {
         return null;
     }
 
+    /**
+     * Save a {@link Team} in the storage
+     *
+     * @param team The {@link Team} to save
+     */
+    public void save(Team team) {
+    }
+
+    /**
+     * Delete permanently a {@link Team} from the storage
+     *
+     * @param team The {@link Team} to delete
+     */
+    public void delete(Team team) {
+    }
+
 }

@@ -44,6 +44,10 @@ public class PlayerList implements IPlayerList, ChangeTracked {
         return false;
     }
 
+    public PlayerTeamTracker getPlayerTeamTracker() {
+        return playerTeamTracker;
+    }
+
     @Override
     public boolean isDirty() {
         return dirty;
