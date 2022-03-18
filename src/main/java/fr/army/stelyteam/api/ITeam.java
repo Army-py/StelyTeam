@@ -1,10 +1,11 @@
 package fr.army.stelyteam.api;
 
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 public interface ITeam {
+
+    UUID getId();
 
     String getPrefix();
 
@@ -14,8 +15,8 @@ public interface ITeam {
 
     Date getCreationDate();
 
-    List<UUID> getOwners();
+    IPlayerList getOwners();
 
-    List<UUID> getMembers();
+    IPlayerList getMembers();
 
 }
