@@ -8,6 +8,10 @@ public interface Storage {
 
     Team loadTeam(UUID teamID);
 
-    Team saveTeam(Team team);
+    void saveTeam(Team team);
+
+    UUID getPlayerTeam(UUID playerId);
+
+    void savePlayerTeams(PlayerTeamTracker playerTeamTracker);
 
 }
