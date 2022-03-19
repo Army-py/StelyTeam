@@ -41,6 +41,9 @@ public class PlayerList implements IPlayerList {
     }
 
     public void clear() {
+        if (uuids.isEmpty()) {
+            return;
+        }
         for (UUID id : uuids) {
             playerTeamTracker.changeTeam(id, null);
         }
