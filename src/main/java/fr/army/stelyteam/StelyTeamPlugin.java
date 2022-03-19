@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 import fr.army.stelyteam.api.StelyTeamAPI;
+import fr.army.stelyteam.storage.TeamManager;
+import fr.army.stelyteam.storage.database.DataBaseStorage;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -21,8 +23,6 @@ public class StelyTeamPlugin extends JavaPlugin {
     public static YamlConfiguration config;
     public static SQLManager sqlManager;
     public static SQLiteManager sqliteManager;
-
-    private StelyTeamAPI stelyTeamApi;
 
     public static ArrayList<String> playersCreateTeam = new ArrayList<String>();
 
@@ -39,6 +39,8 @@ public class StelyTeamPlugin extends JavaPlugin {
     public static ArrayList<String> playersAddTeamMoney = new ArrayList<String>();
     public static ArrayList<String> playersWithdrawTeamMoney = new ArrayList<String>();
 
+    private TeamManager teamManager;
+    private StelyTeamAPI stelyTeamApi;
 
     @Override
     public void onEnable() {
@@ -63,7 +65,8 @@ public class StelyTeamPlugin extends JavaPlugin {
         getCommand("stelyteam").setTabCompleter(new CmdStelyTeam());
         getServer().getPluginManager().registerEvents(new InventoryClickManager(), this);
 
-        stelyTeamApi = new StelyTeamAPI();
+        teamManager = new TeamManager(new DataBaseStorage()); // TODO Add the yaml storage loading. For now, force the db
+        stelyTeamApi = new StelyTeamAPI(teamManager);
 
         getLogger().info("StelyTeam ON");
     }

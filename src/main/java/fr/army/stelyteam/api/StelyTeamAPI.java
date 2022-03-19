@@ -1,17 +1,23 @@
 package fr.army.stelyteam.api;
 
+import fr.army.stelyteam.storage.TeamManager;
+
 import java.util.UUID;
 
 public class StelyTeamAPI {
 
-    public ITeam getTeamOfPlayer(UUID player) {
-        //TODO Get the Team from the storage
-        return null;
+    private final TeamManager teamManager;
+
+    public StelyTeamAPI(TeamManager teamManager) {
+        this.teamManager = teamManager;
     }
 
-    public ITeam getTeamOfOfflinePlayer(UUID uuid) {
-        //TODO Get the Team from the storage
-        return null;
+    public ITeam getPlayerTeam(UUID player) {
+        return teamManager.getPlayerTeam(player);
+    }
+
+    public ITeam getOfflinePlayerTeam(UUID teamId) {
+        return teamManager.getOrLoadTeam(teamId);
     }
 
 }

@@ -32,18 +32,6 @@ public class TeamManager {
      * {@code null} if the {@link Team} does not exist
      */
     public Team getOrLoadTeam(UUID id) {
-        return getOrLoadTeam(id, false);
-    }
-
-    /**
-     * Get a {@link Team} from the cache or the storage
-     *
-     * @param id           The {@link Team}'s id
-     * @param keepInMemory Whether it should keep in memory the {@link Team} if it's loaded from the storage
-     * @return The {@link Team} that have the id {@code id}.
-     * {@code null} if the {@link Team} does not exist
-     */
-    public Team getOrLoadTeam(UUID id, boolean keepInMemory) {
         return null;
     }
 
@@ -67,6 +55,23 @@ public class TeamManager {
     }
 
     /**
+     * Get the player {@link Team}
+     *
+     * @param playerId The player {@link UUID}
+     * @return The {@link Team} of the player.
+     * {@code null} if the player does not have a {@link Team}
+     */
+    public Team getOrLoadPlayerTeam(UUID playerId) {
+        final Team loadedTeam = getPlayerTeam(playerId);
+        if (loadedTeam != null) {
+            return loadedTeam;
+        }
+
+        // TODO Load it from the storage
+        return null;
+    }
+
+    /**
      * Load the {@link UUID} of the team of a player
      *
      * @param playerId The player {@link UUID}
@@ -74,12 +79,6 @@ public class TeamManager {
      * {@code null} if the player does not have a {@link Team}
      */
     public UUID getPlayerTeamId(UUID playerId) {
-        final Team loadedTeam = getPlayerTeam(playerId);
-        if (loadedTeam != null) {
-            return loadedTeam.getId();
-        }
-
-        // TODO Load it from the storage
         return null;
     }
 
