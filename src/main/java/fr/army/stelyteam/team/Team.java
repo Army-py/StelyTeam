@@ -16,7 +16,7 @@ public class Team implements ITeam, ChangeTracked {
     private final Date creationDate;
     private final PlayerList owners;
     private final PlayerList members;
-    private boolean dirty;
+    private int dirty;
 
     public Team(UUID uuid, String prefix, String suffix, UUID creator, Date creationDate, PlayerList owners, PlayerList members) {
         this.uuid = uuid;
@@ -65,11 +65,23 @@ public class Team implements ITeam, ChangeTracked {
 
     @Override
     public boolean isDirty() {
-        return dirty;
+        return dirty == 0;
     }
 
+    /**
+     * Change the dirty flag for every field
+     *
+     * @param dirty {@code true} to set every field dirty, {@code false} to set every field clean
+     */
     @Override
     public void setDirty(boolean dirty) {
-        this.dirty = dirty;
+        if(dirty) {
+            int dirtyValue = 0;
+            for (TeamField tf : TeamField.values()) {
+                dirtyValue = tf.setDirty(dirtyValue);
+            }
+        } else {
+            this.dirty = 0;
+        }
     }
 }
