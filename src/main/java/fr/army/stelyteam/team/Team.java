@@ -1,17 +1,18 @@
 package fr.army.stelyteam.team;
 
-import fr.army.stelyteam.api.IPlayerList;
 import fr.army.stelyteam.api.ITeam;
 import fr.army.stelyteam.storage.ChangeTracked;
 
 import java.util.Date;
+import java.util.Objects;
 import java.util.UUID;
 
 public class Team implements ITeam, ChangeTracked {
 
     private final UUID uuid;
-    private final String prefix;
-    private final String suffix;
+    private String commandId;
+    private String prefix;
+    private String suffix;
     private final UUID creator;
     private final Date creationDate;
     private final PlayerList owners;
@@ -34,13 +35,42 @@ public class Team implements ITeam, ChangeTracked {
     }
 
     @Override
+    public String getCommandId() {
+        return commandId;
+    }
+
+    public void setCommandId(String commandId) {
+        if (Objects.equals(this.commandId, commandId)) {
+            return;
+        }
+        this.commandId = commandId;
+        setDirty(TeamField.COMMAND_ID);
+    }
+
+    @Override
     public String getPrefix() {
         return prefix;
+    }
+
+    public void setPrefix(String prefix) {
+        if (Objects.equals(this.prefix, prefix)) {
+            return;
+        }
+        this.prefix = prefix;
+        setDirty(TeamField.PREFIX);
     }
 
     @Override
     public String getSuffix() {
         return suffix;
+    }
+
+    public void setSuffix(String suffix) {
+        if (Objects.equals(this.suffix, suffix)) {
+            return;
+        }
+        this.suffix = suffix;
+        setDirty(TeamField.SUFFIX);
     }
 
     @Override
@@ -54,12 +84,12 @@ public class Team implements ITeam, ChangeTracked {
     }
 
     @Override
-    public IPlayerList getOwners() {
+    public PlayerList getOwners() {
         return owners;
     }
 
     @Override
-    public IPlayerList getMembers() {
+    public PlayerList getMembers() {
         return members;
     }
 
@@ -75,7 +105,7 @@ public class Team implements ITeam, ChangeTracked {
      */
     @Override
     public void setDirty(boolean dirty) {
-        if(dirty) {
+        if (dirty) {
             int dirtyValue = 0;
             for (TeamField tf : TeamField.values()) {
                 dirtyValue = tf.setDirty(dirtyValue);
@@ -83,5 +113,9 @@ public class Team implements ITeam, ChangeTracked {
         } else {
             this.dirty = 0;
         }
+    }
+
+    private void setDirty(TeamField teamField) {
+        dirty = teamField.setDirty(dirty);
     }
 }

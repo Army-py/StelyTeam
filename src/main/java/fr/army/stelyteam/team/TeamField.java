@@ -2,6 +2,8 @@ package fr.army.stelyteam.team;
 
 public enum TeamField {
 
+    ID,
+    COMMAND_ID,
     PREFIX,
     SUFFIX,
     CREATOR,

@@ -7,6 +7,8 @@ public interface ITeam {
 
     UUID getId();
 
+    String getCommandId();
+
     String getPrefix();
 
     String getSuffix();
