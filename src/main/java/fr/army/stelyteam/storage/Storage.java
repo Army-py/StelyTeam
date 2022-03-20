@@ -12,7 +12,7 @@ public interface Storage {
 
     CompletableFuture<Team> loadTeam(UUID teamID);
 
-    CompletableFuture<Void> saveTeam(Map<TeamField, Optional<Object>> team);
+    CompletableFuture<Void> saveTeam(UUID teamId, Map<TeamField, Optional<Object>> changes);
 
     CompletableFuture<Void> deleteTeam(UUID teamId);
 

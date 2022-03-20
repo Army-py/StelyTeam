@@ -17,7 +17,7 @@ public class FileStorage implements Storage {
     }
 
     @Override
-    public CompletableFuture<Void> saveTeam(Map<TeamField, Optional<Object>> team) {
+    public CompletableFuture<Void> saveTeam(UUID teamId, Map<TeamField, Optional<Object>> changes) {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 

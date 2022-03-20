@@ -6,18 +6,19 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.Lock;
 
 public class PlayerTeamTracker implements ChangeTracked {
 
     private final ConcurrentMap<UUID, Optional<Team>> playerTeams;
-    private final ReentrantLock lock;
+    private final Lock lock;
     private boolean dirty;
 
-    public PlayerTeamTracker(ConcurrentMap<UUID, Optional<Team>> playerTeams) {
-        this.playerTeams = playerTeams;
-        lock = new ReentrantLock(true);
+    public PlayerTeamTracker(Lock lock) {
+        playerTeams = new ConcurrentHashMap<>();
+        this.lock = lock;
     }
 
     public void changeTeam(UUID playerId, Team teamId) {

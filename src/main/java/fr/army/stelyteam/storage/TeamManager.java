@@ -105,7 +105,7 @@ public class TeamManager {
             final List<CompletableFuture<?>> futures = new LinkedList<>();
             // Save team
             if (team.isDirty()) {
-                futures.add(storage.saveTeam(team.getForSaving()));
+                futures.add(storage.saveTeam(team.getId(), team.getForSaving()));
             }
 
             // Save players in the team

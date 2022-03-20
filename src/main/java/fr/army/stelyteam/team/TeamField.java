@@ -7,7 +7,9 @@ public enum TeamField {
     PREFIX,
     SUFFIX,
     CREATOR,
-    CREATION_DATE;
+    CREATION_DATE,
+    OWNERS,
+    MEMBERS;
 
     /**
      * Set this field dirty

@@ -20,15 +20,20 @@ public class Team implements ITeam, ChangeTracked {
     private String suffix;
     private int dirty;
 
-    public Team(UUID uuid, String prefix, String suffix, UUID creator, Date creationDate, PlayerList owners, PlayerList members) {
+    public Team(UUID uuid, String prefix, String suffix, UUID creator, Date creationDate, Set<UUID> owners, Set<UUID> members) {
+        Objects.requireNonNull(uuid);
         this.uuid = uuid;
         this.prefix = prefix;
         this.suffix = suffix;
         this.creator = creator;
         this.creationDate = creationDate;
-        this.owners = owners;
-        this.members = members;
+        this.owners = new PlayerList(this, TeamField.OWNERS, owners);
+        this.members = new PlayerList(this, TeamField.MEMBERS, members);
         this.lock = new ReentrantLock(true);
+    }
+
+    public Team(UUID uuid, String prefix, String suffix, UUID creator, Date creationDate) {
+        this(uuid, prefix, suffix, creator, creationDate, null, null);
     }
 
     @Override
@@ -97,7 +102,7 @@ public class Team implements ITeam, ChangeTracked {
 
     @Override
     public Date getCreationDate() {
-        return (Date) creationDate.clone();
+        return creationDate == null ? null : (Date) creationDate.clone();
     }
 
     @Override
@@ -114,7 +119,7 @@ public class Team implements ITeam, ChangeTracked {
     public boolean isDirty() {
         lock.lock();
         try {
-            return dirty == 0;
+            return dirty != 0;
         } finally {
             lock.unlock();
         }
@@ -134,6 +139,7 @@ public class Team implements ITeam, ChangeTracked {
                 for (TeamField tf : TeamField.values()) {
                     dirtyValue = tf.setDirty(dirtyValue);
                 }
+                this.dirty = dirtyValue;
             } else {
                 this.dirty = 0;
             }
@@ -142,7 +148,7 @@ public class Team implements ITeam, ChangeTracked {
         }
     }
 
-    private void setDirty(TeamField teamField) {
+    public void setDirty(TeamField teamField) {
         dirty = teamField.setDirty(dirty);
     }
 
@@ -161,6 +167,8 @@ public class Team implements ITeam, ChangeTracked {
                     case SUFFIX -> suffix;
                     case CREATOR -> creator;
                     case CREATION_DATE -> creationDate;
+                    case OWNERS -> owners.getIds().toArray(new UUID[0]);
+                    case MEMBERS -> members.getIds().toArray(new UUID[0]);
                 };
                 changes.put(teamField, Optional.ofNullable(fieldValue));
             }
