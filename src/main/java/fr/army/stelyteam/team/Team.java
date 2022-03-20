@@ -3,20 +3,21 @@ package fr.army.stelyteam.team;
 import fr.army.stelyteam.api.ITeam;
 import fr.army.stelyteam.storage.ChangeTracked;
 
-import java.util.Date;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Team implements ITeam, ChangeTracked {
 
     private final UUID uuid;
-    private String commandId;
-    private String prefix;
-    private String suffix;
     private final UUID creator;
     private final Date creationDate;
     private final PlayerList owners;
     private final PlayerList members;
+    private final Lock lock;
+    private String commandId;
+    private String prefix;
+    private String suffix;
     private int dirty;
 
     public Team(UUID uuid, String prefix, String suffix, UUID creator, Date creationDate, PlayerList owners, PlayerList members) {
@@ -27,6 +28,7 @@ public class Team implements ITeam, ChangeTracked {
         this.creationDate = creationDate;
         this.owners = owners;
         this.members = members;
+        this.lock = new ReentrantLock();
     }
 
     @Override
@@ -40,11 +42,16 @@ public class Team implements ITeam, ChangeTracked {
     }
 
     public void setCommandId(String commandId) {
-        if (Objects.equals(this.commandId, commandId)) {
-            return;
+        lock.lock();
+        try {
+            if (Objects.equals(this.commandId, commandId)) {
+                return;
+            }
+            this.commandId = commandId;
+            setDirty(TeamField.COMMAND_ID);
+        } finally {
+            lock.unlock();
         }
-        this.commandId = commandId;
-        setDirty(TeamField.COMMAND_ID);
     }
 
     @Override
@@ -53,11 +60,16 @@ public class Team implements ITeam, ChangeTracked {
     }
 
     public void setPrefix(String prefix) {
-        if (Objects.equals(this.prefix, prefix)) {
-            return;
+        lock.lock();
+        try {
+            if (Objects.equals(this.prefix, prefix)) {
+                return;
+            }
+            this.prefix = prefix;
+            setDirty(TeamField.PREFIX);
+        } finally {
+            lock.unlock();
         }
-        this.prefix = prefix;
-        setDirty(TeamField.PREFIX);
     }
 
     @Override
@@ -66,11 +78,16 @@ public class Team implements ITeam, ChangeTracked {
     }
 
     public void setSuffix(String suffix) {
-        if (Objects.equals(this.suffix, suffix)) {
-            return;
+        lock.lock();
+        try {
+            if (Objects.equals(this.suffix, suffix)) {
+                return;
+            }
+            this.suffix = suffix;
+            setDirty(TeamField.SUFFIX);
+        } finally {
+            lock.unlock();
         }
-        this.suffix = suffix;
-        setDirty(TeamField.SUFFIX);
     }
 
     @Override
@@ -80,7 +97,7 @@ public class Team implements ITeam, ChangeTracked {
 
     @Override
     public Date getCreationDate() {
-        return creationDate;
+        return (Date) creationDate.clone();
     }
 
     @Override
@@ -105,17 +122,48 @@ public class Team implements ITeam, ChangeTracked {
      */
     @Override
     public void setDirty(boolean dirty) {
-        if (dirty) {
-            int dirtyValue = 0;
-            for (TeamField tf : TeamField.values()) {
-                dirtyValue = tf.setDirty(dirtyValue);
+        lock.lock();
+        try {
+            if (dirty) {
+                int dirtyValue = 0;
+                for (TeamField tf : TeamField.values()) {
+                    dirtyValue = tf.setDirty(dirtyValue);
+                }
+            } else {
+                this.dirty = 0;
             }
-        } else {
-            this.dirty = 0;
+        } finally {
+            lock.unlock();
         }
     }
 
     private void setDirty(TeamField teamField) {
         dirty = teamField.setDirty(dirty);
     }
+
+    public Map<TeamField, Optional<Object>> getForSaving() {
+        lock.lock();
+        try {
+            final Map<TeamField, Optional<Object>> changes = new HashMap<>();
+            for (TeamField teamField : TeamField.values()) {
+                if (!teamField.isDirty(dirty)) {
+                    continue;
+                }
+                final Object fieldValue = switch (teamField) {
+                    case ID -> uuid;
+                    case COMMAND_ID -> commandId;
+                    case PREFIX -> prefix;
+                    case SUFFIX -> suffix;
+                    case CREATOR -> creator;
+                    case CREATION_DATE -> creationDate;
+                };
+                changes.put(teamField, Optional.ofNullable(fieldValue));
+            }
+
+            return changes;
+        } finally {
+            lock.unlock();
+        }
+    }
+
 }

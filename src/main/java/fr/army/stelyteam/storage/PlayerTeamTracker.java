@@ -32,14 +32,12 @@ public class PlayerTeamTracker implements ChangeTracked {
 
     public Map<UUID, Optional<Team>> getForSaving() {
         lock.lock();
-        final Map<UUID, Optional<Team>> changes;
         try {
-            changes = new HashMap<>(playerTeams);
             this.dirty = false;
+            return new HashMap<>(playerTeams);
         } finally {
             lock.unlock();
         }
-        return changes;
     }
 
     @Override

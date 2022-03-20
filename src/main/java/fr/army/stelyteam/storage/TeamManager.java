@@ -9,17 +9,20 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class TeamManager {
 
     private final Storage storage;
     private final ConcurrentMap<UUID, Team> playerTeams;
     private final ConcurrentMap<UUID, Team> teamById;
+    private final ReentrantLock lock;
 
     public TeamManager(Storage storage) {
         this.storage = storage;
         playerTeams = new ConcurrentHashMap<>();
         teamById = new ConcurrentHashMap<>();
+        lock = new ReentrantLock();
     }
 
     /**
@@ -99,7 +102,15 @@ public class TeamManager {
      * @return A {@link CompletableFuture} representing the save action
      */
     public CompletableFuture<Void> save(Team team) {
-        return null;
+        lock.lock();
+        try {
+
+            return CompletableFuture.allOf(
+
+            );
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -108,18 +119,23 @@ public class TeamManager {
      * @param team The {@link Team} to delete
      */
     public CompletableFuture<Void> delete(Team team) {
-        // Kick the players from the team
-        final PlayerList owners = team.getOwners();
-        final PlayerList members = team.getMembers();
-        owners.clear();
-        members.clear();
+        lock.lock();
+        try {
+            // Kick the players from the team
+            final PlayerList owners = team.getOwners();
+            final PlayerList members = team.getMembers();
+            owners.clear();
+            members.clear();
 
-        // Delete it from storage and then delete it from the cache
-        return CompletableFuture.allOf(
-                storage.deleteTeam(team.getId()).thenAccept(teamById::remove),
-                storage.savePlayerTeams(owners.getPlayerTeamTracker()).thenAccept(this::linkPlayerTeams),
-                storage.savePlayerTeams(members.getPlayerTeamTracker()).thenAccept(this::linkPlayerTeams)
-        );
+            // Delete it from storage and then delete it from the cache
+            return CompletableFuture.allOf(
+                    storage.deleteTeam(team.getId()).thenAccept(teamById::remove),
+                    storage.savePlayerTeams(owners.getPlayerTeamTracker()).thenAccept(this::linkPlayerTeams),
+                    storage.savePlayerTeams(members.getPlayerTeamTracker()).thenAccept(this::linkPlayerTeams)
+            );
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
