@@ -17,7 +17,7 @@ public class PlayerTeamTracker implements ChangeTracked {
 
     public PlayerTeamTracker(ConcurrentMap<UUID, Optional<Team>> playerTeams) {
         this.playerTeams = playerTeams;
-        lock = new ReentrantLock();
+        lock = new ReentrantLock(true);
     }
 
     public void changeTeam(UUID playerId, Team teamId) {
@@ -42,7 +42,12 @@ public class PlayerTeamTracker implements ChangeTracked {
 
     @Override
     public boolean isDirty() {
-        return dirty;
+        lock.lock();
+        try {
+            return dirty;
+        } finally {
+            lock.unlock();
+        }
     }
 
     @Override

@@ -28,7 +28,7 @@ public class Team implements ITeam, ChangeTracked {
         this.creationDate = creationDate;
         this.owners = owners;
         this.members = members;
-        this.lock = new ReentrantLock();
+        this.lock = new ReentrantLock(true);
     }
 
     @Override
@@ -112,7 +112,12 @@ public class Team implements ITeam, ChangeTracked {
 
     @Override
     public boolean isDirty() {
-        return dirty == 0;
+        lock.lock();
+        try {
+            return dirty == 0;
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**
@@ -160,6 +165,7 @@ public class Team implements ITeam, ChangeTracked {
                 changes.put(teamField, Optional.ofNullable(fieldValue));
             }
 
+            dirty = 0;
             return changes;
         } finally {
             lock.unlock();

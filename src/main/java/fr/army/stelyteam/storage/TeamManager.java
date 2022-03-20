@@ -3,9 +3,7 @@ package fr.army.stelyteam.storage;
 import fr.army.stelyteam.team.PlayerList;
 import fr.army.stelyteam.team.Team;
 
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -104,10 +102,35 @@ public class TeamManager {
     public CompletableFuture<Void> save(Team team) {
         lock.lock();
         try {
+            final List<CompletableFuture<?>> futures = new LinkedList<>();
+            // Save team
+            if (team.isDirty()) {
+                futures.add(storage.saveTeam(team.getForSaving()));
+            }
 
-            return CompletableFuture.allOf(
+            // Save players in the team
+            final PlayerList owners = team.getOwners();
+            final PlayerList members = team.getMembers();
+            // Save owners
+            if (owners.getPlayerTeamTracker().isDirty()) {
+                final Map<UUID, Optional<Team>> changes = owners.getPlayerTeamTracker().getForSaving();
+                futures.add(
+                        storage.savePlayerTeams(changes).thenRun(() -> linkPlayerTeams(changes))
+                );
+            }
+            // Save members
+            if (members.getPlayerTeamTracker().isDirty()) {
+                final Map<UUID, Optional<Team>> changes = members.getPlayerTeamTracker().getForSaving();
+                futures.add(
+                        storage.savePlayerTeams(changes).thenRun(() -> linkPlayerTeams(changes))
+                );
+            }
 
-            );
+            // Don't transfer it to the storage if there is nothing to do
+            if (futures.isEmpty()) {
+                return CompletableFuture.completedFuture(null);
+            }
+            return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
         } finally {
             lock.unlock();
         }
@@ -127,12 +150,32 @@ public class TeamManager {
             owners.clear();
             members.clear();
 
-            // Delete it from storage and then delete it from the cache
-            return CompletableFuture.allOf(
-                    storage.deleteTeam(team.getId()).thenAccept(teamById::remove),
-                    storage.savePlayerTeams(owners.getPlayerTeamTracker()).thenAccept(this::linkPlayerTeams),
-                    storage.savePlayerTeams(members.getPlayerTeamTracker()).thenAccept(this::linkPlayerTeams)
+            // Get the id
+            final UUID teamId = team.getId();
+
+            // Create futures
+            final List<CompletableFuture<?>> futures = new LinkedList<>();
+            // Delete team
+            futures.add(
+                    storage.deleteTeam(teamId).thenRun(() -> teamById.remove(teamId))
             );
+            // Save owners
+            if (owners.getPlayerTeamTracker().isDirty()) {
+                final Map<UUID, Optional<Team>> changes = owners.getPlayerTeamTracker().getForSaving();
+                futures.add(
+                        storage.savePlayerTeams(changes).thenRun(() -> linkPlayerTeams(changes))
+                );
+            }
+            // Save members
+            if (members.getPlayerTeamTracker().isDirty()) {
+                final Map<UUID, Optional<Team>> changes = members.getPlayerTeamTracker().getForSaving();
+                futures.add(
+                        storage.savePlayerTeams(changes).thenRun(() -> linkPlayerTeams(changes))
+                );
+            }
+
+            // Transfer it to the storage in all case as there is at least the remove operation
+            return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
         } finally {
             lock.unlock();
         }
