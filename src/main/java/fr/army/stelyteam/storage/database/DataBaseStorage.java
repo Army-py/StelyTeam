@@ -1,8 +1,8 @@
 package fr.army.stelyteam.storage.database;
 
-import fr.army.stelyteam.storage.PlayerTeamTracker;
 import fr.army.stelyteam.storage.Storage;
 import fr.army.stelyteam.team.Team;
+import fr.army.stelyteam.team.TeamField;
 
 import java.util.Map;
 import java.util.Optional;
@@ -19,12 +19,12 @@ public class DataBaseStorage implements Storage {
     }
 
     @Override
-    public CompletableFuture<Void> saveTeam(Team team) {
+    public CompletableFuture<Void> saveTeam(Map<TeamField, Optional<Object>> team) {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
     @Override
-    public CompletableFuture<UUID> deleteTeam(UUID teamId) {
+    public CompletableFuture<Void> deleteTeam(UUID teamId) {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
@@ -34,7 +34,7 @@ public class DataBaseStorage implements Storage {
     }
 
     @Override
-    public CompletableFuture<Map<UUID, Optional<Team>>> savePlayerTeams(PlayerTeamTracker playerTeamTracker) {
+    public CompletableFuture<Void> savePlayerTeams(Map<UUID, Optional<Team>> changes) {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
