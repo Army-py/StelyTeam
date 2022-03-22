@@ -11,13 +11,13 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class TeamManager {
 
-    private final Storage storage;
+    private final StorageManager storageManager;
     private final ConcurrentMap<UUID, Team> playerTeams;
     private final ConcurrentMap<UUID, Team> teamById;
     private final ReentrantLock lock;
 
-    public TeamManager(Storage storage) {
-        this.storage = storage;
+    public TeamManager(StorageManager storageManager) {
+        this.storageManager = storageManager;
         playerTeams = new ConcurrentHashMap<>();
         teamById = new ConcurrentHashMap<>();
         lock = new ReentrantLock();
@@ -47,7 +47,7 @@ public class TeamManager {
         if (cached != null) {
             return CompletableFuture.completedFuture(cached);
         }
-        return storage.loadTeam(id);
+        return storageManager.loadTeam(id);
     }
 
     /**
@@ -74,7 +74,7 @@ public class TeamManager {
             return CompletableFuture.completedFuture(cachedTeam);
         }
 
-        return storage.getPlayerTeamId(playerId).thenCompose(storage::loadTeam);
+        return storageManager.getPlayerTeamId(playerId).thenCompose(storageManager::loadTeam);
     }
 
     /**
@@ -90,7 +90,7 @@ public class TeamManager {
             return CompletableFuture.completedFuture(cachedTeam.getId());
         }
 
-        return storage.getPlayerTeamId(playerId);
+        return storageManager.getPlayerTeamId(playerId);
     }
 
     /**
@@ -105,7 +105,7 @@ public class TeamManager {
             final List<CompletableFuture<?>> futures = new LinkedList<>();
             // Save team
             if (team.isDirty()) {
-                futures.add(storage.saveTeam(team.getId(), team.getForSaving()));
+                futures.add(storageManager.saveTeam(team.getId(), team.getForSaving()));
             }
 
             // Save players in the team
@@ -115,18 +115,18 @@ public class TeamManager {
             if (owners.getPlayerTeamTracker().isDirty()) {
                 final Map<UUID, Optional<Team>> changes = owners.getPlayerTeamTracker().getForSaving();
                 futures.add(
-                        storage.savePlayerTeams(changes).thenRun(() -> linkPlayerTeams(changes))
+                        storageManager.savePlayerTeams(changes).thenRun(() -> linkPlayerTeams(changes))
                 );
             }
             // Save members
             if (members.getPlayerTeamTracker().isDirty()) {
                 final Map<UUID, Optional<Team>> changes = members.getPlayerTeamTracker().getForSaving();
                 futures.add(
-                        storage.savePlayerTeams(changes).thenRun(() -> linkPlayerTeams(changes))
+                        storageManager.savePlayerTeams(changes).thenRun(() -> linkPlayerTeams(changes))
                 );
             }
 
-            // Don't transfer it to the storage if there is nothing to do
+            // Don't transfer it to the storageManager if there is nothing to do
             if (futures.isEmpty()) {
                 return CompletableFuture.completedFuture(null);
             }
@@ -157,24 +157,24 @@ public class TeamManager {
             final List<CompletableFuture<?>> futures = new LinkedList<>();
             // Delete team
             futures.add(
-                    storage.deleteTeam(teamId).thenRun(() -> teamById.remove(teamId))
+                    storageManager.deleteTeam(teamId).thenRun(() -> teamById.remove(teamId))
             );
             // Save owners
             if (owners.getPlayerTeamTracker().isDirty()) {
                 final Map<UUID, Optional<Team>> changes = owners.getPlayerTeamTracker().getForSaving();
                 futures.add(
-                        storage.savePlayerTeams(changes).thenRun(() -> linkPlayerTeams(changes))
+                        storageManager.savePlayerTeams(changes).thenRun(() -> linkPlayerTeams(changes))
                 );
             }
             // Save members
             if (members.getPlayerTeamTracker().isDirty()) {
                 final Map<UUID, Optional<Team>> changes = members.getPlayerTeamTracker().getForSaving();
                 futures.add(
-                        storage.savePlayerTeams(changes).thenRun(() -> linkPlayerTeams(changes))
+                        storageManager.savePlayerTeams(changes).thenRun(() -> linkPlayerTeams(changes))
                 );
             }
 
-            // Transfer it to the storage in all case as there is at least the remove operation
+            // Transfer it to the storageManager in all case as there is at least the remove operation
             return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
         } finally {
             lock.unlock();
