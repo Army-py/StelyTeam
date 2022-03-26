@@ -8,6 +8,10 @@ public enum TeamField {
     SUFFIX,
     CREATOR,
     CREATION_DATE,
+    LEVEL,
+    HOME,
+    BANK_ACCOUNT,
+    MONEY,
     OWNERS,
     MEMBERS;
 

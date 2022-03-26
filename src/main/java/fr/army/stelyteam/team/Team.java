@@ -1,6 +1,8 @@
 package fr.army.stelyteam.team;
 
 import fr.army.stelyteam.api.ITeam;
+import fr.army.stelyteam.api.ITeamPerks;
+import fr.army.stelyteam.api.LazyLocation;
 import fr.army.stelyteam.storage.ChangeTracked;
 
 import java.util.*;
@@ -12,6 +14,7 @@ public class Team implements ITeam, ChangeTracked {
     private final UUID uuid;
     private final UUID creator;
     private final Date creationDate;
+    private final TeamPerks perks;
     private final PlayerList owners;
     private final PlayerList members;
     private final Lock lock;
@@ -20,20 +23,37 @@ public class Team implements ITeam, ChangeTracked {
     private String suffix;
     private int dirty;
 
-    public Team(UUID uuid, String prefix, String suffix, UUID creator, Date creationDate, Set<UUID> owners, Set<UUID> members) {
+    public Team(
+            UUID uuid,
+            String commandId,
+            String prefix,
+            String suffix,
+            UUID creator,
+            Date creationDate,
+            int level,
+            boolean bankAccount,
+            double money,
+            LazyLocation home,
+            Set<UUID> owners,
+            Set<UUID> members
+    ) {
         Objects.requireNonNull(uuid);
         this.uuid = uuid;
+        this.commandId = commandId;
         this.prefix = prefix;
         this.suffix = suffix;
         this.creator = creator;
-        this.creationDate = creationDate;
+        this.creationDate = creationDate == null ? null : (Date) creationDate.clone();
+        this.perks = new TeamPerks(
+                this,
+                level,
+                bankAccount,
+                money,
+                home
+        );
         this.owners = new PlayerList(this, TeamField.OWNERS, owners);
         this.members = new PlayerList(this, TeamField.MEMBERS, members);
         this.lock = new ReentrantLock(true);
-    }
-
-    public Team(UUID uuid, String prefix, String suffix, UUID creator, Date creationDate) {
-        this(uuid, prefix, suffix, creator, creationDate, null, null);
     }
 
     @Override
@@ -106,6 +126,12 @@ public class Team implements ITeam, ChangeTracked {
     }
 
     @Override
+    public ITeamPerks getPerks() {
+        return perks;
+    }
+
+
+    @Override
     public PlayerList getOwners() {
         return owners;
     }
@@ -149,7 +175,12 @@ public class Team implements ITeam, ChangeTracked {
     }
 
     public void setDirty(TeamField teamField) {
-        dirty = teamField.setDirty(dirty);
+        lock.lock();
+        try {
+            dirty = teamField.setDirty(dirty);
+        } finally {
+            lock.unlock();
+        }
     }
 
     public Map<TeamField, Optional<Object>> getForSaving() {
@@ -167,6 +198,10 @@ public class Team implements ITeam, ChangeTracked {
                     case SUFFIX -> suffix;
                     case CREATOR -> creator;
                     case CREATION_DATE -> creationDate;
+                    case LEVEL -> perks.getLevel();
+                    case HOME -> perks.getHome();
+                    case BANK_ACCOUNT -> perks.getBankAccount().isEnable();
+                    case MONEY -> perks.getBankAccount().getMoney();
                     case OWNERS -> owners.getIds().toArray(new UUID[0]);
                     case MEMBERS -> members.getIds().toArray(new UUID[0]);
                 };

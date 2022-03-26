@@ -17,6 +17,8 @@ public interface ITeam {
 
     Date getCreationDate();
 
+    ITeamPerks getPerks();
+
     IPlayerList getOwners();
 
     IPlayerList getMembers();
