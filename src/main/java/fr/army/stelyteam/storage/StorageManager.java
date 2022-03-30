@@ -8,15 +8,29 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 public class StorageManager {
 
     private final Map<TeamField, Storage> fieldStorage;
+    private final Map<Storage, Set<TeamField>> storageByField;
 
     public StorageManager(YamlConfiguration config, Logger logger) {
         fieldStorage = Collections.synchronizedMap(new EnumMap<>(TeamField.class));
         fieldStorage.putAll(initStorages(config, logger));
+        storageByField = new ConcurrentHashMap<>();
+        loadStorageByField();
+    }
+
+    /**
+     * Load the storageByField map from the fieldStorage map
+     */
+    private void loadStorageByField() {
+        for (Map.Entry<TeamField, Storage> entry : fieldStorage.entrySet()) {
+            final Set<TeamField> fields = storageByField.computeIfAbsent(entry.getValue(), k -> new HashSet<>());
+            fields.add(entry.getKey());
+        }
     }
 
     /**
@@ -100,12 +114,6 @@ public class StorageManager {
 
     public CompletableFuture<Team> loadTeam(UUID teamId) {
         final Map<TeamField, Optional<Object>> values = Collections.synchronizedMap(new EnumMap<>(TeamField.class));
-        // Prepare which field will be sent to which storage
-        final Map<Storage, Set<TeamField>> storageByField = new HashMap<>();
-        for (Map.Entry<TeamField, Storage> entry : fieldStorage.entrySet()) {
-            final Set<TeamField> fields = storageByField.computeIfAbsent(entry.getValue(), k -> new HashSet<>());
-            fields.add(entry.getKey());
-        }
         // Send the fields to the storages
         final CompletableFuture<?>[] storageFutures = new CompletableFuture[storageByField.size()];
         int index = 0;
@@ -156,7 +164,13 @@ public class StorageManager {
     }
 
     public CompletableFuture<Void> deleteTeam(UUID teamId) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        final CompletableFuture<?>[] deleteFutures = new CompletableFuture[storageByField.size()];
+        int index = 0;
+        for (Storage storage : storageByField.keySet()) {
+            deleteFutures[index] = storage.deleteTeam(teamId);
+            index++;
+        }
+        return CompletableFuture.allOf(deleteFutures);
     }
 
     public CompletableFuture<UUID> getPlayerTeamId(UUID playerId) {
