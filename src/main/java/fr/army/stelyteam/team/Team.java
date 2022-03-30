@@ -192,7 +192,6 @@ public class Team implements ITeam, ChangeTracked {
                     continue;
                 }
                 final Object fieldValue = switch (teamField) {
-                    case ID -> uuid;
                     case COMMAND_ID -> commandId;
                     case PREFIX -> prefix;
                     case SUFFIX -> suffix;

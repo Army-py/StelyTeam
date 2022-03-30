@@ -1,5 +1,6 @@
 package fr.army.stelyteam.storage;
 
+import fr.army.stelyteam.api.LazyLocation;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.team.TeamField;
 import org.bukkit.configuration.ConfigurationSection;
@@ -131,7 +132,23 @@ public class StorageManager {
      * @return A {@link Team} filled by all specified values
      */
     private Team createTeam(UUID teamId, Map<TeamField, Optional<Object>> values) {
-        return null;
+        if (values.isEmpty()) {
+            return null;
+        }
+        return new Team(
+                teamId,
+                (String) values.get(TeamField.COMMAND_ID).orElseThrow(RuntimeException::new),
+                (String) values.get(TeamField.PREFIX).orElse(null),
+                (String) values.get(TeamField.SUFFIX).orElse(null),
+                (UUID) values.get(TeamField.CREATOR).orElse(null),
+                (Date) values.get(TeamField.CREATION_DATE).orElse(null),
+                (int) values.get(TeamField.LEVEL).orElse(0),
+                (boolean) values.get(TeamField.BANK_ACCOUNT).orElse(false),
+                (double) values.get(TeamField.MONEY).orElse(0d),
+                (LazyLocation) values.get(TeamField.HOME).orElse(null),
+                new HashSet<>(Arrays.asList((UUID[]) values.get(TeamField.OWNERS).orElse(new UUID[0]))),
+                new HashSet<>(Arrays.asList((UUID[]) values.get(TeamField.MEMBERS).orElse(new UUID[0])))
+        );
     }
 
     public CompletableFuture<Void> saveTeam(UUID teamId, Map<TeamField, Optional<Object>> changes) {
