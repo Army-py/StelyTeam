@@ -6,13 +6,14 @@ import fr.army.stelyteam.team.TeamField;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 public class FileStorage implements Storage {
 
     @Override
-    public CompletableFuture<Team> loadTeam(UUID teamID) {
+    public CompletableFuture<Map<TeamField, Optional<Object>>> loadTeam(UUID teamID, Set<TeamField> teamField) {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 

@@ -5,12 +5,13 @@ import fr.army.stelyteam.team.TeamField;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 public interface Storage {
 
-    CompletableFuture<Team> loadTeam(UUID teamID);
+    CompletableFuture<Map<TeamField, Optional<Object>>> loadTeam(UUID teamID, Set<TeamField> teamField);
 
     CompletableFuture<Void> saveTeam(UUID teamId, Map<TeamField, Optional<Object>> changes);
 

@@ -12,12 +12,10 @@ import java.util.logging.Logger;
 public class StorageManager {
 
     private final Map<TeamField, Storage> fieldStorage;
-    private final Storage[] storages;
 
     public StorageManager(YamlConfiguration config, Logger logger) {
-        fieldStorage = new EnumMap<>(TeamField.class);
+        fieldStorage = Collections.synchronizedMap(new EnumMap<>(TeamField.class));
         fieldStorage.putAll(initStorages(config, logger));
-        storages = new HashSet<>(fieldStorage.values()).toArray(new Storage[0]);
     }
 
     /**
@@ -99,8 +97,41 @@ public class StorageManager {
     }
 
 
-    public CompletableFuture<Team> loadTeam(UUID teamID) {
-        throw new UnsupportedOperationException("Not implemented yet");
+    public CompletableFuture<Team> loadTeam(UUID teamId) {
+        final Map<TeamField, Optional<Object>> values = Collections.synchronizedMap(new EnumMap<>(TeamField.class));
+        // Prepare which field will be sent to which storage
+        final Map<Storage, Set<TeamField>> storageByField = new HashMap<>();
+        for (Map.Entry<TeamField, Storage> entry : fieldStorage.entrySet()) {
+            final Set<TeamField> fields = storageByField.computeIfAbsent(entry.getValue(), k -> new HashSet<>());
+            fields.add(entry.getKey());
+        }
+        // Send the fields to the storages
+        final CompletableFuture<?>[] storageFutures = new CompletableFuture[storageByField.size()];
+        int index = 0;
+        for (Map.Entry<Storage, Set<TeamField>> entry : storageByField.entrySet()) {
+            storageFutures[index] = entry.getKey().loadTeam(
+                    teamId,
+                    entry.getValue()
+            ).thenAccept(values::putAll); // Store the values
+            index++;
+        }
+
+        // Group every future
+        final CompletableFuture<Void> allStorageFuture = CompletableFuture.allOf(storageFutures);
+
+        // Create the team
+        return allStorageFuture.thenApply(o -> createTeam(teamId, values));
+    }
+
+    /**
+     * Create the {@link Team} from the values stored in all {@link Storage}
+     *
+     * @param teamId {@link Team}'s {@link UUID}
+     * @param values A {@link Map} containing every team value
+     * @return A {@link Team} filled by all specified values
+     */
+    private Team createTeam(UUID teamId, Map<TeamField, Optional<Object>> values) {
+        return null;
     }
 
     public CompletableFuture<Void> saveTeam(UUID teamId, Map<TeamField, Optional<Object>> changes) {
