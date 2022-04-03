@@ -17,14 +17,15 @@ public class AdminInventory {
 
     public void onInventoryClick(){
         Player player = (Player) event.getWhoClicked();
+        String playerName = player.getName();
         String itemName = event.getCurrentItem().getItemMeta().getDisplayName();
 
         // Ouverture des inventaires
         if (itemName.equals(StelyTeamPlugin.config.getString("inventories.admin.manage.itemName"))){
-            Inventory inventory = InventoryGenerator.createManageInventory(player.getName());
+            Inventory inventory = InventoryGenerator.createManageInventory(playerName);
             player.openInventory(inventory);
         }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.admin.member.itemName"))){
-            Inventory inventory = InventoryGenerator.createMemberInventory(player.getName());
+            Inventory inventory = InventoryGenerator.createMemberInventory(playerName);
             player.openInventory(inventory);
             
         // Fermeture ou retour en arrière de l'inventaire

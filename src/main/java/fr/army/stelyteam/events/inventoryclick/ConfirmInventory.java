@@ -23,32 +23,33 @@ public class ConfirmInventory {
 
     public void onInventoryClick(){
         Player player = (Player) event.getWhoClicked();
+        String playerName = player.getName();
         String itemName = event.getCurrentItem().getItemMeta().getDisplayName();
 
         // Ouverture des inventaires
-        if (StelyTeamPlugin.playersCreateTeam.contains(player.getName())){
+        if (StelyTeamPlugin.playersCreateTeam.contains(playerName)){
             player.closeInventory();
             if (itemName.equals(StelyTeamPlugin.config.getString("inventories.confirmInventory.confirm.itemName"))){
                 player.sendMessage("Envoie un nom de team");
-                StelyTeamPlugin.instance.getServer().getPluginManager().registerEvents(new PlayerChat(player.getName()), StelyTeamPlugin.instance);
+                StelyTeamPlugin.instance.getServer().getPluginManager().registerEvents(new PlayerChat(playerName), StelyTeamPlugin.instance);
             }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.confirmInventory.cancel.itemName"))){
-                StelyTeamPlugin.playersCreateTeam.remove(player.getName());
+                StelyTeamPlugin.playersCreateTeam.remove(playerName);
                 Inventory inventory = InventoryGenerator.createTeamInventory();
                 player.openInventory(inventory);
             }
-        }else if (StelyTeamPlugin.playersJoinTeam.contains(player.getName())){
+        }else if (StelyTeamPlugin.playersJoinTeam.contains(playerName)){
             player.closeInventory();
             if (itemName.equals(StelyTeamPlugin.config.getString("inventories.confirmInventory.confirm.itemName"))){
-                StelyTeamPlugin.sqlManager.insertMember(player.getName(), StelyTeamPlugin.teamsJoinTeam.get(StelyTeamPlugin.playersJoinTeam.indexOf(player.getName())));
-                player.sendMessage("Vous avez rejoint la team " + StelyTeamPlugin.teamsJoinTeam.get(StelyTeamPlugin.playersJoinTeam.indexOf(player.getName())));
-                StelyTeamPlugin.teamsJoinTeam.remove(StelyTeamPlugin.playersJoinTeam.indexOf(player.getName()));
-                StelyTeamPlugin.playersJoinTeam.remove(player.getName());
+                StelyTeamPlugin.sqlManager.insertMember(playerName, StelyTeamPlugin.teamsJoinTeam.get(StelyTeamPlugin.playersJoinTeam.indexOf(playerName)));
+                player.sendMessage("Vous avez rejoint la team " + StelyTeamPlugin.teamsJoinTeam.get(StelyTeamPlugin.playersJoinTeam.indexOf(playerName)));
+                StelyTeamPlugin.teamsJoinTeam.remove(StelyTeamPlugin.playersJoinTeam.indexOf(playerName));
+                StelyTeamPlugin.playersJoinTeam.remove(playerName);
             }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.confirmInventory.cancel.itemName"))){
-                StelyTeamPlugin.teamsJoinTeam.remove(StelyTeamPlugin.playersJoinTeam.indexOf(player.getName()));
-                StelyTeamPlugin.playersJoinTeam.remove(player.getName());
+                StelyTeamPlugin.teamsJoinTeam.remove(StelyTeamPlugin.playersJoinTeam.indexOf(playerName));
+                StelyTeamPlugin.playersJoinTeam.remove(playerName);
             }
-        }else if (StelyTeamPlugin.teamsKickTeam.contains(StelyTeamPlugin.sqlManager.getTeamIDFromOwner(player.getName()))){
-            String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromOwner(player.getName());
+        }else if (StelyTeamPlugin.teamsKickTeam.contains(StelyTeamPlugin.sqlManager.getTeamIDFromOwner(playerName))){
+            String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromOwner(playerName);
             String member = StelyTeamPlugin.playersKickTeam.get(StelyTeamPlugin.teamsKickTeam.indexOf(teamID));
             player.closeInventory();
             if (itemName.equals(StelyTeamPlugin.config.getString("inventories.confirmInventory.confirm.itemName"))){
@@ -60,55 +61,55 @@ public class ConfirmInventory {
                 StelyTeamPlugin.playersKickTeam.remove(member);
                 StelyTeamPlugin.teamsKickTeam.remove(teamID);
             }
-        }else if (StelyTeamPlugin.playersBuyTeamBank.contains(player.getName())){
+        }else if (StelyTeamPlugin.playersBuyTeamBank.contains(playerName)){
             player.closeInventory();
             if (itemName.equals(StelyTeamPlugin.config.getString("inventories.confirmInventory.confirm.itemName"))){
-                String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(player.getName());
+                String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(playerName);
                 StelyTeamPlugin.sqlManager.updateUnlockTeamBank(teamID);
                 player.sendMessage("Tu as debloqué le compte de la team");
-                StelyTeamPlugin.playersBuyTeamBank.remove(player.getName());
+                StelyTeamPlugin.playersBuyTeamBank.remove(playerName);
 
-                Inventory inventory = InventoryGenerator.createManageInventory(player.getName());
+                Inventory inventory = InventoryGenerator.createManageInventory(playerName);
                 player.openInventory(inventory);
             }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.confirmInventory.cancel.itemName"))){
-                StelyTeamPlugin.playersBuyTeamBank.remove(player.getName());
+                StelyTeamPlugin.playersBuyTeamBank.remove(playerName);
 
-                Inventory inventory = InventoryGenerator.createManageInventory(player.getName());
+                Inventory inventory = InventoryGenerator.createManageInventory(playerName);
                 player.openInventory(inventory);
             }
-        }else if (StelyTeamPlugin.playersEditTeamName.contains(player.getName())){
+        }else if (StelyTeamPlugin.playersEditTeamName.contains(playerName)){
             player.closeInventory();
             if (itemName.equals(StelyTeamPlugin.config.getString("inventories.confirmInventory.confirm.itemName"))){
-                StelyTeamPlugin.playersEditTeamName.remove(player.getName());
+                StelyTeamPlugin.playersEditTeamName.remove(playerName);
                 getNameInput(player, new ConvEditTeamID());
             }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.confirmInventory.cancel.itemName"))){
-                StelyTeamPlugin.playersEditTeamName.remove(player.getName());
+                StelyTeamPlugin.playersEditTeamName.remove(playerName);
 
-                Inventory inventory = InventoryGenerator.createManageInventory(player.getName());
+                Inventory inventory = InventoryGenerator.createManageInventory(playerName);
                 player.openInventory(inventory);
             }
-        }else if (StelyTeamPlugin.playersEditTeamPrefix.contains(player.getName())){
+        }else if (StelyTeamPlugin.playersEditTeamPrefix.contains(playerName)){
             player.closeInventory();
             if (itemName.equals(StelyTeamPlugin.config.getString("inventories.confirmInventory.confirm.itemName"))){
-                StelyTeamPlugin.playersEditTeamPrefix.remove(player.getName());
+                StelyTeamPlugin.playersEditTeamPrefix.remove(playerName);
                 getNameInput(player, new ConvEditTeamPrefix());
             }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.confirmInventory.cancel.itemName"))){
-                StelyTeamPlugin.playersEditTeamPrefix.remove(player.getName());
+                StelyTeamPlugin.playersEditTeamPrefix.remove(playerName);
 
-                Inventory inventory = InventoryGenerator.createManageInventory(player.getName());
+                Inventory inventory = InventoryGenerator.createManageInventory(playerName);
                 player.openInventory(inventory);
             }
-        }else if (StelyTeamPlugin.playersDeleteTeam.contains(player.getName())){
+        }else if (StelyTeamPlugin.playersDeleteTeam.contains(playerName)){
             player.closeInventory();
             if (itemName.equals(StelyTeamPlugin.config.getString("inventories.confirmInventory.confirm.itemName"))){
-                StelyTeamPlugin.playersDeleteTeam.remove(player.getName());
-                String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(player.getName());
-                StelyTeamPlugin.sqlManager.removeTeam(teamID, player.getName());
+                StelyTeamPlugin.playersDeleteTeam.remove(playerName);
+                String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(playerName);
+                StelyTeamPlugin.sqlManager.removeTeam(teamID, playerName);
                 player.sendMessage("Tu as supprimé la team");
             }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.confirmInventory.cancel.itemName"))){
-                StelyTeamPlugin.playersDeleteTeam.remove(player.getName());
+                StelyTeamPlugin.playersDeleteTeam.remove(playerName);
 
-                Inventory inventory = InventoryGenerator.createManageInventory(player.getName());
+                Inventory inventory = InventoryGenerator.createManageInventory(playerName);
                 player.openInventory(inventory);
             }
         }

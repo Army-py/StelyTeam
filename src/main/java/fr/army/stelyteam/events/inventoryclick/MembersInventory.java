@@ -17,12 +17,13 @@ public class MembersInventory {
 
     public void onInventoryClick(){
         Player player = (Player) event.getWhoClicked();
+        String playerName = player.getName();
         String itemName = event.getCurrentItem().getItemMeta().getDisplayName();
 
 
         // Fermeture ou retour en arrière de l'inventaire
         if (itemName.equals(StelyTeamPlugin.config.getString("inventories.teamMembers.close.itemName"))){
-            Inventory inventory = InventoryGenerator.createMemberInventory(player.getName());
+            Inventory inventory = InventoryGenerator.createMemberInventory(playerName);
             player.openInventory(inventory);
         }
     }

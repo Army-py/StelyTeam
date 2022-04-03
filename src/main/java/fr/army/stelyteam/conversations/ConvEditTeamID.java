@@ -11,16 +11,17 @@ public class ConvEditTeamID extends StringPrompt {
     @Override
     public Prompt acceptInput(ConversationContext con, String answer) {
         Player author = (Player) con.getForWhom();
+        String authorName = author.getName();
 
         if (nameTeamIsTooLong(answer)) {
             con.getForWhom().sendRawMessage("Le nom est trop long");
             return this;
         }
 
-        String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(author.getName());
+        String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(authorName);
 
         con.getForWhom().sendRawMessage("Le nom a été changé par " + answer);
-        StelyTeamPlugin.sqlManager.updateTeamID(teamID, answer, author.getName());
+        StelyTeamPlugin.sqlManager.updateTeamID(teamID, answer, authorName);
         return null;
     }
 

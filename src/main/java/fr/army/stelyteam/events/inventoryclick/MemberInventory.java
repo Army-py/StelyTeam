@@ -22,36 +22,37 @@ public class MemberInventory {
 
     public void onInventoryClick(){
         Player player = (Player) event.getWhoClicked();
+        String playerName = player.getName();
         String itemName = event.getCurrentItem().getItemMeta().getDisplayName();
 
         // Fermeture ou retour en arrière de l'inventaire
-        if (StelyTeamPlugin.sqlManager.isOwner(player.getName()) || StelyTeamPlugin.sqlManager.isAdmin(player.getName())){
+        if (StelyTeamPlugin.sqlManager.isOwner(playerName) || StelyTeamPlugin.sqlManager.isAdmin(playerName)){
             if (itemName.equals(StelyTeamPlugin.config.getString("inventories.member.close.itemName"))){
                 Inventory inventory = InventoryGenerator.createAdminInventory();
                 player.openInventory(inventory);
             }
-        }else if (StelyTeamPlugin.sqlManager.isMember(player.getName())){
+        }else if (StelyTeamPlugin.sqlManager.isMember(playerName)){
             if (itemName.equals(StelyTeamPlugin.config.getString("inventories.member.close.itemName"))){
                 player.closeInventory();
             }
         }
 
         if (itemName.equals(StelyTeamPlugin.config.getString("inventories.member.members.itemName"))){
-            Inventory inventory = InventoryGenerator.createMembersInventory(player.getName());
+            Inventory inventory = InventoryGenerator.createMembersInventory(playerName);
             player.openInventory(inventory);
         }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.member.addTeamMoney.itemName"))){
             player.closeInventory();
-            StelyTeamPlugin.playersAddTeamMoney.add(player.getName());
+            StelyTeamPlugin.playersAddTeamMoney.add(playerName);
             getNameInput(player, new ConvAddMoney());
         }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.member.WithdrawTeamMoney.itemName"))){
             player.closeInventory();
-            StelyTeamPlugin.playersWithdrawTeamMoney.add(player.getName());
+            StelyTeamPlugin.playersWithdrawTeamMoney.add(playerName);
             getNameInput(player, new ConvWithdrawMoney());
         }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.member.leaveTeam.itemName"))){
             player.closeInventory();
-            if (!StelyTeamPlugin.sqlManager.isOwner(player.getName())){
-                String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(player.getName());
-                StelyTeamPlugin.sqlManager.removeMember(player.getName(), teamID);
+            if (!StelyTeamPlugin.sqlManager.isOwner(playerName)){
+                String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(playerName);
+                StelyTeamPlugin.sqlManager.removeMember(playerName, teamID);
                 player.sendMessage("Tu as quitté la team " + teamID);
             }else {
                 player.sendMessage("Tu ne peux pas quitter la team car tu es le créateur");
