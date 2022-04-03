@@ -14,12 +14,19 @@ import java.util.logging.Logger;
 
 public class StorageManager {
 
-    private final Map<TeamField, Storage> fieldStorage;
-    private final Map<Storage, Set<TeamField>> storageField;
-    private final Storage commandIdStorage;
+
+    private final StorageFields[] storageFieldsArray;
     private final Executor executor;
+    private final Storage commandIdStorage;
 
     public StorageManager(YamlConfiguration config, Logger logger) {
+
+        //TODO Init StorageFieldsArray
+
+        final Map<TeamField, Storage> fieldStorage;
+        final Map<Storage, Set<TeamField>> storageField;
+
+
         fieldStorage = Collections.synchronizedMap(new EnumMap<>(TeamField.class));
         fieldStorage.putAll(initStorages(config, logger));
         storageField = new ConcurrentHashMap<>();
@@ -132,14 +139,13 @@ public class StorageManager {
     public CompletableFuture<Optional<Team>> loadTeam(UUID teamId) {
         final Map<TeamField, Optional<Object>> values = Collections.synchronizedMap(new EnumMap<>(TeamField.class));
         // Send the fields to the storages
-        final CompletableFuture<?>[] storageFutures = new CompletableFuture[storageField.size()];
-        int index = 0;
-        for (Map.Entry<Storage, Set<TeamField>> entry : storageField.entrySet()) {
-            storageFutures[index] = entry.getKey().loadTeam(
+        final CompletableFuture<?>[] storageFutures = new CompletableFuture[storageFieldsArray.length];
+        for (int index = 0; index < storageFieldsArray.length; index++) {
+            final StorageFields storageFields = storageFieldsArray[index];
+            storageFutures[index] = storageFields.storage().loadTeam(
                     teamId,
-                    entry.getValue()
+                    storageFields.fields()
             ).thenAccept(values::putAll); // Store the values
-            index++;
         }
 
         // Group every future
@@ -188,16 +194,42 @@ public class StorageManager {
         );
     }
 
+    /**
+     * Save a {@link Team} in the permanent storage
+     *
+     * @param teamId  The {@link UUID} of the {@link Team} to save
+     * @param changes The {@link TeamField} to update with their value
+     * @return A {@link CompletableFuture} that represent the save action
+     */
     public CompletableFuture<Void> saveTeam(UUID teamId, Map<TeamField, Optional<Object>> changes) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        final List<CompletableFuture<?>> saveFutures = new LinkedList<>();
+
+        // For each storage, add save future task if needed
+        for (StorageFields storageFields : storageFieldsArray) {
+            final List<Storage.FieldValues> values = new LinkedList<>();
+
+            // For each field, add it to the values if it needs to be updated
+            for (TeamField field : storageFields.fields()) {
+                final Optional<Object> value = changes.get(field);
+                // If the value is null, then it does not need to be updated
+                if (value != null) {
+                    values.add(new Storage.FieldValues(field, value));
+                }
+            }
+
+            // There is changes to make in this storage
+            if (!values.isEmpty()) {
+                saveFutures.add(storageFields.storage().saveTeam(teamId, values));
+            }
+        }
+
+        return CompletableFuture.allOf(saveFutures.toArray(new CompletableFuture[0]));
     }
 
     public CompletableFuture<Void> deleteTeam(UUID teamId) {
-        final CompletableFuture<?>[] deleteFutures = new CompletableFuture[storageField.size()];
-        int index = 0;
-        for (Storage storage : storageField.keySet()) {
-            deleteFutures[index] = storage.deleteTeam(teamId);
-            index++;
+        final CompletableFuture<?>[] deleteFutures = new CompletableFuture[storageFieldsArray.length];
+        for (int index = 0; index < storageFieldsArray.length; index++) {
+            deleteFutures[index] = storageFieldsArray[index].storage().deleteTeam(teamId);
         }
         return CompletableFuture.allOf(deleteFutures);
     }
@@ -213,6 +245,9 @@ public class StorageManager {
     public CompletableFuture<Optional<Team>> loadPlayerTeam(UUID playerId) {
         // .getPlayerTeamId(playerId).thenCompose(storageManager::loadTeam)
         throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    public record StorageFields(Storage storage, TeamField[] fields) {
     }
 
 }

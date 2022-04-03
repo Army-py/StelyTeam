@@ -4,16 +4,16 @@ import fr.army.stelyteam.storage.Storage;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.team.TeamField;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 public class FileStorage implements Storage {
 
     @Override
-    public CompletableFuture<Map<TeamField, Optional<Object>>> loadTeam(UUID teamID, Set<TeamField> teamField) {
+    public CompletableFuture<Map<TeamField, Optional<Object>>> loadTeam(UUID teamID, TeamField[] teamField) {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
@@ -23,7 +23,7 @@ public class FileStorage implements Storage {
     }
 
     @Override
-    public CompletableFuture<Void> saveTeam(UUID teamId, Map<TeamField, Optional<Object>> changes) {
+    public CompletableFuture<Void> saveTeam(UUID teamId, List<FieldValues> changes) {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
