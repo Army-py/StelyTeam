@@ -14,7 +14,6 @@ import java.util.logging.Logger;
 
 public class StorageManager {
 
-
     private final StorageFields[] storageFieldsArray;
     private final Executor executor;
     private final Storage commandIdStorage;
@@ -199,7 +198,7 @@ public class StorageManager {
      *
      * @param teamId  The {@link UUID} of the {@link Team} to save
      * @param changes The {@link TeamField} to update with their value
-     * @return A {@link CompletableFuture} that represent the save action
+     * @return A {@link CompletableFuture} that represents the save action
      */
     public CompletableFuture<Void> saveTeam(UUID teamId, Map<TeamField, Optional<Object>> changes) {
         final List<CompletableFuture<?>> saveFutures = new LinkedList<>();
@@ -226,6 +225,12 @@ public class StorageManager {
         return CompletableFuture.allOf(saveFutures.toArray(new CompletableFuture[0]));
     }
 
+    /**
+     * Delete a {@link Team} from the permanent storage
+     *
+     * @param teamId The {@link Team}'s {@link UUID}
+     * @return A {@link CompletableFuture} that represents the delete action
+     */
     public CompletableFuture<Void> deleteTeam(UUID teamId) {
         final CompletableFuture<?>[] deleteFutures = new CompletableFuture[storageFieldsArray.length];
         for (int index = 0; index < storageFieldsArray.length; index++) {
@@ -247,7 +252,7 @@ public class StorageManager {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
-    public record StorageFields(Storage storage, TeamField[] fields) {
+    private record StorageFields(Storage storage, TeamField[] fields) {
     }
 
 }
