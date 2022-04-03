@@ -44,7 +44,7 @@ public class PlayerList implements IPlayerList {
         lock.lock();
         try {
             if (uuids.add(id)) {
-                playerTeamTracker.changeTeam(id, team);
+                playerTeamTracker.changeTeam(id, team.getId());
                 team.setDirty(teamField);
                 return true;
             }

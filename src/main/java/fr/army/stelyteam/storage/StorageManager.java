@@ -239,11 +239,11 @@ public class StorageManager {
         return CompletableFuture.allOf(deleteFutures);
     }
 
-    public CompletableFuture<UUID> getPlayerTeamId(UUID playerId) {
+    public CompletableFuture<Optional<UUID>> getPlayerTeamId(UUID playerId) {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
-    public CompletableFuture<Void> savePlayerTeams(Map<UUID, Optional<Team>> changes) {
+    public CompletableFuture<Void> savePlayerTeams(Map<UUID, Optional<UUID>> changes) {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 

@@ -14,8 +14,8 @@ public class StelyTeamAPI {
         this.teamManager = teamManager;
     }
 
-    public ITeam getPlayerTeam(UUID player) {
-        return teamManager.getPlayerTeam(player);
+    public Optional<? extends ITeam> getPlayerTeam(UUID player) {
+        return teamManager.getLoadedPlayerTeam(player);
     }
 
     public CompletableFuture<? extends Optional<? extends ITeam>> getOfflinePlayerTeam(UUID teamId) {

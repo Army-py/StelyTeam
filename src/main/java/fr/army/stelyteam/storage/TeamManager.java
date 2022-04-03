@@ -12,7 +12,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class TeamManager {
 
     private final StorageManager storageManager;
-    private final ConcurrentMap<UUID, Team> playerTeams;
+    private final ConcurrentMap<UUID, UUID> playerTeams;
     private final ConcurrentMap<UUID, Team> teamById;
     private final ReentrantLock lock;
 
@@ -64,7 +64,7 @@ public class TeamManager {
     }
 
     /**
-     * Get an {@link Optional} {@link UUID} from the cache or the storage
+     * Get an {@link Optional} {@link Team}'s {@link UUID} from the cache or the storage
      *
      * @param commandId The {@link Team}'s command id
      * @return A {@link CompletableFuture} that return an {@link Optional} {@link UUID} of the {@link Team }
@@ -80,15 +80,43 @@ public class TeamManager {
     }
 
     /**
-     * Load the player {@link Team} from the cache
+     * Get an {@link Optional} {@link Team}'s {@link UUID} from the cache
      *
      * @param playerId The player {@link UUID}
-     * @return The {@link Team} of the player.
-     * {@code null} if the player does not have a {@link Team} or if he's not loaded
+     * @return An {@link Optional} {@link UUID}.
+     * The {@link Optional} is empty if the {@link Team} is not loaded or the player does not have a {@link Team}
      */
-    public Team getPlayerTeam(UUID playerId) {
+    public Optional<UUID> getLoadedPlayerTeamId(UUID playerId) {
         Objects.requireNonNull(playerId);
-        return playerTeams.get(playerId);
+        return Optional.ofNullable(playerTeams.get(playerId));
+    }
+
+    /**
+     * Load the player's {@link Team} from the cache
+     *
+     * @param playerId The player {@link UUID}
+     * @return An {@link Optional} {@link Team}.
+     * The {@link Optional} is empty if the {@link Team} is not loaded or the player does not have a {@link Team}
+     */
+    public Optional<Team> getLoadedPlayerTeam(UUID playerId) {
+        Objects.requireNonNull(playerId);
+        return getLoadedPlayerTeamId(playerId).map(teamById::get);
+    }
+
+    /**
+     * Get the player {@link Team}'s {@link UUID} from the cache or the permanent storage
+     *
+     * @param playerId The player {@link UUID}
+     * @return A {@link CompletableFuture} that return the {@link Optional} {@link Team}'s {@link UUID} of the player
+     * The {@link CompletableFuture} return an empty {@link Optional} if the player does not have a {@link Team}
+     */
+    public CompletableFuture<Optional<UUID>> getOrLoadPlayerTeamId(UUID playerId) {
+        Objects.requireNonNull(playerId);
+        final Optional<UUID> teamId = getLoadedPlayerTeamId(playerId);
+        if (teamId.isPresent()) {
+            return CompletableFuture.completedFuture(teamId);
+        }
+        return storageManager.getPlayerTeamId(playerId);
     }
 
     /**
@@ -100,29 +128,12 @@ public class TeamManager {
      */
     public CompletableFuture<Optional<Team>> getOrLoadPlayerTeam(UUID playerId) {
         Objects.requireNonNull(playerId);
-        final Team cachedTeam = getPlayerTeam(playerId);
-        if (cachedTeam != null) {
-            return CompletableFuture.completedFuture(Optional.of(cachedTeam));
-        }
-
-        return storageManager.loadPlayerTeam(playerId);
-    }
-
-    /**
-     * Load the {@link UUID} of the team of a player
-     *
-     * @param playerId The player {@link UUID}
-     * @return The {@link Team} of the player.
-     * {@code null} if the player does not have a {@link Team}
-     */
-    public CompletableFuture<UUID> getPlayerTeamId(UUID playerId) {
-        Objects.requireNonNull(playerId);
-        final Team cachedTeam = getPlayerTeam(playerId);
-        if (cachedTeam != null) {
-            return CompletableFuture.completedFuture(cachedTeam.getId());
-        }
-
-        return storageManager.getPlayerTeamId(playerId);
+        return getOrLoadPlayerTeamId(playerId).thenCompose(teamId -> {
+            if (teamId.isPresent()) {
+                return getOrLoadTeam(teamId.get());
+            }
+            return CompletableFuture.completedFuture(Optional.empty());
+        });
     }
 
     /**
@@ -146,14 +157,14 @@ public class TeamManager {
             final PlayerList members = team.getMembers();
             // Save owners
             if (owners.getPlayerTeamTracker().isDirty()) {
-                final Map<UUID, Optional<Team>> changes = owners.getPlayerTeamTracker().getForSaving();
+                final Map<UUID, Optional<UUID>> changes = owners.getPlayerTeamTracker().getForSaving();
                 futures.add(
                         storageManager.savePlayerTeams(changes).thenRun(() -> linkPlayerTeams(changes))
                 );
             }
             // Save members
             if (members.getPlayerTeamTracker().isDirty()) {
-                final Map<UUID, Optional<Team>> changes = members.getPlayerTeamTracker().getForSaving();
+                final Map<UUID, Optional<UUID>> changes = members.getPlayerTeamTracker().getForSaving();
                 futures.add(
                         storageManager.savePlayerTeams(changes).thenRun(() -> linkPlayerTeams(changes))
                 );
@@ -195,14 +206,14 @@ public class TeamManager {
             );
             // Save owners
             if (owners.getPlayerTeamTracker().isDirty()) {
-                final Map<UUID, Optional<Team>> changes = owners.getPlayerTeamTracker().getForSaving();
+                final Map<UUID, Optional<UUID>> changes = owners.getPlayerTeamTracker().getForSaving();
                 futures.add(
                         storageManager.savePlayerTeams(changes).thenRun(() -> linkPlayerTeams(changes))
                 );
             }
             // Save members
             if (members.getPlayerTeamTracker().isDirty()) {
-                final Map<UUID, Optional<Team>> changes = members.getPlayerTeamTracker().getForSaving();
+                final Map<UUID, Optional<UUID>> changes = members.getPlayerTeamTracker().getForSaving();
                 futures.add(
                         storageManager.savePlayerTeams(changes).thenRun(() -> linkPlayerTeams(changes))
                 );
@@ -220,9 +231,9 @@ public class TeamManager {
      *
      * @param map The {@link Map} containing the mapping between players and teams
      */
-    private void linkPlayerTeams(Map<UUID, Optional<Team>> map) {
-        for (Map.Entry<UUID, Optional<Team>> entry : map.entrySet()) {
-            final Optional<Team> value = entry.getValue();
+    private void linkPlayerTeams(Map<UUID, Optional<UUID>> map) {
+        for (Map.Entry<UUID, Optional<UUID>> entry : map.entrySet()) {
+            final Optional<UUID> value = entry.getValue();
             if (value.isEmpty()) {
                 playerTeams.remove(entry.getKey());
             } else {

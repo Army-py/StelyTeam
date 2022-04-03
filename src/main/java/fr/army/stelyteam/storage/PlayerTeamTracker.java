@@ -1,7 +1,5 @@
 package fr.army.stelyteam.storage;
 
-import fr.army.stelyteam.team.Team;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -12,7 +10,7 @@ import java.util.concurrent.locks.Lock;
 
 public class PlayerTeamTracker implements ChangeTracked {
 
-    private final ConcurrentMap<UUID, Optional<Team>> playerTeams;
+    private final ConcurrentMap<UUID, Optional<UUID>> playerTeams;
     private final Lock lock;
     private boolean dirty;
 
@@ -21,7 +19,7 @@ public class PlayerTeamTracker implements ChangeTracked {
         this.lock = lock;
     }
 
-    public void changeTeam(UUID playerId, Team teamId) {
+    public void changeTeam(UUID playerId, UUID teamId) {
         lock.lock();
         try {
             playerTeams.put(playerId, Optional.ofNullable(teamId));
@@ -31,7 +29,7 @@ public class PlayerTeamTracker implements ChangeTracked {
         }
     }
 
-    public Map<UUID, Optional<Team>> getForSaving() {
+    public Map<UUID, Optional<UUID>> getForSaving() {
         lock.lock();
         try {
             this.dirty = false;
