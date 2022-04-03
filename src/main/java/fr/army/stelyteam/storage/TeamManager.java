@@ -153,22 +153,8 @@ public class TeamManager {
             }
 
             // Save players in the team
-            final PlayerList owners = team.getOwners();
-            final PlayerList members = team.getMembers();
-            // Save owners
-            if (owners.getPlayerTeamTracker().isDirty()) {
-                final Map<UUID, Optional<UUID>> changes = owners.getPlayerTeamTracker().getForSaving();
-                futures.add(
-                        storageManager.savePlayerTeams(changes).thenRun(() -> linkPlayerTeams(changes))
-                );
-            }
-            // Save members
-            if (members.getPlayerTeamTracker().isDirty()) {
-                final Map<UUID, Optional<UUID>> changes = members.getPlayerTeamTracker().getForSaving();
-                futures.add(
-                        storageManager.savePlayerTeams(changes).thenRun(() -> linkPlayerTeams(changes))
-                );
-            }
+            savePlayerTeam(team.getOwners(), futures);
+            savePlayerTeam(team.getMembers(), futures);
 
             // Don't transfer it to the storageManager if there is nothing to do
             if (futures.isEmpty()) {
@@ -204,25 +190,30 @@ public class TeamManager {
             futures.add(
                     storageManager.deleteTeam(teamId).thenRun(() -> teamById.remove(teamId))
             );
-            // Save owners
-            if (owners.getPlayerTeamTracker().isDirty()) {
-                final Map<UUID, Optional<UUID>> changes = owners.getPlayerTeamTracker().getForSaving();
-                futures.add(
-                        storageManager.savePlayerTeams(changes).thenRun(() -> linkPlayerTeams(changes))
-                );
-            }
-            // Save members
-            if (members.getPlayerTeamTracker().isDirty()) {
-                final Map<UUID, Optional<UUID>> changes = members.getPlayerTeamTracker().getForSaving();
-                futures.add(
-                        storageManager.savePlayerTeams(changes).thenRun(() -> linkPlayerTeams(changes))
-                );
-            }
+            // Save players in the team
+            savePlayerTeam(team.getOwners(), futures);
+            savePlayerTeam(team.getMembers(), futures);
 
             // Transfer it to the storageManager in all case as there is at least the remove operation
             return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
         } finally {
             lock.unlock();
+        }
+    }
+
+    /**
+     * Save a player team associations of a {@link PlayerList}
+     *
+     * @param playerList The player list to save
+     * @param futures    The future {@link List} to fill with the save action
+     */
+    private void savePlayerTeam(PlayerList playerList, List<CompletableFuture<?>> futures) {
+        final PlayerTeamTracker tracker = playerList.getPlayerTeamTracker();
+        if (tracker.isDirty()) {
+            final Map<UUID, Optional<UUID>> changes = tracker.getForSaving();
+            futures.add(
+                    storageManager.savePlayerTeams(playerList.getTeamField(), changes).thenRun(() -> linkPlayerTeams(changes))
+            );
         }
     }
 

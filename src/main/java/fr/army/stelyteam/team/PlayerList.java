@@ -82,4 +82,7 @@ public class PlayerList implements IPlayerList {
         return playerTeamTracker;
     }
 
+    public TeamField getTeamField() {
+        return teamField;
+    }
 }

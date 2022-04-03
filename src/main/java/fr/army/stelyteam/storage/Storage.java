@@ -19,7 +19,7 @@ public interface Storage {
 
     CompletableFuture<Void> deleteTeam(UUID teamId);
 
-    CompletableFuture<UUID> getPlayerTeamId(UUID playerId);
+    CompletableFuture<Optional<UUID>> getPlayerTeamId(UUID playerId);
 
     CompletableFuture<Void> savePlayerTeams(Map<UUID, Optional<Team>> changes);
 

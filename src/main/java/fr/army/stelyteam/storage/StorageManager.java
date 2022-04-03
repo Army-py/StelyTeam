@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 public class StorageManager {
 
     private final StorageFields[] storageFieldsArray;
+    private final StorageFields[] storagePlayersArray;
     private final Executor executor;
     private final Storage commandIdStorage;
 
@@ -241,11 +242,31 @@ public class StorageManager {
         return CompletableFuture.allOf(deleteFutures);
     }
 
+    /**
+     * Get the player {@link Team}'s {@link UUID}
+     *
+     * @param playerId The player's {@link UUID}
+     * @return An {@link Optional} {@link Team}'s {@link UUID} of the player.
+     * An empty {@link Optional} if the player does not have a {@link Team}
+     */
     public CompletableFuture<Optional<UUID>> getPlayerTeamId(UUID playerId) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        final List<UUID> teamIds = Collections.synchronizedList(new LinkedList<>());
+        // Register all associations from all storages
+        final CompletableFuture<?>[] loadFutures = new CompletableFuture[storagePlayersArray.length];
+        for (int index = 0; index < storagePlayersArray.length; index++) {
+            loadFutures[index] = storagePlayersArray[index].storage()
+                    .getPlayerTeamId(playerId)
+                    .thenAcceptAsync(teamId -> teamId.ifPresent(teamIds::add), executor);
+        }
+
+        // Group all futures and create a last one that get the first player association
+        return CompletableFuture.allOf(loadFutures)
+                .thenCompose(o -> CompletableFuture.completedFuture(
+                        teamIds.isEmpty() ? Optional.empty() : Optional.of(teamIds.get(0)))
+                );
     }
 
-    public CompletableFuture<Void> savePlayerTeams(Map<UUID, Optional<UUID>> changes) {
+    public CompletableFuture<Void> savePlayerTeams(TeamField teamField, Map<UUID, Optional<UUID>> changes) {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 

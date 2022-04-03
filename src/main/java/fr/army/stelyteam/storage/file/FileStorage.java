@@ -33,7 +33,7 @@ public class FileStorage implements Storage {
     }
 
     @Override
-    public CompletableFuture<UUID> getPlayerTeamId(UUID playerId) {
+    public CompletableFuture<Optional<UUID>> getPlayerTeamId(UUID playerId) {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
