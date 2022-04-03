@@ -1,6 +1,5 @@
 package fr.army.stelyteam.storage;
 
-import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.team.TeamField;
 
 import java.util.List;
@@ -21,7 +20,7 @@ public interface Storage {
 
     CompletableFuture<Optional<UUID>> getPlayerTeamId(UUID playerId);
 
-    CompletableFuture<Void> savePlayerTeams(Map<UUID, Optional<Team>> changes);
+    CompletableFuture<Void> savePlayerTeams(Map<UUID, Optional<UUID>> changes);
 
     record FieldValues(TeamField field, Optional<Object> value) {
     }

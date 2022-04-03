@@ -1,7 +1,6 @@
 package fr.army.stelyteam.storage.file;
 
 import fr.army.stelyteam.storage.Storage;
-import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.team.TeamField;
 
 import java.util.List;
@@ -38,7 +37,7 @@ public class FileStorage implements Storage {
     }
 
     @Override
-    public CompletableFuture<Void> savePlayerTeams(Map<UUID, Optional<Team>> changes) {
+    public CompletableFuture<Void> savePlayerTeams(Map<UUID, Optional<UUID>> changes) {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 }

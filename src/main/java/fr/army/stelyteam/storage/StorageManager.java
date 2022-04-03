@@ -266,8 +266,26 @@ public class StorageManager {
                 );
     }
 
+    /**
+     * Save the player team associations
+     *
+     * @param teamField The {@link TeamField} to save
+     * @param changes   The changes to apply
+     * @return A {@link CompletableFuture} that represents the save action
+     */
     public CompletableFuture<Void> savePlayerTeams(TeamField teamField, Map<UUID, Optional<UUID>> changes) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        // Retrieve the Storage
+        // (could use a map but there is currently maximum 2 elements and the array is faster for the load method)
+        for (StorageFields storageFields : storagePlayersArray) {
+            for (TeamField field : storageFields.fields()) {
+                if (field == teamField) {
+                    // We found the good storage, load the player from it
+                    return storageFields.storage().savePlayerTeams(changes);
+                }
+            }
+        }
+        // Impossible
+        throw new RuntimeException("Could not find the storage for the " + teamField + " player association.");
     }
 
     private record StorageFields(Storage storage, TeamField[] fields) {
