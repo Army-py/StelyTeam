@@ -9,26 +9,33 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executor;
 import java.util.logging.Logger;
 
 public class StorageManager {
 
     private final Map<TeamField, Storage> fieldStorage;
-    private final Map<Storage, Set<TeamField>> storageByField;
+    private final Map<Storage, Set<TeamField>> storageField;
+    private final Storage commandIdStorage;
+    private final Executor executor;
 
     public StorageManager(YamlConfiguration config, Logger logger) {
         fieldStorage = Collections.synchronizedMap(new EnumMap<>(TeamField.class));
         fieldStorage.putAll(initStorages(config, logger));
-        storageByField = new ConcurrentHashMap<>();
+        storageField = new ConcurrentHashMap<>();
         loadStorageByField();
+
+        commandIdStorage = fieldStorage.get(TeamField.COMMAND_ID);
+
+        executor = null; // TODO Init this executor
     }
 
     /**
-     * Load the storageByField map from the fieldStorage map
+     * Load the storageField map from the fieldStorage map
      */
     private void loadStorageByField() {
         for (Map.Entry<TeamField, Storage> entry : fieldStorage.entrySet()) {
-            final Set<TeamField> fields = storageByField.computeIfAbsent(entry.getValue(), k -> new HashSet<>());
+            final Set<TeamField> fields = storageField.computeIfAbsent(entry.getValue(), k -> new HashSet<>());
             fields.add(entry.getKey());
         }
     }
@@ -99,6 +106,10 @@ public class StorageManager {
         return fieldStorage;
     }
 
+    /*
+     * Init methods
+     */
+
     private Storage initMySQL(ConfigurationSection storageSection) {
         throw new UnsupportedOperationException("Not implemented yet");
     }
@@ -112,12 +123,18 @@ public class StorageManager {
     }
 
 
-    public CompletableFuture<Team> loadTeam(UUID teamId) {
+    /**
+     * Load a {@link Team} from the permanent storage
+     *
+     * @param teamId The {@link Team}'s {@link UUID}
+     * @return An {@link Optional} {@link Team}. The {@link Optional} is empty if the {@link Team} does not exist
+     */
+    public CompletableFuture<Optional<Team>> loadTeam(UUID teamId) {
         final Map<TeamField, Optional<Object>> values = Collections.synchronizedMap(new EnumMap<>(TeamField.class));
         // Send the fields to the storages
-        final CompletableFuture<?>[] storageFutures = new CompletableFuture[storageByField.size()];
+        final CompletableFuture<?>[] storageFutures = new CompletableFuture[storageField.size()];
         int index = 0;
-        for (Map.Entry<Storage, Set<TeamField>> entry : storageByField.entrySet()) {
+        for (Map.Entry<Storage, Set<TeamField>> entry : storageField.entrySet()) {
             storageFutures[index] = entry.getKey().loadTeam(
                     teamId,
                     entry.getValue()
@@ -129,7 +146,18 @@ public class StorageManager {
         final CompletableFuture<Void> allStorageFuture = CompletableFuture.allOf(storageFutures);
 
         // Create the team
-        return allStorageFuture.thenApply(o -> createTeam(teamId, values));
+        return allStorageFuture.thenApplyAsync(o -> createTeam(teamId, values), executor);
+    }
+
+    /**
+     * Load a {@link Team} {@link UUID} from the permanent storage
+     *
+     * @param commandId The {@link Team}'s command id
+     * @return An {@link Optional} {@link Team}'s {@link UUID}
+     * The {@link Optional} is empty if the {@link Team} does not exist
+     */
+    public CompletableFuture<Optional<UUID>> getTeamId(String commandId) {
+        return commandIdStorage.getTeamId(commandId);
     }
 
     /**
@@ -137,25 +165,26 @@ public class StorageManager {
      *
      * @param teamId {@link Team}'s {@link UUID}
      * @param values A {@link Map} containing every team value
-     * @return A {@link Team} filled by all specified values
+     * @return An {@link Optional} {@link Team} filled by all specified values
      */
-    private Team createTeam(UUID teamId, Map<TeamField, Optional<Object>> values) {
+    private Optional<Team> createTeam(UUID teamId, Map<TeamField, Optional<Object>> values) {
         if (values.isEmpty()) {
-            return null;
+            return Optional.empty();
         }
-        return new Team(
-                teamId,
-                (String) values.get(TeamField.COMMAND_ID).orElseThrow(RuntimeException::new),
-                (String) values.get(TeamField.PREFIX).orElse(null),
-                (String) values.get(TeamField.SUFFIX).orElse(null),
-                (UUID) values.get(TeamField.CREATOR).orElse(null),
-                (Date) values.get(TeamField.CREATION_DATE).orElse(null),
-                (int) values.get(TeamField.LEVEL).orElse(0),
-                (boolean) values.get(TeamField.BANK_ACCOUNT).orElse(false),
-                (double) values.get(TeamField.MONEY).orElse(0d),
-                (LazyLocation) values.get(TeamField.HOME).orElse(null),
-                new HashSet<>(Arrays.asList((UUID[]) values.get(TeamField.OWNERS).orElse(new UUID[0]))),
-                new HashSet<>(Arrays.asList((UUID[]) values.get(TeamField.MEMBERS).orElse(new UUID[0])))
+        return Optional.of(new Team(
+                        teamId,
+                        (String) values.get(TeamField.COMMAND_ID).orElseThrow(RuntimeException::new),
+                        (String) values.get(TeamField.PREFIX).orElse(null),
+                        (String) values.get(TeamField.SUFFIX).orElse(null),
+                        (UUID) values.get(TeamField.CREATOR).orElse(null),
+                        (Date) values.get(TeamField.CREATION_DATE).orElse(null),
+                        (int) values.get(TeamField.LEVEL).orElse(0),
+                        (boolean) values.get(TeamField.BANK_ACCOUNT).orElse(false),
+                        (double) values.get(TeamField.MONEY).orElse(0d),
+                        (LazyLocation) values.get(TeamField.HOME).orElse(null),
+                        new HashSet<>(Arrays.asList((UUID[]) values.get(TeamField.OWNERS).orElse(new UUID[0]))),
+                        new HashSet<>(Arrays.asList((UUID[]) values.get(TeamField.MEMBERS).orElse(new UUID[0])))
+                )
         );
     }
 
@@ -164,9 +193,9 @@ public class StorageManager {
     }
 
     public CompletableFuture<Void> deleteTeam(UUID teamId) {
-        final CompletableFuture<?>[] deleteFutures = new CompletableFuture[storageByField.size()];
+        final CompletableFuture<?>[] deleteFutures = new CompletableFuture[storageField.size()];
         int index = 0;
-        for (Storage storage : storageByField.keySet()) {
+        for (Storage storage : storageField.keySet()) {
             deleteFutures[index] = storage.deleteTeam(teamId);
             index++;
         }
@@ -178,6 +207,11 @@ public class StorageManager {
     }
 
     public CompletableFuture<Void> savePlayerTeams(Map<UUID, Optional<Team>> changes) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    public CompletableFuture<Optional<Team>> loadPlayerTeam(UUID playerId) {
+        // .getPlayerTeamId(playerId).thenCompose(storageManager::loadTeam)
         throw new UnsupportedOperationException("Not implemented yet");
     }
 

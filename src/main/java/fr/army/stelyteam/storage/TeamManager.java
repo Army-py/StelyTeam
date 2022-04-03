@@ -24,30 +24,59 @@ public class TeamManager {
     }
 
     /**
-     * Get a {@link Team} from the cache.
-     * It cans return {@code null} if the {@link Team} with the given id is not loaded.
+     * Get an {@link Optional} {@link Team} from the cache.
      *
      * @param id The {@link Team}'s id
      * @return The {@link Team} from the cache that have the id {@code id}.
-     * {@code null} if the {@link Team} does not exist or is not loaded
+     * An empty {@link Optional} if the {@link Team} does not exist or is not loaded
      */
-    public Team getLoadedTeam(UUID id) {
-        return teamById.get(id);
+    public Optional<Team> getLoadedTeam(UUID id) {
+        Objects.requireNonNull(id);
+        return Optional.ofNullable(teamById.get(id));
     }
 
     /**
-     * Get a {@link Team} from the cache or the storage
+     * Get an {@link Optional} {@link Team} from the cache.
+     *
+     * @param commandId The {@link Team}'s command id
+     * @return An {@link Optional} {@link Team} from the cache that have the command id {@code commandId}.
+     * An empty {@link Optional} if the {@link Team} does not exist or is not loaded
+     */
+    public Optional<Team> getLoadedTeam(String commandId) {
+        Objects.requireNonNull(commandId);
+        return teamById.values().stream().filter(team -> commandId.equals(team.getCommandId())).findAny();
+    }
+
+    /**
+     * Get an {@link Optional} {@link Team} from the cache or the storage
      *
      * @param id The {@link Team}'s id
-     * @return A {@link CompletableFuture} that return the {@link Team} that have the id {@code id}.
-     * The {@link CompletableFuture} return {@code null} if the {@link Team} does not exist
+     * @return A {@link CompletableFuture} that return an {@link Optional} {@link Team} that have the id {@code id}.
+     * The {@link CompletableFuture} return an empty {@link Optional} if the {@link Team} does not exist
      */
-    public CompletableFuture<Team> getOrLoadTeam(UUID id) {
-        final Team cached = getLoadedTeam(id);
-        if (cached != null) {
+    public CompletableFuture<Optional<Team>> getOrLoadTeam(UUID id) {
+        Objects.requireNonNull(id);
+        final Optional<Team> cached = getLoadedTeam(id);
+        if (cached.isPresent()) {
             return CompletableFuture.completedFuture(cached);
         }
         return storageManager.loadTeam(id);
+    }
+
+    /**
+     * Get an {@link Optional} {@link UUID} from the cache or the storage
+     *
+     * @param commandId The {@link Team}'s command id
+     * @return A {@link CompletableFuture} that return an {@link Optional} {@link UUID} of the {@link Team }
+     * that have the command id {@code commandId}.
+     * The {@link CompletableFuture} return an empty {@link Optional} if the {@link Team} does not exist
+     */
+    public CompletableFuture<Optional<UUID>> getOrLoadTeam(String commandId) {
+        Objects.requireNonNull(commandId);
+        final Optional<Team> cached = getLoadedTeam(commandId);
+        return cached
+                .map(team -> CompletableFuture.completedFuture(Optional.of(team.getId())))
+                .orElseGet(() -> storageManager.getTeamId(commandId));
     }
 
     /**
@@ -58,6 +87,7 @@ public class TeamManager {
      * {@code null} if the player does not have a {@link Team} or if he's not loaded
      */
     public Team getPlayerTeam(UUID playerId) {
+        Objects.requireNonNull(playerId);
         return playerTeams.get(playerId);
     }
 
@@ -65,16 +95,17 @@ public class TeamManager {
      * Get the player {@link Team}
      *
      * @param playerId The player {@link UUID}
-     * @return A {@link CompletableFuture} that return the {@link Team} of the player
-     * The {@link CompletableFuture} return {@code null} if the player does not have a {@link Team}
+     * @return A {@link CompletableFuture} that return the {@link Optional} {@link Team} of the player
+     * The {@link CompletableFuture} return an empty {@link Optional} if the player does not have a {@link Team}
      */
-    public CompletableFuture<Team> getOrLoadPlayerTeam(UUID playerId) {
+    public CompletableFuture<Optional<Team>> getOrLoadPlayerTeam(UUID playerId) {
+        Objects.requireNonNull(playerId);
         final Team cachedTeam = getPlayerTeam(playerId);
         if (cachedTeam != null) {
-            return CompletableFuture.completedFuture(cachedTeam);
+            return CompletableFuture.completedFuture(Optional.of(cachedTeam));
         }
 
-        return storageManager.getPlayerTeamId(playerId).thenCompose(storageManager::loadTeam);
+        return storageManager.loadPlayerTeam(playerId);
     }
 
     /**
@@ -85,6 +116,7 @@ public class TeamManager {
      * {@code null} if the player does not have a {@link Team}
      */
     public CompletableFuture<UUID> getPlayerTeamId(UUID playerId) {
+        Objects.requireNonNull(playerId);
         final Team cachedTeam = getPlayerTeam(playerId);
         if (cachedTeam != null) {
             return CompletableFuture.completedFuture(cachedTeam.getId());
@@ -100,6 +132,7 @@ public class TeamManager {
      * @return A {@link CompletableFuture} representing the save action
      */
     public CompletableFuture<Void> save(Team team) {
+        Objects.requireNonNull(team);
         lock.lock();
         try {
             final List<CompletableFuture<?>> futures = new LinkedList<>();
@@ -142,6 +175,7 @@ public class TeamManager {
      * @param team The {@link Team} to delete
      */
     public CompletableFuture<Void> delete(Team team) {
+        Objects.requireNonNull(team);
         lock.lock();
         try {
             // Kick the players from the team

@@ -13,6 +13,8 @@ public interface Storage {
 
     CompletableFuture<Map<TeamField, Optional<Object>>> loadTeam(UUID teamID, Set<TeamField> teamField);
 
+    CompletableFuture<Optional<UUID>> getTeamId(String commandId);
+
     CompletableFuture<Void> saveTeam(UUID teamId, Map<TeamField, Optional<Object>> changes);
 
     CompletableFuture<Void> deleteTeam(UUID teamId);
@@ -20,6 +22,5 @@ public interface Storage {
     CompletableFuture<UUID> getPlayerTeamId(UUID playerId);
 
     CompletableFuture<Void> savePlayerTeams(Map<UUID, Optional<Team>> changes);
-
 
 }

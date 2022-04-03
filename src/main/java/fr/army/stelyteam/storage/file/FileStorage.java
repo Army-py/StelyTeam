@@ -18,6 +18,11 @@ public class FileStorage implements Storage {
     }
 
     @Override
+    public CompletableFuture<Optional<UUID>> getTeamId(String commandId) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
     public CompletableFuture<Void> saveTeam(UUID teamId, Map<TeamField, Optional<Object>> changes) {
         throw new UnsupportedOperationException("Not implemented yet");
     }

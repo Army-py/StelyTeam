@@ -2,6 +2,7 @@ package fr.army.stelyteam.api;
 
 import fr.army.stelyteam.storage.TeamManager;
 
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -17,7 +18,7 @@ public class StelyTeamAPI {
         return teamManager.getPlayerTeam(player);
     }
 
-    public CompletableFuture<? extends ITeam> getOfflinePlayerTeam(UUID teamId) {
+    public CompletableFuture<? extends Optional<? extends ITeam>> getOfflinePlayerTeam(UUID teamId) {
         return teamManager.getOrLoadPlayerTeam(teamId);
     }
 
