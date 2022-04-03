@@ -10,7 +10,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
 import java.util.logging.Logger;
 
@@ -18,35 +17,27 @@ public class StorageManager {
 
     private final StorageFields[] storageFieldsArray;
     private final StorageFields[] storagePlayersArray;
-    private final Executor executor;
     private final Storage commandIdStorage;
+    private final Executor executor;
 
     public StorageManager(YamlConfiguration config, Logger logger) {
-
-        //TODO Init StorageFieldsArray
-
-        final Map<TeamField, Storage> fieldStorage;
-        final Map<Storage, Set<TeamField>> storageField;
-
-
-        fieldStorage = Collections.synchronizedMap(new EnumMap<>(TeamField.class));
-        fieldStorage.putAll(initStorages(config, logger));
-        storageField = new ConcurrentHashMap<>();
-        loadStorageByField();
-
+        final Map<String, Storage> storageByName = deserializeStorages(config, logger);
+        final Map<TeamField, Storage> fieldStorage = deserializeFieldAssociations(
+                config,
+                storageByName,
+                "fields",
+                TeamField.values()
+        );
         commandIdStorage = fieldStorage.get(TeamField.COMMAND_ID);
-
+        storageFieldsArray = createStorageFieldsArray(fieldStorage);
+        final Map<TeamField, Storage> playerStorage = deserializeFieldAssociations(
+                config,
+                storageByName,
+                "players",
+                TeamField.OWNERS, TeamField.MEMBERS
+        );
+        storagePlayersArray = createStorageFieldsArray(playerStorage);
         executor = null; // TODO Init this executor
-    }
-
-    /**
-     * Load the storageField map from the fieldStorage map
-     */
-    private void loadStorageByField() {
-        for (Map.Entry<TeamField, Storage> entry : fieldStorage.entrySet()) {
-            final Set<TeamField> fields = storageField.computeIfAbsent(entry.getValue(), k -> new HashSet<>());
-            fields.add(entry.getKey());
-        }
     }
 
     /**
@@ -54,9 +45,9 @@ public class StorageManager {
      *
      * @param config The storage.yml {@link YamlConfiguration}
      * @param logger The plugin's {@link Logger} to log information if there is something wrong
-     * @return A {@link Set} of the used storages
+     * @return A {@link Map} of the specified storages by name
      */
-    private Map<TeamField, Storage> initStorages(YamlConfiguration config, Logger logger) {
+    private Map<String, Storage> deserializeStorages(YamlConfiguration config, Logger logger) {
         final Map<String, Storage> storageByName = new HashMap<>();
         final ConfigurationSection storagesSection = config.getConfigurationSection("storages");
         if (storagesSection == null) {
@@ -78,9 +69,9 @@ public class StorageManager {
             }
             final Storage storage;
             switch (storageType) {
-                case "MySQL" -> storage = initMySQL(storageSection);
-                case "SQLite" -> storage = initSQLite(storageSection);
-                case "Yaml" -> storage = initYaml(storageSection);
+                case "MySQL" -> storage = deserializeMySQL(storageSection);
+                case "SQLite" -> storage = deserializeSQLite(storageSection);
+                case "Yaml" -> storage = deserializeYaml(storageSection);
                 default -> {
                     logger.warning("The storage section '" + storageKey + "' in the storage.yml define an unknown type." +
                             "Supported types are MySQL, SQLite and Yaml");
@@ -93,16 +84,46 @@ public class StorageManager {
             storageByName.put(storageKey, storage);
         }
 
-        // Deserialize storage associations
-        final Map<TeamField, Storage> fieldStorage = new EnumMap<>(TeamField.class);
-        final ConfigurationSection fieldSection = config.getConfigurationSection("fields");
+        return storageByName;
+    }
+
+    /*
+     * Deserialize methods
+     */
+
+    private Storage deserializeMySQL(ConfigurationSection storageSection) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    private Storage deserializeSQLite(ConfigurationSection storageSection) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    private Storage deserializeYaml(ConfigurationSection storageSection) {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    /**
+     * Deserialize field associations from the configuration
+     *
+     * @param config        The {@link YamlConfiguration} to deserialize
+     * @param storageByName The {@link Map} that contains all usable storages
+     * @param sectionName   The section to deserialize
+     * @return A {@link Map} of all storage fields associations
+     */
+    private Map<TeamField, Storage> deserializeFieldAssociations(
+            YamlConfiguration config, Map<String, Storage> storageByName, String sectionName, TeamField... fieldsValues
+    ) {
+        final Map<TeamField, Storage> fieldStorage = new HashMap<>();
+        final ConfigurationSection fieldSection = config.getConfigurationSection(sectionName);
         if (fieldSection == null) {
-            throw new RuntimeException("The storage.yml does not contains the field section");
+            throw new RuntimeException("The storage.yml does not contains the '" + sectionName + "' section");
         }
-        for (TeamField teamField : TeamField.values()) {
+        for (TeamField teamField : fieldsValues) {
             final String storageName = fieldSection.getString(teamField.name());
             if (storageName == null) {
-                throw new RuntimeException("The field '" + teamField + "' does not specify a storage in storage.yml");
+                throw new RuntimeException("The field '" + teamField + "' does not specify a storage in the '"
+                        + sectionName + "' section of the storage.yml");
             }
             final Storage storage = storageByName.get(storageName);
             if (storage == null) {
@@ -115,22 +136,25 @@ public class StorageManager {
         return fieldStorage;
     }
 
-    /*
-     * Init methods
+
+    /**
+     * Create the {@link StorageFields} array
      */
+    private StorageFields[] createStorageFieldsArray(Map<TeamField, Storage> fieldStorage) {
+        // Map every storage to a set of fields
+        final Map<Storage, Set<TeamField>> storageFields = new HashMap<>();
+        for (var entry : fieldStorage.entrySet()) {
+            final Set<TeamField> fields = storageFields.computeIfAbsent(entry.getValue(), k -> new HashSet<>());
+            fields.add(entry.getKey());
+        }
 
-    private Storage initMySQL(ConfigurationSection storageSection) {
-        throw new UnsupportedOperationException("Not implemented yet");
+        final StorageFields[] fields = new StorageFields[storageFields.size()];
+        int index = 0;
+        for (var entry : storageFields.entrySet()) {
+            fields[index++] = new StorageFields(entry.getKey(), entry.getValue().toArray(new TeamField[0]));
+        }
+        return fields;
     }
-
-    private Storage initSQLite(ConfigurationSection storageSection) {
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
-
-    private Storage initYaml(ConfigurationSection storageSection) {
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
-
 
     /**
      * Load a {@link Team} from the permanent storage
