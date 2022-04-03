@@ -249,11 +249,6 @@ public class StorageManager {
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
-    public CompletableFuture<Optional<Team>> loadPlayerTeam(UUID playerId) {
-        // .getPlayerTeamId(playerId).thenCompose(storageManager::loadTeam)
-        throw new UnsupportedOperationException("Not implemented yet");
-    }
-
     private record StorageFields(Storage storage, TeamField[] fields) {
     }
 
