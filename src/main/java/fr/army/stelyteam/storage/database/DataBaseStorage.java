@@ -14,6 +14,16 @@ public class DataBaseStorage implements Storage {
     //TODO Implement this class with the current database system
 
     @Override
+    public void start() {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public void stop() {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
     public CompletableFuture<Map<TeamField, Optional<Object>>> loadTeam(UUID teamID, TeamField[] teamField) {
         throw new UnsupportedOperationException("Not implemented yet");
     }

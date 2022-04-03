@@ -10,7 +10,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Logger;
 
 public class StorageManager {
@@ -18,7 +19,8 @@ public class StorageManager {
     private final StorageFields[] storageFieldsArray;
     private final StorageFields[] storagePlayersArray;
     private final Storage commandIdStorage;
-    private final Executor executor;
+    private final ExecutorService executor;
+    private boolean started;
 
     public StorageManager(YamlConfiguration config, Logger logger) {
         final Map<String, Storage> storageByName = deserializeStorages(config, logger);
@@ -37,7 +39,7 @@ public class StorageManager {
                 TeamField.OWNERS, TeamField.MEMBERS
         );
         storagePlayersArray = createStorageFieldsArray(playerStorage);
-        executor = null; // TODO Init this executor
+        executor = Executors.newSingleThreadExecutor(r -> new Thread(r, "StelyTeam-StorageManager"));
     }
 
     /**
@@ -155,6 +157,57 @@ public class StorageManager {
         }
         return fields;
     }
+
+    /*
+     * Public methods
+     */
+
+    /**
+     * Start the StorageManager
+     */
+    public void start() {
+        if (started) {
+            throw new IllegalStateException();
+        }
+        for (Storage storage : getActivesStorages()) {
+            storage.start();
+        }
+        started = true;
+    }
+
+    /**
+     * Stop the StorageManager
+     */
+    public void stop() {
+        if (!started) {
+            throw new IllegalStateException();
+        }
+        for (Storage storage : getActivesStorages()) {
+            storage.stop();
+        }
+        executor.shutdown();
+        started = false;
+    }
+
+    /**
+     * Get all active storages
+     *
+     * @return A {@link Set} of all active storages
+     */
+    private Set<Storage> getActivesStorages() {
+        final Set<Storage> activeStorages = new HashSet<>();
+        for (StorageFields storageFields : storageFieldsArray) {
+            activeStorages.add(storageFields.storage());
+        }
+        for (StorageFields storageFields : storagePlayersArray) {
+            activeStorages.add(storageFields.storage());
+        }
+        return activeStorages;
+    }
+
+    /*
+     * Storage methods
+     */
 
     /**
      * Load a {@link Team} from the permanent storage

@@ -12,6 +12,16 @@ import java.util.concurrent.CompletableFuture;
 public class FileStorage implements Storage {
 
     @Override
+    public void start() {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
+    public void stop() {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+
+    @Override
     public CompletableFuture<Map<TeamField, Optional<Object>>> loadTeam(UUID teamID, TeamField[] teamField) {
         throw new UnsupportedOperationException("Not implemented yet");
     }

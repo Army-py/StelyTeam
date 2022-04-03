@@ -10,6 +10,10 @@ import java.util.concurrent.CompletableFuture;
 
 public interface Storage {
 
+    void start();
+
+    void stop();
+
     CompletableFuture<Map<TeamField, Optional<Object>>> loadTeam(UUID teamID, TeamField[] teamFields);
 
     CompletableFuture<Optional<UUID>> getTeamId(String commandId);

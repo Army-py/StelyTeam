@@ -70,6 +70,8 @@ public class StelyTeamPlugin extends JavaPlugin {
         teamManager = new TeamManager(storageManager);
         stelyTeamApi = new StelyTeamAPI(teamManager);
 
+        storageManager.start();
+
         getLogger().info("StelyTeam ON");
     }
 
@@ -79,6 +81,9 @@ public class StelyTeamPlugin extends JavaPlugin {
         // sqlite.close();
         sqlManager.disconnect();
         sqliteManager.disconnect();
+
+        storageManager.stop();
+
         getLogger().info("StelyTeam OFF");
     }
 
