@@ -17,9 +17,10 @@ public class UpgradeMembersInventory {
 
     public void onInventoryClick(){
         Player player = (Player) event.getWhoClicked();
+        String playerName = player.getName();
         String itemName = event.getCurrentItem().getItemMeta().getDisplayName();
 
-        String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(player.getName());
+        String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(playerName);
         Integer level = StelyTeamPlugin.sqlManager.getTeamLevel(teamID);
 
         
@@ -32,14 +33,14 @@ public class UpgradeMembersInventory {
                     StelyTeamPlugin.sqlManager.incrementTeamLevel(teamID);
                     player.sendMessage("Vous avez atteint le niveau "+(level+1));
 
-                    Inventory inventory = InventoryGenerator.createUpgradeTotalMembersInventory(player.getName());
+                    Inventory inventory = InventoryGenerator.createUpgradeTotalMembersInventory(playerName);
                     player.openInventory(inventory);
                     break;
                 }
             }
         }else{
             // Retour en arrière de l'inventaire
-            Inventory inventory = InventoryGenerator.createManageInventory(player.getName());
+            Inventory inventory = InventoryGenerator.createManageInventory(playerName);
             player.openInventory(inventory);
         }
     }

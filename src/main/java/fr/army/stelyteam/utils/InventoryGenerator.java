@@ -10,19 +10,13 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 
-public class InventoryGenerator {
-    Player player;
-	String nom;
-	Inventory inventaire;
-
-	
+public class InventoryGenerator {	
 	public static Inventory createTeamInventory() {
 		Integer slots = StelyTeamPlugin.config.getInt("inventoriesSlots.createTeam");
 		Inventory inventory = Bukkit.createInventory(null, slots, StelyTeamPlugin.config.getString("inventoriesName.createTeam"));

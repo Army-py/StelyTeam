@@ -14,16 +14,17 @@ public class ConvEditTeamPrefix extends StringPrompt {
     @Override
     public Prompt acceptInput(ConversationContext con, String answer) {
         Player author = (Player) con.getForWhom();
+        String authorName = author.getName();
         
         if (prefixTeamIsTooLong(answer)) {
             con.getForWhom().sendRawMessage("Le préfixe est trop long");
             return this;
         }
 
-        String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(author.getName());
+        String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(authorName);
 
         con.getForWhom().sendRawMessage("Le préfixe a été changé par " + answer);
-        StelyTeamPlugin.sqlManager.updateTeamPrefix(teamID, answer, author.getName());
+        StelyTeamPlugin.sqlManager.updateTeamPrefix(teamID, answer, authorName);
         return null;
     }
 

@@ -15,12 +15,13 @@ public class ConvEditOwner extends StringPrompt {
     @Override
     public Prompt acceptInput(ConversationContext con, String answer) {
         Player player = Bukkit.getPlayer(answer);
+        String playerName = player.getName();
         Player author = (Player) con.getForWhom();
         String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(author.getName());
         if (player == null) {
             con.getForWhom().sendRawMessage("Ce joueur n'existe pas");
             return null;
-        }else if (!StelyTeamPlugin.sqlManager.isMemberInTeam(player.getName(), teamID)) {
+        }else if (!StelyTeamPlugin.sqlManager.isMemberInTeam(playerName, teamID)) {
             con.getForWhom().sendRawMessage("Ce joueur n'est pas dans ta team");
             return null;
         }
@@ -28,7 +29,7 @@ public class ConvEditOwner extends StringPrompt {
         con.getForWhom().sendRawMessage("L'invitation a été envoyée");
         Inventory inventory = InventoryGenerator.createConfirmInventory();
         player.openInventory(inventory);
-        StelyTeamPlugin.playersJoinTeam.add(player.getName());
+        StelyTeamPlugin.playersJoinTeam.add(playerName);
         return null;
     }
 
