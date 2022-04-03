@@ -1,7 +1,9 @@
 package fr.army.stelyteam.storage;
 
+import com.google.common.collect.Sets;
 import fr.army.stelyteam.api.LazyLocation;
 import fr.army.stelyteam.team.Team;
+import fr.army.stelyteam.team.TeamBuilder;
 import fr.army.stelyteam.team.TeamField;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -176,20 +178,20 @@ public class StorageManager {
         if (values.isEmpty()) {
             return Optional.empty();
         }
-        return Optional.of(new Team(
-                        teamId,
-                        (String) values.get(TeamField.COMMAND_ID).orElseThrow(RuntimeException::new),
-                        (String) values.get(TeamField.PREFIX).orElse(null),
-                        (String) values.get(TeamField.SUFFIX).orElse(null),
-                        (UUID) values.get(TeamField.CREATOR).orElse(null),
-                        (Date) values.get(TeamField.CREATION_DATE).orElse(null),
-                        (int) values.get(TeamField.LEVEL).orElse(0),
-                        (boolean) values.get(TeamField.BANK_ACCOUNT).orElse(false),
-                        (double) values.get(TeamField.MONEY).orElse(0d),
-                        (LazyLocation) values.get(TeamField.HOME).orElse(null),
-                        new HashSet<>(Arrays.asList((UUID[]) values.get(TeamField.OWNERS).orElse(new UUID[0]))),
-                        new HashSet<>(Arrays.asList((UUID[]) values.get(TeamField.MEMBERS).orElse(new UUID[0])))
-                )
+        return Optional.of(new TeamBuilder()
+                .setId(teamId)
+                .setCommandId((String) values.get(TeamField.COMMAND_ID).orElseThrow(RuntimeException::new))
+                .setPrefix((String) values.get(TeamField.PREFIX).orElse(null))
+                .setSuffix((String) values.get(TeamField.SUFFIX).orElse(null))
+                .setCreator((UUID) values.get(TeamField.CREATOR).orElse(null))
+                .setCreationDate((Date) values.get(TeamField.CREATION_DATE).orElse(null))
+                .setLevel((int) values.get(TeamField.LEVEL).orElse(0))
+                .setBankAccount((boolean) values.get(TeamField.BANK_ACCOUNT).orElse(false))
+                .setMoney((double) values.get(TeamField.MONEY).orElse(0d))
+                .setHome((LazyLocation) values.get(TeamField.HOME).orElse(null))
+                .setOwners(Sets.newHashSet((UUID[]) values.get(TeamField.OWNERS).orElse(new UUID[0])))
+                .setMembers(Sets.newHashSet((UUID[]) values.get(TeamField.MEMBERS).orElse(new UUID[0])))
+                .create()
         );
     }
 

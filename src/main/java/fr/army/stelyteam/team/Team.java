@@ -23,7 +23,7 @@ public class Team implements ITeam, ChangeTracked {
     private String suffix;
     private int dirty;
 
-    public Team(
+    Team(
             UUID uuid,
             String commandId,
             String prefix,

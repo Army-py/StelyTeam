@@ -21,11 +21,11 @@ public class TeamBuilder {
     private Set<UUID> owners;
     private Set<UUID> members;
 
-    public UUID getUuid() {
+    public UUID getId() {
         return uuid;
     }
 
-    public TeamBuilder setUuid(UUID uuid) {
+    public TeamBuilder setId(UUID uuid) {
         this.uuid = uuid;
         return this;
     }

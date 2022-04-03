@@ -13,7 +13,7 @@ public class BankAccount implements IBankAccount {
     private boolean enable;
     private double money;
 
-    public BankAccount(Team team, boolean enable, double money) {
+    BankAccount(Team team, boolean enable, double money) {
         this.team = team;
         this.enableLock = new ReentrantLock();
         this.moneyLock = new ReentrantLock();

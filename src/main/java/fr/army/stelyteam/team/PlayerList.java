@@ -18,11 +18,7 @@ public class PlayerList implements IPlayerList {
     private final PlayerTeamTracker playerTeamTracker;
     private final Lock lock;
 
-    public PlayerList(Team team, TeamField teamField) {
-        this(team, teamField, null);
-    }
-
-    public PlayerList(Team team, TeamField teamField, Set<UUID> ids) {
+    PlayerList(Team team, TeamField teamField, Set<UUID> ids) {
         this.team = team;
         this.teamField = teamField;
         this.uuids = ids == null ? new HashSet<>() : new HashSet<>(ids);
