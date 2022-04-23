@@ -63,8 +63,7 @@ public class ManageInventory {
             String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(playerName);
             
             if (!StelyTeamPlugin.sqlManager.hasUnlockedTeamBank(teamID)){
-                player.closeInventory();
-                StelyTeamPlugin.playersBuyTeamBank.add(playerName);
+                StelyTeamPlugin.playersTempActions.put(playerName, "buyTeamBank");
                 Inventory inventory = InventoryGenerator.createConfirmInventory();
                 player.openInventory(inventory);
             }
@@ -72,23 +71,15 @@ public class ManageInventory {
             Inventory inventory = InventoryGenerator.createUpgradeTotalMembersInventory(playerName);
             player.openInventory(inventory);
         }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.manage.editName.itemName"))){
-            player.closeInventory();
-            StelyTeamPlugin.playersEditTeamName.add(playerName);
+            StelyTeamPlugin.playersTempActions.put(playerName, "editName");
             Inventory inventory = InventoryGenerator.createConfirmInventory();
             player.openInventory(inventory);
         }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.manage.editPrefix.itemName"))){
-            player.closeInventory();
-            StelyTeamPlugin.playersEditTeamPrefix.add(playerName);
-            Inventory inventory = InventoryGenerator.createConfirmInventory();
-            player.openInventory(inventory);
-        }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.manage.editOwner.itemName"))){
-            player.closeInventory();
-            StelyTeamPlugin.playersEditTeamOwner.add(playerName);
+            StelyTeamPlugin.playersTempActions.put(playerName, "editPrefix");
             Inventory inventory = InventoryGenerator.createConfirmInventory();
             player.openInventory(inventory);
         }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.manage.removeTeam.itemName"))){
-            player.closeInventory();
-            StelyTeamPlugin.playersDeleteTeam.add(playerName);
+            StelyTeamPlugin.playersTempActions.put(playerName, "deleteTeam");
             Inventory inventory = InventoryGenerator.createConfirmInventory();
             player.openInventory(inventory);
         

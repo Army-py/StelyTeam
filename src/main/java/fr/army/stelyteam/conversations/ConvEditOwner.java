@@ -17,19 +17,19 @@ public class ConvEditOwner extends StringPrompt {
         Player player = Bukkit.getPlayer(answer);
         String playerName = player.getName();
         Player author = (Player) con.getForWhom();
-        String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(author.getName());
+        String authorName = author.getName();
+        String teamId = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(author.getName());
         if (player == null) {
             con.getForWhom().sendRawMessage("Ce joueur n'existe pas");
             return null;
-        }else if (!StelyTeamPlugin.sqlManager.isMemberInTeam(playerName, teamID)) {
+        }else if (!StelyTeamPlugin.sqlManager.isMemberInTeam(playerName, teamId)) {
             con.getForWhom().sendRawMessage("Ce joueur n'est pas dans ta team");
             return null;
         }
 
-        con.getForWhom().sendRawMessage("L'invitation a été envoyée");
+        StelyTeamPlugin.addTeamTempAction(authorName, answer, teamId, "editOwner");
         Inventory inventory = InventoryGenerator.createConfirmInventory();
-        player.openInventory(inventory);
-        StelyTeamPlugin.playersJoinTeam.add(playerName);
+        author.openInventory(inventory);
         return null;
     }
 
@@ -37,5 +37,4 @@ public class ConvEditOwner extends StringPrompt {
     public String getPromptText(ConversationContext arg0) {
         return "Envoie le pseudo du joueur à ajouter";
     }
-
 }

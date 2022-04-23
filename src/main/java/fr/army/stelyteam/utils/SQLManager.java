@@ -312,12 +312,19 @@ public class SQLManager {
     public void updateTeamOwner(String teamID, String newOwner, String owner){
         if(isConnected()){
             try {
-                PreparedStatement queryMember = connection.prepareStatement("UPDATE pseudos SET confiance = ? WHERE ID_team = ? AND ID_pseudo = ?");
-                queryMember.setInt(1, 1);
-                queryMember.setString(2, teamID);
-                queryMember.setString(3, owner);
-                queryMember.executeUpdate();
-                queryMember.close();
+                PreparedStatement queryOwner = connection.prepareStatement("UPDATE pseudos SET confiance = ? WHERE ID_team = ? AND ID_pseudo = ?");
+                queryOwner.setInt(1, 1);
+                queryOwner.setString(2, teamID);
+                queryOwner.setString(3, owner);
+                queryOwner.executeUpdate();
+                queryOwner.close();
+
+                PreparedStatement queryNewOwner = connection.prepareStatement("UPDATE pseudos SET confiance = ? WHERE ID_team = ? AND ID_pseudo = ?");
+                queryNewOwner.setInt(1, 2);
+                queryNewOwner.setString(2, teamID);
+                queryNewOwner.setString(3, newOwner);
+                queryNewOwner.executeUpdate();
+                queryNewOwner.close();
 
                 PreparedStatement queryTeam = connection.prepareStatement("UPDATE teams SET owner = ? WHERE ID_team = ? AND owner = ?");
                 queryTeam.setString(1, newOwner);

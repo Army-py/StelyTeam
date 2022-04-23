@@ -14,15 +14,16 @@ public class ConvRemoveMember extends StringPrompt {
     @Override
     public Prompt acceptInput(ConversationContext con, String answer) {
         Player author = (Player) con.getForWhom();
-        String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(author.getName());
-        if (!StelyTeamPlugin.sqlManager.isMemberInTeam(answer, teamID)){
+        String authorName = author.getName();
+        String teamId = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(author.getName());
+        if (!StelyTeamPlugin.sqlManager.isMemberInTeam(answer, teamId)){
             con.getForWhom().sendRawMessage("Le joueur n'est pas dans ta team");
             return null;
         }
 
+        StelyTeamPlugin.addTeamTempAction(authorName, answer, teamId, "removeMember");
         Inventory inventory = InventoryGenerator.createConfirmInventory();
         author.openInventory(inventory);
-        StelyTeamPlugin.playersKickTeam.add(answer);
         return null;
     }
 

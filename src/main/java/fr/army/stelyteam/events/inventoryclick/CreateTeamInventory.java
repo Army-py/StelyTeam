@@ -24,7 +24,8 @@ public class CreateTeamInventory {
         if (itemName.equals(StelyTeamPlugin.config.getString("inventories.createTeam.itemName"))){
             Inventory confirmInventory = InventoryGenerator.createConfirmInventory();
             player.openInventory(confirmInventory);
-            StelyTeamPlugin.playersCreateTeam.add(playerName);
+            // StelyTeamPlugin.playersCreateTeam.add(playerName);
+            StelyTeamPlugin.playersTempActions.put(playerName, "createTeam");
         }
     }
 }
