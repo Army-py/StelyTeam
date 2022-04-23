@@ -69,7 +69,6 @@ public class InventoryGenerator {
                 item = ItemBuilder.getItem(material, name, lore, StelyTeamPlugin.sqlManager.hasUnlockedTeamBank(teamID));
             }
             
-
             if (StelyTeamPlugin.sqlManager.isOwner(playername)){
                 inventory.setItem(slot, item);
             }
@@ -229,7 +228,12 @@ public class InventoryGenerator {
             if (StelyTeamPlugin.sqlManager.isOwner(playername)) lore = StelyTeamPlugin.config.getStringList("inventories.editMembers."+str+".lore");
             else lore = Collections.emptyList();
             
-            inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, false));
+            
+            if (StelyTeamPlugin.sqlManager.isOwner(playername)){
+                inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, false));
+            }else if (StelyTeamPlugin.config.getInt("inventories.editMembers."+str+".rank") != 2){
+                inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, false));
+            }
         }
         return inventory;
     }

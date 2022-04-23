@@ -12,6 +12,7 @@ import org.bukkit.inventory.Inventory;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.conversations.ConvAddMember;
+import fr.army.stelyteam.conversations.ConvEditOwner;
 import fr.army.stelyteam.conversations.ConvRemoveMember;
 import fr.army.stelyteam.utils.InventoryGenerator;
 
@@ -27,7 +28,7 @@ public class EditMembersInventory {
         String itemName;
         Player player = (Player) event.getWhoClicked();
         String playerName = player.getName();
-        String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(playerName);
+        String teamId = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(playerName);
 
         // Fermeture ou retour en arrière de l'inventaire
         itemName = event.getCurrentItem().getItemMeta().getDisplayName();
@@ -37,22 +38,24 @@ public class EditMembersInventory {
             return;
         }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.editMembers.addMember.itemName"))){
             player.closeInventory();
-            StelyTeamPlugin.teamsJoinTeam.add(StelyTeamPlugin.sqlManager.getTeamIDFromOwner(playerName));
             getNameInput(player, new ConvAddMember());
             return;
         }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.editMembers.removeMember.itemName"))){
             player.closeInventory();
-            StelyTeamPlugin.teamsKickTeam.add(StelyTeamPlugin.sqlManager.getTeamIDFromOwner(playerName));
             getNameInput(player, new ConvRemoveMember());
+            return;
+        }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.editMembers.editOwner.itemName"))){
+            player.closeInventory();
+            getNameInput(player, new ConvEditOwner());
             return;
         }
 
         itemName = removeFirstColors(event.getCurrentItem().getItemMeta().getDisplayName());
-        if (StelyTeamPlugin.sqlManager.getMembers(teamID).contains(itemName) && StelyTeamPlugin.sqlManager.isOwner(playerName)){
+        if (StelyTeamPlugin.sqlManager.getMembers(teamId).contains(itemName) && StelyTeamPlugin.sqlManager.isOwner(playerName)){
             if (StelyTeamPlugin.sqlManager.isAdmin(itemName)){
-                if (event.getClick().isRightClick()) StelyTeamPlugin.sqlManager.demoteToMember(teamID, itemName);
+                if (event.getClick().isRightClick()) StelyTeamPlugin.sqlManager.demoteToMember(teamId, itemName);
             }else if (StelyTeamPlugin.sqlManager.isMember(itemName)){
-                if (event.getClick().isLeftClick()) StelyTeamPlugin.sqlManager.promoteToAdmin(teamID, itemName);
+                if (event.getClick().isLeftClick()) StelyTeamPlugin.sqlManager.promoteToAdmin(teamId, itemName);
             }
             Inventory inventory = InventoryGenerator.createEditMembersInventory(playerName);
             player.openInventory(inventory);

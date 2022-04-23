@@ -14,8 +14,12 @@ public class ConvAddMember extends StringPrompt {
 
     @Override
     public Prompt acceptInput(ConversationContext con, String answer) {
+        Player author = (Player) con.getForWhom();
+        String authorName = author.getName();
         Player player = Bukkit.getPlayer(answer);
         String playerName = player.getName();
+        String teamId = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(author.getName());
+        
         if (player == null) {
             con.getForWhom().sendRawMessage("Ce joueur n'existe pas");
             return null;
@@ -27,7 +31,8 @@ public class ConvAddMember extends StringPrompt {
         con.getForWhom().sendRawMessage("L'invitation a été envoyée");
         Inventory inventory = InventoryGenerator.createConfirmInventory();
         player.openInventory(inventory);
-        StelyTeamPlugin.playersJoinTeam.add(playerName);
+
+        StelyTeamPlugin.addTeamTempAction(authorName, playerName, teamId, "addMember");
         return null;
     }
 

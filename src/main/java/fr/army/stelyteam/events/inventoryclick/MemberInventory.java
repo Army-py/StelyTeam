@@ -42,11 +42,9 @@ public class MemberInventory {
             player.openInventory(inventory);
         }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.member.addTeamMoney.itemName"))){
             player.closeInventory();
-            StelyTeamPlugin.playersAddTeamMoney.add(playerName);
             getNameInput(player, new ConvAddMoney());
         }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.member.WithdrawTeamMoney.itemName"))){
             player.closeInventory();
-            StelyTeamPlugin.playersWithdrawTeamMoney.add(playerName);
             getNameInput(player, new ConvWithdrawMoney());
         }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.member.leaveTeam.itemName"))){
             player.closeInventory();

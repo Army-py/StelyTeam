@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -23,18 +24,10 @@ public class StelyTeamPlugin extends JavaPlugin {
 
     public static ArrayList<String> playersCreateTeam = new ArrayList<String>();
 
-    public static ArrayList<String> playersJoinTeam = new ArrayList<String>();
-    public static ArrayList<String> teamsJoinTeam = new ArrayList<String>();
-    public static ArrayList<String> playersKickTeam = new ArrayList<String>();
-    public static ArrayList<String> teamsKickTeam = new ArrayList<String>();
-    public static ArrayList<String> playersBuyTeamBank = new ArrayList<String>();
-    public static ArrayList<String> playersUpgradeTotalMembers = new ArrayList<String>();
-    public static ArrayList<String> playersEditTeamName = new ArrayList<String>();
-    public static ArrayList<String> playersEditTeamPrefix = new ArrayList<String>();
-    public static ArrayList<String> playersEditTeamOwner = new ArrayList<String>();
-    public static ArrayList<String> playersDeleteTeam = new ArrayList<String>();
-    public static ArrayList<String> playersAddTeamMoney = new ArrayList<String>();
-    public static ArrayList<String> playersWithdrawTeamMoney = new ArrayList<String>();
+    // (playerName, actionName)
+    public static HashMap<String, String> playersTempActions = new HashMap<String, String>();
+    // {sender, receiver, teamId, actionName}
+    public static ArrayList<String[]> teamsTempActions = new ArrayList<String[]>();
 
 
     @Override
@@ -82,5 +75,57 @@ public class StelyTeamPlugin extends JavaPlugin {
             }
         }
         return YamlConfiguration.loadConfiguration(file);
+    }
+
+
+    public static String[] getTeamActions(String playerName) {
+        for (String[] strings : teamsTempActions) {
+            System.out.println(strings[0] + " " + strings[1] + " " + strings[2] + " " + strings[3]);
+            if (strings[0].equals(playerName) || strings[1].equals(playerName)) {
+                return strings;
+            }
+        }
+        return null;
+    }
+
+
+    public static void addTeamTempAction(String sender, String receiver, String teamId, String action) {
+        teamsTempActions.add(new String[]{sender, receiver, teamId, action});
+    }
+
+
+    public static void removeTeamTempAction(String playerName) {
+        for (String[] strings : teamsTempActions) {
+            if (strings[0].equals(playerName) || strings[1].equals(playerName)) {
+                teamsTempActions.remove(strings);
+                return;
+            }
+        }
+    }
+
+
+    public static boolean containTeamAction(String playerName, String actionName) {
+        if (teamsTempActions.isEmpty()) return false;
+        for (String[] strings : teamsTempActions) {
+            if ((strings[0].equals(playerName) || strings[1].equals(playerName)) && strings[3].equals(actionName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    public static void removePlayerTempAction(String playerName) {
+        playersTempActions.remove(playerName);
+    }
+
+
+    public static boolean containPlayerAction(String playerName, String actionName) {
+        if (playersTempActions.isEmpty()) return false;
+        if (playersTempActions.containsKey(playerName) && playersTempActions.get(playerName).equals(actionName)) {
+            return true;
+        }else{
+            return false;
+        }
     }
 }

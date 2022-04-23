@@ -126,14 +126,14 @@ inventories:
         - "§ala team"
     setTeamHome:
       itemName: "§5§lCréer un home"
-      itemType: RED_BED
+      itemType: GREEN_BED
       slot: 20
       rank: 1
       lore:
         - "§aCréer le home de team"
     removeTeamHome:
       itemName: "§5§lRetirer le home"
-      itemType: BLACK_BED
+      itemType: RED_BED
       slot: 29
       rank: 1
       lore:
@@ -175,14 +175,6 @@ inventories:
         - "§ateam qui s'affiche dans"
         - "§ale tchat"
         - "§aPrix : 5,000€"
-    editOwner:
-      itemName: "§5§lChanger de créateur"
-      itemType: DIAMOND
-      slot: 40
-      rank: 2
-      lore:
-        - "§aModifier le créateur"
-        - "§ade la team"
     removeTeam:
       itemName: "§5§lSupprimer la team"
       itemType: COMPOSTER
@@ -305,6 +297,14 @@ inventories:
       slot: 28
       lore:
         - "§aRetirer un membre de la team"
+    editOwner:
+      itemName: "§5§lChanger de créateur"
+      itemType: DIAMOND
+      slot: 31
+      rank: 2
+      lore:
+        - "§aModifier le créateur"
+        - "§ade la team"
     close:
       itemName: "§5§lFermer"
       itemType: BARRIER

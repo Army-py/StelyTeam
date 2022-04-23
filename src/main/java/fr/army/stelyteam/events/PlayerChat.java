@@ -47,7 +47,6 @@ public class PlayerChat implements Listener {
             }else if (count == 1){
                 player.sendMessage("Team créé !");
                 StelyTeamPlugin.sqlManager.insertTeam(teamInfos.get(0), teamInfos.get(1), playername);
-                StelyTeamPlugin.playersCreateTeam.remove(playername);
                 HandlerList.unregisterAll(this);
             }else{
                 count = -1;
