@@ -62,29 +62,37 @@ inventoriesSlots:
 
 ranks:
   owner:
-    name: "§5§lGérant"
     id: 0
+    name: "Gérant"
+    color: "§5"
   co_owner:
-    name: "§5§lCo-Gérant"
     id: 1
+    name: "Co-Gérant"
+    color: "§d"
   admin:
-    name: "§5§lAdmin"
     id: 2
+    name: "Admin"
+    color: "§9"
   moderator:
-    name: "§5§lModerateur"
     id: 3
+    name: "Moderateur"
+    color: "§3"
   member:
-    name: "§5§lMembre"
     id: 4
+    name: "Membre"
+    color: "§2"
   new_member:
-    name: "§5§lNouveau Membre"
     id: 5
+    name: "Nouveau Membre"
+    color: "§e"
   coop:
-    name: "§5§lCoop"
     id: 6
+    name: "Coop"
+    color: "§8"
   alliance:
-    name: "§5§lAlliance"
     id: 7
+    name: "Alliance"
+    color: "§a"
 
 
 # Description des items en fonction des grades, dans le menu d'éition des membres

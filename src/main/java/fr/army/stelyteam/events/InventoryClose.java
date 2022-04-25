@@ -14,7 +14,6 @@ public class InventoryClose implements Listener {
         String playerName = player.getName();
 
 
-        System.out.println("InventoryClose");
         StelyTeamPlugin.getTeamActions(playerName);
         if (event.getView().getTitle().equals(StelyTeamPlugin.config.getString("inventoriesName.confirmInventory"))){
             if (StelyTeamPlugin.getTeamActions(playerName) != null) {
