@@ -48,6 +48,7 @@ inventoriesName:
   confirmInventory: "§5§lConfirmation"
 
 
+# Nombre de slots dans chaque inventaires. A modifier en fonction de la taille d'une ligne de coffre (9 * nombre de lignes) 
 inventoriesSlots:
   createTeam: 27
   admin: 27
@@ -57,6 +58,33 @@ inventoriesSlots:
   editMembers: 36
   upgradeTotalMembers: 27
   confirmInventory: 27
+
+
+ranks:
+  owner:
+    name: "§5§lGérant"
+    id: 0
+  co_owner:
+    name: "§5§lCo-Gérant"
+    id: 1
+  admin:
+    name: "§5§lAdmin"
+    id: 2
+  moderator:
+    name: "§5§lModerateur"
+    id: 3
+  member:
+    name: "§5§lMembre"
+    id: 4
+  new_member:
+    name: "§5§lNouveau Membre"
+    id: 5
+  coop:
+    name: "§5§lCoop"
+    id: 6
+  alliance:
+    name: "§5§lAlliance"
+    id: 7
 
 
 # Description des items en fonction des grades, dans le menu d'éition des membres
