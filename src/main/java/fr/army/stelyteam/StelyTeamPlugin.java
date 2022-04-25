@@ -13,6 +13,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import fr.army.stelyteam.commands.CmdStelyTeam;
 import fr.army.stelyteam.events.InventoryClickManager;
+import fr.army.stelyteam.events.InventoryClose;
+import fr.army.stelyteam.events.PlayerQuit;
 import fr.army.stelyteam.utils.SQLManager;
 import fr.army.stelyteam.utils.SQLiteManager;
 
@@ -52,6 +54,8 @@ public class StelyTeamPlugin extends JavaPlugin {
         getCommand("stelyteam").setExecutor(new CmdStelyTeam());
         getCommand("stelyteam").setTabCompleter(new CmdStelyTeam());
         getServer().getPluginManager().registerEvents(new InventoryClickManager(), this);
+        getServer().getPluginManager().registerEvents(new PlayerQuit(), this);
+        getServer().getPluginManager().registerEvents(new InventoryClose(), this);
 
         getLogger().info("StelyTeam ON");
     }
@@ -80,7 +84,8 @@ public class StelyTeamPlugin extends JavaPlugin {
 
     public static String[] getTeamActions(String playerName) {
         for (String[] strings : teamsTempActions) {
-            System.out.println(strings[0] + " " + strings[1] + " " + strings[2] + " " + strings[3]);
+            // System.out.println(teamsTempActions.size());
+            // System.out.println(strings[0] + " " + strings[1] + " " + strings[2] + " " + strings[3]);
             if (strings[0].equals(playerName) || strings[1].equals(playerName)) {
                 return strings;
             }
@@ -115,12 +120,17 @@ public class StelyTeamPlugin extends JavaPlugin {
     }
 
 
+    public static String getPlayerActions(String playerName) {
+        return playersTempActions.get(playerName);
+    }
+
+
     public static void removePlayerTempAction(String playerName) {
         playersTempActions.remove(playerName);
     }
 
 
-    public static boolean containPlayerAction(String playerName, String actionName) {
+    public static boolean containPlayerTempAction(String playerName, String actionName) {
         if (playersTempActions.isEmpty()) return false;
         if (playersTempActions.containsKey(playerName) && playersTempActions.get(playerName).equals(actionName)) {
             return true;

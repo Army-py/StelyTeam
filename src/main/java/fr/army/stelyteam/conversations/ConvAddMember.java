@@ -17,22 +17,25 @@ public class ConvAddMember extends StringPrompt {
         Player author = (Player) con.getForWhom();
         String authorName = author.getName();
         Player player = Bukkit.getPlayer(answer);
-        String playerName = player.getName();
         String teamId = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(author.getName());
         
         if (player == null) {
             con.getForWhom().sendRawMessage("Ce joueur n'existe pas");
             return null;
-        }else if (StelyTeamPlugin.sqlManager.isMember(playerName)) {
+        }else if (StelyTeamPlugin.sqlManager.isMember(answer)) {
             con.getForWhom().sendRawMessage("Ce joueur est déjà dans une team");
             return null;
+        }else if (StelyTeamPlugin.containTeamAction(answer, "addMember")) {
+            con.getForWhom().sendRawMessage("Ce joueur a déjà une action en cours");
+            return null;
         }
+        
+        StelyTeamPlugin.addTeamTempAction(authorName, answer, teamId, "addMember");
 
         con.getForWhom().sendRawMessage("L'invitation a été envoyée");
         Inventory inventory = InventoryGenerator.createConfirmInventory();
         player.openInventory(inventory);
 
-        StelyTeamPlugin.addTeamTempAction(authorName, playerName, teamId, "addMember");
         return null;
     }
 
