@@ -51,7 +51,7 @@ inventoriesName:
 inventoriesSlots:
   createTeam: 27
   admin: 27
-  manage: 54
+  manage: 45
   member: 27
   teamMembers: 27
   editMembers: 36
@@ -119,7 +119,7 @@ inventories:
     removeMember:
       itemName: "§5§lRetirer un membre"
       itemType: RAW_IRON
-      slot: 20
+      slot: 12
       rank: 1
       lore:
         - "§aRetirer un membre de"
@@ -127,14 +127,14 @@ inventories:
     setTeamHome:
       itemName: "§5§lCréer un home"
       itemType: GREEN_BED
-      slot: 20
+      slot: 13
       rank: 1
       lore:
         - "§aCréer le home de team"
     removeTeamHome:
       itemName: "§5§lRetirer le home"
       itemType: RED_BED
-      slot: 29
+      slot: 14
       rank: 1
       lore:
         - "§aRetirer le home de team"
@@ -142,7 +142,7 @@ inventories:
       buyBank:
       itemName: "§5§lOuvrir le compte"
       itemType: GOLD_BLOCK
-      slot: 38
+      slot: 22
       rank: 1
       lore:
         - "§aCréer le compte banquaire"
@@ -151,7 +151,7 @@ inventories:
     updateTotalMembers:
       itemName: "§5§lAjouter des places"
       itemType: TOTEM_OF_UNDYING
-      slot: 13
+      slot: 15
       rank: 1
       lore:
         - "§aAméliorer le nombre de"
@@ -159,7 +159,7 @@ inventories:
     editName:
       itemName: "§5§lModifier le nom"
       itemType: PAPER
-      slot: 22
+      slot: 30
       rank: 2
       lore:
         - "§aModifier le nom unique"
@@ -178,14 +178,14 @@ inventories:
     removeTeam:
       itemName: "§5§lSupprimer la team"
       itemType: COMPOSTER
-      slot: 15
+      slot: 32
       rank: 2
       lore:
         - "§aSupprimer la team"
     close:
       itemName: "§5§lFermer"
       itemType: BARRIER
-      slot: 53
+      slot: 44
       rank: 1
 
 
