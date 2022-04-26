@@ -83,6 +83,15 @@ public class ConfirmInventory {
                 StelyTeamPlugin.sqlManager.removeTeam(teamID, playerName);
                 player.closeInventory();
                 player.sendMessage("Tu as supprimé la team");
+            }else if (StelyTeamPlugin.containPlayerTempAction(playerName, "upgradeMembers")){
+                String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(playerName);
+                Integer level = StelyTeamPlugin.sqlManager.getTeamLevel(teamID);
+                StelyTeamPlugin.removePlayerTempAction(playerName);
+                StelyTeamPlugin.sqlManager.incrementTeamLevel(teamID);
+                player.sendMessage("Vous avez atteint le niveau " + (level+1));
+
+                Inventory inventory = InventoryGenerator.createUpgradeTotalMembersInventory(playerName);
+                player.openInventory(inventory);
             }
         }
 
@@ -116,6 +125,10 @@ public class ConfirmInventory {
             }else if (StelyTeamPlugin.containPlayerTempAction(playerName, "deleteTeam")){
                 StelyTeamPlugin.removePlayerTempAction(playerName);
                 Inventory inventory = InventoryGenerator.createManageInventory(playerName);
+                player.openInventory(inventory);
+            }else if (StelyTeamPlugin.containPlayerTempAction(playerName, "upgradeMembers")){
+                StelyTeamPlugin.removePlayerTempAction(playerName);
+                Inventory inventory = InventoryGenerator.createUpgradeTotalMembersInventory(playerName);
                 player.openInventory(inventory);
             }
         }
