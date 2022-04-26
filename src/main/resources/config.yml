@@ -75,7 +75,7 @@ ranks:
     color: "§9"
   moderator:
     id: 3
-    name: "Moderateur"
+    name: "Modérateur"
     color: "§3"
   member:
     id: 4
@@ -98,13 +98,7 @@ ranks:
 # Description des items en fonction des grades, dans le menu d'éition des membres
 editMembersLores:
   - "Clique droit pour promouvoir"
-  - "Clique gauche pour dépromouvoir"
-
-
-rankColors:
-  owner: "§5"
-  admin: "§6"
-  member: "§7"
+  - "Clique gauche pour rétrograder"
 
 
 inventories:
