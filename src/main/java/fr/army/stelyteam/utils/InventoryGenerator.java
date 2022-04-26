@@ -161,13 +161,8 @@ public class InventoryGenerator {
             if (playerUUID == null) member = Bukkit.getOfflinePlayer(str);
             else member = Bukkit.getOfflinePlayer(playerUUID);
 
-            if (StelyTeamPlugin.sqlManager.isOwner(str)){
-                itemName = StelyTeamPlugin.config.getString("rankColors.owner")+str;
-            }else if (StelyTeamPlugin.sqlManager.isAdmin(str)){
-                itemName = StelyTeamPlugin.config.getString("rankColors.admin")+str;
-            }else{
-                itemName = StelyTeamPlugin.config.getString("rankColors.member")+str;
-            }
+            String memberRank = StelyTeamPlugin.getRankFromId(StelyTeamPlugin.sqlManager.getMemberRank(str));
+            itemName = StelyTeamPlugin.config.getString("ranks." + memberRank + ".color") + str;
             
             inventory.setItem(headSlot, ItemBuilder.getPlayerHead(member, itemName, Collections.emptyList()));
             headSlot ++;
@@ -198,23 +193,21 @@ public class InventoryGenerator {
         for(String str : StelyTeamPlugin.sqlManager.getMembers(teamID)){
             UUID playerUUID = StelyTeamPlugin.sqliteManager.getUUID(str);
             String itemName;
-            List<String> lore;
+            List<String> lore = new ArrayList<>();
             OfflinePlayer member;
 
             if (playerUUID == null) member = Bukkit.getOfflinePlayer(str);
             else member = Bukkit.getOfflinePlayer(playerUUID);
 
-            if (StelyTeamPlugin.sqlManager.isOwner(str)){
-                lore = StelyTeamPlugin.config.getStringList("editMembersLores.owner");
-                itemName = StelyTeamPlugin.config.getString("rankColors.owner")+str;
-            }else if (StelyTeamPlugin.sqlManager.isAdmin(str)){
-                lore = StelyTeamPlugin.config.getStringList("editMembersLores.admin");
-                itemName = StelyTeamPlugin.config.getString("rankColors.admin")+str;
-            }else{
-                lore = StelyTeamPlugin.config.getStringList("editMembersLores.member");
-                itemName = StelyTeamPlugin.config.getString("rankColors.member")+str;
+            String memberRank = StelyTeamPlugin.getRankFromId(StelyTeamPlugin.sqlManager.getMemberRank(str));
+            itemName = StelyTeamPlugin.config.getString("ranks." + memberRank + ".color") + str;
+            
+            
+            if (!StelyTeamPlugin.sqlManager.isOwner(str) && !StelyTeamPlugin.sqlManager.getMemberRank(str).equals(StelyTeamPlugin.getLastRank())){
+                lore = StelyTeamPlugin.config.getStringList("editMembersLores");
             }
             
+            lore.add(0, StelyTeamPlugin.config.getString("ranks." + memberRank + ".name"));
             inventory.setItem(headSlot, ItemBuilder.getPlayerHead(member, itemName, lore));
             headSlot ++;
         }

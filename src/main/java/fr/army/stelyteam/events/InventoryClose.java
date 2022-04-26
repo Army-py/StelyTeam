@@ -13,7 +13,6 @@ public class InventoryClose implements Listener {
         Player player = (org.bukkit.entity.Player) event.getPlayer();
         String playerName = player.getName();
 
-
         StelyTeamPlugin.getTeamActions(playerName);
         if (event.getView().getTitle().equals(StelyTeamPlugin.config.getString("inventoriesName.confirmInventory"))){
             if (StelyTeamPlugin.getTeamActions(playerName) != null) {

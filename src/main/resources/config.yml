@@ -85,26 +85,20 @@ ranks:
     id: 5
     name: "Nouveau Membre"
     color: "§e"
-  coop:
-    id: 6
-    name: "Coop"
-    color: "§8"
-  alliance:
-    id: 7
-    name: "Alliance"
-    color: "§a"
+  # coop:
+  #   id: 6
+  #   name: "Coop"
+  #   color: "§8"
+  # alliance:
+  #   id: 7
+  #   name: "Alliance"
+  #   color: "§a"
 
 
 # Description des items en fonction des grades, dans le menu d'éition des membres
 editMembersLores:
-  owner: 
-    - "§5Créateur"
-  admin:
-    - "§6Admin §r> §oMembre"
-    - "Clique droit"
-  member:
-    - "§7Membre §r> §oAdmin"
-    - "Clique gauche"
+  - "Clique droit pour promouvoir"
+  - "Clique gauche pour dépromouvoir"
 
 
 rankColors:
@@ -152,14 +146,6 @@ inventories:
       lore:
         - "§aGérer les membres de la"
         - "§ateam"
-    removeMember:
-      itemName: "§5§lRetirer un membre"
-      itemType: RAW_IRON
-      slot: 12
-      rank: 1
-      lore:
-        - "§aRetirer un membre de"
-        - "§ala team"
     setTeamHome:
       itemName: "§5§lCréer un home"
       itemType: GREEN_BED

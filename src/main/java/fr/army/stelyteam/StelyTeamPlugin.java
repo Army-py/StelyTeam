@@ -49,6 +49,8 @@ public class StelyTeamPlugin extends JavaPlugin {
             e.printStackTrace();
             getServer().getPluginManager().disablePlugin(this);
         }
+        
+        sqlManager.createTables();
         sqliteManager.createTables();
         
         getCommand("stelyteam").setExecutor(new CmdStelyTeam());
@@ -137,5 +139,26 @@ public class StelyTeamPlugin extends JavaPlugin {
         }else{
             return false;
         }
+    }
+
+
+    public static String getRankFromId(Integer value) {
+        for (String key : StelyTeamPlugin.config.getConfigurationSection("ranks").getKeys(false)) {
+            if (StelyTeamPlugin.config.getInt("ranks." + key + ".id") == value) {
+                return key;
+            }
+        }
+        return null;
+    }
+
+
+    public static Integer getLastRank(){
+        Integer lastRank = 0;
+        for (String key : StelyTeamPlugin.config.getConfigurationSection("ranks").getKeys(false)) {
+            if (StelyTeamPlugin.config.getInt("ranks." + key + ".id") > lastRank) {
+                lastRank = StelyTeamPlugin.config.getInt("ranks." + key + ".id");
+            }
+        }
+        return lastRank;
     }
 }
