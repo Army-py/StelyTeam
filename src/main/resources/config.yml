@@ -143,14 +143,14 @@ inventories:
     setTeamHome:
       itemName: "§5§lCréer un home"
       itemType: GREEN_BED
-      slot: 13
+      slot: 12
       rank: 1
       lore:
         - "§aCréer le home de team"
     removeTeamHome:
       itemName: "§5§lRetirer le home"
       itemType: RED_BED
-      slot: 14
+      slot: 13
       rank: 1
       lore:
         - "§aRetirer le home de team"
@@ -158,7 +158,7 @@ inventories:
       buyBank:
       itemName: "§5§lOuvrir le compte"
       itemType: GOLD_BLOCK
-      slot: 22
+      slot: 14
       rank: 1
       lore:
         - "§aCréer le compte banquaire"
@@ -175,7 +175,7 @@ inventories:
     editName:
       itemName: "§5§lModifier le nom"
       itemType: PAPER
-      slot: 30
+      slot: 21
       rank: 2
       lore:
         - "§aModifier le nom unique"
@@ -184,7 +184,7 @@ inventories:
     editPrefix:
       itemName: "§5§lModifier le préfixe"
       itemType: NAME_TAG
-      slot: 31
+      slot: 22
       rank: 2
       lore:
         - "§aModifier le nom de la"
@@ -194,14 +194,14 @@ inventories:
     removeTeam:
       itemName: "§5§lSupprimer la team"
       itemType: COMPOSTER
-      slot: 32
+      slot: 23
       rank: 2
       lore:
         - "§aSupprimer la team"
     close:
       itemName: "§5§lFermer"
       itemType: BARRIER
-      slot: 44
+      slot: 35
       rank: 1
 
 
