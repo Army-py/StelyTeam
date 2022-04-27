@@ -52,7 +52,7 @@ inventoriesName:
 inventoriesSlots:
   createTeam: 27
   admin: 27
-  manage: 45
+  manage: 36
   member: 27
   teamMembers: 27
   editMembers: 36
