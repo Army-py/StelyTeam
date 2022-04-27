@@ -52,10 +52,20 @@ public class EditMembersInventory {
 
         itemName = removeFirstColors(event.getCurrentItem().getItemMeta().getDisplayName());
         if (StelyTeamPlugin.sqlManager.getMembers(teamId).contains(itemName) && StelyTeamPlugin.sqlManager.isOwner(playerName)){
-            if (StelyTeamPlugin.sqlManager.isAdmin(itemName)){
-                if (event.getClick().isRightClick()) StelyTeamPlugin.sqlManager.demoteToMember(teamId, itemName);
-            }else if (StelyTeamPlugin.sqlManager.isMember(itemName)){
-                if (event.getClick().isLeftClick()) StelyTeamPlugin.sqlManager.promoteToAdmin(teamId, itemName);
+
+            // System.out.println(itemName);
+            // System.out.println(!StelyTeamPlugin.sqlManager.isOwner(itemName));
+            // System.out.println(StelyTeamPlugin.sqlManager.getMemberRank(itemName));
+
+            if (event.getClick().isRightClick()){
+                if (!StelyTeamPlugin.sqlManager.isOwner(itemName) && StelyTeamPlugin.sqlManager.getMemberRank(itemName) < StelyTeamPlugin.getLastRank()){
+                    StelyTeamPlugin.sqlManager.demoteMember(teamId, itemName);
+                }
+            }
+            if (event.getClick().isLeftClick()){
+                if (!StelyTeamPlugin.sqlManager.isOwner(itemName) && StelyTeamPlugin.sqlManager.getMemberRank(itemName) != 1){
+                    StelyTeamPlugin.sqlManager.promoteMember(teamId, itemName);
+                }
             }
             Inventory inventory = InventoryGenerator.createEditMembersInventory(playerName);
             player.openInventory(inventory);

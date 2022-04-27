@@ -30,38 +30,38 @@ public class ConfirmInventory {
 
         if (itemName.equals(StelyTeamPlugin.config.getString("inventories.confirmInventory.confirm.itemName"))){
             if (StelyTeamPlugin.containTeamAction(playerName, "addMember")){
-                player.closeInventory();
                 String teamId = StelyTeamPlugin.getTeamActions(playerName)[2];
                 StelyTeamPlugin.removeTeamTempAction(playerName);
                 StelyTeamPlugin.sqlManager.insertMember(playerName, teamId);
+                player.closeInventory();
                 player.sendMessage("Vous avez rejoint la team " + teamId);
             }else if (StelyTeamPlugin.containTeamAction(playerName, "removeMember")){
-                player.closeInventory();
                 String teamId = StelyTeamPlugin.getTeamActions(playerName)[2];
                 String receiverName = StelyTeamPlugin.getTeamActions(playerName)[1];
                 Player receiver = Bukkit.getPlayer(receiverName);
                 StelyTeamPlugin.removeTeamTempAction(playerName);
                 StelyTeamPlugin.sqlManager.removeMember(receiverName, teamId);
+                player.closeInventory();
                 player.sendMessage("Vous avez exclu " + receiverName + " de la team");
                 if (receiver != null) receiver.sendMessage("Vous avez été exclu de la team " + teamId);
             }else if (StelyTeamPlugin.containTeamAction(playerName, "editOwner")){
-                player.closeInventory();
                 String teamId = StelyTeamPlugin.getTeamActions(playerName)[2];
                 String senderName = StelyTeamPlugin.getTeamActions(playerName)[0];
                 String receiverName = StelyTeamPlugin.getTeamActions(playerName)[1];
                 Player receiver = Bukkit.getPlayer(receiverName);
                 StelyTeamPlugin.removeTeamTempAction(playerName);
                 StelyTeamPlugin.sqlManager.updateTeamOwner(teamId, receiverName, senderName);
+                player.closeInventory();
                 player.sendMessage("Vous avez promu " + receiverName + " créateur de la team");
                 if (receiver != null) receiver.sendMessage("Vous avez été promu créateur de la team " + teamId);
 
 
-            }else if (StelyTeamPlugin.containPlayerAction(playerName, "createTeam")){
-                player.closeInventory();
+            }else if (StelyTeamPlugin.containPlayerTempAction(playerName, "createTeam")){
                 StelyTeamPlugin.removePlayerTempAction(playerName);
                 player.sendMessage("Envoie un nom de team");
+                player.closeInventory();
                 StelyTeamPlugin.instance.getServer().getPluginManager().registerEvents(new PlayerChat(playerName), StelyTeamPlugin.instance);
-            }else if (StelyTeamPlugin.containPlayerAction(playerName, "buyTeamBank")){
+            }else if (StelyTeamPlugin.containPlayerTempAction(playerName, "buyTeamBank")){
                 String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(playerName);
                 StelyTeamPlugin.removePlayerTempAction(playerName);
                 StelyTeamPlugin.sqlManager.updateUnlockTeamBank(teamID);
@@ -69,53 +69,66 @@ public class ConfirmInventory {
 
                 Inventory inventory = InventoryGenerator.createManageInventory(playerName);
                 player.openInventory(inventory);
-            }else if (StelyTeamPlugin.containPlayerAction(playerName, "editName")){
-                player.closeInventory();
+            }else if (StelyTeamPlugin.containPlayerTempAction(playerName, "editName")){
                 StelyTeamPlugin.removePlayerTempAction(playerName);
+                player.closeInventory();
                 getNameInput(player, new ConvEditTeamID());
-            }else if (StelyTeamPlugin.containPlayerAction(playerName, "editPrefix")){
-                player.closeInventory();
+            }else if (StelyTeamPlugin.containPlayerTempAction(playerName, "editPrefix")){
                 StelyTeamPlugin.removePlayerTempAction(playerName);
-                getNameInput(player, new ConvEditTeamPrefix());
-            }else if (StelyTeamPlugin.containPlayerAction(playerName, "deleteTeam")){
                 player.closeInventory();
+                getNameInput(player, new ConvEditTeamPrefix());
+            }else if (StelyTeamPlugin.containPlayerTempAction(playerName, "deleteTeam")){
                 String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(playerName);
                 StelyTeamPlugin.removePlayerTempAction(playerName);
                 StelyTeamPlugin.sqlManager.removeTeam(teamID, playerName);
+                player.closeInventory();
                 player.sendMessage("Tu as supprimé la team");
+            }else if (StelyTeamPlugin.containPlayerTempAction(playerName, "upgradeMembers")){
+                String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(playerName);
+                Integer level = StelyTeamPlugin.sqlManager.getTeamLevel(teamID);
+                StelyTeamPlugin.removePlayerTempAction(playerName);
+                StelyTeamPlugin.sqlManager.incrementTeamLevel(teamID);
+                player.sendMessage("Vous avez atteint le niveau " + (level+1));
+
+                Inventory inventory = InventoryGenerator.createUpgradeTotalMembersInventory(playerName);
+                player.openInventory(inventory);
             }
         }
 
         else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.confirmInventory.cancel.itemName"))){
             if (StelyTeamPlugin.containTeamAction(playerName, "addMember")){
-                player.closeInventory();
                 StelyTeamPlugin.removeTeamTempAction(playerName);
+                player.closeInventory();
             }else if (StelyTeamPlugin.containTeamAction(playerName, "removeMember")){
-                player.closeInventory();
                 StelyTeamPlugin.removeTeamTempAction(playerName);
+                player.closeInventory();
             }else if (StelyTeamPlugin.containTeamAction(playerName, "editOwner")){
-                player.closeInventory();
                 StelyTeamPlugin.removeTeamTempAction(playerName);
+                player.closeInventory();
 
-            }else if (StelyTeamPlugin.containPlayerAction(playerName, "createTeam")){
+            }else if (StelyTeamPlugin.containPlayerTempAction(playerName, "createTeam")){
                 StelyTeamPlugin.removePlayerTempAction(playerName);
                 Inventory inventory = InventoryGenerator.createTeamInventory();
                 player.openInventory(inventory);
-            }else if (StelyTeamPlugin.containPlayerAction(playerName, "buyTeamBank")){
+            }else if (StelyTeamPlugin.containPlayerTempAction(playerName, "buyTeamBank")){
                 StelyTeamPlugin.removePlayerTempAction(playerName);
                 Inventory inventory = InventoryGenerator.createManageInventory(playerName);
                 player.openInventory(inventory);
-            }else if (StelyTeamPlugin.containPlayerAction(playerName, "editName")){
+            }else if (StelyTeamPlugin.containPlayerTempAction(playerName, "editName")){
                 StelyTeamPlugin.removePlayerTempAction(playerName);
                 Inventory inventory = InventoryGenerator.createManageInventory(playerName);
                 player.openInventory(inventory);
-            }else if (StelyTeamPlugin.containPlayerAction(playerName, "editPrefix")){
+            }else if (StelyTeamPlugin.containPlayerTempAction(playerName, "editPrefix")){
                 StelyTeamPlugin.removePlayerTempAction(playerName);
                 Inventory inventory = InventoryGenerator.createManageInventory(playerName);
                 player.openInventory(inventory);
-            }else if (StelyTeamPlugin.containPlayerAction(playerName, "deleteTeam")){
+            }else if (StelyTeamPlugin.containPlayerTempAction(playerName, "deleteTeam")){
                 StelyTeamPlugin.removePlayerTempAction(playerName);
                 Inventory inventory = InventoryGenerator.createManageInventory(playerName);
+                player.openInventory(inventory);
+            }else if (StelyTeamPlugin.containPlayerTempAction(playerName, "upgradeMembers")){
+                StelyTeamPlugin.removePlayerTempAction(playerName);
+                Inventory inventory = InventoryGenerator.createUpgradeTotalMembersInventory(playerName);
                 player.openInventory(inventory);
             }
         }

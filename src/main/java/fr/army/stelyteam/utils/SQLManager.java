@@ -71,10 +71,26 @@ public class SQLManager {
     }
 
 
+    public void createTables(){
+        if (isConnected()){
+            try {
+                PreparedStatement queryHomes = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'players' ('playername' TEXT, 'rank' INTEGER, 'team_id' TEXT, PRIMARY KEY('playername'), FOREIGN KEY('team_id') REFERENCES 'teams'('team_id'));");
+                PreparedStatement queryPlayers = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'teams' ('team_id' TEXT, 'team_prefix' TEXT, 'owner' TEXT, 'money' INTEGER, 'creation_date' TEXT, 'members_level' INTEGER, 'team_bank' INTEGER, PRIMARY KEY('team_id'), FOREIGN KEY('owner') REFERENCES 'players'('playername'));");
+                queryHomes.executeUpdate();
+                queryPlayers.executeUpdate();
+                queryHomes.close();
+                queryPlayers.close();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+
     public boolean isOwner(String playername){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("SELECT owner FROM teams WHERE owner = ?");
+                PreparedStatement query = connection.prepareStatement("SELECT playername FROM players WHERE rank = 0 AND playername = ?");
                 query.setString(1, playername);
                 ResultSet result = query.executeQuery();
                 boolean isParticipant = result.next();
@@ -91,7 +107,7 @@ public class SQLManager {
     public boolean isMember(String playername){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("SELECT ID_pseudo FROM pseudos WHERE ID_pseudo = ? AND confiance = ?");
+                PreparedStatement query = connection.prepareStatement("SELECT playername FROM players WHERE playername = ? AND rank = ?");
                 query.setString(1, playername);
                 query.setInt(2, 0);
                 ResultSet result = query.executeQuery();
@@ -109,7 +125,7 @@ public class SQLManager {
     public boolean isMemberInTeam(String playername, String team_id){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("SELECT ID_pseudo FROM pseudos WHERE ID_pseudo = ? AND ID_team = ?");
+                PreparedStatement query = connection.prepareStatement("SELECT playername FROM players WHERE playername = ? AND team_id = ?");
                 query.setString(1, playername);
                 query.setString(2, team_id);
                 ResultSet result = query.executeQuery();
@@ -127,7 +143,7 @@ public class SQLManager {
     public boolean isAdmin(String playername){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("SELECT ID_pseudo FROM pseudos WHERE ID_pseudo = ? AND confiance = ?");
+                PreparedStatement query = connection.prepareStatement("SELECT playername FROM players WHERE playername = ? AND rank = ?");
                 query.setString(1, playername);
                 query.setInt(2, 1);
                 ResultSet result = query.executeQuery();
@@ -145,7 +161,7 @@ public class SQLManager {
     public boolean hasUnlockedTeamBank(String teamID){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("SELECT ID_team FROM teams WHERE ID_team = ? AND teamcompte = 1");
+                PreparedStatement query = connection.prepareStatement("SELECT team_id FROM teams WHERE team_id = ? AND team_bank = 1");
                 query.setString(1, teamID);
                 ResultSet result = query.executeQuery();
                 boolean isParticipant = result.next();
@@ -162,7 +178,7 @@ public class SQLManager {
     public boolean teamIdExist(String teamID){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("SELECT ID_team FROM teams WHERE ID_team = ?");
+                PreparedStatement query = connection.prepareStatement("SELECT team_id FROM teams WHERE team_id = ?");
                 query.setString(1, teamID);
                 ResultSet result = query.executeQuery();
                 boolean isParticipant = result.next();
@@ -179,7 +195,7 @@ public class SQLManager {
     public boolean teamPrefixExist(String teamPrefix){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("SELECT prefixteam FROM teams WHERE prefixteam = ?");
+                PreparedStatement query = connection.prepareStatement("SELECT team_prefix FROM teams WHERE team_prefix = ?");
                 query.setString(1, teamPrefix);
                 ResultSet result = query.executeQuery();
                 boolean isParticipant = result.next();
@@ -196,7 +212,7 @@ public class SQLManager {
     public void insertTeam(String teamID, String teamPrefix, String owner){
         if(isConnected()){
             try {
-                PreparedStatement queryTeam = connection.prepareStatement("INSERT INTO teams (ID_team, prefixteam, owner, money, datecreation, niveaux, teamcompte) VALUES (?, ?, ?, ?, ?, ?, ?)");
+                PreparedStatement queryTeam = connection.prepareStatement("INSERT INTO teams (team_id, team_prefix, owner, money, creation_date, members_level, team_bank) VALUES (?, ?, ?, ?, ?, ?, ?)");
                 queryTeam.setString(1, teamID);
                 queryTeam.setString(2, teamPrefix);
                 queryTeam.setString(3, owner);
@@ -207,9 +223,9 @@ public class SQLManager {
                 queryTeam.executeUpdate();
                 queryTeam.close();
 
-                PreparedStatement queryMember = connection.prepareStatement("INSERT INTO pseudos (ID_pseudo, confiance, ID_team) VALUES (?, ?, ?)");
+                PreparedStatement queryMember = connection.prepareStatement("INSERT INTO players (playername, rank, team_id) VALUES (?, ?, ?)");
                 queryMember.setString(1, owner);
-                queryMember.setInt(2, 2);
+                queryMember.setInt(2, 0);
                 queryMember.setString(3, teamID);
                 queryMember.executeUpdate();
                 queryMember.close();
@@ -223,9 +239,9 @@ public class SQLManager {
     public void insertMember(String playername, String teamID){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("INSERT INTO pseudos (ID_pseudo, confiance, ID_team) VALUES (?, ?, ?)");
+                PreparedStatement query = connection.prepareStatement("INSERT INTO players (playername, rank, team_id) VALUES (?, ?, ?)");
                 query.setString(1, playername);
-                query.setInt(2, 0);
+                query.setInt(2, 5);
                 query.setString(3, teamID);
                 query.executeUpdate();
                 query.close();
@@ -239,13 +255,13 @@ public class SQLManager {
     public void removeTeam(String teamID, String owner){
         if(isConnected()){
             try {
-                PreparedStatement queryTeams = connection.prepareStatement("DELETE FROM teams WHERE ID_team = ? AND owner = ?");
+                PreparedStatement queryTeams = connection.prepareStatement("DELETE FROM teams WHERE team_id = ? AND owner = ?");
                 queryTeams.setString(1, teamID);
                 queryTeams.setString(2, owner);
                 queryTeams.executeUpdate();
                 queryTeams.close();
 
-                PreparedStatement queryMembers = connection.prepareStatement("DELETE FROM pseudos WHERE ID_team = ?");
+                PreparedStatement queryMembers = connection.prepareStatement("DELETE FROM players WHERE team_id = ?");
                 queryMembers.setString(1, teamID);
                 queryMembers.executeUpdate();
                 queryMembers.close();
@@ -259,7 +275,7 @@ public class SQLManager {
     public void removeMember(String playername, String teamID){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("DELETE FROM pseudos WHERE ID_pseudo = ? AND ID_team = ?");
+                PreparedStatement query = connection.prepareStatement("DELETE FROM players WHERE playername = ? AND team_id = ?");
                 query.setString(1, playername);
                 query.setString(2, teamID);
                 query.executeUpdate();
@@ -274,14 +290,14 @@ public class SQLManager {
     public void updateTeamID(String teamID, String newTeamID, String owner){
         if(isConnected()){
             try {
-                PreparedStatement queryTeam = connection.prepareStatement("UPDATE teams SET ID_team = ? WHERE ID_team = ? AND owner = ?");
+                PreparedStatement queryTeam = connection.prepareStatement("UPDATE teams SET team_id = ? WHERE team_id = ? AND owner = ?");
                 queryTeam.setString(1, newTeamID);
                 queryTeam.setString(2, teamID);
                 queryTeam.setString(3, owner);
                 queryTeam.executeUpdate();
                 queryTeam.close();
 
-                PreparedStatement queryMember = connection.prepareStatement("UPDATE pseudos SET ID_team = ? WHERE ID_team = ?");
+                PreparedStatement queryMember = connection.prepareStatement("UPDATE players SET team_id = ? WHERE team_id = ?");
                 queryMember.setString(1, newTeamID);
                 queryMember.setString(2, teamID);
                 queryMember.executeUpdate();
@@ -296,7 +312,7 @@ public class SQLManager {
     public void updateTeamPrefix(String teamID, String newTeamPrefix, String owner){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("UPDATE teams SET prefixteam = ? WHERE ID_team = ? AND owner = ?");
+                PreparedStatement query = connection.prepareStatement("UPDATE teams SET team_prefix = ? WHERE team_id = ? AND owner = ?");
                 query.setString(1, newTeamPrefix);
                 query.setString(2, teamID);
                 query.setString(3, owner);
@@ -312,21 +328,21 @@ public class SQLManager {
     public void updateTeamOwner(String teamID, String newOwner, String owner){
         if(isConnected()){
             try {
-                PreparedStatement queryOwner = connection.prepareStatement("UPDATE pseudos SET confiance = ? WHERE ID_team = ? AND ID_pseudo = ?");
+                PreparedStatement queryOwner = connection.prepareStatement("UPDATE players SET rank = ? WHERE team_id = ? AND playername = ?");
                 queryOwner.setInt(1, 1);
                 queryOwner.setString(2, teamID);
                 queryOwner.setString(3, owner);
                 queryOwner.executeUpdate();
                 queryOwner.close();
 
-                PreparedStatement queryNewOwner = connection.prepareStatement("UPDATE pseudos SET confiance = ? WHERE ID_team = ? AND ID_pseudo = ?");
-                queryNewOwner.setInt(1, 2);
+                PreparedStatement queryNewOwner = connection.prepareStatement("UPDATE players SET rank = ? WHERE team_id = ? AND playername = ?");
+                queryNewOwner.setInt(1, 0);
                 queryNewOwner.setString(2, teamID);
                 queryNewOwner.setString(3, newOwner);
                 queryNewOwner.executeUpdate();
                 queryNewOwner.close();
 
-                PreparedStatement queryTeam = connection.prepareStatement("UPDATE teams SET owner = ? WHERE ID_team = ? AND owner = ?");
+                PreparedStatement queryTeam = connection.prepareStatement("UPDATE teams SET owner = ? WHERE team_id = ? AND owner = ?");
                 queryTeam.setString(1, newOwner);
                 queryTeam.setString(2, teamID);
                 queryTeam.setString(3, owner);
@@ -342,7 +358,7 @@ public class SQLManager {
     public void updateUnlockTeamBank(String teamID){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("UPDATE teams SET teamcompte = ? WHERE ID_team = ?");
+                PreparedStatement query = connection.prepareStatement("UPDATE teams SET team_bank = ? WHERE team_id = ?");
                 query.setInt(1, 1);
                 query.setString(2, teamID);
                 query.executeUpdate();
@@ -357,7 +373,7 @@ public class SQLManager {
     public void incrementTeamLevel(String teamID){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("UPDATE teams SET niveaux = niveaux + 1 WHERE ID_team = ?");
+                PreparedStatement query = connection.prepareStatement("UPDATE teams SET members_level = members_level + 1 WHERE team_id = ?");
                 query.setString(1, teamID);
                 query.executeUpdate();
                 query.close();
@@ -371,7 +387,7 @@ public class SQLManager {
     public void incrementTeamMoney(String teamID, int money){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("UPDATE teams SET money = money + ? WHERE ID_team = ?");
+                PreparedStatement query = connection.prepareStatement("UPDATE teams SET money = money + ? WHERE team_id = ?");
                 query.setInt(1, money);
                 query.setString(2, teamID);
                 query.executeUpdate();
@@ -386,7 +402,7 @@ public class SQLManager {
     public void decrementTeamMoney(String teamID, int money){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("UPDATE teams SET money = money - ? WHERE ID_team = ?");
+                PreparedStatement query = connection.prepareStatement("UPDATE teams SET money = money - ? WHERE team_id = ?");
                 query.setInt(1, money);
                 query.setString(2, teamID);
                 query.executeUpdate();
@@ -398,13 +414,12 @@ public class SQLManager {
     }
 
 
-    public void promoteToAdmin(String teamID, String playername){
+    public void promoteMember(String teamId, String playername){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("UPDATE pseudos SET confiance = ? WHERE ID_team = ? AND ID_pseudo = ?");
-                query.setInt(1, 1);
-                query.setString(2, teamID);
-                query.setString(3, playername);
+                PreparedStatement query = connection.prepareStatement("UPDATE players SET rank = rank - 1 WHERE team_id = ? AND playername = ?");
+                query.setString(1, teamId);
+                query.setString(2, playername);
                 query.executeUpdate();
                 query.close();
             } catch (SQLException e) {
@@ -414,13 +429,12 @@ public class SQLManager {
     }
 
 
-    public void demoteToMember(String teamID, String playername){
+    public void demoteMember(String teamId, String playername){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("UPDATE pseudos SET confiance = ? WHERE ID_team = ? AND ID_pseudo = ?");
-                query.setInt(1, 0);
-                query.setString(2, teamID);
-                query.setString(3, playername);
+                PreparedStatement query = connection.prepareStatement("UPDATE players SET rank = rank + 1 WHERE team_id = ? AND playername = ?");
+                query.setString(1, teamId);
+                query.setString(2, playername);
                 query.executeUpdate();
                 query.close();
             } catch (SQLException e) {
@@ -433,7 +447,7 @@ public class SQLManager {
     public void removeTeamAdmin(String teamID, String playername){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("UPDATE pseudos SET confiance = ? WHERE ID_team = ?");
+                PreparedStatement query = connection.prepareStatement("UPDATE players SET rank = ? WHERE team_id = ?");
                 query.setString(1, teamID);
                 query.setInt(2, 0);
                 query.setString(3, teamID);
@@ -449,12 +463,12 @@ public class SQLManager {
     public String getTeamIDFromOwner(String owner){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("SELECT ID_team FROM teams WHERE owner = ?");
+                PreparedStatement query = connection.prepareStatement("SELECT team_id FROM teams WHERE owner = ?");
                 query.setString(1, owner);
                 ResultSet result = query.executeQuery();
                 String teamID = null;
                 if(result.next()){
-                    teamID = result.getString("ID_team");
+                    teamID = result.getString("team_id");
                 }
                 query.close();
                 return teamID;
@@ -469,12 +483,12 @@ public class SQLManager {
     public String getTeamIDFromPlayer(String playername){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("SELECT ID_team FROM pseudos WHERE ID_pseudo = ?");
+                PreparedStatement query = connection.prepareStatement("SELECT team_id FROM players WHERE playername = ?");
                 query.setString(1, playername);
                 ResultSet result = query.executeQuery();
                 String teamID = null;
                 if(result.next()){
-                    teamID = result.getString("ID_team");
+                    teamID = result.getString("team_id");
                 }
                 query.close();
                 return teamID;
@@ -489,12 +503,12 @@ public class SQLManager {
     public Integer getTeamLevel(String teamID){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("SELECT niveaux FROM teams WHERE ID_team = ?");
+                PreparedStatement query = connection.prepareStatement("SELECT members_level FROM teams WHERE team_id = ?");
                 query.setString(1, teamID);
                 ResultSet result = query.executeQuery();
                 Integer level = null;
                 if(result.next()){
-                    level = result.getInt("niveaux");
+                    level = result.getInt("members_level");
                 }
                 query.close();
                 return level;
@@ -509,7 +523,7 @@ public class SQLManager {
     public Integer getTeamMoney(String teamID){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("SELECT money FROM teams WHERE ID_team = ?");
+                PreparedStatement query = connection.prepareStatement("SELECT money FROM teams WHERE team_id = ?");
                 query.setString(1, teamID);
                 ResultSet result = query.executeQuery();
                 Integer level = null;
@@ -529,16 +543,36 @@ public class SQLManager {
     public ArrayList<String> getMembers(String teamID){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("SELECT ID_pseudo FROM pseudos WHERE ID_team = ? ORDER BY confiance DESC");
+                PreparedStatement query = connection.prepareStatement("SELECT playername FROM players WHERE team_id = ? ORDER BY rank ASC");
                 query.setString(1, teamID);
 
                 ResultSet result = query.executeQuery();
                 ArrayList<String> data = new ArrayList<String>();
                 while(result.next()){
-                    data.add(result.getString("ID_pseudo"));
+                    data.add(result.getString("playername"));
                 }
                 query.close();
                 return data;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+
+    public Integer getMemberRank(String playerName) {
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT rank FROM players WHERE playername = ?");
+                query.setString(1, playerName);
+                ResultSet result = query.executeQuery();
+                Integer rank = null;
+                if(result.next()){
+                    rank = result.getInt("rank");
+                }
+                query.close();
+                return rank;
             } catch (SQLException e) {
                 e.printStackTrace();
             }

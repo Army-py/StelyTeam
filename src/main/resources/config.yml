@@ -48,10 +48,11 @@ inventoriesName:
   confirmInventory: "§5§lConfirmation"
 
 
+# Nombre de slots dans chaque inventaires. A modifier en fonction de la taille d'une ligne de coffre (9 * nombre de lignes) 
 inventoriesSlots:
   createTeam: 27
   admin: 27
-  manage: 54
+  manage: 36
   member: 27
   teamMembers: 27
   editMembers: 36
@@ -59,22 +60,45 @@ inventoriesSlots:
   confirmInventory: 27
 
 
+ranks:
+  owner:
+    id: 0
+    name: "Gérant"
+    color: "§5"
+  co_owner:
+    id: 1
+    name: "Co-Gérant"
+    color: "§d"
+  admin:
+    id: 2
+    name: "Admin"
+    color: "§9"
+  moderator:
+    id: 3
+    name: "Modérateur"
+    color: "§3"
+  member:
+    id: 4
+    name: "Membre"
+    color: "§2"
+  new_member:
+    id: 5
+    name: "Nouveau Membre"
+    color: "§e"
+  # coop:
+  #   id: 6
+  #   name: "Coop"
+  #   color: "§8"
+  # alliance:
+  #   id: 7
+  #   name: "Alliance"
+  #   color: "§a"
+
+
 # Description des items en fonction des grades, dans le menu d'éition des membres
 editMembersLores:
-  owner: 
-    - "§5Créateur"
-  admin:
-    - "§6Admin §r> §oMembre"
-    - "Clique droit"
-  member:
-    - "§7Membre §r> §oAdmin"
-    - "Clique gauche"
-
-
-rankColors:
-  owner: "§5"
-  admin: "§6"
-  member: "§7"
+  - "Clique droit pour promouvoir"
+  - "Clique gauche pour rétrograder"
 
 
 inventories:
@@ -116,25 +140,17 @@ inventories:
       lore:
         - "§aGérer les membres de la"
         - "§ateam"
-    removeMember:
-      itemName: "§5§lRetirer un membre"
-      itemType: RAW_IRON
-      slot: 20
-      rank: 1
-      lore:
-        - "§aRetirer un membre de"
-        - "§ala team"
     setTeamHome:
       itemName: "§5§lCréer un home"
       itemType: GREEN_BED
-      slot: 20
+      slot: 12
       rank: 1
       lore:
         - "§aCréer le home de team"
     removeTeamHome:
       itemName: "§5§lRetirer le home"
       itemType: RED_BED
-      slot: 29
+      slot: 13
       rank: 1
       lore:
         - "§aRetirer le home de team"
@@ -142,7 +158,7 @@ inventories:
       buyBank:
       itemName: "§5§lOuvrir le compte"
       itemType: GOLD_BLOCK
-      slot: 38
+      slot: 14
       rank: 1
       lore:
         - "§aCréer le compte banquaire"
@@ -151,7 +167,7 @@ inventories:
     updateTotalMembers:
       itemName: "§5§lAjouter des places"
       itemType: TOTEM_OF_UNDYING
-      slot: 13
+      slot: 15
       rank: 1
       lore:
         - "§aAméliorer le nombre de"
@@ -159,7 +175,7 @@ inventories:
     editName:
       itemName: "§5§lModifier le nom"
       itemType: PAPER
-      slot: 22
+      slot: 21
       rank: 2
       lore:
         - "§aModifier le nom unique"
@@ -168,7 +184,7 @@ inventories:
     editPrefix:
       itemName: "§5§lModifier le préfixe"
       itemType: NAME_TAG
-      slot: 31
+      slot: 22
       rank: 2
       lore:
         - "§aModifier le nom de la"
@@ -178,14 +194,14 @@ inventories:
     removeTeam:
       itemName: "§5§lSupprimer la team"
       itemType: COMPOSTER
-      slot: 15
+      slot: 23
       rank: 2
       lore:
         - "§aSupprimer la team"
     close:
       itemName: "§5§lFermer"
       itemType: BARRIER
-      slot: 53
+      slot: 35
       rank: 1
 
 
