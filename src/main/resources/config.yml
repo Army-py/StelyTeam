@@ -22,7 +22,7 @@ teamMaxMoney: 10000000
 prices:
   createTeam: 100000
   editTeam: 5000
-  teamBank: 1000000
+  buyTeamBank: 1000000
   upgradeLevelOne: 2500000
   upgradeLevelTwo: 5000000
   upgradeLevelThree: 10000000
@@ -32,6 +32,13 @@ prices:
 
 # Item à la place des cases vide
 emptyCase: BLACK_STAINED_GLASS_PANE
+
+# Item en cas de permission insuffisante
+noPermission:
+  itemName: "§cPermission insuffisante"
+  itemType: RED_STAINED_GLASS_PANE
+  lore: 
+    - "§cPermission insuffisante"
 
 
 # Titre des menus et leur nombre de slots
@@ -46,18 +53,20 @@ inventoriesName:
   editMembers: "§5§lGestion des membres"
   upgradeTotalMembers: "§5§lNombre de membres"
   confirmInventory: "§5§lConfirmation"
+  permissions: "§5§lPermissions"
 
 
 # Nombre de slots dans chaque inventaires. A modifier en fonction de la taille d'une ligne de coffre (9 * nombre de lignes) 
 inventoriesSlots:
   createTeam: 27
   admin: 27
-  manage: 36
+  manage: 45
   member: 27
   teamMembers: 27
   editMembers: 36
   upgradeTotalMembers: 27
   confirmInventory: 27
+  permissions: 36
 
 
 ranks:
@@ -136,7 +145,7 @@ inventories:
       itemName: "§5§lGestion des membres"
       itemType: WRITABLE_BOOK
       slot: 11
-      rank: 1
+      rank: 2
       lore:
         - "§aGérer les membres de la"
         - "§ateam"
@@ -144,31 +153,30 @@ inventories:
       itemName: "§5§lCréer un home"
       itemType: GREEN_BED
       slot: 12
-      rank: 1
+      rank: 2
       lore:
         - "§aCréer le home de team"
     removeTeamHome:
       itemName: "§5§lRetirer le home"
       itemType: RED_BED
       slot: 13
-      rank: 1
+      rank: 2
       lore:
         - "§aRetirer le home de team"
-    teamBank:
-      buyBank:
+    buyTeamBank:
       itemName: "§5§lOuvrir le compte"
       itemType: GOLD_BLOCK
       slot: 14
-      rank: 1
+      rank: 2
       lore:
         - "§aCréer le compte banquaire"
         - "§ade la team"
         - "§aPrix : 1,000,000€"
-    updateTotalMembers:
+    upgradeTotalMembers:
       itemName: "§5§lAjouter des places"
       itemType: TOTEM_OF_UNDYING
       slot: 15
-      rank: 1
+      rank: 2
       lore:
         - "§aAméliorer le nombre de"
         - "§amembres dans la team"
@@ -195,38 +203,49 @@ inventories:
       itemName: "§5§lSupprimer la team"
       itemType: COMPOSTER
       slot: 23
-      rank: 2
+      rank: 0
       lore:
         - "§aSupprimer la team"
+    editPermissions:
+      itemName: "§5§lPermissions"
+      itemType: RED_BANNER
+      slot: 31
+      rank: 2
+      lore:
+        - "§aGérer les permissions"
+        - "§ade la team"
     close:
       itemName: "§5§lFermer"
       itemType: BARRIER
-      slot: 35
-      rank: 1
+      slot: 44
 
 
   member:
-    members:
+    seeTeamMembers:
       itemName: "§5§lMembres"
       itemType: TOTEM_OF_UNDYING
       slot: 11
-    teamBank:
+      rank: 5
+    seeTeamBank:
       itemName: "§5§lArgent de la team"
       itemType: EMERALD
       slot: 12
+      rank: 4
       lore:
         - "§aMontant : %teamMoney%€"
     addTeamMoney:
       itemName: "§5§lAjout d'argent"
       itemType: GOLD_NUGGET
       slot: 13
+      rank: 4
       lore:
         - "§aAjouter de l'argent"
         - "§adans la team"
-    WithdrawTeamMoney:
+    withdrawTeamMoney:
       itemName: "§5§lRetrait d'argent"
       itemType: PAPER
       slot: 14
+      rank: 4
       lore:
         - "§aRetirer de l'argent"
         - "§ade la team"
@@ -234,6 +253,7 @@ inventories:
       itemName: "§5§lQuitter la team"
       itemType: DARK_OAK_DOOR
       slot: 15
+      rank: -1
     close:
       itemName: "§5§lFermer"
       itemType: BARRIER
@@ -305,22 +325,130 @@ inventories:
       itemName: "§5§lAjouter un membre"
       itemType: GOLD_INGOT
       slot: 27
+      rank: 2
       lore:
         - "§aAjouter un membre à la team"
     removeMember:
       itemName: "§5§lRetirer un membre"
       itemType: RAW_GOLD
       slot: 28
+      rank: 2
       lore:
         - "§aRetirer un membre de la team"
     editOwner:
       itemName: "§5§lChanger de créateur"
       itemType: DIAMOND
       slot: 31
-      rank: 2
+      rank: 0
       lore:
         - "§aModifier le créateur"
         - "§ade la team"
+    close:
+      itemName: "§5§lFermer"
+      itemType: BARRIER
+      slot: 35
+
+
+  permissions:
+    addTeamMoney:
+      itemName: "§5§lAjouter de l'argent"
+      itemType: GOLD_NUGGET
+      slot: 11
+      rankPath: "member.addTeamMoney"
+      lore:
+        - "§aAjouter de l'argent dans la team"
+    withdrawTeamMoney:
+      itemName: "§5§lRetirer de l'argent"
+      itemType: PAPER
+      slot: 12
+      rankPath: "member.withdrawTeamMoney"
+      lore:
+        - "§aRetirer de l'argent de la team"
+    seeTeamBank:
+      itemName: "§5§lVoir l'argent"
+      itemType: EMERALD
+      slot: 13
+      rankPath: "member.seeTeamBank"
+      lore:
+        - "§aVoir l'argent de la team"
+    buyTeamBank:
+      itemName: "§5§lAchat du compte"
+      itemType: GOLD_BLOCK
+      slot: 14
+      rankPath: "manage.buyTeamBank"
+      lore:
+        - "§aAchat du compte de team"
+    addMember:
+      itemName: "§5§lAjouter un membre"
+      itemType: GOLD_INGOT
+      slot: 15
+      rankPath: "editMembers.addMember"
+      lore:
+        - "§aAjouter un membre à la team"
+    removeMember:
+      itemName: "§5§lRetirer un membre"
+      itemType: RAW_GOLD
+      slot: 16
+      rankPath: "editMembers.removeMember"
+      lore:
+        - "§aRetirer un membre de la team"
+    seeTeamMembers:
+      itemName: "§5§lVoir les membres"
+      itemType: TOTEM_OF_UNDYING
+      slot: 17
+      rankPath: "member.seeTeamMembers"
+      lore:
+        - "§aVoir les membres de la team"
+    upgradeTotalMembers:
+      itemName: "§5§lAméliorer le total des membres"
+      itemType: EXPERIENCE_BOTTLE
+      slot: 18
+      rankPath: "manage.upgradeTotalMembers"
+      lore:
+        - "§aAméliorer le total des membres"
+        - "§ade la team"
+    manageMembers:
+      itemName: "§5§lModifier les membres"
+      itemType: WRITABLE_BOOK
+      slot: 19
+      rankPath: "manage.editMembers"
+      lore:
+        - "§aModifier les membres de la team"
+    editName:
+      itemName: "§5§lModifier le nom"
+      itemType: PAPER
+      slot: 20
+      rankPath: "manage.editName"
+      lore:
+        - "§aModifier le nom de la team"
+    editPrefix:
+      itemName: "§5§lModifier le préfixe"
+      itemType: NAME_TAG
+      slot: 21
+      rankPath: "manage.editPrefix"
+      lore:
+        - "§aModifier le préfixe de la team"
+    setTeamHome:
+      itemName: "§5§lCréer le home"
+      itemType: GREEN_BED
+      slot: 22
+      rankPath: "manage.setTeamHome"
+      lore:
+        - "§aDéfinir le home de la team"
+    removeTeamHome:
+      itemName: "§5§lSupprimer la home"
+      itemType: RED_BED
+      slot: 23
+      rankPath: "manage.removeTeamHome"
+      lore:
+        - "§aRetirer le home de la team"
+    editPermissions:
+      itemName: "§5§lModifier les permissions"
+      itemType: RED_BANNER
+      slot: 24
+      rankPath: "manage.editPermissions"
+      lore:
+        - "§aModifier les permissions de la team"
     close:
       itemName: "§5§lFermer"
       itemType: BARRIER

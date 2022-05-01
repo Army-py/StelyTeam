@@ -1,5 +1,8 @@
 package fr.army.stelyteam.events.inventoryclick;
 
+import java.util.List;
+
+import org.bukkit.Material;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationFactory;
 import org.bukkit.conversations.Prompt;
@@ -24,26 +27,32 @@ public class MemberInventory {
         Player player = (Player) event.getWhoClicked();
         String playerName = player.getName();
         String itemName = event.getCurrentItem().getItemMeta().getDisplayName();
+        Material itemType = event.getCurrentItem().getType();
+        List<String> lore = event.getCurrentItem().getItemMeta().getLore();
+
+        if (itemType.equals(Material.getMaterial(StelyTeamPlugin.config.getString("noPermission.itemType"))) && lore.equals(StelyTeamPlugin.config.getStringList("noPermission.lore"))){
+            return;
+        }
 
         // Fermeture ou retour en arrière de l'inventaire
-        if (StelyTeamPlugin.sqlManager.isOwner(playerName) || StelyTeamPlugin.sqlManager.isAdmin(playerName)){
+        if (StelyTeamPlugin.sqlManager.isOwner(playerName) || StelyTeamPlugin.sqlManager.getMemberRank(playerName) <= 3){
             if (itemName.equals(StelyTeamPlugin.config.getString("inventories.member.close.itemName"))){
                 Inventory inventory = InventoryGenerator.createAdminInventory();
                 player.openInventory(inventory);
             }
-        }else if (StelyTeamPlugin.sqlManager.isMember(playerName)){
+        }else{
             if (itemName.equals(StelyTeamPlugin.config.getString("inventories.member.close.itemName"))){
                 player.closeInventory();
             }
         }
 
-        if (itemName.equals(StelyTeamPlugin.config.getString("inventories.member.members.itemName"))){
+        if (itemName.equals(StelyTeamPlugin.config.getString("inventories.member.seeTeamMembers.itemName"))){
             Inventory inventory = InventoryGenerator.createMembersInventory(playerName);
             player.openInventory(inventory);
         }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.member.addTeamMoney.itemName"))){
             player.closeInventory();
             getNameInput(player, new ConvAddMoney());
-        }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.member.WithdrawTeamMoney.itemName"))){
+        }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.member.withdrawTeamMoney.itemName"))){
             player.closeInventory();
             getNameInput(player, new ConvWithdrawMoney());
         }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.member.leaveTeam.itemName"))){

@@ -145,6 +145,21 @@ public class SQLiteManager {
     }
 
 
+    public void updateTeamID(String teamID, String newTeamID){
+        if(isConnected()){
+            try {
+                PreparedStatement queryHomes = connection.prepareStatement("UPDATE homes SET team_id = ? WHERE team_id = ?");
+                queryHomes.setString(1, newTeamID);
+                queryHomes.setString(2, teamID);
+                queryHomes.executeUpdate();
+                queryHomes.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
     public String getWorld(String team_id){
         if(isConnected()){
             try {
