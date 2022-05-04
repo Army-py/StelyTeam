@@ -54,6 +54,7 @@ public class InventoryGenerator {
     public static Inventory createManageInventory(String playername) {
         Integer slots = StelyTeamPlugin.config.getInt("inventoriesSlots.manage");
         Inventory inventory = Bukkit.createInventory(null, slots, StelyTeamPlugin.config.getString("inventoriesName.manage"));
+        String teamId = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(playername);
 
         emptyCases(inventory, slots);
 
@@ -62,19 +63,38 @@ public class InventoryGenerator {
             Material material = Material.getMaterial(StelyTeamPlugin.config.getString("inventories.manage."+str+".itemType"));
             String name = StelyTeamPlugin.config.getString("inventories.manage."+str+".itemName");
             List<String> lore = StelyTeamPlugin.config.getStringList("inventories.manage."+str+".lore");
-            ItemStack item = ItemBuilder.getItem(material, name, lore, false);
+            ItemStack item;
             
-            if (str.equals("teamBank")){
+            if (str.equals("buyTeamBank")){
                 String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(playername);
                 item = ItemBuilder.getItem(material, name, lore, StelyTeamPlugin.sqlManager.hasUnlockedTeamBank(teamID));
             }
-            
-            if (StelyTeamPlugin.sqlManager.isOwner(playername)){
-                inventory.setItem(slot, item);
+
+            // if (StelyTeamPlugin.sqlManager.isOwner(playername) || StelyTeamPlugin.config.getInt("inventories.manage."+str+".rank") == -1){
+            //     item = ItemBuilder.getItem(material, name, lore, false);
+            // }else if (StelyTeamPlugin.config.getInt("inventories.manage."+str+".rank") >= StelyTeamPlugin.sqlManager.getMemberRank(playername)){
+            //     item = ItemBuilder.getItem(material, name, lore, false);
+            // }else{
+            //     item = ItemBuilder.getItem(
+            //         Material.getMaterial(StelyTeamPlugin.config.getString("noPermission.itemType")), 
+            //         name, 
+            //         StelyTeamPlugin.config.getStringList("noPermission.lore"), 
+            //         false
+            //     );
+            // }
+
+            if (playerHasPermission(playername, teamId, str)){ 
+                item = ItemBuilder.getItem(material, name, lore, false);
+            }else{
+                item = ItemBuilder.getItem(
+                    Material.getMaterial(StelyTeamPlugin.config.getString("noPermission.itemType")), 
+                    name, 
+                    StelyTeamPlugin.config.getStringList("noPermission.lore"), 
+                    false
+                );
             }
-            if (StelyTeamPlugin.config.getInt("inventories.manage."+str+".rank") == 1){
-                inventory.setItem(slot,  item);
-            }
+
+            inventory.setItem(slot,  item);
         }
         return inventory;
     }
@@ -92,12 +112,36 @@ public class InventoryGenerator {
             Material material = Material.getMaterial(StelyTeamPlugin.config.getString("inventories.member."+str+".itemType"));
             String name = StelyTeamPlugin.config.getString("inventories.member."+str+".itemName");
             List<String> lore = StelyTeamPlugin.config.getStringList("inventories.member."+str+".lore");
+            ItemStack item;
             
-            if (name.equals(StelyTeamPlugin.config.getString("inventories.member.teamBank.itemName"))){
+            if (name.equals(StelyTeamPlugin.config.getString("inventories.member.seeTeamBank.itemName"))){
                 lore = replaceInLore(lore, "%teamMoney%", IntegerToString(StelyTeamPlugin.sqlManager.getTeamMoney(teamID)));
             }
 
-            inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, false));
+            // if (StelyTeamPlugin.sqlManager.isOwner(playername) || StelyTeamPlugin.config.getInt("inventories.member."+str+".rank") == -1){
+            //     item = ItemBuilder.getItem(material, name, lore, false);
+            // }else if (StelyTeamPlugin.config.getInt("inventories.member."+str+".rank") >= StelyTeamPlugin.sqlManager.getMemberRank(playername)){
+            //     item = ItemBuilder.getItem(material, name, lore, false);
+            // }else{
+            //     item = ItemBuilder.getItem(
+            //         Material.getMaterial(StelyTeamPlugin.config.getString("noPermission.itemType")), 
+            //         name, 
+            //         StelyTeamPlugin.config.getStringList("noPermission.lore"), 
+            //         false
+            //     );
+            // }
+
+            if (playerHasPermission(playername, teamID, str)){ 
+                item = ItemBuilder.getItem(material, name, lore, false);
+            }else{
+                item = ItemBuilder.getItem(
+                    Material.getMaterial(StelyTeamPlugin.config.getString("noPermission.itemType")), 
+                    name, 
+                    StelyTeamPlugin.config.getStringList("noPermission.lore"), 
+                    false
+                );
+            }
+            inventory.setItem(slot,  item);
         }
         return inventory;
     }
@@ -198,6 +242,7 @@ public class InventoryGenerator {
             String itemName;
             List<String> lore = new ArrayList<>();
             OfflinePlayer member;
+            ItemStack item;
 
             if (playerUUID == null) member = Bukkit.getOfflinePlayer(str);
             else member = Bukkit.getOfflinePlayer(playerUUID);
@@ -209,9 +254,22 @@ public class InventoryGenerator {
             if (!StelyTeamPlugin.sqlManager.isOwner(str) && !StelyTeamPlugin.sqlManager.getMemberRank(str).equals(StelyTeamPlugin.getLastRank())){
                 lore = StelyTeamPlugin.config.getStringList("editMembersLores");
             }
-            
+
             lore.add(0, rankColor + StelyTeamPlugin.config.getString("ranks." + memberRank + ".name"));
-            inventory.setItem(headSlot, ItemBuilder.getPlayerHead(member, itemName, lore));
+            
+            if (playerHasPermission(playername, teamID, "manageMembers")){ 
+                item = ItemBuilder.getPlayerHead(member, itemName, lore);
+            }else{
+                item = ItemBuilder.getItem(
+                    Material.getMaterial(StelyTeamPlugin.config.getString("noPermission.itemType")), 
+                    itemName, 
+                    StelyTeamPlugin.config.getStringList("noPermission.lore"), 
+                    false
+                );
+            }
+
+            // inventory.setItem(headSlot, ItemBuilder.getPlayerHead(member, itemName, lore));
+            inventory.setItem(headSlot, item);
             headSlot ++;
         }
 
@@ -220,16 +278,62 @@ public class InventoryGenerator {
             Material material = Material.getMaterial(StelyTeamPlugin.config.getString("inventories.editMembers."+str+".itemType"));
             String name = StelyTeamPlugin.config.getString("inventories.editMembers."+str+".itemName");
             List<String> lore;
+            ItemStack item;
 
             if (StelyTeamPlugin.sqlManager.isOwner(playername)) lore = StelyTeamPlugin.config.getStringList("inventories.editMembers."+str+".lore");
             else lore = Collections.emptyList();
             
             
-            if (StelyTeamPlugin.sqlManager.isOwner(playername)){
-                inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, false));
-            }else if (StelyTeamPlugin.config.getInt("inventories.editMembers."+str+".rank") != 2){
-                inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, false));
+            // if (StelyTeamPlugin.sqlManager.isOwner(playername)){
+            //     inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, false));
+            // }else if (StelyTeamPlugin.config.getInt("inventories.editMembers."+str+".rank") != 2){
+            //     inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, false));
+            // }
+
+            if (playerHasPermission(playername, teamID, str)){ 
+                item = ItemBuilder.getItem(material, name, lore, false);
+            }else{
+                item = ItemBuilder.getItem(
+                    Material.getMaterial(StelyTeamPlugin.config.getString("noPermission.itemType")), 
+                    name, 
+                    StelyTeamPlugin.config.getStringList("noPermission.lore"), 
+                    false
+                );
             }
+            inventory.setItem(slot, item);
+        }
+        return inventory;
+    }
+
+
+    public static Inventory createPermissionsInventory(String playerName) {
+        Integer slots = StelyTeamPlugin.config.getInt("inventoriesSlots.permissions");
+        Inventory inventory = Bukkit.createInventory(null, slots, StelyTeamPlugin.config.getString("inventoriesName.permissions"));
+        String teamId = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(playerName);
+
+        emptyCases(inventory, slots);
+
+        for(String str : StelyTeamPlugin.config.getConfigurationSection("inventories.permissions").getKeys(false)){
+            Integer slot = StelyTeamPlugin.config.getInt("inventories.permissions."+str+".slot");
+            Material material = Material.getMaterial(StelyTeamPlugin.config.getString("inventories.permissions."+str+".itemType"));
+            String name = StelyTeamPlugin.config.getString("inventories.permissions."+str+".itemName");
+            List<String> lore = StelyTeamPlugin.config.getStringList("inventories.permissions."+str+".lore");
+            ItemStack item;
+
+            if (StelyTeamPlugin.sqlManager.getPermissionRank(teamId, str) != null){
+                Integer permissionRank = StelyTeamPlugin.sqlManager.getPermissionRank(teamId, str);
+                String rankColor = StelyTeamPlugin.config.getString("ranks." + StelyTeamPlugin.getRankFromId(permissionRank) + ".color");
+                lore.add(0, "§r§5> " + rankColor + StelyTeamPlugin.config.getString("ranks." + StelyTeamPlugin.getRankFromId(permissionRank) + ".name"));
+            }else{
+                String rankPath = StelyTeamPlugin.config.getString("inventories.permissions."+str+".rankPath");
+                if (rankPath != null){
+                    Integer rankId = StelyTeamPlugin.config.getInt("inventories."+rankPath+".rank");
+                    String rankColor = StelyTeamPlugin.config.getString("ranks." + StelyTeamPlugin.getRankFromId(rankId) + ".color");
+                    lore.add(0, "§r§5> " + rankColor + StelyTeamPlugin.config.getString("ranks." + StelyTeamPlugin.getRankFromId(rankId) + ".name"));
+                }
+            }
+
+            inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, false));
         }
         return inventory;
     }
@@ -246,6 +350,24 @@ public class InventoryGenerator {
 
     private static String IntegerToString(Integer value){
         return NumberFormat.getNumberInstance(Locale.US).format(value);
+    }
+
+
+    private static boolean playerHasPermission(String playerName, String teamId, String permission){
+        if (StelyTeamPlugin.sqlManager.getPermissionRank(teamId, permission) != null){
+            Integer permissionRank = StelyTeamPlugin.sqlManager.getPermissionRank(teamId, permission);
+            return permissionRank >= StelyTeamPlugin.sqlManager.getMemberRank(playerName);
+        }
+
+        String rankPath = StelyTeamPlugin.config.getString("inventories.permissions."+permission+".rankPath");
+        if (StelyTeamPlugin.sqlManager.isOwner(playerName) || StelyTeamPlugin.config.getInt("inventories."+rankPath+".rank") == -1){
+            return true;
+        }else if (StelyTeamPlugin.config.getInt("inventories."+rankPath+".rank") >= StelyTeamPlugin.sqlManager.getMemberRank(playerName)){
+            return true;
+        }else if (permission.equals("close") || permission.equals("editMembers") || permission.equals("leaveTeam")){
+            return true;
+        }
+        return false;
     }
 
 

@@ -37,6 +37,8 @@ public class InventoryClickManager implements Listener{
             new EditMembersInventory(event).onInventoryClick();
         }else if (event.getView().getTitle().equals(StelyTeamPlugin.config.getString("inventoriesName.teamMembers"))){
             new MembersInventory(event).onInventoryClick();
+        }else if (event.getView().getTitle().equals(StelyTeamPlugin.config.getString("inventoriesName.permissions"))){
+            new PermissionsInventory(event).onInventoryClick();
         }
     }
 }

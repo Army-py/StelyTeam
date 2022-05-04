@@ -22,6 +22,7 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(sender instanceof Player){
             Player player = (Player) sender;
+            String playerName = player.getName();
             
             if(StelyTeamPlugin.playersCreateTeam.contains(player.getName())){
                 return true;
@@ -33,15 +34,15 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
             
             if (args.length == 0){
                 Inventory inventory;
-                if(StelyTeamPlugin.sqlManager.isOwner(player.getName())){
-                    inventory = InventoryGenerator.createAdminInventory();
-                }else if (StelyTeamPlugin.sqlManager.isMember(player.getName())){
-                    inventory = InventoryGenerator.createMemberInventory(player.getName());
-                }else if (StelyTeamPlugin.sqlManager.isAdmin(player.getName())){
-                    inventory = InventoryGenerator.createAdminInventory();
-                }else{
+                if (!StelyTeamPlugin.sqlManager.isMember(playerName)){
                     inventory = InventoryGenerator.createTeamInventory();
-                }
+                }else if(StelyTeamPlugin.sqlManager.isOwner(player.getName())){
+                    inventory = InventoryGenerator.createAdminInventory();
+                }else if (StelyTeamPlugin.sqlManager.getMemberRank(playerName) <= 3){
+                    inventory = InventoryGenerator.createAdminInventory();
+                }else if (StelyTeamPlugin.sqlManager.getMemberRank(playerName) >= 4){
+                    inventory = InventoryGenerator.createMemberInventory(playerName);
+                }else inventory = InventoryGenerator.createTeamInventory();
                 player.openInventory(inventory);
             }else{
                 if (args[0].equals("home")){

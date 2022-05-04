@@ -76,10 +76,13 @@ public class SQLManager {
             try {
                 PreparedStatement queryHomes = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'players' ('playername' TEXT, 'rank' INTEGER, 'team_id' TEXT, PRIMARY KEY('playername'), FOREIGN KEY('team_id') REFERENCES 'teams'('team_id'));");
                 PreparedStatement queryPlayers = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'teams' ('team_id' TEXT, 'team_prefix' TEXT, 'owner' TEXT, 'money' INTEGER, 'creation_date' TEXT, 'members_level' INTEGER, 'team_bank' INTEGER, PRIMARY KEY('team_id'), FOREIGN KEY('owner') REFERENCES 'players'('playername'));");
+                PreparedStatement queryPermissions = connection.prepareStatement("CREATE TABLE 'permissions' ( 'id' INTEGER, 'team_id' INTEGER, 'permission' TEXT, 'rank' INTEGER, FOREIGN KEY('team_id') REFERENCES 'teams'('team_id'), PRIMARY KEY('id'));");
                 queryHomes.executeUpdate();
                 queryPlayers.executeUpdate();
+                queryPermissions.executeUpdate();
                 queryHomes.close();
                 queryPlayers.close();
+                queryPermissions.close();
             } catch (Exception e){
                 e.printStackTrace();
             }
@@ -107,9 +110,8 @@ public class SQLManager {
     public boolean isMember(String playername){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("SELECT playername FROM players WHERE playername = ? AND rank = ?");
+                PreparedStatement query = connection.prepareStatement("SELECT playername FROM players WHERE playername = ?");
                 query.setString(1, playername);
-                query.setInt(2, 0);
                 ResultSet result = query.executeQuery();
                 boolean isParticipant = result.next();
                 query.close();
@@ -265,6 +267,11 @@ public class SQLManager {
                 queryMembers.setString(1, teamID);
                 queryMembers.executeUpdate();
                 queryMembers.close();
+
+                PreparedStatement queryPermissions = connection.prepareStatement("DELETE FROM permissions WHERE team_id = ?");
+                queryPermissions.setString(1, teamID);
+                queryPermissions.executeUpdate();
+                queryPermissions.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -302,6 +309,12 @@ public class SQLManager {
                 queryMember.setString(2, teamID);
                 queryMember.executeUpdate();
                 queryMember.close();
+
+                PreparedStatement queryPermissions = connection.prepareStatement("UPDATE permissions SET team_id = ? WHERE team_id = ?");
+                queryPermissions.setString(1, newTeamID);
+                queryPermissions.setString(2, teamID);
+                queryPermissions.executeUpdate();
+                queryPermissions.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -578,5 +591,72 @@ public class SQLManager {
             }
         }
         return null;
+    }
+
+
+    public Integer getPermissionRank(String teamId, String permission){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT rank FROM permissions WHERE team_id = ? AND permission = ?");
+                query.setString(1, teamId);
+                query.setString(2, permission);
+                ResultSet result = query.executeQuery();
+                Integer rank = null;
+                if(result.next()){
+                    rank = result.getInt("rank");
+                }
+                query.close();
+                return rank;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+
+    public void insertPermission(String teamId, String permission, Integer rank){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("INSERT INTO permissions (team_id, permission, rank) VALUES (?, ?, ?)");
+                query.setString(1, teamId);
+                query.setString(2, permission);
+                query.setInt(3, rank);
+                query.executeUpdate();
+                query.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    public void promoteRankPermission(String teamId, String permission){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("UPDATE permissions SET rank = rank + 1 WHERE team_id = ? AND permission = ?");
+                query.setString(1, teamId);
+                query.setString(2, permission);
+                query.executeUpdate();
+                query.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    public void demoteRankPermission(String teamId, String permission){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("UPDATE permissions SET rank = rank - 1 WHERE team_id = ? AND permission = ?");
+                query.setString(1, teamId);
+                query.setString(2, permission);
+                query.executeUpdate();
+                query.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
