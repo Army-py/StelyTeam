@@ -7,4 +7,6 @@ public interface IPlayerList {
 
     Set<UUID> getIds();
 
+    Set<UUID> getIds(int rank);
+
 }

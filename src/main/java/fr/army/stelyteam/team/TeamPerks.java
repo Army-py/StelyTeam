@@ -3,6 +3,7 @@ package fr.army.stelyteam.team;
 import fr.army.stelyteam.api.IBankAccount;
 import fr.army.stelyteam.api.ITeamPerks;
 import fr.army.stelyteam.api.LazyLocation;
+import fr.army.stelyteam.storage.TeamField;
 
 import java.util.Objects;
 import java.util.concurrent.locks.Lock;
@@ -16,10 +17,10 @@ public class TeamPerks implements ITeamPerks {
     private int level;
     private LazyLocation home;
 
-    public TeamPerks(Team team, int level, boolean bankAccount, double money, LazyLocation home) {
+    public TeamPerks(Team team, ReentrantLock lock, int level, boolean bankAccount, double money, LazyLocation home) {
         this.team = team;
-        this.lock = new ReentrantLock();
-        this.bankAccount = new BankAccount(team, bankAccount, money);
+        this.lock = lock;
+        this.bankAccount = new BankAccount(team, lock, bankAccount, money);
         this.level = level;
         this.home = home;
     }

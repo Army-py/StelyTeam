@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Objects;
 
 import fr.army.stelyteam.api.StelyTeamAPI;
+import fr.army.stelyteam.storage.StorageDeserializer;
 import fr.army.stelyteam.storage.StorageManager;
 import fr.army.stelyteam.storage.TeamManager;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -65,7 +66,11 @@ public class StelyTeamPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerQuit(), this);
         getServer().getPluginManager().registerEvents(new InventoryClose(), this);
 
-        storageManager = new StorageManager(initFile(getDataFolder(), "storage.yml"), getLogger());
+        final StorageDeserializer storageDeserializer = new StorageDeserializer(
+                initFile(getDataFolder(), "storage.yml"),
+                getLogger()
+        );
+        storageManager = new StorageManager(storageDeserializer);
         teamManager = new TeamManager(storageManager);
         stelyTeamApi = new StelyTeamAPI(teamManager);
 

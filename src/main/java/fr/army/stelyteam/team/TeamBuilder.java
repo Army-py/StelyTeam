@@ -3,7 +3,7 @@ package fr.army.stelyteam.team;
 import fr.army.stelyteam.api.LazyLocation;
 
 import java.util.Date;
-import java.util.Set;
+import java.util.Map;
 import java.util.UUID;
 
 public class TeamBuilder {
@@ -18,8 +18,7 @@ public class TeamBuilder {
     private boolean bankAccount;
     private double money;
     private LazyLocation home;
-    private Set<UUID> owners;
-    private Set<UUID> members;
+    private Map<UUID, Integer> players;
 
     public UUID getId() {
         return uuid;
@@ -111,21 +110,12 @@ public class TeamBuilder {
         return this;
     }
 
-    public Set<UUID> getOwners() {
-        return owners;
+    public Map<UUID, Integer> getPlayers() {
+        return players;
     }
 
-    public TeamBuilder setOwners(Set<UUID> owners) {
-        this.owners = owners;
-        return this;
-    }
-
-    public Set<UUID> getMembers() {
-        return members;
-    }
-
-    public TeamBuilder setMembers(Set<UUID> members) {
-        this.members = members;
+    public TeamBuilder setPlayers(Map<UUID, Integer> players) {
+        this.players = players;
         return this;
     }
 
@@ -145,8 +135,7 @@ public class TeamBuilder {
                 bankAccount,
                 money,
                 home,
-                owners,
-                members
+                players
         );
     }
 

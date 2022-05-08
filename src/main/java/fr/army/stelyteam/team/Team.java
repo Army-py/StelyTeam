@@ -1,23 +1,21 @@
 package fr.army.stelyteam.team;
 
 import fr.army.stelyteam.api.ITeam;
-import fr.army.stelyteam.api.ITeamPerks;
 import fr.army.stelyteam.api.LazyLocation;
-import fr.army.stelyteam.storage.ChangeTracked;
+import fr.army.stelyteam.storage.Storage;
+import fr.army.stelyteam.storage.TeamField;
 
 import java.util.*;
-import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class Team implements ITeam, ChangeTracked {
+public class Team implements ITeam {
 
     private final UUID uuid;
     private final UUID creator;
     private final Date creationDate;
     private final TeamPerks perks;
-    private final PlayerList owners;
-    private final PlayerList members;
-    private final Lock lock;
+    private final PlayerList players;
+    private final ReentrantLock lock;
     private String commandId;
     private String prefix;
     private String suffix;
@@ -34,8 +32,7 @@ public class Team implements ITeam, ChangeTracked {
             boolean bankAccount,
             double money,
             LazyLocation home,
-            Set<UUID> owners,
-            Set<UUID> members
+            Map<UUID, Integer> players
     ) {
         Objects.requireNonNull(uuid);
         this.uuid = uuid;
@@ -44,16 +41,17 @@ public class Team implements ITeam, ChangeTracked {
         this.suffix = suffix;
         this.creator = creator;
         this.creationDate = creationDate == null ? null : (Date) creationDate.clone();
+        this.lock = new ReentrantLock(true);
         this.perks = new TeamPerks(
                 this,
+                lock,
                 level,
                 bankAccount,
                 money,
                 home
         );
-        this.owners = new PlayerList(this, TeamField.OWNERS, owners);
-        this.members = new PlayerList(this, TeamField.MEMBERS, members);
-        this.lock = new ReentrantLock(true);
+        this.players = new PlayerList(this, players);
+
     }
 
     @Override
@@ -126,49 +124,20 @@ public class Team implements ITeam, ChangeTracked {
     }
 
     @Override
-    public ITeamPerks getPerks() {
+    public TeamPerks getPerks() {
         return perks;
     }
 
 
     @Override
-    public PlayerList getOwners() {
-        return owners;
+    public PlayerList getPlayers() {
+        return players;
     }
 
-    @Override
-    public PlayerList getMembers() {
-        return members;
-    }
-
-    @Override
     public boolean isDirty() {
         lock.lock();
         try {
             return dirty != 0;
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    /**
-     * Change the dirty flag for every field
-     *
-     * @param dirty {@code true} to set every field dirty, {@code false} to set every field clean
-     */
-    @Override
-    public void setDirty(boolean dirty) {
-        lock.lock();
-        try {
-            if (dirty) {
-                int dirtyValue = 0;
-                for (TeamField tf : TeamField.values()) {
-                    dirtyValue = tf.setDirty(dirtyValue);
-                }
-                this.dirty = dirtyValue;
-            } else {
-                this.dirty = 0;
-            }
         } finally {
             lock.unlock();
         }
@@ -183,28 +152,19 @@ public class Team implements ITeam, ChangeTracked {
         }
     }
 
-    public Map<TeamField, Optional<Object>> getForSaving() {
+    public List<Storage.FieldValues> getForSaving() {
         lock.lock();
         try {
-            final Map<TeamField, Optional<Object>> changes = new HashMap<>();
+            final List<Storage.FieldValues> changes = new LinkedList<>();
             for (TeamField teamField : TeamField.values()) {
                 if (!teamField.isDirty(dirty)) {
                     continue;
                 }
-                final Object fieldValue = switch (teamField) {
-                    case COMMAND_ID -> commandId;
-                    case PREFIX -> prefix;
-                    case SUFFIX -> suffix;
-                    case CREATOR -> creator;
-                    case CREATION_DATE -> creationDate;
-                    case LEVEL -> perks.getLevel();
-                    case HOME -> perks.getHome();
-                    case BANK_ACCOUNT -> perks.getBankAccount().isEnable();
-                    case MONEY -> perks.getBankAccount().getMoney();
-                    case OWNERS -> owners.getIds().toArray(new UUID[0]);
-                    case MEMBERS -> members.getIds().toArray(new UUID[0]);
-                };
-                changes.put(teamField, Optional.ofNullable(fieldValue));
+
+                changes.add(new Storage.FieldValues(
+                        teamField,
+                        Optional.ofNullable(teamField.getExtractor().extract(this))
+                ));
             }
 
             dirty = 0;

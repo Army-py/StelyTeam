@@ -19,8 +19,6 @@ public interface ITeam {
 
     ITeamPerks getPerks();
 
-    IPlayerList getOwners();
-
-    IPlayerList getMembers();
+    IPlayerList getPlayers();
 
 }

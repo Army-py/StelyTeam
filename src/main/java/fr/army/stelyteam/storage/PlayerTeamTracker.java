@@ -4,18 +4,16 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.locks.Lock;
 
-public class PlayerTeamTracker implements ChangeTracked {
+public class PlayerTeamTracker {
 
-    private final ConcurrentMap<UUID, Optional<UUID>> playerTeams;
+    private final Map<UUID, Optional<UUID>> playerTeams;
     private final Lock lock;
     private boolean dirty;
 
     public PlayerTeamTracker(Lock lock) {
-        playerTeams = new ConcurrentHashMap<>();
+        playerTeams = new HashMap<>();
         this.lock = lock;
     }
 
@@ -39,7 +37,6 @@ public class PlayerTeamTracker implements ChangeTracked {
         }
     }
 
-    @Override
     public boolean isDirty() {
         lock.lock();
         try {
@@ -49,13 +46,4 @@ public class PlayerTeamTracker implements ChangeTracked {
         }
     }
 
-    @Override
-    public void setDirty(boolean dirty) {
-        lock.lock();
-        try {
-            this.dirty = dirty;
-        } finally {
-            lock.unlock();
-        }
-    }
 }

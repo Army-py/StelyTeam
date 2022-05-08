@@ -26,13 +26,10 @@ fields:
   HOME: mysql
   BANK_ACCOUNT: mysql
   MONEY: mysql
-  OWNERS: mysql
-  MEMBERS: mysql
+  PLAYERS: mysql
 
-# The player field associations
+# The player team associations
 # - Same rules as 'fields' section
 # - You also need to take care about servers synchronisation
-#     (e.g. if the storage is the same on two servers for field.OWNERS property, then the players.OWNERS property need to be the same too)
-players:
-  OWNERS: mysql
-  MEMBERS: mysql
+#     (e.g. if the storage is the same on two servers for field.PLAYERS property, then this property need to be the same too)
+players: mysql

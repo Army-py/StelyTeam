@@ -1,53 +1,51 @@
 package fr.army.stelyteam.team;
 
 import fr.army.stelyteam.api.IBankAccount;
+import fr.army.stelyteam.storage.TeamField;
 
-import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class BankAccount implements IBankAccount {
 
     private final Team team;
-    private final Lock enableLock;
-    private final Lock moneyLock;
+    private final ReentrantLock lock;
     private boolean enable;
     private double money;
 
-    BankAccount(Team team, boolean enable, double money) {
+    BankAccount(Team team, ReentrantLock lock, boolean enable, double money) {
         this.team = team;
-        this.enableLock = new ReentrantLock();
-        this.moneyLock = new ReentrantLock();
+        this.lock = lock;
         this.enable = enable;
         this.money = money;
     }
 
     @Override
     public boolean isEnable() {
-        enableLock.lock();
+        lock.lock();
         try {
             return enable;
         } finally {
-            enableLock.unlock();
+            lock.unlock();
         }
     }
 
     public void setEnable(boolean enable) {
-        enableLock.lock();
+        lock.lock();
         try {
             this.enable = enable;
             team.setDirty(TeamField.BANK_ACCOUNT);
         } finally {
-            enableLock.unlock();
+            lock.unlock();
         }
     }
 
     @Override
     public double getMoney() {
-        moneyLock.lock();
+        lock.lock();
         try {
             return money;
         } finally {
-            moneyLock.unlock();
+            lock.unlock();
         }
     }
 
@@ -56,12 +54,12 @@ public class BankAccount implements IBankAccount {
         if (money == 0) {
             return;
         }
-        moneyLock.lock();
+        lock.lock();
         try {
             this.money += money;
             team.setDirty(TeamField.MONEY);
         } finally {
-            moneyLock.unlock();
+            lock.unlock();
         }
     }
 

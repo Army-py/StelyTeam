@@ -153,8 +153,7 @@ public class TeamManager {
             }
 
             // Save players in the team
-            savePlayerTeam(team.getOwners(), futures);
-            savePlayerTeam(team.getMembers(), futures);
+            savePlayerTeam(team.getPlayers(), futures);
 
             // Don't transfer it to the storageManager if there is nothing to do
             if (futures.isEmpty()) {
@@ -176,10 +175,8 @@ public class TeamManager {
         lock.lock();
         try {
             // Kick the players from the team
-            final PlayerList owners = team.getOwners();
-            final PlayerList members = team.getMembers();
-            owners.clear();
-            members.clear();
+            final PlayerList players = team.getPlayers();
+            players.clear();
 
             // Get the id
             final UUID teamId = team.getId();
@@ -191,8 +188,7 @@ public class TeamManager {
                     storageManager.deleteTeam(teamId).thenRun(() -> teamById.remove(teamId))
             );
             // Save players in the team
-            savePlayerTeam(team.getOwners(), futures);
-            savePlayerTeam(team.getMembers(), futures);
+            savePlayerTeam(team.getPlayers(), futures);
 
             // Transfer it to the storageManager in all case as there is at least the remove operation
             return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
@@ -212,7 +208,7 @@ public class TeamManager {
         if (tracker.isDirty()) {
             final Map<UUID, Optional<UUID>> changes = tracker.getForSaving();
             futures.add(
-                    storageManager.savePlayerTeams(playerList.getTeamField(), changes).thenRun(() -> linkPlayerTeams(changes))
+                    storageManager.savePlayerTeams(changes).thenRun(() -> linkPlayerTeams(changes))
             );
         }
     }
