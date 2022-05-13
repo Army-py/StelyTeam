@@ -59,6 +59,9 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
                         player.teleport(location);
                         player.sendMessage("Téléportation au home");
                     }
+                }else if (args[0].equals("visual")){
+                    args[0] = "";
+                    player.sendMessage("Ton texte :" + String.join(" ", args).replace("&", "§"));
                 }
             }
         }
@@ -71,6 +74,7 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         List<String> subCommands = new ArrayList<>();
         subCommands.add("home");
+        subCommands.add("visual");
 
         if (args.length == 1){
             List<String> result = new ArrayList<>();

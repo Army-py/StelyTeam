@@ -199,6 +199,10 @@ inventories:
         - "§ateam qui s'affiche dans"
         - "§ale tchat"
         - "§aPrix : 5,000€"
+        - ""
+        - "§cAssurez-vous d'avoir"
+        - "§cessayé le préfixe avant"
+        - "§cavec /stelyteam visual"
     removeTeam:
       itemName: "§5§lSupprimer la team"
       itemType: COMPOSTER
