@@ -247,15 +247,17 @@ public class InventoryGenerator {
             if (playerUUID == null) member = Bukkit.getOfflinePlayer(str);
             else member = Bukkit.getOfflinePlayer(playerUUID);
 
-            String memberRank = StelyTeamPlugin.getRankFromId(StelyTeamPlugin.sqlManager.getMemberRank(str));
-            String rankColor = StelyTeamPlugin.config.getString("ranks." + memberRank + ".color");
+            Integer memberRank = StelyTeamPlugin.sqlManager.getMemberRank(str);
+            String memberRankName = StelyTeamPlugin.getRankFromId(memberRank);
+            String rankColor = StelyTeamPlugin.config.getString("ranks." + memberRankName + ".color");
             itemName = rankColor + str;
             
-            if (!StelyTeamPlugin.sqlManager.isOwner(str) && !StelyTeamPlugin.sqlManager.getMemberRank(str).equals(StelyTeamPlugin.getLastRank())){
+            if (!StelyTeamPlugin.sqlManager.isOwner(str)){
                 lore = StelyTeamPlugin.config.getStringList("editMembersLores");
+                if (StelyTeamPlugin.getLastRank() == memberRank) lore.remove(1);
             }
 
-            lore.add(0, rankColor + StelyTeamPlugin.config.getString("ranks." + memberRank + ".name"));
+            lore.add(0, rankColor + StelyTeamPlugin.config.getString("ranks." + memberRankName + ".name"));
             
             if (playerHasPermission(playername, teamID, "manageMembers")){ 
                 item = ItemBuilder.getPlayerHead(member, itemName, lore);

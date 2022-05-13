@@ -106,8 +106,8 @@ ranks:
 
 # Description des items en fonction des grades, dans le menu d'éition des membres
 editMembersLores:
-  - "Clique droit pour promouvoir"
-  - "Clique gauche pour rétrograder"
+  - "Clique gauche pour promouvoir"
+  - "Clique droit pour rétrograder"
 
 
 inventories:
