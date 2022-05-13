@@ -45,7 +45,7 @@ public class MemberInventory {
                 player.closeInventory();
             }
         }
-
+        
         if (itemName.equals(StelyTeamPlugin.config.getString("inventories.member.seeTeamMembers.itemName"))){
             Inventory inventory = InventoryGenerator.createMembersInventory(playerName);
             player.openInventory(inventory);

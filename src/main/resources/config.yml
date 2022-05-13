@@ -444,7 +444,7 @@ inventories:
         - "§aRetirer le home de la team"
     editPermissions:
       itemName: "§5§lModifier les permissions"
-      itemType: RED_BANNER
+      itemType: REDSTONE
       slot: 24
       rankPath: "manage.editPermissions"
       lore:
