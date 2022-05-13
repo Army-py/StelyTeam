@@ -42,7 +42,7 @@ public class ManageInventory {
 
         }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.manage.setTeamHome.itemName"))){
             player.closeInventory();
-            String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromOwner(playerName);
+            String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(playerName);
             String worldName = player.getWorld().getName();
             Double x = player.getLocation().getX();
             Double y = player.getLocation().getY();
@@ -60,7 +60,7 @@ public class ManageInventory {
             
         }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.manage.removeTeamHome.itemName"))){
             player.closeInventory();
-            String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromOwner(playerName);
+            String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(playerName);
 
             if (StelyTeamPlugin.sqliteManager.isSet(teamID)){
                 StelyTeamPlugin.sqliteManager.removeHome(teamID);

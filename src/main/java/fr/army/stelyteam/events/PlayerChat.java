@@ -36,6 +36,9 @@ public class PlayerChat implements Listener {
         if(count == 0 && nameTeamIsTooLong(message)){
             player.sendMessage("Le nom de team est trop long");
             count--;
+        }else if (count == 0 && StelyTeamPlugin.sqlManager.teamIdExist(message)){
+            player.sendMessage("Ce nom de team existe déjà");
+            count--;
         }else if(count == 1 && prefixTeamIsTooLong(message)){
             player.sendMessage("Le préfixe de team est trop long");
             count--;

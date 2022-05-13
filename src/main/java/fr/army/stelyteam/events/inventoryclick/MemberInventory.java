@@ -45,7 +45,7 @@ public class MemberInventory {
                 player.closeInventory();
             }
         }
-
+        
         if (itemName.equals(StelyTeamPlugin.config.getString("inventories.member.seeTeamMembers.itemName"))){
             Inventory inventory = InventoryGenerator.createMembersInventory(playerName);
             player.openInventory(inventory);
@@ -58,9 +58,9 @@ public class MemberInventory {
         }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.member.leaveTeam.itemName"))){
             player.closeInventory();
             if (!StelyTeamPlugin.sqlManager.isOwner(playerName)){
-                String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(playerName);
-                StelyTeamPlugin.sqlManager.removeMember(playerName, teamID);
-                player.sendMessage("Tu as quitté la team " + teamID);
+                StelyTeamPlugin.playersTempActions.put(playerName, "leaveTeam");
+                Inventory inventory = InventoryGenerator.createConfirmInventory();
+                player.openInventory(inventory);
             }else {
                 player.sendMessage("Tu ne peux pas quitter la team car tu es le créateur");
             }

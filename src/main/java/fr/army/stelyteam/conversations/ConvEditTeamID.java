@@ -16,6 +16,9 @@ public class ConvEditTeamID extends StringPrompt {
         if (nameTeamIsTooLong(answer)) {
             con.getForWhom().sendRawMessage("Le nom est trop long");
             return this;
+        }else if (StelyTeamPlugin.sqlManager.teamIdExist(answer)){
+            con.getForWhom().sendRawMessage("Ce nom de team existe déjà");
+            return this;
         }
 
         String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(authorName);
