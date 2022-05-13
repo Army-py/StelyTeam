@@ -1,8 +1,10 @@
 package fr.army.stelyteam.events.inventoryclick;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.bukkit.Material;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationFactory;
 import org.bukkit.conversations.Prompt;
@@ -26,9 +28,18 @@ public class EditMembersInventory {
 
     public void onInventoryClick(){
         String itemName;
+        Material itemType = event.getCurrentItem().getType();
+        List<String> lore = event.getCurrentItem().getItemMeta().getLore();
         Player player = (Player) event.getWhoClicked();
         String playerName = player.getName();
         String teamId = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(playerName);
+        
+
+
+        if (itemType.equals(Material.getMaterial(StelyTeamPlugin.config.getString("noPermission.itemType"))) && lore.equals(StelyTeamPlugin.config.getStringList("noPermission.lore"))){
+            return;
+        }
+
 
         // Fermeture ou retour en arrière de l'inventaire
         itemName = event.getCurrentItem().getItemMeta().getDisplayName();
@@ -51,18 +62,28 @@ public class EditMembersInventory {
         }
 
         itemName = removeFirstColors(event.getCurrentItem().getItemMeta().getDisplayName());
-        if (StelyTeamPlugin.sqlManager.getMembers(teamId).contains(itemName) && StelyTeamPlugin.sqlManager.isOwner(playerName)){
+        if (StelyTeamPlugin.sqlManager.getMembers(teamId).contains(itemName)){
 
             // System.out.println(itemName);
             // System.out.println(!StelyTeamPlugin.sqlManager.isOwner(itemName));
             // System.out.println(StelyTeamPlugin.sqlManager.getMemberRank(itemName));
 
+            // if (!StelyTeamPlugin.sqlManager.isOwner(itemName) && (itemName.equals(playerName) || StelyTeamPlugin.sqlManager.getMemberRank(itemName)-1 <= StelyTeamPlugin.sqlManager.getMemberRank(playerName))){
+            //     return;
+            // }
+
             if (event.getClick().isRightClick()){
+                if (StelyTeamPlugin.sqlManager.getMemberRank(itemName) <= StelyTeamPlugin.sqlManager.getMemberRank(playerName)){
+                    return;
+                }
                 if (!StelyTeamPlugin.sqlManager.isOwner(itemName) && StelyTeamPlugin.sqlManager.getMemberRank(itemName) < StelyTeamPlugin.getLastRank()){
                     StelyTeamPlugin.sqlManager.demoteMember(teamId, itemName);
                 }
             }
             if (event.getClick().isLeftClick()){
+                if (StelyTeamPlugin.sqlManager.getMemberRank(itemName)-1 <= StelyTeamPlugin.sqlManager.getMemberRank(playerName)){
+                    return;
+                }
                 if (!StelyTeamPlugin.sqlManager.isOwner(itemName) && StelyTeamPlugin.sqlManager.getMemberRank(itemName) != 1){
                     StelyTeamPlugin.sqlManager.promoteMember(teamId, itemName);
                 }

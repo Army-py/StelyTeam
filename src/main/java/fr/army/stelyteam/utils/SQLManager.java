@@ -634,7 +634,7 @@ public class SQLManager {
     public void promoteRankPermission(String teamId, String permission){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("UPDATE permissions SET rank = rank + 1 WHERE team_id = ? AND permission = ?");
+                PreparedStatement query = connection.prepareStatement("UPDATE permissions SET rank = rank - 1 WHERE team_id = ? AND permission = ?");
                 query.setString(1, teamId);
                 query.setString(2, permission);
                 query.executeUpdate();
@@ -649,7 +649,7 @@ public class SQLManager {
     public void demoteRankPermission(String teamId, String permission){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("UPDATE permissions SET rank = rank - 1 WHERE team_id = ? AND permission = ?");
+                PreparedStatement query = connection.prepareStatement("UPDATE permissions SET rank = rank + 1 WHERE team_id = ? AND permission = ?");
                 query.setString(1, teamId);
                 query.setString(2, permission);
                 query.executeUpdate();

@@ -31,40 +31,42 @@ public class PermissionsInventory {
 
         if (getPermissionFromName(itemName) != null){
             String permission = getPermissionFromName(itemName);
-            if (event.getClick().isLeftClick()){
+            if (event.getClick().isRightClick()){
                 if (StelyTeamPlugin.sqlManager.getPermissionRank(teamId, permission) != null){
                     Integer permissionRank = StelyTeamPlugin.sqlManager.getPermissionRank(teamId, permission);
-                    if (permissionRank > 0) StelyTeamPlugin.sqlManager.demoteRankPermission(teamId, permission);
+                    if (!StelyTeamPlugin.sqlManager.isOwner(playerName) && permissionRank <= StelyTeamPlugin.sqlManager.getMemberRank(playerName)){
+                        return;
+                    }
+                    if (permissionRank < StelyTeamPlugin.getLastRank()) StelyTeamPlugin.sqlManager.demoteRankPermission(teamId, permission);
                 }else{
                     String rankPath = StelyTeamPlugin.config.getString("inventories.permissions."+permission+".rankPath");
                     Integer defaultRankId = StelyTeamPlugin.config.getInt("inventories."+rankPath+".rank");
-                    StelyTeamPlugin.sqlManager.insertPermission(teamId, permission, defaultRankId-1);
+                    if (!StelyTeamPlugin.sqlManager.isOwner(playerName) && defaultRankId <= StelyTeamPlugin.sqlManager.getMemberRank(playerName)){
+                        return;
+                    }
+                    if (defaultRankId != StelyTeamPlugin.getLastRank()) defaultRankId = defaultRankId+1;
+                    StelyTeamPlugin.sqlManager.insertPermission(teamId, permission, defaultRankId);
                 }
-            }else if (event.getClick().isRightClick()){
+            }else if (event.getClick().isLeftClick()){
                 if (StelyTeamPlugin.sqlManager.getPermissionRank(teamId, permission) != null){
                     Integer permissionRank = StelyTeamPlugin.sqlManager.getPermissionRank(teamId, permission);
-                    if (permissionRank < StelyTeamPlugin.getLastRank()) StelyTeamPlugin.sqlManager.promoteRankPermission(teamId, permission);
+                    if (!StelyTeamPlugin.sqlManager.isOwner(playerName) && permissionRank-1 <= StelyTeamPlugin.sqlManager.getMemberRank(playerName)){
+                        return;
+                    }
+                    if (permissionRank > 0) StelyTeamPlugin.sqlManager.promoteRankPermission(teamId, permission);
                 }else{
                     String rankPath = StelyTeamPlugin.config.getString("inventories.permissions."+permission+".rankPath");
                     Integer defaultRankId = StelyTeamPlugin.config.getInt("inventories."+rankPath+".rank");
-                    StelyTeamPlugin.sqlManager.insertPermission(teamId, permission, defaultRankId+1);
+                    if (!StelyTeamPlugin.sqlManager.isOwner(playerName) && defaultRankId-1 <= StelyTeamPlugin.sqlManager.getMemberRank(playerName)){
+                        return;
+                    }
+                    if (defaultRankId != 0) defaultRankId = defaultRankId-1;
+                    StelyTeamPlugin.sqlManager.insertPermission(teamId, permission, defaultRankId);
                 }
             }
             Inventory inventory = InventoryGenerator.createPermissionsInventory(playerName);
             player.openInventory(inventory);
         }
-        // if (event.getClick().isRightClick()){
-        //     if (!StelyTeamPlugin.sqlManager.isOwner(itemName) && StelyTeamPlugin.sqlManager.getMemberRank(itemName) < StelyTeamPlugin.getLastRank()){
-        //         StelyTeamPlugin.sqlManager.demoteMember(teamId, itemName);
-        //     }
-        // }
-        // if (event.getClick().isLeftClick()){
-        //     if (!StelyTeamPlugin.sqlManager.isOwner(itemName) && StelyTeamPlugin.sqlManager.getMemberRank(itemName) != 1){
-        //         StelyTeamPlugin.sqlManager.promoteMember(teamId, itemName);
-        //     }
-        // }
-        // Inventory inventory = InventoryGenerator.createEditMembersInventory(playerName);
-        // player.openInventory(inventory);
     }
 
 
