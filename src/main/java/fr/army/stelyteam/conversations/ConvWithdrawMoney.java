@@ -13,7 +13,18 @@ public class ConvWithdrawMoney extends StringPrompt {
     public Prompt acceptInput(ConversationContext con, String answer) {
         Player author = (Player) con.getForWhom();
         String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(author.getName());
-        Integer money = Integer.parseInt(answer);
+        Integer money;
+
+        if (answer.equals("all")){
+            money = StelyTeamPlugin.sqlManager.getTeamMoney(teamID);
+        }else{
+            try {
+                money = Integer.parseInt(answer);
+            } catch (NumberFormatException e) {
+                author.sendRawMessage("Veuillez entrer un nombre");
+                return null;
+            }
+        }
 
         if (teamReachedMinMoney(teamID, money)) {
             con.getForWhom().sendRawMessage("La team a déjà atteint le minimum d'argent");
