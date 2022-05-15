@@ -69,6 +69,14 @@ public class PlayerChat implements Listener {
         while (matcher.find()) {
             colors++;
         }
-        return prefixTeam.length() - colors * pattern.pattern().length() > StelyTeamPlugin.config.getInt("teamPrefixMaxLength");
+
+        Pattern hexPattern = Pattern.compile("&#[A-Fa-f0-9]{6}");
+        Matcher hexMatcher = hexPattern.matcher(prefixTeam);
+        int hexColors = 0;
+        while (hexMatcher.find()) {
+            hexColors++;
+        }
+
+        return prefixTeam.length() - (colors * pattern.pattern().length() + hexColors * hexPattern.pattern().length()) > StelyTeamPlugin.config.getInt("teamPrefixMaxLength");
     }
 }
