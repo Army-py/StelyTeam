@@ -11,6 +11,8 @@ import java.util.Objects;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import net.milkbowl.vault.economy.Economy;
+
 import fr.army.stelyteam.commands.CmdStelyTeam;
 import fr.army.stelyteam.events.InventoryClickManager;
 import fr.army.stelyteam.events.InventoryClose;
@@ -82,6 +84,15 @@ public class StelyTeamPlugin extends JavaPlugin {
         }
         return YamlConfiguration.loadConfiguration(file);
     }
+
+
+    public static boolean setupEconomy(){
+		RegisteredServiceProvider<Economy> economyProvider = Bukkit.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+		if (economyProvider != null) {
+			economy = economyProvider.getProvider();
+		}
+		return (economy != null); 
+	}
 
 
     public static String[] getTeamActions(String playerName) {
