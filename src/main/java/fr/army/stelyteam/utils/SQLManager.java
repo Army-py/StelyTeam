@@ -473,26 +473,6 @@ public class SQLManager {
     }
 
 
-    public String getTeamIDFromOwner(String owner){
-        if(isConnected()){
-            try {
-                PreparedStatement query = connection.prepareStatement("SELECT team_id FROM teams WHERE owner = ?");
-                query.setString(1, owner);
-                ResultSet result = query.executeQuery();
-                String teamID = null;
-                if(result.next()){
-                    teamID = result.getString("team_id");
-                }
-                query.close();
-                return teamID;
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
-
-
     public String getTeamIDFromPlayer(String playername){
         if(isConnected()){
             try {

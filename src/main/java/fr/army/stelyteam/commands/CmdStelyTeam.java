@@ -50,7 +50,7 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
                 player.openInventory(inventory);
             }else{
                 if (args[0].equals("home")){
-                    String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromOwner(player.getName());
+                    String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(player.getName());
                     if (!StelyTeamPlugin.sqliteManager.isSet(teamID)){
                         player.sendMessage("Le home de team n'est pas défini");
                     }else{
