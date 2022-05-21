@@ -64,7 +64,7 @@ public class EditMembersInventory {
         itemName = removeFirstColors(event.getCurrentItem().getItemMeta().getDisplayName());
         if (StelyTeamPlugin.sqlManager.getMembers(teamId).contains(itemName)){
             Integer authorRank = StelyTeamPlugin.sqlManager.getMemberRank(playerName);
-            Integer playerRank = StelyTeamPlugin.sqlManager.getMemberRank(itemName)
+            Integer playerRank = StelyTeamPlugin.sqlManager.getMemberRank(itemName);
             if (event.getClick().isRightClick()){
                 if (playerRank <= authorRank){
                     return;

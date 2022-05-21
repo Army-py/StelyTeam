@@ -290,9 +290,9 @@ public class InventoryGenerator {
 
             String rankPath = StelyTeamPlugin.config.getString("inventories.permissions."+str+".rankPath");
             Integer defaultRankId = StelyTeamPlugin.config.getInt("inventories."+rankPath+".rank");
+            Integer permissionRank = StelyTeamPlugin.sqlManager.getPermissionRank(teamId, str);
 
-            if (StelyTeamPlugin.sqlManager.getPermissionRank(teamId, str) != null){
-                Integer permissionRank = StelyTeamPlugin.sqlManager.getPermissionRank(teamId, str);
+            if (permissionRank != null){
                 String rankColor = StelyTeamPlugin.config.getString("ranks." + StelyTeamPlugin.getRankFromId(permissionRank) + ".color");
                 lore.add(0, "§r§5> " + rankColor + StelyTeamPlugin.config.getString("ranks." + StelyTeamPlugin.getRankFromId(permissionRank) + ".name"));
             }else{
@@ -303,7 +303,7 @@ public class InventoryGenerator {
             }
 
             boolean isDefault = false;
-            if (!str.equals("close") && (StelyTeamPlugin.sqlManager.getPermissionRank(teamId, str) == null || defaultRankId == StelyTeamPlugin.sqlManager.getPermissionRank(teamId, str))){
+            if (!str.equals("close") && (permissionRank == null || defaultRankId == permissionRank)){
                 isDefault = true;
             }
 
@@ -328,8 +328,8 @@ public class InventoryGenerator {
 
 
     private static boolean playerHasPermission(String playerName, String teamId, String permission){
-        if (StelyTeamPlugin.sqlManager.getPermissionRank(teamId, permission) != null){
-            Integer permissionRank = StelyTeamPlugin.sqlManager.getPermissionRank(teamId, permission);
+        Integer permissionRank = StelyTeamPlugin.sqlManager.getPermissionRank(teamId, permission);
+        if (permissionRank != null){
             return permissionRank >= StelyTeamPlugin.sqlManager.getMemberRank(playerName);
         }
 

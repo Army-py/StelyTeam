@@ -47,7 +47,6 @@ public class ConvWithdrawMoney extends StringPrompt {
 
 
     private boolean teamReachedMinMoney(String teamID, Integer money, Integer teamMoney) {
-        Integer teamMoney = teamMoney;
         return teamMoney - money < 0;
     }
 }
