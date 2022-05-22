@@ -2,7 +2,6 @@ package fr.army.stelyteam.events.inventoryclick;
 
 import org.bukkit.Bukkit;
 import org.bukkit.conversations.Conversation;
-import org.bukkit.conversations.ConversationCanceller;
 import org.bukkit.conversations.ConversationFactory;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.entity.Player;

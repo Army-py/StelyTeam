@@ -1,8 +1,5 @@
 package fr.army.stelyteam.utils;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.bukkit.entity.Player;
 
 import fr.army.stelyteam.StelyTeamPlugin;
