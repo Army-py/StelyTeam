@@ -1,18 +1,39 @@
 package fr.army.stelyteam.utils;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import fr.army.StelyTeamPlugin;
-import net.craftersland.data.bridge.PD;
+import net.milkbowl.vault.economy.EconomyResponse;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.RegisteredServiceProvider;
 
 
 public class Economy {
-    public boolean checkMoneyPlayer(Player player, int money) {
-        return PD.api.getDatabaseMoney(player.getName()) >= ((double) money);
+
+    private final net.milkbowl.vault.economy.Economy economy;
+
+    public Economy() {
+        this.economy = setupEconomy();
+        if (economy == null) {
+            throw new RuntimeException("Can not setup Vault economy");
+        }
     }
 
-    public void removeMoneyPlayer(Player player, int money) {
-        StelyTeamPlugin.economy.withdrawPlayer(player, money);
+    private net.milkbowl.vault.economy.Economy setupEconomy() {
+        if (Bukkit.getPluginManager().getPlugin("Vault") == null) {
+            return null;
+        }
+        final RegisteredServiceProvider<net.milkbowl.vault.economy.Economy> rsp = Bukkit.getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+        if (rsp == null) {
+            return null;
+        }
+        return rsp.getProvider();
+    }
+
+    public boolean checkMoneyPlayer(Player player, double money) {
+        return economy.getBalance(player) >= money;
+    }
+
+    public boolean removeMoneyPlayer(Player player, int money) {
+        final EconomyResponse response = economy.withdrawPlayer(player, money);
+        return response.transactionSuccess();
     }
 }
