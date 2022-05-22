@@ -1,5 +1,14 @@
 package fr.army.stelyteam;
 
+import fr.army.stelyteam.commands.CmdStelyTeam;
+import fr.army.stelyteam.events.InventoryClickManager;
+import fr.army.stelyteam.events.InventoryClose;
+import fr.army.stelyteam.events.PlayerQuit;
+import fr.army.stelyteam.utils.SQLManager;
+import fr.army.stelyteam.utils.SQLiteManager;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -7,18 +16,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
-
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
-
-import net.milkbowl.vault.economy.Economy;
-
-import fr.army.stelyteam.commands.CmdStelyTeam;
-import fr.army.stelyteam.events.InventoryClickManager;
-import fr.army.stelyteam.events.InventoryClose;
-import fr.army.stelyteam.events.PlayerQuit;
-import fr.army.stelyteam.utils.SQLManager;
-import fr.army.stelyteam.utils.SQLiteManager;
 
 public class StelyTeamPlugin extends JavaPlugin {
     public static StelyTeamPlugin instance;
@@ -84,15 +81,6 @@ public class StelyTeamPlugin extends JavaPlugin {
         }
         return YamlConfiguration.loadConfiguration(file);
     }
-
-
-    public static boolean setupEconomy(){
-		RegisteredServiceProvider<Economy> economyProvider = Bukkit.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
-		if (economyProvider != null) {
-			economy = economyProvider.getProvider();
-		}
-		return (economy != null); 
-	}
 
 
     public static String[] getTeamActions(String playerName) {
