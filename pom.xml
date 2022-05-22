@@ -22,6 +22,15 @@
             <version>1.18.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+
+        <!-- MysqlPlayerDataBridge -->
+        <dependency>
+            <groupId>MysqlPlayerDataBridge-v4.1.0</groupId>
+            <artifactId>MysqlPlayerDataBridge-v4.1.0</artifactId>
+            <version>4.1.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/api/MysqlPlayerDataBridge-v4.1.0.jar</systemPath>
+        </dependency>
     </dependencies>
 
     <repositories>

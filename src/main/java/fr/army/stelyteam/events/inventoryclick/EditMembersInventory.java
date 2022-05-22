@@ -63,28 +63,20 @@ public class EditMembersInventory {
 
         itemName = removeFirstColors(event.getCurrentItem().getItemMeta().getDisplayName());
         if (StelyTeamPlugin.sqlManager.getMembers(teamId).contains(itemName)){
-
-            // System.out.println(itemName);
-            // System.out.println(!StelyTeamPlugin.sqlManager.isOwner(itemName));
-            // System.out.println(StelyTeamPlugin.sqlManager.getMemberRank(itemName));
-
-            // if (!StelyTeamPlugin.sqlManager.isOwner(itemName) && (itemName.equals(playerName) || StelyTeamPlugin.sqlManager.getMemberRank(itemName)-1 <= StelyTeamPlugin.sqlManager.getMemberRank(playerName))){
-            //     return;
-            // }
-
+            Integer authorRank = StelyTeamPlugin.sqlManager.getMemberRank(playerName);
+            Integer playerRank = StelyTeamPlugin.sqlManager.getMemberRank(itemName);
             if (event.getClick().isRightClick()){
-                if (StelyTeamPlugin.sqlManager.getMemberRank(itemName) <= StelyTeamPlugin.sqlManager.getMemberRank(playerName)){
+                if (playerRank <= authorRank){
                     return;
                 }
-                if (!StelyTeamPlugin.sqlManager.isOwner(itemName) && StelyTeamPlugin.sqlManager.getMemberRank(itemName) < StelyTeamPlugin.getLastRank()){
+                if (!StelyTeamPlugin.sqlManager.isOwner(itemName) && playerRank < StelyTeamPlugin.getLastRank()){
                     StelyTeamPlugin.sqlManager.demoteMember(teamId, itemName);
                 }
-            }
-            if (event.getClick().isLeftClick()){
-                if (StelyTeamPlugin.sqlManager.getMemberRank(itemName)-1 <= StelyTeamPlugin.sqlManager.getMemberRank(playerName)){
+            }else if (event.getClick().isLeftClick()){
+                if (playerRank-1 <= authorRank){
                     return;
                 }
-                if (!StelyTeamPlugin.sqlManager.isOwner(itemName) && StelyTeamPlugin.sqlManager.getMemberRank(itemName) != 1){
+                if (!StelyTeamPlugin.sqlManager.isOwner(itemName) && playerRank != 1){
                     StelyTeamPlugin.sqlManager.promoteMember(teamId, itemName);
                 }
             }

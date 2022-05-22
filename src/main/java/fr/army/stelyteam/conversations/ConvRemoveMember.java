@@ -20,8 +20,14 @@ public class ConvRemoveMember extends StringPrompt {
         if (!StelyTeamPlugin.sqlManager.isMemberInTeam(answer, teamId)){
             con.getForWhom().sendRawMessage("Le joueur n'est pas dans ta team");
             return null;
+        }else if (authorName.equals(answer)){
+            con.getForWhom().sendRawMessage("Tu ne peux pas exclure toi-même");
+            return null;
         }else if (StelyTeamPlugin.containTeamAction(answer, "removeMember")) {
             con.getForWhom().sendRawMessage("Ce joueur a déjà une action en cours");
+            return null;
+        }else if (StelyTeamPlugin.sqlManager.getMemberRank(answer) <= StelyTeamPlugin.sqlManager.getMemberRank(authorName)){
+            con.getForWhom().sendRawMessage("Vous ne pouvez pas exclure un membre de rang supérieur à vous");
             return null;
         }
         

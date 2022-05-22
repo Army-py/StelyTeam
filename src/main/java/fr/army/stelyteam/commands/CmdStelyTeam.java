@@ -2,8 +2,12 @@ package fr.army.stelyteam.commands;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.Command;
@@ -14,10 +18,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.utils.ColorsCreator;
 import fr.army.stelyteam.utils.InventoryGenerator;
 
 public class CmdStelyTeam implements CommandExecutor, TabCompleter {
-
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(sender instanceof Player){
@@ -46,7 +50,7 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
                 player.openInventory(inventory);
             }else{
                 if (args[0].equals("home")){
-                    String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromOwner(player.getName());
+                    String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(player.getName());
                     if (!StelyTeamPlugin.sqliteManager.isSet(teamID)){
                         player.sendMessage("Le home de team n'est pas défini");
                     }else{
@@ -59,6 +63,9 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
                         player.teleport(location);
                         player.sendMessage("Téléportation au home");
                     }
+                }else if (args[0].equals("visual")){
+                    args[0] = "";
+                    player.sendMessage("Ton texte :" + new ColorsCreator().colourise(String.join(" ", args)));
                 }
             }
         }
@@ -71,6 +78,7 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         List<String> subCommands = new ArrayList<>();
         subCommands.add("home");
+        subCommands.add("visual");
 
         if (args.length == 1){
             List<String> result = new ArrayList<>();

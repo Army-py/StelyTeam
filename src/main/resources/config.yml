@@ -199,6 +199,10 @@ inventories:
         - "§ateam qui s'affiche dans"
         - "§ale tchat"
         - "§aPrix : 5,000€"
+        - ""
+        - "§cAssurez-vous d'avoir"
+        - "§cessayé le préfixe avant"
+        - "§cavec /stelyteam visual"
     removeTeam:
       itemName: "§5§lSupprimer la team"
       itemType: COMPOSTER
@@ -353,56 +357,56 @@ inventories:
     addTeamMoney:
       itemName: "§5§lAjouter de l'argent"
       itemType: GOLD_NUGGET
-      slot: 11
+      slot: 10
       rankPath: "member.addTeamMoney"
       lore:
         - "§aAjouter de l'argent dans la team"
     withdrawTeamMoney:
       itemName: "§5§lRetirer de l'argent"
       itemType: PAPER
-      slot: 12
+      slot: 11
       rankPath: "member.withdrawTeamMoney"
       lore:
         - "§aRetirer de l'argent de la team"
     seeTeamBank:
       itemName: "§5§lVoir l'argent"
       itemType: EMERALD
-      slot: 13
+      slot: 12
       rankPath: "member.seeTeamBank"
       lore:
         - "§aVoir l'argent de la team"
     buyTeamBank:
       itemName: "§5§lAchat du compte"
       itemType: GOLD_BLOCK
-      slot: 14
+      slot: 13
       rankPath: "manage.buyTeamBank"
       lore:
         - "§aAchat du compte de team"
     addMember:
       itemName: "§5§lAjouter un membre"
       itemType: GOLD_INGOT
-      slot: 15
+      slot: 14
       rankPath: "editMembers.addMember"
       lore:
         - "§aAjouter un membre à la team"
     removeMember:
       itemName: "§5§lRetirer un membre"
       itemType: RAW_GOLD
-      slot: 16
+      slot: 15
       rankPath: "editMembers.removeMember"
       lore:
         - "§aRetirer un membre de la team"
     seeTeamMembers:
       itemName: "§5§lVoir les membres"
       itemType: TOTEM_OF_UNDYING
-      slot: 17
+      slot: 16
       rankPath: "member.seeTeamMembers"
       lore:
         - "§aVoir les membres de la team"
     upgradeTotalMembers:
       itemName: "§5§lAméliorer le total des membres"
       itemType: EXPERIENCE_BOTTLE
-      slot: 18
+      slot: 19
       rankPath: "manage.upgradeTotalMembers"
       lore:
         - "§aAméliorer le total des membres"
@@ -410,42 +414,42 @@ inventories:
     manageMembers:
       itemName: "§5§lModifier les membres"
       itemType: WRITABLE_BOOK
-      slot: 19
+      slot: 20
       rankPath: "manage.editMembers"
       lore:
         - "§aModifier les membres de la team"
     editName:
       itemName: "§5§lModifier le nom"
       itemType: PAPER
-      slot: 20
+      slot: 21
       rankPath: "manage.editName"
       lore:
         - "§aModifier le nom de la team"
     editPrefix:
       itemName: "§5§lModifier le préfixe"
       itemType: NAME_TAG
-      slot: 21
+      slot: 22
       rankPath: "manage.editPrefix"
       lore:
         - "§aModifier le préfixe de la team"
     setTeamHome:
       itemName: "§5§lCréer le home"
       itemType: GREEN_BED
-      slot: 22
+      slot: 23
       rankPath: "manage.setTeamHome"
       lore:
         - "§aDéfinir le home de la team"
     removeTeamHome:
       itemName: "§5§lSupprimer la home"
       itemType: RED_BED
-      slot: 23
+      slot: 24
       rankPath: "manage.removeTeamHome"
       lore:
         - "§aRetirer le home de la team"
     editPermissions:
       itemName: "§5§lModifier les permissions"
       itemType: REDSTONE
-      slot: 24
+      slot: 25
       rankPath: "manage.editPermissions"
       lore:
         - "§aModifier les permissions de la team"

@@ -15,6 +15,8 @@ import fr.army.stelyteam.storage.TeamManager;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import net.milkbowl.vault.economy.Economy;
+
 import fr.army.stelyteam.commands.CmdStelyTeam;
 import fr.army.stelyteam.events.InventoryClickManager;
 import fr.army.stelyteam.events.InventoryClose;
@@ -106,6 +108,15 @@ public class StelyTeamPlugin extends JavaPlugin {
     public StelyTeamAPI getAPI() {
         return stelyTeamApi;
     }
+
+    public static boolean setupEconomy(){
+		RegisteredServiceProvider<Economy> economyProvider = Bukkit.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+		if (economyProvider != null) {
+			economy = economyProvider.getProvider();
+		}
+		return (economy != null); 
+	}
+
 
     public static String[] getTeamActions(String playerName) {
         for (String[] strings : teamsTempActions) {

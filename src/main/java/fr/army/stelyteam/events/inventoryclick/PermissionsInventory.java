@@ -31,33 +31,34 @@ public class PermissionsInventory {
 
         if (getPermissionFromName(itemName) != null){
             String permission = getPermissionFromName(itemName);
+            Integer permissionRank = StelyTeamPlugin.sqlManager.getPermissionRank(teamId, permission);
+            Integer authorRank = StelyTeamPlugin.sqlManager.getMemberRank(playerName);
+            boolean authorIsOwner = StelyTeamPlugin.sqlManager.isOwner(playerName);
             if (event.getClick().isRightClick()){
-                if (StelyTeamPlugin.sqlManager.getPermissionRank(teamId, permission) != null){
-                    Integer permissionRank = StelyTeamPlugin.sqlManager.getPermissionRank(teamId, permission);
-                    if (!StelyTeamPlugin.sqlManager.isOwner(playerName) && permissionRank <= StelyTeamPlugin.sqlManager.getMemberRank(playerName)){
+                if (permissionRank != null){
+                    if (!authorIsOwner && permissionRank <= authorRank){
                         return;
                     }
                     if (permissionRank < StelyTeamPlugin.getLastRank()) StelyTeamPlugin.sqlManager.demoteRankPermission(teamId, permission);
                 }else{
                     String rankPath = StelyTeamPlugin.config.getString("inventories.permissions."+permission+".rankPath");
                     Integer defaultRankId = StelyTeamPlugin.config.getInt("inventories."+rankPath+".rank");
-                    if (!StelyTeamPlugin.sqlManager.isOwner(playerName) && defaultRankId <= StelyTeamPlugin.sqlManager.getMemberRank(playerName)){
+                    if (!authorIsOwner && defaultRankId <= authorRank){
                         return;
                     }
                     if (defaultRankId != StelyTeamPlugin.getLastRank()) defaultRankId = defaultRankId+1;
                     StelyTeamPlugin.sqlManager.insertPermission(teamId, permission, defaultRankId);
                 }
             }else if (event.getClick().isLeftClick()){
-                if (StelyTeamPlugin.sqlManager.getPermissionRank(teamId, permission) != null){
-                    Integer permissionRank = StelyTeamPlugin.sqlManager.getPermissionRank(teamId, permission);
-                    if (!StelyTeamPlugin.sqlManager.isOwner(playerName) && permissionRank-1 <= StelyTeamPlugin.sqlManager.getMemberRank(playerName)){
+                if (permissionRank != null){
+                    if (!authorIsOwner && permissionRank-1 <= authorRank){
                         return;
                     }
                     if (permissionRank > 0) StelyTeamPlugin.sqlManager.promoteRankPermission(teamId, permission);
                 }else{
                     String rankPath = StelyTeamPlugin.config.getString("inventories.permissions."+permission+".rankPath");
                     Integer defaultRankId = StelyTeamPlugin.config.getInt("inventories."+rankPath+".rank");
-                    if (!StelyTeamPlugin.sqlManager.isOwner(playerName) && defaultRankId-1 <= StelyTeamPlugin.sqlManager.getMemberRank(playerName)){
+                    if (!authorIsOwner && defaultRankId-1 <= authorRank){
                         return;
                     }
                     if (defaultRankId != 0) defaultRankId = defaultRankId-1;
