@@ -103,12 +103,4 @@ public class ManageInventory {
             player.openInventory(inventory);
         }
     }
-    
-
-    public void getNameInput(Player player, Prompt prompt) {
-        ConversationFactory cf = new ConversationFactory(StelyTeamPlugin.instance);
-        Conversation conv = cf.withFirstPrompt(prompt).withLocalEcho(false).buildConversation(player);
-        conv.begin();
-        return;
-    }
 }

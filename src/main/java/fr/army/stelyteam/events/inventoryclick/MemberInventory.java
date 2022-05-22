@@ -13,6 +13,7 @@ import org.bukkit.inventory.Inventory;
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.conversations.ConvAddMoney;
 import fr.army.stelyteam.conversations.ConvWithdrawMoney;
+import fr.army.stelyteam.utils.ConversationBuilder;
 import fr.army.stelyteam.utils.InventoryGenerator;
 
 
@@ -51,10 +52,10 @@ public class MemberInventory {
             player.openInventory(inventory);
         }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.member.addTeamMoney.itemName"))){
             player.closeInventory();
-            getNameInput(player, new ConvAddMoney());
+            new ConversationBuilder().getNameInput(player, new ConvAddMoney());
         }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.member.withdrawTeamMoney.itemName"))){
             player.closeInventory();
-            getNameInput(player, new ConvWithdrawMoney());
+            new ConversationBuilder().getNameInput(player, new ConvWithdrawMoney());
         }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.member.leaveTeam.itemName"))){
             player.closeInventory();
             if (!StelyTeamPlugin.sqlManager.isOwner(playerName)){

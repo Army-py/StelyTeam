@@ -2,6 +2,7 @@ package fr.army.stelyteam.events.inventoryclick;
 
 import org.bukkit.Bukkit;
 import org.bukkit.conversations.Conversation;
+import org.bukkit.conversations.ConversationCanceller;
 import org.bukkit.conversations.ConversationFactory;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.entity.Player;
@@ -11,7 +12,8 @@ import org.bukkit.inventory.Inventory;
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.conversations.ConvEditTeamID;
 import fr.army.stelyteam.conversations.ConvEditTeamPrefix;
-import fr.army.stelyteam.events.PlayerChat;
+import fr.army.stelyteam.conversations.ConvGetTeamId;
+import fr.army.stelyteam.utils.ConversationBuilder;
 import fr.army.stelyteam.utils.InventoryGenerator;
 
 public class ConfirmInventory {
@@ -58,9 +60,8 @@ public class ConfirmInventory {
 
             }else if (StelyTeamPlugin.containPlayerTempAction(playerName, "createTeam")){
                 StelyTeamPlugin.removePlayerTempAction(playerName);
-                player.sendMessage("Envoie un nom de team");
                 player.closeInventory();
-                StelyTeamPlugin.instance.getServer().getPluginManager().registerEvents(new PlayerChat(playerName), StelyTeamPlugin.instance);
+                new ConversationBuilder().getNameInput(player, new ConvGetTeamId());
             }else if (StelyTeamPlugin.containPlayerTempAction(playerName, "buyTeamBank")){
                 String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(playerName);
                 StelyTeamPlugin.removePlayerTempAction(playerName);
@@ -72,11 +73,11 @@ public class ConfirmInventory {
             }else if (StelyTeamPlugin.containPlayerTempAction(playerName, "editName")){
                 StelyTeamPlugin.removePlayerTempAction(playerName);
                 player.closeInventory();
-                getNameInput(player, new ConvEditTeamID());
+                new ConversationBuilder().getNameInput(player, new ConvEditTeamID());
             }else if (StelyTeamPlugin.containPlayerTempAction(playerName, "editPrefix")){
                 StelyTeamPlugin.removePlayerTempAction(playerName);
                 player.closeInventory();
-                getNameInput(player, new ConvEditTeamPrefix());
+                new ConversationBuilder().getNameInput(player, new ConvEditTeamPrefix());
             }else if (StelyTeamPlugin.containPlayerTempAction(playerName, "deleteTeam")){
                 String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(playerName);
                 StelyTeamPlugin.removePlayerTempAction(playerName);
@@ -147,7 +148,11 @@ public class ConfirmInventory {
 
     public void getNameInput(Player player, Prompt prompt) {
         ConversationFactory cf = new ConversationFactory(StelyTeamPlugin.instance);
-        Conversation conv = cf.withFirstPrompt(prompt).withLocalEcho(false).buildConversation(player);
+        cf.withFirstPrompt(prompt);
+        cf.withLocalEcho(false);
+        cf.withTimeout(60);
+
+        Conversation conv = cf.buildConversation(player);
         conv.begin();
         return;
     }

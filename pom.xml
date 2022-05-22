@@ -29,7 +29,15 @@
             <artifactId>MysqlPlayerDataBridge-v4.1.0</artifactId>
             <version>4.1.0</version>
             <scope>system</scope>
-            <systemPath>${basedir}/api/MysqlPlayerDataBridge-v4.1.0.jar</systemPath>
+            <systemPath>${basedir}/src/api/MysqlPlayerDataBridge-v4.1.0.jar</systemPath>
+        </dependency>
+
+        <!-- Vault -->
+        <dependency>
+            <groupId>com.github.MilkBowl</groupId>
+            <artifactId>VaultAPI</artifactId>
+            <version>1.7</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
@@ -38,6 +46,11 @@
         <repository>
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
         </repository>
     </repositories>
 

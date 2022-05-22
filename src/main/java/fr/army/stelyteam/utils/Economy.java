@@ -3,7 +3,9 @@ package fr.army.stelyteam.utils;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import fr.army.StelyTeamPlugin;
+import org.bukkit.entity.Player;
+
+import fr.army.stelyteam.StelyTeamPlugin;
 import net.craftersland.data.bridge.PD;
 
 
