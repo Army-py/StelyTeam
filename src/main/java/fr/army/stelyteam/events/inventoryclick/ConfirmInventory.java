@@ -12,8 +12,8 @@ import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.conversations.ConvEditTeamID;
 import fr.army.stelyteam.conversations.ConvEditTeamPrefix;
 import fr.army.stelyteam.conversations.ConvGetTeamId;
-import fr.army.stelyteam.utils.ConversationBuilder;
 import fr.army.stelyteam.utils.InventoryGenerator;
+import fr.army.stelyteam.utils.conversation.ConversationBuilder;
 
 public class ConfirmInventory {
     private InventoryClickEvent event;

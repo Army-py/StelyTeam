@@ -1,7 +1,7 @@
 package fr.army.stelyteam.conversations;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.utils.ConversationBuilder;
+import fr.army.stelyteam.utils.conversation.ConversationBuilder;
 
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;

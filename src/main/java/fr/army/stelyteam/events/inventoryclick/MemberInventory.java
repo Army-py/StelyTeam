@@ -13,8 +13,8 @@ import org.bukkit.inventory.Inventory;
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.conversations.ConvAddMoney;
 import fr.army.stelyteam.conversations.ConvWithdrawMoney;
-import fr.army.stelyteam.utils.ConversationBuilder;
 import fr.army.stelyteam.utils.InventoryGenerator;
+import fr.army.stelyteam.utils.conversation.ConversationBuilder;
 
 
 public class MemberInventory {

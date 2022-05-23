@@ -16,8 +16,8 @@ import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.conversations.ConvAddMember;
 import fr.army.stelyteam.conversations.ConvEditOwner;
 import fr.army.stelyteam.conversations.ConvRemoveMember;
-import fr.army.stelyteam.utils.ConversationBuilder;
 import fr.army.stelyteam.utils.InventoryGenerator;
+import fr.army.stelyteam.utils.conversation.ConversationBuilder;
 
 
 public class EditMembersInventory {
