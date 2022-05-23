@@ -15,7 +15,6 @@ public class ConversationSetCanceller implements ConversationCanceller {
     @Override
     public boolean cancelBasedOnInput(ConversationContext context, String input) {
         return StelyTeamPlugin.config.getStringList("conversationCancelWords").contains(input);
-        // return input.equalsIgnoreCase("cancel");
     }
 
     @Override
