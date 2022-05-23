@@ -61,7 +61,12 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
                     }
                 }else if (args[0].equals("visual")){
                     args[0] = "";
-                    player.sendMessage("Ton texte :" + new ColorsCreator().colourise(String.join(" ", args)));
+                    System.out.println(args.length);
+                    if (args.length == 1){
+                        player.sendMessage("Utilisation : /stelyteam visual <&3 texte>");
+                    }else{
+                        player.sendMessage("Ton texte :" + new ColorsCreator().colourise(String.join(" ", args)));
+                    }
                 }
             }
         }
