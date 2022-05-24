@@ -3,8 +3,6 @@ author: Army_
 version: "${project.version}"
 main: fr.army.stelyteam.StelyTeamPlugin
 api-version: "1.16"
-depend:
-  - Vault
 commands:
   stelyteam:
     description: "StelyTeam"

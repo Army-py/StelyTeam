@@ -1,14 +1,5 @@
 package fr.army.stelyteam;
 
-import fr.army.stelyteam.commands.CmdStelyTeam;
-import fr.army.stelyteam.events.InventoryClickManager;
-import fr.army.stelyteam.events.InventoryClose;
-import fr.army.stelyteam.events.PlayerQuit;
-import fr.army.stelyteam.utils.SQLManager;
-import fr.army.stelyteam.utils.SQLiteManager;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -22,11 +13,26 @@ import fr.army.stelyteam.storage.StorageDeserializer;
 import fr.army.stelyteam.storage.StorageManager;
 import fr.army.stelyteam.storage.TeamManager;
 
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import net.milkbowl.vault.economy.Economy;
+
+import fr.army.stelyteam.commands.CmdStelyTeam;
+import fr.army.stelyteam.events.InventoryClickManager;
+import fr.army.stelyteam.events.InventoryClose;
+import fr.army.stelyteam.events.PlayerQuit;
+import fr.army.stelyteam.utils.SQLManager;
+import fr.army.stelyteam.utils.SQLiteManager;
+
 public class StelyTeamPlugin extends JavaPlugin {
     public static StelyTeamPlugin instance;
     public static YamlConfiguration config;
     public static SQLManager sqlManager;
     public static SQLiteManager sqliteManager;
+    public static Economy economy = null;
 
     public static ArrayList<String> playersCreateTeam = new ArrayList<String>();
 
@@ -34,6 +40,8 @@ public class StelyTeamPlugin extends JavaPlugin {
     public static HashMap<String, String> playersTempActions = new HashMap<String, String>();
     // {sender, receiver, teamId, actionName}
     public static ArrayList<String[]> teamsTempActions = new ArrayList<String[]>();
+    // {owner, name, prefix}
+    public static ArrayList<String[]> createTeamTemp = new ArrayList<String[]>();
 
     private StorageManager storageManager;
     private TeamManager teamManager;
@@ -107,10 +115,17 @@ public class StelyTeamPlugin extends JavaPlugin {
         return stelyTeamApi;
     }
 
+    public static boolean setupEconomy(){
+		RegisteredServiceProvider<Economy> economyProvider = Bukkit.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+		if (economyProvider != null) {
+			economy = economyProvider.getProvider();
+		}
+		return (economy != null); 
+	}
+
+
     public static String[] getTeamActions(String playerName) {
         for (String[] strings : teamsTempActions) {
-            // System.out.println(teamsTempActions.size());
-            // System.out.println(strings[0] + " " + strings[1] + " " + strings[2] + " " + strings[3]);
             if (strings[0].equals(playerName) || strings[1].equals(playerName)) {
                 return strings;
             }
@@ -118,11 +133,9 @@ public class StelyTeamPlugin extends JavaPlugin {
         return null;
     }
 
-
     public static void addTeamTempAction(String sender, String receiver, String teamId, String action) {
         teamsTempActions.add(new String[]{sender, receiver, teamId, action});
     }
-
 
     public static void removeTeamTempAction(String playerName) {
         for (String[] strings : teamsTempActions) {
@@ -133,11 +146,52 @@ public class StelyTeamPlugin extends JavaPlugin {
         }
     }
 
-
     public static boolean containTeamAction(String playerName, String actionName) {
         if (teamsTempActions.isEmpty()) return false;
         for (String[] strings : teamsTempActions) {
             if ((strings[0].equals(playerName) || strings[1].equals(playerName)) && strings[3].equals(actionName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    public static String[] getCreationTeamTemp(String playerName) {
+        for (String[] strings : createTeamTemp) {
+            if (strings[0].equals(playerName)) {
+                return strings;
+            }
+        }
+        return null;
+    }
+
+    public static void addCreationTeamTempName(String owner, String teamId) {
+        createTeamTemp.add(new String[]{owner, teamId, ""});
+    }
+
+    public static void addCreationTeamTempPrefix(String playerName, String prefix) {
+        for (int i = 0; i < createTeamTemp.size(); i++) {
+            if (createTeamTemp.get(i)[0].equals(playerName)) {
+                createTeamTemp.get(i)[2] = prefix;
+                return;
+            }
+        }
+    }
+
+    public static void removeCreationTeamTemp(String playerName) {
+        for (String[] strings : createTeamTemp) {
+            if (strings[0].equals(playerName)) {
+                createTeamTemp.remove(strings);
+                return;
+            }
+        }
+    }
+
+    public static boolean containCreationTeamTemp(String playerName) {
+        if (createTeamTemp.isEmpty()) return false;
+        for (String[] strings : createTeamTemp) {
+            if (strings[0].equals(playerName)) {
                 return true;
             }
         }

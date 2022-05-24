@@ -2,12 +2,8 @@ package fr.army.stelyteam.commands;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.Command;
@@ -65,7 +61,12 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
                     }
                 }else if (args[0].equals("visual")){
                     args[0] = "";
-                    player.sendMessage("Ton texte :" + new ColorsCreator().colourise(String.join(" ", args)));
+                    System.out.println(args.length);
+                    if (args.length == 1){
+                        player.sendMessage("Utilisation : /stelyteam visual <&3 texte>");
+                    }else{
+                        player.sendMessage("Ton texte :" + new ColorsCreator().colourise(String.join(" ", args)));
+                    }
                 }
             }
         }

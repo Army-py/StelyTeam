@@ -34,6 +34,9 @@ public class UpgradeMembersInventory {
                     Inventory inventory = InventoryGenerator.createConfirmInventory();
                     player.openInventory(inventory);
                     break;
+                }else{
+                    player.sendMessage("Vous devez débloquer le niveau précédent pour pouvoir acheter cette amélioration");
+                    break;
                 }
             }
         }else{

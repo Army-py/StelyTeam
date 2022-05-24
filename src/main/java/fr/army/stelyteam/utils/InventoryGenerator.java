@@ -65,12 +65,12 @@ public class InventoryGenerator {
             List<String> lore = StelyTeamPlugin.config.getStringList("inventories.manage."+str+".lore");
             ItemStack item;
             
-            if (str.equals("buyTeamBank")){
-                item = ItemBuilder.getItem(material, name, lore, StelyTeamPlugin.sqlManager.hasUnlockedTeamBank(teamId));
-            }
-
             if (playerHasPermission(playername, teamId, str)){ 
-                item = ItemBuilder.getItem(material, name, lore, false);
+                if (str.equals("buyTeamBank")){
+                    item = ItemBuilder.getItem(material, name, lore, StelyTeamPlugin.sqlManager.hasUnlockedTeamBank(teamId));
+                }else {
+                    item = ItemBuilder.getItem(material, name, lore, false);
+                }
             }else{
                 item = ItemBuilder.getItem(
                     Material.getMaterial(StelyTeamPlugin.config.getString("noPermission.itemType")), 

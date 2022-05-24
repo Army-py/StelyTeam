@@ -1,5 +1,5 @@
 # Prefixe devant les messages envoyés
-prefix: "§7[§5StelyTeam§7]"
+prefix: "§7[§5StelyTeam§7] "
 
 # Connection à la base de donnée
 sql:
@@ -10,13 +10,22 @@ sql:
   port: 3306
 
 
+# Timeout des conversations (message demandant une information aux joueurs lors de la création de team par exemple)
+conversationTimeout: 60
+
+# Mots permettant d'annuler une conversation (message demandant une information aux joueurs lors de la création de team par exemple)
+conversationCancelWords:
+  - "cancel"
+  - "annuler"
+  - "stop"
+  - "quit"
+
 # Nombre maximum de caracteres dans les noms de team
 teamNameMaxLength: 12
 teamPrefixMaxLength: 12
 
 # Argent maximal d'une team
 teamMaxMoney: 10000000
-
 
 # Prix des différentes actions
 prices:

@@ -76,7 +76,7 @@ public class SQLManager {
             try {
                 PreparedStatement queryHomes = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'players' ('playername' TEXT, 'rank' INTEGER, 'team_id' TEXT, PRIMARY KEY('playername'), FOREIGN KEY('team_id') REFERENCES 'teams'('team_id'));");
                 PreparedStatement queryPlayers = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'teams' ('team_id' TEXT, 'team_prefix' TEXT, 'owner' TEXT, 'money' INTEGER, 'creation_date' TEXT, 'members_level' INTEGER, 'team_bank' INTEGER, PRIMARY KEY('team_id'), FOREIGN KEY('owner') REFERENCES 'players'('playername'));");
-                PreparedStatement queryPermissions = connection.prepareStatement("CREATE TABLE 'permissions' ( 'id' INTEGER, 'team_id' INTEGER, 'permission' TEXT, 'rank' INTEGER, FOREIGN KEY('team_id') REFERENCES 'teams'('team_id'), PRIMARY KEY('id'));");
+                PreparedStatement queryPermissions = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'permissions' ( 'id' INTEGER, 'team_id' INTEGER, 'permission' TEXT, 'rank' INTEGER, FOREIGN KEY('team_id') REFERENCES 'teams'('team_id'), PRIMARY KEY('id'));");
                 queryHomes.executeUpdate();
                 queryPlayers.executeUpdate();
                 queryPermissions.executeUpdate();
