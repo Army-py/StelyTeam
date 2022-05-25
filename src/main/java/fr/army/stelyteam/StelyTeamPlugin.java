@@ -78,6 +78,7 @@ public class StelyTeamPlugin extends JavaPlugin {
                 initFile(getDataFolder(), "storage.yml"),
                 getLogger()
         );
+        storageDeserializer.load();
         storageManager = new StorageManager(storageDeserializer);
         teamManager = new TeamManager(storageManager);
         stelyTeamApi = new StelyTeamAPI(teamManager);
