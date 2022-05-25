@@ -82,6 +82,8 @@ public class StorageDeserializer {
      * Deserialize methods
      */
 
+    // TODO Implement deserialize methods
+
     private Storage deserializeMySQL(ConfigurationSection storageSection) {
         throw new UnsupportedOperationException("Not implemented yet");
     }
