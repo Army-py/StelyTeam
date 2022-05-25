@@ -14,13 +14,24 @@ public class TeamManager {
     private final StorageManager storageManager;
     private final ConcurrentMap<UUID, UUID> playerTeams;
     private final ConcurrentMap<UUID, Team> teamById;
+    private final TeamCache teamCache;
     private final ReentrantLock lock;
 
     public TeamManager(StorageManager storageManager) {
         this.storageManager = storageManager;
         playerTeams = new ConcurrentHashMap<>();
         teamById = new ConcurrentHashMap<>();
+        teamCache = new TeamCache(this, playerTeams, teamById);
         lock = new ReentrantLock();
+    }
+
+    /**
+     * Get the {@link TeamCache} of this {@link TeamManager}
+     *
+     * @return The {@link TeamCache} instance used by this {@link TeamManager}
+     */
+    public TeamCache getTeamCache() {
+        return teamCache;
     }
 
     /**
