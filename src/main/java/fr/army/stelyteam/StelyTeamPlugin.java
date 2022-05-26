@@ -91,15 +91,6 @@ public class StelyTeamPlugin extends JavaPlugin {
     }
 
 
-    public static boolean setupEconomy(){
-		RegisteredServiceProvider<Economy> economyProvider = Bukkit.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
-		if (economyProvider != null) {
-			economy = economyProvider.getProvider();
-		}
-		return (economy != null); 
-	}
-
-
     public static String[] getTeamActions(String playerName) {
         for (String[] strings : teamsTempActions) {
             if (strings[0].equals(playerName) || strings[1].equals(playerName)) {
