@@ -9,9 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.Messenger;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
 
 public class NetworkManager implements PluginMessageListener {
 
@@ -66,7 +64,6 @@ public class NetworkManager implements PluginMessageListener {
         final ByteArrayDataInput in = ByteStreams.newDataInput(message);
 
         final String subChannel = in.readUTF();
-        System.out.println(subChannel);
         if (!subChannel.equals("StelyTeam")) {
             return;
         }
@@ -74,7 +71,7 @@ public class NetworkManager implements PluginMessageListener {
         final byte[] msgBytes = new byte[msgLength];
         in.readFully(msgBytes);
 
-        final DataInputStream msgData = new DataInputStream(new ByteArrayInputStream(msgBytes));
+        final ByteArrayDataInput msgData = ByteStreams.newDataInput(msgBytes);
 
         // TODO Handle msgData
     }
