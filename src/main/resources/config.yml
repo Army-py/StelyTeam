@@ -70,7 +70,7 @@ inventoriesSlots:
   createTeam: 27
   admin: 27
   manage: 45
-  member: 27
+  member: 36
   teamMembers: 27
   editMembers: 36
   upgradeTotalMembers: 27
@@ -234,22 +234,29 @@ inventories:
 
 
   member:
+    teamInfos:
+      itemName: "§5§lInfos"
+      itemType: BOOK
+      slot: 13
+      rank: 5
+      lore:
+        - "§aNom : §e"
     seeTeamMembers:
       itemName: "§5§lMembres"
       itemType: TOTEM_OF_UNDYING
-      slot: 11
+      slot: 20
       rank: 5
     seeTeamBank:
       itemName: "§5§lArgent de la team"
       itemType: EMERALD
-      slot: 12
+      slot: 21
       rank: 4
       lore:
         - "§aMontant : %teamMoney%€"
     addTeamMoney:
       itemName: "§5§lAjout d'argent"
       itemType: GOLD_NUGGET
-      slot: 13
+      slot: 22
       rank: 4
       lore:
         - "§aAjouter de l'argent"
@@ -257,7 +264,7 @@ inventories:
     withdrawTeamMoney:
       itemName: "§5§lRetrait d'argent"
       itemType: PAPER
-      slot: 14
+      slot: 23
       rank: 4
       lore:
         - "§aRetirer de l'argent"
@@ -265,12 +272,12 @@ inventories:
     leaveTeam:
       itemName: "§5§lQuitter la team"
       itemType: DARK_OAK_DOOR
-      slot: 15
+      slot: 24
       rank: -1
     close:
       itemName: "§5§lFermer"
       itemType: BARRIER
-      slot: 26
+      slot: 35
 
 
   upgradeTotalMembers:
