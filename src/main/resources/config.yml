@@ -20,7 +20,7 @@ conversationCancelWords:
   - "stop"
   - "quit"
 
-# Nombre maximum de caracteres dans les noms de team
+# Nombre maximum de caracteres dans les noms de team (les couleurs ne sont pas prises en compte dans la limite)
 teamNameMaxLength: 12
 teamPrefixMaxLength: 12
 

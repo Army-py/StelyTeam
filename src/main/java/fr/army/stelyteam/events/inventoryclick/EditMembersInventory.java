@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationFactory;
@@ -17,6 +18,7 @@ import fr.army.stelyteam.conversations.ConvAddMember;
 import fr.army.stelyteam.conversations.ConvEditOwner;
 import fr.army.stelyteam.conversations.ConvRemoveMember;
 import fr.army.stelyteam.utils.InventoryGenerator;
+import fr.army.stelyteam.utils.RefreshPlayersInventory;
 import fr.army.stelyteam.utils.conversation.ConversationBuilder;
 
 
@@ -65,24 +67,39 @@ public class EditMembersInventory {
         itemName = removeFirstColors(event.getCurrentItem().getItemMeta().getDisplayName());
         if (StelyTeamPlugin.sqlManager.getMembers(teamId).contains(itemName)){
             Integer authorRank = StelyTeamPlugin.sqlManager.getMemberRank(playerName);
-            Integer playerRank = StelyTeamPlugin.sqlManager.getMemberRank(itemName);
+            Integer memberRank = StelyTeamPlugin.sqlManager.getMemberRank(itemName);
+            Player member = Bukkit.getPlayer(itemName);
+
             if (event.getClick().isRightClick()){
-                if (playerRank <= authorRank){
+                if (memberRank <= authorRank){
                     return;
                 }
-                if (!StelyTeamPlugin.sqlManager.isOwner(itemName) && playerRank < StelyTeamPlugin.getLastRank()){
+                if (!StelyTeamPlugin.sqlManager.isOwner(itemName) && memberRank < StelyTeamPlugin.getLastRank()){
                     StelyTeamPlugin.sqlManager.demoteMember(teamId, itemName);
+
+                    if (member != null){
+                        String newRank = StelyTeamPlugin.getRankFromId(memberRank+1);
+                        String newRankColor = StelyTeamPlugin.config.getString("ranks." + newRank + ".color");
+                        member.sendMessage("Vous avez été rétrogradé " + newRankColor + newRank);
+                    }
                 }
             }else if (event.getClick().isLeftClick()){
-                if (playerRank-1 <= authorRank){
+                if (memberRank-1 <= authorRank){
                     return;
                 }
-                if (!StelyTeamPlugin.sqlManager.isOwner(itemName) && playerRank != 1){
+                if (!StelyTeamPlugin.sqlManager.isOwner(itemName) && memberRank != 1){
                     StelyTeamPlugin.sqlManager.promoteMember(teamId, itemName);
+
+                    if (member != null){
+                        String newRank = StelyTeamPlugin.getRankFromId(memberRank-1);
+                        String newRankColor = StelyTeamPlugin.config.getString("ranks." + newRank + ".color");
+                        member.sendMessage("Vous avez été promu " + newRankColor + newRank);
+                    }
                 }
-            }
+            }else return;
             Inventory inventory = InventoryGenerator.createEditMembersInventory(playerName);
             player.openInventory(inventory);
+            RefreshPlayersInventory.refreshTeamMembersInventory(teamId, playerName);
         }
     }
 

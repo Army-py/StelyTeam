@@ -6,6 +6,7 @@ import org.bukkit.inventory.Inventory;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.utils.InventoryGenerator;
+import fr.army.stelyteam.utils.RefreshPlayersInventory;
 
 
 public class PermissionsInventory {
@@ -63,9 +64,10 @@ public class PermissionsInventory {
                     if (defaultRankId != 0) defaultRankId = defaultRankId-1;
                     StelyTeamPlugin.sqlManager.insertPermission(teamId, permission, defaultRankId);
                 }
-            }
+            }else return;
             Inventory inventory = InventoryGenerator.createPermissionsInventory(playerName);
             player.openInventory(inventory);
+            RefreshPlayersInventory.refreshTeamMembersInventory(teamId, playerName);
         }
     }
 
