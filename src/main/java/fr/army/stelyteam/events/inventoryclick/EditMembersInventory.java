@@ -18,7 +18,7 @@ import fr.army.stelyteam.conversations.ConvAddMember;
 import fr.army.stelyteam.conversations.ConvEditOwner;
 import fr.army.stelyteam.conversations.ConvRemoveMember;
 import fr.army.stelyteam.utils.InventoryGenerator;
-import fr.army.stelyteam.utils.RefreshPlayersInventory;
+import fr.army.stelyteam.utils.TeamMembersUtils;
 import fr.army.stelyteam.utils.conversation.ConversationBuilder;
 
 
@@ -99,7 +99,7 @@ public class EditMembersInventory {
             }else return;
             Inventory inventory = InventoryGenerator.createEditMembersInventory(playerName);
             player.openInventory(inventory);
-            RefreshPlayersInventory.refreshTeamMembersInventory(teamId, playerName);
+            TeamMembersUtils.refreshTeamMembersInventory(teamId, playerName);
         }
     }
 

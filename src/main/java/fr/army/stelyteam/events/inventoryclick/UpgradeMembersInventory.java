@@ -6,7 +6,7 @@ import org.bukkit.inventory.Inventory;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.utils.InventoryGenerator;
-import fr.army.stelyteam.utils.RefreshPlayersInventory;
+import fr.army.stelyteam.utils.TeamMembersUtils;
 
 
 public class UpgradeMembersInventory {

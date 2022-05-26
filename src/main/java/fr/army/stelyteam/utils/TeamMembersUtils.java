@@ -7,7 +7,7 @@ import org.bukkit.entity.HumanEntity;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 
-public class RefreshPlayersInventory {
+public class TeamMembersUtils {
     public static void refreshTeamMembersInventory(String teamId, String authorName) {
         ArrayList<String> membersName = StelyTeamPlugin.sqlManager.getMembers(teamId);
         for (String memberName : membersName) {
@@ -34,6 +34,19 @@ public class RefreshPlayersInventory {
                 }else if (player.getOpenInventory().getTitle().equals(StelyTeamPlugin.config.getString("inventoriesName.permissions"))){
                     player.openInventory(InventoryGenerator.createPermissionsInventory(player.getName()));
                 }
+            }
+        }
+    }
+
+
+    public static void teamBroadcast(String teamId, String authorName, String message) {
+        ArrayList<String> membersName = StelyTeamPlugin.sqlManager.getMembers(teamId);
+        for (String memberName : membersName) {
+            if (memberName.equals(authorName)) continue;
+
+            HumanEntity player = Bukkit.getPlayer(memberName);
+            if (player != null) {
+                player.sendMessage(message);
             }
         }
     }
