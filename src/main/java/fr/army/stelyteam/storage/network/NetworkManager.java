@@ -14,37 +14,44 @@ import java.io.ByteArrayOutputStream;
 public class NetworkManager implements PluginMessageListener {
 
     private final StelyTeamPlugin plugin;
-    private boolean load;
+    private final Object lock;
+    private boolean loaded;
 
     public NetworkManager(StelyTeamPlugin plugin) {
         this.plugin = plugin;
+        lock = new Object();
     }
 
     public void load() {
-        synchronized (this) {
-            if (load) {
+        synchronized (lock) {
+            if (loaded) {
                 throw new IllegalStateException("The network manager is already loaded");
             }
             final Messenger messenger = Bukkit.getMessenger();
             messenger.registerIncomingPluginChannel(plugin, "BungeeCord", this);
             messenger.registerOutgoingPluginChannel(plugin, "BungeeCord");
-            load = true;
+            loaded = true;
         }
     }
 
     public void unload() {
-        synchronized (this) {
-            if (!load) {
+        synchronized (lock) {
+            if (!loaded) {
                 throw new IllegalStateException("The network manager is not loaded");
             }
             final Messenger messenger = Bukkit.getMessenger();
             messenger.unregisterIncomingPluginChannel(plugin, "BungeeCord", this);
             messenger.unregisterOutgoingPluginChannel(plugin, "BungeeCord");
-            load = false;
+            loaded = false;
         }
     }
 
     public void sendMessage(ByteArrayOutputStream msgData) {
+        synchronized (lock) {
+            if (!loaded) {
+                throw new IllegalStateException("The network manager is not loaded");
+            }
+        }
         final ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF("Forward");
         out.writeUTF("ALL");
