@@ -62,15 +62,11 @@ public class PlayerList implements IPlayerList {
         lock.lock();
         try {
             final Integer previousValue = uuids.put(id, rank);
-            // Check if the player is added to the team
-            if (previousValue == null) {
-                playerTeamTracker.changeTeam(id, team.getId());
-            }
-            // Check if there is no changes
-            else if (previousValue == rank) {
+            // Check if there is changes
+            if (previousValue != null && previousValue == rank) {
                 return false;
             }
-
+            playerTeamTracker.changeTeam(id, team.getId(), rank);
             team.setDirty(TeamField.PLAYERS);
             return true;
         } finally {
@@ -82,7 +78,7 @@ public class PlayerList implements IPlayerList {
         lock.lock();
         try {
             if (uuids.remove(id) != null) {
-                playerTeamTracker.changeTeam(id, null);
+                playerTeamTracker.changeTeam(id, team.getId(), -1);
                 return true;
             }
             return false;
@@ -98,7 +94,7 @@ public class PlayerList implements IPlayerList {
                 return;
             }
             for (UUID id : uuids.keySet()) {
-                playerTeamTracker.changeTeam(id, null);
+                playerTeamTracker.changeTeam(id, team.getId(), -1);
             }
             uuids.clear();
         } finally {

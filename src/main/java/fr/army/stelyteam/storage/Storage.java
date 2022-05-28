@@ -55,7 +55,7 @@ public interface Storage {
      */
     CompletableFuture<Optional<UUID>> getPlayerTeamId(UUID playerId);
 
-    CompletableFuture<Void> savePlayerTeams(Map<UUID, Optional<UUID>> changes);
+    CompletableFuture<Void> savePlayerTeams(Map<UUID, PlayerTeamTracker.PlayerChange> changes);
 
     record FieldValues(TeamField field, Optional<Object> value) {
     }

@@ -192,7 +192,7 @@ public class StorageManager {
      * @param changes The changes to apply
      * @return A {@link CompletableFuture} that represents the save action
      */
-    public CompletableFuture<Void> savePlayerTeams(Map<UUID, Optional<UUID>> changes) {
+    public CompletableFuture<Void> savePlayerTeams(Map<UUID, PlayerTeamTracker.PlayerChange> changes) {
         return storagePlayers.savePlayerTeams(changes);
     }
 

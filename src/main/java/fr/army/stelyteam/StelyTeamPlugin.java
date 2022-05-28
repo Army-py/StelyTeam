@@ -14,9 +14,7 @@ import fr.army.stelyteam.storage.StorageManager;
 import fr.army.stelyteam.storage.TeamManager;
 
 import fr.army.stelyteam.storage.network.NetworkManager;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import net.milkbowl.vault.economy.Economy;
@@ -81,11 +79,11 @@ public class StelyTeamPlugin extends JavaPlugin {
                 getLogger()
         );
         storageDeserializer.load();
-        storageManager = new StorageManager(storageDeserializer);
-        storageManager.start();
         networkManager = new NetworkManager(this);
         networkManager.load();
-        teamManager = new TeamManager(storageManager);
+        storageManager = new StorageManager(storageDeserializer);
+        storageManager.start();
+        teamManager = new TeamManager(networkManager, storageManager);
         stelyTeamApi = new StelyTeamAPI(teamManager);
 
         getLogger().info("StelyTeam ON");
@@ -98,8 +96,8 @@ public class StelyTeamPlugin extends JavaPlugin {
         sqlManager.disconnect();
         sqliteManager.disconnect();
 
-        networkManager.unload();
         storageManager.stop();
+        networkManager.unload();
 
         getLogger().info("StelyTeam OFF");
     }

@@ -1,14 +1,21 @@
 package fr.army.stelyteam.storage.network;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.storage.PlayerTeamTracker;
+import fr.army.stelyteam.storage.Storage;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.Messenger;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
 import java.io.*;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 public class NetworkManager implements PluginMessageListener {
+
+    // TODO Handle field by field pairing
 
     private final StelyTeamPlugin plugin;
     private final Object lock;
@@ -89,4 +96,28 @@ public class NetworkManager implements PluginMessageListener {
     }
 
 
+    /**
+     * Send team field changes through the network
+     *
+     * @param fieldValues The field values to update
+     */
+    public void sendSave(List<Storage.FieldValues> fieldValues) {
+    }
+
+    /**
+     * Send players changes through the network
+     *
+     * @param changes The player associations to change
+     */
+    public void sendPlayers(Map<UUID, PlayerTeamTracker.PlayerChange> changes) {
+
+    }
+
+    /**
+     * Send delete team action through the network
+     *
+     * @param teamId The team to delete
+     */
+    public void sendDelete(UUID teamId) {
+    }
 }

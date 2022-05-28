@@ -1,5 +1,6 @@
 package fr.army.stelyteam.storage;
 
+import fr.army.stelyteam.storage.network.NetworkManager;
 import fr.army.stelyteam.team.PlayerList;
 import fr.army.stelyteam.team.Team;
 
@@ -11,13 +12,15 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class TeamManager {
 
+    private final NetworkManager networkManager;
     private final StorageManager storageManager;
     private final ConcurrentMap<UUID, UUID> playerTeams;
     private final ConcurrentMap<UUID, Team> teamById;
     private final TeamCache teamCache;
     private final ReentrantLock lock;
 
-    public TeamManager(StorageManager storageManager) {
+    public TeamManager(NetworkManager networkManager, StorageManager storageManager) {
+        this.networkManager = networkManager;
         this.storageManager = storageManager;
         playerTeams = new ConcurrentHashMap<>();
         teamById = new ConcurrentHashMap<>();
@@ -160,11 +163,13 @@ public class TeamManager {
             final List<CompletableFuture<?>> futures = new LinkedList<>();
             // Save team
             if (team.isDirty()) {
-                futures.add(storageManager.saveTeam(team.getId(), team.getForSaving()));
+                final List<Storage.FieldValues> fieldValues = team.getForSaving();
+                networkManager.sendSave(fieldValues);
+                futures.add(storageManager.saveTeam(team.getId(), fieldValues));
             }
 
             // Save players in the team
-            savePlayerTeam(team.getPlayers(), futures);
+            savePlayerTeam(team.getPlayers(), futures, true);
 
             // Don't transfer it to the storageManager if there is nothing to do
             if (futures.isEmpty()) {
@@ -199,7 +204,10 @@ public class TeamManager {
                     storageManager.deleteTeam(teamId).thenRun(() -> teamById.remove(teamId))
             );
             // Save players in the team
-            savePlayerTeam(team.getPlayers(), futures);
+            savePlayerTeam(team.getPlayers(), futures, false);
+
+            // Send changes through the network
+            networkManager.sendDelete(teamId);
 
             // Transfer it to the storageManager in all case as there is at least the remove operation
             return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
@@ -213,11 +221,15 @@ public class TeamManager {
      *
      * @param playerList The player list to save
      * @param futures    The future {@link List} to fill with the save action
+     * @param network    Whether the changes should be sent through the network
      */
-    private void savePlayerTeam(PlayerList playerList, List<CompletableFuture<?>> futures) {
+    private void savePlayerTeam(PlayerList playerList, List<CompletableFuture<?>> futures, boolean network) {
         final PlayerTeamTracker tracker = playerList.getPlayerTeamTracker();
         if (tracker.isDirty()) {
-            final Map<UUID, Optional<UUID>> changes = tracker.getForSaving();
+            final Map<UUID, PlayerTeamTracker.PlayerChange> changes = tracker.getForSaving();
+            if (network) {
+                networkManager.sendPlayers(changes);
+            }
             futures.add(
                     storageManager.savePlayerTeams(changes).thenRun(() -> linkPlayerTeams(changes))
             );
@@ -229,16 +241,16 @@ public class TeamManager {
      *
      * @param map The {@link Map} containing the mapping between players and teams
      */
-    private void linkPlayerTeams(Map<UUID, Optional<UUID>> map) {
-        for (Map.Entry<UUID, Optional<UUID>> entry : map.entrySet()) {
-            final Optional<UUID> value = entry.getValue();
-            if (value.isEmpty()) {
+    private void linkPlayerTeams(Map<UUID, PlayerTeamTracker.PlayerChange> map) {
+        for (Map.Entry<UUID, PlayerTeamTracker.PlayerChange> entry : map.entrySet()) {
+            final PlayerTeamTracker.PlayerChange playerChange = entry.getValue();
+            // Check if it's a remove
+            if (playerChange.rank() < 0) {
                 playerTeams.remove(entry.getKey());
             } else {
-                playerTeams.put(entry.getKey(), value.get());
+                playerTeams.put(entry.getKey(), playerChange.teamId());
             }
         }
     }
-
 
 }
