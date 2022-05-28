@@ -1,15 +1,12 @@
 package fr.army.stelyteam.storage.network;
 
-import com.google.common.io.ByteArrayDataInput;
-import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
 import fr.army.stelyteam.StelyTeamPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.Messenger;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
-import java.io.ByteArrayOutputStream;
+import java.io.*;
 
 public class NetworkManager implements PluginMessageListener {
 
@@ -46,21 +43,25 @@ public class NetworkManager implements PluginMessageListener {
         }
     }
 
-    public void sendMessage(ByteArrayOutputStream msgData) {
+    public void sendMessage(byte[] msgBytes) {
         synchronized (lock) {
             if (!loaded) {
                 throw new IllegalStateException("The network manager is not loaded");
             }
         }
-        final ByteArrayDataOutput out = ByteStreams.newDataOutput();
-        out.writeUTF("Forward");
-        out.writeUTF("ALL");
-        out.writeUTF("StelyTeam");
+        final ByteArrayOutputStream arrayStream = new ByteArrayOutputStream();
+        final DataOutputStream dataStream = new DataOutputStream(arrayStream);
+        try {
+            dataStream.writeUTF("Forward");
+            dataStream.writeUTF("ALL");
+            dataStream.writeUTF("StelyTeam");
 
-        final byte[] msgBytes = msgData.toByteArray();
-        out.writeShort(msgBytes.length);
-        out.write(msgBytes);
-        Bukkit.getServer().sendPluginMessage(plugin, "BungeeCord", out.toByteArray());
+            dataStream.writeShort(msgBytes.length);
+            dataStream.write(msgBytes);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Bukkit.getServer().sendPluginMessage(plugin, "BungeeCord", arrayStream.toByteArray());
     }
 
     @Override
@@ -68,19 +69,23 @@ public class NetworkManager implements PluginMessageListener {
         if (!channel.equals("BungeeCord")) {
             return;
         }
-        final ByteArrayDataInput in = ByteStreams.newDataInput(message);
+        final ByteArrayInputStream arrayStream = new ByteArrayInputStream(message);
+        final DataInputStream dataStream = new DataInputStream(arrayStream);
 
-        final String subChannel = in.readUTF();
-        if (!subChannel.equals("StelyTeam")) {
-            return;
+        final byte[] msgBytes;
+        try {
+            final String subChannel = dataStream.readUTF();
+            if (!subChannel.equals("StelyTeam")) {
+                return;
+            }
+            final short msgLength = dataStream.readShort();
+            msgBytes = new byte[msgLength];
+            dataStream.readFully(msgBytes);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        final short msgLength = in.readShort();
-        final byte[] msgBytes = new byte[msgLength];
-        in.readFully(msgBytes);
 
-        final ByteArrayDataInput msgData = ByteStreams.newDataInput(msgBytes);
-
-        // TODO Handle msgData
+        // TODO Handle msgBytes
     }
 
 
