@@ -1,15 +1,11 @@
 package fr.army.stelyteam.storage.network.packet;
 
 import fr.army.stelyteam.storage.TeamField;
-import fr.army.stelyteam.util.BinaryUtils;
 
 import java.io.*;
 import java.util.UUID;
 
 public class ModifyPacket implements Packet {
-
-    private final static byte UUID_BYTES = Long.BYTES * 2;
-    private final static byte BYTE_ARRAY_LENGTH = UUID_BYTES + 1;
 
     private UUID teamId;
     private TeamField field;
@@ -31,20 +27,17 @@ public class ModifyPacket implements Packet {
 
     @Override
     public void encode(DataOutputStream output) throws IOException {
-        final byte[] array = new byte[BYTE_ARRAY_LENGTH];
-        BinaryUtils.toByteArray(teamId, array, 0);
-        array[UUID_BYTES] = (byte) field.ordinal();
-        output.write(array);
+        output.writeLong(teamId.getMostSignificantBits());
+        output.writeLong(teamId.getLeastSignificantBits());
+        output.writeByte(field.ordinal());
         final ObjectOutputStream objectStream = new ObjectOutputStream(output);
         objectStream.writeObject(value);
     }
 
     @Override
     public void decode(DataInputStream input) throws IOException, ClassNotFoundException {
-        final byte[] array = new byte[BYTE_ARRAY_LENGTH];
-        input.readFully(array);
-        final UUID teamId = BinaryUtils.toUUID(array, 0);
-        final TeamField field = TeamField.values()[array[UUID_BYTES]];
+        final UUID teamId = new UUID(input.readLong(), input.readLong());
+        final TeamField field = TeamField.values()[input.readByte()];
         final ObjectInputStream objectStream = new ObjectInputStream(input);
         final Object value = objectStream.readObject();
         // Modify instance field at the end to avoid partial decoding

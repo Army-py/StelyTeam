@@ -1,7 +1,5 @@
 package fr.army.stelyteam.storage.network.packet;
 
-import fr.army.stelyteam.util.BinaryUtils;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -28,16 +26,13 @@ public class DeletePacket implements Packet {
 
     @Override
     public void encode(DataOutputStream output) throws IOException {
-        final byte[] array = new byte[BYTE_ARRAY_LENGTH];
-        BinaryUtils.toByteArray(uuid, array, 0);
-        output.write(array);
+        output.writeLong(uuid.getMostSignificantBits());
+        output.writeLong(uuid.getLeastSignificantBits());
     }
 
     @Override
     public void decode(DataInputStream input) throws IOException {
-        final byte[] array = new byte[BYTE_ARRAY_LENGTH];
-        input.readFully(array);
-        uuid = BinaryUtils.toUUID(array, 0);
+        uuid = new UUID(input.readLong(), input.readLong());
     }
 
 }
