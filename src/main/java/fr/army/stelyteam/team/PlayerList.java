@@ -55,14 +55,22 @@ public class PlayerList implements IPlayerList {
     }
 
     public boolean setId(UUID id, int rank) {
+        Objects.requireNonNull(id);
+        if (rank < 0) {
+            throw new IllegalArgumentException("The rank must be superior to 0");
+        }
         lock.lock();
         try {
             final Integer previousValue = uuids.put(id, rank);
-            // Check if there is changes
-            if (previousValue != null && previousValue == rank) {
+            // Check if the player is added to the team
+            if (previousValue == null) {
+                playerTeamTracker.changeTeam(id, team.getId());
+            }
+            // Check if there is no changes
+            else if (previousValue == rank) {
                 return false;
             }
-            playerTeamTracker.changeTeam(id, team.getId());
+
             team.setDirty(TeamField.PLAYERS);
             return true;
         } finally {
