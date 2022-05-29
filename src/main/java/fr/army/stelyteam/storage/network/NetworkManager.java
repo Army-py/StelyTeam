@@ -3,6 +3,7 @@ package fr.army.stelyteam.storage.network;
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.storage.PlayerTeamTracker;
 import fr.army.stelyteam.storage.Storage;
+import fr.army.stelyteam.storage.network.packet.Packet;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.Messenger;
@@ -50,7 +51,7 @@ public class NetworkManager implements PluginMessageListener {
         }
     }
 
-    public void sendMessage(byte[] msgBytes) {
+    private void sendMessage(String server, byte[] msgBytes) {
         synchronized (lock) {
             if (!loaded) {
                 throw new IllegalStateException("The network manager is not loaded");
@@ -60,7 +61,7 @@ public class NetworkManager implements PluginMessageListener {
         final DataOutputStream dataStream = new DataOutputStream(arrayStream);
         try {
             dataStream.writeUTF("Forward");
-            dataStream.writeUTF("ALL");
+            dataStream.writeUTF(server);
             dataStream.writeUTF("StelyTeam");
 
             dataStream.writeShort(msgBytes.length);
@@ -69,6 +70,16 @@ public class NetworkManager implements PluginMessageListener {
             throw new RuntimeException(e);
         }
         Bukkit.getServer().sendPluginMessage(plugin, "BungeeCord", arrayStream.toByteArray());
+    }
+
+    private void sendPacket(String server, Packet packet) {
+        final ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+        try {
+            packet.encode(new DataOutputStream(byteStream));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        sendMessage(server, byteStream.toByteArray());
     }
 
     @Override
