@@ -4,6 +4,7 @@ import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.storage.PlayerTeamTracker;
 import fr.army.stelyteam.storage.Storage;
 import fr.army.stelyteam.storage.network.packet.Packet;
+import fr.army.stelyteam.storage.network.packet.PacketType;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.Messenger;
@@ -74,6 +75,7 @@ public class NetworkManager implements PluginMessageListener {
 
     private void sendPacket(String server, Packet packet) {
         final ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+        byteStream.write(packet.getType().ordinal());
         try {
             packet.encode(new DataOutputStream(byteStream));
         } catch (IOException e) {
@@ -103,7 +105,28 @@ public class NetworkManager implements PluginMessageListener {
             throw new RuntimeException(e);
         }
 
-        // TODO Handle msgBytes
+        onPacketReceived(msgBytes);
+    }
+
+    private void onPacketReceived(byte[] msgBytes) {
+        final ByteArrayInputStream byteStream = new ByteArrayInputStream(msgBytes);
+        final int packetId = byteStream.read();
+        final PacketType packetType;
+        try {
+            packetType = PacketType.values()[packetId];
+        } catch (IndexOutOfBoundsException e) {
+            throw new RuntimeException("Invalid packet id: " + packetId);
+        }
+        // Mark the input stream to remove the packet id from the stream in decode method
+        byteStream.mark(-1);
+        final Packet packet = packetType.createPacket();
+        try {
+            packet.decode(new DataInputStream(byteStream));
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        // TODO Handle packet
     }
 
 
