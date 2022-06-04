@@ -196,7 +196,7 @@ public class StorageManager {
         return storagePlayers.savePlayerTeams(changes);
     }
 
-    record StorageFields(Storage storage, TeamField[] fields) {
+    public record StorageFields(Storage storage, TeamField[] fields) {
     }
 
 }

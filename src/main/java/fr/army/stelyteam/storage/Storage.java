@@ -13,6 +13,13 @@ public interface Storage {
     void stop();
 
     /**
+     * Get the hash of this storage
+     *
+     * @return The unique hash {@link String} for this {@link Storage}
+     */
+    String getHash();
+
+    /**
      * Load a {@link fr.army.stelyteam.team.Team}
      *
      * @param teamID     The {@link UUID} of the Team
