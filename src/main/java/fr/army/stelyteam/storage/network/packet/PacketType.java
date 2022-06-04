@@ -1,5 +1,10 @@
 package fr.army.stelyteam.storage.network.packet;
 
+import fr.army.stelyteam.storage.network.packet.lifecycle.DatabasePacket;
+import fr.army.stelyteam.storage.network.packet.work.DeletePacket;
+import fr.army.stelyteam.storage.network.packet.work.ModifyPacket;
+import fr.army.stelyteam.storage.network.packet.work.PlayerPacket;
+
 import java.util.function.Supplier;
 
 public enum PacketType {

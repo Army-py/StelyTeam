@@ -1,4 +1,7 @@
-package fr.army.stelyteam.storage.network.packet;
+package fr.army.stelyteam.storage.network.packet.work;
+
+import fr.army.stelyteam.storage.network.packet.Packet;
+import fr.army.stelyteam.storage.network.packet.PacketType;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
