@@ -2,6 +2,7 @@ package fr.army.stelyteam.storage.network;
 
 import fr.army.stelyteam.storage.TeamField;
 import fr.army.stelyteam.storage.network.packet.lifecycle.CheckStoragePacket;
+import fr.army.stelyteam.storage.network.packet.lifecycle.ServerShutdownPacket;
 import fr.army.stelyteam.storage.network.packet.lifecycle.ValidStoragePacket;
 
 import java.util.Arrays;
@@ -52,6 +53,12 @@ public class StoragePairManager {
 
     public void handleValid(ValidStoragePacket packet) {
         servers[packet.getTeamField().ordinal()].add(packet.getServer());
+    }
+
+    public void handleServerShutdown(ServerShutdownPacket packet) {
+        for (Set<String> serverSet : servers) {
+            serverSet.remove(packet.getServer());
+        }
     }
 
 }
