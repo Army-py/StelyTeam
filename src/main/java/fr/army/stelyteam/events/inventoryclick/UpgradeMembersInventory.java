@@ -34,6 +34,9 @@ public class UpgradeMembersInventory {
                     Inventory inventory = InventoryGenerator.createConfirmInventory();
                     player.openInventory(inventory);
                     return;
+                }else if (itemName.equals(name) && level >= StelyTeamPlugin.config.getInt("inventories.upgradeTotalMembers."+str+".level")){
+                    player.sendMessage("Vous avez déjà débloqué cette amélioration");
+                    return;
                 }
             }
             player.sendMessage("Vous devez débloquer le niveau précédent pour pouvoir acheter cette amélioration");        
