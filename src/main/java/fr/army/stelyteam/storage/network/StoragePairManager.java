@@ -16,13 +16,13 @@ import java.util.Set;
 public class StoragePairManager {
 
     private final NetworkManager networkManager;
-    private final String[] storages;
+    private final String[] storageHashes;
     private final Set<String>[] servers;
 
     public StoragePairManager(NetworkManager networkManager, StorageDeserializer storageDeserializer) {
         this.networkManager = networkManager;
         final int size = TeamField.values().length;
-        storages = getStorages(getStorageByField(storageDeserializer.getStorageFieldsArray()));
+        storageHashes = getStorageHashes(getStorageByField(storageDeserializer.getStorageFieldsArray()));
         servers = getServerArray(size);
     }
 
@@ -37,17 +37,17 @@ public class StoragePairManager {
         return storageByFieldMap;
     }
 
-    private String[] getStorages(Map<TeamField, Storage> storageByField) {
+    private String[] getStorageHashes(Map<TeamField, Storage> storageByField) {
         final TeamField[] fields = TeamField.values();
-        final String[] storages = new String[fields.length];
+        final String[] storageHashes = new String[fields.length];
         for (TeamField field : fields) {
             final Storage storage = storageByField.get(field);
             if (storage == null) {
                 throw new RuntimeException("'" + field + "' does not specify a storage");
             }
-            storages[field.ordinal()] = storage.getHash();
+            storageHashes[field.ordinal()] = storage.getHash();
         }
-        return storages;
+        return storageHashes;
     }
 
     @SuppressWarnings("unchecked")
@@ -60,10 +60,17 @@ public class StoragePairManager {
         return servers;
     }
 
+    public void sendCheckStorage() {
+        final String server = networkManager.getServer();
+        for (TeamField field : TeamField.values()) {
+            networkManager.sendPacket("ALL", new CheckStoragePacket(server, field, storageHashes[field.ordinal()]));
+        }
+    }
+
     public void handleCheck(CheckStoragePacket packet) {
         final TeamField field = packet.getTeamField();
         final int fieldIndex = field.ordinal();
-        final String hostedHash = storages[fieldIndex];
+        final String hostedHash = storageHashes[fieldIndex];
         if (!hostedHash.equals(packet.getHash())) {
             return;
         }
