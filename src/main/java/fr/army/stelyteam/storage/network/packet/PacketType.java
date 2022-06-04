@@ -6,7 +6,8 @@ public enum PacketType {
 
     DELETE(DeletePacket::new),
     MODIFY(ModifyPacket::new),
-    PLAYER(PlayerPacket::new);
+    PLAYER(PlayerPacket::new),
+    DATABASE(DatabasePacket::new);
 
     private final Supplier<Packet> packetCreator;
 

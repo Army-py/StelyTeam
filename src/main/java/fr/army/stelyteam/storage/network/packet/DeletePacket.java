@@ -7,8 +7,6 @@ import java.util.UUID;
 
 public class DeletePacket implements Packet {
 
-    private final static byte BYTE_ARRAY_LENGTH = Long.BYTES * 2;
-
     private UUID uuid;
 
     public DeletePacket() {
