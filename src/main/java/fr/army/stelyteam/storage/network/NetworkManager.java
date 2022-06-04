@@ -21,11 +21,17 @@ public class NetworkManager implements PluginMessageListener {
 
     private final StelyTeamPlugin plugin;
     private final Object lock;
+    // TODO Init the server id with a plugin message
+    private String server;
     private boolean loaded;
 
     public NetworkManager(StelyTeamPlugin plugin) {
         this.plugin = plugin;
         lock = new Object();
+    }
+
+    public String getServer() {
+        return server;
     }
 
     public void load() {
@@ -73,7 +79,7 @@ public class NetworkManager implements PluginMessageListener {
         Bukkit.getServer().sendPluginMessage(plugin, "BungeeCord", arrayStream.toByteArray());
     }
 
-    private void sendPacket(String server, Packet packet) {
+    public void sendPacket(String server, Packet packet) {
         final ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
         byteStream.write(packet.getType().ordinal());
         try {

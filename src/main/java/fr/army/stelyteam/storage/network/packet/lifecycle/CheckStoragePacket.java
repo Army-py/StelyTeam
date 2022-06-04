@@ -12,15 +12,27 @@ public class CheckStoragePacket implements Packet {
 
     private String server;
     private TeamField teamField;
-    private String dataBase;
+    private String hash;
 
     public CheckStoragePacket() {
     }
 
-    public CheckStoragePacket(String server, TeamField teamField, String dataBase) {
+    public CheckStoragePacket(String server, TeamField teamField, String hash) {
         this.server = server;
         this.teamField = teamField;
-        this.dataBase = dataBase;
+        this.hash = hash;
+    }
+
+    public String getServer() {
+        return server;
+    }
+
+    public TeamField getTeamField() {
+        return teamField;
+    }
+
+    public String getHash() {
+        return hash;
     }
 
     @Override
@@ -32,16 +44,16 @@ public class CheckStoragePacket implements Packet {
     public void encode(DataOutputStream output) throws IOException {
         output.writeUTF(server);
         output.writeByte(teamField.ordinal());
-        output.writeUTF(dataBase);
+        output.writeUTF(hash);
     }
 
     @Override
     public void decode(DataInputStream input) throws IOException {
         final String server = input.readUTF();
         final TeamField teamField = TeamField.values()[input.readByte()];
-        final String dataBase = input.readUTF();
+        final String hash = input.readUTF();
         this.server = server;
         this.teamField = teamField;
-        this.dataBase = dataBase;
+        this.hash = hash;
     }
 }

@@ -21,6 +21,14 @@ public class ValidStoragePacket implements Packet {
         this.teamField = teamField;
     }
 
+    public String getServer() {
+        return server;
+    }
+
+    public TeamField getTeamField() {
+        return teamField;
+    }
+
     @Override
     public PacketType getType() {
         return PacketType.VALID_STORAGE;
