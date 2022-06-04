@@ -27,6 +27,9 @@ teamPrefixMaxLength: 12
 # Argent maximal d'une team
 teamMaxMoney: 10000000
 
+# Nombre de membres maximum dans une team
+teamMaxMembers: 10
+
 # Prix des différentes actions
 prices:
   createTeam: 100000
@@ -240,7 +243,11 @@ inventories:
       slot: 13
       rank: 5
       lore:
-        - "§aNom : §e"
+        - "§aNom : §e%NAME%"
+        - "§aPréfixe : §r%PREFIX%"
+        - "§aGérant : §r%OWNER%"
+        - "§aGrade : §r%RANK%"
+        - "§aMembres : §r%MEMBER_COUNT% / %MAX_MEMBERS%"
     seeTeamMembers:
       itemName: "§5§lMembres"
       itemType: TOTEM_OF_UNDYING

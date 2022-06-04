@@ -39,6 +39,23 @@ public class TeamMembersUtils {
     }
 
 
+    public static void closeTeamMembersInventory(String teamId, String authorName) {
+        ArrayList<String> membersName = StelyTeamPlugin.sqlManager.getMembers(teamId);
+        for (String memberName : membersName) {
+            if (memberName.equals(authorName)) continue;
+
+            HumanEntity player = Bukkit.getPlayer(memberName);
+            if (player != null) {
+                if (!StelyTeamPlugin.config.getConfigurationSection("inventoriesName").getValues(true).containsValue(player.getOpenInventory().getTitle())){
+                    continue;
+                }
+
+                player.closeInventory();
+            }
+        }
+    }
+
+
     public static void teamBroadcast(String teamId, String authorName, String message) {
         ArrayList<String> membersName = StelyTeamPlugin.sqlManager.getMembers(teamId);
         for (String memberName : membersName) {

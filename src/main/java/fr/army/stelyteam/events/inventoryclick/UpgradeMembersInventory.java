@@ -6,7 +6,6 @@ import org.bukkit.inventory.Inventory;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.utils.InventoryGenerator;
-import fr.army.stelyteam.utils.TeamMembersUtils;
 
 
 public class UpgradeMembersInventory {
@@ -34,12 +33,13 @@ public class UpgradeMembersInventory {
                     StelyTeamPlugin.playersTempActions.put(playerName, "upgradeMembers");
                     Inventory inventory = InventoryGenerator.createConfirmInventory();
                     player.openInventory(inventory);
-                    break;
-                }else{
-                    player.sendMessage("Vous devez débloquer le niveau précédent pour pouvoir acheter cette amélioration");
-                    break;
+                    return;
+                }else if (itemName.equals(name) && level >= StelyTeamPlugin.config.getInt("inventories.upgradeTotalMembers."+str+".level")){
+                    player.sendMessage("Vous avez déjà débloqué cette amélioration");
+                    return;
                 }
             }
+            player.sendMessage("Vous devez débloquer le niveau précédent pour pouvoir acheter cette amélioration");        
         }else{
             // Retour en arrière de l'inventaire
             Inventory inventory = InventoryGenerator.createManageInventory(playerName);

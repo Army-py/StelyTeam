@@ -95,6 +95,8 @@ public class ConfirmInventory {
                 StelyTeamPlugin.sqlManager.removeTeam(teamID, playerName);
                 player.closeInventory();
                 player.sendMessage("Tu as supprimé la team");
+                TeamMembersUtils.closeTeamMembersInventory(teamID, playerName);
+                TeamMembersUtils.teamBroadcast(teamID, playerName, "La team " + teamID + " a été supprimée");
             }else if (StelyTeamPlugin.containPlayerTempAction(playerName, "upgradeMembers")){
                 String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(playerName);
                 Integer level = StelyTeamPlugin.sqlManager.getTeamLevel(teamID);
@@ -111,6 +113,7 @@ public class ConfirmInventory {
                 StelyTeamPlugin.sqlManager.removeMember(playerName, teamId);
                 player.closeInventory();
                 player.sendMessage("Tu as quitté la team " + teamId);
+                TeamMembersUtils.refreshTeamMembersInventory(teamId, playerName);
             }
         }
 

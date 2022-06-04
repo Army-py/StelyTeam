@@ -28,6 +28,9 @@ public class ConvAddMember extends StringPrompt {
         }else if (StelyTeamPlugin.containTeamAction(answer, "addMember")) {
             con.getForWhom().sendRawMessage("Ce joueur a déjà une action en cours");
             return null;
+        }else if (hasReachedMaxMember(teamId)) {
+            con.getForWhom().sendRawMessage("La team est déjà au maximum de membres");
+            return null;
         }
         
         StelyTeamPlugin.addTeamTempAction(authorName, answer, teamId, "addMember");
@@ -42,6 +45,14 @@ public class ConvAddMember extends StringPrompt {
     @Override
     public String getPromptText(ConversationContext arg0) {
         return "Envoie le pseudo du joueur à ajouter";
+    }
+
+
+    private boolean hasReachedMaxMember(String teamId) {
+        Integer memberAmount = StelyTeamPlugin.sqlManager.getMembers(teamId).size();
+        Integer maxMember = StelyTeamPlugin.config.getInt("teamMaxMembers");
+        Integer teamMembersLelvel = StelyTeamPlugin.sqlManager.getTeamLevel(teamId);
+        return memberAmount >= maxMember + teamMembersLelvel;
     }
 
 }

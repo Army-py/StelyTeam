@@ -493,6 +493,46 @@ public class SQLManager {
     }
 
 
+    public String getTeamPrefix(String teamID){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT team_prefix FROM teams WHERE team_id = ?");
+                query.setString(1, teamID);
+                ResultSet result = query.executeQuery();
+                String teamPrefix = null;
+                if(result.next()){
+                    teamPrefix = result.getString("team_prefix");
+                }
+                query.close();
+                return teamPrefix;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+
+    public String getTeamOwner(String teamID){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT owner FROM teams WHERE team_id = ?");
+                query.setString(1, teamID);
+                ResultSet result = query.executeQuery();
+                String teamOwner = null;
+                if(result.next()){
+                    teamOwner = result.getString("owner");
+                }
+                query.close();
+                return teamOwner;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+
     public Integer getTeamLevel(String teamID){
         if(isConnected()){
             try {
