@@ -89,6 +89,14 @@ public class InventoryGenerator {
     public static Inventory createMemberInventory(String playername) {
         Integer slots = StelyTeamPlugin.config.getInt("inventoriesSlots.member");
         String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(playername);
+        String teamPrefix = StelyTeamPlugin.sqlManager.getTeamPrefix(teamID);
+        String teamOwner = StelyTeamPlugin.sqlManager.getTeamOwner(teamID);
+        Integer teamMembersLelvel = StelyTeamPlugin.sqlManager.getTeamLevel(teamID);
+        Integer teamMembers = StelyTeamPlugin.sqlManager.getMembers(teamID).size();
+        Integer maxMembers = StelyTeamPlugin.config.getInt("teamMaxMembers");
+        String memberRank = StelyTeamPlugin.getRankFromId(StelyTeamPlugin.sqlManager.getMemberRank(playername));
+        String memberRankName = StelyTeamPlugin.config.getString("ranks." + memberRank + ".name");
+        String rankColor = StelyTeamPlugin.config.getString("ranks." + memberRank + ".color");
         Inventory inventory = Bukkit.createInventory(null, slots, StelyTeamPlugin.config.getString("inventoriesName.member"));
         Integer teamMoney = StelyTeamPlugin.sqlManager.getTeamMoney(teamID);
 
@@ -103,6 +111,13 @@ public class InventoryGenerator {
             
             if (name.equals(StelyTeamPlugin.config.getString("inventories.member.seeTeamBank.itemName"))){
                 lore = replaceInLore(lore, "%teamMoney%", IntegerToString(teamMoney));
+            }else if (name.equals(StelyTeamPlugin.config.getString("inventories.member.teamInfos.itemName"))){
+                lore = replaceInLore(lore, "%NAME%", teamID);
+                lore = replaceInLore(lore, "%PREFIX%", teamPrefix.replace("&", "§"));
+                lore = replaceInLore(lore, "%OWNER%", teamOwner);
+                lore = replaceInLore(lore, "%RANK%", rankColor + memberRankName);
+                lore = replaceInLore(lore, "%MEMBER_COUNT%", IntegerToString(teamMembers));
+                lore = replaceInLore(lore, "%MAX_MEMBERS%", IntegerToString(maxMembers+teamMembersLelvel));
             }
 
             if (playerHasPermission(playername, teamID, str)){ 
