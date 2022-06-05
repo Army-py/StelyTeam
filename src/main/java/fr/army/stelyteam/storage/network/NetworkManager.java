@@ -3,6 +3,7 @@ package fr.army.stelyteam.storage.network;
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.storage.PlayerTeamTracker;
 import fr.army.stelyteam.storage.Storage;
+import fr.army.stelyteam.storage.StorageDeserializer;
 import fr.army.stelyteam.storage.network.packet.Packet;
 import fr.army.stelyteam.storage.network.packet.PacketType;
 import org.bukkit.Bukkit;
@@ -17,17 +18,17 @@ import java.util.UUID;
 
 public class NetworkManager implements PluginMessageListener {
 
-    // TODO Handle field by field pairing
-
     private final StelyTeamPlugin plugin;
     private final Object lock;
+    private final StoragePairManager storagePairManager;
     // TODO Init the server id with a plugin message
     private String server;
     private boolean loaded;
 
-    public NetworkManager(StelyTeamPlugin plugin) {
+    public NetworkManager(StelyTeamPlugin plugin, StorageDeserializer storageDeserializer) {
         this.plugin = plugin;
         lock = new Object();
+        storagePairManager = new StoragePairManager(this, storageDeserializer);
     }
 
     public String getServer() {

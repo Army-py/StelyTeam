@@ -8,10 +8,7 @@ import fr.army.stelyteam.storage.network.packet.lifecycle.CheckStoragePacket;
 import fr.army.stelyteam.storage.network.packet.lifecycle.ServerShutdownPacket;
 import fr.army.stelyteam.storage.network.packet.lifecycle.ValidStoragePacket;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class StoragePairManager {
 
@@ -58,6 +55,10 @@ public class StoragePairManager {
             servers[index] = new HashSet<>();
         }
         return servers;
+    }
+
+    public Set<String> getServers(TeamField teamField) {
+        return Collections.unmodifiableSet(servers[teamField.ordinal()]);
     }
 
     public void sendCheckStorage() {
