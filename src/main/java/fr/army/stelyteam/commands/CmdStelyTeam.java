@@ -1,7 +1,9 @@
 package fr.army.stelyteam.commands;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -61,11 +63,41 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
                     }
                 }else if (args[0].equals("visual")){
                     args[0] = "";
-                    System.out.println(args.length);
                     if (args.length == 1){
                         player.sendMessage("Utilisation : /stelyteam visual <&3 texte>");
                     }else{
                         player.sendMessage("Ton texte :" + new ColorsBuilder().replaceColor(String.join(" ", args)));
+                    }
+                }else if (args[0].equals("info")){
+                    args[0] = "";
+                    if (args.length == 1){
+                        player.sendMessage("Utilisation : /stelyteam info <nom de team>");
+                    }else{
+                        String teamID = String.join("", args);
+                        if (StelyTeamPlugin.sqlManager.teamIdExist(teamID)){
+                            String teamPrefix = StelyTeamPlugin.sqlManager.getTeamPrefix(teamID);
+                            String teamOwner = StelyTeamPlugin.sqlManager.getTeamOwner(teamID);
+                            String creationDate = StelyTeamPlugin.sqlManager.getCreationDate(teamID);
+                            Integer teamMembersLelvel = StelyTeamPlugin.sqlManager.getTeamLevel(teamID);
+                            Integer teamMembers = StelyTeamPlugin.sqlManager.getMembers(teamID).size();
+                            Integer maxMembers = StelyTeamPlugin.config.getInt("teamMaxMembers");
+                            String hasUnlockBank = (StelyTeamPlugin.sqlManager.hasUnlockedTeamBank(teamID) ? "§aOui" : "§cNon");
+                            List<String> members = StelyTeamPlugin.sqlManager.getMembers(teamID);
+                            List<String> lore = StelyTeamPlugin.messages.getStringList("commands.stelyteam_info");
+
+                            lore = replaceInLore(lore, "%NAME%", teamID);
+                            lore = replaceInLore(lore, "%PREFIX%", new ColorsBuilder().replaceColor(teamPrefix));
+                            lore = replaceInLore(lore, "%OWNER%", teamOwner);
+                            lore = replaceInLore(lore, "%DATE%", creationDate);
+                            lore = replaceInLore(lore, "%UNLOCK_BANK%", hasUnlockBank);
+                            lore = replaceInLore(lore, "%MEMBER_COUNT%", IntegerToString(teamMembers));
+                            lore = replaceInLore(lore, "%MAX_MEMBERS%", IntegerToString(maxMembers+teamMembersLelvel));
+                            lore = replaceInLore(lore, "%MEMBERS%", String.join(", ", members));
+
+                            player.sendMessage(String.join("\n", lore));
+                        }else{
+                            player.sendMessage("Cette team n'existe pas");
+                        }
                     }
                 }
             }
@@ -80,6 +112,7 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
         List<String> subCommands = new ArrayList<>();
         subCommands.add("home");
         subCommands.add("visual");
+        subCommands.add("info");
 
         if (args.length == 1){
             List<String> result = new ArrayList<>();
@@ -92,5 +125,19 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
         }
 
         return null;
+    }
+
+
+    private static List<String> replaceInLore(List<String> lore, String value, String replace){
+        List<String> newLore = new ArrayList<>();
+        for(String str : lore){
+            newLore.add(str.replace(value, replace));
+        }
+        return newLore;
+    }
+
+    
+    private static String IntegerToString(Integer value){
+        return NumberFormat.getNumberInstance(Locale.US).format(value);
     }
 }

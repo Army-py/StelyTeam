@@ -23,6 +23,7 @@ import fr.army.stelyteam.utils.SQLiteManager;
 public class StelyTeamPlugin extends JavaPlugin {
     public static StelyTeamPlugin instance;
     public static YamlConfiguration config;
+    public static YamlConfiguration messages;
     public static SQLManager sqlManager;
     public static SQLiteManager sqliteManager;
     public static Economy economy = null;
@@ -43,6 +44,7 @@ public class StelyTeamPlugin extends JavaPlugin {
         this.saveDefaultConfig();
 
         config = initFile(this.getDataFolder(), "config.yml");
+        messages = initFile(this.getDataFolder(), "messages.yml");
 
         StelyTeamPlugin.sqlManager = new SQLManager();
         StelyTeamPlugin.sqliteManager = new SQLiteManager();

@@ -15,15 +15,11 @@ public class ConversationAbandoned implements ConversationAbandonedListener {
         ConversationCanceller canceller = abandonedEvent.getCanceller();
         if (canceller == null) return;
 
-        System.out.println(canceller.getClass().getName());
-
         ConversationContext context = abandonedEvent.getContext();
 
         if (canceller.getClass().equals(InactivityConversationCanceller.class)) {
-            System.out.println("InactivityConversationCanceller");
             context.getForWhom().sendRawMessage("Temps de réponse dépassé");
         }else if (canceller.getClass().equals(ConversationSetCanceller.class)){
-            System.out.println("ConversationSetCanceller");
             context.getForWhom().sendRawMessage("Action annulée");
         }
     }

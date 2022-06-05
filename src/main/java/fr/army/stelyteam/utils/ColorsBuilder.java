@@ -32,10 +32,8 @@ public class ColorsBuilder {
         Pattern hexPattern = Pattern.compile("&#[A-Fa-f0-9]{6}");
         final Matcher rgbMatcher = hexPattern.matcher(legacyBuilder.toString());
         while (rgbMatcher.find()) {
-            System.out.println(rgbMatcher.group());
             final String hexCode = rgbMatcher.group().replace("&#", "");
             rgbMatcher.appendReplacement(rgbBuilder, parseHexColor(hexCode));
-            System.out.println("tt");
         }
         rgbMatcher.appendTail(rgbBuilder);
         return rgbBuilder.toString();

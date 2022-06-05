@@ -74,14 +74,14 @@ public class SQLManager {
     public void createTables(){
         if (isConnected()){
             try {
-                PreparedStatement queryHomes = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'players' ('playername' TEXT, 'rank' INTEGER, 'team_id' TEXT, PRIMARY KEY('playername'), FOREIGN KEY('team_id') REFERENCES 'teams'('team_id'));");
-                PreparedStatement queryPlayers = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'teams' ('team_id' TEXT, 'team_prefix' TEXT, 'owner' TEXT, 'money' INTEGER, 'creation_date' TEXT, 'members_level' INTEGER, 'team_bank' INTEGER, PRIMARY KEY('team_id'), FOREIGN KEY('owner') REFERENCES 'players'('playername'));");
+                PreparedStatement queryPlayers = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'players' ('playername' TEXT, 'rank' INTEGER, 'team_id' TEXT, 'join_date' TEXT, PRIMARY KEY('playername'), FOREIGN KEY('team_id') REFERENCES 'teams'('team_id'));");
+                PreparedStatement queryTeams = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'teams' ('team_id' TEXT, 'team_prefix' TEXT, 'owner' TEXT, 'money' INTEGER, 'creation_date' TEXT, 'members_level' INTEGER, 'team_bank' INTEGER, PRIMARY KEY('team_id'), FOREIGN KEY('owner') REFERENCES 'players'('playername'));");
                 PreparedStatement queryPermissions = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'permissions' ( 'id' INTEGER, 'team_id' INTEGER, 'permission' TEXT, 'rank' INTEGER, FOREIGN KEY('team_id') REFERENCES 'teams'('team_id'), PRIMARY KEY('id'));");
-                queryHomes.executeUpdate();
                 queryPlayers.executeUpdate();
+                queryTeams.executeUpdate();
                 queryPermissions.executeUpdate();
-                queryHomes.close();
                 queryPlayers.close();
+                queryTeams.close();
                 queryPermissions.close();
             } catch (Exception e){
                 e.printStackTrace();
@@ -214,7 +214,7 @@ public class SQLManager {
     public void insertTeam(String teamID, String teamPrefix, String owner){
         if(isConnected()){
             try {
-                PreparedStatement queryTeam = connection.prepareStatement("INSERT INTO teams (team_id, team_prefix, owner, money, creation_date, members_level, team_bank) VALUES (?, ?, ?, ?, ?, ?, ?)");
+                PreparedStatement queryTeam = connection.prepareStatement("INSERT INTO teams VALUES (?, ?, ?, ?, ?, ?, ?)");
                 queryTeam.setString(1, teamID);
                 queryTeam.setString(2, teamPrefix);
                 queryTeam.setString(3, owner);
@@ -225,7 +225,7 @@ public class SQLManager {
                 queryTeam.executeUpdate();
                 queryTeam.close();
 
-                PreparedStatement queryMember = connection.prepareStatement("INSERT INTO players (playername, rank, team_id) VALUES (?, ?, ?)");
+                PreparedStatement queryMember = connection.prepareStatement("INSERT INTO players VALUES (?, ?, ?)");
                 queryMember.setString(1, owner);
                 queryMember.setInt(2, 0);
                 queryMember.setString(3, teamID);
@@ -241,10 +241,11 @@ public class SQLManager {
     public void insertMember(String playername, String teamID){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("INSERT INTO players (playername, rank, team_id) VALUES (?, ?, ?)");
+                PreparedStatement query = connection.prepareStatement("INSERT INTO players VALUES (?, ?, ?, ?)");
                 query.setString(1, playername);
                 query.setInt(2, 5);
                 query.setString(3, teamID);
+                query.setString(4, new SimpleDateFormat("yyyy/MM/dd").format(Calendar.getInstance().getTime()));
                 query.executeUpdate();
                 query.close();
             } catch (SQLException e) {
@@ -627,6 +628,26 @@ public class SQLManager {
                 }
                 query.close();
                 return rank;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+
+    public String getCreationDate(String teamID){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT creation_date FROM teams WHERE team_id = ?");
+                query.setString(1, teamID);
+                ResultSet result = query.executeQuery();
+                String creationDate = null;
+                if(result.next()){
+                    creationDate = result.getString("creation_date");
+                }
+                query.close();
+                return creationDate;
             } catch (SQLException e) {
                 e.printStackTrace();
             }

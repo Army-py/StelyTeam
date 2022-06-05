@@ -13,7 +13,6 @@ public class PlayerQuit implements Listener{
         Player player = event.getPlayer();
         String playerName = player.getName();
 
-        System.out.println("PlayerQuit");
         if (StelyTeamPlugin.getTeamActions(playerName) != null){
             StelyTeamPlugin.removeTeamTempAction(playerName);
         }

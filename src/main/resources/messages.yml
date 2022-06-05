@@ -1,0 +1,10 @@
+commands:
+  stelyteam_info:
+    - "§5Informations de la team :" 
+    - "§aNom : §f%NAME%"
+    - "§aPréfixe : §r%PREFIX%"
+    - "§aGérant : §r%OWNER%"
+    - "§aCréation : §r%DATE%"
+    - "§aCompte : §r%UNLOCK_BANK%"
+    - "§aPlaces : §r%MEMBER_COUNT% / %MAX_MEMBERS%"
+    - "§aMembres : §r%MEMBERS%"
