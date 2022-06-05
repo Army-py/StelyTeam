@@ -1,7 +1,7 @@
 package fr.army.stelyteam.conversations;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.utils.ColorsCreator;
+import fr.army.stelyteam.utils.ColorsBuilder;
 
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
@@ -25,7 +25,7 @@ public class ConvEditTeamPrefix extends StringPrompt {
         }
 
 
-        con.getForWhom().sendRawMessage("Le préfixe a été changé par " + new ColorsCreator().colourise(answer));
+        con.getForWhom().sendRawMessage("Le préfixe a été changé par " + new ColorsBuilder().replaceColor(answer));
         StelyTeamPlugin.sqlManager.updateTeamPrefix(teamID, answer, authorName);
         return null;
     }

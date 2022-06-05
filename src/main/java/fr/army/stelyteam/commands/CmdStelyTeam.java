@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.utils.ColorsCreator;
+import fr.army.stelyteam.utils.ColorsBuilder;
 import fr.army.stelyteam.utils.InventoryGenerator;
 
 public class CmdStelyTeam implements CommandExecutor, TabCompleter {
@@ -65,7 +65,7 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
                     if (args.length == 1){
                         player.sendMessage("Utilisation : /stelyteam visual <&3 texte>");
                     }else{
-                        player.sendMessage("Ton texte :" + new ColorsCreator().colourise(String.join(" ", args)));
+                        player.sendMessage("Ton texte :" + new ColorsBuilder().replaceColor(String.join(" ", args)));
                     }
                 }
             }

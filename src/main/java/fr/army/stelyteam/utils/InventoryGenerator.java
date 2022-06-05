@@ -113,7 +113,7 @@ public class InventoryGenerator {
                 lore = replaceInLore(lore, "%teamMoney%", IntegerToString(teamMoney));
             }else if (name.equals(StelyTeamPlugin.config.getString("inventories.member.teamInfos.itemName"))){
                 lore = replaceInLore(lore, "%NAME%", teamID);
-                lore = replaceInLore(lore, "%PREFIX%", teamPrefix.replace("&", "§"));
+                lore = replaceInLore(lore, "%PREFIX%", new ColorsBuilder().replaceColor(teamPrefix));
                 lore = replaceInLore(lore, "%OWNER%", teamOwner);
                 lore = replaceInLore(lore, "%RANK%", rankColor + memberRankName);
                 lore = replaceInLore(lore, "%MEMBER_COUNT%", IntegerToString(teamMembers));
