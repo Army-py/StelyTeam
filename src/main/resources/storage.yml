@@ -1,0 +1,35 @@
+# Storage section
+# - You can have as much storage as you want
+# - Unused storage will be ignored
+# - Every storage have a unique key that it used bellow to map every field to its storage
+# - Every storage have a type (MySQL, SQLite or Yaml) that define the storage type
+storages:
+  mysql:
+    type: MySQL
+  sqlite:
+    type: SQLite
+  yaml:
+    type: Yaml
+
+# The team field associations
+# - Every team field (that represent a property) is stored in a specific storage, specified by the storage key above
+# - You can specify the storage you want for every field
+# - You need to take care about servers synchronisation
+#     (e.g. if the storage is the same on two servers for BANK_ACCOUNT property, then the MONEY property need to be the same too)
+fields:
+  COMMAND_ID: mysql
+  PREFIX: mysql
+  SUFFIX: mysql
+  CREATOR: mysql
+  CREATION_DATE: mysql
+  LEVEL: mysql
+  HOME: mysql
+  BANK_ACCOUNT: mysql
+  MONEY: mysql
+  PLAYERS: mysql
+
+# The player team associations
+# - Same rules as 'fields' section
+# - You also need to take care about servers synchronisation
+#     (e.g. if the storage is the same on two servers for field.PLAYERS property, then this property need to be the same too)
+players: mysql

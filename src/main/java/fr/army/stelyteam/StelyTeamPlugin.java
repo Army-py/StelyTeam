@@ -8,6 +8,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
+import fr.army.stelyteam.api.StelyTeamAPI;
+import fr.army.stelyteam.storage.StorageDeserializer;
+import fr.army.stelyteam.storage.StorageManager;
+import fr.army.stelyteam.storage.TeamManager;
+
+import fr.army.stelyteam.storage.network.NetworkManager;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -37,6 +43,10 @@ public class StelyTeamPlugin extends JavaPlugin {
     // {owner, name, prefix}
     public static ArrayList<String[]> createTeamTemp = new ArrayList<String[]>();
 
+    private StorageManager storageManager;
+    private NetworkManager networkManager;
+    private TeamManager teamManager;
+    private StelyTeamAPI stelyTeamApi;
 
     @Override
     public void onEnable() {
@@ -59,12 +69,24 @@ public class StelyTeamPlugin extends JavaPlugin {
         
         sqlManager.createTables();
         sqliteManager.createTables();
-        
+
         getCommand("stelyteam").setExecutor(new CmdStelyTeam());
         getCommand("stelyteam").setTabCompleter(new CmdStelyTeam());
         getServer().getPluginManager().registerEvents(new InventoryClickManager(), this);
         getServer().getPluginManager().registerEvents(new PlayerQuit(), this);
         getServer().getPluginManager().registerEvents(new InventoryClose(), this);
+
+        final StorageDeserializer storageDeserializer = new StorageDeserializer(
+                initFile(getDataFolder(), "storage.yml"),
+                getLogger()
+        );
+        storageDeserializer.load();
+        networkManager = new NetworkManager(this);
+        networkManager.load();
+        storageManager = new StorageManager(storageDeserializer);
+        storageManager.start();
+        teamManager = new TeamManager(networkManager, storageManager);
+        stelyTeamApi = new StelyTeamAPI(teamManager);
 
         getLogger().info("StelyTeam ON");
     }
@@ -75,6 +97,10 @@ public class StelyTeamPlugin extends JavaPlugin {
         // sqlite.close();
         sqlManager.disconnect();
         sqliteManager.disconnect();
+
+        storageManager.stop();
+        networkManager.unload();
+
         getLogger().info("StelyTeam OFF");
     }
 
@@ -90,6 +116,9 @@ public class StelyTeamPlugin extends JavaPlugin {
         return YamlConfiguration.loadConfiguration(file);
     }
 
+    public StelyTeamAPI getAPI() {
+        return stelyTeamApi;
+    }
 
     public static String[] getTeamActions(String playerName) {
         for (String[] strings : teamsTempActions) {
@@ -185,7 +214,6 @@ public class StelyTeamPlugin extends JavaPlugin {
         }
     }
 
-
     public static String getRankFromId(Integer value) {
         for (String key : StelyTeamPlugin.config.getConfigurationSection("ranks").getKeys(false)) {
             if (StelyTeamPlugin.config.getInt("ranks." + key + ".id") == value) {
@@ -205,4 +233,5 @@ public class StelyTeamPlugin extends JavaPlugin {
         }
         return lastRank;
     }
+
 }
