@@ -81,7 +81,7 @@ public class StelyTeamPlugin extends JavaPlugin {
                 getLogger()
         );
         storageDeserializer.load();
-        networkManager = new NetworkManager(this);
+        networkManager = new NetworkManager(this, storageDeserializer);
         networkManager.load();
         storageManager = new StorageManager(storageDeserializer);
         storageManager.start();
@@ -118,6 +118,14 @@ public class StelyTeamPlugin extends JavaPlugin {
 
     public StelyTeamAPI getAPI() {
         return stelyTeamApi;
+    }
+
+    public TeamManager getTeamManager() {
+        return teamManager;
+    }
+
+    public NetworkManager getNetworkManager() {
+        return networkManager;
     }
 
     public static String[] getTeamActions(String playerName) {

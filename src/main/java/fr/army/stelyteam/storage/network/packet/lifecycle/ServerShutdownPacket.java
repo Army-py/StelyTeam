@@ -1,5 +1,6 @@
 package fr.army.stelyteam.storage.network.packet.lifecycle;
 
+import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.storage.network.packet.Packet;
 import fr.army.stelyteam.storage.network.packet.PacketType;
 
@@ -28,5 +29,10 @@ public class ServerShutdownPacket implements Packet {
     @Override
     public void decode(DataInputStream input) throws IOException {
         this.server = input.readUTF();
+    }
+
+    @Override
+    public void handle(StelyTeamPlugin plugin) {
+        plugin.getNetworkManager().getStoragePairManager().handleServerShutdown(this);
     }
 }

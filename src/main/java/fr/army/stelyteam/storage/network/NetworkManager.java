@@ -35,6 +35,10 @@ public class NetworkManager implements PluginMessageListener {
         return server;
     }
 
+    public StoragePairManager getStoragePairManager() {
+        return storagePairManager;
+    }
+
     public void load() {
         synchronized (lock) {
             if (loaded) {
@@ -133,7 +137,7 @@ public class NetworkManager implements PluginMessageListener {
             throw new RuntimeException(e);
         }
 
-        // TODO Handle packet
+        packet.handle(plugin);
     }
 
 

@@ -1,5 +1,6 @@
 package fr.army.stelyteam.storage.network.packet.lifecycle;
 
+import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.storage.TeamField;
 import fr.army.stelyteam.storage.network.packet.Packet;
 import fr.army.stelyteam.storage.network.packet.PacketType;
@@ -46,6 +47,11 @@ public class ValidStoragePacket implements Packet {
         final TeamField teamField = TeamField.values()[input.readByte()];
         this.server = server;
         this.teamField = teamField;
+    }
+
+    @Override
+    public void handle(StelyTeamPlugin plugin) {
+        plugin.getNetworkManager().getStoragePairManager().handleValid(this);
     }
 
 }

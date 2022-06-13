@@ -1,5 +1,6 @@
 package fr.army.stelyteam.storage.network.packet.work;
 
+import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.storage.network.packet.Packet;
 import fr.army.stelyteam.storage.network.packet.PacketType;
 
@@ -45,6 +46,12 @@ public class PlayerPacket implements Packet {
         this.playerId = playerId;
         this.teamId = teamId;
         this.rank = rank;
+    }
+
+    @Override
+    public void handle(StelyTeamPlugin plugin) {
+        // TODO Modify the player team association from the cache
+        // plugin.getTeamManager()
     }
 
 }

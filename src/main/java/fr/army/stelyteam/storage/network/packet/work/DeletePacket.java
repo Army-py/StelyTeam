@@ -1,5 +1,6 @@
 package fr.army.stelyteam.storage.network.packet.work;
 
+import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.storage.network.packet.Packet;
 import fr.army.stelyteam.storage.network.packet.PacketType;
 
@@ -34,6 +35,12 @@ public class DeletePacket implements Packet {
     @Override
     public void decode(DataInputStream input) throws IOException {
         uuid = new UUID(input.readLong(), input.readLong());
+    }
+
+    @Override
+    public void handle(StelyTeamPlugin plugin) {
+        // TODO Delete the team from the cache
+        // plugin.getTeamManager()
     }
 
 }
