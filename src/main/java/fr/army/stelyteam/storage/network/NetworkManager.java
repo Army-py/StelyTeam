@@ -21,18 +21,18 @@ public class NetworkManager implements PluginMessageListener {
     private final StelyTeamPlugin plugin;
     private final Object lock;
     private final StoragePairManager storagePairManager;
-    // TODO Init the server id with a plugin message
-    private String server;
+    private final ServerNameManager serverNameManager;
     private boolean loaded;
 
     public NetworkManager(StelyTeamPlugin plugin, StorageDeserializer storageDeserializer) {
         this.plugin = plugin;
         lock = new Object();
         storagePairManager = new StoragePairManager(this, storageDeserializer);
+        serverNameManager = new ServerNameManager(this);
     }
 
-    public String getServer() {
-        return server;
+    public ServerNameManager getServerNameManager() {
+        return serverNameManager;
     }
 
     public StoragePairManager getStoragePairManager() {
@@ -47,6 +47,8 @@ public class NetworkManager implements PluginMessageListener {
             final Messenger messenger = Bukkit.getMessenger();
             messenger.registerIncomingPluginChannel(plugin, "BungeeCord", this);
             messenger.registerOutgoingPluginChannel(plugin, "BungeeCord");
+
+            serverNameManager.load(plugin);
             loaded = true;
         }
     }
@@ -59,6 +61,8 @@ public class NetworkManager implements PluginMessageListener {
             final Messenger messenger = Bukkit.getMessenger();
             messenger.unregisterIncomingPluginChannel(plugin, "BungeeCord", this);
             messenger.unregisterOutgoingPluginChannel(plugin, "BungeeCord");
+
+            serverNameManager.unload();
             loaded = false;
         }
     }

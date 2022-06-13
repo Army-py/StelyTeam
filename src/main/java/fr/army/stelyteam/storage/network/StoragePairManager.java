@@ -62,7 +62,7 @@ public class StoragePairManager {
     }
 
     public void sendCheckStorage() {
-        final String server = networkManager.getServer();
+        final String server = networkManager.getServerNameManager().getServerName();
         for (TeamField field : TeamField.values()) {
             networkManager.sendPacket("ALL", new CheckStoragePacket(server, field, storageHashes[field.ordinal()]));
         }
@@ -77,7 +77,8 @@ public class StoragePairManager {
         }
         final String senderServer = packet.getServer();
         servers[fieldIndex].add(senderServer);
-        final ValidStoragePacket validPacket = new ValidStoragePacket(networkManager.getServer(), field);
+        final String serverName = networkManager.getServerNameManager().getServerName();
+        final ValidStoragePacket validPacket = new ValidStoragePacket(serverName, field);
         networkManager.sendPacket(senderServer, validPacket);
     }
 
