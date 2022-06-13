@@ -1,5 +1,8 @@
 package fr.army.stelyteam.storage;
 
+import fr.army.stelyteam.storage.network.packet.work.DeletePacket;
+import fr.army.stelyteam.storage.network.packet.work.ModifyPacket;
+import fr.army.stelyteam.storage.network.packet.work.PlayerPacket;
 import fr.army.stelyteam.team.Team;
 import org.bukkit.entity.Player;
 
@@ -59,6 +62,33 @@ public class TeamCache {
             teamById.remove(teamId);
         }
         return true;
+    }
+
+    /**
+     * Modify a property in a team from the cache
+     *
+     * @param packet The {@link ModifyPacket} to handle
+     */
+    public void handleModify(ModifyPacket packet) {
+
+    }
+
+    /**
+     * Remove a team from the cache
+     *
+     * @param packet The {@link DeletePacket} to handle
+     */
+    public void handleDelete(DeletePacket packet) {
+
+    }
+
+    /**
+     * Change a player association in the cache
+     *
+     * @param packet The {@link PlayerPacket} to handle
+     */
+    public void handlePlayers(PlayerPacket packet) {
+
     }
 
 }

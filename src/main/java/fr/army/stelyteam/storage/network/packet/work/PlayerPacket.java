@@ -50,8 +50,7 @@ public class PlayerPacket implements Packet {
 
     @Override
     public void handle(StelyTeamPlugin plugin) {
-        // TODO Modify the player team association from the cache
-        // plugin.getTeamManager()
+        plugin.getTeamManager().getTeamCache().handlePlayers(this);
     }
 
 }

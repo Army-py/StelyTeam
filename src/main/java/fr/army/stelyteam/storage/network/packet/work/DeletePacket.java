@@ -39,8 +39,7 @@ public class DeletePacket implements Packet {
 
     @Override
     public void handle(StelyTeamPlugin plugin) {
-        // TODO Delete the team from the cache
-        // plugin.getTeamManager()
+        plugin.getTeamManager().getTeamCache().handleDelete(this);
     }
 
 }

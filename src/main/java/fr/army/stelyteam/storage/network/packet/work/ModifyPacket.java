@@ -51,8 +51,7 @@ public class ModifyPacket implements Packet {
 
     @Override
     public void handle(StelyTeamPlugin plugin) {
-        // TODO Modify the team property from the cache
-        // plugin.getTeamManager()
+        plugin.getTeamManager().getTeamCache().handleModify(this);
     }
 
 }
