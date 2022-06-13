@@ -1,7 +1,6 @@
 package fr.army.stelyteam.storage.mapper;
 
 import fr.army.stelyteam.team.Team;
-import fr.army.stelyteam.team.TeamBuilder;
 
 import java.util.*;
 
@@ -28,7 +27,7 @@ public class PlayerMapper implements FieldMapper {
     }
 
     @Override
-    public void inflate(Object value, TeamBuilder builder) {
+    public void inflate(Object value, Team team) {
         final RankedUUIDs rankedUUIDs = (RankedUUIDs) value;
         final UUID[][] storedPlayers = rankedUUIDs.uuids();
         if (storedPlayers.length == 0) {
@@ -44,7 +43,7 @@ public class PlayerMapper implements FieldMapper {
             }
         }
 
-        builder.setPlayers(players);
+        team.getPlayers().getUnsafe().setPlayers(players);
     }
 
     public record RankedUUIDs(int[] ranks, UUID[][] uuids) {

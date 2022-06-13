@@ -12,15 +12,25 @@ import java.util.stream.Collectors;
 public class PlayerList implements IPlayerList {
 
     private final Team team;
+    private final Lock lock;
+    private final Unsafe unsafe;
     private final Map<UUID, Integer> uuids;
     private final PlayerTeamTracker playerTeamTracker;
-    private final Lock lock;
 
-    PlayerList(Team team, Map<UUID, Integer> ids) {
+    public PlayerList(Team team) {
+        this(team, null);
+    }
+
+    public PlayerList(Team team, Map<UUID, Integer> ids) {
         this.team = team;
-        this.uuids = ids == null ? new HashMap<>() : new HashMap<>(ids);
         this.lock = new ReentrantLock();
+        this.unsafe = new Unsafe();
+        this.uuids = ids == null ? new HashMap<>() : new HashMap<>(ids);
         this.playerTeamTracker = new PlayerTeamTracker(lock);
+    }
+
+    public Unsafe getUnsafe() {
+        return unsafe;
     }
 
     public Map<UUID, Integer> getUuidRanks() {
@@ -104,6 +114,22 @@ public class PlayerList implements IPlayerList {
 
     public PlayerTeamTracker getPlayerTeamTracker() {
         return playerTeamTracker;
+    }
+
+    public class Unsafe {
+
+        public void setPlayers(Map<UUID, Integer> players) {
+            if (players == null || players.isEmpty()) {
+                return;
+            }
+            lock.lock();
+            try {
+                PlayerList.this.uuids.putAll(players);
+            } finally {
+                lock.unlock();
+            }
+        }
+
     }
 
 }

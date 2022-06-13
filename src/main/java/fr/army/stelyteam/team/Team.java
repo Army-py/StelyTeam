@@ -10,18 +10,28 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class Team implements ITeam {
 
+    private final Unsafe unsafe;
+    private final ReentrantLock lock;
     private final UUID uuid;
-    private final UUID creator;
-    private final Date creationDate;
     private final TeamPerks perks;
     private final PlayerList players;
-    private final ReentrantLock lock;
+    private UUID creator;
+    private Date creationDate;
     private String commandId;
     private String prefix;
     private String suffix;
     private int dirty;
 
-    Team(
+    public Team(UUID uuid) {
+        Objects.requireNonNull(uuid);
+        this.uuid = uuid;
+        unsafe = new Unsafe();
+        lock = new ReentrantLock(true);
+        perks = new TeamPerks(this, lock);
+        players = new PlayerList(this);
+    }
+
+    public Team(
             UUID uuid,
             String commandId,
             String prefix,
@@ -35,13 +45,14 @@ public class Team implements ITeam {
             Map<UUID, Integer> players
     ) {
         Objects.requireNonNull(uuid);
+        this.unsafe = new Unsafe();
+        this.lock = new ReentrantLock(true);
         this.uuid = uuid;
         this.commandId = commandId;
         this.prefix = prefix;
         this.suffix = suffix;
         this.creator = creator;
         this.creationDate = creationDate == null ? null : (Date) creationDate.clone();
-        this.lock = new ReentrantLock(true);
         this.perks = new TeamPerks(
                 this,
                 lock,
@@ -51,7 +62,10 @@ public class Team implements ITeam {
                 home
         );
         this.players = new PlayerList(this, players);
+    }
 
+    public Unsafe getUnsafe() {
+        return unsafe;
     }
 
     @Override
@@ -67,11 +81,9 @@ public class Team implements ITeam {
     public void setCommandId(String commandId) {
         lock.lock();
         try {
-            if (Objects.equals(this.commandId, commandId)) {
-                return;
+            if (unsafe.setCommandId(commandId)) {
+                setDirty(TeamField.COMMAND_ID);
             }
-            this.commandId = commandId;
-            setDirty(TeamField.COMMAND_ID);
         } finally {
             lock.unlock();
         }
@@ -85,11 +97,9 @@ public class Team implements ITeam {
     public void setPrefix(String prefix) {
         lock.lock();
         try {
-            if (Objects.equals(this.prefix, prefix)) {
-                return;
+            if (unsafe.setPrefix(prefix)) {
+                setDirty(TeamField.PREFIX);
             }
-            this.prefix = prefix;
-            setDirty(TeamField.PREFIX);
         } finally {
             lock.unlock();
         }
@@ -103,11 +113,9 @@ public class Team implements ITeam {
     public void setSuffix(String suffix) {
         lock.lock();
         try {
-            if (Objects.equals(this.suffix, suffix)) {
-                return;
+            if (unsafe.setSuffix(suffix)) {
+                setDirty(TeamField.SUFFIX);
             }
-            this.suffix = suffix;
-            setDirty(TeamField.SUFFIX);
         } finally {
             lock.unlock();
         }
@@ -172,6 +180,57 @@ public class Team implements ITeam {
         } finally {
             lock.unlock();
         }
+    }
+
+    public class Unsafe {
+
+        public boolean setCommandId(String commandId) {
+            lock.lock();
+            try {
+                if (Objects.equals(Team.this.commandId, commandId)) {
+                    return false;
+                }
+                Team.this.commandId = commandId;
+                return true;
+            } finally {
+                lock.unlock();
+            }
+        }
+
+        public boolean setPrefix(String prefix) {
+            lock.lock();
+            try {
+                if (Objects.equals(Team.this.prefix, prefix)) {
+                    return false;
+                }
+                Team.this.prefix = prefix;
+                return true;
+            } finally {
+                lock.unlock();
+            }
+        }
+
+        public boolean setSuffix(String suffix) {
+            lock.lock();
+            try {
+                if (Objects.equals(Team.this.suffix, suffix)) {
+                    return false;
+                }
+                Team.this.suffix = suffix;
+                return true;
+            } finally {
+                lock.unlock();
+            }
+        }
+
+        public void setCreator(UUID creator) {
+            Team.this.creator = creator;
+        }
+
+        public void setCreationDate(Date creationDate) {
+            Team.this.creationDate = creationDate;
+        }
+
     }
 
 }

@@ -11,15 +11,15 @@ import java.util.UUID;
 
 public enum TeamField {
 
-    COMMAND_ID(Team::getCommandId, (o, b) -> b.setCommandId((String) o)),
-    PREFIX(Team::getPrefix, (o, b) -> b.setPrefix((String) o)),
-    SUFFIX(Team::getSuffix, (o, b) -> b.setSuffix((String) o)),
-    CREATOR(Team::getCreator, (o, b) -> b.setCreator((UUID) o)),
-    CREATION_DATE(Team::getCreationDate, (o, b) -> b.setCreationDate((Date) o)),
-    LEVEL(t -> t.getPerks().getLevel(), (o, b) -> b.setLevel((int) o)),
-    HOME(t -> t.getPerks().getHome(), (o, b) -> b.setHome((LazyLocation) o)),
-    BANK_ACCOUNT(t -> t.getPerks().getBankAccount().isEnable(), (o, b) -> b.setBankAccount((boolean) o)),
-    MONEY(t -> t.getPerks().getBankAccount().getMoney(), (o, b) -> b.setMoney((double) o)),
+    COMMAND_ID(Team::getCommandId, (o, t) -> t.getUnsafe().setCommandId((String) o)),
+    PREFIX(Team::getPrefix, (o, t) -> t.getUnsafe().setPrefix((String) o)),
+    SUFFIX(Team::getSuffix, (o, t) -> t.getUnsafe().setSuffix((String) o)),
+    CREATOR(Team::getCreator, (o, t) -> t.getUnsafe().setCreator((UUID) o)),
+    CREATION_DATE(Team::getCreationDate, (o, t) -> t.getUnsafe().setCreationDate((Date) o)),
+    LEVEL(t -> t.getPerks().getLevel(), (o, t) -> t.getPerks().getUnsafe().setLevel((int) o)),
+    HOME(t -> t.getPerks().getHome(), (o, t) -> t.getPerks().getUnsafe().setHome((LazyLocation) o)),
+    BANK_ACCOUNT(t -> t.getPerks().getBankAccount().isEnable(), (o, t) -> t.getPerks().getBankAccount().getUnsafe().setEnable((boolean) o)),
+    MONEY(t -> t.getPerks().getBankAccount().getMoney(), (o, t) -> t.getPerks().getBankAccount().getUnsafe().setMoney((double) o)),
     PLAYERS(new PlayerMapper(), new PlayerMapper());
 
     private final FieldExtractor extractor;

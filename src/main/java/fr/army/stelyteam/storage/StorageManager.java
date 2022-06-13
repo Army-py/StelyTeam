@@ -1,7 +1,6 @@
 package fr.army.stelyteam.storage;
 
 import fr.army.stelyteam.team.Team;
-import fr.army.stelyteam.team.TeamBuilder;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -117,16 +116,15 @@ public class StorageManager {
             return Optional.empty();
         }
 
-        final TeamBuilder builder = new TeamBuilder();
-        builder.setId(teamId);
+        final Team team = new Team(teamId);
 
         for (var value : values) {
             if (value.value().isPresent()) {
-                value.field().getInflater().inflate(value.value().get(), builder);
+                value.field().getInflater().inflate(value.value().get(), team);
             }
         }
 
-        return Optional.of(builder.create());
+        return Optional.of(team);
     }
 
     /**
