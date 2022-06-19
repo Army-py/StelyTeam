@@ -13,13 +13,15 @@ public class ValidStoragePacket implements Packet {
 
     private String server;
     private TeamField teamField;
+    private boolean common;
 
     public ValidStoragePacket() {
     }
 
-    public ValidStoragePacket(String server, TeamField teamField) {
+    public ValidStoragePacket(String server, TeamField teamField, boolean common) {
         this.server = server;
         this.teamField = teamField;
+        this.common = common;
     }
 
     public String getServer() {
@@ -28,6 +30,10 @@ public class ValidStoragePacket implements Packet {
 
     public TeamField getTeamField() {
         return teamField;
+    }
+
+    public boolean isCommon() {
+        return common;
     }
 
     @Override
@@ -39,14 +45,17 @@ public class ValidStoragePacket implements Packet {
     public void encode(DataOutputStream output) throws IOException {
         output.writeUTF(server);
         output.writeByte(teamField.ordinal());
+        output.writeBoolean(common);
     }
 
     @Override
     public void decode(DataInputStream input) throws IOException {
         final String server = input.readUTF();
         final TeamField teamField = TeamField.values()[input.readByte()];
+        final boolean common = input.readBoolean();
         this.server = server;
         this.teamField = teamField;
+        this.common = common;
     }
 
     @Override

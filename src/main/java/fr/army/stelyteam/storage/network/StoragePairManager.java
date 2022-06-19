@@ -72,18 +72,20 @@ public class StoragePairManager {
         final TeamField field = packet.getTeamField();
         final int fieldIndex = field.ordinal();
         final String hostedHash = storageHashes[fieldIndex];
-        if (!hostedHash.equals(packet.getHash())) {
-            return;
-        }
+        final boolean common = hostedHash.equals(packet.getHash());
         final String senderServer = packet.getServer();
-        servers[fieldIndex].add(senderServer);
+        if (common) {
+            servers[fieldIndex].add(senderServer);
+        }
         final String serverName = networkManager.getServerNameManager().getServerName();
-        final ValidStoragePacket validPacket = new ValidStoragePacket(serverName, field);
+        final ValidStoragePacket validPacket = new ValidStoragePacket(serverName, field, common);
         networkManager.sendPacket(senderServer, validPacket);
     }
 
     public void handleValid(ValidStoragePacket packet) {
-        servers[packet.getTeamField().ordinal()].add(packet.getServer());
+        if (packet.isCommon()) {
+            servers[packet.getTeamField().ordinal()].add(packet.getServer());
+        }
     }
 
     public void handleServerShutdown(ServerShutdownPacket packet) {
