@@ -94,7 +94,7 @@ public class ConfirmInventory {
             }else if (StelyTeamPlugin.containPlayerTempAction(playerName, "deleteTeam")){
                 String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(playerName);
                 StelyTeamPlugin.removePlayerTempAction(playerName);
-                StelyTeamPlugin.sqlManager.removeTeam(teamID, playerName);
+                StelyTeamPlugin.sqlManager.removeTeam(teamID);
                 player.closeInventory();
                 player.sendMessage("Tu as supprimé la team");
                 TeamMembersUtils.closeTeamMembersInventory(teamID, playerName);

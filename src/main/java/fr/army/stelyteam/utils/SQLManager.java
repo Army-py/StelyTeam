@@ -255,12 +255,11 @@ public class SQLManager {
     }
 
 
-    public void removeTeam(String teamID, String owner){
+    public void removeTeam(String teamID){
         if(isConnected()){
             try {
-                PreparedStatement queryTeams = connection.prepareStatement("DELETE FROM teams WHERE team_id = ? AND owner = ?");
+                PreparedStatement queryTeams = connection.prepareStatement("DELETE FROM teams WHERE team_id = ?");
                 queryTeams.setString(1, teamID);
-                queryTeams.setString(2, owner);
                 queryTeams.executeUpdate();
                 queryTeams.close();
 
@@ -398,11 +397,11 @@ public class SQLManager {
     }
 
 
-    public void incrementTeamMoney(String teamID, int money){
+    public void incrementTeamMoney(String teamID, float money){
         if(isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("UPDATE teams SET money = money + ? WHERE team_id = ?");
-                query.setInt(1, money);
+                query.setFloat(1, money);
                 query.setString(2, teamID);
                 query.executeUpdate();
                 query.close();
@@ -413,11 +412,11 @@ public class SQLManager {
     }
 
 
-    public void decrementTeamMoney(String teamID, int money){
+    public void decrementTeamMoney(String teamID, float money){
         if(isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("UPDATE teams SET money = money - ? WHERE team_id = ?");
-                query.setInt(1, money);
+                query.setFloat(1, money);
                 query.setString(2, teamID);
                 query.executeUpdate();
                 query.close();
@@ -554,18 +553,18 @@ public class SQLManager {
     }
 
 
-    public Integer getTeamMoney(String teamID){
+    public Float getTeamMoney(String teamID){
         if(isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("SELECT money FROM teams WHERE team_id = ?");
                 query.setString(1, teamID);
                 ResultSet result = query.executeQuery();
-                Integer level = null;
+                Float money = null;
                 if(result.next()){
-                    level = result.getInt("money");
+                    money = result.getFloat("money");
                 }
                 query.close();
-                return level;
+                return money;
             } catch (SQLException e) {
                 e.printStackTrace();
             }

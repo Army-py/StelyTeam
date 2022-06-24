@@ -14,7 +14,7 @@ public class ConvAddMoney extends StringPrompt {
     public Prompt acceptInput(ConversationContext con, String answer) {
         Player author = (Player) con.getForWhom();
         String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(author.getName());
-        Integer money = Integer.parseInt(answer);
+        Float money = Float.parseFloat(answer);
         EconomyManager eco = new EconomyManager();
 
         if (!eco.checkMoneyPlayer(author, money)) {
@@ -40,8 +40,8 @@ public class ConvAddMoney extends StringPrompt {
     }
 
 
-    private boolean teamReachedMaxMoney(String teamID, Integer money) {
-        Integer teamMoney = StelyTeamPlugin.sqlManager.getTeamMoney(teamID);
+    private boolean teamReachedMaxMoney(String teamID, float money) {
+        Float teamMoney = StelyTeamPlugin.sqlManager.getTeamMoney(teamID);
         return teamMoney + money > StelyTeamPlugin.config.getInt("teamMaxMoney");
     }
 }
