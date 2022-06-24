@@ -21,6 +21,9 @@ public class ConvGetTeamId extends StringPrompt {
         }else if (StelyTeamPlugin.sqlManager.teamIdExist(answer)){
             con.getForWhom().sendRawMessage("Ce nom de team existe déjà");
             return this;
+        }else if (answer.contains(" ")){
+            con.getForWhom().sendRawMessage("Le nom ne doit pas contenir d'espace");
+            return this;
         }
 
 

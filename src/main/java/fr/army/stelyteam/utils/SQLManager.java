@@ -294,13 +294,12 @@ public class SQLManager {
     }
 
 
-    public void updateTeamID(String teamID, String newTeamID, String owner){
+    public void updateTeamID(String teamID, String newTeamID){
         if(isConnected()){
             try {
-                PreparedStatement queryTeam = connection.prepareStatement("UPDATE teams SET team_id = ? WHERE team_id = ? AND owner = ?");
+                PreparedStatement queryTeam = connection.prepareStatement("UPDATE teams SET team_id = ? WHERE team_id = ?");
                 queryTeam.setString(1, newTeamID);
                 queryTeam.setString(2, teamID);
-                queryTeam.setString(3, owner);
                 queryTeam.executeUpdate();
                 queryTeam.close();
 
@@ -322,13 +321,12 @@ public class SQLManager {
     }
 
 
-    public void updateTeamPrefix(String teamID, String newTeamPrefix, String owner){
+    public void updateTeamPrefix(String teamID, String newTeamPrefix){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("UPDATE teams SET team_prefix = ? WHERE team_id = ? AND owner = ?");
+                PreparedStatement query = connection.prepareStatement("UPDATE teams SET team_prefix = ? WHERE team_id = ?");
                 query.setString(1, newTeamPrefix);
                 query.setString(2, teamID);
-                query.setString(3, owner);
                 query.executeUpdate();
                 query.close();
             } catch (SQLException e) {
@@ -403,6 +401,20 @@ public class SQLManager {
                 PreparedStatement query = connection.prepareStatement("UPDATE teams SET money = money + ? WHERE team_id = ?");
                 query.setFloat(1, money);
                 query.setString(2, teamID);
+                query.executeUpdate();
+                query.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    public void decrementTeamLevel(String teamID){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("UPDATE teams SET members_level = members_level - 1 WHERE team_id = ?");
+                query.setString(1, teamID);
                 query.executeUpdate();
                 query.close();
             } catch (SQLException e) {

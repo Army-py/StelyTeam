@@ -27,7 +27,7 @@ public class ConvEditTeamPrefix extends StringPrompt {
 
         new EconomyManager().removeMoneyPlayer(author, StelyTeamPlugin.config.getInt("prices.editTeamPrefix"));
         con.getForWhom().sendRawMessage("Le préfixe a été changé par " + new ColorsBuilder().replaceColor(answer));
-        StelyTeamPlugin.sqlManager.updateTeamPrefix(teamID, answer, authorName);
+        StelyTeamPlugin.sqlManager.updateTeamPrefix(teamID, answer);
         return null;
     }
 
