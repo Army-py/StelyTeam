@@ -1,6 +1,8 @@
 package fr.army.stelyteam.conversations;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.utils.EconomyManager;
+
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
@@ -22,7 +24,7 @@ public class ConvEditTeamID extends StringPrompt {
             return this;
         }
 
-
+        new EconomyManager().removeMoneyPlayer(author, StelyTeamPlugin.config.getInt("prices.editTeamId"));
         con.getForWhom().sendRawMessage("Le nom a été changé par " + answer);
         StelyTeamPlugin.sqlManager.updateTeamID(teamID, answer, authorName);
         StelyTeamPlugin.sqliteManager.updateTeamID(teamID, answer);

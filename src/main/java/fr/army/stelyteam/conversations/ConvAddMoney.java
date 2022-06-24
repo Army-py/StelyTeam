@@ -1,6 +1,7 @@
 package fr.army.stelyteam.conversations;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.utils.EconomyManager;
 
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
@@ -14,8 +15,12 @@ public class ConvAddMoney extends StringPrompt {
         Player author = (Player) con.getForWhom();
         String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(author.getName());
         Integer money = Integer.parseInt(answer);
+        EconomyManager eco = new EconomyManager();
 
-        if (teamReachedMaxMoney(teamID, money)) {
+        if (!eco.checkMoneyPlayer(author, money)) {
+            con.getForWhom().sendRawMessage("Vous n'avez pas assez d'argent");
+            return null;
+        }else if (teamReachedMaxMoney(teamID, money)) {
             con.getForWhom().sendRawMessage("La team a déjà atteint le maximum de money");
             return null;
         }else if (money < 0) {
@@ -23,6 +28,7 @@ public class ConvAddMoney extends StringPrompt {
             return null;
         }
 
+        eco.removeMoneyPlayer(author, money);
         con.getForWhom().sendRawMessage("Le montant a été ajouté");
         StelyTeamPlugin.sqlManager.incrementTeamMoney(teamID, money);
         return null;

@@ -12,6 +12,7 @@ import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.conversations.ConvEditTeamID;
 import fr.army.stelyteam.conversations.ConvEditTeamPrefix;
 import fr.army.stelyteam.conversations.ConvGetTeamId;
+import fr.army.stelyteam.utils.EconomyManager;
 import fr.army.stelyteam.utils.InventoryGenerator;
 import fr.army.stelyteam.utils.TeamMembersUtils;
 import fr.army.stelyteam.utils.conversation.ConversationBuilder;
@@ -72,6 +73,7 @@ public class ConfirmInventory {
                 String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(playerName);
                 StelyTeamPlugin.removePlayerTempAction(playerName);
                 StelyTeamPlugin.sqlManager.updateUnlockTeamBank(teamID);
+                new EconomyManager().removeMoneyPlayer(player, StelyTeamPlugin.config.getInt("prices.buyTeamBank"));
                 player.sendMessage("Tu as debloqué le compte de la team");
 
                 Inventory inventory = InventoryGenerator.createManageInventory(playerName);
@@ -102,6 +104,7 @@ public class ConfirmInventory {
                 Integer level = StelyTeamPlugin.sqlManager.getTeamLevel(teamID);
                 StelyTeamPlugin.removePlayerTempAction(playerName);
                 StelyTeamPlugin.sqlManager.incrementTeamLevel(teamID);
+                new EconomyManager().removeMoneyPlayer(player, StelyTeamPlugin.config.getInt("prices.upgradeLevel"+(level+1)));
                 player.sendMessage("Vous avez atteint le niveau " + (level+1));
 
                 Inventory inventory = InventoryGenerator.createUpgradeTotalMembersInventory(playerName);

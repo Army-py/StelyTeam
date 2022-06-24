@@ -595,6 +595,25 @@ public class SQLManager {
     }
 
 
+    public ArrayList<String> getTeamsIds(){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT team_id FROM teams");
+                ResultSet result = query.executeQuery();
+                ArrayList<String> data = new ArrayList<String>();
+                while(result.next()){
+                    data.add(result.getString("team_id"));
+                }
+                query.close();
+                return data;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+
     public Integer getMemberRank(String playerName) {
         if(isConnected()){
             try {

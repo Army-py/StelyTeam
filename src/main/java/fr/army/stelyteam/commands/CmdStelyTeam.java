@@ -75,15 +75,18 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
                     }else{
                         String teamID = String.join("", args);
                         if (StelyTeamPlugin.sqlManager.teamIdExist(teamID)){
+                            String yesMessage = StelyTeamPlugin.messages.getString("commands.stelyteamInfo.true");
+                            String noMessage = StelyTeamPlugin.messages.getString("commands.stelyteamInfo.false");
+
                             String teamPrefix = StelyTeamPlugin.sqlManager.getTeamPrefix(teamID);
                             String teamOwner = StelyTeamPlugin.sqlManager.getTeamOwner(teamID);
                             String creationDate = StelyTeamPlugin.sqlManager.getCreationDate(teamID);
                             Integer teamMembersLelvel = StelyTeamPlugin.sqlManager.getTeamLevel(teamID);
                             Integer teamMembers = StelyTeamPlugin.sqlManager.getMembers(teamID).size();
                             Integer maxMembers = StelyTeamPlugin.config.getInt("teamMaxMembers");
-                            String hasUnlockBank = (StelyTeamPlugin.sqlManager.hasUnlockedTeamBank(teamID) ? "§aOui" : "§cNon");
+                            String hasUnlockBank = (StelyTeamPlugin.sqlManager.hasUnlockedTeamBank(teamID) ? yesMessage : noMessage);
                             List<String> members = StelyTeamPlugin.sqlManager.getMembers(teamID);
-                            List<String> lore = StelyTeamPlugin.messages.getStringList("commands.stelyteam_info");
+                            List<String> lore = StelyTeamPlugin.messages.getStringList("commands.stelyteamInfo.output");
 
                             lore = replaceInLore(lore, "%NAME%", teamID);
                             lore = replaceInLore(lore, "%PREFIX%", new ColorsBuilder().replaceColor(teamPrefix));
@@ -122,6 +125,16 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
                 }
             }
             return result;
+        }else if (args.length >= 2){
+            if (args[0].equals("info")){
+                List<String> result = new ArrayList<>();
+                for (String teamID : StelyTeamPlugin.sqlManager.getTeamsIds()) {
+                    if (teamID.toLowerCase().startsWith(args[1].toLowerCase())){
+                        result.add(teamID);
+                    }
+                }
+                return result;
+            }
         }
 
         return null;

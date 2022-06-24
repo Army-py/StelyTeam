@@ -5,6 +5,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.utils.EconomyManager;
 import fr.army.stelyteam.utils.InventoryGenerator;
 
 
@@ -22,10 +23,13 @@ public class CreateTeamInventory {
         String itemName = event.getCurrentItem().getItemMeta().getDisplayName();
 
         if (itemName.equals(StelyTeamPlugin.config.getString("inventories.createTeam.itemName"))){
-            Inventory confirmInventory = InventoryGenerator.createConfirmInventory();
-            player.openInventory(confirmInventory);
-            // StelyTeamPlugin.playersCreateTeam.add(playerName);
-            StelyTeamPlugin.playersTempActions.put(playerName, "createTeam");
+            if (new EconomyManager().checkMoneyPlayer(player, StelyTeamPlugin.config.getInt("prices.createTeam"))){
+                Inventory confirmInventory = InventoryGenerator.createConfirmInventory();
+                player.openInventory(confirmInventory);
+                StelyTeamPlugin.playersTempActions.put(playerName, "createTeam");
+            }else{
+                player.sendMessage("Vous n'avez pas assez d'argent");
+            }
         }
     }
 }
