@@ -1,6 +1,7 @@
 package fr.army.stelyteam.conversations;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.utils.EconomyManager;
 
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
@@ -29,6 +30,7 @@ public class ConvGetTeamPrefix extends StringPrompt {
 
         StelyTeamPlugin.sqlManager.insertTeam(teamInfos[1], teamInfos[2], authorName);
         StelyTeamPlugin.removeCreationTeamTemp(authorName);
+        new EconomyManager().removeMoneyPlayer(author, StelyTeamPlugin.config.getInt("prices.createTeam"));
         con.getForWhom().sendRawMessage("Team créé !");
         return null;
     }

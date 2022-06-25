@@ -1,6 +1,7 @@
 package fr.army.stelyteam.conversations;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.utils.EconomyManager;
 
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
@@ -13,14 +14,15 @@ public class ConvWithdrawMoney extends StringPrompt {
     public Prompt acceptInput(ConversationContext con, String answer) {
         Player author = (Player) con.getForWhom();
         String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(author.getName());
-        Integer teamMoney = StelyTeamPlugin.sqlManager.getTeamMoney(teamID);
-        Integer money;
+        Float teamMoney = StelyTeamPlugin.sqlManager.getTeamMoney(teamID);
+        EconomyManager eco = new EconomyManager();
+        Float money;
 
         if (answer.equals("all")){
             money = teamMoney;
         }else{
             try {
-                money = Integer.parseInt(answer);
+                money = Float.parseFloat(answer);
             } catch (NumberFormatException e) {
                 author.sendRawMessage("Veuillez entrer un nombre");
                 return null;
@@ -28,13 +30,14 @@ public class ConvWithdrawMoney extends StringPrompt {
         }
 
         if (teamReachedMinMoney(teamID, money, teamMoney)) {
-            con.getForWhom().sendRawMessage("La team a déjà atteint le minimum d'argent");
+            con.getForWhom().sendRawMessage("Vous ne pouvez pas retirer plus de " + teamMoney + "€");
             return null;
         }else if (money < 0) {
             con.getForWhom().sendRawMessage("Vous ne pouvez pas ajouter un montant négatif");
             return null;
         }
 
+        eco.addMoneyPlayer(author, money);
         con.getForWhom().sendRawMessage("Le montant a été retiré");
         StelyTeamPlugin.sqlManager.decrementTeamMoney(teamID, money);
         return null;
@@ -46,7 +49,7 @@ public class ConvWithdrawMoney extends StringPrompt {
     }
 
 
-    private boolean teamReachedMinMoney(String teamID, Integer money, Integer teamMoney) {
+    private boolean teamReachedMinMoney(String teamID, Float money, Float teamMoney) {
         return teamMoney - money < 0;
     }
 }

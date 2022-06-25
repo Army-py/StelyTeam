@@ -5,6 +5,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.utils.EconomyManager;
 import fr.army.stelyteam.utils.InventoryGenerator;
 
 
@@ -30,10 +31,15 @@ public class UpgradeMembersInventory {
                 String name = StelyTeamPlugin.config.getString("inventories.upgradeTotalMembers."+str+".itemName");
                 
                 if (itemName.equals(name) && level+1 == StelyTeamPlugin.config.getInt("inventories.upgradeTotalMembers."+str+".level")){
-                    StelyTeamPlugin.playersTempActions.put(playerName, "upgradeMembers");
-                    Inventory inventory = InventoryGenerator.createConfirmInventory();
-                    player.openInventory(inventory);
-                    return;
+                    if (new EconomyManager().checkMoneyPlayer(player, StelyTeamPlugin.config.getInt("prices.upgradeLevel"+(level+1)))){
+                        StelyTeamPlugin.playersTempActions.put(playerName, "upgradeMembers");
+                        Inventory inventory = InventoryGenerator.createConfirmInventory();
+                        player.openInventory(inventory);
+                        return;
+                    }else{
+                        player.sendMessage("Vous n'avez pas assez d'argent");
+                        return;
+                    }
                 }else if (itemName.equals(name) && level >= StelyTeamPlugin.config.getInt("inventories.upgradeTotalMembers."+str+".level")){
                     player.sendMessage("Vous avez déjà débloqué cette amélioration");
                     return;

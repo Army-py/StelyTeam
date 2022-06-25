@@ -17,12 +17,11 @@ import fr.army.stelyteam.storage.network.NetworkManager;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import net.milkbowl.vault.economy.Economy;
-
 import fr.army.stelyteam.commands.CmdStelyTeam;
 import fr.army.stelyteam.events.InventoryClickManager;
 import fr.army.stelyteam.events.InventoryClose;
 import fr.army.stelyteam.events.PlayerQuit;
+import fr.army.stelyteam.utils.EconomyManager;
 import fr.army.stelyteam.utils.SQLManager;
 import fr.army.stelyteam.utils.SQLiteManager;
 
@@ -32,7 +31,7 @@ public class StelyTeamPlugin extends JavaPlugin {
     public static YamlConfiguration messages;
     public static SQLManager sqlManager;
     public static SQLiteManager sqliteManager;
-    public static Economy economy = null;
+    public static boolean economy = false;
 
     public static ArrayList<String> playersCreateTeam = new ArrayList<String>();
 
@@ -69,6 +68,7 @@ public class StelyTeamPlugin extends JavaPlugin {
         
         sqlManager.createTables();
         sqliteManager.createTables();
+        economy = EconomyManager.setupEconomy();
 
         getCommand("stelyteam").setExecutor(new CmdStelyTeam());
         getCommand("stelyteam").setTabCompleter(new CmdStelyTeam());

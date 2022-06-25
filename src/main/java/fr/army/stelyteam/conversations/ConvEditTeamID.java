@@ -1,6 +1,8 @@
 package fr.army.stelyteam.conversations;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.utils.EconomyManager;
+
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
@@ -20,11 +22,14 @@ public class ConvEditTeamID extends StringPrompt {
         }else if (StelyTeamPlugin.sqlManager.teamIdExist(answer)){
             con.getForWhom().sendRawMessage("Ce nom de team existe déjà");
             return this;
+        }else if (answer.contains(" ")){
+            con.getForWhom().sendRawMessage("Le nom ne doit pas contenir d'espace");
+            return this;
         }
 
-
+        new EconomyManager().removeMoneyPlayer(author, StelyTeamPlugin.config.getInt("prices.editTeamId"));
         con.getForWhom().sendRawMessage("Le nom a été changé par " + answer);
-        StelyTeamPlugin.sqlManager.updateTeamID(teamID, answer, authorName);
+        StelyTeamPlugin.sqlManager.updateTeamID(teamID, answer);
         StelyTeamPlugin.sqliteManager.updateTeamID(teamID, answer);
         return null;
     }
