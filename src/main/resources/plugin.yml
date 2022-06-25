@@ -7,5 +7,69 @@ depend:
   - "Vault"
 commands:
   stelyteam:
-    description: "StelyTeam"
-    usage: "/stelyteam <option>"
+    description: "Ouvre l'inventaire de team"
+    usage: "/stelyteam"
+    home:
+      description: "Se téléporter au home de team"
+      usage: "/stelyteam home"
+    visual:
+      description: "Renvoie une représentation du texte en couleur"
+      usage: "/stelyteam visual <text>"
+    info:
+      description: "Affiche les informations de la team"
+      usage: "/stelyteam info <team>"
+    delete:
+      description: "Supprime la team"
+      usage: "/stelyteam delete <team>"
+      permissions:
+        default: "op"
+    money:
+      description: "Affiche le solde de la team"
+      usage: "/stelyteam money <team>"
+      permissions:
+        default: "op"
+    upgrade:
+      description: "Améliore le nombre de membre max dans une team"
+      usage: "/stelyteam upgrade <team>"
+      permissions:
+        default: "op"
+    downgrade:
+      description: "Diminue le nombre de membre max dans une team"
+      usage: "/stelyteam downgrade <team>"
+      permissions:
+        default: "op"
+    editname:
+      description: "Change le nom d'une team"
+      usage: "/stelyteam editname <team> <name>"
+      permissions:
+        default: "op"
+    editprefix:
+      description: "Change le préfixe d'une team"
+      usage: "/stelyteam editprefix <team> <prefix>"
+      permissions:
+        default: "op"
+    promote:
+      description: "Promote un membre de la team"
+      usage: "/stelyteam promote <team> <player>"
+      permissions:
+        default: "op"
+    demote:
+      description: "Demote un membre de la team"
+      usage: "/stelyteam demote <team> <player>"
+      permissions:
+        default: "op"
+    changeowner:
+      description: "Change le gérant d'une team"
+      usage: "/stelyteam changeowner <team> <player>"
+      permissions:
+        default: "op"
+    addmember:
+      description: "Ajoute un membre à la team"
+      usage: "/stelyteam addmember <team> <player>"
+      permissions:
+        default: "op"
+    removemember:
+      description: "Enlève un membre de la team"
+      usage: "/stelyteam removemember <team> <player>"
+      permissions:
+        default: "op"
