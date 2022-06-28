@@ -98,7 +98,7 @@ public class InventoryGenerator {
         String memberRankName = StelyTeamPlugin.config.getString("ranks." + memberRank + ".name");
         String rankColor = StelyTeamPlugin.config.getString("ranks." + memberRank + ".color");
         Inventory inventory = Bukkit.createInventory(null, slots, StelyTeamPlugin.config.getString("inventoriesName.member"));
-        Float teamMoney = StelyTeamPlugin.sqlManager.getTeamMoney(teamID);
+        Double teamMoney = StelyTeamPlugin.sqlManager.getTeamMoney(teamID);
 
         emptyCases(inventory, slots);
 
@@ -110,7 +110,7 @@ public class InventoryGenerator {
             ItemStack item;
             
             if (name.equals(StelyTeamPlugin.config.getString("inventories.member.seeTeamBank.itemName"))){
-                lore = replaceInLore(lore, "%teamMoney%", FloatToString(teamMoney));
+                lore = replaceInLore(lore, "%teamMoney%", DoubleToString(teamMoney));
             }else if (name.equals(StelyTeamPlugin.config.getString("inventories.member.teamInfos.itemName"))){
                 lore = replaceInLore(lore, "%NAME%", teamID);
                 lore = replaceInLore(lore, "%PREFIX%", new ColorsBuilder().replaceColor(teamPrefix));
@@ -337,12 +337,12 @@ public class InventoryGenerator {
     }
 
 
-    private static String IntegerToString(Integer value){
+    private static String IntegerToString(int value){
         return NumberFormat.getNumberInstance(Locale.US).format(value);
     }
 
 
-    private static String FloatToString(Float value){
+    private static String DoubleToString(double value){
         return NumberFormat.getNumberInstance(Locale.US).format(value);
     }
 

@@ -25,22 +25,22 @@ teamNameMaxLength: 12
 teamPrefixMaxLength: 12
 
 # Argent maximal d'une team
-teamMaxMoney: 10000000
+teamMaxMoney: 10000000.0
 
 # Nombre de membres maximum dans une team
 teamMaxMembers: 10
 
 # Prix des différentes actions
 prices:
-  createTeam: 100000
-  editTeamId: 5000
-  editTeamPrefix: 5000
-  buyTeamBank: 1000000
-  upgradeLevel1: 2500000
-  upgradeLevel2: 5000000
-  upgradeLevel3: 10000000
-  upgradeLevel4: 15000000
-  upgradeLevel5: 25000000
+  createTeam: 100000.0
+  editTeamId: 5000.0
+  editTeamPrefix: 5000.0
+  buyTeamBank: 1000000.0
+  upgradeLevel1: 2500000.0
+  upgradeLevel2: 5000000.0
+  upgradeLevel3: 10000000.0
+  upgradeLevel4: 15000000.0
+  upgradeLevel5: 25000000.0
 
 
 # Item à la place des cases vide

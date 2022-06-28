@@ -7,6 +7,7 @@ import org.bukkit.inventory.Inventory;
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.utils.EconomyManager;
 import fr.army.stelyteam.utils.InventoryGenerator;
+import fr.army.stelyteam.utils.MessageManager;
 
 
 public class UpgradeMembersInventory {
@@ -31,21 +32,24 @@ public class UpgradeMembersInventory {
                 String name = StelyTeamPlugin.config.getString("inventories.upgradeTotalMembers."+str+".itemName");
                 
                 if (itemName.equals(name) && level+1 == StelyTeamPlugin.config.getInt("inventories.upgradeTotalMembers."+str+".level")){
-                    if (new EconomyManager().checkMoneyPlayer(player, StelyTeamPlugin.config.getInt("prices.upgradeLevel"+(level+1)))){
+                    if (new EconomyManager().checkMoneyPlayer(player, StelyTeamPlugin.config.getDouble("prices.upgradeLevel"+(level+1)))){
                         StelyTeamPlugin.playersTempActions.put(playerName, "upgradeMembers");
                         Inventory inventory = InventoryGenerator.createConfirmInventory();
                         player.openInventory(inventory);
                         return;
                     }else{
-                        player.sendMessage("Vous n'avez pas assez d'argent");
+                        // player.sendMessage("Vous n'avez pas assez d'argent");
+                        player.sendMessage(MessageManager.getMessage("common.not_enough_money"));
                         return;
                     }
                 }else if (itemName.equals(name) && level >= StelyTeamPlugin.config.getInt("inventories.upgradeTotalMembers."+str+".level")){
-                    player.sendMessage("Vous avez déjà débloqué cette amélioration");
+                    // player.sendMessage("Vous avez déjà débloqué cette amélioration");
+                    player.sendMessage(MessageManager.getMessage("manage_team.upgrade_levels.already_unlocked"));
                     return;
                 }
             }
-            player.sendMessage("Vous devez débloquer le niveau précédent pour pouvoir acheter cette amélioration");        
+            // player.sendMessage("Vous devez débloquer le niveau précédent pour pouvoir acheter cette amélioration"); 
+            player.sendMessage(MessageManager.getMessage("manage_team.upgrade_levels.must_unlock_previous_level"));
         }else{
             // Retour en arrière de l'inventaire
             Inventory inventory = InventoryGenerator.createManageInventory(playerName);

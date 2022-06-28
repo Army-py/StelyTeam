@@ -395,11 +395,11 @@ public class SQLManager {
     }
 
 
-    public void incrementTeamMoney(String teamID, float money){
+    public void incrementTeamMoney(String teamID, double money){
         if(isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("UPDATE teams SET money = money + ? WHERE team_id = ?");
-                query.setFloat(1, money);
+                query.setDouble(1, money);
                 query.setString(2, teamID);
                 query.executeUpdate();
                 query.close();
@@ -424,11 +424,11 @@ public class SQLManager {
     }
 
 
-    public void decrementTeamMoney(String teamID, float money){
+    public void decrementTeamMoney(String teamID, double money){
         if(isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("UPDATE teams SET money = money - ? WHERE team_id = ?");
-                query.setFloat(1, money);
+                query.setDouble(1, money);
                 query.setString(2, teamID);
                 query.executeUpdate();
                 query.close();
@@ -565,15 +565,15 @@ public class SQLManager {
     }
 
 
-    public Float getTeamMoney(String teamID){
+    public Double getTeamMoney(String teamID){
         if(isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("SELECT money FROM teams WHERE team_id = ?");
                 query.setString(1, teamID);
                 ResultSet result = query.executeQuery();
-                Float money = null;
+                Double money = null;
                 if(result.next()){
-                    money = result.getFloat("money");
+                    money = result.getDouble("money");
                 }
                 query.close();
                 return money;
