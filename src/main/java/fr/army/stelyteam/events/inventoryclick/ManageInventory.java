@@ -3,6 +3,7 @@ package fr.army.stelyteam.events.inventoryclick;
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.utils.EconomyManager;
 import fr.army.stelyteam.utils.InventoryGenerator;
+import fr.army.stelyteam.utils.MessageManager;
 
 import java.util.List;
 
@@ -48,11 +49,12 @@ public class ManageInventory {
 
             if (StelyTeamPlugin.sqliteManager.isSet(teamID)){
                 StelyTeamPlugin.sqliteManager.updateHome(teamID, worldName, x, y, z, yaw);
-                player.sendMessage("Le home a été redéfini");
-
+                // player.sendMessage("Le home a été redéfini");
+                player.sendMessage(MessageManager.getMessage("manage_team.team_home.redefine"));
             }else{
                 StelyTeamPlugin.sqliteManager.addHome(teamID, worldName, x, y, z, yaw);
-                player.sendMessage("Le home a été créé");
+                // player.sendMessage("Le home a été créé");
+                player.sendMessage(MessageManager.getMessage("manage_team.team_home.created"));
             }
             
         }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.manage.removeTeamHome.itemName"))){
@@ -61,43 +63,49 @@ public class ManageInventory {
 
             if (StelyTeamPlugin.sqliteManager.isSet(teamID)){
                 StelyTeamPlugin.sqliteManager.removeHome(teamID);
-                player.sendMessage("Le home a été supprimé");
+                // player.sendMessage("Le home a été supprimé");
+                player.sendMessage(MessageManager.getMessage("manage_team.team_home.deleted"));
             }else{
-                player.sendMessage("Le home n'a pas été défini");
+                // player.sendMessage("Le home n'a pas été défini");
+                player.sendMessage(MessageManager.getMessage("manage_team.team_home.not_set"));
             }
             
         }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.manage.buyTeamBank.itemName"))){
             String teamID = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(playerName);
             
             if (!StelyTeamPlugin.sqlManager.hasUnlockedTeamBank(teamID)){
-                if (new EconomyManager().checkMoneyPlayer(player, StelyTeamPlugin.config.getInt("prices.buyTeamBank"))){
+                if (new EconomyManager().checkMoneyPlayer(player, StelyTeamPlugin.config.getDouble("prices.buyTeamBank"))){
                     StelyTeamPlugin.playersTempActions.put(playerName, "buyTeamBank");
                     Inventory inventory = InventoryGenerator.createConfirmInventory();
                     player.openInventory(inventory);
                 }else{
-                    player.sendMessage("Vous n'avez pas assez d'argent");
+                    // player.sendMessage("Vous n'avez pas assez d'argent");
+                    player.sendMessage(MessageManager.getMessage("common.not_enough_money"));
                 }
             }else{
-                player.sendMessage("Vous avez déjà débloqué la banque de team");
+                // player.sendMessage("Vous avez déjà débloqué la banque de team");
+                player.sendMessage(MessageManager.getMessage("manage_team.team_bank.already_unlocked"));
             }
         }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.manage.upgradeTotalMembers.itemName"))){
             Inventory inventory = InventoryGenerator.createUpgradeTotalMembersInventory(playerName);
             player.openInventory(inventory);
         }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.manage.editName.itemName"))){
-            if (new EconomyManager().checkMoneyPlayer(player, StelyTeamPlugin.config.getInt("prices.editTeamId"))){
+            if (new EconomyManager().checkMoneyPlayer(player, StelyTeamPlugin.config.getDouble("prices.editTeamId"))){
                 StelyTeamPlugin.playersTempActions.put(playerName, "editName");
                 Inventory inventory = InventoryGenerator.createConfirmInventory();
                 player.openInventory(inventory);
             }else{
-                player.sendMessage("Vous n'avez pas assez d'argent");
+                // player.sendMessage("Vous n'avez pas assez d'argent");
+                player.sendMessage(MessageManager.getMessage("common.not_enough_money"));
             }
         }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.manage.editPrefix.itemName"))){
-            if (new EconomyManager().checkMoneyPlayer(player, StelyTeamPlugin.config.getInt("prices.editTeamPrefix"))){
+            if (new EconomyManager().checkMoneyPlayer(player, StelyTeamPlugin.config.getDouble("prices.editTeamPrefix"))){
                 StelyTeamPlugin.playersTempActions.put(playerName, "editPrefix");
                 Inventory inventory = InventoryGenerator.createConfirmInventory();
                 player.openInventory(inventory);
             }else{
-                player.sendMessage("Vous n'avez pas assez d'argent");
+                // player.sendMessage("Vous n'avez pas assez d'argent");
+                player.sendMessage(MessageManager.getMessage("common.not_enough_money"));
             }
         }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.manage.removeTeam.itemName"))){
             StelyTeamPlugin.playersTempActions.put(playerName, "deleteTeam");

@@ -1,13 +1,181 @@
+# Messages les plus communs, qui seront utilisé dans plusieurs actions
+common:
+  invalid_command: "§7Commande invalide"
+  member_not_in_this_team: "§7Le membre n'est pas dans cette team"
+  name_already_exists: "§7Ce nom de team existe déjà"
+  name_cannot_contain_space: "§7Le nom de la team ne doit pas contenir d'espace"
+  name_is_too_long: "§7Le nom est trop long"
+  not_enough_money: "§7Vous n'avez pas assez d'argent"
+  player_already_in_team: "§7Ce joueur est déjà dans une team"
+  player_already_action: "§7Ce joueur a déjà une action en cours"
+  player_not_exist: "§7Ce joueur n'existe pas"
+  player_not_in_your_team: "§7Le joueur n'est pas t'a team"
+  prefix_is_too_long: "§7Le préfixe est trop long"
+  team_not_exist: "§7La team n'existe pas"
+
+# Messages concernant la gestions des membres
+manage_members:
+  add_member:
+    max_members: "§7La team a déjà le nombre maximum de membres"
+    send_player_name: "§7Envoyez le nom du joueur à ajouter"
+    invitation_sent: "§7L'invitation a été envoyée"
+  edit_owner:
+    send_player_name: "§7Envoyez le nom du joueur à promouvoir"
+  remove_member:
+    cant_exclude_yourself: "§7Vous ne pouvez pas vous exclure vous-même"
+    cant_exclude_higher_rank: "§7Vous ne pouvez pas exclure un membre plus haut que vous"
+    member_removed: "§7Le membre a été supprimé"
+    send_player_name: "§7Envoyez le nom du joueur à exclure"
+
+# Messages concernant la gestion de la team et de ses différents paramètres
+manage_team:
+  add_money:
+    cant_add_negative_money: "§7Vous ne pouvez pas ajouter de montant négatif"
+    money_added: "§7Le montant a été ajouté"
+    send_money_amount: "§7Envoyez le montant à ajouter"
+    team_reached_max_money: "§7La team a déjà le montant maximum d'argent"
+  creation:
+    send_team_id: "§7Envoyez le nom de la team"
+    send_team_prefix: "§7Envoyez le préfixe de la team"
+    team_created: "§7La team a été créée"
+  edit_team_id:
+    send_team_id: "§7Envoyez le nouveau nom de la team"
+    team_name_edited: "§7Le nom de la team a été modifié par %VALUE%"
+  edit_team_prefix:
+    send_team_prefix: "§7Envoyez le nouveau préfixe de la team"
+    team_prefix_edited: "§7Le préfixe de la team a été modifié par %VALUE%"
+  withdraw_money:
+    cant_send_negative_money: "§7Vous ne pouvez pas envoyer de montant négatif"
+    money_withdrawn: "§7Le montant a été retiré"
+    send_money_amount: "§7Envoyez le montant à retirer"
+    team_reached_min_money: "§7Vous ne pouvez pas retirer plus de %VALUE%€"
+  team_home:
+    redefine: "§7Le home a été redéfini"
+    created: "§7Le home a été créé"
+    deleted: "§7Le home a été supprimé"
+    not_set: "§7Le home de team n'a pas été défini"
+  team_bank:
+    already_unlocked: "§7La banque de team est déjà déverrouillée"
+    unlock: "§7Vous avez débloqué la banque de team"
+  upgrade_levels:
+    already_unlocked: "§7Vous avez déjà débloqué cette amélioration"
+    must_unlock_previous_level: "§7Vous devez débloquer l'amélioration précédente pour pouvoir acheter cette amélioration"
+    new_upgrade: "§7Amélioration %VALUE% de la team débloquée"
+  team_delete:
+    deleted: "§7La team a été supprimée"
+
+# Messages qui seront envoyés à tout les membres d'une team qui sont connectés
+# Si %AUTHOR% , %RECEIVER% , %VALUE% figurent dans le message il doivent y être replacé obligatoirement si le message en question reçoit une modification
+# %AUTHOR% -> Le membre qui a fait l'action
+# %RECEIVER% -> Le membre qui a reçu l'action
+# %VALUE% -> Une valeur qui peut être l'auteur, le récepteur ou une valeur quelconque
+broadcasts:
+  player_add_new_member: "§7%AUTHOR% a ajouté %RECEIVER% à la team"
+  player_exclude_member: "§7%AUTHOR% a exclu %RECEIVER% de la team"
+  team_bank_unlocked: "§7%VALUE% a débloqué la banque de la team"
+  team_deleted: "§7La team %VALUE% a été supprimée"
+  new_upgrade: "§7Amélioration de la team %VALUE% débloquée"
+
+# Messages que recevra le membre qui a fait une certaine action
+sender:
+  exclude_member: "§7Vous avez exclu %VALUE% de la team"
+  promote_owner: "§7Vous avez promu %VALUE% gérant"
+
+# Messages que recevra le membre qui subit cette action
+receiver:
+  join_team: "§7Vous avez rejoint la team %VALUE%"
+  exclude_from_team: "§7Vous avez été exclu de la team %VALUE%"
+  promote_owner: "§7Vous avez été promu en gérant de la team %VALUE%"
+  promote: "§7Vous avez été promu %VALUE%"
+  demote: "§7Vous avez été rétrogradé %VALUE%"
+
+other:
+  leave_team: "§7Vous avez quitté la team %VALUE%"
+  owner_cant_leave_team: "§7Tu ne peux pas quitter la team car tu es le gérant"
+  team_was_deleted: "§7Tu as supprimé la team"
+
+
+# Messages des conversations (lorsque le plugin demande au joueur de lui envoyer un message)
+conversation:
+  timeout: "§7Temps de réponse dépassé"
+  cancel: "§7Action annulée"
+
+# Messages concernant les payements
+payments:
+  paid: "§7Vous avez payé %VALUE%"
+  received: "§7Vous avez reçu %VALUE%"
+
+# Messages concernant les commandes
+# Si %VALUE% figure dans le message il doit y être replacé obligatoirement si le message en question reçoit une modification
 commands:
-  stelyteamInfo:
+  stelyteam_help:
+    output:
+      - "§7-- §5Commandes StelyTeam §7--"
+      - "§a/st : §7Ouvrir le menu de la team"
+      - "§a/st help : §7Affiche les commandes du plugin"
+      - "§a/st home : §7Se téléporter au home de la team"
+      - "§a/st info <team> : §7Affiche les informations de la team"
+      - "§a/st visual <&3 texte> : §7Afficher le visuel du texte en couleur"
+  stelyteam_admin:
+    output:
+      - "§7-- §5Commandes Admin StelyTeam §7--"
+      - "§a/st delete <team> : §7Supprimer la team"
+      - "§a/st money <team> : §7Affiche l'argent de la team"
+      - "§a/st upgrade <team> : §7Améliore de 1 niveau les améliorations de la team"
+      - "§a/st downgrade <team> : §7Rétrograde de 1 niveau les améliorations de la team"
+      - "§a/st editname <team> <nom> : §7Modifie le nom de la team"
+      - "§a/st editprefix <team> <prefixe> : §7Affiche les informations de la team"
+      - "§a/st changeowner <team> <membre> : §7Change le propriétaire de la team"
+      - "§a/st addmember <team> <joueur> : §7Ajoute un membre dans la team"
+      - "§a/st removemember <team> <joueur> : §7Retire un membre de la team"
+  stelyteam_home:
+    not_set: "§7Le home n'est pas définie"
+    teleport: "§7Téléportation au home de la team"
+  stelyteam_visual:
+    usage: "§7/stelyteam visual <&3 texte>"
+    output: "§7Ton texte : %VALUE%"
+  stelyteam_info:
     true: "§aOui"
     false: "§cNon"
+    usage: "§7/stelyteam info <team>"
     output:
-      - "§5Informations de la team :" 
-      - "§aNom : §f%NAME%"
-      - "§aPréfixe : §r%PREFIX%"
-      - "§aGérant : §r%OWNER%"
-      - "§aCréation : §r%DATE%"
-      - "§aCompte : §r%UNLOCK_BANK%"
-      - "§aPlaces : §r%MEMBER_COUNT% / %MAX_MEMBERS%"
-      - "§aMembres : §r%MEMBERS%"
+      - "§7-- §5Informations de la team §7--" 
+      - "§aNom : §7%NAME%"
+      - "§aPréfixe : §7%PREFIX%"
+      - "§aGérant : §7%OWNER%"
+      - "§aCréation : §7%DATE%"
+      - "§aCompte : §7%UNLOCK_BANK%"
+      - "§aPlaces : §7%MEMBER_COUNT% / %MAX_MEMBERS%"
+      - "§aMembres : §7%MEMBERS%"
+  stelyteam_delete:
+    usage: "§7/stelyteam delete <nom de la team>"
+    output: "§7La team %VALUE% a été supprimée"
+  stelyteam_money:
+    usage: "§7/stelyteam money <nom de la team>"
+    output: "§7Cette team a %VALUE%€"
+  stelyteam_upgrade:
+    usage: "§7/stelyteam upgrade <nom de la team>"
+    max_level: "§7Cette team est déjà au niveau maximum"
+    level_increased: "§7Nombre de membres augmentés pour la team %VALUE%"
+  stelyteam_downgrade:
+    usage: "§7/stelyteam downgrade <nom de la team>"
+    min_level: "§7Cette team est déjà au niveau minimum"
+    level_decreased: "§7Nombre de membres diminués pour la team %VALUE%"
+  stelyteam_editname:
+    usage: "§7/stelyteam editname <nom de la team> <nouveau nom>"
+    output: "§7Nom de la team modifié en %VALUE%"
+  stelyteam_editprefix:
+    usage: "§7/stelyteam editprefix <nom de la team> <nouveau préfixe>"
+    output: "§7Préfixe de la team modifié en %VALUE%"
+  stelyteam_changeowner:
+    usage: "§7/stelyteam changeowner <nom de la team> <pseudo du nouveau gérant>"
+    new_owner_set: "§7Le nouveau gérant est %VALUE%"
+    already_owner: "§7Ce joueur est déjà le gérant"
+    not_in_team: "§7Ce joueur n'est pas dans cette team"
+  stelyteam_addmember:
+    usage: "§7/stelyteam addmember <nom de la team> <pseudo du membre>"
+    outpput: "§7%VALUE% ajouté dans la team"
+  stelyteam_removemember:
+    usage: "§7/stelyteam removemember <nom de la team> <pseudo du membre>"
+    output: "§7%VALUE% retiré de la team"
+    not_in_team: "§7Ce joueur n'est pas dans cette team"

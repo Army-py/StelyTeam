@@ -18,6 +18,7 @@ import fr.army.stelyteam.conversations.ConvAddMember;
 import fr.army.stelyteam.conversations.ConvEditOwner;
 import fr.army.stelyteam.conversations.ConvRemoveMember;
 import fr.army.stelyteam.utils.InventoryGenerator;
+import fr.army.stelyteam.utils.MessageManager;
 import fr.army.stelyteam.utils.TeamMembersUtils;
 import fr.army.stelyteam.utils.conversation.ConversationBuilder;
 
@@ -80,7 +81,8 @@ public class EditMembersInventory {
                     if (member != null){
                         String newRank = StelyTeamPlugin.getRankFromId(memberRank+1);
                         String newRankColor = StelyTeamPlugin.config.getString("ranks." + newRank + ".color");
-                        member.sendMessage("Vous avez été rétrogradé " + newRankColor + newRank);
+                        // member.sendMessage("Vous avez été rétrogradé " + newRankColor + newRank);
+                        member.sendMessage(MessageManager.getReplaceMessage("receiver.demote", newRankColor + newRank));
                     }
                 }
             }else if (event.getClick().isLeftClick()){
@@ -93,7 +95,8 @@ public class EditMembersInventory {
                     if (member != null){
                         String newRank = StelyTeamPlugin.getRankFromId(memberRank-1);
                         String newRankColor = StelyTeamPlugin.config.getString("ranks." + newRank + ".color");
-                        member.sendMessage("Vous avez été promu " + newRankColor + newRank);
+                        // member.sendMessage("Vous avez été promu " + newRankColor + newRank);
+                        member.sendMessage(MessageManager.getReplaceMessage("receiver.promote", newRankColor + newRank));
                     }
                 }
             }else return;

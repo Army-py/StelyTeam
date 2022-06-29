@@ -14,6 +14,7 @@ import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.conversations.ConvAddMoney;
 import fr.army.stelyteam.conversations.ConvWithdrawMoney;
 import fr.army.stelyteam.utils.InventoryGenerator;
+import fr.army.stelyteam.utils.MessageManager;
 import fr.army.stelyteam.utils.conversation.ConversationBuilder;
 
 
@@ -63,7 +64,8 @@ public class MemberInventory {
                 Inventory inventory = InventoryGenerator.createConfirmInventory();
                 player.openInventory(inventory);
             }else {
-                player.sendMessage("Tu ne peux pas quitter la team car tu es le créateur");
+                // player.sendMessage("Tu ne peux pas quitter la team car tu es le créateur");
+                player.sendMessage(MessageManager.getMessage("other.owner_cant_leave_team"));
             }
         }
     }

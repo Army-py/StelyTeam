@@ -17,7 +17,7 @@ public class ConversationBuilder {
         cf.withTimeout(StelyTeamPlugin.config.getInt("conversationTimeout"));
         cf.addConversationAbandonedListener(new ConversationAbandoned());
         cf.withConversationCanceller(new ConversationSetCanceller());
-        cf.withPrefix(new ConversationSetPrefix());
+        // cf.withPrefix(new ConversationSetPrefix());
 
         Conversation conv = cf.buildConversation(player);
         conv.begin();
