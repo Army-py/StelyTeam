@@ -110,7 +110,8 @@ public class InventoryGenerator {
             ItemStack item;
             
             if (name.equals(StelyTeamPlugin.config.getString("inventories.member.seeTeamBank.itemName"))){
-                lore = replaceInLore(lore, "%teamMoney%", DoubleToString(teamMoney));
+                lore = replaceInLore(lore, "%TEAM_MONEY%", DoubleToString(teamMoney));
+                lore = replaceInLore(lore, "%MAX_MONEY%", DoubleToString(StelyTeamPlugin.config.getDouble("teamMaxMoney")));
             }else if (name.equals(StelyTeamPlugin.config.getString("inventories.member.teamInfos.itemName"))){
                 lore = replaceInLore(lore, "%NAME%", teamID);
                 lore = replaceInLore(lore, "%PREFIX%", new ColorsBuilder().replaceColor(teamPrefix));
@@ -199,7 +200,7 @@ public class InventoryGenerator {
             String rankColor = StelyTeamPlugin.config.getString("ranks." + memberRank + ".color");
             itemName = rankColor + str;
             
-            lore.add("§r§5> " + rankColor + StelyTeamPlugin.config.getString("ranks." + memberRank + ".name"));
+            lore.add(StelyTeamPlugin.config.getString("prefixRankLore") + rankColor + StelyTeamPlugin.config.getString("ranks." + memberRank + ".name"));
             inventory.setItem(headSlot, ItemBuilder.getPlayerHead(member, itemName, lore));
             headSlot ++;
         }
@@ -246,7 +247,7 @@ public class InventoryGenerator {
                 if (StelyTeamPlugin.getLastRank() == memberRank) lore.remove(1);
             }
 
-            lore.add(0, "§r§5> " + rankColor + StelyTeamPlugin.config.getString("ranks." + memberRankName + ".name"));
+            lore.add(0, StelyTeamPlugin.config.getString("prefixRankLore") + rankColor + StelyTeamPlugin.config.getString("ranks." + memberRankName + ".name"));
             
             if (playerHasPermission(playername, teamID, "manageMembers")){ 
                 item = ItemBuilder.getPlayerHead(member, itemName, lore);
@@ -306,14 +307,15 @@ public class InventoryGenerator {
             String rankPath = StelyTeamPlugin.config.getString("inventories.permissions."+str+".rankPath");
             Integer defaultRankId = StelyTeamPlugin.config.getInt("inventories."+rankPath+".rank");
             Integer permissionRank = StelyTeamPlugin.sqlManager.getPermissionRank(teamId, str);
+            String lorePrefix = StelyTeamPlugin.config.getString("prefixRankLore");
 
             if (permissionRank != null){
                 String rankColor = StelyTeamPlugin.config.getString("ranks." + StelyTeamPlugin.getRankFromId(permissionRank) + ".color");
-                lore.add(0, "§r§5> " + rankColor + StelyTeamPlugin.config.getString("ranks." + StelyTeamPlugin.getRankFromId(permissionRank) + ".name"));
+                lore.add(0, lorePrefix + rankColor + StelyTeamPlugin.config.getString("ranks." + StelyTeamPlugin.getRankFromId(permissionRank) + ".name"));
             }else{
                 if (rankPath != null){
                     String rankColor = StelyTeamPlugin.config.getString("ranks." + StelyTeamPlugin.getRankFromId(defaultRankId) + ".color");
-                    lore.add(0, "§r§5> " + rankColor + StelyTeamPlugin.config.getString("ranks." + StelyTeamPlugin.getRankFromId(defaultRankId) + ".name"));
+                    lore.add(0, lorePrefix + rankColor + StelyTeamPlugin.config.getString("ranks." + StelyTeamPlugin.getRankFromId(defaultRankId) + ".name"));
                 }
             }
 
@@ -372,9 +374,7 @@ public class InventoryGenerator {
 		item.setItemMeta(meta);
 
         for(int i = 0; i < slots; i++) {
-			if(i != 11 || i != 15) {
-				inventory.setItem(i, item);
-			}
+			inventory.setItem(i, item);
 		}
 	}
 }

@@ -54,6 +54,10 @@ noPermission:
     - "§cPermission insuffisante"
 
 
+# Préfixe à gauche du rang, affiché dans le menu de la gestion des membres de la team et dans la liste des membres
+prefixRankLore: "§r§5> "
+
+
 # Titre des menus et leur nombre de slots
 # Le nombre de slots peut être augmenté en fonction du tombre d'item dans le menu *
 # * Respecter le nombre de slots en fonction de la taille d'une ligne de coffre (9 * nombre de lignes)
@@ -260,7 +264,8 @@ inventories:
       slot: 21
       rank: 4
       lore:
-        - "§aMontant : %teamMoney%€"
+        - "§aMontant : %TEAM_MONEY%€"
+        - "§aMax : %MAX_MONEY%€"
     addTeamMoney:
       itemName: "§5§lAjout d'argent"
       itemType: GOLD_NUGGET

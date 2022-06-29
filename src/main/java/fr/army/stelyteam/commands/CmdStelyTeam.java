@@ -109,8 +109,14 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
                             player.sendMessage(MessageManager.getMessage("common.team_not_exist"));
                         }
                     }
+                }else if (args[0].equals("help")){
+                    List<String> commandsPlayer = StelyTeamPlugin.messages.getStringList("commands.stelyteam_help.output");
+                    player.sendMessage(String.join("\n", commandsPlayer));
                 }else if (sender.isOp()){
-                    if (args[0].equals("delete")){
+                    if (args[0].equals("admin")){
+                        List<String> commandsOp = StelyTeamPlugin.messages.getStringList("commands.stelyteam_admin.output");
+                        player.sendMessage(String.join("\n", commandsOp));
+                    }else if (args[0].equals("delete")){
                         args[0] = "";
                         if (args.length == 1){
                             // player.sendMessage("Utilisation : /stelyteam delete <nom de team>");
@@ -297,7 +303,6 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
                 }else player.sendMessage(MessageManager.getMessage("common.invalid_command"));
             }
         }
-
     return true;
     }
 
@@ -309,8 +314,10 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
         subCommands.add("home");
         subCommands.add("visual");
         subCommands.add("info");
+        subCommands.add("help");
 
         if (sender.isOp()){
+            subCommandsOp.add("admin");
             subCommandsOp.add("delete");
             subCommandsOp.add("money");
             subCommandsOp.add("upgrade");

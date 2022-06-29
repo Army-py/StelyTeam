@@ -108,63 +108,74 @@ payments:
 # Messages concernant les commandes
 # Si %VALUE% figure dans le message il doit y être replacé obligatoirement si le message en question reçoit une modification
 commands:
+  stelyteam_help:
+    output:
+      - "§7-- §5Commandes StelyTeam §7--"
+      - "§a/st : §7Ouvrir le menu de la team"
+      - "§a/st help : §7Affiche les commandes du plugin"
+      - "§a/st home : §7Se téléporter au home de la team"
+      - "§a/st info <team> : §7Affiche les informations de la team"
+      - "§a/st visual <&3 texte> : §7Afficher le visuel du texte en couleur"
+  stelyteam_admin:
+    output:
+      - "§7-- §5Commandes Admin StelyTeam §7--"
+      - "§a/st delete <team> : §7Supprimer la team"
+      - "§a/st money <team> : §7Affiche l'argent de la team"
+      - "§a/st upgrade <team> : §7Améliore de 1 niveau les améliorations de la team"
+      - "§a/st downgrade <team> : §7Rétrograde de 1 niveau les améliorations de la team"
+      - "§a/st editname <team> <nom> : §7Modifie le nom de la team"
+      - "§a/st editprefix <team> <prefixe> : §7Affiche les informations de la team"
+      - "§a/st changeowner <team> <membre> : §7Change le propriétaire de la team"
+      - "§a/st addmember <team> <joueur> : §7Ajoute un membre dans la team"
+      - "§a/st removemember <team> <joueur> : §7Retire un membre de la team"
   stelyteam_home:
     not_set: "§7Le home n'est pas définie"
     teleport: "§7Téléportation au home de la team"
   stelyteam_visual:
-    usage: "§7Utilisation : /stelyteam visual <&3 texte>"
+    usage: "§7/stelyteam visual <&3 texte>"
     output: "§7Ton texte : %VALUE%"
   stelyteam_info:
     true: "§aOui"
     false: "§cNon"
-    usage: "§7Utilisation : /stelyteam info <team>"
+    usage: "§7/stelyteam info <team>"
     output:
-      - "§5Informations de la team :" 
-      - "§aNom : §f%NAME%"
-      - "§aPréfixe : §r%PREFIX%"
-      - "§aGérant : §r%OWNER%"
-      - "§aCréation : §r%DATE%"
-      - "§aCompte : §r%UNLOCK_BANK%"
-      - "§aPlaces : §r%MEMBER_COUNT% / %MAX_MEMBERS%"
-      - "§aMembres : §r%MEMBERS%"
+      - "§7-- §5Informations de la team §7--" 
+      - "§aNom : §7%NAME%"
+      - "§aPréfixe : §7%PREFIX%"
+      - "§aGérant : §7%OWNER%"
+      - "§aCréation : §7%DATE%"
+      - "§aCompte : §7%UNLOCK_BANK%"
+      - "§aPlaces : §7%MEMBER_COUNT% / %MAX_MEMBERS%"
+      - "§aMembres : §7%MEMBERS%"
   stelyteam_delete:
-    usage: "§7Utilisation : /stelyteam delete <nom de la team>"
+    usage: "§7/stelyteam delete <nom de la team>"
     output: "§7La team %VALUE% a été supprimée"
   stelyteam_money:
-    usage: "§7Utilisation : /stelyteam money <nom de la team>"
+    usage: "§7/stelyteam money <nom de la team>"
     output: "§7Cette team a %VALUE%€"
   stelyteam_upgrade:
-    usage: "§7Utilisation : /stelyteam upgrade <nom de la team>"
+    usage: "§7/stelyteam upgrade <nom de la team>"
     max_level: "§7Cette team est déjà au niveau maximum"
     level_increased: "§7Nombre de membres augmentés pour la team %VALUE%"
   stelyteam_downgrade:
-    usage: "§7Utilisation : /stelyteam downgrade <nom de la team>"
+    usage: "§7/stelyteam downgrade <nom de la team>"
     min_level: "§7Cette team est déjà au niveau minimum"
     level_decreased: "§7Nombre de membres diminués pour la team %VALUE%"
   stelyteam_editname:
-    usage: "§7Utilisation : /stelyteam editname <nom de la team> <nouveau nom>"
+    usage: "§7/stelyteam editname <nom de la team> <nouveau nom>"
     output: "§7Nom de la team modifié en %VALUE%"
   stelyteam_editprefix:
-    usage: "§7Utilisation : /stelyteam editprefix <nom de la team> <nouveau préfixe>"
+    usage: "§7/stelyteam editprefix <nom de la team> <nouveau préfixe>"
     output: "§7Préfixe de la team modifié en %VALUE%"
-  stelyteam_promote:
-    usage: "§7Utilisation : /stelyteam promote <nom de la team> <pseudo du membre>"
-    member_promoted: "§7Membre promu"
-    max_rank: "§7Ce membre est déjà au rang maximum"
-  stelyteam_demote:
-    usage: "§7Utilisation : /stelyteam demote <nom de la team> <pseudo du membre>"
-    member_demoted: "§7Membre rétrogradé"
-    min_rank: "§7Ce membre est déjà au rang minimum"
-    cant_demote_owner: "§7Vous ne pouvez pas rétrograder le gérant"
   stelyteam_changeowner:
-    usage: "§7Utilisation : /stelyteam changeowner <nom de la team> <pseudo du nouveau gérant>"
+    usage: "§7/stelyteam changeowner <nom de la team> <pseudo du nouveau gérant>"
     new_owner_set: "§7Le nouveau gérant est %VALUE%"
     already_owner: "§7Ce joueur est déjà le gérant"
     not_in_team: "§7Ce joueur n'est pas dans cette team"
   stelyteam_addmember:
-    usage: "§7Utilisation : /stelyteam addmember <nom de la team> <pseudo du membre>"
+    usage: "§7/stelyteam addmember <nom de la team> <pseudo du membre>"
     outpput: "§7%VALUE% ajouté dans la team"
   stelyteam_removemember:
-    usage: "§7Utilisation : /stelyteam removemember <nom de la team> <pseudo du membre>"
+    usage: "§7/stelyteam removemember <nom de la team> <pseudo du membre>"
     output: "§7%VALUE% retiré de la team"
     not_in_team: "§7Ce joueur n'est pas dans cette team"
