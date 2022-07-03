@@ -40,7 +40,7 @@ public class ColorsBuilder {
     }
 
 
-    public static String parseHexColor(String hexColor) {
+    private String parseHexColor(String hexColor) {
         Color.fromRGB(Integer.decode("#" + hexColor));
         final StringBuilder assembledColorCode = new StringBuilder();
         assembledColorCode.append(ChatColor.COLOR_CHAR + "x");

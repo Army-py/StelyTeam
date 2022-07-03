@@ -1,0 +1,53 @@
+package fr.army.stelyteam.commands.subCommands.manage;
+
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.commands.SubCommand;
+import fr.army.stelyteam.utils.MessageManager;
+import fr.army.stelyteam.utils.SQLManager;
+
+public class SubCmdEditName extends SubCommand {
+
+    private SQLManager sqlManager;
+    private MessageManager messageManager;
+
+
+    public SubCmdEditName(StelyTeamPlugin plugin) {
+        super(plugin);
+        this.sqlManager = plugin.getSQLManager();
+        this.messageManager = plugin.getMessageManager();
+    }
+
+
+    @Override
+    public boolean execute(CommandSender sender, String[] args) {
+        Player player = (Player) sender;
+        args[0] = "";
+
+        if (args.length < 3){
+            // player.sendMessage("Utilisation : /stelyteam editname <nom de team> <nouveau nom>");
+            player.sendMessage(messageManager.getMessage("commands.stelyteam_editname.usage"));
+        }else{
+            if (sqlManager.teamIdExist(args[1])){
+                if (sqlManager.teamIdExist(args[2])){
+                    // player.sendMessage("Ce nom de team existe déjà");
+                    player.sendMessage(messageManager.getMessage("commands.common.,name_already_exist"));
+                }else if (args[2].contains(" ")){
+                    // player.sendMessage("Le nom de team ne doit pas contenir d'espace");
+                    player.sendMessage(messageManager.getMessage("commands.common.name_cannot_contain_space"));
+                }else{
+                    sqlManager.updateTeamID(args[1], args[2]);
+                    // player.sendMessage("Nom de team modifié en " + args[2]);
+                    player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_editname.output", args[2]));
+                }
+            }else{
+                // player.sendMessage("Cette team n'existe pas");
+                player.sendMessage(messageManager.getMessage("common.team_not_exist"));
+            }
+        }
+        return true;
+    }
+
+}
