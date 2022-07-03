@@ -11,7 +11,6 @@ import java.util.Objects;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import fr.army.stelyteam.commands.CmdStelyTeam;
 import fr.army.stelyteam.commands.CommandManager;
 import fr.army.stelyteam.events.InventoryClickManager;
 import fr.army.stelyteam.events.InventoryClose;
@@ -23,29 +22,27 @@ import fr.army.stelyteam.utils.SQLManager;
 import fr.army.stelyteam.utils.SQLiteManager;
 
 public class StelyTeamPlugin extends JavaPlugin {
-    public static StelyTeamPlugin instance;
-    public static YamlConfiguration config;
-    public static YamlConfiguration messages;
-    public static SQLManager sqlManager;
-    public static SQLiteManager sqliteManager;
-    public static EconomyManager economy;
+    private YamlConfiguration config;
+    private YamlConfiguration messages;
+    private SQLManager sqlManager;
+    private SQLiteManager sqliteManager;
+    private EconomyManager economy;
     private CommandManager commandManager;
     private MessageManager messageManager;
     private ColorsBuilder colorsBuilder;
 
-    public static ArrayList<String> playersCreateTeam = new ArrayList<String>();
+    public ArrayList<String> playersCreateTeam = new ArrayList<String>();
 
     // (playerName, actionName)
-    public static HashMap<String, String> playersTempActions = new HashMap<String, String>();
+    public HashMap<String, String> playersTempActions = new HashMap<String, String>();
     // {sender, receiver, teamId, actionName}
-    public static ArrayList<String[]> teamsTempActions = new ArrayList<String[]>();
+    public ArrayList<String[]> teamsTempActions = new ArrayList<String[]>();
     // {owner, name, prefix}
-    public static ArrayList<String[]> createTeamTemp = new ArrayList<String[]>();
+    public ArrayList<String[]> createTeamTemp = new ArrayList<String[]>();
 
 
     @Override
     public void onEnable() {
-        instance = this;
         this.saveDefaultConfig();
 
         this.config = initFile(this.getDataFolder(), "config.yml");
@@ -99,7 +96,7 @@ public class StelyTeamPlugin extends JavaPlugin {
     }
 
 
-    public static String[] getTeamActions(String playerName) {
+    public String[] getTeamActions(String playerName) {
         for (String[] strings : teamsTempActions) {
             if (strings[0].equals(playerName) || strings[1].equals(playerName)) {
                 return strings;
@@ -108,11 +105,11 @@ public class StelyTeamPlugin extends JavaPlugin {
         return null;
     }
 
-    public static void addTeamTempAction(String sender, String receiver, String teamId, String action) {
+    public void addTeamTempAction(String sender, String receiver, String teamId, String action) {
         teamsTempActions.add(new String[]{sender, receiver, teamId, action});
     }
 
-    public static void removeTeamTempAction(String playerName) {
+    public void removeTeamTempAction(String playerName) {
         for (String[] strings : teamsTempActions) {
             if (strings[0].equals(playerName) || strings[1].equals(playerName)) {
                 teamsTempActions.remove(strings);
@@ -121,7 +118,7 @@ public class StelyTeamPlugin extends JavaPlugin {
         }
     }
 
-    public static boolean containTeamAction(String playerName, String actionName) {
+    public boolean containTeamAction(String playerName, String actionName) {
         if (teamsTempActions.isEmpty()) return false;
         for (String[] strings : teamsTempActions) {
             if ((strings[0].equals(playerName) || strings[1].equals(playerName)) && strings[3].equals(actionName)) {
@@ -132,7 +129,7 @@ public class StelyTeamPlugin extends JavaPlugin {
     }
 
 
-    public static String[] getCreationTeamTemp(String playerName) {
+    public String[] getCreationTeamTemp(String playerName) {
         for (String[] strings : createTeamTemp) {
             if (strings[0].equals(playerName)) {
                 return strings;
@@ -141,11 +138,11 @@ public class StelyTeamPlugin extends JavaPlugin {
         return null;
     }
 
-    public static void addCreationTeamTempName(String owner, String teamId) {
+    public void addCreationTeamTempName(String owner, String teamId) {
         createTeamTemp.add(new String[]{owner, teamId, ""});
     }
 
-    public static void addCreationTeamTempPrefix(String playerName, String prefix) {
+    public void addCreationTeamTempPrefix(String playerName, String prefix) {
         for (int i = 0; i < createTeamTemp.size(); i++) {
             if (createTeamTemp.get(i)[0].equals(playerName)) {
                 createTeamTemp.get(i)[2] = prefix;
@@ -154,7 +151,7 @@ public class StelyTeamPlugin extends JavaPlugin {
         }
     }
 
-    public static void removeCreationTeamTemp(String playerName) {
+    public void removeCreationTeamTemp(String playerName) {
         for (String[] strings : createTeamTemp) {
             if (strings[0].equals(playerName)) {
                 createTeamTemp.remove(strings);
@@ -163,7 +160,7 @@ public class StelyTeamPlugin extends JavaPlugin {
         }
     }
 
-    public static boolean containCreationTeamTemp(String playerName) {
+    public boolean containCreationTeamTemp(String playerName) {
         if (createTeamTemp.isEmpty()) return false;
         for (String[] strings : createTeamTemp) {
             if (strings[0].equals(playerName)) {
@@ -174,17 +171,17 @@ public class StelyTeamPlugin extends JavaPlugin {
     }
 
 
-    public static String getPlayerActions(String playerName) {
+    public String getPlayerActions(String playerName) {
         return playersTempActions.get(playerName);
     }
 
 
-    public static void removePlayerTempAction(String playerName) {
+    public void removePlayerTempAction(String playerName) {
         playersTempActions.remove(playerName);
     }
 
 
-    public static boolean containPlayerTempAction(String playerName, String actionName) {
+    public boolean containPlayerTempAction(String playerName, String actionName) {
         if (playersTempActions.isEmpty()) return false;
         if (playersTempActions.containsKey(playerName) && playersTempActions.get(playerName).equals(actionName)) {
             return true;
@@ -194,9 +191,9 @@ public class StelyTeamPlugin extends JavaPlugin {
     }
 
 
-    public static String getRankFromId(Integer value) {
-        for (String key : StelyTeamPlugin.config.getConfigurationSection("ranks").getKeys(false)) {
-            if (StelyTeamPlugin.config.getInt("ranks." + key + ".id") == value) {
+    public String getRankFromId(Integer value) {
+        for (String key : config.getConfigurationSection("ranks").getKeys(false)) {
+            if (config.getInt("ranks." + key + ".id") == value) {
                 return key;
             }
         }
@@ -204,11 +201,11 @@ public class StelyTeamPlugin extends JavaPlugin {
     }
 
 
-    public static Integer getLastRank(){
+    public Integer getLastRank(){
         Integer lastRank = 0;
-        for (String key : StelyTeamPlugin.config.getConfigurationSection("ranks").getKeys(false)) {
-            if (StelyTeamPlugin.config.getInt("ranks." + key + ".id") > lastRank) {
-                lastRank = StelyTeamPlugin.config.getInt("ranks." + key + ".id");
+        for (String key : config.getConfigurationSection("ranks").getKeys(false)) {
+            if (config.getInt("ranks." + key + ".id") > lastRank) {
+                lastRank = config.getInt("ranks." + key + ".id");
             }
         }
         return lastRank;
