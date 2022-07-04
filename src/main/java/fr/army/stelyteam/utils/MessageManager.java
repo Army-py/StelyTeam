@@ -31,6 +31,6 @@ public class MessageManager {
     }
 
     private String getPluginPrefix (){
-        return config.getString("prefix");
+        return messages.getString("prefix");
     }
 }

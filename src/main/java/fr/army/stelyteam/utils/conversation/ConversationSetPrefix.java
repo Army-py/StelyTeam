@@ -8,14 +8,14 @@ import fr.army.stelyteam.StelyTeamPlugin;
 
 public class ConversationSetPrefix implements ConversationPrefix {
 
-    private YamlConfiguration config;
+    private YamlConfiguration messages;
 
     public ConversationSetPrefix(StelyTeamPlugin plugin) {
-        this.config = plugin.getConfig();
+        this.messages = plugin.getMessages();
     }
 
     @Override
     public String getPrefix(ConversationContext context) {
-        return config.getString("prefix");
+        return messages.getString("prefix");
     }
 }

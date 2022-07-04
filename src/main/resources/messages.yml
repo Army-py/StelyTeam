@@ -1,3 +1,6 @@
+# Prefixe devant les messages envoyés
+prefix: "§7[§5StelyTeam§7] "
+
 # Messages les plus communs, qui seront utilisé dans plusieurs actions
 common:
   invalid_command: "§7Commande invalide"
