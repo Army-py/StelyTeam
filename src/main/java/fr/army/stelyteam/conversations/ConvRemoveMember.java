@@ -1,5 +1,6 @@
 package fr.army.stelyteam.conversations;
 
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
@@ -7,33 +8,50 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.utils.InventoryGenerator;
+import fr.army.stelyteam.utils.InventoryBuilder;
 import fr.army.stelyteam.utils.MessageManager;
+import fr.army.stelyteam.utils.SQLManager;
 
 public class ConvRemoveMember extends StringPrompt {
+
+    private StelyTeamPlugin plugin;
+    private SQLManager sqlManager;
+    private YamlConfiguration config;
+    private MessageManager messageManager;
+    private InventoryBuilder inventoryBuilder;
+
+
+    public ConvRemoveMember(StelyTeamPlugin plugin) {
+        this.plugin = plugin;
+        this.sqlManager = plugin.getSQLManager();
+        this.config = plugin.getConfig();
+        this.messageManager = plugin.getMessageManager();
+        this.inventoryBuilder = plugin.getInventoryBuilder();
+    }
+
 
     @Override
     public Prompt acceptInput(ConversationContext con, String answer) {
         Player author = (Player) con.getForWhom();
         String authorName = author.getName();
-        String teamId = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(author.getName());
+        String teamId = sqlManager.getTeamIDFromPlayer(author.getName());
 
-        if (!StelyTeamPlugin.sqlManager.isMemberInTeam(answer, teamId)){
+        if (!sqlManager.isMemberInTeam(answer, teamId)){
             // con.getForWhom().sendRawMessage("Le joueur n'est pas dans ta team");
-            con.getForWhom().sendRawMessage(MessageManager.getMessage("common.player_not_in_your_team"));
+            con.getForWhom().sendRawMessage(messageManager.getMessage("common.player_not_in_your_team"));
             return null;
         }else if (authorName.equals(answer)){
             // con.getForWhom().sendRawMessage("Tu ne peux pas exclure toi-même");
-            con.getForWhom().sendRawMessage(MessageManager.getMessage("manage_members.remove_member.cant_exclude_yourself"));
+            con.getForWhom().sendRawMessage(messageManager.getMessage("manage_members.remove_member.cant_exclude_yourself"));
             return null;
-        }else if (StelyTeamPlugin.sqlManager.getMemberRank(answer) <= StelyTeamPlugin.sqlManager.getMemberRank(authorName)){
+        }else if (sqlManager.getMemberRank(answer) <= sqlManager.getMemberRank(authorName)){
             // con.getForWhom().sendRawMessage("Vous ne pouvez pas exclure un membre de rang supérieur à vous");
-            con.getForWhom().sendRawMessage(MessageManager.getMessage("manage_members.remove_member.cant_exclude_higher_rank"));
+            con.getForWhom().sendRawMessage(messageManager.getMessage("manage_members.remove_member.cant_exclude_higher_rank"));
             return null;
         }
         
-        StelyTeamPlugin.addTeamTempAction(authorName, answer, teamId, "removeMember");
-        Inventory inventory = InventoryGenerator.createConfirmInventory();
+        plugin.addTeamTempAction(authorName, answer, teamId, "removeMember");
+        Inventory inventory = inventoryBuilder.createConfirmInventory();
         author.openInventory(inventory);
         return null;
     }
@@ -41,7 +59,7 @@ public class ConvRemoveMember extends StringPrompt {
     @Override
     public String getPromptText(ConversationContext arg0) {
         // return "Envoie le pseudo du joueur à retirer";
-        return MessageManager.getMessage("manage_members.remove_member.send_player_name");
+        return messageManager.getMessage("manage_members.remove_member.send_player_name");
     }
 
 }

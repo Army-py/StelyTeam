@@ -33,10 +33,10 @@ public class SubCmdEditName extends SubCommand {
             if (sqlManager.teamIdExist(args[1])){
                 if (sqlManager.teamIdExist(args[2])){
                     // player.sendMessage("Ce nom de team existe déjà");
-                    player.sendMessage(messageManager.getMessage("commands.common.,name_already_exist"));
+                    player.sendMessage(messageManager.getMessage("common.name_already_exists"));
                 }else if (args[2].contains(" ")){
                     // player.sendMessage("Le nom de team ne doit pas contenir d'espace");
-                    player.sendMessage(messageManager.getMessage("commands.common.name_cannot_contain_space"));
+                    player.sendMessage(messageManager.getMessage("common.name_cannot_contain_space"));
                 }else{
                     sqlManager.updateTeamID(args[1], args[2]);
                     // player.sendMessage("Nom de team modifié en " + args[2]);

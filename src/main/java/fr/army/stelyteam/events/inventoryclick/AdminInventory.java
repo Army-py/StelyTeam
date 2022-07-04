@@ -1,19 +1,27 @@
 package fr.army.stelyteam.events.inventoryclick;
 
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.utils.InventoryGenerator;
+import fr.army.stelyteam.utils.InventoryBuilder;
 
 
 public class AdminInventory {
-    private InventoryClickEvent event;
 
-    public AdminInventory(InventoryClickEvent event) {
+    private InventoryClickEvent event;
+    private YamlConfiguration config;
+    private InventoryBuilder inventoryBuilder;
+
+
+    public AdminInventory(InventoryClickEvent event, StelyTeamPlugin plugin) {
         this.event = event;
+        this.config = plugin.getConfig();
+        this.inventoryBuilder = plugin.getInventoryBuilder();
     }
+
 
     public void onInventoryClick(){
         Player player = (Player) event.getWhoClicked();
@@ -21,15 +29,15 @@ public class AdminInventory {
         String itemName = event.getCurrentItem().getItemMeta().getDisplayName();
 
         // Ouverture des inventaires
-        if (itemName.equals(StelyTeamPlugin.config.getString("inventories.admin.manage.itemName"))){
-            Inventory inventory = InventoryGenerator.createManageInventory(playerName);
+        if (itemName.equals(config.getString("inventories.admin.manage.itemName"))){
+            Inventory inventory = inventoryBuilder.createManageInventory(playerName);
             player.openInventory(inventory);
-        }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.admin.member.itemName"))){
-            Inventory inventory = InventoryGenerator.createMemberInventory(playerName);
+        }else if (itemName.equals(config.getString("inventories.admin.member.itemName"))){
+            Inventory inventory = inventoryBuilder.createMemberInventory(playerName);
             player.openInventory(inventory);
             
         // Fermeture ou retour en arrière de l'inventaire
-        }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.admin.close.itemName"))){
+        }else if (itemName.equals(config.getString("inventories.admin.close.itemName"))){
             player.closeInventory();
         }
     }

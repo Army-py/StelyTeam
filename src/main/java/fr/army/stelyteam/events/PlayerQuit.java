@@ -8,16 +8,23 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import fr.army.stelyteam.StelyTeamPlugin;
 
 public class PlayerQuit implements Listener{
+
+    private StelyTeamPlugin plugin;
+
+    public PlayerQuit(StelyTeamPlugin plugin) {
+        this.plugin = plugin;
+    }
+
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event){
         Player player = event.getPlayer();
         String playerName = player.getName();
 
-        if (StelyTeamPlugin.getTeamActions(playerName) != null){
-            StelyTeamPlugin.removeTeamTempAction(playerName);
+        if (plugin.getTeamActions(playerName) != null){
+            plugin.removeTeamTempAction(playerName);
         }
-        if (StelyTeamPlugin.getPlayerActions(playerName) != null){
-            StelyTeamPlugin.removePlayerTempAction(playerName);
+        if (plugin.getPlayerActions(playerName) != null){
+            plugin.removePlayerTempAction(playerName);
         }
     }
 }

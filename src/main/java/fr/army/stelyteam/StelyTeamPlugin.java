@@ -17,19 +17,27 @@ import fr.army.stelyteam.events.InventoryClose;
 import fr.army.stelyteam.events.PlayerQuit;
 import fr.army.stelyteam.utils.ColorsBuilder;
 import fr.army.stelyteam.utils.EconomyManager;
+import fr.army.stelyteam.utils.InventoryBuilder;
 import fr.army.stelyteam.utils.MessageManager;
 import fr.army.stelyteam.utils.SQLManager;
 import fr.army.stelyteam.utils.SQLiteManager;
+import fr.army.stelyteam.utils.TeamMembersUtils;
+import fr.army.stelyteam.utils.conversation.ConversationBuilder;
 
 public class StelyTeamPlugin extends JavaPlugin {
+
     private YamlConfiguration config;
     private YamlConfiguration messages;
     private SQLManager sqlManager;
     private SQLiteManager sqliteManager;
-    private EconomyManager economy;
+    private EconomyManager economyManager;
     private CommandManager commandManager;
     private MessageManager messageManager;
     private ColorsBuilder colorsBuilder;
+    private ConversationBuilder conversationBuilder;
+    private InventoryBuilder inventoryBuilder;
+    private TeamMembersUtils teamMembersUtils;
+
 
     public ArrayList<String> playersCreateTeam = new ArrayList<String>();
 
@@ -48,8 +56,8 @@ public class StelyTeamPlugin extends JavaPlugin {
         this.config = initFile(this.getDataFolder(), "config.yml");
         this.messages = initFile(this.getDataFolder(), "messages.yml");
 
-        this.sqlManager = new SQLManager();
-        this.sqliteManager = new SQLiteManager();
+        this.sqlManager = new SQLManager(this);
+        this.sqliteManager = new SQLiteManager(this);
 
         try {
             this.sqlManager.connect();
@@ -62,14 +70,17 @@ public class StelyTeamPlugin extends JavaPlugin {
         
         this.sqlManager.createTables();
         this.sqliteManager.createTables();
-        this.economy = new EconomyManager(this);
+        this.economyManager = new EconomyManager(this);
         this.messageManager = new MessageManager(this);
         this.commandManager = new CommandManager(this);
         this.colorsBuilder = new ColorsBuilder();
+        this.conversationBuilder = new ConversationBuilder(this);
+        this.inventoryBuilder = new InventoryBuilder(this);
+        this.teamMembersUtils = new TeamMembersUtils(this);
         
-        getServer().getPluginManager().registerEvents(new InventoryClickManager(), this);
-        getServer().getPluginManager().registerEvents(new PlayerQuit(), this);
-        getServer().getPluginManager().registerEvents(new InventoryClose(), this);
+        getServer().getPluginManager().registerEvents(new InventoryClickManager(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerQuit(this), this);
+        getServer().getPluginManager().registerEvents(new InventoryClose(this), this);
 
         getLogger().info("StelyTeam ON");
     }
@@ -228,8 +239,8 @@ public class StelyTeamPlugin extends JavaPlugin {
         return sqliteManager;
     }
 
-    public EconomyManager getEconomy() {
-        return economy;
+    public EconomyManager getEconomyManager() {
+        return economyManager;
     }
 
     public MessageManager getMessageManager() {
@@ -238,5 +249,17 @@ public class StelyTeamPlugin extends JavaPlugin {
 
     public ColorsBuilder getColorsBuilder() {
         return colorsBuilder;
+    }
+
+    public ConversationBuilder getConversationBuilder() {
+        return conversationBuilder;
+    }
+
+    public InventoryBuilder getInventoryBuilder() {
+        return inventoryBuilder;
+    }
+
+    public TeamMembersUtils getTeamMembersUtils() {
+        return teamMembersUtils;
     }
 }

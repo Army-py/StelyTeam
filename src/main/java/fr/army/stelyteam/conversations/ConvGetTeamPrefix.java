@@ -3,7 +3,9 @@ package fr.army.stelyteam.conversations;
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.utils.EconomyManager;
 import fr.army.stelyteam.utils.MessageManager;
+import fr.army.stelyteam.utils.SQLManager;
 
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
@@ -14,6 +16,21 @@ import java.util.regex.Pattern;
 
 public class ConvGetTeamPrefix extends StringPrompt {
 
+    private StelyTeamPlugin plugin;
+    private SQLManager sqlManager;
+    private YamlConfiguration config;
+    private MessageManager messageManager;
+    private EconomyManager economyManager;
+
+
+    public ConvGetTeamPrefix(StelyTeamPlugin plugin) {
+        this.plugin = plugin;
+        this.sqlManager = plugin.getSQLManager();
+        this.config = plugin.getConfig();
+        this.messageManager = plugin.getMessageManager();
+        this.economyManager = plugin.getEconomyManager();
+    }
+
     @Override
     public Prompt acceptInput(ConversationContext con, String answer) {
         Player author = (Player) con.getForWhom();
@@ -21,27 +38,27 @@ public class ConvGetTeamPrefix extends StringPrompt {
         
         if (prefixTeamIsTooLong(answer)) {
             // con.getForWhom().sendRawMessage("Le préfixe est trop long");
-            con.getForWhom().sendRawMessage(MessageManager.getMessage("common.prefix_is_too_long"));
+            con.getForWhom().sendRawMessage(messageManager.getMessage("common.prefix_is_too_long"));
             return this;
         }
 
 
-        StelyTeamPlugin.addCreationTeamTempPrefix(authorName, answer);
+        plugin.addCreationTeamTempPrefix(authorName, answer);
 
-        String[] teamInfos = StelyTeamPlugin.getCreationTeamTemp(authorName);
+        String[] teamInfos = plugin.getCreationTeamTemp(authorName);
 
-        StelyTeamPlugin.sqlManager.insertTeam(teamInfos[1], teamInfos[2], authorName);
-        StelyTeamPlugin.removeCreationTeamTemp(authorName);
-        new EconomyManager().removeMoneyPlayer(author, StelyTeamPlugin.config.getDouble("prices.createTeam"));
+        sqlManager.insertTeam(teamInfos[1], teamInfos[2], authorName);
+        plugin.removeCreationTeamTemp(authorName);
+        economyManager.removeMoneyPlayer(author, config.getDouble("prices.createTeam"));
         // con.getForWhom().sendRawMessage("Team créé !");
-        con.getForWhom().sendRawMessage(MessageManager.getMessage("manage_team.creation.team_created"));
+        con.getForWhom().sendRawMessage(messageManager.getMessage("manage_team.creation.team_created"));
         return null;
     }
 
     @Override
     public String getPromptText(ConversationContext arg0) {
         // return "Envoie le préfixe de team";
-        return MessageManager.getMessage("manage_team.creation.send_team_prefix");
+        return messageManager.getMessage("manage_team.creation.send_team_prefix");
     }
 
 
@@ -60,6 +77,6 @@ public class ConvGetTeamPrefix extends StringPrompt {
             hexColors++;
         }
 
-        return prefixTeam.length() - (colors * pattern.pattern().length() + hexColors * hexPattern.pattern().length()) > StelyTeamPlugin.config.getInt("teamPrefixMaxLength");
+        return prefixTeam.length() - (colors * pattern.pattern().length() + hexColors * hexPattern.pattern().length()) > config.getInt("teamPrefixMaxLength");
     }
 }

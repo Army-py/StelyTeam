@@ -23,7 +23,7 @@ public class ConvAddMoney extends StringPrompt {
         this.sqlManager = plugin.getSQLManager();
         this.config = plugin.getConfig();
         this.messageManager = plugin.getMessageManager();
-        this.economy = plugin.getEconomy();
+        this.economy = plugin.getEconomyManager();
     }
 
     @Override

@@ -1,10 +1,8 @@
 package fr.army.stelyteam.commands;
 
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import org.bukkit.command.Command;
@@ -29,28 +27,33 @@ import fr.army.stelyteam.commands.subCommands.member.SubCmdChangeOwner;
 import fr.army.stelyteam.commands.subCommands.member.SubCmdRemoveMember;
 import fr.army.stelyteam.commands.subCommands.utility.SubCmdHome;
 import fr.army.stelyteam.commands.subCommands.utility.SubCmdVisual;
-import fr.army.stelyteam.utils.InventoryGenerator;
+import fr.army.stelyteam.utils.InventoryBuilder;
 import fr.army.stelyteam.utils.MessageManager;
 import fr.army.stelyteam.utils.SQLManager;
 import fr.army.stelyteam.utils.SQLiteManager;
 
 public class CmdStelyTeam implements CommandExecutor, TabCompleter {
+
     private StelyTeamPlugin plugin;
     private SQLManager sqlManager;
     private SQLiteManager sqliteManager;
+    private MessageManager messageManager;
+    private InventoryBuilder inventoryBuilder;
     private Map<String, Object> subCommands;
     private Map<String, Object> subCommandsOp;
-    private MessageManager messageManager;
+
 
     public CmdStelyTeam(StelyTeamPlugin plugin) {
         this.plugin = plugin;
         this.sqlManager = plugin.getSQLManager();
         this.sqliteManager = plugin.getSQLiteManager();
         this.messageManager = plugin.getMessageManager();
+        this.inventoryBuilder = new InventoryBuilder(plugin);
         this.subCommands = new HashMap<>();
         this.subCommandsOp = new HashMap<>();
         initSubCommands();
     }
+
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -62,21 +65,21 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
                 return true;
             }
 
-            if (sqliteManager.isRegistered(player.getName())) {
+            if (!sqliteManager.isRegistered(player.getName())) {
                 sqliteManager.registerPlayer(player);
             }
             
             if (args.length == 0){
                 Inventory inventory;
                 if (!sqlManager.isMember(playerName)){
-                    inventory = InventoryGenerator.createTeamInventory();
+                    inventory = inventoryBuilder.createTeamInventory();
                 }else if(sqlManager.isOwner(player.getName())){
-                    inventory = InventoryGenerator.createAdminInventory();
+                    inventory = inventoryBuilder.createAdminInventory();
                 }else if (sqlManager.getMemberRank(playerName) <= 3){
-                    inventory = InventoryGenerator.createAdminInventory();
+                    inventory = inventoryBuilder.createAdminInventory();
                 }else if (sqlManager.getMemberRank(playerName) >= 4){
-                    inventory = InventoryGenerator.createMemberInventory(playerName);
-                }else inventory = InventoryGenerator.createTeamInventory();
+                    inventory = inventoryBuilder.createMemberInventory(playerName);
+                }else inventory = inventoryBuilder.createTeamInventory();
                 player.openInventory(inventory);
             }else{
                 if (subCommands.containsKey(args[0])){

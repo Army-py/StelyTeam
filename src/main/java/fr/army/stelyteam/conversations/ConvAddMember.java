@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.utils.InventoryGenerator;
+import fr.army.stelyteam.utils.InventoryBuilder;
 import fr.army.stelyteam.utils.MessageManager;
 import fr.army.stelyteam.utils.SQLManager;
 
@@ -19,6 +19,7 @@ public class ConvAddMember extends StringPrompt {
     private SQLManager sqlManager;
     private YamlConfiguration config;
     private MessageManager messageManager;
+    private InventoryBuilder inventoryBuilder;
 
 
     public ConvAddMember(StelyTeamPlugin plugin){
@@ -26,6 +27,7 @@ public class ConvAddMember extends StringPrompt {
         this.sqlManager = plugin.getSQLManager();
         this.config = plugin.getConfig();
         this.messageManager = plugin.getMessageManager();
+        this.inventoryBuilder = plugin.getInventoryBuilder();
     }
 
 
@@ -58,7 +60,7 @@ public class ConvAddMember extends StringPrompt {
 
         // con.getForWhom().sendRawMessage("L'invitation a été envoyée");
         con.getForWhom().sendRawMessage(messageManager.getMessage("manage_members.add_member.invitation_sent"));
-        Inventory inventory = InventoryGenerator.createConfirmInventory();
+        Inventory inventory = inventoryBuilder.createConfirmInventory();
         player.openInventory(inventory);
 
         return null;

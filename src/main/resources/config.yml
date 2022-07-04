@@ -246,12 +246,13 @@ inventories:
       itemName: "§5§lInfos"
       itemType: BOOK
       slot: 13
-      rank: 5
+      rank: -1
       lore:
         - "§aNom : §f%NAME%"
         - "§aPréfixe : §r%PREFIX%"
         - "§aGérant : §r%OWNER%"
         - "§aGrade : §r%RANK%"
+        - "§aArrivé : §r%DATE%"
         - "§aMembres : §r%MEMBER_COUNT% / %MAX_MEMBERS%"
     seeTeamMembers:
       itemName: "§5§lMembres"

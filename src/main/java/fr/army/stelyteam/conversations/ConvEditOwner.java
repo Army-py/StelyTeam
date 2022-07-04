@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.utils.InventoryGenerator;
+import fr.army.stelyteam.utils.InventoryBuilder;
 import fr.army.stelyteam.utils.MessageManager;
 import fr.army.stelyteam.utils.SQLManager;
 
@@ -17,11 +17,13 @@ public class ConvEditOwner extends StringPrompt {
     private StelyTeamPlugin plugin;
     private SQLManager sqlManager;
     private MessageManager messageManager;
+    private InventoryBuilder inventoryBuilder;
 
     public ConvEditOwner(StelyTeamPlugin plugin) {
         this.plugin = plugin;
         this.sqlManager = plugin.getSQLManager();
         this.messageManager = plugin.getMessageManager();
+        this.inventoryBuilder = plugin.getInventoryBuilder();
     }
 
     @Override
@@ -46,7 +48,7 @@ public class ConvEditOwner extends StringPrompt {
         }
 
         plugin.addTeamTempAction(authorName, answer, teamId, "editOwner");
-        Inventory inventory = InventoryGenerator.createConfirmInventory();
+        Inventory inventory = inventoryBuilder.createConfirmInventory();
         author.openInventory(inventory);
         return null;
     }

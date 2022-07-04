@@ -6,9 +6,7 @@ import java.util.regex.Pattern;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.conversations.Conversation;
-import org.bukkit.conversations.ConversationFactory;
-import org.bukkit.conversations.Prompt;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
@@ -17,18 +15,35 @@ import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.conversations.ConvAddMember;
 import fr.army.stelyteam.conversations.ConvEditOwner;
 import fr.army.stelyteam.conversations.ConvRemoveMember;
-import fr.army.stelyteam.utils.InventoryGenerator;
+import fr.army.stelyteam.utils.InventoryBuilder;
 import fr.army.stelyteam.utils.MessageManager;
+import fr.army.stelyteam.utils.SQLManager;
 import fr.army.stelyteam.utils.TeamMembersUtils;
 import fr.army.stelyteam.utils.conversation.ConversationBuilder;
 
 
 public class EditMembersInventory {
     private InventoryClickEvent event;
+    private StelyTeamPlugin plugin;
+    private YamlConfiguration config;
+    private SQLManager sqlManager;
+    private MessageManager messageManager;
+    private ConversationBuilder conversationBuilder;
+    private InventoryBuilder inventoryBuilder;
+    private TeamMembersUtils teamMembersUtils;
 
-    public EditMembersInventory(InventoryClickEvent event) {
+
+    public EditMembersInventory(InventoryClickEvent event, StelyTeamPlugin plugin) {
         this.event = event;
+        this.plugin = plugin;
+        this.config = plugin.getConfig();
+        this.sqlManager = plugin.getSQLManager();
+        this.messageManager = plugin.getMessageManager();
+        this.conversationBuilder = plugin.getConversationBuilder();
+        this.inventoryBuilder = plugin.getInventoryBuilder();
+        this.teamMembersUtils = plugin.getTeamMembersUtils();
     }
+
 
     public void onInventoryClick(){
         String itemName;
@@ -36,73 +51,75 @@ public class EditMembersInventory {
         List<String> lore = event.getCurrentItem().getItemMeta().getLore();
         Player player = (Player) event.getWhoClicked();
         String playerName = player.getName();
-        String teamId = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(playerName);
+        String teamId = sqlManager.getTeamIDFromPlayer(playerName);
         
 
 
-        if (itemType.equals(Material.getMaterial(StelyTeamPlugin.config.getString("noPermission.itemType"))) && lore.equals(StelyTeamPlugin.config.getStringList("noPermission.lore"))){
+        if (itemType.equals(Material.getMaterial(config.getString("noPermission.itemType"))) && lore.equals(config.getStringList("noPermission.lore"))){
             return;
         }
 
 
         // Fermeture ou retour en arrière de l'inventaire
         itemName = event.getCurrentItem().getItemMeta().getDisplayName();
-        if (itemName.equals(StelyTeamPlugin.config.getString("inventories.editMembers.close.itemName"))){
-            Inventory inventory = InventoryGenerator.createManageInventory(playerName);
+        if (itemName.equals(config.getString("inventories.editMembers.close.itemName"))){
+            Inventory inventory = inventoryBuilder.createManageInventory(playerName);
             player.openInventory(inventory);
             return;
-        }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.editMembers.addMember.itemName"))){
+        }else if (itemName.equals(config.getString("inventories.editMembers.addMember.itemName"))){
             player.closeInventory();
-            new ConversationBuilder().getNameInput(player, new ConvAddMember());
+            conversationBuilder.getNameInput(player, new ConvAddMember(plugin));
             return;
-        }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.editMembers.removeMember.itemName"))){
+        }else if (itemName.equals(config.getString("inventories.editMembers.removeMember.itemName"))){
             player.closeInventory();
-            new ConversationBuilder().getNameInput(player, new ConvRemoveMember());
+            conversationBuilder.getNameInput(player, new ConvRemoveMember(plugin));
             return;
-        }else if (itemName.equals(StelyTeamPlugin.config.getString("inventories.editMembers.editOwner.itemName"))){
+        }else if (itemName.equals(config.getString("inventories.editMembers.editOwner.itemName"))){
             player.closeInventory();
-            new ConversationBuilder().getNameInput(player, new ConvEditOwner());
+            conversationBuilder.getNameInput(player, new ConvEditOwner(plugin));
             return;
         }
 
         itemName = removeFirstColors(event.getCurrentItem().getItemMeta().getDisplayName());
-        if (StelyTeamPlugin.sqlManager.getMembers(teamId).contains(itemName)){
-            Integer authorRank = StelyTeamPlugin.sqlManager.getMemberRank(playerName);
-            Integer memberRank = StelyTeamPlugin.sqlManager.getMemberRank(itemName);
+        if (sqlManager.getMembers(teamId).contains(itemName)){
+            Integer authorRank = sqlManager.getMemberRank(playerName);
+            Integer memberRank = sqlManager.getMemberRank(itemName);
             Player member = Bukkit.getPlayer(itemName);
 
             if (event.getClick().isRightClick()){
                 if (memberRank <= authorRank){
                     return;
                 }
-                if (!StelyTeamPlugin.sqlManager.isOwner(itemName) && memberRank < StelyTeamPlugin.getLastRank()){
-                    StelyTeamPlugin.sqlManager.demoteMember(teamId, itemName);
+                if (!sqlManager.isOwner(itemName) && memberRank < plugin.getLastRank()){
+                    sqlManager.demoteMember(teamId, itemName);
 
-                    if (member != null){
-                        String newRank = StelyTeamPlugin.getRankFromId(memberRank+1);
-                        String newRankColor = StelyTeamPlugin.config.getString("ranks." + newRank + ".color");
+                    if (member != null && itemName == member.getName()){
+                        String newRank = plugin.getRankFromId(memberRank+1);
+                        String newRankName = config.getString("ranks." + newRank + ".name");
+                        String newRankColor = config.getString("ranks." + newRank + ".color");
                         // member.sendMessage("Vous avez été rétrogradé " + newRankColor + newRank);
-                        member.sendMessage(MessageManager.getReplaceMessage("receiver.demote", newRankColor + newRank));
+                        member.sendMessage(messageManager.getReplaceMessage("receiver.demote", newRankColor + newRankName));
                     }
                 }
             }else if (event.getClick().isLeftClick()){
                 if (memberRank-1 <= authorRank){
                     return;
                 }
-                if (!StelyTeamPlugin.sqlManager.isOwner(itemName) && memberRank != 1){
-                    StelyTeamPlugin.sqlManager.promoteMember(teamId, itemName);
+                if (!sqlManager.isOwner(itemName) && memberRank != 1){
+                    sqlManager.promoteMember(teamId, itemName);
 
-                    if (member != null){
-                        String newRank = StelyTeamPlugin.getRankFromId(memberRank-1);
-                        String newRankColor = StelyTeamPlugin.config.getString("ranks." + newRank + ".color");
+                    if (member != null && itemName == member.getName()){
+                        String newRank = plugin.getRankFromId(memberRank-1);
+                        String newRankName = config.getString("ranks." + newRank + ".name");
+                        String newRankColor = config.getString("ranks." + newRank + ".color");
                         // member.sendMessage("Vous avez été promu " + newRankColor + newRank);
-                        member.sendMessage(MessageManager.getReplaceMessage("receiver.promote", newRankColor + newRank));
+                        member.sendMessage(messageManager.getReplaceMessage("receiver.promote", newRankColor + newRankName));
                     }
                 }
             }else return;
-            Inventory inventory = InventoryGenerator.createEditMembersInventory(playerName);
+            Inventory inventory = inventoryBuilder.createEditMembersInventory(playerName);
             player.openInventory(inventory);
-            TeamMembersUtils.refreshTeamMembersInventory(teamId, playerName);
+            teamMembersUtils.refreshTeamMembersInventory(teamId, playerName);
         }
     }
 
@@ -115,17 +132,5 @@ public class EditMembersInventory {
             colors++;
         }
         return name.substring(name.length() - (name.length() - colors * pattern.pattern().length()));
-    }
-
-
-    public void getNameInput(Player player, Prompt prompt) {
-        ConversationFactory cf = new ConversationFactory(StelyTeamPlugin.instance);
-        cf.withFirstPrompt(prompt);
-        cf.withLocalEcho(false);
-        cf.withTimeout(60);
-
-        Conversation conv = cf.buildConversation(player);
-        conv.begin();
-        return;
     }
 }

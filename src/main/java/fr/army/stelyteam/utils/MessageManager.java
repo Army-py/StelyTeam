@@ -5,6 +5,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import fr.army.stelyteam.StelyTeamPlugin;
 
 public class MessageManager {
+
     private YamlConfiguration config;
     private YamlConfiguration messages;
 
@@ -13,9 +14,6 @@ public class MessageManager {
         this.messages = plugin.getMessages();
     }
 
-    private String getPluginPrefix (){
-        return config.getString("prefix");
-    }
 
     public String getMessage(String path) {
         return getPluginPrefix() + messages.getString(path);
@@ -30,5 +28,9 @@ public class MessageManager {
     public String getDoubleReplaceMessage(String path, String author, String receiver) {
         return getPluginPrefix() + messages.getString(path).replace("%AUTHOR%", author).replace("%RECEIVER%", receiver);
         // return new ColorsBuilder().replaceColor(getPluginPrefix() + StelyTeamPlugin.messages.getString(path).replace("%AUTHOR%", author).replace("%RECEIVER%", receiver));
+    }
+
+    private String getPluginPrefix (){
+        return config.getString("prefix");
     }
 }

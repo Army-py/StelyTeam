@@ -1,5 +1,8 @@
 package fr.army.stelyteam.commands.subCommands.info;
 
+import java.text.NumberFormat;
+import java.util.Locale;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -30,7 +33,7 @@ public class SubCmdMoney extends SubCommand {
             String teamID = String.join("", args);
             if (sqlManager.teamIdExist(teamID)){
                 // player.sendMessage(sqlManager.getTeamMoney(teamID).toString());
-                player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_money.output", sqlManager.getTeamMoney(teamID).toString()));
+                player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_money.output", DoubleToString(sqlManager.getTeamMoney(teamID))));
             }else{
                 // player.sendMessage("Cette team n'existe pas");
                 player.sendMessage(messageManager.getMessage("common.team_not_exist"));
@@ -39,4 +42,8 @@ public class SubCmdMoney extends SubCommand {
         return true;
     }
 
+
+    private String DoubleToString(double value){
+        return NumberFormat.getNumberInstance(Locale.US).format(value);
+    }
 }

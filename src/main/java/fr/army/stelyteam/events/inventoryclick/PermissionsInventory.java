@@ -1,80 +1,95 @@
 package fr.army.stelyteam.events.inventoryclick;
 
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.utils.InventoryGenerator;
+import fr.army.stelyteam.utils.InventoryBuilder;
+import fr.army.stelyteam.utils.SQLManager;
 import fr.army.stelyteam.utils.TeamMembersUtils;
 
 
 public class PermissionsInventory {
-    private InventoryClickEvent event;
 
-    public PermissionsInventory(InventoryClickEvent event) {
+    private InventoryClickEvent event;
+    private StelyTeamPlugin plugin;
+    private YamlConfiguration config;
+    private SQLManager sqlManager;
+    private InventoryBuilder inventoryBuilder;
+    private TeamMembersUtils teamMembersUtils;
+
+
+    public PermissionsInventory(InventoryClickEvent event, StelyTeamPlugin plugin){
         this.event = event;
+        this.plugin = plugin;
+        this.config = plugin.getConfig();
+        this.sqlManager = plugin.getSQLManager();
+        this.inventoryBuilder = plugin.getInventoryBuilder();
+        this.teamMembersUtils = new TeamMembersUtils(plugin);
     }
+
 
     public void onInventoryClick(){
         Player player = (Player) event.getWhoClicked();
         String playerName = player.getName();
         String itemName = event.getCurrentItem().getItemMeta().getDisplayName();
-        String teamId = StelyTeamPlugin.sqlManager.getTeamIDFromPlayer(playerName);
+        String teamId = sqlManager.getTeamIDFromPlayer(playerName);
 
         // Fermeture ou retour en arrière de l'inventaire
-        if (itemName.equals(StelyTeamPlugin.config.getString("inventories.permissions.close.itemName"))){
-            Inventory inventory = InventoryGenerator.createManageInventory(playerName);
+        if (itemName.equals(config.getString("inventories.permissions.close.itemName"))){
+            Inventory inventory = inventoryBuilder.createManageInventory(playerName);
             player.openInventory(inventory);
             return;
         }
 
         if (getPermissionFromName(itemName) != null){
             String permission = getPermissionFromName(itemName);
-            Integer permissionRank = StelyTeamPlugin.sqlManager.getPermissionRank(teamId, permission);
-            Integer authorRank = StelyTeamPlugin.sqlManager.getMemberRank(playerName);
-            boolean authorIsOwner = StelyTeamPlugin.sqlManager.isOwner(playerName);
+            Integer permissionRank = sqlManager.getPermissionRank(teamId, permission);
+            Integer authorRank = sqlManager.getMemberRank(playerName);
+            boolean authorIsOwner = sqlManager.isOwner(playerName);
             if (event.getClick().isRightClick()){
                 if (permissionRank != null){
                     if (!authorIsOwner && permissionRank <= authorRank){
                         return;
                     }
-                    if (permissionRank < StelyTeamPlugin.getLastRank()) StelyTeamPlugin.sqlManager.demoteRankPermission(teamId, permission);
+                    if (permissionRank < plugin.getLastRank()) sqlManager.demoteRankPermission(teamId, permission);
                 }else{
-                    String rankPath = StelyTeamPlugin.config.getString("inventories.permissions."+permission+".rankPath");
-                    Integer defaultRankId = StelyTeamPlugin.config.getInt("inventories."+rankPath+".rank");
+                    String rankPath = config.getString("inventories.permissions."+permission+".rankPath");
+                    Integer defaultRankId = config.getInt("inventories."+rankPath+".rank");
                     if (!authorIsOwner && defaultRankId <= authorRank){
                         return;
                     }
-                    if (defaultRankId != StelyTeamPlugin.getLastRank()) defaultRankId = defaultRankId+1;
-                    StelyTeamPlugin.sqlManager.insertPermission(teamId, permission, defaultRankId);
+                    if (defaultRankId != plugin.getLastRank()) defaultRankId = defaultRankId+1;
+                    sqlManager.insertPermission(teamId, permission, defaultRankId);
                 }
             }else if (event.getClick().isLeftClick()){
                 if (permissionRank != null){
                     if (!authorIsOwner && permissionRank-1 <= authorRank){
                         return;
                     }
-                    if (permissionRank > 0) StelyTeamPlugin.sqlManager.promoteRankPermission(teamId, permission);
+                    if (permissionRank > 0) sqlManager.promoteRankPermission(teamId, permission);
                 }else{
-                    String rankPath = StelyTeamPlugin.config.getString("inventories.permissions."+permission+".rankPath");
-                    Integer defaultRankId = StelyTeamPlugin.config.getInt("inventories."+rankPath+".rank");
+                    String rankPath = config.getString("inventories.permissions."+permission+".rankPath");
+                    Integer defaultRankId = config.getInt("inventories."+rankPath+".rank");
                     if (!authorIsOwner && defaultRankId-1 <= authorRank){
                         return;
                     }
                     if (defaultRankId != 0) defaultRankId = defaultRankId-1;
-                    StelyTeamPlugin.sqlManager.insertPermission(teamId, permission, defaultRankId);
+                    sqlManager.insertPermission(teamId, permission, defaultRankId);
                 }
             }else return;
-            Inventory inventory = InventoryGenerator.createPermissionsInventory(playerName);
+            Inventory inventory = inventoryBuilder.createPermissionsInventory(playerName);
             player.openInventory(inventory);
-            TeamMembersUtils.refreshTeamMembersInventory(teamId, playerName);
+            teamMembersUtils.refreshTeamMembersInventory(teamId, playerName);
         }
     }
 
 
-    public static String getPermissionFromName(String value) {
-        for (String key : StelyTeamPlugin.config.getConfigurationSection("inventories.permissions").getKeys(false)) {
-            if (StelyTeamPlugin.config.getString("inventories.permissions." + key + ".itemName").equals(value)) {
+    public String getPermissionFromName(String value) {
+        for (String key : config.getConfigurationSection("inventories.permissions").getKeys(false)) {
+            if (config.getString("inventories.permissions." + key + ".itemName").equals(value)) {
                 return key;
             }
         }
