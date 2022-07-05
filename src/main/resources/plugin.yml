@@ -9,6 +9,7 @@ commands:
   stelyteam:
     description: "Ouvre l'inventaire de team"
     usage: "/stelyteam"
+    aliases: ["st"]
     home:
       description: "Se téléporter au home de team"
       usage: "/stelyteam home"

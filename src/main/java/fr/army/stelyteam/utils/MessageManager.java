@@ -1,24 +1,36 @@
 package fr.army.stelyteam.utils;
 
+import org.bukkit.configuration.file.YamlConfiguration;
+
 import fr.army.stelyteam.StelyTeamPlugin;
 
 public class MessageManager {
-    private static String getPluginPrefix (){
-        return StelyTeamPlugin.config.getString("prefix");
+
+    private YamlConfiguration config;
+    private YamlConfiguration messages;
+
+    public MessageManager(StelyTeamPlugin plugin) {
+        this.config = plugin.getConfig();
+        this.messages = plugin.getMessages();
     }
 
-    public static String getMessage(String path) {
-        return getPluginPrefix() + StelyTeamPlugin.messages.getString(path);
+
+    public String getMessage(String path) {
+        return getPluginPrefix() + messages.getString(path);
         // return new ColorsBuilder().replaceColor(getPluginPrefix() + StelyTeamPlugin.messages.getString(path));
     }
 
-    public static String getReplaceMessage(String path, String replace) {
-        return getPluginPrefix() + StelyTeamPlugin.messages.getString(path).replace("%VALUE%", replace);
+    public String getReplaceMessage(String path, String replace) {
+        return getPluginPrefix() + messages.getString(path).replace("%VALUE%", replace);
         // return new ColorsBuilder().replaceColor(getPluginPrefix() + StelyTeamPlugin.messages.getString(path).replace("%VALUE%", replace));
     }
 
-    public static String getDoubleReplaceMessage(String path, String author, String receiver) {
-        return getPluginPrefix() + StelyTeamPlugin.messages.getString(path).replace("%AUTHOR%", author).replace("%RECEIVER%", receiver);
+    public String getDoubleReplaceMessage(String path, String author, String receiver) {
+        return getPluginPrefix() + messages.getString(path).replace("%AUTHOR%", author).replace("%RECEIVER%", receiver);
         // return new ColorsBuilder().replaceColor(getPluginPrefix() + StelyTeamPlugin.messages.getString(path).replace("%AUTHOR%", author).replace("%RECEIVER%", receiver));
+    }
+
+    private String getPluginPrefix (){
+        return messages.getString("prefix");
     }
 }

@@ -20,8 +20,9 @@ public class SQLManager {
     private int port;
 
     private Connection connection;
+    private StelyTeamPlugin plugin;
 
-    public SQLManager() {
+    public SQLManager(StelyTeamPlugin plugin) {
         // this.host = App.config.getString("sql.host");
         // this.database = App.config.getString("sql.database");
         // this.user = App.config.getString("sql.user");
@@ -29,6 +30,8 @@ public class SQLManager {
         // this.port = App.config.getInt("sql.port");
 
         this.database = "bungeecord_StelyTeam.db";
+
+        this.plugin = plugin;
     }
 
 
@@ -39,7 +42,7 @@ public class SQLManager {
 
     public void connect() throws ClassNotFoundException, SQLException{
         if(!isConnected()){
-            this.connection = DriverManager.getConnection("jdbc:sqlite:"+ StelyTeamPlugin.instance.getDataFolder().getAbsolutePath()+"/"+this.database);
+            this.connection = DriverManager.getConnection("jdbc:sqlite:"+ plugin.getDataFolder().getAbsolutePath()+"/"+this.database);
         }
     }
 
@@ -219,16 +222,17 @@ public class SQLManager {
                 queryTeam.setString(2, teamPrefix);
                 queryTeam.setString(3, owner);
                 queryTeam.setInt(4, 0);
-                queryTeam.setString(5, new SimpleDateFormat("yyyy/MM/dd").format(Calendar.getInstance().getTime()));
+                queryTeam.setString(5, new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime()));
                 queryTeam.setInt(6, 0);
                 queryTeam.setInt(7, 0);
                 queryTeam.executeUpdate();
                 queryTeam.close();
 
-                PreparedStatement queryMember = connection.prepareStatement("INSERT INTO players VALUES (?, ?, ?)");
+                PreparedStatement queryMember = connection.prepareStatement("INSERT INTO players VALUES (?, ?, ?, ?)");
                 queryMember.setString(1, owner);
                 queryMember.setInt(2, 0);
                 queryMember.setString(3, teamID);
+                queryMember.setString(4, new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime()));
                 queryMember.executeUpdate();
                 queryMember.close();
             } catch (SQLException e) {
@@ -245,7 +249,7 @@ public class SQLManager {
                 query.setString(1, playername);
                 query.setInt(2, 5);
                 query.setString(3, teamID);
-                query.setString(4, new SimpleDateFormat("yyyy/MM/dd").format(Calendar.getInstance().getTime()));
+                query.setString(4, new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime()));
                 query.executeUpdate();
                 query.close();
             } catch (SQLException e) {
@@ -729,5 +733,25 @@ public class SQLManager {
                 e.printStackTrace();
             }
         }
+    }
+
+
+    public String getJoinDate(String playername) {
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT join_date FROM players WHERE playername = ?");
+                query.setString(1, playername);
+                ResultSet result = query.executeQuery();
+                String joinDate = null;
+                if(result.next()){
+                    joinDate = result.getString("join_date");
+                }
+                query.close();
+                return joinDate;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 }

@@ -1,19 +1,31 @@
 package fr.army.stelyteam.events.inventoryclick;
 
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.utils.EconomyManager;
-import fr.army.stelyteam.utils.InventoryGenerator;
+import fr.army.stelyteam.utils.InventoryBuilder;
+import fr.army.stelyteam.utils.MessageManager;
 
 
 public class CreateTeamInventory {
     private InventoryClickEvent event;
+    private StelyTeamPlugin plugin;
+    private YamlConfiguration config;
+    private EconomyManager economyManager;
+    private MessageManager messageManager;
+    private InventoryBuilder inventoryBuilder;
 
-    public CreateTeamInventory(InventoryClickEvent event) {
+    public CreateTeamInventory(InventoryClickEvent event, StelyTeamPlugin plugin) {
         this.event = event;
+        this.plugin = plugin;
+        this.config = plugin.getConfig();
+        this.economyManager = plugin.getEconomyManager();
+        this.messageManager = plugin.getMessageManager();
+        this.inventoryBuilder = plugin.getInventoryBuilder();
     }
 
 
@@ -22,13 +34,14 @@ public class CreateTeamInventory {
         String playerName = player.getName();
         String itemName = event.getCurrentItem().getItemMeta().getDisplayName();
 
-        if (itemName.equals(StelyTeamPlugin.config.getString("inventories.createTeam.itemName"))){
-            if (new EconomyManager().checkMoneyPlayer(player, StelyTeamPlugin.config.getDouble("prices.createTeam"))){
-                Inventory confirmInventory = InventoryGenerator.createConfirmInventory();
+        if (itemName.equals(config.getString("inventories.createTeam.itemName"))){
+            if (economyManager.checkMoneyPlayer(player, config.getDouble("prices.createTeam"))){
+                Inventory confirmInventory = inventoryBuilder.createConfirmInventory();
                 player.openInventory(confirmInventory);
-                StelyTeamPlugin.playersTempActions.put(playerName, "createTeam");
+                plugin.playersTempActions.put(playerName, "createTeam");
             }else{
-                player.sendMessage("Vous n'avez pas assez d'argent");
+                // player.sendMessage("Vous n'avez pas assez d'argent");
+                player.sendMessage(messageManager.getMessage("common.not_enough_money"));
             }
         }
     }

@@ -12,11 +12,15 @@ import org.bukkit.entity.Player;
 import fr.army.stelyteam.StelyTeamPlugin;
 
 public class SQLiteManager {
+
     private String database;
     private Connection connection;
+    private StelyTeamPlugin plugin;
 
-    public SQLiteManager() {
+    public SQLiteManager(StelyTeamPlugin plugin) {
         this.database = "data.db";
+        
+        this.plugin = plugin;
     }
 
 
@@ -27,7 +31,7 @@ public class SQLiteManager {
 
     public void connect() throws ClassNotFoundException, SQLException{
         if(!isConnected()){
-            this.connection = DriverManager.getConnection("jdbc:sqlite:"+ StelyTeamPlugin.instance.getDataFolder().getAbsolutePath()+"/"+this.database);
+            this.connection = DriverManager.getConnection("jdbc:sqlite:"+ plugin.getDataFolder().getAbsolutePath()+"/"+this.database);
         }
     }
 

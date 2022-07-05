@@ -1,6 +1,3 @@
-# Prefixe devant les messages envoyés
-prefix: "§7[§5StelyTeam§7] "
-
 # Connection à la base de donnée
 sql:
   host: "localhost"
@@ -246,12 +243,13 @@ inventories:
       itemName: "§5§lInfos"
       itemType: BOOK
       slot: 13
-      rank: 5
+      rank: -1
       lore:
-        - "§aNom : §f%NAME%"
+        - "§aNom : §r%NAME%"
         - "§aPréfixe : §r%PREFIX%"
         - "§aGérant : §r%OWNER%"
         - "§aGrade : §r%RANK%"
+        - "§aArrivé : §r%DATE%"
         - "§aMembres : §r%MEMBER_COUNT% / %MAX_MEMBERS%"
     seeTeamMembers:
       itemName: "§5§lMembres"
