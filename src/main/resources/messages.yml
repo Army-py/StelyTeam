@@ -91,7 +91,6 @@ sender:
 
 # Messages que recevra le membre qui subit cette action
 receiver:
-  join_team: "§7Vous avez rejoint la team %VALUE%"
   exclude_from_team: "§7Vous avez été exclu de la team %VALUE%"
   promote_owner: "§7Vous avez été promu en gérant de la team %VALUE%"
   promote: "§7Vous avez été promu %VALUE%"
