@@ -9,12 +9,14 @@ common:
   name_cannot_contain_space: "§7Le nom de la team ne doit pas contenir d'espace"
   name_is_too_long: "§7Le nom est trop long"
   not_enough_money: "§7Vous n'avez pas assez d'argent"
+  no_invitation: "§7Vous n'avez reçu aucune invitation"
   player_already_in_team: "§7Ce joueur est déjà dans une team"
   player_already_action: "§7Ce joueur a déjà une action en cours"
   player_not_exist: "§7Ce joueur n'existe pas"
   player_not_in_your_team: "§7Le joueur n'est pas t'a team"
   prefix_is_too_long: "§7Le préfixe est trop long"
   team_not_exist: "§7La team n'existe pas"
+  team_bank_not_unlock: "§7Vous n'avez pas débloqué le compte de team"
 
 # Messages concernant la gestions des membres
 manage_members:
@@ -22,6 +24,9 @@ manage_members:
     max_members: "§7La team a déjà le nombre maximum de membres"
     send_player_name: "§7Envoyez le nom du joueur à ajouter"
     invitation_sent: "§7L'invitation a été envoyée"
+    invitation_received: "§7%VALUE% vous avez envoyé une invitation pour rejoindre sa team"
+    accept_invitation: "\n  §aAccepter §7: Clique ici pour accepter"
+    refuse_invitation: "\n  §cRefuser §7: Clique ici pour refuser"
   edit_owner:
     send_player_name: "§7Envoyez le nom du joueur à promouvoir"
   remove_member:
@@ -150,6 +155,10 @@ commands:
       - "§aCompte : §7%UNLOCK_BANK%"
       - "§aPlaces : §7%MEMBER_COUNT% / %MAX_MEMBERS%"
       - "§aMembres : §7%MEMBERS%"
+  stelyteam_accept:
+    output: "§7Vous avez rejoint la team %VALUE%"
+  stelyteam_deny:
+    output: "§7Vous avez refusé l'invitation"
   stelyteam_delete:
     usage: "§7/stelyteam delete <nom de la team>"
     output: "§7La team %VALUE% a été supprimée"

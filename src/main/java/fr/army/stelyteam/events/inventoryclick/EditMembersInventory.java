@@ -93,7 +93,7 @@ public class EditMembersInventory {
                 if (!sqlManager.isOwner(itemName) && memberRank < plugin.getLastRank()){
                     sqlManager.demoteMember(teamId, itemName);
 
-                    if (member != null && itemName == member.getName()){
+                    if (member != null && removeFirstColors(itemName).equals(member.getName())){
                         String newRank = plugin.getRankFromId(memberRank+1);
                         String newRankName = config.getString("ranks." + newRank + ".name");
                         String newRankColor = config.getString("ranks." + newRank + ".color");
@@ -108,7 +108,7 @@ public class EditMembersInventory {
                 if (!sqlManager.isOwner(itemName) && memberRank != 1){
                     sqlManager.promoteMember(teamId, itemName);
 
-                    if (member != null && itemName == member.getName()){
+                    if (member != null && removeFirstColors(itemName).equals(member.getName())){
                         String newRank = plugin.getRankFromId(memberRank-1);
                         String newRankName = config.getString("ranks." + newRank + ".name");
                         String newRankColor = config.getString("ranks." + newRank + ".color");

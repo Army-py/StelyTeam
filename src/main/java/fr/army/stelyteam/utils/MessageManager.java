@@ -15,6 +15,10 @@ public class MessageManager {
     }
 
 
+    public String getMessageWithoutPrefix(String key) {
+        return messages.getString(key);
+    }
+
     public String getMessage(String path) {
         return getPluginPrefix() + messages.getString(path);
         // return new ColorsBuilder().replaceColor(getPluginPrefix() + StelyTeamPlugin.messages.getString(path));

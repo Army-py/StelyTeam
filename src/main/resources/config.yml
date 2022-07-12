@@ -51,6 +51,17 @@ noPermission:
     - "§cPermission insuffisante"
 
 
+# Item si le compte de la team n'a pas encore été débloquée
+teamBankNotUnlock:
+  itemName: "§cCompte non débloqué"
+  itemType: EMERALD
+  lore: 
+    - "§cDébloquer le compte de"
+    - "§cla team pour pouvoir"
+    - "§cy avoir accès"
+
+
+
 # Préfixe à gauche du rang, affiché dans le menu de la gestion des membres de la team et dans la liste des membres
 prefixRankLore: "§r§5> "
 

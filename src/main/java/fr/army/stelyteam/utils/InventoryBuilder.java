@@ -125,7 +125,7 @@ public class InventoryBuilder {
             String name = config.getString("inventories.member."+str+".itemName");
             List<String> lore = config.getStringList("inventories.member."+str+".lore");
             ItemStack item;
-            
+
             if (name.equals(config.getString("inventories.member.seeTeamBank.itemName"))){
                 lore = replaceInLore(lore, "%TEAM_MONEY%", DoubleToString(teamMoney));
                 lore = replaceInLore(lore, "%MAX_MONEY%", DoubleToString(config.getDouble("teamMaxMoney")));
@@ -149,6 +149,18 @@ public class InventoryBuilder {
                     false
                 );
             }
+
+            if (name.equals(config.getString("inventories.member.seeTeamBank.itemName"))){
+                if (!sqlManager.hasUnlockedTeamBank(teamID)){
+                    item = ItemBuilder.getItem(
+                        Material.getMaterial(config.getString("teamBankNotUnlock.itemType")),
+                        config.getString("teamBankNotUnlock.itemName"),
+                        Collections.emptyList(),
+                        false
+                    );
+                }
+            }
+
             inventory.setItem(slot,  item);
         }
         return inventory;

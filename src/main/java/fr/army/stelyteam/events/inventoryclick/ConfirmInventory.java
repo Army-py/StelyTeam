@@ -52,18 +52,7 @@ public class ConfirmInventory {
         String itemName = event.getCurrentItem().getItemMeta().getDisplayName();
 
         if (itemName.equals(config.getString("inventories.confirmInventory.confirm.itemName"))){
-            if (plugin.containTeamAction(playerName, "addMember")){
-                String teamId = plugin.getTeamActions(playerName)[2];
-                String senderName = plugin.getTeamActions(playerName)[0];
-                plugin.removeTeamTempAction(playerName);
-                sqlManager.insertMember(playerName, teamId);
-                player.closeInventory();
-                // player.sendMessage("Vous avez rejoint la team " + teamId);
-                player.sendMessage(messageManager.getReplaceMessage("receiver.join_team", teamId));
-                teamMembersUtils.refreshTeamMembersInventory(teamId, playerName);
-                // TeamMembersUtils.teamBroadcast(teamId, senderName, senderName + " a ajouté " + playerName + " à la team");
-                teamMembersUtils.teamBroadcast(teamId, senderName, messageManager.getDoubleReplaceMessage("broadcasts.player_add_new_member", senderName, playerName));
-            }else if (plugin.containTeamAction(playerName, "removeMember")){
+            if (plugin.containTeamAction(playerName, "removeMember")){
                 String teamId = plugin.getTeamActions(playerName)[2];
                 String receiverName = plugin.getTeamActions(playerName)[1];
                 Player receiver = Bukkit.getPlayer(receiverName);
@@ -73,7 +62,7 @@ public class ConfirmInventory {
                 // player.sendMessage("Vous avez exclu " + receiverName + " de la team");
                 player.sendMessage(messageManager.getReplaceMessage("sender.exclude_member", receiverName));
                 // if (receiver != null) receiver.sendMessage("Vous avez été exclu de la team " + teamId);
-                if (receiver != null) receiver.sendMessage(messageManager.getReplaceMessage("receiver.exclude_from_team", teamId));
+                if (receiver != null && receiver.getName().equals(receiverName)) receiver.sendMessage(messageManager.getReplaceMessage("receiver.exclude_from_team", teamId));
                 teamMembersUtils.refreshTeamMembersInventory(teamId, playerName);
                 // teamMembersUtils.teamBroadcast(teamId, playerName, playerName + " a exclu " + receiverName);
                 teamMembersUtils.teamBroadcast(teamId, playerName, messageManager.getDoubleReplaceMessage("broadcasts.player_exclude_member", playerName, receiverName));
@@ -88,7 +77,7 @@ public class ConfirmInventory {
                 // player.sendMessage("Vous avez promu " + receiverName + " créateur de la team");
                 player.sendMessage(messageManager.getReplaceMessage("sender.promote_owner", receiverName));
                 // if (receiver != null) receiver.sendMessage("Vous avez été promu gérant de la team " + teamId);
-                if (receiver != null) receiver.sendMessage(messageManager.getReplaceMessage("receiver.promote_owner", teamId));
+                if (receiver != null && receiver.getName().equals(receiverName)) receiver.sendMessage(messageManager.getReplaceMessage("receiver.promote_owner", teamId));
                 teamMembersUtils.refreshTeamMembersInventory(teamId, playerName);
 
 
