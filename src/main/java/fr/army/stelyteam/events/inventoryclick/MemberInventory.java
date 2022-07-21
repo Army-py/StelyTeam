@@ -48,6 +48,7 @@ public class MemberInventory {
         Player player = (Player) event.getWhoClicked();
         String playerName = player.getName();
         String itemName = event.getCurrentItem().getItemMeta().getDisplayName();
+        String teamId = sqlManager.getTeamIDFromPlayer(playerName);
         Material itemType = event.getCurrentItem().getType();
         List<String> lore = event.getCurrentItem().getItemMeta().getLore();
 
@@ -71,11 +72,21 @@ public class MemberInventory {
             Inventory inventory = inventoryBuilder.createMembersInventory(playerName);
             player.openInventory(inventory);
         }else if (itemName.equals(config.getString("inventories.member.addTeamMoney.itemName"))){
-            player.closeInventory();
-            conversationBuilder.getNameInput(player, new ConvAddMoney(plugin));
+            if (!sqlManager.hasUnlockedTeamBank(teamId)) {
+                // player.sendMessage("Le compte de la team n'a pas encore été débloqué");
+                player.sendMessage(messageManager.getMessage("common.team_bank_not_unlock"));
+            }else{
+                player.closeInventory();
+                conversationBuilder.getNameInput(player, new ConvAddMoney(plugin));
+            }
         }else if (itemName.equals(config.getString("inventories.member.withdrawTeamMoney.itemName"))){
-            player.closeInventory();
-            conversationBuilder.getNameInput(player, new ConvWithdrawMoney(plugin));
+            if (!sqlManager.hasUnlockedTeamBank(teamId)) {
+                // player.sendMessage("Le compte de la team n'a pas encore été débloqué");
+                player.sendMessage(messageManager.getMessage("common.team_bank_not_unlock"));
+            }else{
+                player.closeInventory();
+                conversationBuilder.getNameInput(player, new ConvWithdrawMoney(plugin));
+            }
         }else if (itemName.equals(config.getString("inventories.member.leaveTeam.itemName"))){
             player.closeInventory();
             if (!sqlManager.isOwner(playerName)){

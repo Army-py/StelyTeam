@@ -25,6 +25,8 @@ import fr.army.stelyteam.commands.subCommands.manage.SubCmdUpgrade;
 import fr.army.stelyteam.commands.subCommands.member.SubCmdAddMember;
 import fr.army.stelyteam.commands.subCommands.member.SubCmdChangeOwner;
 import fr.army.stelyteam.commands.subCommands.member.SubCmdRemoveMember;
+import fr.army.stelyteam.commands.subCommands.team.SubCmdAccept;
+import fr.army.stelyteam.commands.subCommands.team.SubCmdDeny;
 import fr.army.stelyteam.commands.subCommands.utility.SubCmdHome;
 import fr.army.stelyteam.commands.subCommands.utility.SubCmdVisual;
 import fr.army.stelyteam.utils.InventoryBuilder;
@@ -169,6 +171,8 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
         subCommands.put("visual", new SubCmdVisual(plugin));
         subCommands.put("info", new SubCmdInfo(plugin));
         subCommands.put("help", new SubCmdHelp(plugin));
+        subCommands.put("accept", new SubCmdAccept(plugin));
+        subCommands.put("deny", new SubCmdDeny(plugin));
 
         subCommandsOp.put("admin", new SubCmdAdmin(plugin));
         subCommandsOp.put("delete", new SubCmdDelete(plugin));

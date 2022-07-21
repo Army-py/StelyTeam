@@ -12,6 +12,11 @@ import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.utils.InventoryBuilder;
 import fr.army.stelyteam.utils.MessageManager;
 import fr.army.stelyteam.utils.SQLManager;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.chat.ClickEvent.Action;
 
 public class ConvAddMember extends StringPrompt {
 
@@ -56,12 +61,22 @@ public class ConvAddMember extends StringPrompt {
             return null;
         }
         
-        plugin.addTeamTempAction(authorName, answer, teamId, "addMember");
+        // plugin.addTeamTempAction(authorName, answer, teamId, "addMember");
 
         // con.getForWhom().sendRawMessage("L'invitation a été envoyée");
+
+
+        BaseComponent[] components = new ComponentBuilder(messageManager.getReplaceMessage("manage_members.add_member.invitation_received", authorName))
+            .append(messageManager.getMessageWithoutPrefix("manage_members.add_member.accept_invitation")).event(new ClickEvent(Action.RUN_COMMAND, "/st accept"))
+            .append(messageManager.getMessageWithoutPrefix("manage_members.add_member.refuse_invitation")).event(new ClickEvent(Action.RUN_COMMAND, "/st deny"))
+            .create();
+
+            
+        player.spigot().sendMessage(components);
         con.getForWhom().sendRawMessage(messageManager.getMessage("manage_members.add_member.invitation_sent"));
-        Inventory inventory = inventoryBuilder.createConfirmInventory();
-        player.openInventory(inventory);
+        
+        // Inventory inventory = inventoryBuilder.createConfirmInventory();
+        // player.openInventory(inventory);
 
         return null;
     }
