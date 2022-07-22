@@ -50,7 +50,7 @@ public class UpgradeMembersInventory {
                 String name = config.getString("inventories.upgradeTotalMembers."+str+".itemName");
                 
                 if (itemName.equals(name) && level+1 == config.getInt("inventories.upgradeTotalMembers."+str+".level")){
-                    if (economyManager.checkMoneyPlayer(player, config.getDouble("prices.upgradeLevel"+(level+1)))){
+                    if (economyManager.checkMoneyPlayer(player, config.getDouble("prices.upgrade.teamPlaces.level"+(level+1)))){
                         plugin.playersTempActions.put(playerName, "upgradeMembers");
                         Inventory inventory = inventoryBuilder.createConfirmInventory();
                         player.openInventory(inventory);

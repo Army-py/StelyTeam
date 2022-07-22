@@ -126,7 +126,7 @@ public class ConfirmInventory {
                 Integer newLevel = level + 1;
                 plugin.removePlayerTempAction(playerName);
                 sqlManager.incrementTeamLevel(teamID);
-                economyManager.removeMoneyPlayer(player, config.getDouble("prices.upgradeLevel"+newLevel));
+                economyManager.removeMoneyPlayer(player, config.getDouble("prices.upgrade.teamPlaces.level"+newLevel));
                 // player.sendMessage("Vous avez atteint le niveau " + (level+1));
                 player.sendMessage(messageManager.getReplaceMessage("manage_team.upgrade_levels.new_upgrade", newLevel.toString()));
 
