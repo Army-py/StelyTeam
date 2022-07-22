@@ -76,7 +76,7 @@ inventoriesName:
   member: "§5§lMenu Membre"
   teamMembers: "§5§lMembres"
   editMembers: "§5§lGestion des membres"
-  upgradeTotalMembers: "§5§lNombre de membres"
+  upgradeTotalMembers: "§5§lPlaces disponibles"
   confirmInventory: "§5§lConfirmation"
   permissions: "§5§lPermissions"
 
@@ -442,20 +442,20 @@ inventories:
       lore:
         - "§aVoir les membres de la team"
     upgradeTotalMembers:
-      itemName: "§5§lAméliorer le total des membres"
+      itemName: "§5§lAugmenter les places disponibles"
       itemType: EXPERIENCE_BOTTLE
       slot: 19
       rankPath: "manage.upgradeTotalMembers"
       lore:
-        - "§aAméliorer le total des membres"
-        - "§ade la team"
+        - "§aAugmenter le nombre de places"
+        - "§adisponible dans la team"
     manageMembers:
-      itemName: "§5§lModifier les membres"
+      itemName: "§5§lGestion des membres"
       itemType: WRITABLE_BOOK
       slot: 20
       rankPath: "manage.editMembers"
       lore:
-        - "§aModifier les membres de la team"
+        - "§aGérer les membres de la team"
     editName:
       itemName: "§5§lModifier le nom"
       itemType: PAPER
