@@ -1,9 +1,11 @@
 package fr.army.stelyteam.events.inventoryclick;
 
+import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.utils.EconomyManager;
@@ -43,7 +45,6 @@ public class UpgradeMembersInventory {
         String teamID = sqlManager.getTeamIDFromPlayer(playerName);
         Integer level = sqlManager.getTeamLevel(teamID);
 
-        
         // Gestion des items
         if (!itemName.equals(config.getString("inventories.upgradeTotalMembers.close.itemName"))){
             for(String str : config.getConfigurationSection("inventories.upgradeTotalMembers").getKeys(false)){

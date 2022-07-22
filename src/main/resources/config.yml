@@ -68,6 +68,15 @@ teamBankNotUnlock:
     - "§cla team pour pouvoir"
     - "§cy avoir accès"
 
+# Item si l'un des stockage de la team n'a pas encore été débloqué
+storageNotUnlock:
+  itemName: "§cStockage non débloqué"
+  itemType: ENDER_CHEST
+  lore: 
+    - "§cDébloquer ce stockage"
+    - "§cpour pouvoir y avoir"
+    - "§caccès"
+
 
 
 # Préfixe à gauche du rang, affiché dans le menu de la gestion des membres de la team et dans la liste des membres
@@ -87,6 +96,7 @@ inventoriesName:
   upgradeTotalMembers: "§5§lPlaces disponibles"
   confirmInventory: "§5§lConfirmation"
   permissions: "§5§lPermissions"
+  storageDirectory: "§5§lStockages disponibles"
 
 
 # Nombre de slots dans chaque inventaires. A modifier en fonction de la taille d'une ligne de coffre (9 * nombre de lignes) 
@@ -94,12 +104,14 @@ inventoriesSlots:
   createTeam: 27
   admin: 27
   manage: 45
-  member: 36
+  member: 45
   teamMembers: 27
   editMembers: 36
   upgradeTotalMembers: 27
   confirmInventory: 27
   permissions: 36
+  storageDirectory: 27
+  storage: 54
 
 
 ranks:
@@ -304,10 +316,17 @@ inventories:
       itemType: DARK_OAK_DOOR
       slot: 24
       rank: -1
+    storageDirectory:
+      itemName: "§5§lStockages"
+      itemType: CHEST
+      slot: 25
+      rank: 4
+      lore:
+        - "§aStockages de la team"
     close:
       itemName: "§5§lFermer"
       itemType: BARRIER
-      slot: 35
+      slot: 44
 
 
   upgradeTotalMembers:
@@ -342,6 +361,48 @@ inventories:
     levelFive:
       itemName: "§5§l15 places"
       itemType: NETHERITE_INGOT
+      slot: 15
+      level: 5
+      lore:
+        - "§aPrix : 25,000,000€"
+    close:
+      itemName: "§5§lFermer"
+      itemType: BARRIER
+      slot: 26
+
+
+  upgradeStorageAmount:
+    storageOne:
+      itemName: "§5§l1 stockage"
+      itemType: CHEST
+      slot: 11
+      level: 1
+      lore:
+        - "§aPrix : 2,500,000€"
+    storageTwo:
+      itemName: "§5§l2 stockages"
+      itemType: CHEST
+      slot: 12
+      level: 2
+      lore:
+        - "§aPrix : 5,000,000€"
+    storageThree:
+      itemName: "§5§l3 stockages"
+      itemType: CHEST
+      slot: 13
+      level: 3
+      lore:
+        - "§aPrix : 10,000,000€"
+    storageFour:
+      itemName: "§5§l4 stockages"
+      itemType: CHEST
+      slot: 14
+      level: 4
+      lore:
+        - "§aPrix : 15,000,000€"
+    storageFive:
+      itemName: "§5§l5 stockages"
+      itemType: CHEST
       slot: 15
       level: 5
       lore:
@@ -503,3 +564,26 @@ inventories:
       itemName: "§5§lFermer"
       itemType: BARRIER
       slot: 35
+
+
+  storageDirectory: 
+    storageOne:
+      itemName: "§5§lStockage 1"
+      itemType: CHEST
+      slot: 10
+    storageTwo:
+      itemName: "§5§lStockage 2"
+      itemType: CHEST
+      slot: 11
+    storageThree:
+      itemName: "§5§lStockage 3"
+      itemType: CHEST
+      slot: 12
+    storageFour:
+      itemName: "§5§lStockage 4"
+      itemType: CHEST
+      slot: 13
+    storageFive:
+      itemName: "§5§lStockage 5"
+      itemType: CHEST
+      slot: 14
