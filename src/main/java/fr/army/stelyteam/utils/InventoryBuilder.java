@@ -360,6 +360,22 @@ public class InventoryBuilder {
     }
 
 
+    public Inventory createStorageDirectoryInventory(){
+        Integer slots = config.getInt("inventoriesSlots.storageDirectory");
+        Inventory inventory = Bukkit.createInventory(null, slots, config.getString("inventoriesName.storageDirectory"));
+        emptyCases(inventory, slots);
+
+        for(String str : config.getConfigurationSection("inventories.storageDirectory").getKeys(false)){
+            Integer slot = config.getInt("inventories.storageDirectory."+str+".slot");
+            Material material = Material.getMaterial(config.getString("inventories.storageDirectory."+str+".itemType"));
+            String name = config.getString("inventories.storageDirectory."+str+".itemName");
+            List<String> lore = config.getStringList("inventories.storageDirectory."+str+".lore");
+            inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, false));
+        }
+        return inventory;
+    }
+
+
     private List<String> replaceInLore(List<String> lore, String value, String replace){
         List<String> newLore = new ArrayList<>();
         for(String str : lore){
