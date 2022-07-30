@@ -97,6 +97,7 @@ inventoriesName:
   confirmInventory: "§5§lConfirmation"
   permissions: "§5§lPermissions"
   storageDirectory: "§5§lStockages disponibles"
+  storage: "§5§lStockage"
 
 
 # Nombre de slots dans chaque inventaires. A modifier en fonction de la taille d'une ligne de coffre (9 * nombre de lignes) 
@@ -109,7 +110,7 @@ inventoriesSlots:
   editMembers: 36
   upgradeTotalMembers: 27
   confirmInventory: 27
-  permissions: 36
+  permissions: 45
   storageDirectory: 27
   storage: 54
 
@@ -319,7 +320,7 @@ inventories:
     storageDirectory:
       itemName: "§5§lStockages"
       itemType: CHEST
-      slot: 25
+      slot: 31
       rank: 4
       lore:
         - "§aStockages de la team"
@@ -560,6 +561,14 @@ inventories:
       rankPath: "manage.editPermissions"
       lore:
         - "§aModifier les permissions de la team"
+    storageDirectory:
+      itemName: "§5§lAccès aux stockages"
+      itemType: BARREL
+      slot: 31
+      rankPath: "member.storageDirectory"
+      lore:
+        - "§aPermet d'avoir accès aux"
+        - "§astockages de la team"
     close:
       itemName: "§5§lFermer"
       itemType: BARRIER

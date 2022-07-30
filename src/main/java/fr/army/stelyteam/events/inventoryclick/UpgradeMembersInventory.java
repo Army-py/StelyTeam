@@ -44,7 +44,7 @@ public class UpgradeMembersInventory {
 
         String teamID = sqlManager.getTeamIDFromPlayer(playerName);
         Integer level = sqlManager.getTeamLevel(teamID);
-
+        
         // Gestion des items
         if (!itemName.equals(config.getString("inventories.upgradeTotalMembers.close.itemName"))){
             for(String str : config.getConfigurationSection("inventories.upgradeTotalMembers").getKeys(false)){
