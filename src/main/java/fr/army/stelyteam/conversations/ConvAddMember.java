@@ -91,7 +91,7 @@ public class ConvAddMember extends StringPrompt {
     private boolean hasReachedMaxMember(String teamId) {
         Integer memberAmount = sqlManager.getMembers(teamId).size();
         Integer maxMember = config.getInt("teamMaxMembers");
-        Integer teamMembersLelvel = sqlManager.getTeamLevel(teamId);
+        Integer teamMembersLelvel = sqlManager.getTeamMembersLevel(teamId);
         return memberAmount >= maxMember + teamMembersLelvel;
     }
 

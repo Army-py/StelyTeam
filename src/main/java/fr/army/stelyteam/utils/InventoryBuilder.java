@@ -107,7 +107,7 @@ public class InventoryBuilder {
         String teamID = sqlManager.getTeamIDFromPlayer(playername);
         String teamPrefix = sqlManager.getTeamPrefix(teamID);
         String teamOwner = sqlManager.getTeamOwner(teamID);
-        Integer teamMembersLelvel = sqlManager.getTeamLevel(teamID);
+        Integer teamMembersLelvel = sqlManager.getTeamMembersLevel(teamID);
         Integer teamMembers = sqlManager.getMembers(teamID).size();
         Integer maxMembers = config.getInt("teamMaxMembers");
         String memberJoinDate = sqlManager.getJoinDate(playername);
@@ -189,7 +189,7 @@ public class InventoryBuilder {
     public Inventory createUpgradeTotalMembersInventory(String playername) {
         Integer slots = config.getInt("inventoriesSlots.upgradeTotalMembers");
         String teamID = sqlManager.getTeamIDFromPlayer(playername);
-        Integer level = sqlManager.getTeamLevel(teamID);
+        Integer level = sqlManager.getTeamMembersLevel(teamID);
         Inventory inventory = Bukkit.createInventory(null, slots, config.getString("inventoriesName.upgradeTotalMembers"));
 
         emptyCases(inventory, slots);
@@ -360,17 +360,33 @@ public class InventoryBuilder {
     }
 
 
-    public Inventory createStorageDirectoryInventory(){
+    public Inventory createStorageDirectoryInventory(String playerName) {
         Integer slots = config.getInt("inventoriesSlots.storageDirectory");
+        String teamId = sqlManager.getTeamIDFromPlayer(playerName);
         Inventory inventory = Bukkit.createInventory(null, slots, config.getString("inventoriesName.storageDirectory"));
+        Integer level = sqlManager.getTeamStorageLevel(teamId);
+
         emptyCases(inventory, slots);
 
         for(String str : config.getConfigurationSection("inventories.storageDirectory").getKeys(false)){
             Integer slot = config.getInt("inventories.storageDirectory."+str+".slot");
-            Material material = Material.getMaterial(config.getString("inventories.storageDirectory."+str+".itemType"));
-            String name = config.getString("inventories.storageDirectory."+str+".itemName");
-            List<String> lore = config.getStringList("inventories.storageDirectory."+str+".lore");
-            inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, false));
+            Material material;
+            String name;
+            List<String> lore;
+
+            if (level >= config.getInt("inventories.storageDirectory."+str+".level") || str.equals("close")){
+                material = Material.getMaterial(config.getString("inventories.storageDirectory."+str+".itemType"));
+                name = config.getString("inventories.storageDirectory."+str+".itemName");
+                lore = config.getStringList("inventories.storageDirectory."+str+".lore");
+
+                inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, false));
+            }else{
+                material = Material.getMaterial(config.getString("storageNotUnlock.itemType"));
+                name = config.getString("storageNotUnlock.itemName");
+                lore = config.getStringList("storageNotUnlock.lore");
+
+                inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, false));
+            }
         }
         return inventory;
     }

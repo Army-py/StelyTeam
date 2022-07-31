@@ -15,7 +15,7 @@ import fr.army.stelyteam.utils.SQLManager;
 import fr.army.stelyteam.utils.SQLiteManager;
 
 
-public class UpgradeMembersInventory {
+public class UpgradeStorageInventory {
 
     private InventoryClickEvent event;
     private StelyTeamPlugin plugin;
@@ -26,7 +26,7 @@ public class UpgradeMembersInventory {
     private InventoryBuilder inventoryBuilder;
 
 
-    public UpgradeMembersInventory(InventoryClickEvent event, StelyTeamPlugin plugin) {
+    public UpgradeStorageInventory(InventoryClickEvent event, StelyTeamPlugin plugin) {
         this.event = event;
         this.plugin = plugin;
         this.config = plugin.getConfig();

@@ -122,7 +122,7 @@ public class ConfirmInventory {
                 teamMembersUtils.closeTeamMembersInventory(teamID, playerName);
             }else if (plugin.containPlayerTempAction(playerName, "upgradeMembers")){
                 String teamID = sqlManager.getTeamIDFromPlayer(playerName);
-                Integer level = sqlManager.getTeamLevel(teamID);
+                Integer level = sqlManager.getTeamMembersLevel(teamID);
                 Integer newLevel = level + 1;
                 plugin.removePlayerTempAction(playerName);
                 sqlManager.incrementTeamLevel(teamID);

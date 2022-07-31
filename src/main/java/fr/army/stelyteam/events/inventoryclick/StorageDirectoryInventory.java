@@ -22,7 +22,7 @@ import fr.army.stelyteam.utils.SQLiteManager;
 import fr.army.stelyteam.utils.conversation.ConversationBuilder;
 
 
-public class MemberInventory {
+public class StorageDirectoryInventory {
 
     private InventoryClickEvent event;
     private StelyTeamPlugin plugin;
@@ -33,7 +33,7 @@ public class MemberInventory {
     private InventoryBuilder inventoryBuilder;
 
 
-    public MemberInventory(InventoryClickEvent event, StelyTeamPlugin plugin) {
+    public StorageDirectoryInventory(InventoryClickEvent event, StelyTeamPlugin plugin) {
         this.event = event;
         this.plugin = plugin;
         this.config = plugin.getConfig();
@@ -59,47 +59,9 @@ public class MemberInventory {
         // Fermeture ou retour en arrière de l'inventaire
         if (sqlManager.isOwner(playerName) || sqlManager.getMemberRank(playerName) <= 3){
             if (itemName.equals(config.getString("inventories.member.close.itemName"))){
-                Inventory inventory = inventoryBuilder.createAdminInventory();
+                Inventory inventory = inventoryBuilder.createMemberInventory(playerName);
                 player.openInventory(inventory);
             }
-        }else{
-            if (itemName.equals(config.getString("inventories.member.close.itemName"))){
-                player.closeInventory();
-            }
-        }
-        
-        if (itemName.equals(config.getString("inventories.member.seeTeamMembers.itemName"))){
-            Inventory inventory = inventoryBuilder.createMembersInventory(playerName);
-            player.openInventory(inventory);
-        }else if (itemName.equals(config.getString("inventories.member.addTeamMoney.itemName"))){
-            if (!sqlManager.hasUnlockedTeamBank(teamId)) {
-                // player.sendMessage("Le compte de la team n'a pas encore été débloqué");
-                player.sendMessage(messageManager.getMessage("common.team_bank_not_unlock"));
-            }else{
-                player.closeInventory();
-                conversationBuilder.getNameInput(player, new ConvAddMoney(plugin));
-            }
-        }else if (itemName.equals(config.getString("inventories.member.withdrawTeamMoney.itemName"))){
-            if (!sqlManager.hasUnlockedTeamBank(teamId)) {
-                // player.sendMessage("Le compte de la team n'a pas encore été débloqué");
-                player.sendMessage(messageManager.getMessage("common.team_bank_not_unlock"));
-            }else{
-                player.closeInventory();
-                conversationBuilder.getNameInput(player, new ConvWithdrawMoney(plugin));
-            }
-        }else if (itemName.equals(config.getString("inventories.member.leaveTeam.itemName"))){
-            player.closeInventory();
-            if (!sqlManager.isOwner(playerName)){
-                plugin.playersTempActions.put(playerName, "leaveTeam");
-                Inventory inventory = inventoryBuilder.createConfirmInventory();
-                player.openInventory(inventory);
-            }else {
-                // player.sendMessage("Tu ne peux pas quitter la team car tu es le créateur");
-                player.sendMessage(messageManager.getMessage("other.owner_cant_leave_team"));
-            }
-        }else if (itemName.equals(config.getString("inventories.member.storageDirectory.itemName"))){
-            Inventory inventory = inventoryBuilder.createStorageDirectoryInventory(playerName);
-            player.openInventory(inventory);
         }
     }
 

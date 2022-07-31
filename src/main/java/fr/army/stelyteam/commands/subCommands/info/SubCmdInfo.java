@@ -50,7 +50,7 @@ public class SubCmdInfo extends SubCommand {
                 String teamPrefix = sqlManager.getTeamPrefix(teamID);
                 String teamOwner = sqlManager.getTeamOwner(teamID);
                 String creationDate = sqlManager.getCreationDate(teamID);
-                Integer teamMembersLelvel = sqlManager.getTeamLevel(teamID);
+                Integer teamMembersLelvel = sqlManager.getTeamMembersLevel(teamID);
                 Integer teamMembers = sqlManager.getMembers(teamID).size();
                 Integer maxMembers = config.getInt("teamMaxMembers");
                 String hasUnlockBank = (sqlManager.hasUnlockedTeamBank(teamID) ? yesMessage : noMessage);

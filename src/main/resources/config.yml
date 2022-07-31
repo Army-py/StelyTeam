@@ -226,6 +226,14 @@ inventories:
       lore:
         - "§aAméliorer le nombre de"
         - "§amembres dans la team"
+    upgradeStorages:
+      itemName: "§5§lAjouter des stockages"
+      itemType: CHEST
+      slot: 16
+      rank: 2
+      lore:
+        - "§aAméliorer le nombre de"
+        - "§astockages dans la team"
     editName:
       itemName: "§5§lModifier le nom"
       itemType: PAPER
@@ -259,7 +267,7 @@ inventories:
     editPermissions:
       itemName: "§5§lPermissions"
       itemType: RED_BANNER
-      slot: 31
+      slot: 24
       rank: 2
       lore:
         - "§aGérer les permissions"
@@ -579,20 +587,29 @@ inventories:
     storageOne:
       itemName: "§5§lStockage 1"
       itemType: CHEST
-      slot: 10
+      level: 1
+      slot: 11
     storageTwo:
       itemName: "§5§lStockage 2"
       itemType: CHEST
-      slot: 11
+      level: 2
+      slot: 12
     storageThree:
       itemName: "§5§lStockage 3"
       itemType: CHEST
-      slot: 12
+      level: 3
+      slot: 13
     storageFour:
       itemName: "§5§lStockage 4"
       itemType: CHEST
-      slot: 13
+      level: 4
+      slot: 14
     storageFive:
       itemName: "§5§lStockage 5"
       itemType: CHEST
-      slot: 14
+      level: 5
+      slot: 15
+    close:
+      itemName: "§5§lFermer"
+      itemType: BARRIER
+      slot: 26

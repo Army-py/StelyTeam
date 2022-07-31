@@ -31,7 +31,7 @@ public class SubCmdDowngrade extends SubCommand {
         }else{
             String teamID = String.join("", args);
             if (sqlManager.teamIdExist(teamID)){
-                Integer teamUpgrades = sqlManager.getTeamLevel(teamID);
+                Integer teamUpgrades = sqlManager.getTeamMembersLevel(teamID);
                 if (teamUpgrades == 0){
                     // player.sendMessage("Cette team est déjà au niveau minimum");
                     player.sendMessage(messageManager.getMessage("commands.stelyteam_downgrade.min_level"));

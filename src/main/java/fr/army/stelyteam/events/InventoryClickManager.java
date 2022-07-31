@@ -52,6 +52,8 @@ public class InventoryClickManager implements Listener{
             new MembersInventory(event, plugin).onInventoryClick();
         }else if (event.getView().getTitle().equals(config.getString("inventoriesName.permissions"))){
             new PermissionsInventory(event, plugin).onInventoryClick();
+        }else if (event.getView().getTitle().equals(config.getString("inventoriesName.storageDirectory"))){
+            new StorageDirectoryInventory(event, plugin).onInventoryClick();
         }
     }
 }

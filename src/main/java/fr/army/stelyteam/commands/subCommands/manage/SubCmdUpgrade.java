@@ -34,7 +34,7 @@ public class SubCmdUpgrade extends SubCommand {
             String teamID = String.join("", args);
             if (sqlManager.teamIdExist(teamID)){
                 Integer maxUpgrades = config.getConfigurationSection("inventories.upgradeTotalMembers").getValues(false).size() - 1;
-                Integer teamUpgrades = sqlManager.getTeamLevel(teamID);
+                Integer teamUpgrades = sqlManager.getTeamMembersLevel(teamID);
                 if (maxUpgrades == teamUpgrades){
                     // player.sendMessage("Cette team est déjà au niveau maximum");
                     player.sendMessage(messageManager.getMessage("commands.stelyteam_upgrade.max_level"));

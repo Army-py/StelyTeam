@@ -220,7 +220,7 @@ public class SQLManager {
     public void insertTeam(String teamID, String teamPrefix, String owner){
         if(isConnected()){
             try {
-                PreparedStatement queryTeam = connection.prepareStatement("INSERT INTO teams VALUES (?, ?, ?, ?, ?, ?, ?)");
+                PreparedStatement queryTeam = connection.prepareStatement("INSERT INTO teams VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
                 queryTeam.setString(1, teamID);
                 queryTeam.setString(2, teamPrefix);
                 queryTeam.setString(3, owner);
@@ -228,6 +228,7 @@ public class SQLManager {
                 queryTeam.setString(5, new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime()));
                 queryTeam.setInt(6, 0);
                 queryTeam.setInt(7, 0);
+                queryTeam.setInt(8, 0);
                 queryTeam.executeUpdate();
                 queryTeam.close();
 
@@ -552,7 +553,7 @@ public class SQLManager {
     }
 
 
-    public Integer getTeamLevel(String teamID){
+    public Integer getTeamMembersLevel(String teamID){
         if(isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("SELECT members_level FROM teams WHERE team_id = ?");
@@ -564,6 +565,26 @@ public class SQLManager {
                 }
                 query.close();
                 return level;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+
+    public Integer getTeamStorageLevel(String teamId){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT team_storage FROM teams WHERE team_id = ?");
+                query.setString(1, teamId);
+                ResultSet result = query.executeQuery();
+                Integer storage = null;
+                if(result.next()){
+                    storage = result.getInt("team_storage");
+                }
+                query.close();
+                return storage;
             } catch (SQLException e) {
                 e.printStackTrace();
             }
