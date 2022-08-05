@@ -403,6 +403,20 @@ public class SQLManager {
     }
 
 
+    public void incrementTeamStorage(String teamID){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("UPDATE teams SET team_storage = team_storage + 1 WHERE team_id = ?");
+                query.setString(1, teamID);
+                query.executeUpdate();
+                query.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
     public void incrementTeamMoney(String teamID, double money){
         if(isConnected()){
             try {

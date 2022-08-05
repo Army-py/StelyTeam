@@ -107,6 +107,9 @@ public class ManageInventory {
         }else if (itemName.equals(config.getString("inventories.manage.upgradeTotalMembers.itemName"))){
             Inventory inventory = inventoryBuilder.createUpgradeTotalMembersInventory(playerName);
             player.openInventory(inventory);
+        }else if (itemName.equals(config.getString("inventories.manage.upgradeStorages.itemName"))){
+            Inventory inventory = inventoryBuilder.createUpgradeStorageInventory(playerName);
+            player.openInventory(inventory);
         }else if (itemName.equals(config.getString("inventories.manage.editName.itemName"))){
             if (economyManager.checkMoneyPlayer(player, config.getDouble("prices.editTeamId"))){
                 plugin.playersTempActions.put(playerName, "editName");

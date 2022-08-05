@@ -41,18 +41,23 @@ public class UpgradeStorageInventory {
         Player player = (Player) event.getWhoClicked();
         String playerName = player.getName();
         String itemName = event.getCurrentItem().getItemMeta().getDisplayName();
+        Material material = event.getCurrentItem().getType();
 
         String teamID = sqlManager.getTeamIDFromPlayer(playerName);
-        Integer level = sqlManager.getTeamMembersLevel(teamID);
+        Integer level = sqlManager.getTeamStorageLevel(teamID);
         
         // Gestion des items
-        if (!itemName.equals(config.getString("inventories.upgradeTotalMembers.close.itemName"))){
-            for(String str : config.getConfigurationSection("inventories.upgradeTotalMembers").getKeys(false)){
-                String name = config.getString("inventories.upgradeTotalMembers."+str+".itemName");
+        if (itemName.equals(config.getString("inventories.upgradeStorageAmount.close.itemName"))){
+            // Retour en arrière de l'inventaire
+            Inventory inventory = inventoryBuilder.createManageInventory(playerName);
+            player.openInventory(inventory);
+        }else if (!material.name().equals(config.getString("emptyCase"))){
+            for(String str : config.getConfigurationSection("inventories.upgradeStorageAmount").getKeys(false)){
+                String name = config.getString("inventories.upgradeStorageAmount."+str+".itemName");
                 
-                if (itemName.equals(name) && level+1 == config.getInt("inventories.upgradeTotalMembers."+str+".level")){
-                    if (economyManager.checkMoneyPlayer(player, config.getDouble("prices.upgrade.teamPlaces.level"+(level+1)))){
-                        plugin.playersTempActions.put(playerName, "upgradeMembers");
+                if (itemName.equals(name) && level+1 == config.getInt("inventories.upgradeStorageAmount."+str+".level")){
+                    if (economyManager.checkMoneyPlayer(player, config.getDouble("prices.upgrade.teamStorages.level"+(level+1)))){
+                        plugin.playersTempActions.put(playerName, "upgradeStorages");
                         Inventory inventory = inventoryBuilder.createConfirmInventory();
                         player.openInventory(inventory);
                         return;
@@ -61,18 +66,14 @@ public class UpgradeStorageInventory {
                         player.sendMessage(messageManager.getMessage("common.not_enough_money"));
                         return;
                     }
-                }else if (itemName.equals(name) && level >= config.getInt("inventories.upgradeTotalMembers."+str+".level")){
+                }else if (itemName.equals(name) && level >= config.getInt("inventories.upgradeStorageAmount."+str+".level")){
                     // player.sendMessage("Vous avez déjà débloqué cette amélioration");
-                    player.sendMessage(messageManager.getMessage("manage_team.upgrade_levels.already_unlocked"));
+                    player.sendMessage(messageManager.getMessage("common.already_unlocked"));
                     return;
                 }
             }
             // player.sendMessage("Vous devez débloquer le niveau précédent pour pouvoir acheter cette amélioration"); 
-            player.sendMessage(messageManager.getMessage("manage_team.upgrade_levels.must_unlock_previous_level"));
-        }else{
-            // Retour en arrière de l'inventaire
-            Inventory inventory = inventoryBuilder.createManageInventory(playerName);
-            player.openInventory(inventory);
+            player.sendMessage(messageManager.getMessage("manage_team.upgrade_storages.must_unlock_previous_level"));
         }
     }
 }

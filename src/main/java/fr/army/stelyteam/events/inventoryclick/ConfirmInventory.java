@@ -128,13 +128,28 @@ public class ConfirmInventory {
                 sqlManager.incrementTeamLevel(teamID);
                 economyManager.removeMoneyPlayer(player, config.getDouble("prices.upgrade.teamPlaces.level"+newLevel));
                 // player.sendMessage("Vous avez atteint le niveau " + (level+1));
-                player.sendMessage(messageManager.getReplaceMessage("manage_team.upgrade_levels.new_upgrade", newLevel.toString()));
+                player.sendMessage(messageManager.getReplaceMessage("manage_team.upgrade_member_amount.new_upgrade", newLevel.toString()));
 
                 Inventory inventory = inventoryBuilder.createUpgradeTotalMembersInventory(playerName);
                 player.openInventory(inventory);
                 teamMembersUtils.refreshTeamMembersInventory(teamID, playerName);
                 // teamMembersUtils.teamBroadcast(teamID, playerName, "Amélioration " + (level+1) + " de la team débloquée");
-                teamMembersUtils.teamBroadcast(teamID, playerName, messageManager.getReplaceMessage("broadcasts.new_upgrade", newLevel.toString()));
+                teamMembersUtils.teamBroadcast(teamID, playerName, messageManager.getReplaceMessage("broadcasts.new_member_amount_upgrade", newLevel.toString()));
+            }else if (plugin.containPlayerTempAction(playerName, "upgradeStorages")){
+                String teamID = sqlManager.getTeamIDFromPlayer(playerName);
+                Integer level = sqlManager.getTeamStorageLevel(teamID);
+                Integer newLevel = level + 1;
+                plugin.removePlayerTempAction(playerName);
+                sqlManager.incrementTeamStorage(teamID);
+                economyManager.removeMoneyPlayer(player, config.getDouble("prices.upgrade.teamStorages.level"+newLevel));
+                // player.sendMessage("Vous avez atteint le niveau " + (level+1));
+                player.sendMessage(messageManager.getReplaceMessage("manage_team.upgrade_storages.new_upgrade", newLevel.toString()));
+
+                Inventory inventory = inventoryBuilder.createUpgradeStorageInventory(playerName);
+                player.openInventory(inventory);
+                teamMembersUtils.refreshTeamMembersInventory(teamID, playerName);
+                // teamMembersUtils.teamBroadcast(teamID, playerName, "Amélioration " + (level+1) + " de la team débloquée");
+                teamMembersUtils.teamBroadcast(teamID, playerName, messageManager.getReplaceMessage("broadcasts.new_storage_upgrade", newLevel.toString()));
             }else if (plugin.containPlayerTempAction(playerName, "leaveTeam")){
                 String teamId = sqlManager.getTeamIDFromPlayer(playerName);
                 plugin.removePlayerTempAction(playerName);
@@ -180,6 +195,10 @@ public class ConfirmInventory {
             }else if (plugin.containPlayerTempAction(playerName, "upgradeMembers")){
                 plugin.removePlayerTempAction(playerName);
                 Inventory inventory = inventoryBuilder.createUpgradeTotalMembersInventory(playerName);
+                player.openInventory(inventory);
+            }else if (plugin.containPlayerTempAction(playerName, "upgradeStorages")){
+                plugin.removePlayerTempAction(playerName);
+                Inventory inventory = inventoryBuilder.createUpgradeStorageInventory(playerName);
                 player.openInventory(inventory);
             }else if (plugin.containPlayerTempAction(playerName, "leaveTeam")){
                 plugin.removePlayerTempAction(playerName);

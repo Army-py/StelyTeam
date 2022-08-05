@@ -210,6 +210,30 @@ public class InventoryBuilder {
     }
 
 
+    public Inventory createUpgradeStorageInventory(String playername) {
+        Integer slots = config.getInt("inventoriesSlots.upgradeStorageAmount");
+        String teamID = sqlManager.getTeamIDFromPlayer(playername);
+        Integer level = sqlManager.getTeamStorageLevel(teamID);
+        Inventory inventory = Bukkit.createInventory(null, slots, config.getString("inventoriesName.upgradeStorageAmount"));
+
+        emptyCases(inventory, slots);
+
+        for(String str : config.getConfigurationSection("inventories.upgradeStorageAmount").getKeys(false)){
+            Integer slot = config.getInt("inventories.upgradeStorageAmount."+str+".slot");
+            Material material = Material.getMaterial(config.getString("inventories.upgradeStorageAmount."+str+".itemType"));
+            String name = config.getString("inventories.upgradeStorageAmount."+str+".itemName");
+            List<String> lore = config.getStringList("inventories.upgradeStorageAmount."+str+".lore");
+
+            if (level >= config.getInt("inventories.upgradeStorageAmount."+str+".level") && !str.equals("close")){
+                inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, true));
+            }else{
+                inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, false));
+            }
+        }
+        return inventory;
+    }
+
+
     public Inventory createMembersInventory(String playername) {
         Integer slots = config.getInt("inventoriesSlots.teamMembers");
         String teamID = sqlManager.getTeamIDFromPlayer(playername);

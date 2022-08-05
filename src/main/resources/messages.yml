@@ -3,6 +3,7 @@ prefix: "§7[§5StelyTeam§7] "
 
 # Messages les plus communs, qui seront utilisé dans plusieurs actions
 common:
+  already_unlocked: "§7Vous avez déjà débloqué cette amélioration"
   invalid_command: "§7Commande invalide"
   member_not_in_this_team: "§7Le membre n'est pas dans cette team"
   name_already_exists: "§7Ce nom de team existe déjà"
@@ -65,10 +66,12 @@ manage_team:
   team_bank:
     already_unlocked: "§7La banque de team est déjà déverrouillée"
     unlock: "§7Vous avez débloqué la banque de team"
-  upgrade_levels:
-    already_unlocked: "§7Vous avez déjà débloqué cette amélioration"
+  upgrade_member_amount:
     must_unlock_previous_level: "§7Vous devez débloquer l'amélioration précédente pour pouvoir acheter cette amélioration"
-    new_upgrade: "§7Amélioration %VALUE% de la team débloquée"
+    new_upgrade: "§7Amélioration du nombre de membre %VALUE% de la team débloquée"
+  upgrade_storages:
+    must_unlock_previous_level: "§7Vous devez débloquer l'amélioration précédente pour pouvoir acheter cette amélioration"
+    new_upgrade: "§7Amélioration du stockage %VALUE% de la team débloquée"
   team_delete:
     deleted: "§7La team a été supprimée"
 
@@ -82,7 +85,8 @@ broadcasts:
   player_exclude_member: "§7%AUTHOR% a exclu %RECEIVER% de la team"
   team_bank_unlocked: "§7%VALUE% a débloqué la banque de la team"
   team_deleted: "§7La team %VALUE% a été supprimée"
-  new_upgrade: "§7Amélioration de la team %VALUE% débloquée"
+  new_member_amount_upgrade: "§7Une nouvelle place dans la team %VALUE% a été débloquée"
+  new_storage_upgrade: "§7Un nouveau stockage de la team %VALUE% a été débloqué"
 
 # Messages que recevra le membre qui a fait une certaine action
 sender:
