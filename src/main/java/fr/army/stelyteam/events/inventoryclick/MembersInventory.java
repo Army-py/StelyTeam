@@ -6,11 +6,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.utils.EconomyManager;
 import fr.army.stelyteam.utils.InventoryBuilder;
-import fr.army.stelyteam.utils.MessageManager;
-import fr.army.stelyteam.utils.SQLManager;
-import fr.army.stelyteam.utils.SQLiteManager;
 
 
 public class MembersInventory {

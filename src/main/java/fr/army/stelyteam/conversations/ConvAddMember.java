@@ -6,16 +6,13 @@ import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.utils.InventoryBuilder;
 import fr.army.stelyteam.utils.MessageManager;
 import fr.army.stelyteam.utils.SQLManager;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.ClickEvent.Action;
 
 public class ConvAddMember extends StringPrompt {
@@ -24,7 +21,6 @@ public class ConvAddMember extends StringPrompt {
     private SQLManager sqlManager;
     private YamlConfiguration config;
     private MessageManager messageManager;
-    private InventoryBuilder inventoryBuilder;
 
 
     public ConvAddMember(StelyTeamPlugin plugin){
@@ -32,7 +28,6 @@ public class ConvAddMember extends StringPrompt {
         this.sqlManager = plugin.getSQLManager();
         this.config = plugin.getConfig();
         this.messageManager = plugin.getMessageManager();
-        this.inventoryBuilder = plugin.getInventoryBuilder();
     }
 
 

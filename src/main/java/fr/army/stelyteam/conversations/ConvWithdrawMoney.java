@@ -5,7 +5,6 @@ import fr.army.stelyteam.utils.EconomyManager;
 import fr.army.stelyteam.utils.MessageManager;
 import fr.army.stelyteam.utils.SQLManager;
 
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
@@ -14,14 +13,12 @@ import org.bukkit.entity.Player;
 public class ConvWithdrawMoney extends StringPrompt {
 
     private SQLManager sqlManager;
-    private YamlConfiguration config;
     private MessageManager messageManager;
     private EconomyManager economyManager;
 
 
     public ConvWithdrawMoney(StelyTeamPlugin plugin) {
         this.sqlManager = plugin.getSQLManager();
-        this.config = plugin.getConfig();
         this.messageManager = plugin.getMessageManager();
         this.economyManager = plugin.getEconomyManager();
     }

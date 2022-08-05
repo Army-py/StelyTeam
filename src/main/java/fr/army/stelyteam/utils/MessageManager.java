@@ -6,11 +6,9 @@ import fr.army.stelyteam.StelyTeamPlugin;
 
 public class MessageManager {
 
-    private YamlConfiguration config;
     private YamlConfiguration messages;
 
     public MessageManager(StelyTeamPlugin plugin) {
-        this.config = plugin.getConfig();
         this.messages = plugin.getMessages();
     }
 

@@ -14,11 +14,9 @@ import org.bukkit.inventory.Inventory;
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.conversations.ConvAddMoney;
 import fr.army.stelyteam.conversations.ConvWithdrawMoney;
-import fr.army.stelyteam.utils.EconomyManager;
 import fr.army.stelyteam.utils.InventoryBuilder;
 import fr.army.stelyteam.utils.MessageManager;
 import fr.army.stelyteam.utils.SQLManager;
-import fr.army.stelyteam.utils.SQLiteManager;
 import fr.army.stelyteam.utils.conversation.ConversationBuilder;
 
 

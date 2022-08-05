@@ -1,6 +1,5 @@
 package fr.army.stelyteam.conversations;
 
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
@@ -16,7 +15,6 @@ public class ConvRemoveMember extends StringPrompt {
 
     private StelyTeamPlugin plugin;
     private SQLManager sqlManager;
-    private YamlConfiguration config;
     private MessageManager messageManager;
     private InventoryBuilder inventoryBuilder;
 
@@ -24,7 +22,6 @@ public class ConvRemoveMember extends StringPrompt {
     public ConvRemoveMember(StelyTeamPlugin plugin) {
         this.plugin = plugin;
         this.sqlManager = plugin.getSQLManager();
-        this.config = plugin.getConfig();
         this.messageManager = plugin.getMessageManager();
         this.inventoryBuilder = plugin.getInventoryBuilder();
     }

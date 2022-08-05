@@ -12,14 +12,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.conversations.ConvAddMoney;
-import fr.army.stelyteam.conversations.ConvWithdrawMoney;
-import fr.army.stelyteam.utils.EconomyManager;
 import fr.army.stelyteam.utils.InventoryBuilder;
-import fr.army.stelyteam.utils.MessageManager;
 import fr.army.stelyteam.utils.SQLManager;
-import fr.army.stelyteam.utils.SQLiteManager;
-import fr.army.stelyteam.utils.conversation.ConversationBuilder;
 
 
 public class StorageDirectoryInventory {
@@ -28,8 +22,6 @@ public class StorageDirectoryInventory {
     private StelyTeamPlugin plugin;
     private YamlConfiguration config;
     private SQLManager sqlManager;
-    private MessageManager messageManager;
-    private ConversationBuilder conversationBuilder;
     private InventoryBuilder inventoryBuilder;
 
 
@@ -38,8 +30,6 @@ public class StorageDirectoryInventory {
         this.plugin = plugin;
         this.config = plugin.getConfig();
         this.sqlManager = plugin.getSQLManager();
-        this.messageManager = plugin.getMessageManager();
-        this.conversationBuilder = plugin.getConversationBuilder();
         this.inventoryBuilder = plugin.getInventoryBuilder();
     }
 
@@ -48,7 +38,6 @@ public class StorageDirectoryInventory {
         Player player = (Player) event.getWhoClicked();
         String playerName = player.getName();
         String itemName = event.getCurrentItem().getItemMeta().getDisplayName();
-        String teamId = sqlManager.getTeamIDFromPlayer(playerName);
         Material itemType = event.getCurrentItem().getType();
         List<String> lore = event.getCurrentItem().getItemMeta().getLore();
 
