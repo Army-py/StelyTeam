@@ -2,6 +2,7 @@ package fr.army.stelyteam.utils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.io.BukkitObjectInputStream;
@@ -10,7 +11,7 @@ import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
 public class SerializeManager {
     
-    public String itemStackToBase64(ItemStack itemStack) {
+    public String itemStackToBase64(ItemStack[] itemStack) {
         try {
             final ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
             final BukkitObjectOutputStream objectOutputStream = new BukkitObjectOutputStream(arrayOutputStream);
@@ -22,11 +23,11 @@ public class SerializeManager {
     }
 
 
-    public ItemStack itemStackFromBase64(String base64) {
+    public ItemStack[] itemStackFromBase64(String base64) {
         try {
             final ByteArrayInputStream arrayInputStream = new ByteArrayInputStream(Base64Coder.decodeLines(base64));
             final BukkitObjectInputStream objectInputStream = new BukkitObjectInputStream(arrayInputStream);
-            return (ItemStack) objectInputStream.readObject();
+            return (ItemStack[]) objectInputStream.readObject();
         } catch (final Exception exception) {
             throw new RuntimeException("Error turning base64 into ItemStack", exception);
         }

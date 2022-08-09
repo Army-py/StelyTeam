@@ -1,5 +1,8 @@
 package fr.army.stelyteam.utils;
 
+import java.io.InputStream;
+import java.sql.Array;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -80,7 +83,7 @@ public class SQLManager {
                 PreparedStatement queryPlayers = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'players' ('playername' TEXT, 'rank' INTEGER, 'team_id' TEXT, 'join_date' TEXT, PRIMARY KEY('playername'), FOREIGN KEY('team_id') REFERENCES 'teams'('team_id'));");
                 PreparedStatement queryTeams = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'teams' ('team_id' TEXT, 'team_prefix' TEXT, 'owner' TEXT, 'money' INTEGER, 'creation_date' TEXT, 'members_level' INTEGER, 'team_bank' INTEGER, 'team_storage' INTEGER, PRIMARY KEY('team_id'), FOREIGN KEY('owner') REFERENCES 'players'('playername'));");
                 PreparedStatement queryPermissions = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'permissions' ( 'id' INTEGER, 'team_id' INTEGER, 'permission' TEXT, 'rank' INTEGER, FOREIGN KEY('team_id') REFERENCES 'teams'('team_id'), PRIMARY KEY('id'));");
-                PreparedStatement queryStorages = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'storages' ( 'id' INTEGER, 'team_id' INTEGER, 'storage' INTEGER, 'content' TEXT, FOREIGN KEY('team_id') REFERENCES 'teams'('team_id'), PRIMARY KEY('id'));");
+                PreparedStatement queryStorages = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'storages' ( 'id' INTEGER, 'team_id' INTEGER, 'storage' INTEGER, 'content' BLOB, FOREIGN KEY('team_id') REFERENCES 'teams'('team_id'), PRIMARY KEY('id'));");
                 queryPlayers.executeUpdate();
                 queryTeams.executeUpdate();
                 queryPermissions.executeUpdate();
@@ -791,5 +794,78 @@ public class SQLManager {
             }
         }
         return null;
+    }
+
+
+    public boolean teamHasStorage(String teamId, String storageId){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT * FROM storages WHERE team_id = ? AND storage_id = ?");
+                query.setString(1, teamId);
+                query.setString(2, storageId);
+                ResultSet result = query.executeQuery();
+                if(result.next()){
+                    query.close();
+                    return true;
+                }
+                query.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+
+    public String getStorageContent(String teamId, String storageId){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT content FROM storages WHERE team_id = ? AND storage_id = ?");
+                query.setString(1, teamId);
+                query.setString(2, storageId);
+                ResultSet result = query.executeQuery();
+                String content = null;
+                if(result.next()){
+                    content = (String) result.getObject("content");
+                }
+                query.close();
+                return content;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+
+    public void insertStorageContent(String teamId, String storageId, String content){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("INSERT INTO storages (team_id, storage_id, content) VALUES (?, ?, ?)");
+                query.setString(1, teamId);
+                query.setString(2, storageId);
+                query.setObject(3, content);
+                query.executeUpdate();
+                query.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    public void updateStorageContent(String teamId, String storageId, String content){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("UPDATE storages SET content = ? WHERE team_id = ? AND storage_id = ?");
+                query.setObject(1, content);
+                query.setString(2, teamId);
+                query.setString(3, storageId);
+                query.executeUpdate();
+                query.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

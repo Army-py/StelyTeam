@@ -7,7 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.events.inventoryclick.*;
+import fr.army.stelyteam.events.inventories.*;
 import fr.army.stelyteam.utils.SQLiteManager;
 
 
@@ -33,7 +33,7 @@ public class InventoryClickManager implements Listener{
 
         Player player = (Player) event.getWhoClicked();
         if (!sqliteManager.isRegistered(player.getName())) sqliteManager.registerPlayer(player);
-
+        
         if (event.getView().getTitle().equals(config.getString("inventoriesName.admin"))){
             new AdminInventory(event, plugin).onInventoryClick();
         }else if (event.getView().getTitle().equals(config.getString("inventoriesName.confirmInventory"))){
@@ -56,6 +56,8 @@ public class InventoryClickManager implements Listener{
             new StorageDirectoryInventory(event, plugin).onInventoryClick();
         }else if (event.getView().getTitle().equals(config.getString("inventoriesName.upgradeStorageAmount"))){
             new UpgradeStorageInventory(event, plugin).onInventoryClick();
+        }else if (event.getView().getTitle().startsWith(config.getString("inventoriesName.storage"))){
+            new StorageInventory(event, plugin).onInventoryClick();
         }
     }
 }

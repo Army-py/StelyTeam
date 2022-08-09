@@ -1,12 +1,10 @@
-package fr.army.stelyteam.events.inventoryclick;
+package fr.army.stelyteam.events.inventories;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.conversations.Conversation;
-import org.bukkit.conversations.ConversationFactory;
-import org.bukkit.conversations.Prompt;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 
 import fr.army.stelyteam.StelyTeamPlugin;
@@ -22,7 +20,8 @@ import fr.army.stelyteam.utils.conversation.ConversationBuilder;
 
 public class ConfirmInventory {
 
-    private InventoryClickEvent event;
+    private InventoryClickEvent clickEvent;
+    private InventoryCloseEvent closeEvent;
     private StelyTeamPlugin plugin;
     private YamlConfiguration config;
     private SQLManager sqlManager;
@@ -33,8 +32,21 @@ public class ConfirmInventory {
     private TeamMembersUtils teamMembersUtils;
 
 
-    public ConfirmInventory(InventoryClickEvent event, StelyTeamPlugin plugin) {
-        this.event = event;
+    public ConfirmInventory(InventoryClickEvent clickEvent, StelyTeamPlugin plugin) {
+        this.clickEvent = clickEvent;
+        this.plugin = plugin;
+        this.config = plugin.getConfig();
+        this.sqlManager = plugin.getSQLManager();
+        this.messageManager = plugin.getMessageManager();
+        this.economyManager = plugin.getEconomyManager();
+        this.conversationBuilder = plugin.getConversationBuilder();
+        this.inventoryBuilder = plugin.getInventoryBuilder();
+        this.teamMembersUtils = plugin.getTeamMembersUtils();
+    }
+
+
+    public ConfirmInventory(InventoryCloseEvent closeEvent, StelyTeamPlugin plugin) {
+        this.closeEvent = closeEvent;
         this.plugin = plugin;
         this.config = plugin.getConfig();
         this.sqlManager = plugin.getSQLManager();
@@ -47,9 +59,9 @@ public class ConfirmInventory {
 
 
     public void onInventoryClick(){
-        Player player = (Player) event.getWhoClicked();
+        Player player = (Player) clickEvent.getWhoClicked();
         String playerName = player.getName();
-        String itemName = event.getCurrentItem().getItemMeta().getDisplayName();
+        String itemName = clickEvent.getCurrentItem().getItemMeta().getDisplayName();
 
         if (itemName.equals(config.getString("inventories.confirmInventory.confirm.itemName"))){
             if (plugin.containTeamAction(playerName, "removeMember")){
@@ -209,14 +221,15 @@ public class ConfirmInventory {
     }
 
 
-    public void getNameInput(Player player, Prompt prompt) {
-        ConversationFactory cf = new ConversationFactory(plugin);
-        cf.withFirstPrompt(prompt);
-        cf.withLocalEcho(false);
-        cf.withTimeout(60);
+    public void onInventoryClose(){
+        Player player = (org.bukkit.entity.Player) closeEvent.getPlayer();
+        String playerName = player.getName();
 
-        Conversation conv = cf.buildConversation(player);
-        conv.begin();
-        return;
+        if (plugin.getTeamActions(playerName) != null) {
+            plugin.removeTeamTempAction(playerName);
+        }
+        if (plugin.getPlayerActions(playerName) != null) {
+            plugin.removePlayerTempAction(playerName);
+        }
     }
 }

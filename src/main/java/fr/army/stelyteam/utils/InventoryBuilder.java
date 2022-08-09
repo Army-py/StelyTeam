@@ -23,6 +23,7 @@ public class InventoryBuilder {
     private YamlConfiguration config;
     private SQLManager sqlManager;
     private SQLiteManager sqliteManager;
+    private SerializeManager serializeManager;
 
 
     public InventoryBuilder(StelyTeamPlugin plugin) {
@@ -30,6 +31,7 @@ public class InventoryBuilder {
         this.config = plugin.getConfig();
         this.sqlManager = plugin.getSQLManager();
         this.sqliteManager = plugin.getSQLiteManager();
+        this.serializeManager = new SerializeManager();
     }
 
 
@@ -412,6 +414,30 @@ public class InventoryBuilder {
                 inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, false));
             }
         }
+        return inventory;
+    }
+
+
+    public Inventory createStorageInventory(String teamId, String storageId, String storageName){
+        Integer slots = config.getInt("inventoriesSlots.storage");
+        Inventory inventory = Bukkit.createInventory(null, slots, storageName);
+        
+        if (sqlManager.teamHasStorage(teamId, storageId)){
+            String contentString = sqlManager.getStorageContent(teamId, storageId);
+            ItemStack[] content = serializeManager.itemStackFromBase64(contentString);
+            inventory.setContents(content);
+        }
+
+        for(String str : config.getConfigurationSection("inventories.storage").getKeys(false)){
+            Integer slot = config.getInt("inventories.storage."+str+".slot");
+            Material material = Material.getMaterial(config.getString("inventories.storage."+str+".itemType"));
+            String name = config.getString("inventories.storage."+str+".itemName");
+            List<String> lore = config.getStringList("inventories.storage."+str+".lore");
+
+            inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, false));
+        }
+
+
         return inventory;
     }
 

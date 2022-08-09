@@ -1,4 +1,4 @@
-package fr.army.stelyteam.events.inventoryclick;
+package fr.army.stelyteam.events.inventories;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;

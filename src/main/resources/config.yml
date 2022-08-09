@@ -99,6 +99,11 @@ inventoriesName:
   upgradeStorageAmount: "§5§lAméliorations du stockage"
   storageDirectory: "§5§lStockages disponibles"
   storage: "§5§lStockage"
+  storageOne: "§5§lStockage 1"
+  storageTwo: "§5§lStockage 2"
+  storageThree: "§5§lStockage 3"
+  storageFour: "§5§lStockage 4"
+  storageFive: "§5§lStockage 5"
 
 
 # Nombre de slots dans chaque inventaires. A modifier en fonction de la taille d'une ligne de coffre (9 * nombre de lignes) 
@@ -585,31 +590,43 @@ inventories:
       slot: 35
 
 
+  storage:
+    close:
+      itemName: "§5§lFermer"
+      itemType: BARRIER
+      slot: 53
+
+
   storageDirectory: 
     storageOne:
       itemName: "§5§lStockage 1"
       itemType: CHEST
       level: 1
+      storageId: "storage_1"
       slot: 11
     storageTwo:
       itemName: "§5§lStockage 2"
       itemType: CHEST
       level: 2
+      storageId: "storage_2"
       slot: 12
     storageThree:
       itemName: "§5§lStockage 3"
       itemType: CHEST
       level: 3
+      storageId: "storage_3"
       slot: 13
     storageFour:
       itemName: "§5§lStockage 4"
       itemType: CHEST
       level: 4
+      storageId: "storage_4"
       slot: 14
     storageFive:
       itemName: "§5§lStockage 5"
       itemType: CHEST
       level: 5
+      storageId: "storage_5"
       slot: 15
     close:
       itemName: "§5§lFermer"

@@ -1,4 +1,4 @@
-package fr.army.stelyteam.events.inventoryclick;
+package fr.army.stelyteam.events.inventories;
 
 import java.util.List;
 
@@ -37,6 +37,7 @@ public class StorageDirectoryInventory {
     public void onInventoryClick(){
         Player player = (Player) event.getWhoClicked();
         String playerName = player.getName();
+        String teamId = sqlManager.getTeamIDFromPlayer(playerName);
         String itemName = event.getCurrentItem().getItemMeta().getDisplayName();
         Material itemType = event.getCurrentItem().getType();
         List<String> lore = event.getCurrentItem().getItemMeta().getLore();
@@ -46,10 +47,19 @@ public class StorageDirectoryInventory {
         }
 
         // Fermeture ou retour en arrière de l'inventaire
-        if (sqlManager.isOwner(playerName) || sqlManager.getMemberRank(playerName) <= 3){
-            if (itemName.equals(config.getString("inventories.member.close.itemName"))){
-                Inventory inventory = inventoryBuilder.createMemberInventory(playerName);
-                player.openInventory(inventory);
+        if (itemName.equals(config.getString("inventories.member.close.itemName"))){
+            Inventory inventory = inventoryBuilder.createMemberInventory(playerName);
+            player.openInventory(inventory);
+        }else{
+            for(String str : config.getConfigurationSection("inventories.storageDirectory").getKeys(false)){
+                String name = config.getString("inventories.storageDirectory."+str+".itemName");
+                Material type = Material.getMaterial(config.getString("inventories.storageDirectory."+str+".itemType"));
+                String storageId = config.getString("inventories.storageDirectory."+str+".storageId");
+
+                if (itemName.equals(name) && itemType.equals(type)){
+                    Inventory inventory = inventoryBuilder.createStorageInventory(teamId, storageId, name);
+                    player.openInventory(inventory);
+                }
             }
         }
     }

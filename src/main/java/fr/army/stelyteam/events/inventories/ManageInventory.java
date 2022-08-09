@@ -1,4 +1,4 @@
-package fr.army.stelyteam.events.inventoryclick;
+package fr.army.stelyteam.events.inventories;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.utils.EconomyManager;

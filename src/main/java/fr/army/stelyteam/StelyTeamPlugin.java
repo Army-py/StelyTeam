@@ -13,7 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import fr.army.stelyteam.commands.CommandManager;
 import fr.army.stelyteam.events.InventoryClickManager;
-import fr.army.stelyteam.events.InventoryClose;
+import fr.army.stelyteam.events.InventoryCloseManager;
 import fr.army.stelyteam.events.PlayerQuit;
 import fr.army.stelyteam.utils.ColorsBuilder;
 import fr.army.stelyteam.utils.EconomyManager;
@@ -21,6 +21,7 @@ import fr.army.stelyteam.utils.InventoryBuilder;
 import fr.army.stelyteam.utils.MessageManager;
 import fr.army.stelyteam.utils.SQLManager;
 import fr.army.stelyteam.utils.SQLiteManager;
+import fr.army.stelyteam.utils.SerializeManager;
 import fr.army.stelyteam.utils.TeamMembersUtils;
 import fr.army.stelyteam.utils.conversation.ConversationBuilder;
 
@@ -37,6 +38,7 @@ public class StelyTeamPlugin extends JavaPlugin {
     private ConversationBuilder conversationBuilder;
     private InventoryBuilder inventoryBuilder;
     private TeamMembersUtils teamMembersUtils;
+    private SerializeManager serializeManager;
 
 
     public ArrayList<String> playersCreateTeam = new ArrayList<String>();
@@ -77,10 +79,11 @@ public class StelyTeamPlugin extends JavaPlugin {
         this.conversationBuilder = new ConversationBuilder(this);
         this.inventoryBuilder = new InventoryBuilder(this);
         this.teamMembersUtils = new TeamMembersUtils(this);
+        this.serializeManager = new SerializeManager();
         
         getServer().getPluginManager().registerEvents(new InventoryClickManager(this), this);
         getServer().getPluginManager().registerEvents(new PlayerQuit(this), this);
-        getServer().getPluginManager().registerEvents(new InventoryClose(this), this);
+        getServer().getPluginManager().registerEvents(new InventoryCloseManager(this), this);
 
         getLogger().info("StelyTeam ON");
     }
@@ -261,5 +264,9 @@ public class StelyTeamPlugin extends JavaPlugin {
 
     public TeamMembersUtils getTeamMembersUtils() {
         return teamMembersUtils;
+    }
+
+    public SerializeManager getSerializeManager() {
+        return serializeManager;
     }
 }

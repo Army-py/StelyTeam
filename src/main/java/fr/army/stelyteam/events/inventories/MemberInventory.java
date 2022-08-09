@@ -1,4 +1,4 @@
-package fr.army.stelyteam.events.inventoryclick;
+package fr.army.stelyteam.events.inventories;
 
 import java.util.List;
 
