@@ -1,7 +1,5 @@
 package fr.army.stelyteam.commands.subCommands.team;
 
-import javax.swing.plaf.synth.SynthScrollPaneUI;
-
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
