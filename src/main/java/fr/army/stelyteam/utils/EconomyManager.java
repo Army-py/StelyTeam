@@ -18,7 +18,6 @@ public class EconomyManager {
     public EconomyManager(StelyTeamPlugin plugin){
         setupEconomy();
         this.messageManager = new MessageManager(plugin);
-        // this.messageManager = plugin.getMessageManager();
     }
 
     public boolean checkMoneyPlayer(Player player, Double money) {
@@ -27,16 +26,11 @@ public class EconomyManager {
 
     public void removeMoneyPlayer(Player player, double money) {
         economy.withdrawPlayer(player, money);
-        // player.sendMessage("Vous avez payé " + money + "€");
         player.sendRawMessage(messageManager.getReplaceMessage("payments.paid", DoubleToString(money)));
     }
 
     public void addMoneyPlayer(Player player, double money) {
         economy.depositPlayer(player, money);
-        // player.sendMessage("Vous avez reçu " + money + "€");
-        System.out.println(DoubleToString(money));
-        System.out.println(messageManager.getMessage("payments.received"));
-        System.out.println(messageManager.getReplaceMessage("payments.received", DoubleToString(money)));
         player.sendRawMessage(messageManager.getReplaceMessage("payments.received", DoubleToString(money)));
     }
 
