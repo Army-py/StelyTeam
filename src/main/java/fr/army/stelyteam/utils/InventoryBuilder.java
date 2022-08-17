@@ -402,7 +402,11 @@ public class InventoryBuilder {
 
             if (level >= config.getInt("inventories.storageDirectory."+str+".level") || str.equals("close")){
                 material = Material.getMaterial(config.getString("inventories.storageDirectory."+str+".itemType"));
-                name = config.getString("inventories.storageDirectory."+str+".itemName");
+                if (str.equals("close")){
+                    name = config.getString("inventories.storageDirectory."+str+".itemName");
+                }else{
+                    name = config.getString(config.getString("inventories.storageDirectory."+str+".itemName"));
+                }
                 lore = config.getStringList("inventories.storageDirectory."+str+".lore");
 
                 inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, false));
@@ -420,13 +424,21 @@ public class InventoryBuilder {
 
     public Inventory createStorageInventory(String teamId, String storageId, String storageName){
         Integer slots = config.getInt("inventoriesSlots.storage");
-        Inventory inventory = Bukkit.createInventory(null, slots, storageName);
-        
-        if (sqlManager.teamHasStorage(teamId, storageId)){
-            String contentString = sqlManager.getStorageContent(teamId, storageId);
-            ItemStack[] content = serializeManager.itemStackFromBase64(contentString);
-            inventory.setContents(content);
+        Inventory inventory;
+
+        if (plugin.containTeamStorage(teamId, storageId)){
+            inventory = plugin.getStorageInstance(teamId, storageId);
+        }else{
+            inventory = Bukkit.createInventory(null, slots, storageName);
+            plugin.addTeamStorage(teamId, inventory, storageId, serializeManager.serialize(inventory.getContents()));
+
+            if (sqlManager.teamHasStorage(teamId, storageId)){
+                String contentString = sqlManager.getStorageContent(teamId, storageId);
+                ItemStack[] content = serializeManager.deserialize(contentString);
+                inventory.setContents(content);
+            }
         }
+
 
         for(String str : config.getConfigurationSection("inventories.storage").getKeys(false)){
             Integer slot = config.getInt("inventories.storage."+str+".slot");

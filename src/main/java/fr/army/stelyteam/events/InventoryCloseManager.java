@@ -25,7 +25,7 @@ public class InventoryCloseManager implements Listener {
     public void onInventoryClose(InventoryCloseEvent event) {        
         if (event.getView().getTitle().equals(config.getString("inventoriesName.confirmInventory"))){
             new ConfirmInventory(event, plugin).onInventoryClose();
-        }else if (event.getView().getTitle().startsWith(config.getString("inventoriesName.storage")) && !event.getView().getTitle().equals(config.getString("inventoriesName.storageDirectory"))){
+        }else if (config.getConfigurationSection("inventoriesName.storages").getValues(true).containsValue(event.getView().getTitle())){
             new StorageInventory(event, plugin).onInventoryClose();
         }
     }

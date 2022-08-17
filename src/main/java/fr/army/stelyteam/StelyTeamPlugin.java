@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Objects;
 
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import fr.army.stelyteam.commands.CommandManager;
@@ -49,6 +50,8 @@ public class StelyTeamPlugin extends JavaPlugin {
     public ArrayList<String[]> teamsTempActions = new ArrayList<String[]>();
     // {owner, name, prefix}
     public ArrayList<String[]> createTeamTemp = new ArrayList<String[]>();
+    // {teamId, storageInstance, storageId, content}
+    public ArrayList<Object[]> storageTemp = new ArrayList<Object[]>();
 
 
     @Override
@@ -82,8 +85,8 @@ public class StelyTeamPlugin extends JavaPlugin {
         this.serializeManager = new SerializeManager();
         
         getServer().getPluginManager().registerEvents(new InventoryClickManager(this), this);
-        getServer().getPluginManager().registerEvents(new PlayerQuit(this), this);
         getServer().getPluginManager().registerEvents(new InventoryCloseManager(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerQuit(this), this);
 
         getLogger().info("StelyTeam ON");
     }
@@ -108,6 +111,20 @@ public class StelyTeamPlugin extends JavaPlugin {
         }
         return YamlConfiguration.loadConfiguration(file);
     }
+
+
+    // public NBTTagCompound getNBTTag(ItemStack bukkitStack) {
+    //     net.minecraft.world.item.ItemStack itemStack = CraftItemStack.asNMSCopy(bukkitStack);
+    //     NBTTagCompound nbtTagCompound = itemStack.getTag() != null ? itemStack.getTag() : new NBTTagCompound();
+    //     return nbtTagCompound;
+    // }
+
+
+    // public ItemStack getFromNBTTag(ItemStack bukkitStack, NBTTagCompound nbtTagCompound) {
+    //     net.minecraft.world.item.ItemStack itemStack = CraftItemStack.asNMSCopy(bukkitStack);
+    //     itemStack.setTag(nbtTagCompound);
+    //     return CraftItemStack.asBukkitCopy(itemStack);
+    // }
 
 
     public String[] getTeamActions(String playerName) {
@@ -202,6 +219,85 @@ public class StelyTeamPlugin extends JavaPlugin {
         }else{
             return false;
         }
+    }
+
+
+    public boolean containTeamStorage(String teamId, String storageId) {
+        if (storageTemp.isEmpty()) return false;
+        for (Object[] objects : storageTemp) {
+            if (objects[0].equals(teamId) && objects[2].equals(storageId)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    public boolean teamStorageHasContent(String teamId, String storageId) {
+        if (storageTemp.isEmpty()) return false;
+        for (Object[] objects : storageTemp) {
+            if (objects[0].equals(teamId) && objects[2].equals(storageId) && !((String) objects[3]).isEmpty()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    public boolean containLastPlayer(String teamId, String playerName) {
+        if (storageTemp.isEmpty()) return false;
+        for (Object[] objects : storageTemp) {
+            if (objects[0].equals(teamId) && objects[1].equals(playerName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    public void addTeamStorage(String teamId, Inventory inventoryInstance, String storageId, String content) {
+        storageTemp.add(new Object[]{teamId, inventoryInstance, storageId, content});
+    }
+
+
+    public void removeTeamStorage(String teamId, String storageId) {
+        for (Object[] objects : storageTemp) {
+            if (objects[0].equals(teamId) && objects[2].equals(storageId)) {
+                storageTemp.remove(objects);
+                return;
+            }
+        }
+    }
+
+
+    public void replaceTeamStorage(String teamId, Inventory inventoryInstance, String storageId, String content) {
+        for (Object[] objects : storageTemp) {
+            if (objects[0].equals(teamId) && objects[2].equals(storageId)) {
+                storageTemp.remove(objects);
+                storageTemp.add(new Object[]{teamId, inventoryInstance, storageId, content});
+                return;
+            }
+        }
+    }
+
+
+    public String getTeamStorageContent(String teamId, String storageId) {
+        for (Object[] objects : storageTemp) {
+            if (objects[0].equals(teamId) && objects[2].equals(storageId)) {
+                return (String) objects[3];
+            }
+        }
+        return null;
+    }
+
+
+    public Inventory getStorageInstance(String teamId, String storageId) {
+        for (Object[] objects : storageTemp) {
+            if (objects[0].equals(teamId) && objects[2].equals(storageId)) {
+                return (Inventory) objects[1];
+            }
+        }
+        return null;
     }
 
 

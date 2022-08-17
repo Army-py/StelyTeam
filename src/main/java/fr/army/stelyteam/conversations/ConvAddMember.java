@@ -56,7 +56,7 @@ public class ConvAddMember extends StringPrompt {
             return null;
         }
         
-        // plugin.addTeamTempAction(authorName, answer, teamId, "addMember");
+        plugin.addTeamTempAction(authorName, answer, teamId, "addMember");
 
         // con.getForWhom().sendRawMessage("L'invitation a été envoyée");
 

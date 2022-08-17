@@ -1,7 +1,5 @@
 package fr.army.stelyteam.events.inventories;
 
-import java.util.List;
-
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.conversations.Conversation;
@@ -40,19 +38,14 @@ public class StorageDirectoryInventory {
         String teamId = sqlManager.getTeamIDFromPlayer(playerName);
         String itemName = event.getCurrentItem().getItemMeta().getDisplayName();
         Material itemType = event.getCurrentItem().getType();
-        List<String> lore = event.getCurrentItem().getItemMeta().getLore();
-
-        if (itemType.equals(Material.getMaterial(config.getString("noPermission.itemType"))) && lore.equals(config.getStringList("noPermission.lore"))){
-            return;
-        }
 
         // Fermeture ou retour en arrière de l'inventaire
-        if (itemName.equals(config.getString("inventories.member.close.itemName"))){
+        if (itemName.equals(config.getString("inventories.storageDirectory.close.itemName"))){
             Inventory inventory = inventoryBuilder.createMemberInventory(playerName);
             player.openInventory(inventory);
         }else{
             for(String str : config.getConfigurationSection("inventories.storageDirectory").getKeys(false)){
-                String name = config.getString("inventories.storageDirectory."+str+".itemName");
+                String name = config.getString(config.getString("inventories.storageDirectory."+str+".itemName"));
                 Material type = Material.getMaterial(config.getString("inventories.storageDirectory."+str+".itemType"));
                 String storageId = config.getString("inventories.storageDirectory."+str+".storageId");
 
@@ -64,7 +57,7 @@ public class StorageDirectoryInventory {
         }
     }
 
-    
+
     public void getNameInput(Player player, Prompt prompt) {
         ConversationFactory cf = new ConversationFactory(plugin);
         Conversation conv = cf.withFirstPrompt(prompt).withLocalEcho(false).buildConversation(player);

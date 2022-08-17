@@ -98,12 +98,12 @@ inventoriesName:
   permissions: "§5§lPermissions"
   upgradeStorageAmount: "§5§lAméliorations du stockage"
   storageDirectory: "§5§lStockages disponibles"
-  storage: "§5§lStockage"
-  storageOne: "§5§lStockage 1"
-  storageTwo: "§5§lStockage 2"
-  storageThree: "§5§lStockage 3"
-  storageFour: "§5§lStockage 4"
-  storageFive: "§5§lStockage 5"
+  storages:
+    storageOne: "§5§lStockage 1"
+    storageTwo: "§5§lStockage 2"
+    storageThree: "§5§lStockage 3"
+    storageFour: "§5§lStockage 4"
+    storageFive: "§5§lStockage 5"
 
 
 # Nombre de slots dans chaque inventaires. A modifier en fonction de la taille d'une ligne de coffre (9 * nombre de lignes) 
@@ -382,7 +382,7 @@ inventories:
       lore:
         - "§aPrix : 25,000,000€"
     close:
-      itemName: "§5§lFermer"
+      itemName: "§5§lRetour au menu de gestion"
       itemType: BARRIER
       slot: 26
 
@@ -424,7 +424,7 @@ inventories:
       lore:
         - "§aPrix : 25,000,000€"
     close:
-      itemName: "§5§lFermer"
+      itemName: "§5§lRetour au menu de gestion"
       itemType: BARRIER
       slot: 26
 
@@ -442,7 +442,7 @@ inventories:
 
   teamMembers:
     close:
-      itemName: "§5§lFermer"
+      itemName: "§5§lRetour au menu membre"
       itemType: BARRIER
       slot: 26
 
@@ -471,7 +471,7 @@ inventories:
         - "§aModifier le créateur"
         - "§ade la team"
     close:
-      itemName: "§5§lFermer"
+      itemName: "§5§lRetour au menu de gestion"
       itemType: BARRIER
       slot: 35
 
@@ -585,50 +585,50 @@ inventories:
         - "§aPermet d'avoir accès aux"
         - "§astockages de la team"
     close:
-      itemName: "§5§lFermer"
+      itemName: "§5§lRetour au menu de gestion"
       itemType: BARRIER
       slot: 35
 
 
   storage:
     close:
-      itemName: "§5§lFermer"
+      itemName: "§5§lRetour aux stockages"
       itemType: BARRIER
       slot: 53
 
 
   storageDirectory: 
     storageOne:
-      itemName: "§5§lStockage 1"
+      itemName: inventoriesName.storages.storageOne
       itemType: CHEST
       level: 1
       storageId: "storage_1"
       slot: 11
     storageTwo:
-      itemName: "§5§lStockage 2"
+      itemName: inventoriesName.storages.storageTwo
       itemType: CHEST
       level: 2
       storageId: "storage_2"
       slot: 12
     storageThree:
-      itemName: "§5§lStockage 3"
+      itemName: inventoriesName.storages.storageThree
       itemType: CHEST
       level: 3
       storageId: "storage_3"
       slot: 13
     storageFour:
-      itemName: "§5§lStockage 4"
+      itemName: inventoriesName.storages.storageFour
       itemType: CHEST
       level: 4
       storageId: "storage_4"
       slot: 14
     storageFive:
-      itemName: "§5§lStockage 5"
+      itemName: inventoriesName.storages.storageFive
       itemType: CHEST
       level: 5
       storageId: "storage_5"
       slot: 15
     close:
-      itemName: "§5§lFermer"
+      itemName: "§5§lRetour au menu membre"
       itemType: BARRIER
       slot: 26

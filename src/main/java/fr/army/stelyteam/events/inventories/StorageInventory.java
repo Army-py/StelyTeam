@@ -1,5 +1,6 @@
 package fr.army.stelyteam.events.inventories;
 
+import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -20,51 +21,71 @@ public class StorageInventory {
     private InventoryBuilder inventoryBuilder;
     private SQLManager sqlManager;
     private SerializeManager serializeManager;
+    private StelyTeamPlugin plugin;
+
 
     public StorageInventory(InventoryClickEvent clickEvent, StelyTeamPlugin plugin) {
+        this.plugin = plugin;
         this.clickEvent = clickEvent;
         this.config = plugin.getConfig();
+        this.sqlManager = plugin.getSQLManager();
         this.inventoryBuilder = plugin.getInventoryBuilder();
+        this.serializeManager = plugin.getSerializeManager();
     }
 
     public StorageInventory(InventoryCloseEvent closeEvent, StelyTeamPlugin plugin) {
+        this.plugin = plugin;
         this.closeEvent = closeEvent;
         this.config = plugin.getConfig();
         this.sqlManager = plugin.getSQLManager();
         this.serializeManager = plugin.getSerializeManager();
     }
 
+
     public void onInventoryClick(){
         Player player = (Player) clickEvent.getWhoClicked();
         String playerName = player.getName();
-        String itemName = clickEvent.getCurrentItem().getItemMeta().getDisplayName();
-
+        String itemName;
+        
         // Fermeture ou retour en arrière de l'inventaire
-        if (itemName.equals(config.getString("inventories.storage.close.itemName"))){
-            Inventory inventory = inventoryBuilder.createStorageDirectoryInventory(playerName);
-            player.openInventory(inventory);
-        }else{
-            clickEvent.setCancelled(false);
+        if (clickEvent.getCurrentItem() != null){
+            itemName = clickEvent.getCurrentItem().getItemMeta().getDisplayName();
+            if (itemName.equals(config.getString("inventories.storage.close.itemName"))){
+                clickEvent.setCancelled(true);
+                if (clickEvent.getCursor().getType().equals(Material.AIR)){
+                    player.openInventory(inventoryBuilder.createStorageDirectoryInventory(playerName));
+                    return;
+                }else return;
+            }
         }
+        clickEvent.setCancelled(false);
     }
 
 
     public void onInventoryClose(){
         Player player = (org.bukkit.entity.Player) closeEvent.getPlayer();
+        Inventory storageInventory = closeEvent.getInventory();
         String playerName = player.getName();
         String teamId = sqlManager.getTeamIDFromPlayer(playerName);
         String storageId = getStorageId(closeEvent.getView().getTitle());
-        ItemStack[] inventoryContents = closeEvent.getInventory().getContents();
+        ItemStack[] inventoryContent = closeEvent.getInventory().getContents();
         int closeButtonSlot = config.getInt("inventories.storage.close.slot");
 
-        if (!sqlManager.teamHasStorage(teamId, storageId)){
-            if (getStoredItemCount(inventoryContents) > config.getConfigurationSection("inventories.storage").getKeys(false).size()){
-                inventoryContents[closeButtonSlot] = null;
-                sqlManager.insertStorageContent(teamId, storageId, serializeManager.itemStackToBase64(inventoryContents));
-            }
+        inventoryContent[closeButtonSlot] = null;
+        if (plugin.containTeamStorage(teamId, storageId)){
+            plugin.replaceTeamStorage(teamId, storageInventory, storageId, serializeManager.serialize(inventoryContent));
         }else{
-            inventoryContents[closeButtonSlot] = null;
-            sqlManager.updateStorageContent(teamId, storageId, serializeManager.itemStackToBase64(inventoryContents));
+            plugin.addTeamStorage(teamId, storageInventory, storageId, serializeManager.serialize(inventoryContent));
+        }
+        
+        if (plugin.containTeamStorage(teamId, storageId)){
+            System.out.println("Storage exist");
+            String inventoryContentString = plugin.getTeamStorageContent(teamId, storageId);
+            if (!sqlManager.teamHasStorage(teamId, storageId)){
+                sqlManager.insertStorageContent(teamId, storageId, inventoryContentString);
+            }else{
+                sqlManager.updateStorageContent(teamId, storageId, inventoryContentString);
+            }
         }
     }
 
@@ -72,21 +93,11 @@ public class StorageInventory {
     private String getStorageId(String inventoryTitle){
         String storageId;
         for(String str : config.getConfigurationSection("inventories.storageDirectory").getKeys(false)){
-            if (config.getString("inventories.storageDirectory." + str + ".itemName").equals(inventoryTitle)){
+            if (config.getString(config.getString("inventories.storageDirectory." + str + ".itemName")).equals(inventoryTitle)){
                 storageId = config.getString("inventories.storageDirectory." + str + ".storageId");
                 return storageId;
             }
         }
         return null;
-    }
-
-    private int getStoredItemCount(ItemStack[] inventoryContents){
-        int storedItemsCount = 0;
-        for (int i = 0; i < inventoryContents.length; i++) {
-            if (inventoryContents[i] != null){
-                storedItemsCount++;
-            }
-        }
-        return storedItemsCount;
     }
 }
