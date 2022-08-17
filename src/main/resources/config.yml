@@ -587,7 +587,7 @@ inventories:
     close:
       itemName: "§5§lRetour au menu de gestion"
       itemType: BARRIER
-      slot: 35
+      slot: 44
 
 
   storage:
