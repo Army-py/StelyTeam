@@ -50,8 +50,9 @@ public class ConvGetTeamPrefix extends StringPrompt {
         sqlManager.insertTeam(teamInfos[1], teamInfos[2], authorName);
         plugin.removeCreationTeamTemp(authorName);
         economyManager.removeMoneyPlayer(author, config.getDouble("prices.createTeam"));
-        // con.getForWhom().sendRawMessage("Team créé !");
         con.getForWhom().sendRawMessage(messageManager.getMessage("manage_team.creation.team_created"));
+        
+        openTeamPanel(author);
         return null;
     }
 
@@ -78,5 +79,11 @@ public class ConvGetTeamPrefix extends StringPrompt {
         }
 
         return prefixTeam.length() - (colors * pattern.pattern().length() + hexColors * hexPattern.pattern().length()) > config.getInt("teamPrefixMaxLength");
+    }
+
+    private void openTeamPanel(Player player) {
+        if (config.getBoolean("openTeamAfterCreate")){
+            player.performCommand("st");
+        }
     }
 }

@@ -83,7 +83,7 @@ public class SQLManager {
                 PreparedStatement queryPlayers = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'players' ('id' INTEGER UNIQUE, 'playername' TEXT UNIQUE, 'rank' INTEGER, 'team_id' INTEGER, 'join_date' TEXT, PRIMARY KEY('id' AUTOINCREMENT), FOREIGN KEY('team_id') REFERENCES 'teams'('id'));");
                 PreparedStatement queryTeams = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'teams' ('id' INTEGER UNIQUE, 'team_id' TEXT UNIQUE, 'team_prefix' TEXT UNIQUE, 'owner' TEXT, 'money' INTEGER, 'creation_date' TEXT, 'members_level' INTEGER, 'team_bank' INTEGER, 'team_storage' INTEGER, PRIMARY KEY('id' AUTOINCREMENT), FOREIGN KEY('owner') REFERENCES 'players'('playername'));");
                 PreparedStatement queryPermissions = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'permissions' ( 'id' INTEGER, 'team_id' INTEGER, 'permission' TEXT, 'rank' INTEGER, FOREIGN KEY('team_id') REFERENCES 'teams'('id'), PRIMARY KEY('id'));");
-                PreparedStatement queryStorages = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'storages' ( 'id' INTEGER, 'team_id' INTEGER, 'storage' INTEGER, 'content' BLOB, FOREIGN KEY('team_id') REFERENCES 'teams'('id'), PRIMARY KEY('id'));");
+                PreparedStatement queryStorages = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'storages' ( 'id' INTEGER, 'team_id' INTEGER, 'storage_id' INTEGER, 'content' BLOB, FOREIGN KEY('team_id') REFERENCES 'teams'('id'), PRIMARY KEY('id'));");
                 queryPlayers.executeUpdate();
                 queryTeams.executeUpdate();
                 queryPermissions.executeUpdate();
