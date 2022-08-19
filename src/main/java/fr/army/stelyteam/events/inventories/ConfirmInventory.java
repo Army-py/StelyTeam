@@ -15,6 +15,7 @@ import fr.army.stelyteam.utils.EconomyManager;
 import fr.army.stelyteam.utils.InventoryBuilder;
 import fr.army.stelyteam.utils.MessageManager;
 import fr.army.stelyteam.utils.SQLManager;
+import fr.army.stelyteam.utils.SQLiteManager;
 import fr.army.stelyteam.utils.TeamMembersUtils;
 import fr.army.stelyteam.utils.conversation.ConversationBuilder;
 
@@ -25,6 +26,7 @@ public class ConfirmInventory {
     private StelyTeamPlugin plugin;
     private YamlConfiguration config;
     private SQLManager sqlManager;
+    private SQLiteManager sqliteManager;
     private MessageManager messageManager;
     private EconomyManager economyManager;
     private ConversationBuilder conversationBuilder;
@@ -37,6 +39,7 @@ public class ConfirmInventory {
         this.plugin = plugin;
         this.config = plugin.getConfig();
         this.sqlManager = plugin.getSQLManager();
+        this.sqliteManager = plugin.getSQLiteManager();
         this.messageManager = plugin.getMessageManager();
         this.economyManager = plugin.getEconomyManager();
         this.conversationBuilder = plugin.getConversationBuilder();
@@ -48,13 +51,6 @@ public class ConfirmInventory {
     public ConfirmInventory(InventoryCloseEvent closeEvent, StelyTeamPlugin plugin) {
         this.closeEvent = closeEvent;
         this.plugin = plugin;
-        this.config = plugin.getConfig();
-        this.sqlManager = plugin.getSQLManager();
-        this.messageManager = plugin.getMessageManager();
-        this.economyManager = plugin.getEconomyManager();
-        this.conversationBuilder = plugin.getConversationBuilder();
-        this.inventoryBuilder = plugin.getInventoryBuilder();
-        this.teamMembersUtils = plugin.getTeamMembersUtils();
     }
 
 
@@ -128,6 +124,7 @@ public class ConfirmInventory {
                 // teamMembersUtils.teamBroadcast(teamID, playerName, "La team " + teamID + " a été supprimée");
                 teamMembersUtils.teamBroadcast(teamID, playerName, messageManager.replaceTeamId("broadcasts.team_deleted", teamID));
                 sqlManager.removeTeam(teamID);
+                sqliteManager.removeHome(teamID);
                 player.closeInventory();
                 // player.sendMessage("Tu as supprimé la team");
                 player.sendMessage(messageManager.getMessage("manage_team.team_delete.deleted"));
@@ -222,7 +219,7 @@ public class ConfirmInventory {
 
 
     public void onInventoryClose(){
-        Player player = (org.bukkit.entity.Player) closeEvent.getPlayer();
+        Player player = (Player) closeEvent.getPlayer();
         String playerName = player.getName();
 
         if (plugin.getTeamActions(playerName) != null) {
