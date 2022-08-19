@@ -79,14 +79,16 @@ manage_team:
 # Si %AUTHOR% , %RECEIVER% , %VALUE% figurent dans le message il doivent y être replacé obligatoirement si le message en question reçoit une modification
 # %AUTHOR% -> Le membre qui a fait l'action
 # %RECEIVER% -> Le membre qui a reçu l'action
+# %TEAM_ID% -> Le nom de la team
+# %TEAM_PREFIX% -> Le préfixe de la team
 # %VALUE% -> Une valeur qui peut être l'auteur, le récepteur ou une valeur quelconque
 broadcasts:
   player_add_new_member: "§7%AUTHOR% a ajouté %RECEIVER% à la team"
   player_exclude_member: "§7%AUTHOR% a exclu %RECEIVER% de la team"
-  team_bank_unlocked: "§7%VALUE% a débloqué la banque de la team"
-  team_deleted: "§7La team %VALUE% a été supprimée"
-  new_member_amount_upgrade: "§7Une nouvelle place dans la team %VALUE% a été débloquée"
-  new_storage_upgrade: "§7Un nouveau stockage de la team %VALUE% a été débloqué"
+  team_bank_unlocked: "§7%AUTHOR% a débloqué la banque de la team"
+  team_deleted: "§7La team %TEAM_ID% a été supprimée"
+  new_member_amount_upgrade: "§7Une nouvelle place dans la team %TEAM_ID% a été débloquée"
+  new_storage_upgrade: "§7Un nouveau stockage de la team %TEAM_ID% a été débloqué"
 
 # Messages que recevra le membre qui a fait une certaine action
 sender:

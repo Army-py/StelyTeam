@@ -23,10 +23,8 @@ public class SubCmdDeny extends SubCommand {
         
         if (plugin.containTeamAction(playerName, "addMember")){
             plugin.removeTeamTempAction(playerName);
-            // player.sendMessage("Vous avez refusé l'invitation");
             player.sendMessage(messageManager.getMessage("commands.stelyteam_deny.output"));
         }else{
-            // player.sendMessage("Vous n'avez pas d'invitation");
             player.sendMessage(messageManager.getMessage("common.no_invitation"));
         }
 

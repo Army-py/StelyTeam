@@ -33,14 +33,11 @@ public class SubCmdAccept extends SubCommand {
             String senderName = plugin.getTeamActions(playerName)[0];
             plugin.removeTeamTempAction(playerName);
             sqlManager.insertMember(playerName, teamId);
-            // player.sendMessage("Vous avez rejoint la team " + teamId);
             player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_accept.output", teamId));
             teamMembersUtils.refreshTeamMembersInventory(teamId, playerName);
-            // TeamMembersUtils.teamBroadcast(teamId, senderName, senderName + " a ajouté " + playerName + " à la team");
-            teamMembersUtils.teamBroadcast(teamId, senderName, messageManager.getDoubleReplaceMessage("broadcasts.player_add_new_member", senderName, playerName));
+            teamMembersUtils.teamBroadcast(teamId, senderName, messageManager.replaceAuthorAndReceiver("broadcasts.player_add_new_member", senderName, playerName));
         }else{
             player.sendMessage(messageManager.getMessage("common.no_invitation"));
-            // player.sendMessage(messageManager.getMessage("receiver.no_invitation"));
         }
 
         return true;

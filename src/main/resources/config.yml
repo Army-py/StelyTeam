@@ -233,7 +233,7 @@ inventories:
       lore:
         - "§aAméliorer le nombre de"
         - "§amembres dans la team"
-    upgradeStorages:
+    upgradeStorageAmount:
       itemName: "§5§lAjouter des stockages"
       itemType: CHEST
       slot: 20
@@ -481,56 +481,56 @@ inventories:
       itemName: "§5§lAjouter de l'argent"
       itemType: GOLD_NUGGET
       slot: 10
-      rankPath: "member.addTeamMoney"
+      rankPath: member.addTeamMoney
       lore:
         - "§aAjouter de l'argent dans la team"
     withdrawTeamMoney:
       itemName: "§5§lRetirer de l'argent"
       itemType: PAPER
       slot: 11
-      rankPath: "member.withdrawTeamMoney"
+      rankPath: member.withdrawTeamMoney
       lore:
         - "§aRetirer de l'argent de la team"
     seeTeamBank:
       itemName: "§5§lVoir l'argent"
       itemType: EMERALD
       slot: 12
-      rankPath: "member.seeTeamBank"
+      rankPath: member.seeTeamBank
       lore:
         - "§aVoir l'argent de la team"
     buyTeamBank:
       itemName: "§5§lAchat du compte"
       itemType: GOLD_BLOCK
       slot: 13
-      rankPath: "manage.buyTeamBank"
+      rankPath: manage.buyTeamBank
       lore:
         - "§aAchat du compte de team"
     addMember:
       itemName: "§5§lAjouter un membre"
       itemType: GOLD_INGOT
       slot: 14
-      rankPath: "editMembers.addMember"
+      rankPath: editMembers.addMember
       lore:
         - "§aAjouter un membre à la team"
     removeMember:
       itemName: "§5§lRetirer un membre"
       itemType: RAW_GOLD
       slot: 15
-      rankPath: "editMembers.removeMember"
+      rankPath: editMembers.removeMember
       lore:
         - "§aRetirer un membre de la team"
     seeTeamMembers:
       itemName: "§5§lVoir les membres"
       itemType: TOTEM_OF_UNDYING
       slot: 16
-      rankPath: "member.seeTeamMembers"
+      rankPath: member.seeTeamMembers
       lore:
         - "§aVoir les membres de la team"
     upgradeTotalMembers:
       itemName: "§5§lAugmenter les places disponibles"
       itemType: EXPERIENCE_BOTTLE
       slot: 19
-      rankPath: "manage.upgradeTotalMembers"
+      rankPath: manage.upgradeTotalMembers
       lore:
         - "§aAugmenter le nombre de places"
         - "§adisponible dans la team"
@@ -538,52 +538,60 @@ inventories:
       itemName: "§5§lGestion des membres"
       itemType: WRITABLE_BOOK
       slot: 20
-      rankPath: "manage.editMembers"
+      rankPath: manage.editMembers
       lore:
         - "§aGérer les membres de la team"
     editName:
       itemName: "§5§lModifier le nom"
       itemType: PAPER
       slot: 21
-      rankPath: "manage.editName"
+      rankPath: manage.editName
       lore:
         - "§aModifier le nom de la team"
     editPrefix:
       itemName: "§5§lModifier le préfixe"
       itemType: NAME_TAG
       slot: 22
-      rankPath: "manage.editPrefix"
+      rankPath: manage.editPrefix
       lore:
         - "§aModifier le préfixe de la team"
     setTeamHome:
       itemName: "§5§lCréer le home"
       itemType: GREEN_BED
       slot: 23
-      rankPath: "manage.setTeamHome"
+      rankPath: manage.setTeamHome
       lore:
         - "§aDéfinir le home de la team"
     removeTeamHome:
       itemName: "§5§lSupprimer la home"
       itemType: RED_BED
       slot: 24
-      rankPath: "manage.removeTeamHome"
+      rankPath: manage.removeTeamHome
       lore:
         - "§aRetirer le home de la team"
     editPermissions:
       itemName: "§5§lModifier les permissions"
       itemType: REDSTONE
       slot: 25
-      rankPath: "manage.editPermissions"
+      rankPath: manage.editPermissions
       lore:
         - "§aModifier les permissions de la team"
     storageDirectory:
       itemName: "§5§lAccès aux stockages"
       itemType: BARREL
-      slot: 31
-      rankPath: "member.storageDirectory"
+      slot: 32
+      rankPath: member.storageDirectory
       lore:
         - "§aPermet d'avoir accès aux"
         - "§astockages de la team"
+    upgradeStorageAmount:
+      itemName: "§5§lAugmenter les stockages disponibles"
+      itemType: COMPOSTER
+      slot: 30
+      rankPath: manage.upgradeStorageAmount
+      lore:
+        - "§aAugmenter le nombre de stockages"
+        - "§adisponible dans la team"
     close:
       itemName: "§5§lRetour au menu de gestion"
       itemType: BARRIER

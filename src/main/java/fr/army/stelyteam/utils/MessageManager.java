@@ -19,17 +19,30 @@ public class MessageManager {
 
     public String getMessage(String path) {
         return getPluginPrefix() + messages.getString(path);
-        // return new ColorsBuilder().replaceColor(getPluginPrefix() + StelyTeamPlugin.messages.getString(path));
     }
 
     public String getReplaceMessage(String path, String replace) {
         return getPluginPrefix() + messages.getString(path).replace("%VALUE%", replace);
-        // return new ColorsBuilder().replaceColor(getPluginPrefix() + StelyTeamPlugin.messages.getString(path).replace("%VALUE%", replace));
     }
 
-    public String getDoubleReplaceMessage(String path, String author, String receiver) {
+    public String replaceAuthor(String path, String author) {
+        return getPluginPrefix() + messages.getString(path).replace("%AUTHOR%", author);
+    }
+
+    public String replaceReceiver(String path, String receiver) {
+        return getPluginPrefix() + messages.getString(path).replace("%RECEIVER%", receiver);
+    }
+
+    public String replaceTeamId(String path, String teamName) {
+        return getPluginPrefix() + messages.getString(path).replace("%TEAM_ID%", teamName);
+    }
+
+    public String replaceTeamPrefix(String path, String teamPrefix) {
+        return getPluginPrefix() + messages.getString(path).replace("%TEAM_PREFIX%", teamPrefix);
+    }
+
+    public String replaceAuthorAndReceiver(String path, String author, String receiver) {
         return getPluginPrefix() + messages.getString(path).replace("%AUTHOR%", author).replace("%RECEIVER%", receiver);
-        // return new ColorsBuilder().replaceColor(getPluginPrefix() + StelyTeamPlugin.messages.getString(path).replace("%AUTHOR%", author).replace("%RECEIVER%", receiver));
     }
 
     private String getPluginPrefix (){

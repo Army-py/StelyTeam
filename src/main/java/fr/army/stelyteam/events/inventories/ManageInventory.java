@@ -107,7 +107,7 @@ public class ManageInventory {
         }else if (itemName.equals(config.getString("inventories.manage.upgradeTotalMembers.itemName"))){
             Inventory inventory = inventoryBuilder.createUpgradeTotalMembersInventory(playerName);
             player.openInventory(inventory);
-        }else if (itemName.equals(config.getString("inventories.manage.upgradeStorages.itemName"))){
+        }else if (itemName.equals(config.getString("inventories.manage.upgradeStorageAmount.itemName"))){
             Inventory inventory = inventoryBuilder.createUpgradeStorageInventory(playerName);
             player.openInventory(inventory);
         }else if (itemName.equals(config.getString("inventories.manage.editName.itemName"))){

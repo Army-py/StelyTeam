@@ -77,7 +77,7 @@ public class ConfirmInventory {
                 if (receiver != null && receiver.getName().equals(receiverName)) receiver.sendMessage(messageManager.getReplaceMessage("receiver.exclude_from_team", teamId));
                 teamMembersUtils.refreshTeamMembersInventory(teamId, playerName);
                 // teamMembersUtils.teamBroadcast(teamId, playerName, playerName + " a exclu " + receiverName);
-                teamMembersUtils.teamBroadcast(teamId, playerName, messageManager.getDoubleReplaceMessage("broadcasts.player_exclude_member", playerName, receiverName));
+                teamMembersUtils.teamBroadcast(teamId, playerName, messageManager.replaceAuthorAndReceiver("broadcasts.player_exclude_member", playerName, receiverName));
             }else if (plugin.containTeamAction(playerName, "editOwner")){
                 String teamId = plugin.getTeamActions(playerName)[2];
                 String senderName = plugin.getTeamActions(playerName)[0];
@@ -109,7 +109,7 @@ public class ConfirmInventory {
                 player.openInventory(inventory);
                 teamMembersUtils.refreshTeamMembersInventory(teamID, playerName);
                 // teamMembersUtils.teamBroadcast(teamID, playerName, "Le compte de team a été débloqué");
-                teamMembersUtils.teamBroadcast(teamID, playerName, messageManager.getMessage("broadcasts.team_bank_unlocked"));
+                teamMembersUtils.teamBroadcast(teamID, playerName, messageManager.replaceAuthor("broadcasts.team_bank_unlocked", playerName));
             }else if (plugin.containPlayerTempAction(playerName, "editName")){
                 String teamID = sqlManager.getTeamIDFromPlayer(playerName);
                 plugin.removePlayerTempAction(playerName);
@@ -126,7 +126,7 @@ public class ConfirmInventory {
                 String teamID = sqlManager.getTeamIDFromPlayer(playerName);
                 plugin.removePlayerTempAction(playerName);
                 // teamMembersUtils.teamBroadcast(teamID, playerName, "La team " + teamID + " a été supprimée");
-                teamMembersUtils.teamBroadcast(teamID, playerName, messageManager.getReplaceMessage("broadcasts.team_deleted", teamID));
+                teamMembersUtils.teamBroadcast(teamID, playerName, messageManager.replaceTeamId("broadcasts.team_deleted", teamID));
                 sqlManager.removeTeam(teamID);
                 player.closeInventory();
                 // player.sendMessage("Tu as supprimé la team");
@@ -146,7 +146,7 @@ public class ConfirmInventory {
                 player.openInventory(inventory);
                 teamMembersUtils.refreshTeamMembersInventory(teamID, playerName);
                 // teamMembersUtils.teamBroadcast(teamID, playerName, "Amélioration " + (level+1) + " de la team débloquée");
-                teamMembersUtils.teamBroadcast(teamID, playerName, messageManager.getReplaceMessage("broadcasts.new_member_amount_upgrade", newLevel.toString()));
+                teamMembersUtils.teamBroadcast(teamID, playerName, messageManager.replaceTeamId("broadcasts.new_member_amount_upgrade", teamID));
             }else if (plugin.containPlayerTempAction(playerName, "upgradeStorages")){
                 String teamID = sqlManager.getTeamIDFromPlayer(playerName);
                 Integer level = sqlManager.getTeamStorageLevel(teamID);
@@ -161,7 +161,7 @@ public class ConfirmInventory {
                 player.openInventory(inventory);
                 teamMembersUtils.refreshTeamMembersInventory(teamID, playerName);
                 // teamMembersUtils.teamBroadcast(teamID, playerName, "Amélioration " + (level+1) + " de la team débloquée");
-                teamMembersUtils.teamBroadcast(teamID, playerName, messageManager.getReplaceMessage("broadcasts.new_storage_upgrade", newLevel.toString()));
+                teamMembersUtils.teamBroadcast(teamID, playerName, messageManager.replaceTeamId("broadcasts.new_storage_upgrade", teamID));
             }else if (plugin.containPlayerTempAction(playerName, "leaveTeam")){
                 String teamId = sqlManager.getTeamIDFromPlayer(playerName);
                 plugin.removePlayerTempAction(playerName);
