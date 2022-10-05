@@ -50,6 +50,8 @@ public class InventoryClickManager implements Listener{
                 new UpgradeMembersInventory(event, plugin).onInventoryClick();
             }else if (event.getView().getTitle().equals(config.getString("inventoriesName.editMembers"))){
                 new EditMembersInventory(event, plugin).onInventoryClick();
+            }else if (event.getView().getTitle().equals(config.getString("inventoriesName.editAlliances"))){
+                new EditAlliancesInventory(event, plugin).onInventoryClick();
             }else if (event.getView().getTitle().equals(config.getString("inventoriesName.teamMembers"))){
                 new MembersInventory(event, plugin).onInventoryClick();
             }else if (event.getView().getTitle().equals(config.getString("inventoriesName.permissions"))){

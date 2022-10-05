@@ -36,6 +36,14 @@ public class SubCmdAccept extends SubCommand {
             player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_accept.output", teamId));
             teamMembersUtils.refreshTeamMembersInventory(teamId, playerName);
             teamMembersUtils.teamBroadcast(teamId, senderName, messageManager.replaceAuthorAndReceiver("broadcasts.player_add_new_member", senderName, playerName));
+        }else if (plugin.containTeamAction(playerName, "addAlliance")){
+            String teamId = plugin.getTeamActions(playerName)[2];
+            String senderName = plugin.getTeamActions(playerName)[0];
+            plugin.removeTeamTempAction(playerName);
+            sqlManager.insertAlliance(playerName, teamId);
+            player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_accept.output", teamId));
+            teamMembersUtils.refreshTeamMembersInventory(teamId, playerName);
+            teamMembersUtils.teamBroadcast(teamId, senderName, messageManager.replaceAuthorAndReceiver("broadcasts.player_add_new_alliance", senderName, playerName));
         }else{
             player.sendMessage(messageManager.getMessage("common.no_invitation"));
         }

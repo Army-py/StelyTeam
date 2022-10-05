@@ -3,6 +3,7 @@ prefix: "§7[§5StelyTeam§7] "
 
 # Messages les plus communs, qui seront utilisé dans plusieurs actions
 common:
+  already_alliance: "Vous êtes déjà en alliance avec cette team"
   already_unlocked: "§7Vous avez déjà débloqué cette amélioration"
   invalid_command: "§7Commande invalide"
   member_not_in_this_team: "§7Le membre n'est pas dans cette team"
@@ -12,12 +13,14 @@ common:
   not_enough_money: "§7Vous n'avez pas assez d'argent"
   no_invitation: "§7Vous n'avez reçu aucune invitation"
   player_already_in_team: "§7Ce joueur est déjà dans une team"
-  player_already_action: "§7Ce joueur a déjà une action en cours"
-  player_not_exist: "§7Ce joueur n'existe pas"
+  player_already_action: "§7Ce joueur a déjà une action en cours, attend qu'il n'y soit plus"
+  player_not_exist: "§7Ce joueur n'existe pas ou n'est pas connecté"
   player_not_in_your_team: "§7Le joueur n'est pas t'a team"
   prefix_is_too_long: "§7Le préfixe est trop long"
   team_not_exist: "§7La team n'existe pas"
   team_bank_not_unlock: "§7Vous n'avez pas débloqué le compte de team"
+  owner_not_connected: "§7Le gérant de la team n'est pas connecté"
+  owner_already_action: "§7Le gérant a déjà une action en cours, attend qu'il n'y soit plus"
 
 # Messages concernant la gestions des membres
 manage_members:
@@ -25,9 +28,10 @@ manage_members:
     max_members: "§7La team a déjà le nombre maximum de membres"
     send_player_name: "§7Envoyez le nom du joueur à ajouter"
     invitation_sent: "§7L'invitation a été envoyée"
-    invitation_received: "§7%VALUE% vous avez envoyé une invitation pour rejoindre sa team"
+    invitation_received: "§7%VALUE% vous a envoyé une invitation pour rejoindre sa team"
     accept_invitation: "\n  §aAccepter §7: Clique ici pour accepter"
     refuse_invitation: "\n  §cRefuser §7: Clique ici pour refuser"
+    joined_team: "§7Vous avez rejoint la team %TEAM_ID%"
   edit_owner:
     send_player_name: "§7Envoyez le nom du joueur à promouvoir"
   remove_member:
@@ -35,6 +39,19 @@ manage_members:
     cant_exclude_higher_rank: "§7Vous ne pouvez pas exclure un membre plus haut que vous"
     member_removed: "§7Le membre a été supprimé"
     send_player_name: "§7Envoyez le nom du joueur à exclure"
+
+# Messages concernant la gestions des alliances
+manage_alliances:
+  add_alliance:
+    send_team_name: "§7Envoyez le nom de la team a ajouter à l'alliance"
+    invitation_sent: "§7L'invitation a été envoyée"
+    invitation_received: "§7%AUTHOR% vous a envoyé une invitation pour rejoindre son alliance"
+    accept_invitation: "\n  §aAccepter §7: Clique ici pour accepter"
+    refuse_invitation: "\n  §cRefuser §7: Clique ici pour refuser"
+  remove_alliance:
+    team_not_in_alliance: "§7La team n'est pas dans l'alliance de la team"
+    member_removed: "§7L'alliance avec %TEAM_ID% a été supprimée"
+    send_team_name: "§7Envoyez le nom de la team a supprimer de l'alliance"
 
 # Messages concernant la gestion de la team et de ses différents paramètres
 manage_team:
@@ -85,6 +102,7 @@ manage_team:
 broadcasts:
   player_add_new_member: "§7%AUTHOR% a ajouté %RECEIVER% à la team"
   player_exclude_member: "§7%AUTHOR% a exclu %RECEIVER% de la team"
+  player_add_new_alliance: "§7%AUTHOR% a ajouté %TEAM% à l'alliance de la team"
   team_bank_unlocked: "§7%AUTHOR% a débloqué la banque de la team"
   team_deleted: "§7La team %TEAM_ID% a été supprimée"
   new_member_amount_upgrade: "§7Une nouvelle place dans la team %TEAM_ID% a été débloquée"
@@ -161,7 +179,7 @@ commands:
       - "§aPlaces : §7%MEMBER_COUNT% / %MAX_MEMBERS%"
       - "§aMembres : §7%MEMBERS%"
   stelyteam_accept:
-    output: "§7Vous avez rejoint la team %VALUE%"
+    output: "§7Vous avez accepeté l'invitation"
   stelyteam_deny:
     output: "§7Vous avez refusé l'invitation"
   stelyteam_delete:

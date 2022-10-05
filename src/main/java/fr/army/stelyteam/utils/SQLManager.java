@@ -84,14 +84,19 @@ public class SQLManager {
                 PreparedStatement queryTeams = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'teams' ('id' INTEGER UNIQUE, 'team_id' TEXT UNIQUE, 'team_prefix' TEXT UNIQUE, 'owner' TEXT, 'money' INTEGER, 'creation_date' TEXT, 'members_level' INTEGER, 'team_bank' INTEGER, 'team_storage' INTEGER, PRIMARY KEY('id' AUTOINCREMENT), FOREIGN KEY('owner') REFERENCES 'players'('playername'));");
                 PreparedStatement queryPermissions = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'permissions' ( 'id' INTEGER, 'team_id' INTEGER, 'permission' TEXT, 'rank' INTEGER, FOREIGN KEY('team_id') REFERENCES 'teams'('id'), PRIMARY KEY('id'));");
                 PreparedStatement queryStorages = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'storages' ( 'id' INTEGER, 'team_id' INTEGER, 'storage_id' INTEGER, 'content' BLOB, FOREIGN KEY('team_id') REFERENCES 'teams'('id'), PRIMARY KEY('id'));");
+                PreparedStatement queryAlliances = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'alliances' ('id' INTEGER, 'team_id' INTEGER, 'alliance_id' INTEGER, 'alliance_date' TEXT, PRIMARY KEY('id' AUTOINCREMENT));");
+                
                 queryPlayers.executeUpdate();
                 queryTeams.executeUpdate();
                 queryPermissions.executeUpdate();
                 queryStorages.executeUpdate();
+                queryAlliances.executeUpdate();
+
                 queryPlayers.close();
                 queryTeams.close();
                 queryPermissions.close();
                 queryStorages.close();
+                queryAlliances.close();
             } catch (Exception e){
                 e.printStackTrace();
             }
@@ -210,7 +215,7 @@ public class SQLManager {
                 queryTeam.setString(2, teamPrefix);
                 queryTeam.setString(3, owner);
                 queryTeam.setInt(4, 0);
-                queryTeam.setString(5, new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime()));
+                queryTeam.setString(5, getCurrentDate());
                 queryTeam.setInt(6, 0);
                 queryTeam.setInt(7, 0);
                 queryTeam.setInt(8, 0);
@@ -221,7 +226,7 @@ public class SQLManager {
                 queryMember.setString(1, owner);
                 queryMember.setInt(2, 0);
                 queryMember.setInt(3, getTeamId(teamID));
-                queryMember.setString(4, new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime()));
+                queryMember.setString(4, getCurrentDate());
                 queryMember.executeUpdate();
                 queryMember.close();
             } catch (SQLException e) {
@@ -238,7 +243,7 @@ public class SQLManager {
                 query.setString(1, playername);
                 query.setInt(2, 5);
                 query.setInt(3, getTeamId(teamId));
-                query.setString(4, new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime()));
+                query.setString(4, getCurrentDate());
                 query.executeUpdate();
                 query.close();
             } catch (SQLException e) {
@@ -833,6 +838,63 @@ public class SQLManager {
                 e.printStackTrace();
             }
         }
+    }
+
+
+    public void insertAlliance(String teamId, String allianceId){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("INSERT INTO alliances (team_id, alliance_id, alliance_date) VALUES (?, ?, ?)");
+                query.setInt(1, getTeamId(teamId));
+                query.setInt(2, getTeamId(allianceId));
+                query.setString(3, getCurrentDate());
+                query.executeUpdate();
+                query.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    public void removeAlliance(String teamId, String allianceId){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("DELETE FROM alliances WHERE team_id = ? AND alliance_id = ?");
+                query.setInt(1, getTeamId(teamId));
+                query.setInt(2, getTeamId(allianceId));
+                query.executeUpdate();
+                query.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    public boolean isAlliance(String teamId, String allianceId){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT * FROM alliances WHERE team_id = ? AND alliance_id = ?");
+                query.setInt(1, getTeamId(teamId));
+                query.setInt(2, getTeamId(allianceId));
+                ResultSet result = query.executeQuery();
+                if(result.next()){
+                    query.close();
+                    return true;
+                }
+                query.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return isAlliance(allianceId, teamId);
+    }
+
+
+
+    private String getCurrentDate(){
+        return new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime());
     }
 
 

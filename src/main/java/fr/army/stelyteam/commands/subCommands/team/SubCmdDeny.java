@@ -21,7 +21,7 @@ public class SubCmdDeny extends SubCommand {
         Player player = (Player) sender;
         String playerName = player.getName();
         
-        if (plugin.containTeamAction(playerName, "addMember")){
+        if (plugin.containTeamAction(playerName, "addMember") || plugin.containTeamAction(playerName, "addAlliance")){
             plugin.removeTeamTempAction(playerName);
             player.sendMessage(messageManager.getMessage("commands.stelyteam_deny.output"));
         }else{
