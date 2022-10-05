@@ -454,6 +454,65 @@ public class InventoryBuilder {
     }
 
 
+    public Inventory createEditAlliancesInventory(String playername) {
+        Integer slots = config.getInt("inventoriesSlots.editAlliances");
+        String teamId = sqlManager.getTeamIDFromPlayer(playername);
+        Inventory inventory = Bukkit.createInventory(null, slots, config.getString("inventoriesName.editAlliances"));
+
+        emptyCases(inventory, slots);
+        Integer headSlot = 0;
+        for(String str : sqlManager.getAlliances(teamId)){
+            String allianceOwnerName = sqlManager.getTeamOwner(str);
+            OfflinePlayer allianceOwner = Bukkit.getPlayer(allianceOwnerName);
+            String itemName = config.getString("teamAllianceNameColor") + allianceOwnerName;
+            List<String> lore = config.getStringList("teamAllianceLore");
+            ItemStack item;
+            
+            // lore.add(0, config.getString("prefixRankLore") + rankColor + config.getString("ranks." + memberRankName + ".name"));
+            
+            
+            if (playerHasPermission(playername, teamId, "seeAllliances")){ 
+                item = ItemBuilder.getPlayerHead(allianceOwner, itemName, lore);
+            }else{
+                item = ItemBuilder.getItem(
+                    Material.getMaterial(config.getString("noPermission.itemType")), 
+                    itemName, 
+                    config.getStringList("noPermission.lore"), 
+                    false
+                );
+            }
+
+            inventory.setItem(headSlot, item);
+            headSlot ++;
+        }
+
+        for(String str : config.getConfigurationSection("inventories.editMembers").getKeys(false)){
+            Integer slot = config.getInt("inventories.editMembers."+str+".slot");
+            Material material = Material.getMaterial(config.getString("inventories.editMembers."+str+".itemType"));
+            String name = config.getString("inventories.editMembers."+str+".itemName");
+            List<String> lore;
+            ItemStack item;
+
+            if (sqlManager.isOwner(playername)) lore = config.getStringList("inventories.editMembers."+str+".lore");
+            else lore = Collections.emptyList();
+            
+
+            if (playerHasPermission(playername, teamID, str)){ 
+                item = ItemBuilder.getItem(material, name, lore, false);
+            }else{
+                item = ItemBuilder.getItem(
+                    Material.getMaterial(config.getString("noPermission.itemType")), 
+                    name, 
+                    config.getStringList("noPermission.lore"), 
+                    false
+                );
+            }
+            inventory.setItem(slot, item);
+        }
+        return inventory;
+    }
+
+
     private List<String> replaceInLore(List<String> lore, String value, String replace){
         List<String> newLore = new ArrayList<>();
         for(String str : lore){

@@ -604,7 +604,7 @@ public class SQLManager {
     public ArrayList<String> getMembers(String teamId){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("SELECT playername FROM players WHERE team_id = ? ORDER BY rank ASC");
+                PreparedStatement query = connection.prepareStatement("SELECT playername FROM players WHERE team_id = ? ORDER BY rank, playername");
                 query.setInt(1, getTeamId(teamId));
 
                 ResultSet result = query.executeQuery();
@@ -838,6 +838,28 @@ public class SQLManager {
                 e.printStackTrace();
             }
         }
+    }
+
+
+    public ArrayList<String> getAlliances(String teamId){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT team_id FROM alliances WHERE team_id = ? OR allied_team_id = ?");
+                query.setInt(1, getTeamId(teamId));
+                query.setInt(2, getTeamId(teamId));
+
+                ResultSet result = query.executeQuery();
+                ArrayList<String> data = new ArrayList<String>();
+                while(result.next()){
+                    data.add(result.getString("team_id"));
+                }
+                query.close();
+                return data;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 
 

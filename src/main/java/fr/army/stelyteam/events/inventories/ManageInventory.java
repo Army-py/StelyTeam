@@ -56,6 +56,12 @@ public class ManageInventory {
             Inventory inventory = inventoryBuilder.createEditMembersInventory(playerName);
             player.openInventory(inventory);
 
+
+        else if (itemName.equals(config.getString("inventories.manage.editAlliances.itemName"))){
+            Inventory inventory = inventoryBuilder.createEditAlliancesInventory(playerName);
+            player.openInventory(inventory);
+
+
         }else if (itemName.equals(config.getString("inventories.manage.setTeamHome.itemName"))){
             player.closeInventory();
             String teamID = sqlManager.getTeamIDFromPlayer(playerName);
@@ -67,27 +73,25 @@ public class ManageInventory {
 
             if (sqliteManager.isSet(teamID)){
                 sqliteManager.updateHome(teamID, worldName, x, y, z, yaw);
-                // player.sendMessage("Le home a été redéfini");
                 player.sendMessage(messageManager.getMessage("manage_team.team_home.redefine"));
             }else{
                 sqliteManager.addHome(teamID, worldName, x, y, z, yaw);
-                // player.sendMessage("Le home a été créé");
                 player.sendMessage(messageManager.getMessage("manage_team.team_home.created"));
             }
-            
+
+
         }else if (itemName.equals(config.getString("inventories.manage.removeTeamHome.itemName"))){
             player.closeInventory();
             String teamID = sqlManager.getTeamIDFromPlayer(playerName);
 
             if (sqliteManager.isSet(teamID)){
                 sqliteManager.removeHome(teamID);
-                // player.sendMessage("Le home a été supprimé");
                 player.sendMessage(messageManager.getMessage("manage_team.team_home.deleted"));
             }else{
-                // player.sendMessage("Le home n'a pas été défini");
                 player.sendMessage(messageManager.getMessage("manage_team.team_home.not_set"));
             }
-            
+
+
         }else if (itemName.equals(config.getString("inventories.manage.buyTeamBank.itemName"))){
             String teamID = sqlManager.getTeamIDFromPlayer(playerName);
             
@@ -97,28 +101,33 @@ public class ManageInventory {
                     Inventory inventory = inventoryBuilder.createConfirmInventory();
                     player.openInventory(inventory);
                 }else{
-                    // player.sendMessage("Vous n'avez pas assez d'argent");
                     player.sendMessage(messageManager.getMessage("common.not_enough_money"));
                 }
             }else{
-                // player.sendMessage("Vous avez déjà débloqué la banque de team");
                 player.sendMessage(messageManager.getMessage("manage_team.team_bank.already_unlocked"));
             }
+
+
         }else if (itemName.equals(config.getString("inventories.manage.upgradeTotalMembers.itemName"))){
             Inventory inventory = inventoryBuilder.createUpgradeTotalMembersInventory(playerName);
             player.openInventory(inventory);
+
+
         }else if (itemName.equals(config.getString("inventories.manage.upgradeStorageAmount.itemName"))){
             Inventory inventory = inventoryBuilder.createUpgradeStorageInventory(playerName);
             player.openInventory(inventory);
+
+
         }else if (itemName.equals(config.getString("inventories.manage.editName.itemName"))){
             if (economyManager.checkMoneyPlayer(player, config.getDouble("prices.editTeamId"))){
                 plugin.playersTempActions.put(playerName, "editName");
                 Inventory inventory = inventoryBuilder.createConfirmInventory();
                 player.openInventory(inventory);
             }else{
-                // player.sendMessage("Vous n'avez pas assez d'argent");
                 player.sendMessage(messageManager.getMessage("common.not_enough_money"));
             }
+
+
         }else if (itemName.equals(config.getString("inventories.manage.editPrefix.itemName"))){
             if (economyManager.checkMoneyPlayer(player, config.getDouble("prices.editTeamPrefix"))){
                 plugin.playersTempActions.put(playerName, "editPrefix");
@@ -128,10 +137,14 @@ public class ManageInventory {
                 // player.sendMessage("Vous n'avez pas assez d'argent");
                 player.sendMessage(messageManager.getMessage("common.not_enough_money"));
             }
+
+
         }else if (itemName.equals(config.getString("inventories.manage.removeTeam.itemName"))){
             plugin.playersTempActions.put(playerName, "deleteTeam");
             Inventory inventory = inventoryBuilder.createConfirmInventory();
             player.openInventory(inventory);
+
+
         }else if (itemName.equals(config.getString("inventories.manage.editPermissions.itemName"))){
             Inventory inventory = inventoryBuilder.createPermissionsInventory(playerName);
             player.openInventory(inventory);

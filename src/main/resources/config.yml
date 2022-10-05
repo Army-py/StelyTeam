@@ -86,6 +86,18 @@ storageNotUnlock:
 # Préfixe à gauche du rang, affiché dans le menu de la gestion des membres de la team et dans la liste des membres
 prefixRankLore: "§r§5> "
 
+# Couleur du nom de l'owner de la team dans la liste des alliances
+teamAllianceNameColor: "§a"
+
+# Description des teams dans la liste des alliances
+teamAllianceLore:
+  - "§aGérant : §r%OWNER%"
+  - "§aNom : §r%NAME%"
+  - "§aPréfixe : §r%PREFIX%"
+  - "§aAlliance depuis : §r%DATE%"
+  - "§aPlaces : §r%MEMBER_COUNT% / %MAX_MEMBERS%"
+  - "§aMembers : §r%MEMBERS%"
+
 
 # Titre des menus et leur nombre de slots
 # Le nombre de slots peut être augmenté en fonction du tombre d'item dans le menu *
@@ -97,6 +109,7 @@ inventoriesName:
   member: "§5§lMenu Membre"
   teamMembers: "§5§lMembres"
   editMembers: "§5§lGestion des membres"
+  editAlliances: "§5§lGestion des alliances"
   upgradeTotalMembers: "§5§lPlaces disponibles"
   confirmInventory: "§5§lConfirmation"
   permissions: "§5§lPermissions"
@@ -118,6 +131,7 @@ inventoriesSlots:
   member: 45
   teamMembers: 27
   editMembers: 36
+  editAlliances: 36
   upgradeTotalMembers: 27
   confirmInventory: 27
   permissions: 45
@@ -315,10 +329,15 @@ inventories:
       itemType: TOTEM_OF_UNDYING
       slot: 20
       rank: 5
+    seeTeamAlliances:
+      itemName: "§5§lAlliances"
+      itemType: FEATHER
+      slot: 21
+      rank: 5
     seeTeamBank:
       itemName: "§5§lArgent de la team"
       itemType: EMERALD
-      slot: 21
+      slot: 22
       rank: 4
       lore:
         - "§aMontant : %TEAM_MONEY%€"
@@ -326,7 +345,7 @@ inventories:
     addTeamMoney:
       itemName: "§5§lAjout d'argent"
       itemType: GOLD_NUGGET
-      slot: 22
+      slot: 23
       rank: 4
       lore:
         - "§aAjouter de l'argent"
@@ -334,7 +353,7 @@ inventories:
     withdrawTeamMoney:
       itemName: "§5§lRetrait d'argent"
       itemType: PAPER
-      slot: 23
+      slot: 24
       rank: 4
       lore:
         - "§aRetirer de l'argent"
@@ -342,7 +361,7 @@ inventories:
     leaveTeam:
       itemName: "§5§lQuitter la team"
       itemType: DARK_OAK_DOOR
-      slot: 24
+      slot: 25
       rank: -1
     storageDirectory:
       itemName: "§5§lStockages"
@@ -625,6 +644,27 @@ inventories:
       lore:
         - "§aAugmenter le nombre de stockages"
         - "§adisponible dans la team"
+    addAlliance:
+      itemName: "§5§lAjouter une alliance"
+      itemType: PRISMARINE_SHARD
+      slot: 31
+      rankPath: editAlliances.addAlliance
+      lore:
+        - "§aAjouter une alliance à la team"
+    removeAlliance:
+      itemName: "§5§lRetirer une alliance"
+      itemType: PRISMARINE_CRYSTALS
+      slot: 32
+      rankPath: editAlliances.removeAlliance
+      lore:
+        - "§aRetirer une alliance de la team"
+    seeAlliances:
+      itemName: "§5§lVoir les alliances"
+      itemType: ENDER_EYE
+      slot: 33
+      rankPath: member.seeAlliances
+      lore:
+        - "§aVoir les alliances de la team"
     close:
       itemName: "§5§lRetour au menu de gestion"
       itemType: BARRIER
