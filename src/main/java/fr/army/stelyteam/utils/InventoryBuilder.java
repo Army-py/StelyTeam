@@ -24,6 +24,7 @@ public class InventoryBuilder {
     private SQLManager sqlManager;
     private SQLiteManager sqliteManager;
     private SerializeManager serializeManager;
+    private ColorsBuilder colorBuilder;
 
 
     public InventoryBuilder(StelyTeamPlugin plugin) {
@@ -32,6 +33,7 @@ public class InventoryBuilder {
         this.sqlManager = plugin.getSQLManager();
         this.sqliteManager = plugin.getSQLiteManager();
         this.serializeManager = new SerializeManager();
+        this.colorBuilder = new ColorsBuilder();
     }
 
 
@@ -454,21 +456,36 @@ public class InventoryBuilder {
     }
 
 
-    public Inventory createEditAlliancesInventory(String playername) {
-        Integer slots = config.getInt("inventoriesSlots.editAlliances");
+    public Inventory createAlliancesInventory(String playername) {
+        Integer slots = config.getInt("inventoriesSlots.teamAlliances");
         String teamId = sqlManager.getTeamIDFromPlayer(playername);
-        Inventory inventory = Bukkit.createInventory(null, slots, config.getString("inventoriesName.editAlliances"));
+        Inventory inventory = Bukkit.createInventory(null, slots, config.getString("inventoriesName.teamAlliances"));
 
         emptyCases(inventory, slots);
         Integer headSlot = 0;
         for(String str : sqlManager.getAlliances(teamId)){
+            String alliancePrefix = sqlManager.getTeamPrefix(str);
             String allianceOwnerName = sqlManager.getTeamOwner(str);
-            OfflinePlayer allianceOwner = Bukkit.getPlayer(allianceOwnerName);
-            String itemName = config.getString("teamAllianceNameColor") + allianceOwnerName;
+            String allianceDate = sqlManager.getAllianceDate(teamId, str);
+            Integer teamMembersLelvel = sqlManager.getTeamMembersLevel(str);
+            Integer teamMembers = sqlManager.getMembers(str).size();
+            Integer maxMembers = config.getInt("teamMaxMembers");
+            ArrayList<String> allianceMembers = sqlManager.getMembers(str);
+            UUID playerUUID = sqliteManager.getUUID(allianceOwnerName);
+            String itemName = colorBuilder.replaceColor(alliancePrefix);
             List<String> lore = config.getStringList("teamAllianceLore");
+            OfflinePlayer allianceOwner;
             ItemStack item;
+
+            if (playerUUID == null) allianceOwner = Bukkit.getOfflinePlayer(allianceOwnerName);
+            else allianceOwner = Bukkit.getOfflinePlayer(playerUUID);
             
-            // lore.add(0, config.getString("prefixRankLore") + rankColor + config.getString("ranks." + memberRankName + ".name"));
+            lore = replaceInLore(lore, "%OWNER%", allianceOwnerName);
+            lore = replaceInLore(lore, "%NAME%", str);
+            lore = replaceInLore(lore, "%DATE%", allianceDate);
+            lore = replaceInLore(lore, "%MEMBER_COUNT%", IntegerToString(teamMembers));
+            lore = replaceInLore(lore, "%MAX_MEMBERS%", IntegerToString(maxMembers+teamMembersLelvel));
+            lore = replaceInLore(lore, "%MEMBERS%", String.join(", ", allianceMembers));
             
             
             if (playerHasPermission(playername, teamId, "seeAllliances")){ 
@@ -486,18 +503,82 @@ public class InventoryBuilder {
             headSlot ++;
         }
 
-        for(String str : config.getConfigurationSection("inventories.editMembers").getKeys(false)){
-            Integer slot = config.getInt("inventories.editMembers."+str+".slot");
-            Material material = Material.getMaterial(config.getString("inventories.editMembers."+str+".itemType"));
-            String name = config.getString("inventories.editMembers."+str+".itemName");
+        for(String str : config.getConfigurationSection("inventories.teamAlliances").getKeys(false)){
+            Integer slot = config.getInt("inventories.teamAlliances."+str+".slot");
+            Material material = Material.getMaterial(config.getString("inventories.teamAlliances."+str+".itemType"));
+            String name = config.getString("inventories.teamAlliances."+str+".itemName");
+            List<String> lore;
+
+            if (sqlManager.isOwner(playername)) lore = config.getStringList("inventories.teamAlliances."+str+".lore");
+            else lore = Collections.emptyList();
+            
+            inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, false));
+        }
+        return inventory;
+    }
+
+
+    public Inventory createEditAlliancesInventory(String playername) {
+        Integer slots = config.getInt("inventoriesSlots.editAlliances");
+        String teamId = sqlManager.getTeamIDFromPlayer(playername);
+        Inventory inventory = Bukkit.createInventory(null, slots, config.getString("inventoriesName.editAlliances"));
+
+        emptyCases(inventory, slots);
+        Integer headSlot = 0;
+        for(String str : sqlManager.getAlliances(teamId)){
+            String alliancePrefix = sqlManager.getTeamPrefix(str);
+            String allianceOwnerName = sqlManager.getTeamOwner(str);
+            String allianceDate = sqlManager.getAllianceDate(teamId, str);
+            Integer teamMembersLelvel = sqlManager.getTeamMembersLevel(str);
+            Integer teamMembers = sqlManager.getMembers(str).size();
+            Integer maxMembers = config.getInt("teamMaxMembers");
+            ArrayList<String> allianceMembers = sqlManager.getMembers(str);
+            UUID playerUUID = sqliteManager.getUUID(allianceOwnerName);
+            String itemName = colorBuilder.replaceColor(alliancePrefix);
+            List<String> lore = config.getStringList("teamAllianceLore");
+            OfflinePlayer allianceOwner;
+            ItemStack item;
+
+
+            if (playerUUID == null) allianceOwner = Bukkit.getOfflinePlayer(allianceOwnerName);
+            else allianceOwner = Bukkit.getOfflinePlayer(playerUUID);
+
+            
+            lore = replaceInLore(lore, "%OWNER%", allianceOwnerName);
+            lore = replaceInLore(lore, "%NAME%", str);
+            lore = replaceInLore(lore, "%DATE%", allianceDate);
+            lore = replaceInLore(lore, "%MEMBER_COUNT%", IntegerToString(teamMembers));
+            lore = replaceInLore(lore, "%MAX_MEMBERS%", IntegerToString(maxMembers+teamMembersLelvel));
+            lore = replaceInLore(lore, "%MEMBERS%", String.join(", ", allianceMembers));
+            
+            
+            if (playerHasPermission(playername, teamId, "seeAllliances")){ 
+                item = ItemBuilder.getPlayerHead(allianceOwner, itemName, lore);
+            }else{
+                item = ItemBuilder.getItem(
+                    Material.getMaterial(config.getString("noPermission.itemType")), 
+                    itemName, 
+                    config.getStringList("noPermission.lore"), 
+                    false
+                );
+            }
+
+            inventory.setItem(headSlot, item);
+            headSlot ++;
+        }
+
+        for(String str : config.getConfigurationSection("inventories.editAlliances").getKeys(false)){
+            Integer slot = config.getInt("inventories.editAlliances."+str+".slot");
+            Material material = Material.getMaterial(config.getString("inventories.editAlliances."+str+".itemType"));
+            String name = config.getString("inventories.editAlliances."+str+".itemName");
             List<String> lore;
             ItemStack item;
 
-            if (sqlManager.isOwner(playername)) lore = config.getStringList("inventories.editMembers."+str+".lore");
+            if (sqlManager.isOwner(playername)) lore = config.getStringList("inventories.editAlliances."+str+".lore");
             else lore = Collections.emptyList();
             
 
-            if (playerHasPermission(playername, teamID, str)){ 
+            if (playerHasPermission(playername, teamId, str)){ 
                 item = ItemBuilder.getItem(material, name, lore, false);
             }else{
                 item = ItemBuilder.getItem(

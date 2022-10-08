@@ -69,6 +69,11 @@ public class MemberInventory {
         if (itemName.equals(config.getString("inventories.member.seeTeamMembers.itemName"))){
             Inventory inventory = inventoryBuilder.createMembersInventory(playerName);
             player.openInventory(inventory);
+        
+        }else if (itemName.equals(config.getString("inventories.member.seeTeamAlliances.itemName"))){
+            Inventory inventory = inventoryBuilder.createAlliancesInventory(playerName);
+            player.openInventory(inventory);
+        
         }else if (itemName.equals(config.getString("inventories.member.addTeamMoney.itemName"))){
             if (!sqlManager.hasUnlockedTeamBank(teamId)) {
                 // player.sendMessage("Le compte de la team n'a pas encore été débloqué");

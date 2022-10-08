@@ -86,14 +86,10 @@ storageNotUnlock:
 # Préfixe à gauche du rang, affiché dans le menu de la gestion des membres de la team et dans la liste des membres
 prefixRankLore: "§r§5> "
 
-# Couleur du nom de l'owner de la team dans la liste des alliances
-teamAllianceNameColor: "§a"
-
 # Description des teams dans la liste des alliances
 teamAllianceLore:
   - "§aGérant : §r%OWNER%"
   - "§aNom : §r%NAME%"
-  - "§aPréfixe : §r%PREFIX%"
   - "§aAlliance depuis : §r%DATE%"
   - "§aPlaces : §r%MEMBER_COUNT% / %MAX_MEMBERS%"
   - "§aMembers : §r%MEMBERS%"
@@ -108,6 +104,7 @@ inventoriesName:
   manage: "§5§lGérer la team"
   member: "§5§lMenu Membre"
   teamMembers: "§5§lMembres"
+  teamAlliances: "§5§lAlliances"
   editMembers: "§5§lGestion des membres"
   editAlliances: "§5§lGestion des alliances"
   upgradeTotalMembers: "§5§lPlaces disponibles"
@@ -130,6 +127,7 @@ inventoriesSlots:
   manage: 45
   member: 45
   teamMembers: 27
+  teamAlliances: 27
   editMembers: 36
   editAlliances: 36
   upgradeTotalMembers: 27
@@ -358,18 +356,18 @@ inventories:
       lore:
         - "§aRetirer de l'argent"
         - "§ade la team"
-    leaveTeam:
-      itemName: "§5§lQuitter la team"
-      itemType: DARK_OAK_DOOR
-      slot: 25
-      rank: -1
     storageDirectory:
       itemName: "§5§lStockages"
       itemType: CHEST
-      slot: 31
+      slot: 30
       rank: 4
       lore:
         - "§aStockages de la team"
+    leaveTeam:
+      itemName: "§5§lQuitter la team"
+      itemType: DARK_OAK_DOOR
+      slot: 32
+      rank: -1
     close:
       itemName: "§5§lFermer"
       itemType: BARRIER
@@ -472,6 +470,13 @@ inventories:
 
 
   teamMembers:
+    close:
+      itemName: "§5§lRetour au menu membre"
+      itemType: BARRIER
+      slot: 26
+
+
+  teamAlliances:
     close:
       itemName: "§5§lRetour au menu membre"
       itemType: BARRIER

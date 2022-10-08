@@ -57,7 +57,7 @@ public class ManageInventory {
             player.openInventory(inventory);
 
 
-        else if (itemName.equals(config.getString("inventories.manage.editAlliances.itemName"))){
+        }else if (itemName.equals(config.getString("inventories.manage.editAlliances.itemName"))){
             Inventory inventory = inventoryBuilder.createEditAlliancesInventory(playerName);
             player.openInventory(inventory);
 
