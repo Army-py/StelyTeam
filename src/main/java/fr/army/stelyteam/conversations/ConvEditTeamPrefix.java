@@ -34,7 +34,7 @@ public class ConvEditTeamPrefix extends StringPrompt {
     public Prompt acceptInput(ConversationContext con, String answer) {
         Player author = (Player) con.getForWhom();
         String authorName = author.getName();
-        String teamID = sqlManager.getTeamIDFromPlayer(authorName);
+        String teamID = sqlManager.getTeamNameFromPlayerName(authorName);
         
         if (prefixTeamIsTooLong(answer)) {
             // con.getForWhom().sendRawMessage("Le préfixe est trop long");

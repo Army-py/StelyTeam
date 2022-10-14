@@ -35,11 +35,11 @@ public class ConvAddAlliance extends StringPrompt {
     public Prompt acceptInput(ConversationContext con, String answer) {
         Player author = (Player) con.getForWhom();
         String authorName = author.getName();
-        String teamId = sqlManager.getTeamIDFromPlayer(author.getName());
-        String ownerName = sqlManager.getTeamOwner(teamId);
+        String teamId = sqlManager.getTeamNameFromPlayerName(author.getName());
+        String ownerName = sqlManager.getTeamOwnerName(teamId);
         Player owner = Bukkit.getPlayer(ownerName);
         
-        if (!sqlManager.teamIdExist(answer)) {
+        if (!sqlManager.teamNameExists(answer)) {
             con.getForWhom().sendRawMessage(messageManager.getMessage("common.team_not_exist"));
             return null;
         }else if (sqlManager.isAlliance(teamId, answer)) {
@@ -79,9 +79,9 @@ public class ConvAddAlliance extends StringPrompt {
 
 
     private boolean hasReachedMaxMember(String teamId) {
-        Integer memberAmount = sqlManager.getMembers(teamId).size();
+        Integer memberAmount = sqlManager.getTeamMembers(teamId).size();
         Integer maxMember = config.getInt("teamMaxMembers");
-        Integer teamMembersLelvel = sqlManager.getTeamMembersLevel(teamId);
+        Integer teamMembersLelvel = sqlManager.getImprovLvlMembers(teamId);
         return memberAmount >= maxMember + teamMembersLelvel;
     }
 

@@ -31,7 +31,7 @@ public class ConvRemoveMember extends StringPrompt {
     public Prompt acceptInput(ConversationContext con, String answer) {
         Player author = (Player) con.getForWhom();
         String authorName = author.getName();
-        String teamId = sqlManager.getTeamIDFromPlayer(author.getName());
+        String teamId = sqlManager.getTeamNameFromPlayerName(author.getName());
 
         if (!sqlManager.isMemberInTeam(answer, teamId)){
             // con.getForWhom().sendRawMessage("Le joueur n'est pas dans ta team");

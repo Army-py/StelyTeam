@@ -51,7 +51,7 @@ public class EditMembersInventory {
         List<String> lore = event.getCurrentItem().getItemMeta().getLore();
         Player player = (Player) event.getWhoClicked();
         String playerName = player.getName();
-        String teamId = sqlManager.getTeamIDFromPlayer(playerName);
+        String teamId = sqlManager.getTeamNameFromPlayerName(playerName);
         
 
 
@@ -81,7 +81,7 @@ public class EditMembersInventory {
         }
 
         itemName = removeFirstColors(event.getCurrentItem().getItemMeta().getDisplayName());
-        if (sqlManager.getMembers(teamId).contains(itemName)){
+        if (sqlManager.getTeamMembers(teamId).contains(itemName)){
             Integer authorRank = sqlManager.getMemberRank(playerName);
             Integer memberRank = sqlManager.getMemberRank(itemName);
             Player member = Bukkit.getPlayer(itemName);

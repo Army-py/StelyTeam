@@ -64,7 +64,7 @@ public class ManageInventory {
 
         }else if (itemName.equals(config.getString("inventories.manage.setTeamHome.itemName"))){
             player.closeInventory();
-            String teamID = sqlManager.getTeamIDFromPlayer(playerName);
+            String teamID = sqlManager.getTeamNameFromPlayerName(playerName);
             String worldName = player.getWorld().getName();
             Double x = player.getLocation().getX();
             Double y = player.getLocation().getY();
@@ -82,7 +82,7 @@ public class ManageInventory {
 
         }else if (itemName.equals(config.getString("inventories.manage.removeTeamHome.itemName"))){
             player.closeInventory();
-            String teamID = sqlManager.getTeamIDFromPlayer(playerName);
+            String teamID = sqlManager.getTeamNameFromPlayerName(playerName);
 
             if (sqliteManager.isSet(teamID)){
                 sqliteManager.removeHome(teamID);
@@ -93,7 +93,7 @@ public class ManageInventory {
 
 
         }else if (itemName.equals(config.getString("inventories.manage.buyTeamBank.itemName"))){
-            String teamID = sqlManager.getTeamIDFromPlayer(playerName);
+            String teamID = sqlManager.getTeamNameFromPlayerName(playerName);
             
             if (!sqlManager.hasUnlockedTeamBank(teamID)){
                 if (economyManager.checkMoneyPlayer(player, config.getDouble("prices.buyTeamBank"))){

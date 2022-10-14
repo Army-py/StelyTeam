@@ -43,18 +43,18 @@ public class SubCmdInfo extends SubCommand {
             player.sendMessage(messageManager.getMessage("commands.stelyteam_info.usage"));
         }else{
             String teamID = String.join("", args);
-            if (sqlManager.teamIdExist(teamID)){
+            if (sqlManager.teamNameExists(teamID)){
                 String yesMessage = messages.getString("commands.stelyteam_info.true");
                 String noMessage = messages.getString("commands.stelyteam_info.false");
 
                 String teamPrefix = sqlManager.getTeamPrefix(teamID);
-                String teamOwner = sqlManager.getTeamOwner(teamID);
-                String creationDate = sqlManager.getCreationDate(teamID);
-                Integer teamMembersLelvel = sqlManager.getTeamMembersLevel(teamID);
-                Integer teamMembers = sqlManager.getMembers(teamID).size();
+                String teamOwner = sqlManager.getTeamOwnerName(teamID);
+                String creationDate = sqlManager.getTeamCreationDate(teamID);
+                Integer teamMembersLelvel = sqlManager.getImprovLvlMembers(teamID);
+                Integer teamMembers = sqlManager.getTeamMembers(teamID).size();
                 Integer maxMembers = config.getInt("teamMaxMembers");
                 String hasUnlockBank = (sqlManager.hasUnlockedTeamBank(teamID) ? yesMessage : noMessage);
-                List<String> members = sqlManager.getMembers(teamID);
+                List<String> members = sqlManager.getTeamMembers(teamID);
                 List<String> lore = messages.getStringList("commands.stelyteam_info.output");
 
                 lore = replaceInLore(lore, "%NAME%", teamID);

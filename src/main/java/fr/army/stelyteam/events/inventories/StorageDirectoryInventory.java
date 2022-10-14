@@ -35,7 +35,7 @@ public class StorageDirectoryInventory {
     public void onInventoryClick(){
         Player player = (Player) event.getWhoClicked();
         String playerName = player.getName();
-        String teamId = sqlManager.getTeamIDFromPlayer(playerName);
+        String teamId = sqlManager.getTeamNameFromPlayerName(playerName);
         String itemName = event.getCurrentItem().getItemMeta().getDisplayName();
         Material itemType = event.getCurrentItem().getType();
 
@@ -47,7 +47,7 @@ public class StorageDirectoryInventory {
             for(String str : config.getConfigurationSection("inventories.storageDirectory").getKeys(false)){
                 String name = config.getString(config.getString("inventories.storageDirectory."+str+".itemName"));
                 Material type = Material.getMaterial(config.getString("inventories.storageDirectory."+str+".itemType"));
-                String storageId = config.getString("inventories.storageDirectory."+str+".storageId");
+                Integer storageId = config.getInt("inventories.storageDirectory."+str+".storageId");
 
                 if (itemName.equals(name) && itemType.equals(type)){
                     Inventory inventory = inventoryBuilder.createStorageInventory(teamId, storageId, name);

@@ -36,7 +36,7 @@ public class EditAlliancesInventory {
         String itemName;
         Player player = (Player) event.getWhoClicked();
         String playerName = player.getName();
-        String teamId = sqlManager.getTeamIDFromPlayer(playerName);
+        String teamId = sqlManager.getTeamNameFromPlayerName(playerName);
 
 
         // Fermeture ou retour en arrière de l'inventaire

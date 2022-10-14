@@ -123,7 +123,7 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
         }else if (args.length == 2){
             if (args[0].equals("info")){
                 List<String> result = new ArrayList<>();
-                for (String teamID : sqlManager.getTeamsIds()) {
+                for (String teamID : sqlManager.getTeamsName()) {
                     if (teamID.toLowerCase().startsWith(args[1].toLowerCase())){
                         result.add(teamID);
                     }
@@ -132,7 +132,7 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
             }else if (sender.isOp()){
                 if (subCommandsOp.containsKey(args[0])){
                     List<String> result = new ArrayList<>();
-                    for (String teamID : sqlManager.getTeamsIds()) {
+                    for (String teamID : sqlManager.getTeamsName()) {
                         if (teamID.toLowerCase().startsWith(args[1].toLowerCase())){
                             result.add(teamID);
                         }
@@ -143,7 +143,7 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
         }else if (sender.isOp() && args.length == 3){
             if (args[0].equals("changeowner")){
                 List<String> result = new ArrayList<>();
-                for (String member : sqlManager.getMembers(args[1])) {
+                for (String member : sqlManager.getTeamMembers(args[1])) {
                     Integer memberRank = sqlManager.getMemberRank(member);
                     if (memberRank > 0 && member.toLowerCase().startsWith(args[2].toLowerCase())){
                         result.add(member);
@@ -152,7 +152,7 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
                 return result;
             }else if (args[0].equals("removemember")){
                 List<String> result = new ArrayList<>();
-                for (String member : sqlManager.getMembers(args[1])) {
+                for (String member : sqlManager.getTeamMembers(args[1])) {
                     Integer memberRank = sqlManager.getMemberRank(member);
                     if (memberRank != 0 && member.toLowerCase().startsWith(args[2].toLowerCase())){
                         result.add(member);

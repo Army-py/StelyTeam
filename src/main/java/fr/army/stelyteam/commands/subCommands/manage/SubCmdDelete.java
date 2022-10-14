@@ -33,7 +33,7 @@ public class SubCmdDelete extends SubCommand {
             player.sendMessage(messageManager.getMessage("commands.stelyteam_delete.usage"));
         }else{
             String teamID = String.join("", args);
-            if (sqlManager.teamIdExist(teamID)){
+            if (sqlManager.teamNameExists(teamID)){
                 sqlManager.removeTeam(teamID);
                 sqliteManager.removeHome(teamID);
                 // player.sendMessage("Team supprimée");

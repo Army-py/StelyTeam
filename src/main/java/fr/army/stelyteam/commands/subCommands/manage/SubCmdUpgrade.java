@@ -32,14 +32,14 @@ public class SubCmdUpgrade extends SubCommand {
             player.sendMessage(messageManager.getMessage("commands.stelyteam_upgrade.usage"));
         }else{
             String teamID = String.join("", args);
-            if (sqlManager.teamIdExist(teamID)){
+            if (sqlManager.teamNameExists(teamID)){
                 Integer maxUpgrades = config.getConfigurationSection("inventories.upgradeTotalMembers").getValues(false).size() - 1;
-                Integer teamUpgrades = sqlManager.getTeamMembersLevel(teamID);
+                Integer teamUpgrades = sqlManager.getImprovLvlMembers(teamID);
                 if (maxUpgrades == teamUpgrades){
                     // player.sendMessage("Cette team est déjà au niveau maximum");
                     player.sendMessage(messageManager.getMessage("commands.stelyteam_upgrade.max_level"));
                 }else{
-                    sqlManager.incrementTeamLevel(teamID);
+                    sqlManager.incrementImprovLvlMembers(teamID);
                     // player.sendMessage("Nombre de membres augmenté");
                     player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_upgrade.output", teamID));
                 }

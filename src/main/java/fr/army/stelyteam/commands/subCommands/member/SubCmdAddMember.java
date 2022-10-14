@@ -28,7 +28,7 @@ public class SubCmdAddMember extends SubCommand {
             // player.sendMessage("Utilisation : /stelyteam addmember <nom de team> <membre>");
             player.sendMessage(messageManager.getMessage("commands.stelyteam_addmember.usage"));
         }else{
-            if (sqlManager.teamIdExist(args[1])){
+            if (sqlManager.teamNameExists(args[1])){
                 if (sqlManager.isMember(args[2])){
                     // player.sendMessage("Ce joueur est déjà dans une team");
                     player.sendMessage(messageManager.getMessage("common.player_already_in_team"));

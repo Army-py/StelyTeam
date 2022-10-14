@@ -688,31 +688,31 @@ inventories:
       itemName: inventoriesName.storages.storageOne
       itemType: CHEST
       level: 1
-      storageId: "storage_1"
+      storageId: 1
       slot: 11
     storageTwo:
       itemName: inventoriesName.storages.storageTwo
       itemType: CHEST
       level: 2
-      storageId: "storage_2"
+      storageId: 2
       slot: 12
     storageThree:
       itemName: inventoriesName.storages.storageThree
       itemType: CHEST
       level: 3
-      storageId: "storage_3"
+      storageId: 3
       slot: 13
     storageFour:
       itemName: inventoriesName.storages.storageFour
       itemType: CHEST
       level: 4
-      storageId: "storage_4"
+      storageId: 4
       slot: 14
     storageFive:
       itemName: inventoriesName.storages.storageFive
       itemType: CHEST
       level: 5
-      storageId: "storage_5"
+      storageId: 5
       slot: 15
     close:
       itemName: "§5§lRetour au menu membre"

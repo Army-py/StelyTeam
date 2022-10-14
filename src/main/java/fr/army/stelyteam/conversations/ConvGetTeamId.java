@@ -37,7 +37,7 @@ public class ConvGetTeamId extends StringPrompt {
             // con.getForWhom().sendRawMessage("Le nom est trop long");
             con.getForWhom().sendRawMessage(messageManager.getMessage("common.name_is_too_long"));
             return this;
-        }else if (sqlManager.teamIdExist(answer)){
+        }else if (sqlManager.teamNameExists(answer)){
             // con.getForWhom().sendRawMessage("Ce nom de team existe déjà");
             con.getForWhom().sendRawMessage(messageManager.getMessage("common.name_already_exists"));
             return this;

@@ -66,20 +66,20 @@ public class StorageInventory {
         Player player = (org.bukkit.entity.Player) closeEvent.getPlayer();
         Inventory storageInventory = closeEvent.getInventory();
         String playerName = player.getName();
-        String teamId = sqlManager.getTeamIDFromPlayer(playerName);
-        String storageId = getStorageId(closeEvent.getView().getTitle());
+        String teamId = sqlManager.getTeamNameFromPlayerName(playerName);
+        Integer storageId = getStorageId(closeEvent.getView().getTitle());
         ItemStack[] inventoryContent = closeEvent.getInventory().getContents();
         int closeButtonSlot = config.getInt("inventories.storage.close.slot");
 
         inventoryContent[closeButtonSlot] = null;
-        if (plugin.containTeamStorage(teamId, storageId)){
-            plugin.replaceTeamStorage(teamId, storageInventory, storageId, serializeManager.serialize(inventoryContent));
+        if (plugin.containTeamStorage(teamId, storageId.toString())){
+            plugin.replaceTeamStorage(teamId, storageInventory, storageId.toString(), serializeManager.serialize(inventoryContent));
         }else{
-            plugin.addTeamStorage(teamId, storageInventory, storageId, serializeManager.serialize(inventoryContent));
+            plugin.addTeamStorage(teamId, storageInventory, storageId.toString(), serializeManager.serialize(inventoryContent));
         }
         
-        if (plugin.containTeamStorage(teamId, storageId)){
-            String inventoryContentString = plugin.getTeamStorageContent(teamId, storageId);
+        if (plugin.containTeamStorage(teamId, storageId.toString())){
+            String inventoryContentString = plugin.getTeamStorageContent(teamId, storageId.toString());
             if (!sqlManager.teamHasStorage(teamId, storageId)){
                 sqlManager.insertStorageContent(teamId, storageId, inventoryContentString);
             }else{
@@ -89,11 +89,11 @@ public class StorageInventory {
     }
 
 
-    private String getStorageId(String inventoryTitle){
-        String storageId;
+    private Integer getStorageId(String inventoryTitle){
+        Integer storageId;
         for(String str : config.getConfigurationSection("inventories.storageDirectory").getKeys(false)){
             if (config.getString(config.getString("inventories.storageDirectory." + str + ".itemName")).equals(inventoryTitle)){
-                storageId = config.getString("inventories.storageDirectory." + str + ".storageId");
+                storageId = config.getInt("inventories.storageDirectory." + str + ".storageId");
                 return storageId;
             }
         }

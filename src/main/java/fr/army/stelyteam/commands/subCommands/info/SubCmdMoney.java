@@ -31,7 +31,7 @@ public class SubCmdMoney extends SubCommand {
             player.sendMessage(messageManager.getMessage("commands.stelyteam_money.usage"));
         }else{
             String teamID = String.join("", args);
-            if (sqlManager.teamIdExist(teamID)){
+            if (sqlManager.teamNameExists(teamID)){
                 // player.sendMessage(sqlManager.getTeamMoney(teamID).toString());
                 player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_money.output", DoubleToString(sqlManager.getTeamMoney(teamID))));
             }else{

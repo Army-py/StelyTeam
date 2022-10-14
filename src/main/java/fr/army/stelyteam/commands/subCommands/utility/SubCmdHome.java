@@ -28,7 +28,7 @@ public class SubCmdHome extends SubCommand {
     @Override
     public boolean execute(CommandSender sender, String[] args) {
         Player player = (Player) sender;
-        String teamID = sqlManager.getTeamIDFromPlayer(player.getName());
+        String teamID = sqlManager.getTeamNameFromPlayerName(player.getName());
         
         if (!sqliteManager.isSet(teamID)){
             // player.sendMessage("Le home de team n'est pas défini");

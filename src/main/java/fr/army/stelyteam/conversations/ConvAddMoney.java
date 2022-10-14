@@ -29,7 +29,7 @@ public class ConvAddMoney extends StringPrompt {
     @Override
     public Prompt acceptInput(ConversationContext con, String answer) {
         Player author = (Player) con.getForWhom();
-        String teamID = sqlManager.getTeamIDFromPlayer(author.getName());
+        String teamID = sqlManager.getTeamNameFromPlayerName(author.getName());
         Double money = Double.parseDouble(answer);
 
         if (!economy.checkMoneyPlayer(author, money)) {

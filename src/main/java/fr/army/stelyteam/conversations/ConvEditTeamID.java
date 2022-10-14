@@ -33,13 +33,13 @@ public class ConvEditTeamID extends StringPrompt {
     public Prompt acceptInput(ConversationContext con, String answer) {
         Player author = (Player) con.getForWhom();
         String authorName = author.getName();
-        String teamID = sqlManager.getTeamIDFromPlayer(authorName);
+        String teamID = sqlManager.getTeamNameFromPlayerName(authorName);
 
         if (nameTeamIsTooLong(answer)) {
             // con.getForWhom().sendRawMessage("Le nom est trop long");
             con.getForWhom().sendRawMessage(messageManager.getMessage("common.name_is_too_long"));
             return this;
-        }else if (sqlManager.teamIdExist(answer)){
+        }else if (sqlManager.teamNameExists(answer)){
             // con.getForWhom().sendRawMessage("Ce nom de team existe déjà");
             con.getForWhom().sendRawMessage(messageManager.getMessage("common.name_already_exists"));
             return this;
@@ -52,7 +52,7 @@ public class ConvEditTeamID extends StringPrompt {
         economyManager.removeMoneyPlayer(author, config.getDouble("prices.editTeamId"));
         // con.getForWhom().sendRawMessage("Le nom a été changé par " + answer);
         con.getForWhom().sendRawMessage(messageManager.getReplaceMessage("manage_team.edit_team_id.team_name_edited", answer));
-        sqlManager.updateTeamID(teamID, answer);
+        sqlManager.updateTeamName(teamID, answer);
         sqliteManager.updateTeamID(teamID, answer);
         return null;
     }

@@ -46,7 +46,7 @@ public class MemberInventory {
         Player player = (Player) event.getWhoClicked();
         String playerName = player.getName();
         String itemName = event.getCurrentItem().getItemMeta().getDisplayName();
-        String teamId = sqlManager.getTeamIDFromPlayer(playerName);
+        String teamId = sqlManager.getTeamNameFromPlayerName(playerName);
         Material itemType = event.getCurrentItem().getType();
         List<String> lore = event.getCurrentItem().getItemMeta().getLore();
 

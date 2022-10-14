@@ -94,9 +94,9 @@ public class ConfirmInventory {
                 player.closeInventory();
                 conversationBuilder.getNameInput(player, new ConvGetTeamId(plugin));
             }else if (plugin.containPlayerTempAction(playerName, "buyTeamBank")){
-                String teamID = sqlManager.getTeamIDFromPlayer(playerName);
+                String teamID = sqlManager.getTeamNameFromPlayerName(playerName);
                 plugin.removePlayerTempAction(playerName);
-                sqlManager.updateUnlockTeamBank(teamID);
+                sqlManager.updateUnlockedTeamBank(teamID);
                 economyManager.removeMoneyPlayer(player, config.getDouble("prices.buyTeamBank"));
                 // player.sendMessage("Tu as debloqué le compte de la team");
                 player.sendMessage(messageManager.getMessage("manage_team.team_bank.unlock"));
@@ -107,19 +107,19 @@ public class ConfirmInventory {
                 // teamMembersUtils.teamBroadcast(teamID, playerName, "Le compte de team a été débloqué");
                 teamMembersUtils.teamBroadcast(teamID, playerName, messageManager.replaceAuthor("broadcasts.team_bank_unlocked", playerName));
             }else if (plugin.containPlayerTempAction(playerName, "editName")){
-                String teamID = sqlManager.getTeamIDFromPlayer(playerName);
+                String teamID = sqlManager.getTeamNameFromPlayerName(playerName);
                 plugin.removePlayerTempAction(playerName);
                 player.closeInventory();
                 conversationBuilder.getNameInput(player, new ConvEditTeamID(plugin));
                 teamMembersUtils.refreshTeamMembersInventory(teamID, playerName);
             }else if (plugin.containPlayerTempAction(playerName, "editPrefix")){
-                String teamID = sqlManager.getTeamIDFromPlayer(playerName);
+                String teamID = sqlManager.getTeamNameFromPlayerName(playerName);
                 plugin.removePlayerTempAction(playerName);
                 player.closeInventory();
                 conversationBuilder.getNameInput(player, new ConvEditTeamPrefix(plugin));
                 teamMembersUtils.refreshTeamMembersInventory(teamID, playerName);
             }else if (plugin.containPlayerTempAction(playerName, "deleteTeam")){
-                String teamID = sqlManager.getTeamIDFromPlayer(playerName);
+                String teamID = sqlManager.getTeamNameFromPlayerName(playerName);
                 plugin.removePlayerTempAction(playerName);
                 // teamMembersUtils.teamBroadcast(teamID, playerName, "La team " + teamID + " a été supprimée");
                 teamMembersUtils.teamBroadcast(teamID, playerName, messageManager.replaceTeamId("broadcasts.team_deleted", teamID));
@@ -130,11 +130,11 @@ public class ConfirmInventory {
                 player.sendMessage(messageManager.getMessage("manage_team.team_delete.deleted"));
                 teamMembersUtils.closeTeamMembersInventory(teamID, playerName);
             }else if (plugin.containPlayerTempAction(playerName, "upgradeMembers")){
-                String teamID = sqlManager.getTeamIDFromPlayer(playerName);
-                Integer level = sqlManager.getTeamMembersLevel(teamID);
+                String teamID = sqlManager.getTeamNameFromPlayerName(playerName);
+                Integer level = sqlManager.getImprovLvlMembers(teamID);
                 Integer newLevel = level + 1;
                 plugin.removePlayerTempAction(playerName);
-                sqlManager.incrementTeamLevel(teamID);
+                sqlManager.incrementImprovLvlMembers(teamID);
                 economyManager.removeMoneyPlayer(player, config.getDouble("prices.upgrade.teamPlaces.level"+newLevel));
                 // player.sendMessage("Vous avez atteint le niveau " + (level+1));
                 player.sendMessage(messageManager.getReplaceMessage("manage_team.upgrade_member_amount.new_upgrade", newLevel.toString()));
@@ -145,11 +145,11 @@ public class ConfirmInventory {
                 // teamMembersUtils.teamBroadcast(teamID, playerName, "Amélioration " + (level+1) + " de la team débloquée");
                 teamMembersUtils.teamBroadcast(teamID, playerName, messageManager.replaceTeamId("broadcasts.new_member_amount_upgrade", teamID));
             }else if (plugin.containPlayerTempAction(playerName, "upgradeStorages")){
-                String teamID = sqlManager.getTeamIDFromPlayer(playerName);
-                Integer level = sqlManager.getTeamStorageLevel(teamID);
+                String teamID = sqlManager.getTeamNameFromPlayerName(playerName);
+                Integer level = sqlManager.getTeamStorageLvl(teamID);
                 Integer newLevel = level + 1;
                 plugin.removePlayerTempAction(playerName);
-                sqlManager.incrementTeamStorage(teamID);
+                sqlManager.incrementTeamStorageLvl(teamID);
                 economyManager.removeMoneyPlayer(player, config.getDouble("prices.upgrade.teamStorages.level"+newLevel));
                 // player.sendMessage("Vous avez atteint le niveau " + (level+1));
                 player.sendMessage(messageManager.getReplaceMessage("manage_team.upgrade_storages.new_upgrade", newLevel.toString()));
@@ -160,7 +160,7 @@ public class ConfirmInventory {
                 // teamMembersUtils.teamBroadcast(teamID, playerName, "Amélioration " + (level+1) + " de la team débloquée");
                 teamMembersUtils.teamBroadcast(teamID, playerName, messageManager.replaceTeamId("broadcasts.new_storage_upgrade", teamID));
             }else if (plugin.containPlayerTempAction(playerName, "leaveTeam")){
-                String teamId = sqlManager.getTeamIDFromPlayer(playerName);
+                String teamId = sqlManager.getTeamNameFromPlayerName(playerName);
                 plugin.removePlayerTempAction(playerName);
                 sqlManager.removeMember(playerName, teamId);
                 player.closeInventory();

@@ -32,7 +32,7 @@ public class SubCmdEditPrefix extends SubCommand {
             // player.sendMessage("Utilisation : /stelyteam editprefix <nom de team> <nouveau prefix>");
             player.sendMessage(messageManager.getMessage("commands.stelyteam_editprefix.usage"));
         }else{
-            if (sqlManager.teamIdExist(args[1])){
+            if (sqlManager.teamNameExists(args[1])){
                 sqlManager.updateTeamPrefix(args[1], args[2]);
                 // player.sendMessage("Préfixe de team modifié en " + new ColorsBuilder().replaceColor(args[2]));
                 player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_editprefix.output", colorsBuilder.replaceColor(args[2])));

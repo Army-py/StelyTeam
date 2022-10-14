@@ -36,7 +36,7 @@ public class ConvAddMember extends StringPrompt {
         Player author = (Player) con.getForWhom();
         String authorName = author.getName();
         Player player = Bukkit.getPlayer(answer);
-        String teamId = sqlManager.getTeamIDFromPlayer(author.getName());
+        String teamId = sqlManager.getTeamNameFromPlayerName(author.getName());
         
         if (player == null) {
             // con.getForWhom().sendRawMessage("Ce joueur n'existe pas");
@@ -84,9 +84,9 @@ public class ConvAddMember extends StringPrompt {
 
 
     private boolean hasReachedMaxMember(String teamId) {
-        Integer memberAmount = sqlManager.getMembers(teamId).size();
+        Integer memberAmount = sqlManager.getTeamMembers(teamId).size();
         Integer maxMember = config.getInt("teamMaxMembers");
-        Integer teamMembersLelvel = sqlManager.getTeamMembersLevel(teamId);
+        Integer teamMembersLelvel = sqlManager.getImprovLvlMembers(teamId);
         return memberAmount >= maxMember + teamMembersLelvel;
     }
 

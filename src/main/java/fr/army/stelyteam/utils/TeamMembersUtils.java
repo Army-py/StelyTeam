@@ -22,8 +22,8 @@ public class TeamMembersUtils {
     }
 
 
-    public void refreshTeamMembersInventory(String teamId, String authorName) {
-        ArrayList<String> membersName = sqlManager.getMembers(teamId);
+    public void refreshTeamMembersInventory(String teamName, String authorName) {
+        ArrayList<String> membersName = sqlManager.getTeamMembers(teamName);
         for (String memberName : membersName) {
             if (memberName.equals(authorName)) continue;
 
@@ -55,8 +55,8 @@ public class TeamMembersUtils {
     }
 
 
-    public void closeTeamMembersInventory(String teamId, String authorName) {
-        ArrayList<String> membersName = sqlManager.getMembers(teamId);
+    public void closeTeamMembersInventory(String teamName, String authorName) {
+        ArrayList<String> membersName = sqlManager.getTeamMembers(teamName);
         for (String memberName : membersName) {
             if (memberName.equals(authorName)) continue;
 
@@ -72,8 +72,8 @@ public class TeamMembersUtils {
     }
 
 
-    public void teamBroadcast(String teamId, String authorName, String message) {
-        ArrayList<String> membersName = sqlManager.getMembers(teamId);
+    public void teamBroadcast(String teamName, String authorName, String message) {
+        ArrayList<String> membersName = sqlManager.getTeamMembers(teamName);
         for (String memberName : membersName) {
             if (memberName.equals(authorName)) continue;
 
