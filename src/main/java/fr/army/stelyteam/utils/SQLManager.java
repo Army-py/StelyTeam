@@ -82,7 +82,7 @@ public class SQLManager {
             try {
                 PreparedStatement queryPlayers = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'player' ('playerId' INTEGER, 'playerName' TEXT, 'teamRank' INTEGER, 'joinDate' TEXT, 'teamId' INTEGER, FOREIGN KEY('teamId') REFERENCES 'team'('teamId'), PRIMARY KEY('playerId' AUTOINCREMENT));");
                 PreparedStatement queryTeams = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'team' ('teamId' INTEGER, 'teamName' TEXT UNIQUE, 'teamPrefix' TEXT, 'teamMoney' INTEGER, 'creationDate' TEXT, 'improvLvlMembers' INTEGER, 'teamStorageLvl' INTEGER, 'unlockedTeamBank' INTEGER, 'teamOwnerPlayerId' INTEGER UNIQUE, PRIMARY KEY('teamId' AUTOINCREMENT), FOREIGN KEY('teamOwnerPlayerId') REFERENCES 'player'('playerId'));");
-                PreparedStatement queryStorages = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'storage' ('storageId' INTEGER, 'teamId' INTEGER, 'storageContent' BLOB, PRIMARY KEY('storageId','teamId'), FOREIGN KEY('teamId') REFERENCES 'team'('teamId'));");
+                PreparedStatement queryStorages = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'teamStorage' ('storageId' INTEGER, 'teamId' INTEGER, 'storageContent' BLOB, PRIMARY KEY('storageId','teamId'), FOREIGN KEY('teamId') REFERENCES 'team'('teamId'));");
                 PreparedStatement queryAlliances = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'alliance' ('teamId' INTEGER, 'teamAllianceId' INTEGER, 'allianceDate' TEXT, FOREIGN KEY('teamId') REFERENCES 'team'('teamId'), FOREIGN KEY('teamAllianceId') REFERENCES 'team'('teamId'), PRIMARY KEY('teamId','teamAllianceId'));");
                 PreparedStatement queryAssignements = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'assignement' ('teamId' INTEGER, 'permLabel' TEXT, 'teamRank' INTEGER, FOREIGN KEY('teamId') REFERENCES 'team'('teamId'), PRIMARY KEY('permLabel','teamId'));");
 
@@ -247,7 +247,7 @@ public class SQLManager {
             try {
                 PreparedStatement query = connection.prepareStatement("INSERT INTO player (playerName, teamRank, joinDate, teamId) VALUES (?, ?, ?, ?)");
                 query.setString(1, playerName);
-                query.setInt(2, 1);
+                query.setInt(2, 5);
                 query.setString(3, getCurrentDate());
                 query.setInt(4, getTeamId(teamName));
                 query.executeUpdate();
@@ -605,6 +605,27 @@ public class SQLManager {
     }
 
 
+    public ArrayList<String> getTeamMembersWithRank(String teamName, int rank){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT p.playerName FROM player AS p INNER JOIN team AS t ON p.teamId = t.teamId WHERE t.teamName = ? AND p.teamRank <= ? ORDER BY p.teamRank ASC");
+                query.setString(1, teamName);
+                query.setInt(2, rank);
+                ResultSet result = query.executeQuery();
+                ArrayList<String> teamMembers = new ArrayList<>();
+                while(result.next()){
+                    teamMembers.add(result.getString("playerName"));
+                }
+                query.close();
+                return teamMembers;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+
     public ArrayList<String> getTeamsName(){
         if(isConnected()){
             try {
@@ -664,11 +685,11 @@ public class SQLManager {
     public String getTeamCreationDate(String teamName){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("SELECT CreationDate FROM team WHERE teamName = ?");
+                PreparedStatement query = connection.prepareStatement("SELECT creationDate FROM team WHERE teamName = ?");
                 query.setString(1, teamName);
                 ResultSet result = query.executeQuery();
                 if(result.next()){
-                    return result.getString("teamCreationDate");
+                    return result.getString("creationDate");
                 }
                 query.close();
             } catch (SQLException e) {
@@ -833,14 +854,22 @@ public class SQLManager {
     public ArrayList<String> getAlliances(String teamName){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("SELECT t.teamName FROM team AS t INNER JOIN alliance AS a ON t.teamId = a.teamAllianceId WHERE a.teamId = ?");
-                query.setString(1, teamName);
-                ResultSet result = query.executeQuery();
                 ArrayList<String> alliances = new ArrayList<>();
-                while(result.next()){
-                    alliances.add(result.getString("teamName"));
+                PreparedStatement queryTeam = connection.prepareStatement("SELECT t.teamName FROM team AS t INNER JOIN alliance AS a ON t.teamId = a.teamAllianceId WHERE a.teamId = ?");
+                queryTeam.setInt(1, getTeamId(teamName));
+                ResultSet resultTeam = queryTeam.executeQuery();
+                while(resultTeam.next()){
+                    alliances.add(resultTeam.getString("teamName"));
                 }
-                query.close();
+                queryTeam.close();
+                
+                PreparedStatement queryAlliance = connection.prepareStatement("SELECT t.teamName FROM team AS t INNER JOIN alliance AS a ON t.teamId = a.teamId WHERE a.teamAllianceId = ?");
+                queryAlliance.setInt(1, getTeamId(teamName));
+                ResultSet resultAlliance = queryAlliance.executeQuery();
+                while(resultAlliance.next()){
+                    alliances.add(resultAlliance.getString("teamName"));
+                }
+                queryAlliance.close();
                 return alliances;
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -853,9 +882,11 @@ public class SQLManager {
     public String getAllianceDate(String teamName, String allianceName){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("SELECT a.allianceDate FROM alliance AS a INNER JOIN team AS t ON a.teamId = t.teamId WHERE t.teamName = ? AND a.teamAllianceId = ?");
+                PreparedStatement query = connection.prepareStatement("SELECT a.allianceDate FROM alliance AS a INNER JOIN team AS t ON a.teamId = t.teamId WHERE (t.teamName = ? OR t.teamName = ?) AND (a.teamAllianceId = ? OR a.teamId = ?)");
                 query.setString(1, teamName);
-                query.setInt(2, getTeamId(allianceName));
+                query.setString(2, allianceName);
+                query.setInt(3, getTeamId(allianceName));
+                query.setInt(4, getTeamId(allianceName));
                 ResultSet result = query.executeQuery();
                 if(result.next()){
                     return result.getString("allianceDate");
@@ -888,9 +919,11 @@ public class SQLManager {
     public void removeAlliance(String teamName, String allianceName){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("DELETE FROM alliance WHERE teamId = ? AND teamAllianceId = ?");
+                PreparedStatement query = connection.prepareStatement("DELETE FROM alliance WHERE (teamId = ? AND teamAllianceId = ?) OR (teamId = ? AND teamAllianceId = ?)");
                 query.setInt(1, getTeamId(teamName));
                 query.setInt(2, getTeamId(allianceName));
+                query.setInt(3, getTeamId(allianceName));
+                query.setInt(4, getTeamId(teamName));
                 query.executeUpdate();
                 query.close();
             } catch (SQLException e) {
@@ -903,9 +936,11 @@ public class SQLManager {
     public boolean isAlliance(String teamName, String allianceName){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("SELECT * FROM alliance AS a INNER JOIN team AS t ON a.teamId = t.teamId WHERE t.teamName = ? AND a.teamAllianceId = ?");
+                PreparedStatement query = connection.prepareStatement("SELECT * FROM alliance AS a INNER JOIN team AS t ON a.teamId = t.teamId WHERE (t.teamName = ? OR t.teamName = ?) AND (a.teamAllianceId = ? OR a.teamId = ?)");
                 query.setString(1, teamName);
-                query.setInt(2, getTeamId(allianceName));
+                query.setString(2, allianceName);
+                query.setInt(3, getTeamId(allianceName));
+                query.setInt(4, getTeamId(allianceName));
                 ResultSet result = query.executeQuery();
                 if(result.next()){
                     return true;
@@ -925,7 +960,10 @@ public class SQLManager {
                 PreparedStatement query = connection.prepareStatement("SELECT teamId FROM team WHERE teamName = ?");
                 query.setString(1, teamName);
                 ResultSet result = query.executeQuery();
-                int teamId = result.getInt("teamId");
+                int teamId = 0;
+                if(result.next()){
+                    teamId = result.getInt("teamId");
+                }
                 query.close();
                 return teamId;
             } catch (Exception e){

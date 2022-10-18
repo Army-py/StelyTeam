@@ -35,14 +35,14 @@ public class ConvAddAlliance extends StringPrompt {
     public Prompt acceptInput(ConversationContext con, String answer) {
         Player author = (Player) con.getForWhom();
         String authorName = author.getName();
-        String teamId = sqlManager.getTeamNameFromPlayerName(author.getName());
-        String ownerName = sqlManager.getTeamOwnerName(teamId);
+        String teamName = sqlManager.getTeamNameFromPlayerName(authorName);
+        String ownerName = sqlManager.getTeamOwnerName(answer);
         Player owner = Bukkit.getPlayer(ownerName);
         
         if (!sqlManager.teamNameExists(answer)) {
             con.getForWhom().sendRawMessage(messageManager.getMessage("common.team_not_exist"));
             return null;
-        }else if (sqlManager.isAlliance(teamId, answer)) {
+        }else if (sqlManager.isAlliance(teamName, answer)) {
             con.getForWhom().sendRawMessage(messageManager.getMessage("common.already_alliance"));
             return null;
         }else if (owner == null) {
@@ -53,8 +53,6 @@ public class ConvAddAlliance extends StringPrompt {
             return null;
         }
         
-        plugin.addTeamTempAction(authorName, ownerName, teamId, "addAlliance");
-
 
         BaseComponent[] components = new ComponentBuilder(messageManager.getReplaceMessage("manage_alliances.add_alliance.invitation_received", authorName))
             .append(messageManager.getMessageWithoutPrefix("manage_alliances.add_alliance.accept_invitation")).event(new ClickEvent(Action.RUN_COMMAND, "/st accept"))
@@ -62,7 +60,15 @@ public class ConvAddAlliance extends StringPrompt {
             .create();
 
             
-        owner.spigot().sendMessage(components);
+        // owner.spigot().sendMessage(components);
+        for (String playerName: sqlManager.getTeamMembersWithRank(answer, 1)){
+            Player player = Bukkit.getPlayer(playerName);
+            if (player != null) {
+                plugin.addTeamTempAction(authorName, playerName, teamName, "addAlliance");
+                player.spigot().sendMessage(components);
+                break;
+            }
+        }
         con.getForWhom().sendRawMessage(messageManager.getMessage("manage_alliances.add_alliance.invitation_sent"));
         
         // Inventory inventory = inventoryBuilder.createConfirmInventory();
@@ -74,7 +80,7 @@ public class ConvAddAlliance extends StringPrompt {
     @Override
     public String getPromptText(ConversationContext arg0) {
         // return "Envoie le pseudo du joueur à ajouter";
-        return messageManager.getMessage("manage_alliances.add_alliance.send_player_name");
+        return messageManager.getMessage("manage_alliances.add_alliance.send_team_name");
     }
 
 

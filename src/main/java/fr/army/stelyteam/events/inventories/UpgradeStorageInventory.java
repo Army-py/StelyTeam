@@ -42,7 +42,7 @@ public class UpgradeStorageInventory {
         Material material = event.getCurrentItem().getType();
 
         String teamID = sqlManager.getTeamNameFromPlayerName(playerName);
-        Integer level = sqlManager.getImprovLvlMembers(teamID);
+        Integer level = sqlManager.getTeamStorageLvl(teamID);
         
         // Gestion des items
         if (itemName.equals(config.getString("inventories.upgradeStorageAmount.close.itemName"))){

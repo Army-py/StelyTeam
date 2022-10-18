@@ -24,9 +24,10 @@ public class ConversationBuilder {
 
         cf.withFirstPrompt(prompt);
         cf.withLocalEcho(false);
-        cf.withTimeout(config.getInt("conversationTimeout"));
         cf.addConversationAbandonedListener(new ConversationAbandoned(plugin));
         cf.withConversationCanceller(new ConversationSetCanceller(plugin));
+        cf.withTimeout(config.getInt("conversationTimeout"));
+        // cf.withEscapeSequence("cancel");
         // cf.withPrefix(new ConversationSetPrefix());
 
         Conversation conv = cf.buildConversation(player);

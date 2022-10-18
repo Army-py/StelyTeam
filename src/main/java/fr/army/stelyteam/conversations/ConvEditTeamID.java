@@ -5,6 +5,7 @@ import fr.army.stelyteam.utils.EconomyManager;
 import fr.army.stelyteam.utils.MessageManager;
 import fr.army.stelyteam.utils.SQLManager;
 import fr.army.stelyteam.utils.SQLiteManager;
+import fr.army.stelyteam.utils.TeamMembersUtils;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.conversations.ConversationContext;
@@ -19,6 +20,7 @@ public class ConvEditTeamID extends StringPrompt {
     private YamlConfiguration config;
     private MessageManager messageManager;
     private EconomyManager economyManager;
+    private TeamMembersUtils teamMembersUtils;
 
 
     public ConvEditTeamID(StelyTeamPlugin plugin){
@@ -27,6 +29,7 @@ public class ConvEditTeamID extends StringPrompt {
         this.config = plugin.getConfig();
         this.messageManager = plugin.getMessageManager();
         this.economyManager = plugin.getEconomyManager();
+        this.teamMembersUtils = plugin.getTeamMembersUtils();
     }
 
     @Override
@@ -54,6 +57,7 @@ public class ConvEditTeamID extends StringPrompt {
         con.getForWhom().sendRawMessage(messageManager.getReplaceMessage("manage_team.edit_team_id.team_name_edited", answer));
         sqlManager.updateTeamName(teamID, answer);
         sqliteManager.updateTeamID(teamID, answer);
+        teamMembersUtils.refreshTeamMembersInventory(teamID, authorName);
         return null;
     }
 

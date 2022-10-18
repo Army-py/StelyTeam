@@ -64,7 +64,7 @@ public class ConvGetTeamPrefix extends StringPrompt {
 
 
     private boolean prefixTeamIsTooLong(String prefixTeam){
-        Pattern pattern = Pattern.compile("§.");
+        Pattern pattern = Pattern.compile("&.");
         Matcher matcher = pattern.matcher(prefixTeam);
         int colors = 0;
         while (matcher.find()) {

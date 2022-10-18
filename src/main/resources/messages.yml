@@ -10,17 +10,18 @@ common:
   name_already_exists: "§7Ce nom de team existe déjà"
   name_cannot_contain_space: "§7Le nom de la team ne doit pas contenir d'espace"
   name_is_too_long: "§7Le nom est trop long"
+  not_in_alliance: "§7Vous n'êtes pas en alliance avec cette team"
   not_enough_money: "§7Vous n'avez pas assez d'argent"
   no_invitation: "§7Vous n'avez reçu aucune invitation"
   player_already_in_team: "§7Ce joueur est déjà dans une team"
-  player_already_action: "§7Ce joueur a déjà une action en cours, attend qu'il n'y soit plus"
+  player_already_action: "§7Ce joueur a déjà une action en cours, attend qu'il ai fini"
   player_not_exist: "§7Ce joueur n'existe pas ou n'est pas connecté"
-  player_not_in_your_team: "§7Le joueur n'est pas t'a team"
+  player_not_in_your_team: "§7Le joueur n'est pas dans t'a team"
   prefix_is_too_long: "§7Le préfixe est trop long"
   team_not_exist: "§7La team n'existe pas"
   team_bank_not_unlock: "§7Vous n'avez pas débloqué le compte de team"
   owner_not_connected: "§7Le gérant de la team n'est pas connecté"
-  owner_already_action: "§7Le gérant a déjà une action en cours, attend qu'il n'y soit plus"
+  owner_already_action: "§7Le gérant a déjà une action en cours, attend qu'il ai fini"
 
 # Messages concernant la gestions des membres
 manage_members:
@@ -50,7 +51,7 @@ manage_alliances:
     refuse_invitation: "\n  §cRefuser §7: Clique ici pour refuser"
   remove_alliance:
     team_not_in_alliance: "§7La team n'est pas dans l'alliance de la team"
-    member_removed: "§7L'alliance avec %TEAM_ID% a été supprimée"
+    alliance_removed: "§7L'alliance avec %TEAM_ID% a été supprimée"
     send_team_name: "§7Envoyez le nom de la team a supprimer de l'alliance"
 
 # Messages concernant la gestion de la team et de ses différents paramètres
@@ -103,6 +104,7 @@ broadcasts:
   player_add_new_member: "§7%AUTHOR% a ajouté %RECEIVER% à la team"
   player_exclude_member: "§7%AUTHOR% a exclu %RECEIVER% de la team"
   player_add_new_alliance: "§7%AUTHOR% a ajouté %TEAM% à l'alliance de la team"
+  player_remove_alliance: "§7%AUTHOR% a supprimé %TEAM% de l'alliance de la team"
   team_bank_unlocked: "§7%AUTHOR% a débloqué la banque de la team"
   team_deleted: "§7La team %TEAM_ID% a été supprimée"
   new_member_amount_upgrade: "§7Une nouvelle place dans la team %TEAM_ID% a été débloquée"
@@ -112,6 +114,7 @@ broadcasts:
 sender:
   exclude_member: "§7Vous avez exclu %VALUE% de la team"
   promote_owner: "§7Vous avez promu %VALUE% gérant"
+  remove_alliance: "§7Vous avez supprimé l'alliance avec %VALUE%"
 
 # Messages que recevra le membre qui subit cette action
 receiver:
@@ -119,6 +122,7 @@ receiver:
   promote_owner: "§7Vous avez été promu en gérant de la team %VALUE%"
   promote: "§7Vous avez été promu %VALUE%"
   demote: "§7Vous avez été rétrogradé %VALUE%"
+  remove_alliance: "§7L'alliance avec %VALUE% a été supprimée"
 
 other:
   leave_team: "§7Vous avez quitté la team %VALUE%"

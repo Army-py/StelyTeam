@@ -74,6 +74,24 @@ public class ConfirmInventory {
                 teamMembersUtils.refreshTeamMembersInventory(teamId, playerName);
                 // teamMembersUtils.teamBroadcast(teamId, playerName, playerName + " a exclu " + receiverName);
                 teamMembersUtils.teamBroadcast(teamId, playerName, messageManager.replaceAuthorAndReceiver("broadcasts.player_exclude_member", playerName, receiverName));
+            }else if (plugin.containTeamAction(playerName, "removeAlliance")){
+                String teamName = plugin.getTeamActions(playerName)[2];
+                String allianceName = plugin.getTeamActions(playerName)[1];
+                plugin.removeTeamTempAction(playerName);
+                sqlManager.removeAlliance(teamName, allianceName);;
+                player.closeInventory();
+                // player.sendMessage("Vous avez exclu " + receiverName + " de la team");
+                player.sendMessage(messageManager.getReplaceMessage("sender.remove_alliance", allianceName));
+                for (String memberName: sqlManager.getTeamMembers(allianceName)){
+                    Player member = Bukkit.getPlayer(memberName);
+                    if (member != null){
+                        member.sendMessage(messageManager.getReplaceMessage("receiver.remove_alliance", teamName));
+                    }
+                }
+                teamMembersUtils.refreshTeamMembersInventory(teamName, playerName);
+                teamMembersUtils.refreshTeamMembersInventory(allianceName, playerName);
+                // teamMembersUtils.teamBroadcast(teamId, playerName, playerName + " a exclu " + receiverName);
+                teamMembersUtils.teamBroadcast(teamName, playerName, messageManager.replaceAuthorAndReceiver("broadcasts.player_remove_alliance", playerName, allianceName));
             }else if (plugin.containTeamAction(playerName, "editOwner")){
                 String teamId = plugin.getTeamActions(playerName)[2];
                 String senderName = plugin.getTeamActions(playerName)[0];
@@ -171,10 +189,10 @@ public class ConfirmInventory {
         }
 
         else if (itemName.equals(config.getString("inventories.confirmInventory.cancel.itemName"))){
-            if (plugin.containTeamAction(playerName, "addMember")){
+            if (plugin.containTeamAction(playerName, "removeMember")){
                 plugin.removeTeamTempAction(playerName);
                 player.closeInventory();
-            }else if (plugin.containTeamAction(playerName, "removeMember")){
+            }else if (plugin.containTeamAction(playerName, "removeAlliance")){
                 plugin.removeTeamTempAction(playerName);
                 player.closeInventory();
             }else if (plugin.containTeamAction(playerName, "editOwner")){

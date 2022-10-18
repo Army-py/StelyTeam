@@ -6,7 +6,9 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.conversations.ConvAddAlliance;
 import fr.army.stelyteam.conversations.ConvAddMember;
+import fr.army.stelyteam.conversations.ConvRemoveAlliance;
 import fr.army.stelyteam.conversations.ConvRemoveMember;
 import fr.army.stelyteam.utils.InventoryBuilder;
 import fr.army.stelyteam.utils.SQLManager;
@@ -36,7 +38,6 @@ public class EditAlliancesInventory {
         String itemName;
         Player player = (Player) event.getWhoClicked();
         String playerName = player.getName();
-        String teamId = sqlManager.getTeamNameFromPlayerName(playerName);
 
 
         // Fermeture ou retour en arrière de l'inventaire
@@ -45,13 +46,13 @@ public class EditAlliancesInventory {
             Inventory inventory = inventoryBuilder.createManageInventory(playerName);
             player.openInventory(inventory);
             return;
-        }else if (itemName.equals(config.getString("inventories.editAlliances.addMember.itemName"))){
+        }else if (itemName.equals(config.getString("inventories.editAlliances.addAlliance.itemName"))){
             player.closeInventory();
-            conversationBuilder.getNameInput(player, new ConvAddMember(plugin));
+            conversationBuilder.getNameInput(player, new ConvAddAlliance(plugin));
             return;
-        }else if (itemName.equals(config.getString("inventories.editAlliances.removeMember.itemName"))){
+        }else if (itemName.equals(config.getString("inventories.editAlliances.removeAlliance.itemName"))){
             player.closeInventory();
-            conversationBuilder.getNameInput(player, new ConvRemoveMember(plugin));
+            conversationBuilder.getNameInput(player, new ConvRemoveAlliance(plugin));
             return;
         }
     }

@@ -517,14 +517,14 @@ inventories:
       itemName: "§5§lAjouter une alliance"
       itemType: PRISMARINE_SHARD
       slot: 27
-      rank: 2
+      rank: 1
       lore:
         - "§aAjouter une alliance à la team"
-    removeMember:
+    removeAlliance:
       itemName: "§5§lRetirer une alliance"
       itemType: PRISMARINE_CRYSTALS
       slot: 28
-      rank: 2
+      rank: 1
       lore:
         - "§aRetirer une alliance de la team"
     close:
@@ -663,11 +663,11 @@ inventories:
       rankPath: editAlliances.removeAlliance
       lore:
         - "§aRetirer une alliance de la team"
-    seeAlliances:
+    seeTeamAlliances:
       itemName: "§5§lVoir les alliances"
       itemType: ENDER_EYE
       slot: 33
-      rankPath: member.seeAlliances
+      rankPath: member.seeTeamAlliances
       lore:
         - "§aVoir les alliances de la team"
     close:

@@ -54,7 +54,7 @@ public class PermissionsInventory {
                     if (!authorIsOwner && permissionRank <= authorRank){
                         return;
                     }
-                    if (permissionRank < plugin.getLastRank()) sqlManager.decrementAssignement(teamId, permission);
+                    if (permissionRank < plugin.getLastRank()) sqlManager.incrementAssignement(teamId, permission);
                 }else{
                     String rankPath = config.getString("inventories.permissions."+permission+".rankPath");
                     Integer defaultRankId = config.getInt("inventories."+rankPath+".rank");
@@ -69,7 +69,7 @@ public class PermissionsInventory {
                     if (!authorIsOwner && permissionRank-1 <= authorRank){
                         return;
                     }
-                    if (permissionRank > 0) sqlManager.incrementAssignement(teamId, permission);
+                    if (permissionRank > 0) sqlManager.decrementAssignement(teamId, permission);
                 }else{
                     String rankPath = config.getString("inventories.permissions."+permission+".rankPath");
                     Integer defaultRankId = config.getInt("inventories."+rankPath+".rank");

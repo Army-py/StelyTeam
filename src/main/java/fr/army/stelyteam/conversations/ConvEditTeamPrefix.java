@@ -5,6 +5,7 @@ import fr.army.stelyteam.utils.ColorsBuilder;
 import fr.army.stelyteam.utils.EconomyManager;
 import fr.army.stelyteam.utils.MessageManager;
 import fr.army.stelyteam.utils.SQLManager;
+import fr.army.stelyteam.utils.TeamMembersUtils;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.conversations.ConversationContext;
@@ -21,6 +22,7 @@ public class ConvEditTeamPrefix extends StringPrompt {
     private YamlConfiguration config;
     private MessageManager messageManager;
     private EconomyManager economyManager;
+    private TeamMembersUtils teamMembersUtils;
 
 
     public ConvEditTeamPrefix(StelyTeamPlugin plugin) {
@@ -28,6 +30,7 @@ public class ConvEditTeamPrefix extends StringPrompt {
         this.config = plugin.getConfig();
         this.messageManager = plugin.getMessageManager();
         this.economyManager = plugin.getEconomyManager();
+        this.teamMembersUtils = plugin.getTeamMembersUtils();
     }
 
     @Override
@@ -46,6 +49,7 @@ public class ConvEditTeamPrefix extends StringPrompt {
         // con.getForWhom().sendRawMessage("Le préfixe a été changé par " + new ColorsBuilder().replaceColor(answer));
         con.getForWhom().sendRawMessage(messageManager.getReplaceMessage("manage_team.edit_team_prefix.team_prefix_edited", new ColorsBuilder().replaceColor(answer)));
         sqlManager.updateTeamPrefix(teamID, answer);
+        teamMembersUtils.refreshTeamMembersInventory(teamID, authorName);
         return null;
     }
 
@@ -57,7 +61,7 @@ public class ConvEditTeamPrefix extends StringPrompt {
 
 
     private boolean prefixTeamIsTooLong(String prefixTeam){
-        Pattern pattern = Pattern.compile("§.");
+        Pattern pattern = Pattern.compile("&.");
         Matcher matcher = pattern.matcher(prefixTeam);
         int colors = 0;
         while (matcher.find()) {
