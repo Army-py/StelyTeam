@@ -81,6 +81,9 @@ public class StorageInventory {
         if (plugin.containTeamStorage(teamId, storageId.toString())){
             String inventoryContentString = plugin.getTeamStorageContent(teamId, storageId.toString());
             if (!sqlManager.teamHasStorage(teamId, storageId)){
+                if (!sqlManager.storageExist(storageId)){
+                    sqlManager.insertStorage(storageId);
+                }
                 sqlManager.insertStorageContent(teamId, storageId, inventoryContentString);
             }else{
                 sqlManager.updateStorageContent(teamId, storageId, inventoryContentString);

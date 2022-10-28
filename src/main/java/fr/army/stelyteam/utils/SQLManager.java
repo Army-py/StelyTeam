@@ -82,21 +82,24 @@ public class SQLManager {
             try {
                 PreparedStatement queryPlayers = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'player' ('playerId' INTEGER, 'playerName' TEXT, 'teamRank' INTEGER, 'joinDate' TEXT, 'teamId' INTEGER, FOREIGN KEY('teamId') REFERENCES 'team'('teamId'), PRIMARY KEY('playerId' AUTOINCREMENT));");
                 PreparedStatement queryTeams = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'team' ('teamId' INTEGER, 'teamName' TEXT UNIQUE, 'teamPrefix' TEXT, 'teamMoney' INTEGER, 'creationDate' TEXT, 'improvLvlMembers' INTEGER, 'teamStorageLvl' INTEGER, 'unlockedTeamBank' INTEGER, 'teamOwnerPlayerId' INTEGER UNIQUE, PRIMARY KEY('teamId' AUTOINCREMENT), FOREIGN KEY('teamOwnerPlayerId') REFERENCES 'player'('playerId'));");
-                PreparedStatement queryStorages = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'teamStorage' ('storageId' INTEGER, 'teamId' INTEGER, 'storageContent' BLOB, PRIMARY KEY('storageId','teamId'), FOREIGN KEY('teamId') REFERENCES 'team'('teamId'));");
+                PreparedStatement queryTeamStorages = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'teamStorage' ('storageId' INTEGER, 'teamId' INTEGER, 'storageContent' BLOB, PRIMARY KEY('storageId','teamId'), FOREIGN KEY('teamId') REFERENCES 'team'('teamId'), FOREIGN KEY('storageId') REFERENCES 'storage'('storageId'));");
                 PreparedStatement queryAlliances = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'alliance' ('teamId' INTEGER, 'teamAllianceId' INTEGER, 'allianceDate' TEXT, FOREIGN KEY('teamId') REFERENCES 'team'('teamId'), FOREIGN KEY('teamAllianceId') REFERENCES 'team'('teamId'), PRIMARY KEY('teamId','teamAllianceId'));");
                 PreparedStatement queryAssignements = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'assignement' ('teamId' INTEGER, 'permLabel' TEXT, 'teamRank' INTEGER, FOREIGN KEY('teamId') REFERENCES 'team'('teamId'), PRIMARY KEY('permLabel','teamId'));");
+                PreparedStatement queryStorages = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'storage' ('storageId' INTEGER, PRIMARY KEY('storageId'));");
 
                 queryPlayers.executeUpdate();
                 queryTeams.executeUpdate();
-                queryStorages.executeUpdate();
+                queryTeamStorages.executeUpdate();
                 queryAlliances.executeUpdate();
                 queryAssignements.executeUpdate();
+                queryStorages.executeUpdate();
 
                 queryPlayers.close();
                 queryTeams.close();
-                queryStorages.close();
+                queryTeamStorages.close();
                 queryAlliances.close();
                 queryAssignements.close();
+                queryStorages.close();
             } catch (Exception e){
                 e.printStackTrace();
             }
@@ -335,14 +338,14 @@ public class SQLManager {
             try {
                 PreparedStatement queryOwner = connection.prepareStatement("UPDATE player SET teamRank = ? WHERE teamName = ? AND playerName = ?");
                 queryOwner.setInt(1, 1);
-                queryOwner.setInt(2, getTeamId(teamName));
+                queryOwner.setString(2, teamName);
                 queryOwner.setString(3, teamOwner);
                 queryOwner.executeUpdate();
                 queryOwner.close();
 
                 PreparedStatement queryNewOwner = connection.prepareStatement("UPDATE player SET teamRank = ? WHERE teamName = ? AND playerName = ?");
                 queryNewOwner.setInt(1, 0);
-                queryNewOwner.setInt(2, getTeamId(teamName));
+                queryNewOwner.setString(2, teamName);
                 queryNewOwner.setString(3, newTeamOwner);
                 queryNewOwner.executeUpdate();
                 queryNewOwner.close();
@@ -764,12 +767,25 @@ public class SQLManager {
     }
 
 
-    public boolean teamHasStorage(String teamName, Integer storageId){
+    public void insertStorage(int storageId){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("SELECT * FROM teamStorage AS ts INNER JOIN team AS t ON ts.teamId = t.teamId WHERE t.teamName = ? AND ts.storageId = ?");
-                query.setInt(1, getTeamId(teamName));
-                query.setInt(2, storageId);
+                PreparedStatement query = connection.prepareStatement("INSERT INTO storage (storageId) VALUES (?)");
+                query.setInt(1, storageId);
+                query.executeUpdate();
+                query.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    public boolean storageExist(int storageId){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT storageId FROM storage WHERE storageId = ?");
+                query.setInt(1, storageId);
                 ResultSet result = query.executeQuery();
                 if(result.next()){
                     return true;
@@ -783,11 +799,29 @@ public class SQLManager {
     }
 
 
+    public boolean teamHasStorage(String teamName, Integer storageId){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT * FROM teamStorage AS ts INNER JOIN team AS t ON ts.teamId = t.teamId WHERE t.teamName = ? AND ts.storageId = ?");
+                query.setString(1, teamName);
+                query.setInt(2, storageId);
+                ResultSet result = query.executeQuery();
+                boolean isParticipant = result.next();
+                query.close();
+                return isParticipant;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+
     public String getStorageContent(String teamName, Integer storageId){
         if(isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("SELECT storageContent FROM teamStorage AS ts INNER JOIN team AS t ON ts.teamId = t.teamId WHERE t.teamName = ? AND ts.storageId = ?");
-                query.setInt(1, getTeamId(teamName));
+                query.setString(1, teamName);
                 query.setInt(2, storageId);
                 ResultSet result = query.executeQuery();
                 if(result.next()){
