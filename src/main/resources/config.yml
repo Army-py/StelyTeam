@@ -26,34 +26,34 @@ teamNameMaxLength: 12
 teamPrefixMaxLength: 12
 
 # Argent maximal d'une team
-teamMaxMoney: 10000000.0
+teamMaxMoney: 1000000.0
 
 # Nombre de membres maximum dans une team
 teamMaxMembers: 10
 
 # Prix des différentes actions
 prices:
-  createTeam: 100000.0
-  editTeamId: 5000.0
-  editTeamPrefix: 5000.0
-  buyTeamBank: 1000000.0
+  createTeam: 10000.0
+  editTeamId: 2000.0
+  editTeamPrefix: 3000.0
+  buyTeamBank: 500000.0
   upgrade:
     teamPlaces:
-      level1: 2500000.0
-      level2: 5000000.0
-      level3: 10000000.0
-      level4: 15000000.0
-      level5: 25000000.0
+      level1: 25000.0
+      level2: 50000.0
+      level3: 100000.0
+      level4: 150000.0
+      level5: 250000.0
     teamStorages:
-      level1: 2500000.0
-      level2: 5000000.0
-      level3: 10000000.0
-      level4: 15000000.0
-      level5: 25000000.0
+      level1: 10000.0
+      level2: 25000.0
+      level3: 50000.0
+      level4: 80000.0
+      level5: 100000.0
 
 
 # Item à la place des cases vide
-emptyCase: BLACK_STAINED_GLASS_PANE
+emptyCase: LIGHT_BLUE_STAINED_GLASS_PANE
 
 # Item en cas de permission insuffisante
 noPermission:
@@ -65,7 +65,7 @@ noPermission:
 
 # Item si le compte de la team n'a pas encore été débloquée
 teamBankNotUnlock:
-  itemName: "§cCompte non débloqué"
+  itemName: "§c§nCompte non débloqué"
   itemType: EMERALD
   lore: 
     - "§cDébloquer le compte de"
@@ -74,35 +74,30 @@ teamBankNotUnlock:
 
 # Item si l'un des stockage de la team n'a pas encore été débloqué
 storageNotUnlock:
-  itemName: "§cStockage non débloqué"
+  itemName: "§c§nStockage non débloqué"
   itemType: ENDER_CHEST
-  lore: 
-    - "§cDébloquer ce stockage"
-    - "§cpour pouvoir y avoir"
-    - "§caccès"
-
-
 
 # Préfixe à gauche du rang, affiché dans le menu de la gestion des membres de la team et dans la liste des membres
-prefixRankLore: "§r§5> "
+prefixRankLore: "§r§e>> "
 
 # Description des teams dans la liste des alliances
 teamAllianceLore:
-  - "§aGérant : §r%OWNER%"
-  - "§aNom : §r%NAME%"
-  - "§aAlliance depuis : §r%DATE%"
-  - "§aPlaces : §r%MEMBER_COUNT% / %MAX_MEMBERS%"
-  - "§aMembers : §r%MEMBERS%"
+  - "§aGérant de la team : §e%OWNER%"
+  - "§aNom : §e%NAME%"
+  - "§aPréfixe : §r%PREFIX%"
+  - "§aNombre de membre : §e%MEMBER_COUNT% sur %MAX_MEMBERS%"
+  - "§aMembre(s) : §e%MEMBERS%"
+  - "§aAllié depuis le §e%DATE%"  
 
 
 # Titre des menus et leur nombre de slots
 # Le nombre de slots peut être augmenté en fonction du tombre d'item dans le menu *
 # * Respecter le nombre de slots en fonction de la taille d'une ligne de coffre (9 * nombre de lignes)
 inventoriesName:
-  createTeam: "§5§lCréer une team"
-  admin: "§5§lMenus"
+  createTeam: "§5§lCréation de Team"
+  admin: "§5§lMenu principal"
   manage: "§5§lGérer la team"
-  member: "§5§lMenu Membre"
+  member: "§5§lOptions de la team"
   teamMembers: "§5§lMembres"
   teamAlliances: "§5§lAlliances"
   editMembers: "§5§lGestion des membres"
@@ -141,28 +136,24 @@ inventoriesSlots:
 ranks:
   owner:
     id: 0
-    name: "Gérant"
-    color: "§5"
+    name: "Chef"
+    color: "§c"
   co_owner:
     id: 1
-    name: "Co-Gérant"
+    name: "Chef adjoint"
     color: "§d"
-  admin:
-    id: 2
-    name: "Admin"
-    color: "§9"
   moderator:
-    id: 3
-    name: "Modérateur"
-    color: "§3"
+    id: 2
+    name: "Ainé"
+    color: "§6"
   member:
-    id: 4
+    id: 3
     name: "Membre"
-    color: "§2"
-  new_member:
-    id: 5
-    name: "Nouveau Membre"
     color: "§e"
+  new_member:
+    id: 4
+    name: "Nouveau Membre"
+    color: "§7"
   # coop:
   #   id: 6
   #   name: "Coop"
@@ -175,292 +166,295 @@ ranks:
 
 # Description des items en fonction des grades, dans le menu d'éition des membres
 editMembersLores:
-  - "Clique gauche pour promouvoir"
-  - "Clique droit pour rétrograder"
+  - "§7§oClique gauche pour promouvoir"
+  - "§7§oClique droit pour rétrograder"
 
 
 inventories:
   createTeam:
-    itemName: "§5§lCréer une team"
-    itemType: RED_BANNER
+    itemName: "§5§nCréer une team"
+    itemType: LIME_BANNER
     slot: 13
     lore: 
-      - "§aPrix : 100,000€"
-
+      - "§aPrix : 100 000€"
 
   admin:
     manage:
-      itemName: "§5§lMenu Gestion"
-      itemType: BOOK
+      itemName: "§5§nMenu de gestion"
+      itemType: WRITABLE_BOOK
       slot: 12
       lore:
-        - "§aGérer les différents"
+        - "§aGére les différents"
         - "§aparamètres de la team"
     member:
-      itemName: "§5§lMenu Membre"
-      itemType: PAPER
+      itemName: "§5§nMenu de la team"
+      itemType: PLAYER_HEAD
       slot: 14
       lore:
-        - "§aMenu du membre de"
-        - "§ala team"
+        - "§aVisualise les options"
+        - "§ade la team"
     close:
-      itemName: "§5§lFermer"
+      itemName: "§c§oFermer"
       itemType: BARRIER
       slot: 26
 
 
   manage:
     editMembers:
-      itemName: "§5§lGestion des membres"
+      itemName: "§5§nGestion des membres"
       itemType: WRITABLE_BOOK
-      slot: 11
+      slot: 9
       rank: 2
       lore:
-        - "§aGérer les membres de la"
-        - "§ateam"
+        - "§aGérer les membres"
+        - "§ade la team"
     editAlliances:
-      itemName: "§5§lGestion des alliances"
+      itemName: "§5§nGestion des alliances"
       itemType: FEATHER
-      slot: 12
+      slot: 18
       rank: 2
       lore:
-        - "§aGérer les alliances de la"
-        - "§ateam"
+        - "§aGérer les alliances"
+        - "§ade la team"
     setTeamHome:
-      itemName: "§5§lCréer un home"
+      itemName: "§5§nCréer un home"
       itemType: GREEN_BED
-      slot: 13
+      slot: 11
       rank: 2
       lore:
         - "§aCréer le home de team"
     removeTeamHome:
-      itemName: "§5§lRetirer le home"
+      itemName: "§5§nRetirer le home"
       itemType: RED_BED
-      slot: 14
+      slot: 20
       rank: 2
       lore:
         - "§aRetirer le home de team"
     buyTeamBank:
-      itemName: "§5§lOuvrir le compte"
+      itemName: "§5§nOuvrir le compte"
       itemType: GOLD_BLOCK
-      slot: 15
+      slot: 13
       rank: 2
       lore:
         - "§aCréer le compte banquaire"
         - "§ade la team"
-        - "§aPrix : 1,000,000€"
+        - "§b§oPrix : 1 000 000€"
     upgradeTotalMembers:
-      itemName: "§5§lAjouter des places"
+      itemName: "§5§nAjouter des places"
       itemType: TOTEM_OF_UNDYING
-      slot: 20
+      slot: 15
       rank: 2
       lore:
         - "§aAméliorer le nombre de"
-        - "§amembres dans la team"
+        - "§amembres maximum dans la team"
     upgradeStorageAmount:
-      itemName: "§5§lAjouter des stockages"
+      itemName: "§5§nAjouter du stockage"
       itemType: CHEST
-      slot: 21
+      slot: 24
       rank: 2
       lore:
         - "§aAméliorer le nombre de"
-        - "§astockages dans la team"
+        - "§astockage maximum dans la team"
     editName:
-      itemName: "§5§lModifier le nom"
+      itemName: "§5§nModifier le nom"
       itemType: PAPER
-      slot: 22
+      slot: 17
       rank: 2
       lore:
-        - "§aModifier le nom unique"
-        - "§ade la team"
-        - "§aPrix : 5,000€"
+        - "§aModifier le nom de la team"
+        - "§b§oPrix : 5 000€"
     editPrefix:
-      itemName: "§5§lModifier le préfixe"
+      itemName: "§5§nModifier le préfixe"
       itemType: NAME_TAG
-      slot: 23
+      slot: 26
       rank: 2
       lore:
-        - "§aModifier le nom de la"
-        - "§ateam qui s'affiche dans"
-        - "§ale tchat"
-        - "§aPrix : 5,000€"
+        - "§aModifier le préfixe de la team"
+        - "§aqui s'affiche dans le tchat"
+        - "§b§oPrix : 5 000€"
         - ""
-        - "§cAssurez-vous d'avoir"
-        - "§cessayé le préfixe avant,"
-        - "§cavec /stelyteam visual"
+        - "§7§oVous pouvez prévisualiser"
+        - "§7§ole préfixe avec la commande :"
+        - "§7§o/stelyteam visual <texte>"
     editPermissions:
-      itemName: "§5§lPermissions"
+      itemName: "§5§nPermissions"
       itemType: RED_BANNER
-      slot: 24
+      slot: 22
       rank: 2
       lore:
         - "§aGérer les permissions"
         - "§ade la team"
     removeTeam:
-      itemName: "§5§lSupprimer la team"
+      itemName: "§c§nSupprimer la team"
       itemType: COMPOSTER
-      slot: 31
+      slot: 40
       rank: 0
-      lore:
-        - "§aSupprimer la team"
     close:
-      itemName: "§5§lFermer"
+      itemName: "§c§oFermer"
       itemType: BARRIER
       slot: 44
 
 
   member:
     teamInfos:
-      itemName: "§5§lInfos"
+      itemName: "§5§nInformations"
       itemType: BOOK
-      slot: 13
+      slot: 11
       rank: -1
       lore:
-        - "§aNom : §r%NAME%"
+        - "§aGérant de la team : §e%OWNER%"
+        - "§aNom : §e%NAME%"
         - "§aPréfixe : §r%PREFIX%"
-        - "§aGérant : §r%OWNER%"
-        - "§aGrade : §r%RANK%"
-        - "§aArrivé : §r%DATE%"
-        - "§aMembres : §r%MEMBER_COUNT% / %MAX_MEMBERS%"
+        - "§aNombre de membre : §e%MEMBER_COUNT% sur %MAX_MEMBERS%"        
+        - "§aDate de la création : §e%DATE%"    
+        - ""        
+        - "§aTon grade : §r%RANK%"
     seeTeamMembers:
-      itemName: "§5§lMembres"
+      itemName: "§5§nMembres"
       itemType: TOTEM_OF_UNDYING
       slot: 20
       rank: 5
+      lore:
+        - "§aClique pour voir les"  
+        - "§amembres de la team"      
     seeTeamAlliances:
-      itemName: "§5§lAlliances"
+      itemName: "§5§nAlliances"
       itemType: FEATHER
-      slot: 21
+      slot: 29
       rank: 5
+      lore:
+        - "§aClique pour voir les"  
+        - "§aalliances de la team"        
     seeTeamBank:
-      itemName: "§5§lArgent de la team"
+      itemName: "§5§nArgent de la team"
       itemType: EMERALD
+      slot: 13
+      rank: 4
+      lore:
+        - "§aCompte : §6%TEAM_MONEY%€"
+        - "§aPlafond du compte : §6%MAX_MONEY%€"
+    addTeamMoney:
+      itemName: "§5§nAjout d'argent"
+      itemType: GOLD_NUGGET
       slot: 22
       rank: 4
       lore:
-        - "§aMontant : %TEAM_MONEY%€"
-        - "§aMax : %MAX_MONEY%€"
-    addTeamMoney:
-      itemName: "§5§lAjout d'argent"
-      itemType: GOLD_NUGGET
-      slot: 23
-      rank: 4
-      lore:
-        - "§aAjouter de l'argent"
-        - "§adans la team"
+        - "§aAjouter de l'argent dans"
+        - "§ale compte de la team"
     withdrawTeamMoney:
-      itemName: "§5§lRetrait d'argent"
+      itemName: "§5§nRetrait d'argent"
       itemType: PAPER
-      slot: 24
+      slot: 31
       rank: 4
       lore:
-        - "§aRetirer de l'argent"
-        - "§ade la team"
+        - "§aRetirer de l'argent dans"
+        - "§ale compte de la team"
     storageDirectory:
-      itemName: "§5§lStockages"
+      itemName: "§5§nStockage"
       itemType: CHEST
-      slot: 30
+      slot: 15
       rank: 4
       lore:
-        - "§aStockages de la team"
+        - "§aClique pour voir le"
+        - "§astockage de la team"
     leaveTeam:
-      itemName: "§5§lQuitter la team"
+      itemName: "§c§nQuitter la team"
       itemType: DARK_OAK_DOOR
-      slot: 32
+      slot: 33
       rank: -1
     close:
-      itemName: "§5§lFermer"
+      itemName: "§c§oFermer"
       itemType: BARRIER
       slot: 44
 
 
   upgradeTotalMembers:
     levelOne:
-      itemName: "§5§l11 places"
+      itemName: "§5§n11 places"
       itemType: IRON_INGOT
       slot: 11
       level: 1
       lore:
-        - "§aPrix : 2,500,000€"
+        - "§b§oPrix : 25 000€"
     levelTwo:
-      itemName: "§5§l12 places"
+      itemName: "§5§n12 places"
       itemType: GOLD_INGOT
       slot: 12
       level: 2
       lore:
-        - "§aPrix : 5,000,000€"
+        - "§b§oPrix : 50 000€"
     levelThree:
-      itemName: "§5§l13 places"
+      itemName: "§5§n13 places"
       itemType: DIAMOND
       slot: 13
       level: 3
       lore:
-        - "§aPrix : 10,000,000€"
+        - "§b§oPrix : 100 000€"
     levelFour:
-      itemName: "§5§l14 places"
+      itemName: "§5§n14 places"
       itemType: EMERALD
       slot: 14
       level: 4
       lore:
-        - "§aPrix : 15,000,000€"
+        - "§b§oPrix : 150 000€"
     levelFive:
-      itemName: "§5§l15 places"
+      itemName: "§5§n15 places"
       itemType: NETHERITE_INGOT
       slot: 15
       level: 5
       lore:
-        - "§aPrix : 25,000,000€"
+        - "§b§oPrix : 250 000€"
     close:
-      itemName: "§5§lRetour au menu de gestion"
+      itemName: "§c§oRetour"
       itemType: BARRIER
       slot: 26
 
 
   upgradeStorageAmount:
     storageOne:
-      itemName: "§5§l1 stockage"
+      itemName: "§5§n1 stockage"
       itemType: BARREL
       slot: 11
       level: 1
       lore:
-        - "§aPrix : 2,500,000€"
+        - "§b§oPrix : 10 000€"
     storageTwo:
-      itemName: "§5§l2 stockages"
+      itemName: "§5§n2 stockages"
       itemType: BARREL
       slot: 12
       level: 2
       lore:
-        - "§aPrix : 5,000,000€"
+        - "§b§oPrix : 25 000€"
     storageThree:
-      itemName: "§5§l3 stockages"
+      itemName: "§5§n3 stockages"
       itemType: BARREL
       slot: 13
       level: 3
       lore:
-        - "§aPrix : 10,000,000€"
+        - "§b§oPrix : 50 000€"
     storageFour:
-      itemName: "§5§l4 stockages"
+      itemName: "§5§n4 stockages"
       itemType: BARREL
       slot: 14
       level: 4
       lore:
-        - "§aPrix : 15,000,000€"
+        - "§b§oPrix : 80 000€"
     storageFive:
-      itemName: "§5§l5 stockages"
+      itemName: "§5§n5 stockages"
       itemType: BARREL
       slot: 15
       level: 5
       lore:
-        - "§aPrix : 25,000,000€"
+        - "§b§oPrix : 100 000€"
     close:
-      itemName: "§5§lRetour au menu de gestion"
+      itemName: "§c§oRetour"
       itemType: BARRIER
       slot: 26
 
 
   confirmInventory:
     confirm:
-      itemName: "§a§lConfirmer"
+      itemName: "§a§nConfirmer"
       itemType: LIME_STAINED_GLASS_PANE
       slots: [13]
     cancel:
@@ -471,120 +465,120 @@ inventories:
 
   teamMembers:
     close:
-      itemName: "§5§lRetour au menu membre"
+      itemName: "§c§oRetour"
       itemType: BARRIER
       slot: 26
 
 
   teamAlliances:
     close:
-      itemName: "§5§lRetour au menu membre"
+      itemName: "§c§oRetour"
       itemType: BARRIER
       slot: 26
 
 
   editMembers:
     addMember:
-      itemName: "§5§lAjouter un membre"
+      itemName: "§5§nAjouter un membre"
       itemType: GOLD_INGOT
       slot: 27
       rank: 2
       lore:
         - "§aAjouter un membre à la team"
     removeMember:
-      itemName: "§5§lRetirer un membre"
+      itemName: "§5§nRetirer un membre"
       itemType: RAW_GOLD
       slot: 28
       rank: 2
       lore:
         - "§aRetirer un membre de la team"
     editOwner:
-      itemName: "§5§lChanger de créateur"
-      itemType: DIAMOND
+      itemName: "§5§nChanger de créateur"
+      itemType: LECTERN
       slot: 31
       rank: 0
       lore:
         - "§aModifier le créateur"
         - "§ade la team"
     close:
-      itemName: "§5§lRetour au menu de gestion"
+      itemName: "§c§oRetour"
       itemType: BARRIER
       slot: 35
 
 
   editAlliances:
     addAlliance:
-      itemName: "§5§lAjouter une alliance"
+      itemName: "§5§nAjouter une alliance"
       itemType: PRISMARINE_SHARD
       slot: 27
       rank: 1
       lore:
         - "§aAjouter une alliance à la team"
     removeAlliance:
-      itemName: "§5§lRetirer une alliance"
+      itemName: "§5§nRetirer une alliance"
       itemType: PRISMARINE_CRYSTALS
       slot: 28
       rank: 1
       lore:
         - "§aRetirer une alliance de la team"
     close:
-      itemName: "§5§lRetour au menu de gestion"
+      itemName: "§c§oRetour"
       itemType: BARRIER
       slot: 35
 
 
   permissions:
     addTeamMoney:
-      itemName: "§5§lAjouter de l'argent"
+      itemName: "§5§nAjouter de l'argent"
       itemType: GOLD_NUGGET
       slot: 10
       rankPath: member.addTeamMoney
       lore:
         - "§aAjouter de l'argent dans la team"
     withdrawTeamMoney:
-      itemName: "§5§lRetirer de l'argent"
+      itemName: "§5§nRetirer de l'argent"
       itemType: PAPER
       slot: 11
       rankPath: member.withdrawTeamMoney
       lore:
         - "§aRetirer de l'argent de la team"
     seeTeamBank:
-      itemName: "§5§lVoir l'argent"
+      itemName: "§5§nVoir l'argent"
       itemType: EMERALD
       slot: 12
       rankPath: member.seeTeamBank
       lore:
         - "§aVoir l'argent de la team"
     buyTeamBank:
-      itemName: "§5§lAchat du compte"
+      itemName: "§5§nAchat du compte"
       itemType: GOLD_BLOCK
       slot: 13
       rankPath: manage.buyTeamBank
       lore:
         - "§aAchat du compte de team"
     addMember:
-      itemName: "§5§lAjouter un membre"
+      itemName: "§5§nAjouter un membre"
       itemType: GOLD_INGOT
       slot: 14
       rankPath: editMembers.addMember
       lore:
         - "§aAjouter un membre à la team"
     removeMember:
-      itemName: "§5§lRetirer un membre"
+      itemName: "§5§nRetirer un membre"
       itemType: RAW_GOLD
       slot: 15
       rankPath: editMembers.removeMember
       lore:
         - "§aRetirer un membre de la team"
     seeTeamMembers:
-      itemName: "§5§lVoir les membres"
+      itemName: "§5§nVoir les membres"
       itemType: TOTEM_OF_UNDYING
       slot: 16
       rankPath: member.seeTeamMembers
       lore:
         - "§aVoir les membres de la team"
     upgradeTotalMembers:
-      itemName: "§5§lAugmenter les places disponibles"
+      itemName: "§5§nAugmenter les places disponibles"
       itemType: EXPERIENCE_BOTTLE
       slot: 19
       rankPath: manage.upgradeTotalMembers
@@ -592,49 +586,49 @@ inventories:
         - "§aAugmenter le nombre de places"
         - "§adisponible dans la team"
     manageMembers:
-      itemName: "§5§lGestion des membres"
+      itemName: "§5§nGestion des membres"
       itemType: WRITABLE_BOOK
       slot: 20
       rankPath: manage.editMembers
       lore:
         - "§aGérer les membres de la team"
     editName:
-      itemName: "§5§lModifier le nom"
+      itemName: "§5§nModifier le nom"
       itemType: PAPER
       slot: 21
       rankPath: manage.editName
       lore:
         - "§aModifier le nom de la team"
     editPrefix:
-      itemName: "§5§lModifier le préfixe"
+      itemName: "§5§nModifier le préfixe"
       itemType: NAME_TAG
       slot: 22
       rankPath: manage.editPrefix
       lore:
         - "§aModifier le préfixe de la team"
     setTeamHome:
-      itemName: "§5§lCréer le home"
+      itemName: "§5§nCréer le home"
       itemType: GREEN_BED
       slot: 23
       rankPath: manage.setTeamHome
       lore:
         - "§aDéfinir le home de la team"
     removeTeamHome:
-      itemName: "§5§lSupprimer la home"
+      itemName: "§5§nSupprimer la home"
       itemType: RED_BED
       slot: 24
       rankPath: manage.removeTeamHome
       lore:
         - "§aRetirer le home de la team"
     editPermissions:
-      itemName: "§5§lModifier les permissions"
+      itemName: "§5§nModifier les permissions"
       itemType: REDSTONE
       slot: 25
       rankPath: manage.editPermissions
       lore:
         - "§aModifier les permissions de la team"
     storageDirectory:
-      itemName: "§5§lAccès aux stockages"
+      itemName: "§5§nAccès aux stockages"
       itemType: BARREL
       slot: 32
       rankPath: member.storageDirectory
@@ -642,7 +636,7 @@ inventories:
         - "§aPermet d'avoir accès aux"
         - "§astockages de la team"
     upgradeStorageAmount:
-      itemName: "§5§lAugmenter les stockages disponibles"
+      itemName: "§5§nAugmenter les stockages disponibles"
       itemType: COMPOSTER
       slot: 30
       rankPath: manage.upgradeStorageAmount
@@ -650,35 +644,35 @@ inventories:
         - "§aAugmenter le nombre de stockages"
         - "§adisponible dans la team"
     addAlliance:
-      itemName: "§5§lAjouter une alliance"
+      itemName: "§5§nAjouter une alliance"
       itemType: PRISMARINE_SHARD
       slot: 31
       rankPath: editAlliances.addAlliance
       lore:
         - "§aAjouter une alliance à la team"
     removeAlliance:
-      itemName: "§5§lRetirer une alliance"
+      itemName: "§5§nRetirer une alliance"
       itemType: PRISMARINE_CRYSTALS
       slot: 32
       rankPath: editAlliances.removeAlliance
       lore:
         - "§aRetirer une alliance de la team"
     seeTeamAlliances:
-      itemName: "§5§lVoir les alliances"
+      itemName: "§5§nVoir les alliances"
       itemType: ENDER_EYE
       slot: 33
       rankPath: member.seeTeamAlliances
       lore:
         - "§aVoir les alliances de la team"
     close:
-      itemName: "§5§lRetour au menu de gestion"
+      itemName: "§c§oRetour"
       itemType: BARRIER
       slot: 44
 
 
   storage:
     close:
-      itemName: "§5§lRetour aux stockages"
+      itemName: "§c§oRetour"
       itemType: BARRIER
       slot: 53
 
@@ -715,6 +709,6 @@ inventories:
       storageId: 5
       slot: 15
     close:
-      itemName: "§5§lRetour au menu membre"
+      itemName: "§c§oRetour"
       itemType: BARRIER
       slot: 26

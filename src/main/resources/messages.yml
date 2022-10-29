@@ -6,7 +6,6 @@ common:
   already_alliance: "Vous êtes déjà en alliance avec cette team"
   already_unlocked: "§7Vous avez déjà débloqué cette amélioration"
   invalid_command: "§7Commande invalide"
-  member_not_in_this_team: "§7Le membre n'est pas dans cette team"
   name_already_exists: "§7Ce nom de team existe déjà"
   name_cannot_contain_space: "§7Le nom de la team ne doit pas contenir d'espace"
   name_is_too_long: "§7Le nom est trop long"

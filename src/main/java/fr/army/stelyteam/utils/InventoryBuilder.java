@@ -488,7 +488,7 @@ public class InventoryBuilder {
             lore = replaceInLore(lore, "%MEMBERS%", String.join(", ", allianceMembers));
             
             
-            if (playerHasPermission(playername, teamId, "seeAllliances")){ 
+            if (playerHasPermission(playername, teamId, "seeTeamAlliances")){ 
                 item = ItemBuilder.getPlayerHead(allianceOwner, itemName, lore);
             }else{
                 item = ItemBuilder.getItem(
@@ -546,6 +546,7 @@ public class InventoryBuilder {
             
             lore = replaceInLore(lore, "%OWNER%", allianceOwnerName);
             lore = replaceInLore(lore, "%NAME%", str);
+            lore = replaceInLore(lore, "%PREFIX%", alliancePrefix);
             lore = replaceInLore(lore, "%DATE%", allianceDate);
             lore = replaceInLore(lore, "%MEMBER_COUNT%", IntegerToString(teamMembers));
             lore = replaceInLore(lore, "%MAX_MEMBERS%", IntegerToString(maxMembers+teamMembersLelvel));

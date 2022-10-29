@@ -12,6 +12,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import org.bukkit.configuration.file.YamlConfiguration;
+
 import fr.army.stelyteam.StelyTeamPlugin;
 
 public class SQLManager {
@@ -81,7 +83,7 @@ public class SQLManager {
         if (isConnected()){
             try {
                 PreparedStatement queryPlayers = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'player' ('playerId' INTEGER, 'playerName' TEXT, 'teamRank' INTEGER, 'joinDate' TEXT, 'teamId' INTEGER, FOREIGN KEY('teamId') REFERENCES 'team'('teamId'), PRIMARY KEY('playerId' AUTOINCREMENT));");
-                PreparedStatement queryTeams = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'team' ('teamId' INTEGER, 'teamName' TEXT UNIQUE, 'teamPrefix' TEXT, 'teamMoney' INTEGER, 'creationDate' TEXT, 'improvLvlMembers' INTEGER, 'teamStorageLvl' INTEGER, 'unlockedTeamBank' INTEGER, 'teamOwnerPlayerId' INTEGER UNIQUE, PRIMARY KEY('teamId' AUTOINCREMENT), FOREIGN KEY('teamOwnerPlayerId') REFERENCES 'player'('playerId'));");
+                PreparedStatement queryTeams = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'team' ('teamId' INTEGER, 'teamName' TEXT UNIQUE, 'teamPrefix' TEXT, 'teamDescription' TEXT, 'teamMoney' INTEGER, 'creationDate' TEXT, 'improvLvlMembers' INTEGER, 'teamStorageLvl' INTEGER, 'unlockedTeamBank' INTEGER, 'teamOwnerPlayerId' INTEGER UNIQUE, PRIMARY KEY('teamId' AUTOINCREMENT), FOREIGN KEY('teamOwnerPlayerId') REFERENCES 'player'('playerId'));");
                 PreparedStatement queryTeamStorages = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'teamStorage' ('storageId' INTEGER, 'teamId' INTEGER, 'storageContent' BLOB, PRIMARY KEY('storageId','teamId'), FOREIGN KEY('teamId') REFERENCES 'team'('teamId'), FOREIGN KEY('storageId') REFERENCES 'storage'('storageId'));");
                 PreparedStatement queryAlliances = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'alliance' ('teamId' INTEGER, 'teamAllianceId' INTEGER, 'allianceDate' TEXT, FOREIGN KEY('teamId') REFERENCES 'team'('teamId'), FOREIGN KEY('teamAllianceId') REFERENCES 'team'('teamId'), PRIMARY KEY('teamId','teamAllianceId'));");
                 PreparedStatement queryAssignements = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'assignement' ('teamId' INTEGER, 'permLabel' TEXT, 'teamRank' INTEGER, FOREIGN KEY('teamId') REFERENCES 'team'('teamId'), PRIMARY KEY('permLabel','teamId'));");
@@ -221,15 +223,16 @@ public class SQLManager {
                 queryMember.executeUpdate();
                 queryMember.close();
                 
-                PreparedStatement queryTeam = connection.prepareStatement("INSERT INTO team (teamName, teamPrefix, teamMoney, creationDate, improvLvlMembers, teamStorageLvl, unlockedTeamBank, teamOwnerPlayerId) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+                PreparedStatement queryTeam = connection.prepareStatement("INSERT INTO team (teamName, teamPrefix, teamDescription, teamMoney, creationDate, improvLvlMembers, teamStorageLvl, unlockedTeamBank, teamOwnerPlayerId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
                 queryTeam.setString(1, teamName);
                 queryTeam.setString(2, teamPrefix);
-                queryTeam.setInt(3, 0);
-                queryTeam.setString(4, getCurrentDate());
-                queryTeam.setInt(5, 0);
+                queryTeam.setString(3, "Aucune description");
+                queryTeam.setInt(4, 0);
+                queryTeam.setString(5, getCurrentDate());
                 queryTeam.setInt(6, 0);
                 queryTeam.setInt(7, 0);
-                queryTeam.setInt(8, getPlayerId(ownerName));
+                queryTeam.setInt(8, 0);
+                queryTeam.setInt(9, getPlayerId(ownerName));
                 queryTeam.executeUpdate();
                 queryTeam.close();
 
@@ -250,7 +253,7 @@ public class SQLManager {
             try {
                 PreparedStatement query = connection.prepareStatement("INSERT INTO player (playerName, teamRank, joinDate, teamId) VALUES (?, ?, ?, ?)");
                 query.setString(1, playerName);
-                query.setInt(2, 5);
+                query.setInt(2, plugin.getLastRank());
                 query.setString(3, getCurrentDate());
                 query.setInt(4, getTeamId(teamName));
                 query.executeUpdate();
@@ -274,6 +277,17 @@ public class SQLManager {
                 queryPermissions.setInt(1, getTeamId(teamName));
                 queryPermissions.executeUpdate();
                 queryPermissions.close();
+
+                PreparedStatement queryAlliances = connection.prepareStatement("DELETE FROM alliance WHERE teamId = ? OR teamAllianceId = ?");
+                queryAlliances.setInt(1, getTeamId(teamName));
+                queryAlliances.setInt(2, getTeamId(teamName));
+                queryAlliances.executeUpdate();
+                queryAlliances.close();
+
+                PreparedStatement queryTeamStorage = connection.prepareStatement("DELETE FROM teamStorage WHERE teamId = ?");
+                queryTeamStorage.setInt(1, getTeamId(teamName));
+                queryTeamStorage.executeUpdate();
+                queryTeamStorage.close();
 
                 PreparedStatement queryTeams = connection.prepareStatement("DELETE FROM team WHERE teamName = ?");
                 queryTeams.setString(1, teamName);
@@ -336,16 +350,16 @@ public class SQLManager {
     public void updateTeamOwner(String teamName, String teamOwner, String newTeamOwner){
         if(isConnected()){
             try {
-                PreparedStatement queryOwner = connection.prepareStatement("UPDATE player SET teamRank = ? WHERE teamName = ? AND playerName = ?");
+                PreparedStatement queryOwner = connection.prepareStatement("UPDATE player SET teamRank = ? WHERE teamId = ? AND playerName = ?");
                 queryOwner.setInt(1, 1);
-                queryOwner.setString(2, teamName);
+                queryOwner.setInt(2, getTeamId(teamName));
                 queryOwner.setString(3, teamOwner);
                 queryOwner.executeUpdate();
                 queryOwner.close();
 
-                PreparedStatement queryNewOwner = connection.prepareStatement("UPDATE player SET teamRank = ? WHERE teamName = ? AND playerName = ?");
+                PreparedStatement queryNewOwner = connection.prepareStatement("UPDATE player SET teamRank = ? WHERE teamId = ? AND playerName = ?");
                 queryNewOwner.setInt(1, 0);
-                queryNewOwner.setString(2, teamName);
+                queryNewOwner.setInt(2, getTeamId(teamName));
                 queryNewOwner.setString(3, newTeamOwner);
                 queryNewOwner.executeUpdate();
                 queryNewOwner.close();
