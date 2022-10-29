@@ -37,7 +37,6 @@ public class ConvAddAlliance extends StringPrompt {
         String authorName = author.getName();
         String teamName = sqlManager.getTeamNameFromPlayerName(authorName);
         String ownerName = sqlManager.getTeamOwnerName(answer);
-        Player owner = Bukkit.getPlayer(ownerName);
         
         if (!sqlManager.teamNameExists(answer)) {
             con.getForWhom().sendRawMessage(messageManager.getMessage("common.team_not_exist"));
@@ -45,13 +44,11 @@ public class ConvAddAlliance extends StringPrompt {
         }else if (sqlManager.isAlliance(teamName, answer)) {
             con.getForWhom().sendRawMessage(messageManager.getMessage("common.already_alliance"));
             return null;
-        }else if (owner == null) {
-            con.getForWhom().sendRawMessage(messageManager.getMessage("common.owner_not_connected"));
-            return null;
-        }else if (plugin.containTeamAction(ownerName, "addAlliance")) {
-            con.getForWhom().sendRawMessage(messageManager.getMessage("common.owner_already_action"));
-            return null;
         }
+        // }else if (plugin.containTeamAction(ownerName, "addAlliance")) {
+        //     con.getForWhom().sendRawMessage(messageManager.getMessage("common.owner_already_action"));
+        //     return null;
+        // }
         
 
         BaseComponent[] components = new ComponentBuilder(messageManager.getReplaceMessage("manage_alliances.add_alliance.invitation_received", authorName))
@@ -60,16 +57,17 @@ public class ConvAddAlliance extends StringPrompt {
             .create();
 
             
-        // owner.spigot().sendMessage(components);
         for (String playerName: sqlManager.getTeamMembersWithRank(answer, 1)){
             Player player = Bukkit.getPlayer(playerName);
-            if (player != null) {
+            if (player != null && !plugin.containTeamAction(playerName, "addAlliance")) {
                 plugin.addTeamTempAction(authorName, playerName, teamName, "addAlliance");
                 player.spigot().sendMessage(components);
+                con.getForWhom().sendRawMessage(messageManager.getMessage("manage_alliances.add_alliance.invitation_sent"));
                 break;
             }
         }
-        con.getForWhom().sendRawMessage(messageManager.getMessage("manage_alliances.add_alliance.invitation_sent"));
+
+        con.getForWhom().sendRawMessage(messageManager.getMessage("common.owners_not_connected"));
         
         // Inventory inventory = inventoryBuilder.createConfirmInventory();
         // player.openInventory(inventory);
@@ -82,13 +80,4 @@ public class ConvAddAlliance extends StringPrompt {
         // return "Envoie le pseudo du joueur à ajouter";
         return messageManager.getMessage("manage_alliances.add_alliance.send_team_name");
     }
-
-
-    private boolean hasReachedMaxMember(String teamId) {
-        Integer memberAmount = sqlManager.getTeamMembers(teamId).size();
-        Integer maxMember = config.getInt("teamMaxMembers");
-        Integer teamMembersLelvel = sqlManager.getImprovLvlMembers(teamId);
-        return memberAmount >= maxMember + teamMembersLelvel;
-    }
-
 }
