@@ -9,6 +9,7 @@ common:
   name_already_exists: "§cCe nom de team existe déjà."
   name_cannot_contain_space: "§cLe nom de la team ne doit pas contenir d'espace."
   name_is_too_long: "§cLe nom de la team est trop long."
+  no_command_in_conv: "§cVous ne pouvez pas utiliser de commande dans une conversation."
   not_in_alliance: "§cVous n'êtes pas en alliance avec cette team."
   not_enough_money: "§cVous n'avez pas assez d'argent."
   no_invitation: "§cVous n'avez reçu aucune invitation."

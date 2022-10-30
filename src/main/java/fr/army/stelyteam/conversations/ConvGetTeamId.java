@@ -48,6 +48,9 @@ public class ConvGetTeamId extends StringPrompt {
         }
 
 
+        if (plugin.getCreationTeamTemp(authorName) != null){
+            plugin.removeCreationTeamTemp(authorName);
+        }
         plugin.addCreationTeamTempName(authorName, answer);
         conversationBuilder.getNameInput(author, new ConvGetTeamPrefix(plugin));
         return null;

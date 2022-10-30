@@ -36,7 +36,7 @@ public class ConvAddAlliance extends StringPrompt {
         Player author = (Player) con.getForWhom();
         String authorName = author.getName();
         String teamName = sqlManager.getTeamNameFromPlayerName(authorName);
-        
+
         if (!sqlManager.teamNameExists(answer)) {
             con.getForWhom().sendRawMessage(messageManager.getMessage("common.team_not_exist"));
             return null;
