@@ -45,6 +45,10 @@ public class MessageManager {
         return getPluginPrefix() + messages.getString(path).replace("%AUTHOR%", author).replace("%RECEIVER%", receiver);
     }
 
+    public String replaceAuthorAndTeamName(String path, String author, String teamName) {
+        return getPluginPrefix() + messages.getString(path).replace("%AUTHOR%", author).replace("%TEAM%", teamName);
+    }
+
     private String getPluginPrefix (){
         return messages.getString("prefix");
     }

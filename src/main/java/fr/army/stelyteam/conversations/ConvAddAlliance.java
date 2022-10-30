@@ -36,7 +36,6 @@ public class ConvAddAlliance extends StringPrompt {
         Player author = (Player) con.getForWhom();
         String authorName = author.getName();
         String teamName = sqlManager.getTeamNameFromPlayerName(authorName);
-        String ownerName = sqlManager.getTeamOwnerName(answer);
         
         if (!sqlManager.teamNameExists(answer)) {
             con.getForWhom().sendRawMessage(messageManager.getMessage("common.team_not_exist"));
@@ -51,7 +50,7 @@ public class ConvAddAlliance extends StringPrompt {
         // }
         
 
-        BaseComponent[] components = new ComponentBuilder(messageManager.getReplaceMessage("manage_alliances.add_alliance.invitation_received", authorName))
+        BaseComponent[] components = new ComponentBuilder(messageManager.replaceAuthor("manage_alliances.add_alliance.invitation_received", authorName))
             .append(messageManager.getMessageWithoutPrefix("manage_alliances.add_alliance.accept_invitation")).event(new ClickEvent(Action.RUN_COMMAND, "/st accept"))
             .append(messageManager.getMessageWithoutPrefix("manage_alliances.add_alliance.refuse_invitation")).event(new ClickEvent(Action.RUN_COMMAND, "/st deny"))
             .create();

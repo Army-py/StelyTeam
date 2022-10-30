@@ -114,9 +114,11 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
                     result.add(subcommand);
                 }
             }
-            for (String subcommand : subCommandsOp.keySet()) {
-                if (subcommand.toLowerCase().toLowerCase().startsWith(args[0])){
-                    result.add(subcommand);
+            if (sender.isOp()){
+                for (String subcommand : subCommandsOp.keySet()) {
+                    if (subcommand.toLowerCase().toLowerCase().startsWith(args[0])){
+                        result.add(subcommand);
+                    }
                 }
             }
             return result;
