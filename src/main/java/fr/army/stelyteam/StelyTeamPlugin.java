@@ -16,15 +16,15 @@ import fr.army.stelyteam.commands.CommandManager;
 import fr.army.stelyteam.events.InventoryClickManager;
 import fr.army.stelyteam.events.InventoryCloseManager;
 import fr.army.stelyteam.events.PlayerQuit;
-import fr.army.stelyteam.utils.ColorsBuilder;
-import fr.army.stelyteam.utils.EconomyManager;
-import fr.army.stelyteam.utils.InventoryBuilder;
-import fr.army.stelyteam.utils.MessageManager;
-import fr.army.stelyteam.utils.SQLManager;
-import fr.army.stelyteam.utils.SQLiteManager;
-import fr.army.stelyteam.utils.SerializeManager;
 import fr.army.stelyteam.utils.TeamMembersUtils;
+import fr.army.stelyteam.utils.builder.ColorsBuilder;
+import fr.army.stelyteam.utils.builder.InventoryBuilder;
 import fr.army.stelyteam.utils.conversation.ConversationBuilder;
+import fr.army.stelyteam.utils.manager.EconomyManager;
+import fr.army.stelyteam.utils.manager.MessageManager;
+import fr.army.stelyteam.utils.manager.SQLManager;
+import fr.army.stelyteam.utils.manager.SQLiteManager;
+import fr.army.stelyteam.utils.manager.SerializeManager;
 
 public class StelyTeamPlugin extends JavaPlugin {
 
@@ -52,6 +52,18 @@ public class StelyTeamPlugin extends JavaPlugin {
     public ArrayList<String[]> createTeamTemp = new ArrayList<String[]>();
     // {teamId, storageInstance, storageId, content}
     public ArrayList<Object[]> storageTemp = new ArrayList<Object[]>();
+
+    // {senderName, receiverName, actionName, teamName, teamPrefix}
+    // public ArrayList<Object> tempCache = new ArrayList<Object>();
+
+    // {teamName, storageId, storageInstance, storageContent}
+    public ArrayList<Object> cachedStorage = new ArrayList<Object>();
+
+    // {senderName, receiverName, actionName, teamName, teamPrefix}
+    public ArrayList<Object> cachedTempAction = new ArrayList<Object>();
+
+    // {teamName, teamPrefix, teamDescription, teamMoney, creationDate, improvLvlMembers, teamStorageLvl, unlockedTeamBank, teamOwner}
+    public ArrayList<Object> cachedTeam = new ArrayList<Object>();
 
 
     @Override

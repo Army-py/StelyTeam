@@ -1,9 +1,9 @@
 package fr.army.stelyteam.conversations;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.utils.MessageManager;
-import fr.army.stelyteam.utils.SQLManager;
 import fr.army.stelyteam.utils.conversation.ConversationBuilder;
+import fr.army.stelyteam.utils.manager.MessageManager;
+import fr.army.stelyteam.utils.manager.SQLManager;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.conversations.ConversationContext;

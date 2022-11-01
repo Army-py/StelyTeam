@@ -11,13 +11,13 @@ import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.conversations.ConvEditTeamID;
 import fr.army.stelyteam.conversations.ConvEditTeamPrefix;
 import fr.army.stelyteam.conversations.ConvGetTeamId;
-import fr.army.stelyteam.utils.EconomyManager;
-import fr.army.stelyteam.utils.InventoryBuilder;
-import fr.army.stelyteam.utils.MessageManager;
-import fr.army.stelyteam.utils.SQLManager;
-import fr.army.stelyteam.utils.SQLiteManager;
 import fr.army.stelyteam.utils.TeamMembersUtils;
+import fr.army.stelyteam.utils.builder.InventoryBuilder;
 import fr.army.stelyteam.utils.conversation.ConversationBuilder;
+import fr.army.stelyteam.utils.manager.EconomyManager;
+import fr.army.stelyteam.utils.manager.MessageManager;
+import fr.army.stelyteam.utils.manager.SQLManager;
+import fr.army.stelyteam.utils.manager.SQLiteManager;
 
 public class ConfirmInventory {
 

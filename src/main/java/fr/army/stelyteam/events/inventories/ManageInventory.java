@@ -1,11 +1,11 @@
 package fr.army.stelyteam.events.inventories;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.utils.EconomyManager;
-import fr.army.stelyteam.utils.InventoryBuilder;
-import fr.army.stelyteam.utils.MessageManager;
-import fr.army.stelyteam.utils.SQLManager;
-import fr.army.stelyteam.utils.SQLiteManager;
+import fr.army.stelyteam.utils.builder.InventoryBuilder;
+import fr.army.stelyteam.utils.manager.EconomyManager;
+import fr.army.stelyteam.utils.manager.MessageManager;
+import fr.army.stelyteam.utils.manager.SQLManager;
+import fr.army.stelyteam.utils.manager.SQLiteManager;
 
 import java.util.List;
 

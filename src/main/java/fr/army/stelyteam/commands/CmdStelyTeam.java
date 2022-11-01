@@ -30,10 +30,10 @@ import fr.army.stelyteam.commands.subCommands.team.SubCmdAccept;
 import fr.army.stelyteam.commands.subCommands.team.SubCmdDeny;
 import fr.army.stelyteam.commands.subCommands.utility.SubCmdHome;
 import fr.army.stelyteam.commands.subCommands.utility.SubCmdVisual;
-import fr.army.stelyteam.utils.InventoryBuilder;
-import fr.army.stelyteam.utils.MessageManager;
-import fr.army.stelyteam.utils.SQLManager;
-import fr.army.stelyteam.utils.SQLiteManager;
+import fr.army.stelyteam.utils.builder.InventoryBuilder;
+import fr.army.stelyteam.utils.manager.MessageManager;
+import fr.army.stelyteam.utils.manager.SQLManager;
+import fr.army.stelyteam.utils.manager.SQLiteManager;
 
 public class CmdStelyTeam implements CommandExecutor, TabCompleter {
 

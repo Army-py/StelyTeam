@@ -10,9 +10,9 @@ import fr.army.stelyteam.conversations.ConvAddAlliance;
 import fr.army.stelyteam.conversations.ConvAddMember;
 import fr.army.stelyteam.conversations.ConvRemoveAlliance;
 import fr.army.stelyteam.conversations.ConvRemoveMember;
-import fr.army.stelyteam.utils.InventoryBuilder;
-import fr.army.stelyteam.utils.SQLManager;
+import fr.army.stelyteam.utils.builder.InventoryBuilder;
 import fr.army.stelyteam.utils.conversation.ConversationBuilder;
+import fr.army.stelyteam.utils.manager.SQLManager;
 
 
 public class EditAlliancesInventory {

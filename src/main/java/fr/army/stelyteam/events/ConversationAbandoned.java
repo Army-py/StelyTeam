@@ -7,8 +7,8 @@ import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.InactivityConversationCanceller;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.utils.MessageManager;
 import fr.army.stelyteam.utils.conversation.ConversationSetCanceller;
+import fr.army.stelyteam.utils.manager.MessageManager;
 
 public class ConversationAbandoned implements ConversationAbandonedListener {
 

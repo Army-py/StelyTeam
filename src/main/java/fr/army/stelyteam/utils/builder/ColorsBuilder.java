@@ -1,4 +1,4 @@
-package fr.army.stelyteam.utils;
+package fr.army.stelyteam.utils.builder;
 
 import java.util.Locale;
 import java.util.regex.Matcher;

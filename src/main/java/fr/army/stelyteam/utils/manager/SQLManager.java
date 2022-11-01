@@ -1,8 +1,5 @@
-package fr.army.stelyteam.utils;
+package fr.army.stelyteam.utils.manager;
 
-import java.io.InputStream;
-import java.sql.Array;
-import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -11,8 +8,6 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-
-import org.bukkit.configuration.file.YamlConfiguration;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 

@@ -1,4 +1,4 @@
-package fr.army.stelyteam.utils;
+package fr.army.stelyteam.utils.manager;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 

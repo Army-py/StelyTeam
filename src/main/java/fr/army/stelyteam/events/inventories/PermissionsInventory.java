@@ -6,9 +6,9 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.utils.InventoryBuilder;
-import fr.army.stelyteam.utils.SQLManager;
 import fr.army.stelyteam.utils.TeamMembersUtils;
+import fr.army.stelyteam.utils.builder.InventoryBuilder;
+import fr.army.stelyteam.utils.manager.SQLManager;
 
 
 public class PermissionsInventory {

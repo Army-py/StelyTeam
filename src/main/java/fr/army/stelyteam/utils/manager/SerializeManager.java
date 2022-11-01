@@ -1,4 +1,4 @@
-package fr.army.stelyteam.utils;
+package fr.army.stelyteam.utils.manager;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

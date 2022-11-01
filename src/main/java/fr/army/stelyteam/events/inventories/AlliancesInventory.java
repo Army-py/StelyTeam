@@ -6,7 +6,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.utils.InventoryBuilder;
+import fr.army.stelyteam.utils.builder.InventoryBuilder;
 
 
 public class AlliancesInventory {

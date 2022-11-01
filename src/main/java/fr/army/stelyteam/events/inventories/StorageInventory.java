@@ -9,9 +9,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.utils.InventoryBuilder;
-import fr.army.stelyteam.utils.SQLManager;
-import fr.army.stelyteam.utils.SerializeManager;
+import fr.army.stelyteam.utils.builder.InventoryBuilder;
+import fr.army.stelyteam.utils.manager.SQLManager;
+import fr.army.stelyteam.utils.manager.SerializeManager;
 
 public class StorageInventory {
     
