@@ -7,19 +7,15 @@ import org.bukkit.inventory.Inventory;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.conversations.ConvAddAlliance;
-import fr.army.stelyteam.conversations.ConvAddMember;
 import fr.army.stelyteam.conversations.ConvRemoveAlliance;
-import fr.army.stelyteam.conversations.ConvRemoveMember;
 import fr.army.stelyteam.utils.builder.InventoryBuilder;
 import fr.army.stelyteam.utils.conversation.ConversationBuilder;
-import fr.army.stelyteam.utils.manager.SQLManager;
 
 
 public class EditAlliancesInventory {
     private InventoryClickEvent event;
     private StelyTeamPlugin plugin;
     private YamlConfiguration config;
-    private SQLManager sqlManager;
     private ConversationBuilder conversationBuilder;
     private InventoryBuilder inventoryBuilder;
 
@@ -28,7 +24,6 @@ public class EditAlliancesInventory {
         this.event = event;
         this.plugin = plugin;
         this.config = plugin.getConfig();
-        this.sqlManager = plugin.getSQLManager();
         this.conversationBuilder = plugin.getConversationBuilder();
         this.inventoryBuilder = plugin.getInventoryBuilder();
     }

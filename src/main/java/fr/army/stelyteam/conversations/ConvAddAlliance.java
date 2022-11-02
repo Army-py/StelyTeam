@@ -21,10 +21,12 @@ public class ConvAddAlliance extends StringPrompt {
     private SQLManager sqlManager;
     private YamlConfiguration config;
     private MessageManager messageManager;
+    private Object cacheManager;
 
 
     public ConvAddAlliance(StelyTeamPlugin plugin){
         this.plugin = plugin;
+        this.cacheManager = cacheManager;
         this.sqlManager = plugin.getSQLManager();
         this.config = plugin.getConfig();
         this.messageManager = plugin.getMessageManager();

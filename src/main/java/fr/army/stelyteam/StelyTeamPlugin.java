@@ -20,6 +20,7 @@ import fr.army.stelyteam.utils.TeamMembersUtils;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
 import fr.army.stelyteam.utils.builder.InventoryBuilder;
 import fr.army.stelyteam.utils.conversation.ConversationBuilder;
+import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.EconomyManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
 import fr.army.stelyteam.utils.manager.SQLManager;
@@ -30,6 +31,7 @@ public class StelyTeamPlugin extends JavaPlugin {
 
     private YamlConfiguration config;
     private YamlConfiguration messages;
+    private CacheManager cacheManager;
     private SQLManager sqlManager;
     private SQLiteManager sqliteManager;
     private EconomyManager economyManager;
@@ -53,18 +55,6 @@ public class StelyTeamPlugin extends JavaPlugin {
     // {teamId, storageInstance, storageId, content}
     public ArrayList<Object[]> storageTemp = new ArrayList<Object[]>();
 
-    // {senderName, receiverName, actionName, teamName, teamPrefix}
-    // public ArrayList<Object> tempCache = new ArrayList<Object>();
-
-    // {teamName, storageId, storageInstance, storageContent}
-    public ArrayList<Object> cachedStorage = new ArrayList<Object>();
-
-    // {senderName, receiverName, actionName, teamName, teamPrefix}
-    public ArrayList<Object> cachedTempAction = new ArrayList<Object>();
-
-    // {teamName, teamPrefix, teamDescription, teamMoney, creationDate, improvLvlMembers, teamStorageLvl, unlockedTeamBank, teamOwner}
-    public ArrayList<Object> cachedTeam = new ArrayList<Object>();
-
 
     @Override
     public void onEnable() {
@@ -85,6 +75,7 @@ public class StelyTeamPlugin extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
         }
         
+        this.cacheManager = new CacheManager();
         this.sqlManager.createTables();
         this.sqliteManager.createTables();
         this.economyManager = new EconomyManager(this);
@@ -125,20 +116,7 @@ public class StelyTeamPlugin extends JavaPlugin {
     }
 
 
-    // public NBTTagCompound getNBTTag(ItemStack bukkitStack) {
-    //     net.minecraft.world.item.ItemStack itemStack = CraftItemStack.asNMSCopy(bukkitStack);
-    //     NBTTagCompound nbtTagCompound = itemStack.getTag() != null ? itemStack.getTag() : new NBTTagCompound();
-    //     return nbtTagCompound;
-    // }
-
-
-    // public ItemStack getFromNBTTag(ItemStack bukkitStack, NBTTagCompound nbtTagCompound) {
-    //     net.minecraft.world.item.ItemStack itemStack = CraftItemStack.asNMSCopy(bukkitStack);
-    //     itemStack.setTag(nbtTagCompound);
-    //     return CraftItemStack.asBukkitCopy(itemStack);
-    // }
-
-
+    // getTempAction
     public String[] getTeamActions(String playerName) {
         for (String[] strings : teamsTempActions) {
             if (strings[0].equals(playerName) || strings[1].equals(playerName)) {
@@ -148,10 +126,12 @@ public class StelyTeamPlugin extends JavaPlugin {
         return null;
     }
 
+    // addTempAction
     public void addTeamTempAction(String sender, String receiver, String teamId, String action) {
         teamsTempActions.add(new String[]{sender, receiver, teamId, action});
     }
 
+    // removePlayerAction
     public void removeTeamTempAction(String playerName) {
         for (String[] strings : teamsTempActions) {
             if (strings[0].equals(playerName) || strings[1].equals(playerName)) {
@@ -161,6 +141,7 @@ public class StelyTeamPlugin extends JavaPlugin {
         }
     }
 
+    // playerHasActionName
     public boolean containTeamAction(String playerName, String actionName) {
         if (teamsTempActions.isEmpty()) return false;
         for (String[] strings : teamsTempActions) {
@@ -171,7 +152,7 @@ public class StelyTeamPlugin extends JavaPlugin {
         return false;
     }
 
-
+    // getTempAction
     public String[] getCreationTeamTemp(String playerName) {
         for (String[] strings : createTeamTemp) {
             if (strings[0].equals(playerName)) {
@@ -181,10 +162,12 @@ public class StelyTeamPlugin extends JavaPlugin {
         return null;
     }
 
+    // addTempAction
     public void addCreationTeamTempName(String owner, String teamId) {
         createTeamTemp.add(new String[]{owner, teamId, ""});
     }
 
+    // setActionTeamPrefix
     public void addCreationTeamTempPrefix(String playerName, String prefix) {
         for (int i = 0; i < createTeamTemp.size(); i++) {
             if (createTeamTemp.get(i)[0].equals(playerName)) {
@@ -194,6 +177,7 @@ public class StelyTeamPlugin extends JavaPlugin {
         }
     }
 
+    // removePlayerAction
     public void removeCreationTeamTemp(String playerName) {
         for (String[] strings : createTeamTemp) {
             if (strings[0].equals(playerName)) {
@@ -203,6 +187,7 @@ public class StelyTeamPlugin extends JavaPlugin {
         }
     }
 
+    // playerHasAction
     public boolean containCreationTeamTemp(String playerName) {
         if (createTeamTemp.isEmpty()) return false;
         for (String[] strings : createTeamTemp) {
@@ -214,16 +199,17 @@ public class StelyTeamPlugin extends JavaPlugin {
     }
 
 
+    // getPlayerActionName
     public String getPlayerActions(String playerName) {
         return playersTempActions.get(playerName);
     }
 
-
+    // removePlayerAction
     public void removePlayerTempAction(String playerName) {
         playersTempActions.remove(playerName);
     }
 
-
+    // playerHasActionName
     public boolean containPlayerTempAction(String playerName, String actionName) {
         if (playersTempActions.isEmpty()) return false;
         if (playersTempActions.containsKey(playerName) && playersTempActions.get(playerName).equals(actionName)) {
@@ -233,7 +219,7 @@ public class StelyTeamPlugin extends JavaPlugin {
         }
     }
 
-
+    // containsStorage
     public boolean containTeamStorage(String teamId, String storageId) {
         if (storageTemp.isEmpty()) return false;
         for (Object[] objects : storageTemp) {
@@ -244,34 +230,12 @@ public class StelyTeamPlugin extends JavaPlugin {
         return false;
     }
 
-
-    public boolean teamStorageHasContent(String teamId, String storageId) {
-        if (storageTemp.isEmpty()) return false;
-        for (Object[] objects : storageTemp) {
-            if (objects[0].equals(teamId) && objects[2].equals(storageId) && !((String) objects[3]).isEmpty()) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-
-    public boolean containLastPlayer(String teamId, String playerName) {
-        if (storageTemp.isEmpty()) return false;
-        for (Object[] objects : storageTemp) {
-            if (objects[0].equals(teamId) && objects[1].equals(playerName)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-
+    // addStorage
     public void addTeamStorage(String teamId, Inventory inventoryInstance, String storageId, String content) {
         storageTemp.add(new Object[]{teamId, inventoryInstance, storageId, content});
     }
 
-
+    // removeStorage
     public void removeTeamStorage(String teamId, String storageId) {
         for (Object[] objects : storageTemp) {
             if (objects[0].equals(teamId) && objects[2].equals(storageId)) {
@@ -281,7 +245,7 @@ public class StelyTeamPlugin extends JavaPlugin {
         }
     }
 
-
+    // replaceStorage
     public void replaceTeamStorage(String teamId, Inventory inventoryInstance, String storageId, String content) {
         for (Object[] objects : storageTemp) {
             if (objects[0].equals(teamId) && objects[2].equals(storageId)) {
@@ -292,7 +256,7 @@ public class StelyTeamPlugin extends JavaPlugin {
         }
     }
 
-
+    // getStorage
     public String getTeamStorageContent(String teamId, String storageId) {
         for (Object[] objects : storageTemp) {
             if (objects[0].equals(teamId) && objects[2].equals(storageId)) {
@@ -302,7 +266,7 @@ public class StelyTeamPlugin extends JavaPlugin {
         return null;
     }
 
-
+    // Storage.getStorageInstance
     public Inventory getStorageInstance(String teamId, String storageId) {
         for (Object[] objects : storageTemp) {
             if (objects[0].equals(teamId) && objects[2].equals(storageId)) {
@@ -340,6 +304,10 @@ public class StelyTeamPlugin extends JavaPlugin {
 
     public YamlConfiguration getMessages() {
         return messages;
+    }
+
+    public CacheManager getCacheManager() {
+        return cacheManager;
     }
 
     public SQLManager getSQLManager() {

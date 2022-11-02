@@ -9,6 +9,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import org.bukkit.configuration.file.YamlConfiguration;
+
 import fr.army.stelyteam.StelyTeamPlugin;
 
 public class SQLManager {
@@ -21,6 +23,7 @@ public class SQLManager {
 
     private Connection connection;
     private StelyTeamPlugin plugin;
+    private YamlConfiguration config;
 
     public SQLManager(StelyTeamPlugin plugin) {
         // this.host = App.config.getString("sql.host");
@@ -32,6 +35,7 @@ public class SQLManager {
         this.database = "bungeecord_StelyTeam.db";
 
         this.plugin = plugin;
+        this.config = plugin.getConfig();
     }
 
 
@@ -221,7 +225,7 @@ public class SQLManager {
                 PreparedStatement queryTeam = connection.prepareStatement("INSERT INTO team (teamName, teamPrefix, teamDescription, teamMoney, creationDate, improvLvlMembers, teamStorageLvl, unlockedTeamBank, teamOwnerPlayerId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
                 queryTeam.setString(1, teamName);
                 queryTeam.setString(2, teamPrefix);
-                queryTeam.setString(3, "Aucune description");
+                queryTeam.setString(3, config.getString("teamDefaultDescription"));
                 queryTeam.setInt(4, 0);
                 queryTeam.setString(5, getCurrentDate());
                 queryTeam.setInt(6, 0);
