@@ -9,7 +9,7 @@ import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.conversations.ConvAddAlliance;
 import fr.army.stelyteam.conversations.ConvRemoveAlliance;
 import fr.army.stelyteam.utils.builder.InventoryBuilder;
-import fr.army.stelyteam.utils.conversation.ConversationBuilder;
+import fr.army.stelyteam.utils.builder.conversation.ConversationBuilder;
 
 
 public class EditAlliancesInventory {

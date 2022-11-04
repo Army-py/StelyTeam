@@ -17,7 +17,7 @@ import fr.army.stelyteam.conversations.ConvEditOwner;
 import fr.army.stelyteam.conversations.ConvRemoveMember;
 import fr.army.stelyteam.utils.TeamMembersUtils;
 import fr.army.stelyteam.utils.builder.InventoryBuilder;
-import fr.army.stelyteam.utils.conversation.ConversationBuilder;
+import fr.army.stelyteam.utils.builder.conversation.ConversationBuilder;
 import fr.army.stelyteam.utils.manager.MessageManager;
 import fr.army.stelyteam.utils.manager.SQLManager;
 

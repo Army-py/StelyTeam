@@ -5,32 +5,39 @@ import org.bukkit.conversations.ConversationAbandonedListener;
 import org.bukkit.conversations.ConversationCanceller;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.InactivityConversationCanceller;
+import org.bukkit.entity.Player;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.utils.conversation.ConversationSetCanceller;
+import fr.army.stelyteam.utils.builder.conversation.ConversationSetCanceller;
+import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
 
 public class ConversationAbandoned implements ConversationAbandonedListener {
 
+    private CacheManager cacheManager;
     private MessageManager messageManager;
 
     public ConversationAbandoned(StelyTeamPlugin plugin){
+        this.cacheManager = plugin.getCacheManager();
         this.messageManager = new MessageManager(plugin);
     }
 
     @Override
     public void conversationAbandoned(ConversationAbandonedEvent abandonedEvent) {
         ConversationCanceller canceller = abandonedEvent.getCanceller();
+        ConversationContext context = abandonedEvent.getContext();
+        Player author = (Player) context.getForWhom();
+        cacheManager.removeInConversation(author.getName());
+        
         if (canceller == null) return;
 
-        ConversationContext context = abandonedEvent.getContext();
 
         if (canceller.getClass().equals(InactivityConversationCanceller.class)) {
             // context.getForWhom().sendRawMessage("Temps de réponse dépassé");
-            context.getForWhom().sendRawMessage(messageManager.getMessage("conversation.timeout"));
+            author.sendRawMessage(messageManager.getMessage("conversation.timeout"));
         }else if (canceller.getClass().equals(ConversationSetCanceller.class)){
             // context.getForWhom().sendRawMessage("Action annulée");
-            context.getForWhom().sendRawMessage(messageManager.getMessage("conversation.cancel"));
+            author.sendRawMessage(messageManager.getMessage("conversation.cancel"));
         }
     }
 }

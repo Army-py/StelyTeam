@@ -3,7 +3,7 @@ package fr.army.stelyteam.conversations;
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.TemporaryAction;
-import fr.army.stelyteam.utils.conversation.ConversationBuilder;
+import fr.army.stelyteam.utils.builder.conversation.ConversationBuilder;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
 import fr.army.stelyteam.utils.manager.SQLManager;

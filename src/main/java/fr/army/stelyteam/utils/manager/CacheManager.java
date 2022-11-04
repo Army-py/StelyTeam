@@ -13,6 +13,9 @@ public class CacheManager {
 
     // {teamName, storageId, storageInstance, storageContent}
     private ArrayList<Storage> cachedStorage = new ArrayList<Storage>();
+
+    // {playerName}
+    private ArrayList<String> cachedInConversation = new ArrayList<String>();
     
     // {teamName, teamPrefix, teamDescription, teamMoney, creationDate, improvLvlMembers, teamStorageLvl, unlockedTeamBank, teamOwnerName}
     private ArrayList<Team> cachedTeam = new ArrayList<Team>();
@@ -110,5 +113,18 @@ public class CacheManager {
             }
         }
         return false;
+    }
+
+
+    public void addInConversation(String playerName){
+        cachedInConversation.add(playerName);
+    }
+
+    public void removeInConversation(String playerName){
+        cachedInConversation.remove(playerName);
+    }
+
+    public boolean isInConversation(String playerName){
+        return cachedInConversation.contains(playerName);
     }
 }

@@ -31,6 +31,7 @@ import fr.army.stelyteam.commands.subCommands.team.SubCmdDeny;
 import fr.army.stelyteam.commands.subCommands.utility.SubCmdHome;
 import fr.army.stelyteam.commands.subCommands.utility.SubCmdVisual;
 import fr.army.stelyteam.utils.builder.InventoryBuilder;
+import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
 import fr.army.stelyteam.utils.manager.SQLManager;
 import fr.army.stelyteam.utils.manager.SQLiteManager;
@@ -38,6 +39,7 @@ import fr.army.stelyteam.utils.manager.SQLiteManager;
 public class CmdStelyTeam implements CommandExecutor, TabCompleter {
 
     private StelyTeamPlugin plugin;
+    private CacheManager cacheManager;
     private SQLManager sqlManager;
     private SQLiteManager sqliteManager;
     private MessageManager messageManager;
@@ -48,6 +50,7 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
 
     public CmdStelyTeam(StelyTeamPlugin plugin) {
         this.plugin = plugin;
+        this.cacheManager = plugin.getCacheManager();
         this.sqlManager = plugin.getSQLManager();
         this.sqliteManager = plugin.getSQLiteManager();
         this.messageManager = plugin.getMessageManager();
@@ -64,9 +67,15 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
             Player player = (Player) sender;
             String playerName = player.getName();
 
+            if (cacheManager.isInConversation(playerName)){
+                player.sendRawMessage(messageManager.getMessage("common.no_command_in_conv"));
+                return true;
+            }
+
             if (!sqliteManager.isRegistered(player.getName())) {
                 sqliteManager.registerPlayer(player);
             }
+
             
             if (args.length == 0){
                 Inventory inventory;

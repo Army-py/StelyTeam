@@ -16,7 +16,7 @@ import fr.army.stelyteam.events.PlayerQuit;
 import fr.army.stelyteam.utils.TeamMembersUtils;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
 import fr.army.stelyteam.utils.builder.InventoryBuilder;
-import fr.army.stelyteam.utils.conversation.ConversationBuilder;
+import fr.army.stelyteam.utils.builder.conversation.ConversationBuilder;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.EconomyManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
