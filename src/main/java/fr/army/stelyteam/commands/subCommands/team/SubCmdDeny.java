@@ -6,14 +6,20 @@ import org.bukkit.entity.Player;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.commands.SubCommand;
+import fr.army.stelyteam.utils.TemporaryAction;
+import fr.army.stelyteam.utils.TemporaryActionNames;
+import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
 
 public class SubCmdDeny extends SubCommand {
 
+    private StelyTeamPlugin plugin;
+    private CacheManager cacheManager;
     private MessageManager messageManager;
 
     public SubCmdDeny(StelyTeamPlugin plugin) {
         super(plugin);
+        this.cacheManager = plugin.getCacheManager();
         this.messageManager = plugin.getMessageManager();
     }
 
@@ -21,11 +27,15 @@ public class SubCmdDeny extends SubCommand {
     public boolean execute(CommandSender sender, String[] args) {
         Player player = (Player) sender;
         String playerName = player.getName();
-        String senderName = plugin.getTeamActions(playerName)[0];
+        // String senderName = plugin.getTeamActions(playerName)[0];
+        TemporaryAction tempAction = cacheManager.getTempAction(playerName);
+        String senderName = tempAction.getSenderName();
         Player invitationSender = Bukkit.getPlayer(senderName);
         
-        if (plugin.containTeamAction(playerName, "addMember") || plugin.containTeamAction(playerName, "addAlliance")){
-            plugin.removeTeamTempAction(playerName);
+        // if (plugin.containTeamAction(playerName, "addMember") || plugin.containTeamAction(playerName, "addAlliance")){
+        if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.ADD_MEMBER) || cacheManager.playerHasActionName(playerName, TemporaryActionNames.ADD_ALLIANCE)){
+            // plugin.removeTeamTempAction(playerName);
+            cacheManager.removePlayerAction(playerName);
             player.sendMessage(messageManager.getMessage("commands.stelyteam_deny.output"));
             if (invitationSender != null){
                 invitationSender.sendMessage(messageManager.getReplaceMessage("sender.accepted_invitation", playerName));

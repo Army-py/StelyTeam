@@ -7,13 +7,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.utils.Team;
+import fr.army.stelyteam.utils.TemporaryAction;
+import fr.army.stelyteam.utils.TemporaryActionNames;
 import fr.army.stelyteam.utils.builder.InventoryBuilder;
+import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
 import fr.army.stelyteam.utils.manager.SQLManager;
 
 public class ConvRemoveMember extends StringPrompt {
 
     private StelyTeamPlugin plugin;
+    private CacheManager cacheManager;
     private SQLManager sqlManager;
     private MessageManager messageManager;
     private InventoryBuilder inventoryBuilder;
@@ -21,6 +26,7 @@ public class ConvRemoveMember extends StringPrompt {
 
     public ConvRemoveMember(StelyTeamPlugin plugin) {
         this.plugin = plugin;
+        this.cacheManager = plugin.getCacheManager();
         this.sqlManager = plugin.getSQLManager();
         this.messageManager = plugin.getMessageManager();
         this.inventoryBuilder = plugin.getInventoryBuilder();
@@ -32,6 +38,7 @@ public class ConvRemoveMember extends StringPrompt {
         Player author = (Player) con.getForWhom();
         String authorName = author.getName();
         String teamId = sqlManager.getTeamNameFromPlayerName(author.getName());
+        Team team = sqlManager.getTeamFromPlayerName(author.getName());
 
         if (!sqlManager.isMemberInTeam(answer, teamId)){
             // con.getForWhom().sendRawMessage("Le joueur n'est pas dans ta team");
@@ -47,7 +54,14 @@ public class ConvRemoveMember extends StringPrompt {
             return null;
         }
         
-        plugin.addTeamTempAction(authorName, answer, teamId, "removeMember");
+        // plugin.addTeamTempAction(authorName, answer, teamId, "removeMember");
+        cacheManager.addTempAction(
+            new TemporaryAction(
+                authorName,
+                answer,
+                TemporaryActionNames.REMOVE_MEMBER,
+                team)
+        );
         Inventory inventory = inventoryBuilder.createConfirmInventory();
         author.openInventory(inventory);
         return null;

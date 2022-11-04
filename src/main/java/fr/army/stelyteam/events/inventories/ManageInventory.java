@@ -1,7 +1,10 @@
 package fr.army.stelyteam.events.inventories;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.utils.TemporaryAction;
+import fr.army.stelyteam.utils.TemporaryActionNames;
 import fr.army.stelyteam.utils.builder.InventoryBuilder;
+import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.EconomyManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
 import fr.army.stelyteam.utils.manager.SQLManager;
@@ -19,6 +22,7 @@ import org.bukkit.inventory.Inventory;
 public class ManageInventory {
     private InventoryClickEvent event;
     private StelyTeamPlugin plugin;
+    private CacheManager cacheManager;
     private YamlConfiguration config;
     private SQLManager sqlManager;
     private SQLiteManager sqliteManager;
@@ -30,6 +34,7 @@ public class ManageInventory {
     public ManageInventory(InventoryClickEvent event, StelyTeamPlugin plugin) {
         this.event = event;
         this.plugin = plugin;
+        this.cacheManager = plugin.getCacheManager();
         this.config = plugin.getConfig();
         this.sqlManager = plugin.getSQLManager();
         this.sqliteManager = plugin.getSQLiteManager();
@@ -97,7 +102,9 @@ public class ManageInventory {
             
             if (!sqlManager.hasUnlockedTeamBank(teamID)){
                 if (economyManager.checkMoneyPlayer(player, config.getDouble("prices.buyTeamBank"))){
-                    plugin.playersTempActions.put(playerName, "buyTeamBank");
+                    // plugin.playersTempActions.put(playerName, "buyTeamBank");
+                    cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.BUY_TEAM_BANK));
+
                     Inventory inventory = inventoryBuilder.createConfirmInventory();
                     player.openInventory(inventory);
                 }else{
@@ -120,7 +127,8 @@ public class ManageInventory {
 
         }else if (itemName.equals(config.getString("inventories.manage.editName.itemName"))){
             if (economyManager.checkMoneyPlayer(player, config.getDouble("prices.editTeamId"))){
-                plugin.playersTempActions.put(playerName, "editName");
+                // plugin.playersTempActions.put(playerName, "editName");
+                cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.EDIT_NAME));
                 Inventory inventory = inventoryBuilder.createConfirmInventory();
                 player.openInventory(inventory);
             }else{
@@ -130,7 +138,8 @@ public class ManageInventory {
 
         }else if (itemName.equals(config.getString("inventories.manage.editPrefix.itemName"))){
             if (economyManager.checkMoneyPlayer(player, config.getDouble("prices.editTeamPrefix"))){
-                plugin.playersTempActions.put(playerName, "editPrefix");
+                // plugin.playersTempActions.put(playerName, "editPrefix");
+                cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.EDIT_PREFIX));
                 Inventory inventory = inventoryBuilder.createConfirmInventory();
                 player.openInventory(inventory);
             }else{
@@ -140,7 +149,8 @@ public class ManageInventory {
 
 
         }else if (itemName.equals(config.getString("inventories.manage.removeTeam.itemName"))){
-            plugin.playersTempActions.put(playerName, "deleteTeam");
+            // plugin.playersTempActions.put(playerName, "deleteTeam");
+            cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.DELETE_TEAM));
             Inventory inventory = inventoryBuilder.createConfirmInventory();
             player.openInventory(inventory);
 

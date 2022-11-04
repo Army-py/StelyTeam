@@ -9,7 +9,10 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.utils.Storage;
+import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.builder.InventoryBuilder;
+import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.SQLManager;
 import fr.army.stelyteam.utils.manager.SerializeManager;
 
@@ -17,15 +20,17 @@ public class StorageInventory {
     
     private InventoryClickEvent clickEvent;
     private InventoryCloseEvent closeEvent;
+    private StelyTeamPlugin plugin;
+    private CacheManager cacheManager;
     private YamlConfiguration config;
     private InventoryBuilder inventoryBuilder;
     private SQLManager sqlManager;
     private SerializeManager serializeManager;
-    private StelyTeamPlugin plugin;
 
 
     public StorageInventory(InventoryClickEvent clickEvent, StelyTeamPlugin plugin) {
         this.plugin = plugin;
+        this.cacheManager = plugin.getCacheManager();
         this.clickEvent = clickEvent;
         this.config = plugin.getConfig();
         this.sqlManager = plugin.getSQLManager();
@@ -35,6 +40,7 @@ public class StorageInventory {
 
     public StorageInventory(InventoryCloseEvent closeEvent, StelyTeamPlugin plugin) {
         this.plugin = plugin;
+        this.cacheManager = plugin.getCacheManager();
         this.closeEvent = closeEvent;
         this.config = plugin.getConfig();
         this.sqlManager = plugin.getSQLManager();
@@ -67,19 +73,28 @@ public class StorageInventory {
         Inventory storageInventory = closeEvent.getInventory();
         String playerName = player.getName();
         String teamId = sqlManager.getTeamNameFromPlayerName(playerName);
+        Team team = sqlManager.getTeamFromPlayerName(playerName);
         Integer storageId = getStorageId(closeEvent.getView().getTitle());
         ItemStack[] inventoryContent = closeEvent.getInventory().getContents();
         int closeButtonSlot = config.getInt("inventories.storage.close.slot");
-
         inventoryContent[closeButtonSlot] = null;
-        if (plugin.containTeamStorage(teamId, storageId.toString())){
-            plugin.replaceTeamStorage(teamId, storageInventory, storageId.toString(), serializeManager.serialize(inventoryContent));
+        Storage storage = new Storage(team, storageId, storageInventory, serializeManager.serialize(inventoryContent));
+
+        // if (plugin.containTeamStorage(teamId, storageId.toString())){
+        //     plugin.replaceTeamStorage(teamId, storageInventory, storageId.toString(), serializeManager.serialize(inventoryContent));
+        // }else{
+        //     plugin.addTeamStorage(teamId, storageInventory, storageId.toString(), serializeManager.serialize(inventoryContent));
+        // }
+        if (cacheManager.containsStorage(team, storageId)){
+            cacheManager.replaceStorage(storage);
         }else{
-            plugin.addTeamStorage(teamId, storageInventory, storageId.toString(), serializeManager.serialize(inventoryContent));
+            cacheManager.addStorage(storage);
         }
-        
-        if (plugin.containTeamStorage(teamId, storageId.toString())){
-            String inventoryContentString = plugin.getTeamStorageContent(teamId, storageId.toString());
+
+        // if (plugin.containTeamStorage(teamId, storageId.toString())){
+        if (cacheManager.containsStorage(team, storageId)){
+            // String inventoryContentString = plugin.getTeamStorageContent(teamId, storageId.toString());
+            String inventoryContentString = serializeManager.serialize(inventoryContent);
             if (!sqlManager.teamHasStorage(teamId, storageId)){
                 if (!sqlManager.storageExist(storageId)){
                     sqlManager.insertStorage(storageId);

@@ -7,7 +7,10 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.utils.TemporaryAction;
+import fr.army.stelyteam.utils.TemporaryActionNames;
 import fr.army.stelyteam.utils.builder.InventoryBuilder;
+import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.EconomyManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
 import fr.army.stelyteam.utils.manager.SQLManager;
@@ -17,6 +20,7 @@ public class UpgradeMembersInventory {
 
     private InventoryClickEvent event;
     private StelyTeamPlugin plugin;
+    private CacheManager cacheManager;
     private YamlConfiguration config;
     private SQLManager sqlManager;
     private MessageManager messageManager;
@@ -27,6 +31,7 @@ public class UpgradeMembersInventory {
     public UpgradeMembersInventory(InventoryClickEvent event, StelyTeamPlugin plugin) {
         this.event = event;
         this.plugin = plugin;
+        this.cacheManager = plugin.getCacheManager();
         this.config = plugin.getConfig();
         this.sqlManager = plugin.getSQLManager();
         this.messageManager = plugin.getMessageManager();
@@ -54,7 +59,8 @@ public class UpgradeMembersInventory {
                 
                 if (itemName.equals(name) && level+1 == config.getInt("inventories.upgradeTotalMembers."+str+".level")){
                     if (economyManager.checkMoneyPlayer(player, config.getDouble("prices.upgrade.teamPlaces.level"+(level+1)))){
-                        plugin.playersTempActions.put(playerName, "upgradeMembers");
+                        // plugin.playersTempActions.put(playerName, "upgradeMembers");
+                        cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.IMPROV_LVL_MEMBERS));
                         Inventory inventory = inventoryBuilder.createConfirmInventory();
                         player.openInventory(inventory);
                         return;

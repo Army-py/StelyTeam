@@ -16,6 +16,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.utils.Storage;
+import fr.army.stelyteam.utils.Team;
+import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.SQLManager;
 import fr.army.stelyteam.utils.manager.SQLiteManager;
 import fr.army.stelyteam.utils.manager.SerializeManager;
@@ -23,6 +26,7 @@ import fr.army.stelyteam.utils.manager.SerializeManager;
 public class InventoryBuilder {
 
     private StelyTeamPlugin plugin;
+    private CacheManager cacheManager;
     private YamlConfiguration config;
     private SQLManager sqlManager;
     private SQLiteManager sqliteManager;
@@ -32,6 +36,7 @@ public class InventoryBuilder {
 
     public InventoryBuilder(StelyTeamPlugin plugin) {
         this.plugin = plugin;
+        this.cacheManager = plugin.getCacheManager();
         this.config = plugin.getConfig();
         this.sqlManager = plugin.getSQLManager();
         this.sqliteManager = plugin.getSQLiteManager();
@@ -427,18 +432,27 @@ public class InventoryBuilder {
     }
 
 
-    public Inventory createStorageInventory(String teamId, Integer storageId, String storageName){
+    public Inventory createStorageInventory(Team team, Integer storageId, String storageName){
         Integer slots = config.getInt("inventoriesSlots.storage");
         Inventory inventory;
 
-        if (plugin.containTeamStorage(teamId, storageId.toString())){
-            inventory = plugin.getStorageInstance(teamId, storageId.toString());
+        // if (plugin.containTeamStorage(teamId, storageId.toString())){
+        if (cacheManager.containsStorage(team, storageId)){
+            // inventory = plugin.getStorageInstance(teamId, storageId.toString());
+            inventory = cacheManager.getStorage(team, storageId).getStorageInstance();
         }else{
             inventory = Bukkit.createInventory(null, slots, storageName);
-            plugin.addTeamStorage(teamId, inventory, storageId.toString(), serializeManager.serialize(inventory.getContents()));
+            // plugin.addTeamStorage(teamId, inventory, storageId.toString(), serializeManager.serialize(inventory.getContents()));
+            cacheManager.addStorage(
+                new Storage(
+                    team,
+                    storageId,
+                    inventory,
+                    serializeManager.serialize(inventory.getContents()))
+            );
 
-            if (sqlManager.teamHasStorage(teamId, storageId)){
-                String contentString = sqlManager.getStorageContent(teamId, storageId);
+            if (sqlManager.teamHasStorage(team.getTeamName(), storageId)){
+                String contentString = sqlManager.getStorageContent(team.getTeamName(), storageId);
                 ItemStack[] content = serializeManager.deserialize(contentString);
                 inventory.setContents(content);
             }

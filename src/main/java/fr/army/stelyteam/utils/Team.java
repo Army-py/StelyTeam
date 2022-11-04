@@ -8,7 +8,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import fr.army.stelyteam.StelyTeamPlugin;
 
 public class Team {
-    private StelyTeamPlugin plugin;
+    private StelyTeamPlugin plugin = StelyTeamPlugin.getPlugin();
     private YamlConfiguration config = plugin.getConfig();
 
     private String teamName;
@@ -21,9 +21,7 @@ public class Team {
     private boolean unlockedTeamBank = false;
     private String teamOwnerName;
 
-    public Team(StelyTeamPlugin plugin, String teamName, String teamPrefix, String teamDescription, int teamMoney, String creationDate, int improvLvlMembers, int teamStorageLvl, boolean unlockedTeamBank, String teamOwnerName){
-        this.plugin = plugin;
-
+    public Team(String teamName, String teamPrefix, String teamDescription, int teamMoney, String creationDate, int improvLvlMembers, int teamStorageLvl, boolean unlockedTeamBank, String teamOwnerName){
         this.teamName = teamName;
         this.teamPrefix = teamPrefix;
         this.teamDescription = teamDescription;
@@ -35,17 +33,13 @@ public class Team {
         this.teamOwnerName = teamOwnerName;
     }
 
-    public Team(StelyTeamPlugin plugin, String teamName, String teamPrefix, String creationDate, String teamOwnerName){
-        this.plugin = plugin;
-
+    public Team(String teamName, String teamPrefix, String creationDate, String teamOwnerName){
         this.teamName = teamName;
         this.teamPrefix = teamPrefix;
         this.teamOwnerName = teamOwnerName;
     }
 
-    public Team(StelyTeamPlugin plugin, String teamName, String creationDate, String teamOwnerName){
-        this.plugin = plugin;
-
+    public Team(String teamName, String teamOwnerName){
         this.teamName = teamName;
         this.teamOwnerName = teamOwnerName;
     }

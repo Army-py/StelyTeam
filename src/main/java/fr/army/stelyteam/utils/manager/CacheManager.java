@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import fr.army.stelyteam.utils.Storage;
 import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.TemporaryAction;
+import fr.army.stelyteam.utils.TemporaryActionNames;
 
 public class CacheManager {
     // {senderName, receiverName, actionName, teamName, teamPrefix}
@@ -31,7 +32,7 @@ public class CacheManager {
         return null;
     }
 
-    public String getPlayerActionName(String playerName){
+    public TemporaryActionNames getPlayerActionName(String playerName){
         for(TemporaryAction tempAction : cachedTempAction){
             if(tempAction.getSenderName().equals(playerName) || tempAction.getReceiverName().equals(playerName)){
                 return tempAction.getActionName();
@@ -44,6 +45,7 @@ public class CacheManager {
         for(TemporaryAction tempAction : cachedTempAction){
             if(tempAction.getSenderName().equals(playerName) || tempAction.getReceiverName().equals(playerName)){
                 cachedTempAction.remove(tempAction);
+                return;
             }
         }
     }
@@ -58,7 +60,7 @@ public class CacheManager {
         return false;
     }
 
-    public boolean playerHasActionName(String playerName, String actionName){
+    public boolean playerHasActionName(String playerName, TemporaryActionNames actionName){
         if (cachedTempAction.isEmpty()) return false;
         for(TemporaryAction tempAction : cachedTempAction){
             if((tempAction.getSenderName().equals(playerName) || tempAction.getReceiverName().equals(playerName)) && tempAction.getActionName().equals(actionName)){

@@ -1,13 +1,16 @@
 package fr.army.stelyteam.conversations;
 
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.utils.Team;
+import fr.army.stelyteam.utils.TemporaryAction;
+import fr.army.stelyteam.utils.TemporaryActionNames;
+import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
 import fr.army.stelyteam.utils.manager.SQLManager;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -18,17 +21,15 @@ import net.md_5.bungee.api.chat.ClickEvent.Action;
 public class ConvAddAlliance extends StringPrompt {
 
     private StelyTeamPlugin plugin;
+    private CacheManager cacheManager;
     private SQLManager sqlManager;
-    private YamlConfiguration config;
     private MessageManager messageManager;
-    private Object cacheManager;
 
 
     public ConvAddAlliance(StelyTeamPlugin plugin){
         this.plugin = plugin;
-        this.cacheManager = cacheManager;
+        this.cacheManager = plugin.getCacheManager();
         this.sqlManager = plugin.getSQLManager();
-        this.config = plugin.getConfig();
         this.messageManager = plugin.getMessageManager();
     }
 
@@ -38,6 +39,7 @@ public class ConvAddAlliance extends StringPrompt {
         Player author = (Player) con.getForWhom();
         String authorName = author.getName();
         String teamName = sqlManager.getTeamNameFromPlayerName(authorName);
+        Team team = sqlManager.getTeamFromPlayerName(authorName);
 
         if (!sqlManager.teamNameExists(answer)) {
             con.getForWhom().sendRawMessage(messageManager.getMessage("common.team_not_exist"));
@@ -60,8 +62,17 @@ public class ConvAddAlliance extends StringPrompt {
             
         for (String playerName: sqlManager.getTeamMembersWithRank(answer, 1)){
             Player player = Bukkit.getPlayer(playerName);
-            if (player != null && !plugin.containTeamAction(playerName, "addAlliance")) {
-                plugin.addTeamTempAction(authorName, playerName, teamName, "addAlliance");
+            // if (player != null && !plugin.containTeamAction(playerName, "addAlliance")) {
+            if (player != null && !cacheManager.playerHasActionName(playerName, TemporaryActionNames.ADD_ALLIANCE)) {
+                // plugin.addTeamTempAction(authorName, playerName, teamName, "addAlliance");
+                cacheManager.addTempAction(
+                    new TemporaryAction(
+                        authorName,
+                        playerName,
+                        TemporaryActionNames.ADD_ALLIANCE,
+                        team
+                    )
+                );
                 player.spigot().sendMessage(components);
                 con.getForWhom().sendRawMessage(messageManager.getMessage("manage_alliances.add_alliance.invitation_sent"));
                 break;

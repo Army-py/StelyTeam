@@ -1,6 +1,9 @@
 package fr.army.stelyteam.conversations;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.utils.Team;
+import fr.army.stelyteam.utils.TemporaryAction;
+import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.EconomyManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
 import fr.army.stelyteam.utils.manager.SQLManager;
@@ -17,6 +20,7 @@ import java.util.regex.Pattern;
 public class ConvGetTeamPrefix extends StringPrompt {
 
     private StelyTeamPlugin plugin;
+    private CacheManager cacheManager;
     private SQLManager sqlManager;
     private YamlConfiguration config;
     private MessageManager messageManager;
@@ -25,6 +29,7 @@ public class ConvGetTeamPrefix extends StringPrompt {
 
     public ConvGetTeamPrefix(StelyTeamPlugin plugin) {
         this.plugin = plugin;
+        this.cacheManager = plugin.getCacheManager();
         this.sqlManager = plugin.getSQLManager();
         this.config = plugin.getConfig();
         this.messageManager = plugin.getMessageManager();
@@ -43,12 +48,17 @@ public class ConvGetTeamPrefix extends StringPrompt {
         }
 
 
-        plugin.addCreationTeamTempPrefix(authorName, answer);
+        // plugin.addCreationTeamTempPrefix(authorName, answer);
+        cacheManager.setActionTeamPrefix(authorName, answer);
 
-        String[] teamInfos = plugin.getCreationTeamTemp(authorName);
+        // String[] teamInfos = plugin.getCreationTeamTemp(authorName);
+        TemporaryAction tempAction = cacheManager.getTempAction(authorName);
+        Team team = tempAction.getTeam();
 
-        sqlManager.insertTeam(teamInfos[1], teamInfos[2], authorName);
-        plugin.removeCreationTeamTemp(authorName);
+        // sqlManager.insertTeam(teamInfos[1], teamInfos[2], authorName);
+        sqlManager.insertTeam(team.getTeamName(), team.getTeamPrefix(), authorName);
+        // plugin.removeCreationTeamTemp(authorName);
+        cacheManager.removePlayerAction(authorName);
         economyManager.removeMoneyPlayer(author, config.getDouble("prices.createTeam"));
         con.getForWhom().sendRawMessage(messageManager.getMessage("manage_team.creation.team_created"));
         

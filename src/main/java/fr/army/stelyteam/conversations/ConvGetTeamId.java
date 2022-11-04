@@ -1,7 +1,10 @@
 package fr.army.stelyteam.conversations;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.utils.Team;
+import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.conversation.ConversationBuilder;
+import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
 import fr.army.stelyteam.utils.manager.SQLManager;
 
@@ -14,6 +17,7 @@ import org.bukkit.entity.Player;
 public class ConvGetTeamId extends StringPrompt {
 
     private StelyTeamPlugin plugin;
+    private CacheManager cacheManager;
     private SQLManager sqlManager;
     private YamlConfiguration config;
     private MessageManager messageManager;
@@ -22,6 +26,7 @@ public class ConvGetTeamId extends StringPrompt {
 
     public ConvGetTeamId(StelyTeamPlugin plugin) {
         this.plugin = plugin;
+        this.cacheManager = plugin.getCacheManager();
         this.sqlManager = plugin.getSQLManager();
         this.config = plugin.getConfig();
         this.messageManager = plugin.getMessageManager();
@@ -48,10 +53,19 @@ public class ConvGetTeamId extends StringPrompt {
         }
 
 
-        if (plugin.getCreationTeamTemp(authorName) != null){
-            plugin.removeCreationTeamTemp(authorName);
+        // if (plugin.getCreationTeamTemp(authorName) != null){
+        //     plugin.removeCreationTeamTemp(authorName);
+        // }
+        if (cacheManager.playerHasAction(authorName)){
+            cacheManager.removePlayerAction(authorName);
         }
-        plugin.addCreationTeamTempName(authorName, answer);
+        // plugin.addCreationTeamTempName(authorName, answer);
+        cacheManager.addTempAction(
+            new TemporaryAction(
+                authorName, 
+                new Team(answer, authorName)
+            )
+        );
         conversationBuilder.getNameInput(author, new ConvGetTeamPrefix(plugin));
         return null;
     }

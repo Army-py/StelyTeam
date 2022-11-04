@@ -8,6 +8,10 @@ import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.utils.Team;
+import fr.army.stelyteam.utils.TemporaryAction;
+import fr.army.stelyteam.utils.TemporaryActionNames;
+import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
 import fr.army.stelyteam.utils.manager.SQLManager;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -18,6 +22,7 @@ import net.md_5.bungee.api.chat.ClickEvent.Action;
 public class ConvAddMember extends StringPrompt {
 
     private StelyTeamPlugin plugin;
+    private CacheManager cacheManager;
     private SQLManager sqlManager;
     private YamlConfiguration config;
     private MessageManager messageManager;
@@ -25,6 +30,7 @@ public class ConvAddMember extends StringPrompt {
 
     public ConvAddMember(StelyTeamPlugin plugin){
         this.plugin = plugin;
+        this.cacheManager = plugin.getCacheManager();
         this.sqlManager = plugin.getSQLManager();
         this.config = plugin.getConfig();
         this.messageManager = plugin.getMessageManager();
@@ -37,6 +43,7 @@ public class ConvAddMember extends StringPrompt {
         String authorName = author.getName();
         Player player = Bukkit.getPlayer(answer);
         String teamId = sqlManager.getTeamNameFromPlayerName(author.getName());
+        Team team = sqlManager.getTeamFromPlayerName(author.getName());
         
         if (player == null) {
             con.getForWhom().sendRawMessage(messageManager.getMessage("common.player_not_exist"));
@@ -44,7 +51,8 @@ public class ConvAddMember extends StringPrompt {
         }else if (sqlManager.isMember(answer)) {
             con.getForWhom().sendRawMessage(messageManager.getMessage("common.player_already_in_team"));
             return null;
-        }else if (plugin.containTeamAction(answer, "addMember")) {
+        // }else if (plugin.containTeamAction(answer, "addMember")) {
+        }else if (cacheManager.playerHasActionName(answer, TemporaryActionNames.ADD_MEMBER)) {
             con.getForWhom().sendRawMessage(messageManager.getMessage("common.player_already_action"));
             return null;
         }else if (hasReachedMaxMember(teamId)) {
@@ -52,7 +60,14 @@ public class ConvAddMember extends StringPrompt {
             return null;
         }
         
-        plugin.addTeamTempAction(authorName, answer, teamId, "addMember");
+        // plugin.addTeamTempAction(authorName, answer, teamId, "addMember");
+        cacheManager.addTempAction(
+            new TemporaryAction(
+                authorName,
+                answer,
+                TemporaryActionNames.ADD_MEMBER,
+                team)
+        );
 
 
         BaseComponent[] components = new ComponentBuilder(messageManager.getReplaceMessage("manage_members.add_member.invitation_received", authorName))

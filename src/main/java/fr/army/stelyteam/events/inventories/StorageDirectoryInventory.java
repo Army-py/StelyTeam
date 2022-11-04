@@ -10,6 +10,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.builder.InventoryBuilder;
 import fr.army.stelyteam.utils.manager.SQLManager;
 
@@ -36,6 +37,7 @@ public class StorageDirectoryInventory {
         Player player = (Player) event.getWhoClicked();
         String playerName = player.getName();
         String teamId = sqlManager.getTeamNameFromPlayerName(playerName);
+        Team team = sqlManager.getTeamFromPlayerName(playerName);
         String itemName = event.getCurrentItem().getItemMeta().getDisplayName();
         Material itemType = event.getCurrentItem().getType();
 
@@ -50,7 +52,8 @@ public class StorageDirectoryInventory {
                 Integer storageId = config.getInt("inventories.storageDirectory."+str+".storageId");
 
                 if (itemName.equals(name) && itemType.equals(type)){
-                    Inventory inventory = inventoryBuilder.createStorageInventory(teamId, storageId, name);
+                    // Inventory inventory = inventoryBuilder.createStorageInventory(teamId, storageId, name);
+                    Inventory inventory = inventoryBuilder.createStorageInventory(team, storageId, name);
                     player.openInventory(inventory);
                 }
             }

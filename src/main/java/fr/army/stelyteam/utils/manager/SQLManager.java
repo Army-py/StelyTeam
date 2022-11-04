@@ -12,6 +12,7 @@ import java.util.Calendar;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.utils.Team;
 
 public class SQLManager {
     
@@ -501,6 +502,34 @@ public class SQLManager {
                 ResultSet result = query.executeQuery();
                 if(result.next()){
                     return result.getString("teamName");
+                }
+                query.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+
+    public Team getTeamFromPlayerName(String playerName){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT t.teamName, t.teamPrefix, t.teamDescription, t.teamMoney, t.creationDate, t.improvLvlMembers, t.teamStorageLvl, t.unlockedTeamBank, o.playerName AS 'ownerName' FROM team AS t INNER JOIN player p ON t.teamId = p.teamId INNER JOIN player o ON t.teamOwnerPlayerId = o.playerId WHERE p.playerName = ?");
+                query.setString(1, playerName);
+                ResultSet result = query.executeQuery();
+                if(result.next()){
+                    return new Team(
+                        result.getString("teamName"),
+                        result.getString("teamPrefix"),
+                        result.getString("teamDescription"),
+                        result.getInt("teamMoney"),
+                        result.getString("creationDate"),
+                        result.getInt("improvLvlMembers"),
+                        result.getInt("teamStorageLvl"),
+                        (1 == result.getInt("unlockedTeamBank")),
+                        result.getString("ownerName")
+                    );
                 }
                 query.close();
             } catch (SQLException e) {

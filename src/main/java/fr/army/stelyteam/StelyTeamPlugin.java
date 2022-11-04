@@ -29,6 +29,7 @@ import fr.army.stelyteam.utils.manager.SerializeManager;
 
 public class StelyTeamPlugin extends JavaPlugin {
 
+    private static StelyTeamPlugin plugin;
     private YamlConfiguration config;
     private YamlConfiguration messages;
     private CacheManager cacheManager;
@@ -58,6 +59,7 @@ public class StelyTeamPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        plugin = this;
         this.saveDefaultConfig();
 
         this.config = initFile(this.getDataFolder(), "config.yml");
@@ -101,6 +103,11 @@ public class StelyTeamPlugin extends JavaPlugin {
         sqlManager.disconnect();
         sqliteManager.disconnect();
         getLogger().info("StelyTeam OFF");
+    }
+
+
+    public static StelyTeamPlugin getPlugin() {
+        return plugin;
     }
 
 
@@ -199,7 +206,7 @@ public class StelyTeamPlugin extends JavaPlugin {
     }
 
 
-    // getPlayerActionName
+    // getPlayerAction
     public String getPlayerActions(String playerName) {
         return playersTempActions.get(playerName);
     }

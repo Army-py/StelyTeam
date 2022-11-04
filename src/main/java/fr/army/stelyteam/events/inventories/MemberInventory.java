@@ -14,8 +14,11 @@ import org.bukkit.inventory.Inventory;
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.conversations.ConvAddMoney;
 import fr.army.stelyteam.conversations.ConvWithdrawMoney;
+import fr.army.stelyteam.utils.TemporaryAction;
+import fr.army.stelyteam.utils.TemporaryActionNames;
 import fr.army.stelyteam.utils.builder.InventoryBuilder;
 import fr.army.stelyteam.utils.conversation.ConversationBuilder;
+import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
 import fr.army.stelyteam.utils.manager.SQLManager;
 
@@ -24,6 +27,7 @@ public class MemberInventory {
 
     private InventoryClickEvent event;
     private StelyTeamPlugin plugin;
+    private CacheManager cacheManager;
     private YamlConfiguration config;
     private SQLManager sqlManager;
     private MessageManager messageManager;
@@ -34,6 +38,7 @@ public class MemberInventory {
     public MemberInventory(InventoryClickEvent event, StelyTeamPlugin plugin) {
         this.event = event;
         this.plugin = plugin;
+        this.cacheManager = plugin.getCacheManager();
         this.config = plugin.getConfig();
         this.sqlManager = plugin.getSQLManager();
         this.messageManager = plugin.getMessageManager();
@@ -93,7 +98,8 @@ public class MemberInventory {
         }else if (itemName.equals(config.getString("inventories.member.leaveTeam.itemName"))){
             player.closeInventory();
             if (!sqlManager.isOwner(playerName)){
-                plugin.playersTempActions.put(playerName, "leaveTeam");
+                // plugin.playersTempActions.put(playerName, "leaveTeam");
+                cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.EDIT_NAME));
                 Inventory inventory = inventoryBuilder.createConfirmInventory();
                 player.openInventory(inventory);
             }else {
