@@ -51,7 +51,6 @@ public class ConvAddMember extends StringPrompt {
         }else if (sqlManager.isMember(answer)) {
             con.getForWhom().sendRawMessage(messageManager.getMessage("common.player_already_in_team"));
             return null;
-        // }else if (plugin.containTeamAction(answer, "addMember")) {
         }else if (cacheManager.playerHasActionName(answer, TemporaryActionNames.ADD_MEMBER)) {
             con.getForWhom().sendRawMessage(messageManager.getMessage("common.player_already_action"));
             return null;
@@ -60,7 +59,6 @@ public class ConvAddMember extends StringPrompt {
             return null;
         }
         
-        // plugin.addTeamTempAction(authorName, answer, teamId, "addMember");
         cacheManager.addTempAction(
             new TemporaryAction(
                 authorName,

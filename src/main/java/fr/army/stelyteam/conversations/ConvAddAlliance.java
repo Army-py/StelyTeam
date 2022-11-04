@@ -48,10 +48,6 @@ public class ConvAddAlliance extends StringPrompt {
             con.getForWhom().sendRawMessage(messageManager.getMessage("common.already_alliance"));
             return null;
         }
-        // }else if (plugin.containTeamAction(ownerName, "addAlliance")) {
-        //     con.getForWhom().sendRawMessage(messageManager.getMessage("common.owner_already_action"));
-        //     return null;
-        // }
         
 
         BaseComponent[] components = new ComponentBuilder(messageManager.replaceAuthor("manage_alliances.add_alliance.invitation_received", authorName))
@@ -62,9 +58,7 @@ public class ConvAddAlliance extends StringPrompt {
             
         for (String playerName: sqlManager.getTeamMembersWithRank(answer, 1)){
             Player player = Bukkit.getPlayer(playerName);
-            // if (player != null && !plugin.containTeamAction(playerName, "addAlliance")) {
             if (player != null && !cacheManager.playerHasActionName(playerName, TemporaryActionNames.ADD_ALLIANCE)) {
-                // plugin.addTeamTempAction(authorName, playerName, teamName, "addAlliance");
                 cacheManager.addTempAction(
                     new TemporaryAction(
                         authorName,
@@ -80,9 +74,6 @@ public class ConvAddAlliance extends StringPrompt {
         }
 
         con.getForWhom().sendRawMessage(messageManager.getMessage("common.owners_not_connected"));
-        
-        // Inventory inventory = inventoryBuilder.createConfirmInventory();
-        // player.openInventory(inventory);
 
         return null;
     }

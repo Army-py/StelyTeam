@@ -19,7 +19,6 @@ public class SubCmdEditPrefix extends SubCommand {
         super(plugin);
         this.messageManager = plugin.getMessageManager();
         this.sqlManager = plugin.getSQLManager();
-        // this.colorsBuilder = plugin.getColorsBuilder();
         this.colorsBuilder = new ColorsBuilder();
     }
 

@@ -63,10 +63,6 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
         if(sender instanceof Player){
             Player player = (Player) sender;
             String playerName = player.getName();
-            
-            if(plugin.playersCreateTeam.contains(player.getName())){
-                return true;
-            }
 
             if (!sqliteManager.isRegistered(player.getName())) {
                 sqliteManager.registerPlayer(player);

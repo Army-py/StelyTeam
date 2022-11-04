@@ -9,8 +9,8 @@ public enum TemporaryActionNames {
     EDIT_NAME,
     EDIT_PREFIX,
     DELETE_TEAM,
-    IMPROV_LVL_MEMBERS, // upgradeMembers
-    IMPROV_LVL_STORAGE, // upgradeStorage
+    IMPROV_LVL_MEMBERS,
+    IMPROV_LVL_STORAGE,
     LEAVE_TEAM, 
     ADD_ALLIANCE, 
     ADD_MEMBER

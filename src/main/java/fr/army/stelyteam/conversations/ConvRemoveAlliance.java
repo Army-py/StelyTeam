@@ -45,7 +45,6 @@ public class ConvRemoveAlliance extends StringPrompt {
             return null;
         }
         
-        // plugin.addTeamTempAction(authorName, answer, teamName, "removeAlliance");
         cacheManager.addTempAction(
             new TemporaryAction(
                 authorName,

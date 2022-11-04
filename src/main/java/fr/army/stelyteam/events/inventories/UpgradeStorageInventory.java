@@ -60,7 +60,6 @@ public class UpgradeStorageInventory {
                 
                 if (itemName.equals(name) && level+1 == config.getInt("inventories.upgradeStorageAmount."+str+".level")){
                     if (economyManager.checkMoneyPlayer(player, config.getDouble("prices.upgrade.teamStorages.level"+(level+1)))){
-                        // plugin.playersTempActions.put(playerName, "upgradeStorages");
                         cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.IMPROV_LVL_STORAGE));
                         Inventory inventory = inventoryBuilder.createConfirmInventory();
                         player.openInventory(inventory);

@@ -23,12 +23,6 @@ public class PlayerQuit implements Listener{
         Player player = event.getPlayer();
         String playerName = player.getName();
 
-        // if (plugin.getTeamActions(playerName) != null){
-        //     plugin.removeTeamTempAction(playerName);
-        // }
-        // if (plugin.getPlayerActions(playerName) != null){
-        //     plugin.removePlayerTempAction(playerName);
-        // }
         if (cacheManager.getTempAction(playerName) != null){
             cacheManager.removePlayerAction(playerName);
         }

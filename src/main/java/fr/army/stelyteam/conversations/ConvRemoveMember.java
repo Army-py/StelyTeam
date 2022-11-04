@@ -54,7 +54,6 @@ public class ConvRemoveMember extends StringPrompt {
             return null;
         }
         
-        // plugin.addTeamTempAction(authorName, answer, teamId, "removeMember");
         cacheManager.addTempAction(
             new TemporaryAction(
                 authorName,

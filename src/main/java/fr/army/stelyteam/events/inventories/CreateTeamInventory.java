@@ -43,7 +43,6 @@ public class CreateTeamInventory {
             if (economyManager.checkMoneyPlayer(player, config.getDouble("prices.createTeam"))){
                 Inventory confirmInventory = inventoryBuilder.createConfirmInventory();
                 player.openInventory(confirmInventory);
-                // plugin.playersTempActions.put(playerName, "createTeam");
                 cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.CREATE_TEAM));
             }else{
                 // player.sendMessage("Vous n'avez pas assez d'argent");

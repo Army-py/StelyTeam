@@ -35,15 +35,11 @@ public class SubCmdAccept extends SubCommand {
         Player player = (Player) sender;
         String playerName = player.getName();
 
-        // if (plugin.containTeamAction(playerName, "addMember")){
         if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.ADD_MEMBER)){
-            // String teamId = plugin.getTeamActions(playerName)[2];
-            // String senderName = plugin.getTeamActions(playerName)[0];
             TemporaryAction tempAction = cacheManager.getTempAction(playerName);
             String teamName = tempAction.getTeam().getTeamName();
             String senderName = tempAction.getSenderName();
             Player invitationSender = Bukkit.getPlayer(senderName);
-            // plugin.removeTeamTempAction(playerName);
             cacheManager.removePlayerAction(playerName);
             player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_accept.output", teamName));
             if (invitationSender != null){
@@ -52,18 +48,13 @@ public class SubCmdAccept extends SubCommand {
             teamMembersUtils.teamBroadcast(teamName, senderName, messageManager.replaceAuthorAndReceiver("broadcasts.player_add_new_member", senderName, playerName));
             sqlManager.insertMember(playerName, teamName);
             teamMembersUtils.refreshTeamMembersInventory(teamName, playerName);
-        // }else if (plugin.containTeamAction(playerName, "addAlliance")){
         }else if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.ADD_ALLIANCE)){
-            // String senderName = plugin.getTeamActions(playerName)[0];
-            // String receiverName = plugin.getTeamActions(playerName)[1];
-            // String teamName = plugin.getTeamActions(playerName)[2];
             TemporaryAction tempAction = cacheManager.getTempAction(playerName);
             String senderName = tempAction.getSenderName();
             String receiverName = tempAction.getReceiverName();
             String teamName = tempAction.getTeam().getTeamName();
             Player invitationSender = Bukkit.getPlayer(senderName);
             String allianceName = sqlManager.getTeamNameFromPlayerName(receiverName);
-            // plugin.removeTeamTempAction(playerName);
             cacheManager.removePlayerAction(playerName);
             player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_accept.output", teamName));
             if (invitationSender != null){

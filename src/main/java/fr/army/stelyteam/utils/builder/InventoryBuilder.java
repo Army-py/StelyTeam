@@ -436,13 +436,10 @@ public class InventoryBuilder {
         Integer slots = config.getInt("inventoriesSlots.storage");
         Inventory inventory;
 
-        // if (plugin.containTeamStorage(teamId, storageId.toString())){
         if (cacheManager.containsStorage(team, storageId)){
-            // inventory = plugin.getStorageInstance(teamId, storageId.toString());
             inventory = cacheManager.getStorage(team, storageId).getStorageInstance();
         }else{
             inventory = Bukkit.createInventory(null, slots, storageName);
-            // plugin.addTeamStorage(teamId, inventory, storageId.toString(), serializeManager.serialize(inventory.getContents()));
             cacheManager.addStorage(
                 new Storage(
                     team,

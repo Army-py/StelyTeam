@@ -102,7 +102,6 @@ public class ManageInventory {
             
             if (!sqlManager.hasUnlockedTeamBank(teamID)){
                 if (economyManager.checkMoneyPlayer(player, config.getDouble("prices.buyTeamBank"))){
-                    // plugin.playersTempActions.put(playerName, "buyTeamBank");
                     cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.BUY_TEAM_BANK));
 
                     Inventory inventory = inventoryBuilder.createConfirmInventory();
@@ -127,7 +126,6 @@ public class ManageInventory {
 
         }else if (itemName.equals(config.getString("inventories.manage.editName.itemName"))){
             if (economyManager.checkMoneyPlayer(player, config.getDouble("prices.editTeamId"))){
-                // plugin.playersTempActions.put(playerName, "editName");
                 cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.EDIT_NAME));
                 Inventory inventory = inventoryBuilder.createConfirmInventory();
                 player.openInventory(inventory);
@@ -138,7 +136,6 @@ public class ManageInventory {
 
         }else if (itemName.equals(config.getString("inventories.manage.editPrefix.itemName"))){
             if (economyManager.checkMoneyPlayer(player, config.getDouble("prices.editTeamPrefix"))){
-                // plugin.playersTempActions.put(playerName, "editPrefix");
                 cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.EDIT_PREFIX));
                 Inventory inventory = inventoryBuilder.createConfirmInventory();
                 player.openInventory(inventory);
@@ -149,7 +146,6 @@ public class ManageInventory {
 
 
         }else if (itemName.equals(config.getString("inventories.manage.removeTeam.itemName"))){
-            // plugin.playersTempActions.put(playerName, "deleteTeam");
             cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.DELETE_TEAM));
             Inventory inventory = inventoryBuilder.createConfirmInventory();
             player.openInventory(inventory);

@@ -48,16 +48,12 @@ public class ConvGetTeamPrefix extends StringPrompt {
         }
 
 
-        // plugin.addCreationTeamTempPrefix(authorName, answer);
         cacheManager.setActionTeamPrefix(authorName, answer);
 
-        // String[] teamInfos = plugin.getCreationTeamTemp(authorName);
         TemporaryAction tempAction = cacheManager.getTempAction(authorName);
         Team team = tempAction.getTeam();
 
-        // sqlManager.insertTeam(teamInfos[1], teamInfos[2], authorName);
         sqlManager.insertTeam(team.getTeamName(), team.getTeamPrefix(), authorName);
-        // plugin.removeCreationTeamTemp(authorName);
         cacheManager.removePlayerAction(authorName);
         economyManager.removeMoneyPlayer(author, config.getDouble("prices.createTeam"));
         con.getForWhom().sendRawMessage(messageManager.getMessage("manage_team.creation.team_created"));

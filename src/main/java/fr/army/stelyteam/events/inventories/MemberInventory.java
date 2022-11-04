@@ -98,7 +98,6 @@ public class MemberInventory {
         }else if (itemName.equals(config.getString("inventories.member.leaveTeam.itemName"))){
             player.closeInventory();
             if (!sqlManager.isOwner(playerName)){
-                // plugin.playersTempActions.put(playerName, "leaveTeam");
                 cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.EDIT_NAME));
                 Inventory inventory = inventoryBuilder.createConfirmInventory();
                 player.openInventory(inventory);

@@ -80,18 +80,12 @@ public class StorageInventory {
         inventoryContent[closeButtonSlot] = null;
         Storage storage = new Storage(team, storageId, storageInventory, serializeManager.serialize(inventoryContent));
 
-        // if (plugin.containTeamStorage(teamId, storageId.toString())){
-        //     plugin.replaceTeamStorage(teamId, storageInventory, storageId.toString(), serializeManager.serialize(inventoryContent));
-        // }else{
-        //     plugin.addTeamStorage(teamId, storageInventory, storageId.toString(), serializeManager.serialize(inventoryContent));
-        // }
         if (cacheManager.containsStorage(team, storageId)){
             cacheManager.replaceStorage(storage);
         }else{
             cacheManager.addStorage(storage);
         }
 
-        // if (plugin.containTeamStorage(teamId, storageId.toString())){
         if (cacheManager.containsStorage(team, storageId)){
             // String inventoryContentString = plugin.getTeamStorageContent(teamId, storageId.toString());
             String inventoryContentString = serializeManager.serialize(inventoryContent);

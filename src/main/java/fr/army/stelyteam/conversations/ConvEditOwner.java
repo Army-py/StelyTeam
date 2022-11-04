@@ -48,14 +48,12 @@ public class ConvEditOwner extends StringPrompt {
             // con.getForWhom().sendRawMessage("Ce joueur n'est pas dans ta team");
             con.getForWhom().sendRawMessage(messageManager.getMessage("common.player_not_in_your_team"));
             return null;
-        // }else if (plugin.containTeamAction(answer, "editOwner")) {
         }else if (cacheManager.playerHasActionName(answer, TemporaryActionNames.EDIT_OWNER)) {
             // con.getForWhom().sendRawMessage("Ce joueur a déjà une action en cours");
             con.getForWhom().sendRawMessage(messageManager.getMessage("common.player_already_action"));
             return null;
         }
 
-        // plugin.addTeamTempAction(authorName, answer, teamId, "editOwner");
         cacheManager.addTempAction(
             new TemporaryAction(
                 authorName,

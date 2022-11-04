@@ -53,13 +53,9 @@ public class ConvGetTeamId extends StringPrompt {
         }
 
 
-        // if (plugin.getCreationTeamTemp(authorName) != null){
-        //     plugin.removeCreationTeamTemp(authorName);
-        // }
         if (cacheManager.playerHasAction(authorName)){
             cacheManager.removePlayerAction(authorName);
         }
-        // plugin.addCreationTeamTempName(authorName, answer);
         cacheManager.addTempAction(
             new TemporaryAction(
                 authorName, 
