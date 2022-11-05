@@ -55,8 +55,9 @@ public class InventoryBuilder {
         Material material = Material.getMaterial(config.getString("inventories.createTeam.itemType"));
         String name = config.getString("inventories.createTeam.itemName");
         List<String> lore = config.getStringList("inventories.createTeam.lore");
+        String headTexture = config.getString("inventories.createTeam.headTexture");
 
-        inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, false));
+        inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, false));
 		
 		return inventory;
 	}
@@ -73,7 +74,8 @@ public class InventoryBuilder {
             Material material = Material.getMaterial(config.getString("inventories.admin."+str+".itemType"));
             String name = config.getString("inventories.admin."+str+".itemName");
             List<String> lore = config.getStringList("inventories.admin."+str+".lore");
-            inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, false));
+            String headTexture = config.getString("inventories.admin."+str+".headTexture");
+            inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, false));
         }
         return inventory;
     }
@@ -91,24 +93,27 @@ public class InventoryBuilder {
             Material material = Material.getMaterial(config.getString("inventories.manage."+str+".itemType"));
             String name = config.getString("inventories.manage."+str+".itemName");
             List<String> lore = config.getStringList("inventories.manage."+str+".lore");
+            String headTexture = config.getString("inventories.manage."+str+".headTexture");
+            
             ItemStack item;
             
             if (playerHasPermission(playername, teamId, str)){ 
                 if (str.equals("buyTeamBank")){
-                    item = ItemBuilder.getItem(material, name, lore, sqlManager.hasUnlockedTeamBank(teamId));
+                    item = ItemBuilder.getItem(material, name, lore, headTexture, sqlManager.hasUnlockedTeamBank(teamId));
                 }else {
-                    item = ItemBuilder.getItem(material, name, lore, false);
+                    item = ItemBuilder.getItem(material, name, lore, headTexture, false);
                 }
             }else{
                 item = ItemBuilder.getItem(
                     Material.getMaterial(config.getString("noPermission.itemType")), 
                     name, 
-                    config.getStringList("noPermission.lore"), 
+                    config.getStringList("noPermission.lore"),
+                    config.getString("noPermission.headTexture"),
                     false
                 );
             }
 
-            inventory.setItem(slot,  item);
+            inventory.setItem(slot, item);
         }
         return inventory;
     }
@@ -136,6 +141,7 @@ public class InventoryBuilder {
             Material material = Material.getMaterial(config.getString("inventories.member."+str+".itemType"));
             String name = config.getString("inventories.member."+str+".itemName");
             List<String> lore = config.getStringList("inventories.member."+str+".lore");
+            String headTexture = config.getString("inventories.member."+str+".headTexture");
             ItemStack item;
 
             if (name.equals(config.getString("inventories.member.seeTeamBank.itemName"))){
@@ -152,12 +158,13 @@ public class InventoryBuilder {
             }
 
             if (playerHasPermission(playername, teamID, str)){ 
-                item = ItemBuilder.getItem(material, name, lore, false);
+                item = ItemBuilder.getItem(material, name, lore, headTexture, false);
             }else{
                 item = ItemBuilder.getItem(
                     Material.getMaterial(config.getString("noPermission.itemType")), 
                     name, 
-                    config.getStringList("noPermission.lore"), 
+                    config.getStringList("noPermission.lore"),
+                    config.getString("noPermission.headTexture"),
                     false
                 );
             }
@@ -168,6 +175,7 @@ public class InventoryBuilder {
                         Material.getMaterial(config.getString("teamBankNotUnlock.itemType")),
                         config.getString("teamBankNotUnlock.itemName"),
                         Collections.emptyList(),
+                        config.getString("teamBankNotUnlock.headTexture"),
                         false
                     );
                 }
@@ -189,9 +197,10 @@ public class InventoryBuilder {
             Material material = Material.getMaterial(config.getString("inventories.confirmInventory."+str+".itemType"));
             String name = config.getString("inventories.confirmInventory."+str+".itemName");
             List<String> lore = config.getStringList("inventories.confirmInventory."+str+".lore");
+            String headTexture = config.getString("inventories.confirmInventory."+str+".headTexture");
 
             for(Integer slot : config.getIntegerList("inventories.confirmInventory."+str+".slots")){
-                inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, false));
+                inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, false));
             }
         }
         return inventory;
@@ -211,11 +220,12 @@ public class InventoryBuilder {
             Material material = Material.getMaterial(config.getString("inventories.upgradeTotalMembers."+str+".itemType"));
             String name = config.getString("inventories.upgradeTotalMembers."+str+".itemName");
             List<String> lore = config.getStringList("inventories.upgradeTotalMembers."+str+".lore");
+            String headTexture = config.getString("inventories.upgradeTotalMembers."+str+".headTexture");
 
             if (level >= config.getInt("inventories.upgradeTotalMembers."+str+".level") && !str.equals("close")){
-                inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, true));
+                inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, true));
             }else{
-                inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, false));
+                inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, false));
             }
         }
         return inventory;
@@ -235,11 +245,12 @@ public class InventoryBuilder {
             Material material = Material.getMaterial(config.getString("inventories.upgradeStorageAmount."+str+".itemType"));
             String name = config.getString("inventories.upgradeStorageAmount."+str+".itemName");
             List<String> lore = config.getStringList("inventories.upgradeStorageAmount."+str+".lore");
+            String headTexture = config.getString("inventories.upgradeStorageAmount."+str+".headTexture");
 
             if (level >= config.getInt("inventories.upgradeStorageAmount."+str+".level") && !str.equals("close")){
-                inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, true));
+                inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, true));
             }else{
-                inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, false));
+                inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, false));
             }
         }
         return inventory;
@@ -276,11 +287,12 @@ public class InventoryBuilder {
             Material material = Material.getMaterial(config.getString("inventories.teamMembers."+str+".itemType"));
             String name = config.getString("inventories.teamMembers."+str+".itemName");
             List<String> lore;
+            String headTexture = config.getString("inventories.teamMembers."+str+".headTexture");
 
             if (sqlManager.isOwner(playername)) lore = config.getStringList("inventories.teamMembers."+str+".lore");
             else lore = Collections.emptyList();
             
-            inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, false));
+            inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, false));
         }
         return inventory;
     }
@@ -321,7 +333,8 @@ public class InventoryBuilder {
                 item = ItemBuilder.getItem(
                     Material.getMaterial(config.getString("noPermission.itemType")), 
                     itemName, 
-                    config.getStringList("noPermission.lore"), 
+                    config.getStringList("noPermission.lore"),
+                    config.getString("noPermission.headTexture"),
                     false
                 );
             }
@@ -334,6 +347,7 @@ public class InventoryBuilder {
             Integer slot = config.getInt("inventories.editMembers."+str+".slot");
             Material material = Material.getMaterial(config.getString("inventories.editMembers."+str+".itemType"));
             String name = config.getString("inventories.editMembers."+str+".itemName");
+            String headTexture = config.getString("inventories.editMembers."+str+".headTexture");
             List<String> lore;
             ItemStack item;
 
@@ -342,12 +356,13 @@ public class InventoryBuilder {
             
 
             if (playerHasPermission(playername, teamID, str)){ 
-                item = ItemBuilder.getItem(material, name, lore, false);
+                item = ItemBuilder.getItem(material, name, lore, headTexture, false);
             }else{
                 item = ItemBuilder.getItem(
                     Material.getMaterial(config.getString("noPermission.itemType")), 
                     name, 
-                    config.getStringList("noPermission.lore"), 
+                    config.getStringList("noPermission.lore"),
+                    config.getString("noPermission.headTexture"),
                     false
                 );
             }
@@ -369,6 +384,7 @@ public class InventoryBuilder {
             Material material = Material.getMaterial(config.getString("inventories.permissions."+str+".itemType"));
             String name = config.getString("inventories.permissions."+str+".itemName");
             List<String> lore = config.getStringList("inventories.permissions."+str+".lore");
+            String headTexture = config.getString("inventories.permissions."+str+".headTexture");
 
             String rankPath = config.getString("inventories.permissions."+str+".rankPath");
             Integer defaultRankId = config.getInt("inventories."+rankPath+".rank");
@@ -390,7 +406,7 @@ public class InventoryBuilder {
                 isDefault = true;
             }
 
-            inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, isDefault));
+            inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, isDefault));
         }
         return inventory;
     }
@@ -406,12 +422,14 @@ public class InventoryBuilder {
 
         for(String str : config.getConfigurationSection("inventories.storageDirectory").getKeys(false)){
             Integer slot = config.getInt("inventories.storageDirectory."+str+".slot");
+            String headTexture;
             Material material;
             String name;
             List<String> lore;
 
             if (level >= config.getInt("inventories.storageDirectory."+str+".level") || str.equals("close")){
                 material = Material.getMaterial(config.getString("inventories.storageDirectory."+str+".itemType"));
+                headTexture = config.getString("inventories.storageDirectory."+str+".headTexture");
                 if (str.equals("close")){
                     name = config.getString("inventories.storageDirectory."+str+".itemName");
                 }else{
@@ -419,13 +437,14 @@ public class InventoryBuilder {
                 }
                 lore = config.getStringList("inventories.storageDirectory."+str+".lore");
 
-                inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, false));
+                inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, false));
             }else{
                 material = Material.getMaterial(config.getString("storageNotUnlock.itemType"));
                 name = config.getString("storageNotUnlock.itemName");
                 lore = config.getStringList("storageNotUnlock.lore");
+                headTexture = config.getString("storageNotUnlock.headTexture");
 
-                inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, false));
+                inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, false));
             }
         }
         return inventory;
@@ -461,10 +480,10 @@ public class InventoryBuilder {
             Material material = Material.getMaterial(config.getString("inventories.storage."+str+".itemType"));
             String name = config.getString("inventories.storage."+str+".itemName");
             List<String> lore = config.getStringList("inventories.storage."+str+".lore");
+            String headTexture = config.getString("inventories.storage."+str+".headTexture");
 
-            inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, false));
+            inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, false));
         }
-
 
         return inventory;
     }
@@ -508,7 +527,8 @@ public class InventoryBuilder {
                 item = ItemBuilder.getItem(
                     Material.getMaterial(config.getString("noPermission.itemType")), 
                     itemName, 
-                    config.getStringList("noPermission.lore"), 
+                    config.getStringList("noPermission.lore"),
+                    config.getString("noPermission.headTexture"),
                     false
                 );
             }
@@ -521,12 +541,13 @@ public class InventoryBuilder {
             Integer slot = config.getInt("inventories.teamAlliances."+str+".slot");
             Material material = Material.getMaterial(config.getString("inventories.teamAlliances."+str+".itemType"));
             String name = config.getString("inventories.teamAlliances."+str+".itemName");
+            String headTexture = config.getString("inventories.teamAlliances."+str+".headTexture");
             List<String> lore;
 
             if (sqlManager.isOwner(playername)) lore = config.getStringList("inventories.teamAlliances."+str+".lore");
             else lore = Collections.emptyList();
             
-            inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, false));
+            inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, false));
         }
         return inventory;
     }
@@ -574,6 +595,7 @@ public class InventoryBuilder {
                     Material.getMaterial(config.getString("noPermission.itemType")), 
                     itemName, 
                     config.getStringList("noPermission.lore"), 
+                    config.getString("noPermission.headTexture"),
                     false
                 );
             }
@@ -586,6 +608,7 @@ public class InventoryBuilder {
             Integer slot = config.getInt("inventories.editAlliances."+str+".slot");
             Material material = Material.getMaterial(config.getString("inventories.editAlliances."+str+".itemType"));
             String name = config.getString("inventories.editAlliances."+str+".itemName");
+            String headTexture = config.getString("inventories.editAlliances."+str+".headTexture");
             List<String> lore;
             ItemStack item;
 
@@ -594,12 +617,13 @@ public class InventoryBuilder {
             
 
             if (playerHasPermission(playername, teamId, str)){ 
-                item = ItemBuilder.getItem(material, name, lore, false);
+                item = ItemBuilder.getItem(material, name, lore, headTexture, false);
             }else{
                 item = ItemBuilder.getItem(
                     Material.getMaterial(config.getString("noPermission.itemType")), 
                     name, 
-                    config.getStringList("noPermission.lore"), 
+                    config.getStringList("noPermission.lore"),
+                    config.getString("noPermission.headTexture"),
                     false
                 );
             }

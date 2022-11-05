@@ -23,7 +23,7 @@ openTeamAfterCreate: true
 
 # Nombre maximum de caracteres dans les noms de team (les couleurs ne sont pas prises en compte dans la limite)
 teamNameMaxLength: 12
-teamPrefixMaxLength: 12
+teamPrefixMaxLength: 10
 
 # Argent maximal d'une team
 teamMaxMoney: 1000000.0
@@ -36,7 +36,7 @@ teamDefaultDescription: "Aucune description"
 
 # Prix des différentes actions
 prices:
-  createTeam: 10000.0
+  createTeam: 20000.0
   editTeamId: 2000.0
   editTeamPrefix: 3000.0
   buyTeamBank: 500000.0
@@ -55,6 +55,16 @@ prices:
       level5: 100000.0
 
 
+# Pour pouvoir mettre une tête custom il faudra juste la texture de la tête entre les guillemets de headTexture
+# et mettre comme type d'item PLAYER_HEAD
+# Exemples
+# seeTeamBank:
+#   itemName: "§5§nArgent de la team"
+#   itemType: PLAYER_HEAD
+#   headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZmFjNGI3ZjQ2YTA2N2QxMGViMjQzMGEwMzE5MTA0ZWU4MDFhNjY4ZTRmOTAxZTkyNTJhYWZkOGU1YTE2Zjk3In19fQ"
+#   slot: 13
+
+
 # Item à la place des cases vide
 emptyCase: LIGHT_BLUE_STAINED_GLASS_PANE
 
@@ -62,6 +72,7 @@ emptyCase: LIGHT_BLUE_STAINED_GLASS_PANE
 noPermission:
   itemName: "§cPermission insuffisante"
   itemType: RED_STAINED_GLASS_PANE
+  headTexture: ""
   lore: 
     - "§cPermission insuffisante"
 
@@ -70,6 +81,7 @@ noPermission:
 teamBankNotUnlock:
   itemName: "§c§nCompte non débloqué"
   itemType: EMERALD
+  headTexture: ""
   lore: 
     - "§cDébloquer le compte de"
     - "§cla team pour pouvoir"
@@ -79,13 +91,14 @@ teamBankNotUnlock:
 storageNotUnlock:
   itemName: "§c§nStockage non débloqué"
   itemType: ENDER_CHEST
+  headTexture: ""
 
 # Préfixe à gauche du rang, affiché dans le menu de la gestion des membres de la team et dans la liste des membres
 prefixRankLore: "§r§e>> "
 
 # Description des teams dans la liste des alliances
 teamAllianceLore:
-  - "§aGérant de la team : §e%OWNER%"
+  - "§aChef de la team : §e%OWNER%"
   - "§aNom : §e%NAME%"
   - "§aPréfixe : §r%PREFIX%"
   - "§aNombre de membre : §e%MEMBER_COUNT% sur %MAX_MEMBERS%"
@@ -177,14 +190,16 @@ inventories:
   createTeam:
     itemName: "§5§nCréer une team"
     itemType: LIME_BANNER
+    headTexture: ""
     slot: 13
     lore: 
-      - "§aPrix : 100 000€"
+      - "§aPrix : 20 000€"
 
   admin:
     manage:
       itemName: "§5§nMenu de gestion"
       itemType: WRITABLE_BOOK
+      headTexture: ""
       slot: 12
       lore:
         - "§aGére les différents"
@@ -192,6 +207,7 @@ inventories:
     member:
       itemName: "§5§nMenu de la team"
       itemType: PLAYER_HEAD
+      headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYmU0OTEwOWRiNzQ4ODQ0MzQ1ODBiZGYzMmRkMGNmMzIxODQ3OGIxZTJhZWUwZmRjMjcxOTcwMTliNmJiNjg4NiJ9fX0"
       slot: 14
       lore:
         - "§aVisualise les options"
@@ -199,6 +215,7 @@ inventories:
     close:
       itemName: "§c§oFermer"
       itemType: BARRIER
+      headTexture: ""
       slot: 26
 
 
@@ -206,6 +223,7 @@ inventories:
     editMembers:
       itemName: "§5§nGestion des membres"
       itemType: WRITABLE_BOOK
+      headTexture: ""
       slot: 9
       rank: 2
       lore:
@@ -214,6 +232,7 @@ inventories:
     editAlliances:
       itemName: "§5§nGestion des alliances"
       itemType: FEATHER
+      headTexture: ""
       slot: 18
       rank: 2
       lore:
@@ -222,6 +241,7 @@ inventories:
     setTeamHome:
       itemName: "§5§nCréer un home"
       itemType: GREEN_BED
+      headTexture: ""
       slot: 11
       rank: 2
       lore:
@@ -229,6 +249,7 @@ inventories:
     removeTeamHome:
       itemName: "§5§nRetirer le home"
       itemType: RED_BED
+      headTexture: ""
       slot: 20
       rank: 2
       lore:
@@ -236,6 +257,7 @@ inventories:
     buyTeamBank:
       itemName: "§5§nOuvrir le compte"
       itemType: GOLD_BLOCK
+      headTexture: ""
       slot: 13
       rank: 2
       lore:
@@ -245,6 +267,7 @@ inventories:
     upgradeTotalMembers:
       itemName: "§5§nAjouter des places"
       itemType: TOTEM_OF_UNDYING
+      headTexture: ""
       slot: 15
       rank: 2
       lore:
@@ -253,6 +276,7 @@ inventories:
     upgradeStorageAmount:
       itemName: "§5§nAjouter du stockage"
       itemType: CHEST
+      headTexture: ""
       slot: 24
       rank: 2
       lore:
@@ -261,6 +285,7 @@ inventories:
     editName:
       itemName: "§5§nModifier le nom"
       itemType: PAPER
+      headTexture: ""
       slot: 17
       rank: 2
       lore:
@@ -269,6 +294,7 @@ inventories:
     editPrefix:
       itemName: "§5§nModifier le préfixe"
       itemType: NAME_TAG
+      headTexture: ""
       slot: 26
       rank: 2
       lore:
@@ -282,6 +308,7 @@ inventories:
     editPermissions:
       itemName: "§5§nPermissions"
       itemType: RED_BANNER
+      headTexture: ""
       slot: 22
       rank: 2
       lore:
@@ -290,11 +317,13 @@ inventories:
     removeTeam:
       itemName: "§c§nSupprimer la team"
       itemType: COMPOSTER
+      headTexture: ""
       slot: 40
       rank: 0
     close:
       itemName: "§c§oFermer"
       itemType: BARRIER
+      headTexture: ""
       slot: 44
 
 
@@ -302,10 +331,11 @@ inventories:
     teamInfos:
       itemName: "§5§nInformations"
       itemType: BOOK
+      headTexture: ""
       slot: 11
       rank: -1
       lore:
-        - "§aGérant de la team : §e%OWNER%"
+        - "§aChef de la team : §e%OWNER%"
         - "§aNom : §e%NAME%"
         - "§aPréfixe : §r%PREFIX%"
         - "§aNombre de membre : §e%MEMBER_COUNT% sur %MAX_MEMBERS%"        
@@ -315,6 +345,7 @@ inventories:
     seeTeamMembers:
       itemName: "§5§nMembres"
       itemType: TOTEM_OF_UNDYING
+      headTexture: ""
       slot: 20
       rank: 5
       lore:
@@ -323,6 +354,7 @@ inventories:
     seeTeamAlliances:
       itemName: "§5§nAlliances"
       itemType: FEATHER
+      headTexture: ""
       slot: 29
       rank: 5
       lore:
@@ -331,6 +363,7 @@ inventories:
     seeTeamBank:
       itemName: "§5§nArgent de la team"
       itemType: EMERALD
+      headTexture: ""
       slot: 13
       rank: 4
       lore:
@@ -339,6 +372,7 @@ inventories:
     addTeamMoney:
       itemName: "§5§nAjout d'argent"
       itemType: GOLD_NUGGET
+      headTexture: ""
       slot: 22
       rank: 4
       lore:
@@ -347,6 +381,7 @@ inventories:
     withdrawTeamMoney:
       itemName: "§5§nRetrait d'argent"
       itemType: PAPER
+      headTexture: ""
       slot: 31
       rank: 4
       lore:
@@ -355,6 +390,7 @@ inventories:
     storageDirectory:
       itemName: "§5§nStockage"
       itemType: CHEST
+      headTexture: ""
       slot: 15
       rank: 4
       lore:
@@ -363,11 +399,13 @@ inventories:
     leaveTeam:
       itemName: "§c§nQuitter la team"
       itemType: DARK_OAK_DOOR
+      headTexture: ""
       slot: 33
       rank: -1
     close:
       itemName: "§c§oFermer"
       itemType: BARRIER
+      headTexture: ""
       slot: 44
 
 
@@ -375,6 +413,7 @@ inventories:
     levelOne:
       itemName: "§5§n11 places"
       itemType: IRON_INGOT
+      headTexture: ""
       slot: 11
       level: 1
       lore:
@@ -382,6 +421,7 @@ inventories:
     levelTwo:
       itemName: "§5§n12 places"
       itemType: GOLD_INGOT
+      headTexture: ""
       slot: 12
       level: 2
       lore:
@@ -389,6 +429,7 @@ inventories:
     levelThree:
       itemName: "§5§n13 places"
       itemType: DIAMOND
+      headTexture: ""
       slot: 13
       level: 3
       lore:
@@ -396,6 +437,7 @@ inventories:
     levelFour:
       itemName: "§5§n14 places"
       itemType: EMERALD
+      headTexture: ""
       slot: 14
       level: 4
       lore:
@@ -403,6 +445,7 @@ inventories:
     levelFive:
       itemName: "§5§n15 places"
       itemType: NETHERITE_INGOT
+      headTexture: ""
       slot: 15
       level: 5
       lore:
@@ -410,6 +453,7 @@ inventories:
     close:
       itemName: "§c§oRetour"
       itemType: BARRIER
+      headTexture: ""
       slot: 26
 
 
@@ -417,6 +461,7 @@ inventories:
     storageOne:
       itemName: "§5§n1 stockage"
       itemType: BARREL
+      headTexture: ""
       slot: 11
       level: 1
       lore:
@@ -424,6 +469,7 @@ inventories:
     storageTwo:
       itemName: "§5§n2 stockages"
       itemType: BARREL
+      headTexture: ""
       slot: 12
       level: 2
       lore:
@@ -431,6 +477,7 @@ inventories:
     storageThree:
       itemName: "§5§n3 stockages"
       itemType: BARREL
+      headTexture: ""
       slot: 13
       level: 3
       lore:
@@ -438,6 +485,7 @@ inventories:
     storageFour:
       itemName: "§5§n4 stockages"
       itemType: BARREL
+      headTexture: ""
       slot: 14
       level: 4
       lore:
@@ -445,6 +493,7 @@ inventories:
     storageFive:
       itemName: "§5§n5 stockages"
       itemType: BARREL
+      headTexture: ""
       slot: 15
       level: 5
       lore:
@@ -452,6 +501,7 @@ inventories:
     close:
       itemName: "§c§oRetour"
       itemType: BARRIER
+      headTexture: ""
       slot: 26
 
 
@@ -459,10 +509,12 @@ inventories:
     confirm:
       itemName: "§a§nConfirmer"
       itemType: LIME_STAINED_GLASS_PANE
+      headTexture: ""
       slots: [13]
     cancel:
       itemName: "§c§lAnnuler"
       itemType: RED_STAINED_GLASS_PANE
+      headTexture: ""
       slots: [9, 10, 11, 12, 14, 15, 16, 17]
 
 
@@ -470,6 +522,7 @@ inventories:
     close:
       itemName: "§c§oRetour"
       itemType: BARRIER
+      headTexture: ""
       slot: 26
 
 
@@ -477,6 +530,7 @@ inventories:
     close:
       itemName: "§c§oRetour"
       itemType: BARRIER
+      headTexture: ""
       slot: 26
 
 
@@ -484,6 +538,7 @@ inventories:
     addMember:
       itemName: "§5§nAjouter un membre"
       itemType: GOLD_INGOT
+      headTexture: ""
       slot: 27
       rank: 2
       lore:
@@ -491,6 +546,7 @@ inventories:
     removeMember:
       itemName: "§5§nRetirer un membre"
       itemType: RAW_GOLD
+      headTexture: ""
       slot: 28
       rank: 2
       lore:
@@ -498,6 +554,7 @@ inventories:
     editOwner:
       itemName: "§5§nChanger de créateur"
       itemType: LECTERN
+      headTexture: ""
       slot: 31
       rank: 0
       lore:
@@ -506,6 +563,7 @@ inventories:
     close:
       itemName: "§c§oRetour"
       itemType: BARRIER
+      headTexture: ""
       slot: 35
 
 
@@ -513,6 +571,7 @@ inventories:
     addAlliance:
       itemName: "§5§nAjouter une alliance"
       itemType: PRISMARINE_SHARD
+      headTexture: ""
       slot: 27
       rank: 1
       lore:
@@ -520,6 +579,7 @@ inventories:
     removeAlliance:
       itemName: "§5§nRetirer une alliance"
       itemType: PRISMARINE_CRYSTALS
+      headTexture: ""
       slot: 28
       rank: 1
       lore:
@@ -527,6 +587,7 @@ inventories:
     close:
       itemName: "§c§oRetour"
       itemType: BARRIER
+      headTexture: ""
       slot: 35
 
 
@@ -534,6 +595,7 @@ inventories:
     addTeamMoney:
       itemName: "§5§nAjouter de l'argent"
       itemType: GOLD_NUGGET
+      headTexture: ""
       slot: 10
       rankPath: member.addTeamMoney
       lore:
@@ -541,6 +603,7 @@ inventories:
     withdrawTeamMoney:
       itemName: "§5§nRetirer de l'argent"
       itemType: PAPER
+      headTexture: ""
       slot: 11
       rankPath: member.withdrawTeamMoney
       lore:
@@ -548,6 +611,7 @@ inventories:
     seeTeamBank:
       itemName: "§5§nVoir l'argent"
       itemType: EMERALD
+      headTexture: ""
       slot: 12
       rankPath: member.seeTeamBank
       lore:
@@ -555,6 +619,7 @@ inventories:
     buyTeamBank:
       itemName: "§5§nAchat du compte"
       itemType: GOLD_BLOCK
+      headTexture: ""
       slot: 13
       rankPath: manage.buyTeamBank
       lore:
@@ -562,6 +627,7 @@ inventories:
     addMember:
       itemName: "§5§nAjouter un membre"
       itemType: GOLD_INGOT
+      headTexture: ""
       slot: 14
       rankPath: editMembers.addMember
       lore:
@@ -569,6 +635,7 @@ inventories:
     removeMember:
       itemName: "§5§nRetirer un membre"
       itemType: RAW_GOLD
+      headTexture: ""
       slot: 15
       rankPath: editMembers.removeMember
       lore:
@@ -576,6 +643,7 @@ inventories:
     seeTeamMembers:
       itemName: "§5§nVoir les membres"
       itemType: TOTEM_OF_UNDYING
+      headTexture: ""
       slot: 16
       rankPath: member.seeTeamMembers
       lore:
@@ -583,6 +651,7 @@ inventories:
     upgradeTotalMembers:
       itemName: "§5§nAugmenter les places disponibles"
       itemType: EXPERIENCE_BOTTLE
+      headTexture: ""
       slot: 19
       rankPath: manage.upgradeTotalMembers
       lore:
@@ -591,6 +660,7 @@ inventories:
     manageMembers:
       itemName: "§5§nGestion des membres"
       itemType: WRITABLE_BOOK
+      headTexture: ""
       slot: 20
       rankPath: manage.editMembers
       lore:
@@ -598,6 +668,7 @@ inventories:
     editName:
       itemName: "§5§nModifier le nom"
       itemType: PAPER
+      headTexture: ""
       slot: 21
       rankPath: manage.editName
       lore:
@@ -605,6 +676,7 @@ inventories:
     editPrefix:
       itemName: "§5§nModifier le préfixe"
       itemType: NAME_TAG
+      headTexture: ""
       slot: 22
       rankPath: manage.editPrefix
       lore:
@@ -612,6 +684,7 @@ inventories:
     setTeamHome:
       itemName: "§5§nCréer le home"
       itemType: GREEN_BED
+      headTexture: ""
       slot: 23
       rankPath: manage.setTeamHome
       lore:
@@ -619,6 +692,7 @@ inventories:
     removeTeamHome:
       itemName: "§5§nSupprimer la home"
       itemType: RED_BED
+      headTexture: ""
       slot: 24
       rankPath: manage.removeTeamHome
       lore:
@@ -626,6 +700,7 @@ inventories:
     editPermissions:
       itemName: "§5§nModifier les permissions"
       itemType: REDSTONE
+      headTexture: ""
       slot: 25
       rankPath: manage.editPermissions
       lore:
@@ -633,6 +708,7 @@ inventories:
     storageDirectory:
       itemName: "§5§nAccès aux stockages"
       itemType: BARREL
+      headTexture: ""
       slot: 32
       rankPath: member.storageDirectory
       lore:
@@ -641,6 +717,7 @@ inventories:
     upgradeStorageAmount:
       itemName: "§5§nAugmenter les stockages disponibles"
       itemType: COMPOSTER
+      headTexture: ""
       slot: 30
       rankPath: manage.upgradeStorageAmount
       lore:
@@ -649,6 +726,7 @@ inventories:
     addAlliance:
       itemName: "§5§nAjouter une alliance"
       itemType: PRISMARINE_SHARD
+      headTexture: ""
       slot: 31
       rankPath: editAlliances.addAlliance
       lore:
@@ -656,6 +734,7 @@ inventories:
     removeAlliance:
       itemName: "§5§nRetirer une alliance"
       itemType: PRISMARINE_CRYSTALS
+      headTexture: ""
       slot: 32
       rankPath: editAlliances.removeAlliance
       lore:
@@ -663,6 +742,7 @@ inventories:
     seeTeamAlliances:
       itemName: "§5§nVoir les alliances"
       itemType: ENDER_EYE
+      headTexture: ""
       slot: 33
       rankPath: member.seeTeamAlliances
       lore:
@@ -670,6 +750,7 @@ inventories:
     close:
       itemName: "§c§oRetour"
       itemType: BARRIER
+      headTexture: ""
       slot: 44
 
 
@@ -677,6 +758,7 @@ inventories:
     close:
       itemName: "§c§oRetour"
       itemType: BARRIER
+      headTexture: ""
       slot: 53
 
 
@@ -684,34 +766,40 @@ inventories:
     storageOne:
       itemName: inventoriesName.storages.storageOne
       itemType: CHEST
+      headTexture: ""
       level: 1
       storageId: 1
       slot: 11
     storageTwo:
       itemName: inventoriesName.storages.storageTwo
       itemType: CHEST
+      headTexture: ""
       level: 2
       storageId: 2
       slot: 12
     storageThree:
       itemName: inventoriesName.storages.storageThree
       itemType: CHEST
+      headTexture: ""
       level: 3
       storageId: 3
       slot: 13
     storageFour:
       itemName: inventoriesName.storages.storageFour
       itemType: CHEST
+      headTexture: ""
       level: 4
       storageId: 4
       slot: 14
     storageFive:
       itemName: inventoriesName.storages.storageFive
       itemType: CHEST
+      headTexture: ""
       level: 5
       storageId: 5
       slot: 15
     close:
       itemName: "§c§oRetour"
       itemType: BARRIER
+      headTexture: ""
       slot: 26
