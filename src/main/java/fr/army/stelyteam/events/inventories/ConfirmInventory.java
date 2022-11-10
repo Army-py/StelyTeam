@@ -71,7 +71,6 @@ public class ConfirmInventory {
                 String teamName = tempAction.getTeam().getTeamName();
                 String receiverName = tempAction.getReceiverName();
                 Player receiver = Bukkit.getPlayer(receiverName);
-                cacheManager.removePlayerAction(playerName);
                 sqlManager.removeMember(receiverName, teamName);
                 player.closeInventory();
                 player.sendMessage(messageManager.getReplaceMessage("sender.exclude_member", receiverName));
@@ -83,7 +82,6 @@ public class ConfirmInventory {
                 TemporaryAction tempAction = cacheManager.getTempAction(playerName);
                 String teamName = tempAction.getTeam().getTeamName();
                 String allianceName = tempAction.getReceiverName();
-                cacheManager.removePlayerAction(playerName);
                 sqlManager.removeAlliance(teamName, allianceName);;
                 player.closeInventory();
                 player.sendMessage(messageManager.getReplaceMessage("sender.remove_alliance", allianceName));
@@ -103,12 +101,35 @@ public class ConfirmInventory {
                 String senderName = tempAction.getSenderName();
                 String receiverName = tempAction.getReceiverName();
                 Player receiver = Bukkit.getPlayer(receiverName);
-                cacheManager.removePlayerAction(playerName);
                 sqlManager.updateTeamOwner(teamName, receiverName, senderName);
                 player.closeInventory();
                 player.sendMessage(messageManager.getReplaceMessage("sender.promote_owner", receiverName));
                 if (receiver != null && receiver.getName().equals(receiverName)) receiver.sendMessage(messageManager.getReplaceMessage("receiver.promote_owner", teamName));
                 teamMembersUtils.refreshTeamMembersInventory(teamName, playerName);
+            
+            }else if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.CREATE_HOME)){
+                player.closeInventory();
+                String teamName = sqlManager.getTeamNameFromPlayerName(playerName);
+                String worldName = player.getWorld().getName();
+                Double x = player.getLocation().getX();
+                Double y = player.getLocation().getY();
+                Double z = player.getLocation().getZ();
+                Double yaw = (double) player.getLocation().getYaw();
+
+                if (sqliteManager.isSet(teamName)){
+                    sqliteManager.updateHome(teamName, worldName, x, y, z, yaw);
+                    player.sendMessage(messageManager.getMessage("manage_team.team_home.redefine"));
+                }else{
+                    sqliteManager.addHome(teamName, worldName, x, y, z, yaw);
+                    player.sendMessage(messageManager.getMessage("manage_team.team_home.created"));
+                }
+
+            }else if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.DELETE_HOME)){
+                player.closeInventory();
+                String teamName = sqlManager.getTeamNameFromPlayerName(playerName);
+
+                sqliteManager.removeHome(teamName);
+                player.sendMessage(messageManager.getMessage("manage_team.team_home.deleted"));
 
 
             }else if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.CREATE_TEAM)){
@@ -118,7 +139,6 @@ public class ConfirmInventory {
 
             }else if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.BUY_TEAM_BANK)){
                 String teamID = sqlManager.getTeamNameFromPlayerName(playerName);
-                cacheManager.removePlayerAction(playerName);
                 sqlManager.updateUnlockedTeamBank(teamID);
                 economyManager.removeMoneyPlayer(player, config.getDouble("prices.buyTeamBank"));
                 player.sendMessage(messageManager.getMessage("manage_team.team_bank.unlock"));
@@ -130,21 +150,18 @@ public class ConfirmInventory {
 
             }else if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.EDIT_NAME)){
                 String teamID = sqlManager.getTeamNameFromPlayerName(playerName);
-                cacheManager.removePlayerAction(playerName);
                 player.closeInventory();
                 conversationBuilder.getNameInput(player, new ConvEditTeamID(plugin));
                 teamMembersUtils.refreshTeamMembersInventory(teamID, playerName);
 
             }else if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.EDIT_PREFIX)){
                 String teamID = sqlManager.getTeamNameFromPlayerName(playerName);
-                cacheManager.removePlayerAction(playerName);
                 player.closeInventory();
                 conversationBuilder.getNameInput(player, new ConvEditTeamPrefix(plugin));
                 teamMembersUtils.refreshTeamMembersInventory(teamID, playerName);
 
             }else if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.DELETE_TEAM)){
                 String teamID = sqlManager.getTeamNameFromPlayerName(playerName);
-                cacheManager.removePlayerAction(playerName);
                 teamMembersUtils.teamBroadcast(teamID, playerName, messageManager.replaceTeamId("broadcasts.team_deleted", teamID));
                 sqlManager.removeTeam(teamID);
                 sqliteManager.removeHome(teamID);
@@ -156,7 +173,6 @@ public class ConfirmInventory {
                 String teamID = sqlManager.getTeamNameFromPlayerName(playerName);
                 Integer level = sqlManager.getImprovLvlMembers(teamID);
                 Integer newLevel = level + 1;
-                cacheManager.removePlayerAction(playerName);
                 sqlManager.incrementImprovLvlMembers(teamID);
                 economyManager.removeMoneyPlayer(player, config.getDouble("prices.upgrade.teamPlaces.level"+newLevel));
                 player.sendMessage(messageManager.getReplaceMessage("manage_team.upgrade_member_amount.new_upgrade", newLevel.toString()));
@@ -170,7 +186,6 @@ public class ConfirmInventory {
                 String teamID = sqlManager.getTeamNameFromPlayerName(playerName);
                 Integer level = sqlManager.getTeamStorageLvl(teamID);
                 Integer newLevel = level + 1;
-                cacheManager.removePlayerAction(playerName);
                 sqlManager.incrementTeamStorageLvl(teamID);
                 economyManager.removeMoneyPlayer(player, config.getDouble("prices.upgrade.teamStorages.level"+newLevel));
                 player.sendMessage(messageManager.getReplaceMessage("manage_team.upgrade_storages.new_upgrade", newLevel.toString()));
@@ -182,12 +197,12 @@ public class ConfirmInventory {
 
             }else if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.LEAVE_TEAM)){
                 String teamId = sqlManager.getTeamNameFromPlayerName(playerName);
-                cacheManager.removePlayerAction(playerName);
                 sqlManager.removeMember(playerName, teamId);
                 player.closeInventory();
                 player.sendMessage(messageManager.getReplaceMessage("other.leave_team", teamId));
                 teamMembersUtils.refreshTeamMembersInventory(teamId, playerName);
             }
+            cacheManager.removePlayerAction(playerName);
         }
 
         else if (itemName.equals(config.getString("inventories.confirmInventory.cancel.itemName"))){
@@ -196,6 +211,10 @@ public class ConfirmInventory {
             }else if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.REMOVE_ALLIANCE)){
                 player.closeInventory();
             }else if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.EDIT_OWNER)){
+                player.closeInventory();
+            }else if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.CREATE_HOME)){
+                player.closeInventory();
+            }else if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.DELETE_HOME)){
                 player.closeInventory();
 
             }else if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.CREATE_TEAM)){

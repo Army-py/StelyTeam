@@ -11,7 +11,9 @@ public enum TemporaryActionNames {
     DELETE_TEAM,
     IMPROV_LVL_MEMBERS,
     IMPROV_LVL_STORAGE,
-    LEAVE_TEAM, 
-    ADD_ALLIANCE, 
-    ADD_MEMBER
+    LEAVE_TEAM,
+    ADD_ALLIANCE,
+    ADD_MEMBER,
+    CREATE_HOME,
+    DELETE_HOME
 }

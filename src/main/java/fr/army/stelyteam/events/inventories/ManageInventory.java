@@ -68,32 +68,19 @@ public class ManageInventory {
 
 
         }else if (itemName.equals(config.getString("inventories.manage.setTeamHome.itemName"))){
-            player.closeInventory();
-            String teamID = sqlManager.getTeamNameFromPlayerName(playerName);
-            String worldName = player.getWorld().getName();
-            Double x = player.getLocation().getX();
-            Double y = player.getLocation().getY();
-            Double z = player.getLocation().getZ();
-            Double yaw = (double) player.getLocation().getYaw();
-
-            if (sqliteManager.isSet(teamID)){
-                sqliteManager.updateHome(teamID, worldName, x, y, z, yaw);
-                player.sendMessage(messageManager.getMessage("manage_team.team_home.redefine"));
-            }else{
-                sqliteManager.addHome(teamID, worldName, x, y, z, yaw);
-                player.sendMessage(messageManager.getMessage("manage_team.team_home.created"));
-            }
+            cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.CREATE_HOME));
+            Inventory inventory = inventoryBuilder.createConfirmInventory();
+            player.openInventory(inventory);
 
 
         }else if (itemName.equals(config.getString("inventories.manage.removeTeamHome.itemName"))){
-            player.closeInventory();
-            String teamID = sqlManager.getTeamNameFromPlayerName(playerName);
-
-            if (sqliteManager.isSet(teamID)){
-                sqliteManager.removeHome(teamID);
-                player.sendMessage(messageManager.getMessage("manage_team.team_home.deleted"));
-            }else{
+            String teamName = sqlManager.getTeamNameFromPlayerName(playerName);
+            if (!sqliteManager.isSet(teamName)){
                 player.sendMessage(messageManager.getMessage("manage_team.team_home.not_set"));
+            }else{
+                cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.DELETE_HOME));
+                Inventory inventory = inventoryBuilder.createConfirmInventory();
+                player.openInventory(inventory);
             }
 
 
