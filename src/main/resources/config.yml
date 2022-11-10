@@ -154,30 +154,32 @@ ranks:
     id: 0
     name: "Chef"
     color: "§c"
+    itemType: RED_DYE
+    headTexture: ""
   co_owner:
     id: 1
     name: "Chef adjoint"
     color: "§6"
+    itemType: ORANGE_DYE
+    headTexture: ""
   moderator:
     id: 2
     name: "Ainé"
     color: "§e"
+    itemType: YELLOW_DYE
+    headTexture: ""
   member:
     id: 3
     name: "Membre"
     color: "§d"
+    itemType: PINK_DYE
+    headTexture: ""
   new_member:
     id: 4
     name: "Nouveau Membre"
     color: "§7"
-  # coop:
-  #   id: 6
-  #   name: "Coop"
-  #   color: "§8"
-  # alliance:
-  #   id: 7
-  #   name: "Alliance"
-  #   color: "§a"
+    itemType: GRAY_DYE
+    headTexture: ""
 
 
 # Description des items en fonction des grades, dans le menu d'éition des membres

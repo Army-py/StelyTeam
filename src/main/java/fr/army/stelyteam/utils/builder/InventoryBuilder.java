@@ -381,24 +381,31 @@ public class InventoryBuilder {
 
         for(String str : config.getConfigurationSection("inventories.permissions").getKeys(false)){
             Integer slot = config.getInt("inventories.permissions."+str+".slot");
-            Material material = Material.getMaterial(config.getString("inventories.permissions."+str+".itemType"));
+            // Material material = Material.getMaterial(config.getString("inventories.permissions."+str+".itemType"));
             String name = config.getString("inventories.permissions."+str+".itemName");
             List<String> lore = config.getStringList("inventories.permissions."+str+".lore");
-            String headTexture = config.getString("inventories.permissions."+str+".headTexture");
-
+            String headTexture;
+            
             String rankPath = config.getString("inventories.permissions."+str+".rankPath");
             Integer defaultRankId = config.getInt("inventories."+rankPath+".rank");
             Integer permissionRank = sqlManager.getRankAssignement(teamId, str);
             String lorePrefix = config.getString("prefixRankLore");
+            Material material;
+
+            if (str.equals("close")){
+                material = Material.getMaterial(config.getString("inventories.permissions."+str+".itemType"));
+                headTexture = config.getString("inventories.permissions."+str+".headTexture");
+            }else{
+                material = Material.getMaterial(config.getString("ranks."+plugin.getRankFromId(permissionRank != null ? permissionRank : defaultRankId)+".itemType"));
+                headTexture = config.getString("ranks."+plugin.getRankFromId(permissionRank != null ? permissionRank : defaultRankId)+".headTexture");
+            }
 
             if (permissionRank != null){
                 String rankColor = config.getString("ranks." + plugin.getRankFromId(permissionRank) + ".color");
                 lore.add(0, lorePrefix + rankColor + config.getString("ranks." + plugin.getRankFromId(permissionRank) + ".name"));
-            }else{
-                if (rankPath != null){
-                    String rankColor = config.getString("ranks." + plugin.getRankFromId(defaultRankId) + ".color");
-                    lore.add(0, lorePrefix + rankColor + config.getString("ranks." + plugin.getRankFromId(defaultRankId) + ".name"));
-                }
+            }else if (rankPath != null){
+                String rankColor = config.getString("ranks." + plugin.getRankFromId(defaultRankId) + ".color");
+                lore.add(0, lorePrefix + rankColor + config.getString("ranks." + plugin.getRankFromId(defaultRankId) + ".name"));
             }
 
             boolean isDefault = false;
