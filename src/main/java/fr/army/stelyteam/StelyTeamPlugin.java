@@ -128,6 +128,34 @@ public class StelyTeamPlugin extends JavaPlugin {
     }
 
 
+    public boolean playerHasPermission(String playerName, String teamId, String permission){
+        Integer permissionRank = sqlManager.getRankAssignement(teamId, permission);
+        if (permissionRank != null){
+            return permissionRank >= sqlManager.getMemberRank(playerName);
+        }
+
+        String rankPath = config.getString("inventories.permissions."+permission+".rankPath");
+        if (sqlManager.isOwner(playerName) || config.getInt("inventories."+rankPath+".rank") == -1){
+            return true;
+        }else if (config.getInt("inventories."+rankPath+".rank") >= sqlManager.getMemberRank(playerName)){
+            return true;
+        }else if (permission.equals("close") || permission.equals("leaveTeam") || permission.equals("teamInfos")){
+            return true;
+        }
+        return false;
+    }
+
+
+    public boolean playerHasPermissionInSection(String playerName, String teamName, String sectionName){
+        for (String section : config.getConfigurationSection("inventories." + sectionName).getKeys(false)){
+            if (playerHasPermission(playerName, teamName, section) && !section.equals("close")){
+                return true;
+            }
+        }
+        return false;
+    }
+
+
     public YamlConfiguration getConfig() {
         return config;
     }

@@ -2,6 +2,7 @@ package fr.army.stelyteam.conversations;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.utils.Team;
+import fr.army.stelyteam.utils.TeamMembersUtils;
 import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.EconomyManager;
@@ -13,6 +14,7 @@ import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -25,6 +27,7 @@ public class ConvGetTeamPrefix extends StringPrompt {
     private YamlConfiguration config;
     private MessageManager messageManager;
     private EconomyManager economyManager;
+    private TeamMembersUtils teamMembersUtils;
 
 
     public ConvGetTeamPrefix(StelyTeamPlugin plugin) {
@@ -34,6 +37,7 @@ public class ConvGetTeamPrefix extends StringPrompt {
         this.config = plugin.getConfig();
         this.messageManager = plugin.getMessageManager();
         this.economyManager = plugin.getEconomyManager();
+        this.teamMembersUtils = plugin.getTeamMembersUtils();
     }
 
     @Override
@@ -58,7 +62,7 @@ public class ConvGetTeamPrefix extends StringPrompt {
         economyManager.removeMoneyPlayer(author, config.getDouble("prices.createTeam"));
         con.getForWhom().sendRawMessage(messageManager.getMessage("manage_team.creation.team_created"));
         
-        openTeamPanel(author);
+        if (config.getBoolean("openTeamAfterCreate")) teamMembersUtils.openMainInventory(author);
         return null;
     }
 
@@ -85,11 +89,5 @@ public class ConvGetTeamPrefix extends StringPrompt {
         }
 
         return prefixTeam.length() - (colors * pattern.pattern().length() + hexColors * hexPattern.pattern().length()) > config.getInt("teamPrefixMaxLength");
-    }
-
-    private void openTeamPanel(Player player) {
-        if (config.getBoolean("openTeamAfterCreate")){
-            player.performCommand("st");
-        }
     }
 }

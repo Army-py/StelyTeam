@@ -30,6 +30,7 @@ import fr.army.stelyteam.commands.subCommands.team.SubCmdAccept;
 import fr.army.stelyteam.commands.subCommands.team.SubCmdDeny;
 import fr.army.stelyteam.commands.subCommands.utility.SubCmdHome;
 import fr.army.stelyteam.commands.subCommands.utility.SubCmdVisual;
+import fr.army.stelyteam.utils.TeamMembersUtils;
 import fr.army.stelyteam.utils.builder.InventoryBuilder;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
@@ -44,6 +45,7 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
     private SQLiteManager sqliteManager;
     private MessageManager messageManager;
     private InventoryBuilder inventoryBuilder;
+    private TeamMembersUtils teamMembersUtils;
     private Map<String, Object> subCommands;
     private Map<String, Object> subCommandsOp;
 
@@ -55,6 +57,7 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
         this.sqliteManager = plugin.getSQLiteManager();
         this.messageManager = plugin.getMessageManager();
         this.inventoryBuilder = new InventoryBuilder(plugin);
+        this.teamMembersUtils = new TeamMembersUtils(plugin);
         this.subCommands = new HashMap<>();
         this.subCommandsOp = new HashMap<>();
         initSubCommands();
@@ -78,17 +81,7 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
 
             
             if (args.length == 0){
-                Inventory inventory;
-                if (!sqlManager.isMember(playerName)){
-                    inventory = inventoryBuilder.createTeamInventory();
-                }else if(sqlManager.isOwner(player.getName())){
-                    inventory = inventoryBuilder.createAdminInventory();
-                }else if (sqlManager.getMemberRank(playerName) <= 3){
-                    inventory = inventoryBuilder.createAdminInventory();
-                }else if (sqlManager.getMemberRank(playerName) >= 4){
-                    inventory = inventoryBuilder.createMemberInventory(playerName);
-                }else inventory = inventoryBuilder.createTeamInventory();
-                player.openInventory(inventory);
+                teamMembersUtils.openMainInventory(player);
             }else{
                 if (subCommands.containsKey(args[0])){
                     SubCommand subCmd = (SubCommand) subCommands.get(args[0]);

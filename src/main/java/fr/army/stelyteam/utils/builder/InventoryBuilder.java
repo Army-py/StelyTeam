@@ -97,7 +97,7 @@ public class InventoryBuilder {
             
             ItemStack item;
             
-            if (playerHasPermission(playername, teamId, str)){ 
+            if (plugin.playerHasPermission(playername, teamId, str)){ 
                 if (str.equals("buyTeamBank")){
                     item = ItemBuilder.getItem(material, name, lore, headTexture, sqlManager.hasUnlockedTeamBank(teamId));
                 }else {
@@ -157,7 +157,7 @@ public class InventoryBuilder {
                 lore = replaceInLore(lore, "%MAX_MEMBERS%", IntegerToString(maxMembers+teamMembersLelvel));
             }
 
-            if (playerHasPermission(playername, teamID, str)){ 
+            if (plugin.playerHasPermission(playername, teamID, str)){ 
                 item = ItemBuilder.getItem(material, name, lore, headTexture, false);
             }else{
                 item = ItemBuilder.getItem(
@@ -327,7 +327,7 @@ public class InventoryBuilder {
 
             lore.add(0, config.getString("prefixRankLore") + rankColor + config.getString("ranks." + memberRankName + ".name"));
             
-            if (playerHasPermission(playername, teamID, "manageMembers")){ 
+            if (plugin.playerHasPermission(playername, teamID, "manageMembers")){ 
                 item = ItemBuilder.getPlayerHead(member, itemName, lore);
             }else{
                 item = ItemBuilder.getItem(
@@ -355,7 +355,7 @@ public class InventoryBuilder {
             else lore = Collections.emptyList();
             
 
-            if (playerHasPermission(playername, teamID, str)){ 
+            if (plugin.playerHasPermission(playername, teamID, str)){ 
                 item = ItemBuilder.getItem(material, name, lore, headTexture, false);
             }else{
                 item = ItemBuilder.getItem(
@@ -521,7 +521,7 @@ public class InventoryBuilder {
             lore = replaceInLore(lore, "%MEMBERS%", String.join(", ", allianceMembers));
             
             
-            if (playerHasPermission(playername, teamId, "seeTeamAlliances")){ 
+            if (plugin.playerHasPermission(playername, teamId, "seeTeamAlliances")){ 
                 item = ItemBuilder.getPlayerHead(allianceOwner, itemName, lore);
             }else{
                 item = ItemBuilder.getItem(
@@ -588,7 +588,7 @@ public class InventoryBuilder {
             lore = replaceInLore(lore, "%MEMBERS%", String.join(", ", allianceMembers));
             
             
-            if (playerHasPermission(playername, teamId, "seeAllliances")){ 
+            if (plugin.playerHasPermission(playername, teamId, "seeAllliances")){ 
                 item = ItemBuilder.getPlayerHead(allianceOwner, itemName, lore);
             }else{
                 item = ItemBuilder.getItem(
@@ -616,7 +616,7 @@ public class InventoryBuilder {
             else lore = Collections.emptyList();
             
 
-            if (playerHasPermission(playername, teamId, str)){ 
+            if (plugin.playerHasPermission(playername, teamId, str)){ 
                 item = ItemBuilder.getItem(material, name, lore, headTexture, false);
             }else{
                 item = ItemBuilder.getItem(
@@ -649,24 +649,6 @@ public class InventoryBuilder {
 
     private String DoubleToString(double value){
         return NumberFormat.getNumberInstance(Locale.US).format(value);
-    }
-
-
-    private boolean playerHasPermission(String playerName, String teamId, String permission){
-        Integer permissionRank = sqlManager.getRankAssignement(teamId, permission);
-        if (permissionRank != null){
-            return permissionRank >= sqlManager.getMemberRank(playerName);
-        }
-
-        String rankPath = config.getString("inventories.permissions."+permission+".rankPath");
-        if (sqlManager.isOwner(playerName) || config.getInt("inventories."+rankPath+".rank") == -1){
-            return true;
-        }else if (config.getInt("inventories."+rankPath+".rank") >= sqlManager.getMemberRank(playerName)){
-            return true;
-        }else if (permission.equals("close") || permission.equals("editMembers") || permission.equals("leaveTeam") || permission.equals("teamInfos")){
-            return true;
-        }
-        return false;
     }
 
 

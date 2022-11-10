@@ -35,7 +35,7 @@ public class SubCmdDeny extends SubCommand {
             cacheManager.removePlayerAction(playerName);
             player.sendMessage(messageManager.getMessage("commands.stelyteam_deny.output"));
             if (invitationSender != null){
-                invitationSender.sendMessage(messageManager.getReplaceMessage("sender.accepted_invitation", playerName));
+                invitationSender.sendMessage(messageManager.getReplaceMessage("sender.refused_invitation", playerName));
             }
         }else{
             player.sendMessage(messageManager.getMessage("common.no_invitation"));
