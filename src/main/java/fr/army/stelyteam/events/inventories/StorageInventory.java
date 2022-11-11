@@ -51,17 +51,36 @@ public class StorageInventory {
     public void onInventoryClick(){
         Player player = (Player) clickEvent.getWhoClicked();
         String playerName = player.getName();
+        Team team = sqlManager.getTeamFromPlayerName(playerName);
+        Integer storageId = getStorageId(clickEvent.getView().getTitle());
         String itemName;
+        String storageName;
         
         // Fermeture ou retour en arrière de l'inventaire
         if (clickEvent.getCurrentItem() != null){
+            Material material = clickEvent.getCurrentItem().getType();
             itemName = clickEvent.getCurrentItem().getItemMeta().getDisplayName();
-            if (itemName.equals(config.getString("inventories.storage.close.itemName"))){
+            if (material.name().equals(config.getString("emptyCase"))){
                 clickEvent.setCancelled(true);
-                if (clickEvent.getCursor().getType().equals(Material.AIR)){
-                    player.openInventory(inventoryBuilder.createStorageDirectoryInventory(playerName));
-                    return;
-                }else return;
+                return;
+            }else if (itemName.equals(config.getString("inventories.storage.previous.itemName"))){
+                clickEvent.setCancelled(true);
+                storageName = config.getString(config.getString("inventories.storageDirectory."+plugin.getStorageFromId(storageId-1)+".itemName"));
+                player.openInventory(inventoryBuilder.createStorageInventory(team, storageId-1, storageName));
+                return;
+            }else if (itemName.equals(config.getString("inventories.storage.next.itemName"))){
+                clickEvent.setCancelled(true);
+                storageName = config.getString(config.getString("inventories.storageDirectory."+plugin.getStorageFromId(storageId+1)+".itemName"));
+                player.openInventory(inventoryBuilder.createStorageInventory(team, storageId+1, storageName));
+                return;
+            }else{
+                if (itemName.equals(config.getString("inventories.storage.close.itemName"))){
+                    clickEvent.setCancelled(true);
+                    if (clickEvent.getCursor().getType().equals(Material.AIR)){
+                        player.openInventory(inventoryBuilder.createStorageDirectoryInventory(playerName));
+                        return;
+                    }else return;
+                }
             }
         }
         clickEvent.setCancelled(false);

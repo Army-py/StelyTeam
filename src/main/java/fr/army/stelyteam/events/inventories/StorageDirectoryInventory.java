@@ -55,6 +55,7 @@ public class StorageDirectoryInventory {
                     // Inventory inventory = inventoryBuilder.createStorageInventory(teamId, storageId, name);
                     Inventory inventory = inventoryBuilder.createStorageInventory(team, storageId, name);
                     player.openInventory(inventory);
+                    return;
                 }
             }
         }

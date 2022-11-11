@@ -117,6 +117,16 @@ public class StelyTeamPlugin extends JavaPlugin {
     }
 
 
+    public String getStorageFromId(Integer storageId){
+        for (String key : config.getConfigurationSection("inventories.storageDirectory").getKeys(false)) {
+            if (config.getInt("inventories.storageDirectory." + key + ".storageId") == storageId) {
+                return key;
+            }
+        }
+        return null;
+    }
+
+
     public Integer getLastRank(){
         Integer lastRank = 0;
         for (String key : config.getConfigurationSection("ranks").getKeys(false)) {
@@ -125,6 +135,18 @@ public class StelyTeamPlugin extends JavaPlugin {
             }
         }
         return lastRank;
+    }
+
+
+    public Integer getMinStorageId(){
+        Integer minStorageId = Integer.MAX_VALUE;
+        for (String key : config.getConfigurationSection("inventories.storageDirectory").getKeys(false)) {
+            if (config.getInt("inventories.storageDirectory." + key + ".storageId") < minStorageId) {
+                if (key.equals("close")) continue;
+                minStorageId = config.getInt("inventories.storageDirectory." + key + ".storageId");
+            }
+        }
+        return minStorageId;
     }
 
 
