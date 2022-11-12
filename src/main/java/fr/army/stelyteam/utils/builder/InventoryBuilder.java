@@ -212,21 +212,35 @@ public class InventoryBuilder {
         String teamID = sqlManager.getTeamNameFromPlayerName(playername);
         Integer level = sqlManager.getImprovLvlMembers(teamID);
         Inventory inventory = Bukkit.createInventory(null, slots, config.getString("inventoriesName.upgradeTotalMembers"));
+        Material material;
+        String headTexture;
 
         emptyCases(inventory, slots, 0);
 
         for(String str : config.getConfigurationSection("inventories.upgradeTotalMembers").getKeys(false)){
             Integer slot = config.getInt("inventories.upgradeTotalMembers."+str+".slot");
-            Material material = Material.getMaterial(config.getString("inventories.upgradeTotalMembers."+str+".itemType"));
+            // Material material = Material.getMaterial(config.getString("inventories.upgradeTotalMembers."+str+".itemType"));
             String name = config.getString("inventories.upgradeTotalMembers."+str+".itemName");
             List<String> lore = config.getStringList("inventories.upgradeTotalMembers."+str+".lore");
-            String headTexture = config.getString("inventories.upgradeTotalMembers."+str+".headTexture");
+            // String headTexture = config.getString("inventories.upgradeTotalMembers."+str+".headTexture");
 
-            if (level >= config.getInt("inventories.upgradeTotalMembers."+str+".level") && !str.equals("close")){
-                inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, true));
+            // if (level >= config.getInt("inventories.upgradeTotalMembers."+str+".level") && !str.equals("close")){
+            //     inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, true));
+            // }else{
+            //     inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, false));
+            // }
+
+            if (str.equals("close")){
+                material = Material.getMaterial(config.getString("inventories.upgradeTotalMembers."+str+".itemType"));
+                headTexture = config.getString("inventories.upgradeTotalMembers."+str+".headTexture");
+            }else if (level >= config.getInt("inventories.upgradeTotalMembers."+str+".level")){
+                material = Material.getMaterial(config.getString("inventories.upgradeTotalMembers."+str+".unlock.itemType"));
+                headTexture = config.getString("inventories.upgradeTotalMembers."+str+".unlock.headTexture");
             }else{
-                inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, false));
+                material = Material.getMaterial(config.getString("inventories.upgradeTotalMembers."+str+".lock.itemType"));
+                headTexture = config.getString("inventories.upgradeTotalMembers."+str+".lock.headTexture");
             }
+            inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, false));
         }
         return inventory;
     }
@@ -237,21 +251,36 @@ public class InventoryBuilder {
         String teamID = sqlManager.getTeamNameFromPlayerName(playername);
         Integer level = sqlManager.getTeamStorageLvl(teamID);
         Inventory inventory = Bukkit.createInventory(null, slots, config.getString("inventoriesName.upgradeStorageAmount"));
+        Material material;
+        String headTexture;
 
         emptyCases(inventory, slots, 0);
 
         for(String str : config.getConfigurationSection("inventories.upgradeStorageAmount").getKeys(false)){
             Integer slot = config.getInt("inventories.upgradeStorageAmount."+str+".slot");
-            Material material = Material.getMaterial(config.getString("inventories.upgradeStorageAmount."+str+".itemType"));
+            // Material material = Material.getMaterial(config.getString("inventories.upgradeStorageAmount."+str+".itemType"));
             String name = config.getString("inventories.upgradeStorageAmount."+str+".itemName");
             List<String> lore = config.getStringList("inventories.upgradeStorageAmount."+str+".lore");
-            String headTexture = config.getString("inventories.upgradeStorageAmount."+str+".headTexture");
+            // String headTexture = config.getString("inventories.upgradeStorageAmount."+str+".headTexture");
 
-            if (level >= config.getInt("inventories.upgradeStorageAmount."+str+".level") && !str.equals("close")){
-                inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, true));
+            // if (level >= config.getInt("inventories.upgradeStorageAmount."+str+".level") && !str.equals("close")){
+            //     inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, true));
+            // }else{
+            //     inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, false));
+            // }
+            
+            if (str.equals("close")){
+                material = Material.getMaterial(config.getString("inventories.upgradeStorageAmount."+str+".itemType"));
+                headTexture = config.getString("inventories.upgradeStorageAmount."+str+".headTexture");
+            }else if (level >= config.getInt("inventories.upgradeStorageAmount."+str+".level")){
+                material = Material.getMaterial(config.getString("inventories.upgradeStorageAmount."+str+".unlock.itemType"));
+                headTexture = config.getString("inventories.upgradeStorageAmount."+str+".unlock.headTexture");
             }else{
-                inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, false));
+                material = Material.getMaterial(config.getString("inventories.upgradeStorageAmount."+str+".lock.itemType"));
+                headTexture = config.getString("inventories.upgradeStorageAmount."+str+".lock.headTexture");
             }
+
+            inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, false));
         }
         return inventory;
     }

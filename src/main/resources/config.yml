@@ -415,40 +415,60 @@ inventories:
   upgradeTotalMembers:
     levelOne:
       itemName: "§5§n11 places"
-      itemType: PLAYER_HEAD
-      headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODg5OTE2OTc0Njk2NTNjOWFmODM1MmZkZjE4ZDBjYzljNjc3NjNjZmU2NjE3NWMxNTU2YWVkMzMyNDZjNyJ9fX0="
+      lock:
+        itemType: PLAYER_HEAD
+        headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOGQyNDU0ZTRjNjdiMzIzZDViZTk1M2I1YjNkNTQxNzRhYTI3MTQ2MDM3NGVlMjg0MTBjNWFlYWUyYzExZjUifX19"
+      unlock:
+        itemType: PLAYER_HEAD
+        headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODg5OTE2OTc0Njk2NTNjOWFmODM1MmZkZjE4ZDBjYzljNjc3NjNjZmU2NjE3NWMxNTU2YWVkMzMyNDZjNyJ9fX0="
       slot: 11
       level: 1
       lore:
         - "§b§oPrix : 25 000€"
     levelTwo:
       itemName: "§5§n12 places"
-      itemType: PLAYER_HEAD
-      headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTQ5NmMxNjJkN2M5ZTFiYzhjZjM2M2YxYmZhNmY0YjJlZTVkZWM2MjI2YzIyOGY1MmViNjVkOTZhNDYzNWMifX19"
+      lock:
+        itemType: PLAYER_HEAD
+        headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYjEzYjc3OGM2ZTUxMjgwMjQyMTRmODU5YjRmYWRjNzczOGM3YmUzNjdlZTRiOWI4ZGJhZDc5NTRjZmYzYSJ9fX0="
+      unlock:
+        itemType: PLAYER_HEAD
+        headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTQ5NmMxNjJkN2M5ZTFiYzhjZjM2M2YxYmZhNmY0YjJlZTVkZWM2MjI2YzIyOGY1MmViNjVkOTZhNDYzNWMifX19"
       slot: 12
       level: 2
       lore:
         - "§b§oPrix : 50 000€"
     levelThree:
       itemName: "§5§n13 places"
-      itemType: PLAYER_HEAD
-      headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzQyMjZmMmViNjRhYmM4NmIzOGI2MWQxNDk3NzY0Y2JhMDNkMTc4YWZjMzNiN2I4MDIzY2Y0OGI0OTMxMSJ9fX0="
+      lock:
+        itemType: PLAYER_HEAD
+        headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMDMxZjY2YmUwOTUwNTg4NTk4ZmVlZWE3ZTZjNjc3OTM1NWU1N2NjNmRlOGI5MWE0NDM5MWIyZTlmZDcyIn19fQ=="
+      unlock:
+        itemType: PLAYER_HEAD
+        headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzQyMjZmMmViNjRhYmM4NmIzOGI2MWQxNDk3NzY0Y2JhMDNkMTc4YWZjMzNiN2I4MDIzY2Y0OGI0OTMxMSJ9fX0="
       slot: 13
       level: 3
       lore:
         - "§b§oPrix : 100 000€"
     levelFour:
       itemName: "§5§n14 places"
-      itemType: PLAYER_HEAD
-      headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjkyMGVjY2UxYzhjZGU1ZGJjYTU5MzhjNTM4NGY3MTRlNTViZWU0Y2NhODY2YjcyODNiOTVkNjllZWQzZDJjIn19fQ=="
+      lock:
+        itemType: PLAYER_HEAD
+        headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTViYzQyYzY5ODQ2YzNkYTk1MzFhYzdkYmEyYjU1MzYzZjhmOTQ3MjU3NmUxN2Q0MjNiN2E5YjgxYzkxNTEifX19"
+      unlock:
+        itemType: PLAYER_HEAD
+        headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjkyMGVjY2UxYzhjZGU1ZGJjYTU5MzhjNTM4NGY3MTRlNTViZWU0Y2NhODY2YjcyODNiOTVkNjllZWQzZDJjIn19fQ=="
       slot: 14
       level: 4
       lore:
         - "§b§oPrix : 150 000€"
     levelFive:
       itemName: "§5§n15 places"
-      itemType: PLAYER_HEAD
-      headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTJjMTQyYWY1OWYyOWViMzVhYjI5YzZhNDVlMzM2MzVkY2ZjMmE5NTZkYmQ0ZDJlNTU3MmIwZDM4ODkxYjM1NCJ9fX0="
+      lock:
+        itemType: PLAYER_HEAD
+        headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZGYzZjU2NWE4ODkyOGVlNWE5ZDY4NDNkOTgyZDc4ZWFlNmI0MWQ5MDc3ZjJhMWU1MjZhZjg2N2Q3OGZiIn19fQ=="
+      unlock:
+        itemType: PLAYER_HEAD
+        headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTJjMTQyYWY1OWYyOWViMzVhYjI5YzZhNDVlMzM2MzVkY2ZjMmE5NTZkYmQ0ZDJlNTU3MmIwZDM4ODkxYjM1NCJ9fX0="
       slot: 15
       level: 5
       lore:
@@ -463,40 +483,60 @@ inventories:
   upgradeStorageAmount:
     storageOne:
       itemName: "§5§n1 stockage"
-      itemType: PLAYER_HEAD
-      headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODg5OTE2OTc0Njk2NTNjOWFmODM1MmZkZjE4ZDBjYzljNjc3NjNjZmU2NjE3NWMxNTU2YWVkMzMyNDZjNyJ9fX0="
+      lock:
+        itemType: PLAYER_HEAD
+        headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOGQyNDU0ZTRjNjdiMzIzZDViZTk1M2I1YjNkNTQxNzRhYTI3MTQ2MDM3NGVlMjg0MTBjNWFlYWUyYzExZjUifX19"
+      unlock:
+        itemType: PLAYER_HEAD
+        headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODg5OTE2OTc0Njk2NTNjOWFmODM1MmZkZjE4ZDBjYzljNjc3NjNjZmU2NjE3NWMxNTU2YWVkMzMyNDZjNyJ9fX0="
       slot: 11
       level: 1
       lore:
         - "§b§oPrix : 10 000€"
     storageTwo:
       itemName: "§5§n2 stockages"
-      itemType: PLAYER_HEAD
-      headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTQ5NmMxNjJkN2M5ZTFiYzhjZjM2M2YxYmZhNmY0YjJlZTVkZWM2MjI2YzIyOGY1MmViNjVkOTZhNDYzNWMifX19"
+      lock:
+        itemType: PLAYER_HEAD
+        headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYjEzYjc3OGM2ZTUxMjgwMjQyMTRmODU5YjRmYWRjNzczOGM3YmUzNjdlZTRiOWI4ZGJhZDc5NTRjZmYzYSJ9fX0="
+      unlock:
+        itemType: PLAYER_HEAD
+        headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTQ5NmMxNjJkN2M5ZTFiYzhjZjM2M2YxYmZhNmY0YjJlZTVkZWM2MjI2YzIyOGY1MmViNjVkOTZhNDYzNWMifX19"
       slot: 12
       level: 2
       lore:
         - "§b§oPrix : 25 000€"
     storageThree:
       itemName: "§5§n3 stockages"
-      itemType: PLAYER_HEAD
-      headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzQyMjZmMmViNjRhYmM4NmIzOGI2MWQxNDk3NzY0Y2JhMDNkMTc4YWZjMzNiN2I4MDIzY2Y0OGI0OTMxMSJ9fX0="
+      lock:
+        itemType: PLAYER_HEAD
+        headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMDMxZjY2YmUwOTUwNTg4NTk4ZmVlZWE3ZTZjNjc3OTM1NWU1N2NjNmRlOGI5MWE0NDM5MWIyZTlmZDcyIn19fQ=="
+      unlock:
+        itemType: PLAYER_HEAD
+        headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzQyMjZmMmViNjRhYmM4NmIzOGI2MWQxNDk3NzY0Y2JhMDNkMTc4YWZjMzNiN2I4MDIzY2Y0OGI0OTMxMSJ9fX0="
       slot: 13
       level: 3
       lore:
         - "§b§oPrix : 50 000€"
     storageFour:
       itemName: "§5§n4 stockages"
-      itemType: PLAYER_HEAD
-      headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjkyMGVjY2UxYzhjZGU1ZGJjYTU5MzhjNTM4NGY3MTRlNTViZWU0Y2NhODY2YjcyODNiOTVkNjllZWQzZDJjIn19fQ=="
+      lock:
+        itemType: PLAYER_HEAD
+        headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTViYzQyYzY5ODQ2YzNkYTk1MzFhYzdkYmEyYjU1MzYzZjhmOTQ3MjU3NmUxN2Q0MjNiN2E5YjgxYzkxNTEifX19"
+      unlock:
+        itemType: PLAYER_HEAD
+        headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjkyMGVjY2UxYzhjZGU1ZGJjYTU5MzhjNTM4NGY3MTRlNTViZWU0Y2NhODY2YjcyODNiOTVkNjllZWQzZDJjIn19fQ=="
       slot: 14
       level: 4
       lore:
         - "§b§oPrix : 80 000€"
     storageFive:
       itemName: "§5§n5 stockages"
-      itemType: PLAYER_HEAD
-      headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTJjMTQyYWY1OWYyOWViMzVhYjI5YzZhNDVlMzM2MzVkY2ZjMmE5NTZkYmQ0ZDJlNTU3MmIwZDM4ODkxYjM1NCJ9fX0="
+      lock:
+        itemType: PLAYER_HEAD
+        headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZGYzZjU2NWE4ODkyOGVlNWE5ZDY4NDNkOTgyZDc4ZWFlNmI0MWQ5MDc3ZjJhMWU1MjZhZjg2N2Q3OGZiIn19fQ=="
+      unlock:
+        itemType: PLAYER_HEAD
+        headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTJjMTQyYWY1OWYyOWViMzVhYjI5YzZhNDVlMzM2MzVkY2ZjMmE5NTZkYmQ0ZDJlNTU3MmIwZDM4ODkxYjM1NCJ9fX0="
       slot: 15
       level: 5
       lore:
