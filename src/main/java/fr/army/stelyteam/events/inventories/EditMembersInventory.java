@@ -16,8 +16,11 @@ import fr.army.stelyteam.conversations.ConvAddMember;
 import fr.army.stelyteam.conversations.ConvEditOwner;
 import fr.army.stelyteam.conversations.ConvRemoveMember;
 import fr.army.stelyteam.utils.TeamMembersUtils;
+import fr.army.stelyteam.utils.TemporaryAction;
+import fr.army.stelyteam.utils.TemporaryActionNames;
 import fr.army.stelyteam.utils.builder.InventoryBuilder;
 import fr.army.stelyteam.utils.builder.conversation.ConversationBuilder;
+import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
 import fr.army.stelyteam.utils.manager.SQLManager;
 
@@ -26,6 +29,7 @@ public class EditMembersInventory {
     private InventoryClickEvent event;
     private StelyTeamPlugin plugin;
     private YamlConfiguration config;
+    private CacheManager cacheManager;
     private SQLManager sqlManager;
     private MessageManager messageManager;
     private ConversationBuilder conversationBuilder;
@@ -37,6 +41,7 @@ public class EditMembersInventory {
         this.event = event;
         this.plugin = plugin;
         this.config = plugin.getConfig();
+        this.cacheManager = plugin.getCacheManager();
         this.sqlManager = plugin.getSQLManager();
         this.messageManager = plugin.getMessageManager();
         this.conversationBuilder = plugin.getConversationBuilder();
@@ -71,8 +76,12 @@ public class EditMembersInventory {
             conversationBuilder.getNameInput(player, new ConvAddMember(plugin));
             return;
         }else if (itemName.equals(config.getString("inventories.editMembers.removeMember.itemName"))){
-            player.closeInventory();
-            conversationBuilder.getNameInput(player, new ConvRemoveMember(plugin));
+            // player.closeInventory();
+            // conversationBuilder.getNameInput(player, new ConvRemoveMember(plugin));
+            cacheManager.addTempAction(
+                new TemporaryAction(playerName, TemporaryActionNames.CLICK_REMOVE_MEMBER)
+            );
+            player.openInventory(inventoryBuilder.createMembersInventory(playerName, config.getString("inventoriesName.removeMembers")));
             return;
         }else if (itemName.equals(config.getString("inventories.editMembers.editOwner.itemName"))){
             player.closeInventory();

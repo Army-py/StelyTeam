@@ -62,6 +62,8 @@ public class InventoryClickManager implements Listener{
                 new UpgradeStorageInventory(event, plugin).onInventoryClick();
             }else if (event.getView().getTitle().equals(config.getString("inventoriesName.teamAlliances"))){
                 new AlliancesInventory(event, plugin).onInventoryClick();
+            }else if (event.getView().getTitle().equals(config.getString("inventoriesName.removeMembers"))){
+                new MembersInventory(event, plugin).onInventoryClick();
             }
         }
 

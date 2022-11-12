@@ -1030,6 +1030,25 @@ public class SQLManager {
     }
 
 
+    public ArrayList<String> getMembers(){
+        if(isConnected()){
+            try {
+                ArrayList<String> members = new ArrayList<>();
+                PreparedStatement query = connection.prepareStatement("SELECT playerName FROM player");
+                ResultSet result = query.executeQuery();
+                while(result.next()){
+                    members.add(result.getString("playerName"));
+                }
+                query.close();
+                return members;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+
     private int getTeamId(String teamName){
         if (isConnected()){
             try {

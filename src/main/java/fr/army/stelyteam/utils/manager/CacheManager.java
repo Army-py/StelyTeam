@@ -53,6 +53,17 @@ public class CacheManager {
         }
     }
 
+    public void removePlayerActionName(String playerName, TemporaryActionNames actionName){
+        for(TemporaryAction tempAction : cachedTempAction){
+            if(tempAction.getSenderName().equals(playerName) || tempAction.getReceiverName().equals(playerName)){
+                if(tempAction.getActionName().equals(actionName)){
+                    cachedTempAction.remove(tempAction);
+                    return;
+                }
+            }
+        }
+    }
+
     public boolean playerHasAction(String playerName){
         if (cachedTempAction.isEmpty()) return false;
         for(TemporaryAction tempAction : cachedTempAction){

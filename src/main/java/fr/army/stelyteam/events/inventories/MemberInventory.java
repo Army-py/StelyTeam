@@ -72,7 +72,7 @@ public class MemberInventory {
         }
         
         if (itemName.equals(config.getString("inventories.member.seeTeamMembers.itemName"))){
-            Inventory inventory = inventoryBuilder.createMembersInventory(playerName);
+            Inventory inventory = inventoryBuilder.createMembersInventory(playerName, config.getString("inventoriesName.teamMembers"));
             player.openInventory(inventory);
         
         }else if (itemName.equals(config.getString("inventories.member.seeTeamAlliances.itemName"))){

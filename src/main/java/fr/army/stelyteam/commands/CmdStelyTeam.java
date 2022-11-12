@@ -129,6 +129,11 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
                         result.add(teamID);
                     }
                 }
+                for (String playerName : sqlManager.getMembers()) {
+                    if (playerName.toLowerCase().startsWith(args[1].toLowerCase())){
+                        result.add(playerName);
+                    }
+                }
                 return result;
             }else if (sender.isOp()){
                 if (subCommandsOp.containsKey(args[0])){

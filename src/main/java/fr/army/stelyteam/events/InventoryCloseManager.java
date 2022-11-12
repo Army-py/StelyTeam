@@ -8,6 +8,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.events.inventories.ConfirmInventory;
+import fr.army.stelyteam.events.inventories.MembersInventory;
 import fr.army.stelyteam.events.inventories.StorageInventory;
 
 public class InventoryCloseManager implements Listener {
@@ -27,6 +28,8 @@ public class InventoryCloseManager implements Listener {
             new ConfirmInventory(event, plugin).onInventoryClose();
         }else if (config.getConfigurationSection("inventoriesName.storages").getValues(true).containsValue(event.getView().getTitle())){
             new StorageInventory(event, plugin).onInventoryClose();
+        }else if (event.getView().getTitle().equals(config.getString("inventoriesName.removeMembers"))){
+            new MembersInventory(event, plugin).onInventoryClose();
         }
     }
 }

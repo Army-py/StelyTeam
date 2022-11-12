@@ -66,7 +66,7 @@ public class TeamMembersUtils {
                 }else if (player.getOpenInventory().getTitle().equals(config.getString("inventoriesName.editMembers"))){
                     player.openInventory(inventoryBuilder.createEditMembersInventory(player.getName()));
                 }else if (player.getOpenInventory().getTitle().equals(config.getString("inventoriesName.teamMembers"))){
-                    player.openInventory(inventoryBuilder.createMembersInventory(player.getName()));
+                    player.openInventory(inventoryBuilder.createMembersInventory(player.getName(), config.getString("inventoriesName.teamMembers")));
                 }else if (player.getOpenInventory().getTitle().equals(config.getString("inventoriesName.permissions"))){
                     player.openInventory(inventoryBuilder.createPermissionsInventory(player.getName()));
                 }else if (player.getOpenInventory().getTitle().equals(config.getString("inventoriesName.storageDirectory"))){

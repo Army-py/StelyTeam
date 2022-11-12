@@ -257,10 +257,10 @@ public class InventoryBuilder {
     }
 
 
-    public Inventory createMembersInventory(String playername) {
+    public Inventory createMembersInventory(String playername, String inventoryName) {
         Integer slots = config.getInt("inventoriesSlots.teamMembers");
         String teamID = sqlManager.getTeamNameFromPlayerName(playername);
-        Inventory inventory = Bukkit.createInventory(null, slots, config.getString("inventoriesName.teamMembers"));
+        Inventory inventory = Bukkit.createInventory(null, slots, inventoryName);
 
         emptyCases(inventory, slots, 0);
         Integer headSlot = 0;
