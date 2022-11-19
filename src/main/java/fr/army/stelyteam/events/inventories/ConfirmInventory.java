@@ -8,9 +8,10 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.conversations.ConvEditTeamID;
+import fr.army.stelyteam.conversations.ConvEditTeamDesc;
+import fr.army.stelyteam.conversations.ConvEditTeamName;
 import fr.army.stelyteam.conversations.ConvEditTeamPrefix;
-import fr.army.stelyteam.conversations.ConvGetTeamId;
+import fr.army.stelyteam.conversations.ConvGetTeamName;
 import fr.army.stelyteam.utils.TeamMembersUtils;
 import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.TemporaryActionNames;
@@ -135,7 +136,7 @@ public class ConfirmInventory {
             }else if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.CREATE_TEAM)){
                 cacheManager.removePlayerAction(playerName);
                 player.closeInventory();
-                conversationBuilder.getNameInput(player, new ConvGetTeamId(plugin));
+                conversationBuilder.getNameInput(player, new ConvGetTeamName(plugin));
 
             }else if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.BUY_TEAM_BANK)){
                 String teamID = sqlManager.getTeamNameFromPlayerName(playerName);
@@ -151,13 +152,19 @@ public class ConfirmInventory {
             }else if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.EDIT_NAME)){
                 String teamID = sqlManager.getTeamNameFromPlayerName(playerName);
                 player.closeInventory();
-                conversationBuilder.getNameInput(player, new ConvEditTeamID(plugin));
+                conversationBuilder.getNameInput(player, new ConvEditTeamName(plugin));
                 teamMembersUtils.refreshTeamMembersInventory(teamID, playerName);
 
             }else if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.EDIT_PREFIX)){
                 String teamID = sqlManager.getTeamNameFromPlayerName(playerName);
                 player.closeInventory();
                 conversationBuilder.getNameInput(player, new ConvEditTeamPrefix(plugin));
+                teamMembersUtils.refreshTeamMembersInventory(teamID, playerName);
+            
+            }else if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.EDIT_DESCRIPTION)){
+                String teamID = sqlManager.getTeamNameFromPlayerName(playerName);
+                player.closeInventory();
+                conversationBuilder.getNameInput(player, new ConvEditTeamDesc(plugin));
                 teamMembersUtils.refreshTeamMembersInventory(teamID, playerName);
 
             }else if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.DELETE_TEAM)){
@@ -227,6 +234,9 @@ public class ConfirmInventory {
                 Inventory inventory = inventoryBuilder.createManageInventory(playerName);
                 player.openInventory(inventory);
             }else if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.EDIT_PREFIX)){
+                Inventory inventory = inventoryBuilder.createManageInventory(playerName);
+                player.openInventory(inventory);
+            }else if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.EDIT_DESCRIPTION)){
                 Inventory inventory = inventoryBuilder.createManageInventory(playerName);
                 player.openInventory(inventory);
             }else if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.DELETE_TEAM)){

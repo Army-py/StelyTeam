@@ -132,6 +132,17 @@ public class ManageInventory {
             }
 
 
+        }else if (itemName.equals(config.getString("inventories.manage.editDescription.itemName"))){
+            if (economyManager.checkMoneyPlayer(player, config.getDouble("prices.editTeamDescription"))){
+                cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.EDIT_DESCRIPTION));
+                Inventory inventory = inventoryBuilder.createConfirmInventory();
+                player.openInventory(inventory);
+            }else{
+                // player.sendMessage("Vous n'avez pas assez d'argent");
+                player.sendMessage(messageManager.getMessage("common.not_enough_money"));
+            }
+
+
         }else if (itemName.equals(config.getString("inventories.manage.removeTeam.itemName"))){
             cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.DELETE_TEAM));
             Inventory inventory = inventoryBuilder.createConfirmInventory();

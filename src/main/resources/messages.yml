@@ -5,6 +5,8 @@ prefix: "§7[§5StelyTeam§7] "
 common:
   already_alliance: "§cVous êtes déjà en alliance avec cette team."
   already_unlocked: "§cVous avez déjà débloqué cette amélioration."
+  description_is_too_long: "§cLa description est trop longue. §7§o(30 caractères maximum)"
+  description_contains_blocked_colors: "§cLa description contient des couleurs interdites. §7§o(toutes les couleurs rouge)"
   invalid_command: "§cCommande invalide."
   name_already_exists: "§cCe nom de team existe déjà."
   name_cannot_contain_space: "§cLe nom de la team ne doit pas contenir d'espace."
@@ -72,6 +74,9 @@ manage_team:
   edit_team_prefix:
     send_team_prefix: "§aÉcris dans le tchat le nouveau préfixe de la team."
     team_prefix_edited: "§aLe préfixe de la team a été modifié par §e%VALUE%§a."
+  edit_team_description:
+    send_team_description: "§aÉcris dans le tchat la nouvelle description de la team."
+    team_description_edited: "§aLa description de la team a été modifié par §e%VALUE%§a."
   withdraw_money:
     cant_send_negative_money: "§cVous ne pouvez pas retirer un montant négatif."
     money_withdrawn: "§aLe montant a été retiré."
@@ -185,6 +190,7 @@ commands:
       - "§aNombre de membre : §e%MEMBER_COUNT% sur %MAX_MEMBERS%"
       - "§aMembre(s) : §e%MEMBERS%"
       - "§aDate de création : §e%DATE%"
+      - "§aDescription : §e%DESCRIPTION%"
       - "§7---------------------------"
   stelyteam_accept:
     output: "§aVous avez accepté l'invitation."

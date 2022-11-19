@@ -44,6 +44,9 @@ openTeamAfterCreate: true
 teamNameMaxLength: 12
 teamPrefixMaxLength: 10
 
+# Longueur max de la description d'une team (sans compter les couleurs)
+teamDescriptionMaxLength: 30
+
 # Argent maximal d'une team
 teamMaxMoney: 1000000.0
 
@@ -58,6 +61,7 @@ prices:
   createTeam: 20000.0
   editTeamId: 2000.0
   editTeamPrefix: 3000.0
+  editTeamDescription: 5000.0
   buyTeamBank: 500000.0
   upgrade:
     teamPlaces:
@@ -122,7 +126,8 @@ teamAllianceLore:
   - "§aPréfixe : §r%PREFIX%"
   - "§aNombre de membre : §e%MEMBER_COUNT% sur %MAX_MEMBERS%"
   - "§aMembre(s) : §e%MEMBERS%"
-  - "§aAllié depuis le §e%DATE%"  
+  - "§aAllié depuis le §e%DATE%"
+  - "§aDescription : §e%DESCRIPTION%"
 
 
 # Titre des menus et leur nombre de slots
@@ -312,7 +317,7 @@ inventories:
       rank: 0
       lore:
         - "§aModifier le nom de la team"
-        - "§b§oPrix : 5 000€"
+        - "§b§oPrix : 2 000€"
     editPrefix:
       itemName: "§5§nModifier le préfixe"
       itemType: NAME_TAG
@@ -322,11 +327,20 @@ inventories:
       lore:
         - "§aModifier le préfixe de la team"
         - "§aqui s'affiche dans le tchat"
-        - "§b§oPrix : 5 000€"
+        - "§b§oPrix : 3 000€"
         - ""
         - "§7§oVous pouvez prévisualiser"
         - "§7§ole préfixe avec la commande :"
         - "§7§o/stelyteam visual <texte>"
+    editDescription:
+      itemName: "§5§nModifier la description"
+      itemType: WRITABLE_BOOK
+      headTexture: ""
+      slot: 31
+      rank: 0
+      lore:
+        - "§aModifier la description de la team"
+        - "§b§oPrix : 5 000€"
     editPermissions:
       itemName: "§5§nPermissions"
       itemType: RED_BANNER
@@ -360,9 +374,10 @@ inventories:
         - "§aChef de la team : §e%OWNER%"
         - "§aNom : §e%NAME%"
         - "§aPréfixe : §r%PREFIX%"
-        - "§aNombre de membre : §e%MEMBER_COUNT% sur %MAX_MEMBERS%"        
-        - "§aDate de la création : §e%DATE%"    
-        - ""        
+        - "§aNombre de membre : §e%MEMBER_COUNT% sur %MAX_MEMBERS%"
+        - "§aDate de la création : §e%DATE%"
+        - "§aDescription : §e%DESCRIPTION%"
+        - ""
         - "§aTon grade : §r%RANK%"
     seeTeamMembers:
       itemName: "§5§nMembres"

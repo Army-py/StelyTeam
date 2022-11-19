@@ -50,6 +50,7 @@ public class SubCmdInfo extends SubCommand {
                 String teamPrefix = sqlManager.getTeamPrefix(teamID);
                 String teamOwner = sqlManager.getTeamOwnerName(teamID);
                 String creationDate = sqlManager.getTeamCreationDate(teamID);
+                String teamDescription = sqlManager.getTeamDescription(teamID);
                 Integer teamMembersLelvel = sqlManager.getImprovLvlMembers(teamID);
                 Integer teamMembers = sqlManager.getTeamMembers(teamID).size();
                 Integer maxMembers = config.getInt("teamMaxMembers");
@@ -65,6 +66,7 @@ public class SubCmdInfo extends SubCommand {
                 lore = replaceInLore(lore, "%MEMBER_COUNT%", IntegerToString(teamMembers));
                 lore = replaceInLore(lore, "%MAX_MEMBERS%", IntegerToString(maxMembers+teamMembersLelvel));
                 lore = replaceInLore(lore, "%MEMBERS%", String.join(", ", members));
+                lore = replaceInLore(lore, "%DESCRIPTION%", colorsBuilder.replaceColor(teamDescription));
 
                 player.sendMessage(String.join("\n", lore));
             }else{

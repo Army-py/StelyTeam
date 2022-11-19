@@ -60,6 +60,14 @@ public class ColorsBuilder {
     }
 
 
+    public boolean descriptionTeamIsTooLong(String prefixTeam){
+        int colors = getPrefixColors(prefixTeam).size();
+        int hexColors = getPrefixHexColors(prefixTeam).size();
+
+        return prefixTeam.length() - (colors * 2 + hexColors * 8) > config.getInt("teamDescriptionMaxLength");
+    }
+
+
     public boolean containsBlockedColors(String prefixTeam){
         for (String color : config.getStringList("blockedColors")) {
             if (prefixTeam.contains(color)) {

@@ -31,7 +31,7 @@ public class InventoryBuilder {
     private SQLManager sqlManager;
     private SQLiteManager sqliteManager;
     private SerializeManager serializeManager;
-    private ColorsBuilder colorBuilder;
+    private ColorsBuilder colorsBuilder;
 
 
     public InventoryBuilder(StelyTeamPlugin plugin) {
@@ -41,7 +41,7 @@ public class InventoryBuilder {
         this.sqlManager = plugin.getSQLManager();
         this.sqliteManager = plugin.getSQLiteManager();
         this.serializeManager = new SerializeManager();
-        this.colorBuilder = new ColorsBuilder(plugin);
+        this.colorsBuilder = new ColorsBuilder(plugin);
     }
 
 
@@ -133,6 +133,7 @@ public class InventoryBuilder {
         String rankColor = config.getString("ranks." + memberRank + ".color");
         Inventory inventory = Bukkit.createInventory(null, slots, config.getString("inventoriesName.member"));
         Double teamMoney = sqlManager.getTeamMoney(teamID);
+        String teamDescription = sqlManager.getTeamDescription(teamID);
 
         emptyCases(inventory, slots, 0);
 
@@ -149,12 +150,13 @@ public class InventoryBuilder {
                 lore = replaceInLore(lore, "%MAX_MONEY%", DoubleToString(config.getDouble("teamMaxMoney")));
             }else if (name.equals(config.getString("inventories.member.teamInfos.itemName"))){
                 lore = replaceInLore(lore, "%NAME%", teamID);
-                lore = replaceInLore(lore, "%PREFIX%", colorBuilder.replaceColor(teamPrefix));
+                lore = replaceInLore(lore, "%PREFIX%", colorsBuilder.replaceColor(teamPrefix));
                 lore = replaceInLore(lore, "%OWNER%", teamOwner);
                 lore = replaceInLore(lore, "%RANK%", rankColor + memberRankName);
                 lore = replaceInLore(lore, "%DATE%", memberJoinDate);
                 lore = replaceInLore(lore, "%MEMBER_COUNT%", IntegerToString(teamMembers));
                 lore = replaceInLore(lore, "%MAX_MEMBERS%", IntegerToString(maxMembers+teamMembersLelvel));
+                lore = replaceInLore(lore, "%DESCRIPTION%", colorsBuilder.replaceColor(teamDescription));
             }
 
             if (plugin.playerHasPermission(playername, teamID, str)){ 
@@ -546,9 +548,10 @@ public class InventoryBuilder {
             Integer teamMembersLelvel = sqlManager.getImprovLvlMembers(str);
             Integer teamMembers = sqlManager.getTeamMembers(str).size();
             Integer maxMembers = config.getInt("teamMaxMembers");
+            String teamDescription = sqlManager.getTeamDescription(str);
             ArrayList<String> allianceMembers = sqlManager.getTeamMembers(str);
             UUID playerUUID = sqliteManager.getUUID(allianceOwnerName);
-            String itemName = colorBuilder.replaceColor(alliancePrefix);
+            String itemName = colorsBuilder.replaceColor(alliancePrefix);
             List<String> lore = config.getStringList("teamAllianceLore");
             OfflinePlayer allianceOwner;
             ItemStack item;
@@ -558,10 +561,12 @@ public class InventoryBuilder {
             
             lore = replaceInLore(lore, "%OWNER%", allianceOwnerName);
             lore = replaceInLore(lore, "%NAME%", str);
+            lore = replaceInLore(lore, "%PREFIX%", colorsBuilder.replaceColor(alliancePrefix));
             lore = replaceInLore(lore, "%DATE%", allianceDate);
             lore = replaceInLore(lore, "%MEMBER_COUNT%", IntegerToString(teamMembers));
             lore = replaceInLore(lore, "%MAX_MEMBERS%", IntegerToString(maxMembers+teamMembersLelvel));
             lore = replaceInLore(lore, "%MEMBERS%", String.join(", ", allianceMembers));
+            lore = replaceInLore(lore, "%DESCRIPTION%", colorsBuilder.replaceColor(teamDescription));
             
             
             if (plugin.playerHasPermission(playername, teamId, "seeTeamAlliances")){ 
@@ -607,12 +612,13 @@ public class InventoryBuilder {
             String alliancePrefix = sqlManager.getTeamPrefix(str);
             String allianceOwnerName = sqlManager.getTeamOwnerName(str);
             String allianceDate = sqlManager.getAllianceDate(teamId, str);
+            String teamDescription = sqlManager.getTeamDescription(str);
             Integer teamMembersLelvel = sqlManager.getImprovLvlMembers(str);
             Integer teamMembers = sqlManager.getTeamMembers(str).size();
             Integer maxMembers = config.getInt("teamMaxMembers");
             ArrayList<String> allianceMembers = sqlManager.getTeamMembers(str);
             UUID playerUUID = sqliteManager.getUUID(allianceOwnerName);
-            String itemName = colorBuilder.replaceColor(alliancePrefix);
+            String itemName = colorsBuilder.replaceColor(alliancePrefix);
             List<String> lore = config.getStringList("teamAllianceLore");
             OfflinePlayer allianceOwner;
             ItemStack item;
@@ -624,11 +630,12 @@ public class InventoryBuilder {
             
             lore = replaceInLore(lore, "%OWNER%", allianceOwnerName);
             lore = replaceInLore(lore, "%NAME%", str);
-            lore = replaceInLore(lore, "%PREFIX%", alliancePrefix);
+            lore = replaceInLore(lore, "%PREFIX%", colorsBuilder.replaceColor(alliancePrefix));
             lore = replaceInLore(lore, "%DATE%", allianceDate);
             lore = replaceInLore(lore, "%MEMBER_COUNT%", IntegerToString(teamMembers));
             lore = replaceInLore(lore, "%MAX_MEMBERS%", IntegerToString(maxMembers+teamMembersLelvel));
             lore = replaceInLore(lore, "%MEMBERS%", String.join(", ", allianceMembers));
+            lore = replaceInLore(lore, "%DESCRIPTION%", colorsBuilder.replaceColor(teamDescription));
             
             
             if (plugin.playerHasPermission(playername, teamId, "seeAllliances")){ 

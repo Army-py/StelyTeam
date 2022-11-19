@@ -347,6 +347,21 @@ public class SQLManager {
     }
 
 
+    public void updateTeamDescription(String teamName, String newTeamDescription){
+        if(isConnected()){
+            try {
+                PreparedStatement queryTeam = connection.prepareStatement("UPDATE team SET teamDescription = ? WHERE teamName = ?");
+                queryTeam.setString(1, newTeamDescription);
+                queryTeam.setString(2, teamName);
+                queryTeam.executeUpdate();
+                queryTeam.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
     public void updateTeamOwner(String teamName, String teamOwner, String newTeamOwner){
         if(isConnected()){
             try {
@@ -735,6 +750,24 @@ public class SQLManager {
                 ResultSet result = query.executeQuery();
                 if(result.next()){
                     return result.getString("creationDate");
+                }
+                query.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+
+    public String getTeamDescription(String teamName){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT teamDescription FROM team WHERE teamName = ?");
+                query.setString(1, teamName);
+                ResultSet result = query.executeQuery();
+                if(result.next()){
+                    return result.getString("teamDescription");
                 }
                 query.close();
             } catch (SQLException e) {
