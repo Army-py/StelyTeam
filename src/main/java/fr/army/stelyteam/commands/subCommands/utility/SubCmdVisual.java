@@ -16,7 +16,7 @@ public class SubCmdVisual extends SubCommand {
     public SubCmdVisual(StelyTeamPlugin plugin) {
         super(plugin);
         this.messageManager = plugin.getMessageManager();
-        this.colorsBuilder = new ColorsBuilder();
+        this.colorsBuilder = new ColorsBuilder(plugin);
     }
 
     @Override

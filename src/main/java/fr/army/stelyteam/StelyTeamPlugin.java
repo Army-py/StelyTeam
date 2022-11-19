@@ -68,7 +68,7 @@ public class StelyTeamPlugin extends JavaPlugin {
         this.economyManager = new EconomyManager(this);
         this.messageManager = new MessageManager(this);
         this.commandManager = new CommandManager(this);
-        this.colorsBuilder = new ColorsBuilder();
+        this.colorsBuilder = new ColorsBuilder(this);
         this.conversationBuilder = new ConversationBuilder(this);
         this.inventoryBuilder = new InventoryBuilder(this);
         this.teamMembersUtils = new TeamMembersUtils(this);

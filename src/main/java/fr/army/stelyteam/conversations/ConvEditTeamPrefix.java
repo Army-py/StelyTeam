@@ -7,12 +7,14 @@ import fr.army.stelyteam.utils.manager.EconomyManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
 import fr.army.stelyteam.utils.manager.SQLManager;
 
+import org.bukkit.Color;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -23,6 +25,7 @@ public class ConvEditTeamPrefix extends StringPrompt {
     private MessageManager messageManager;
     private EconomyManager economyManager;
     private TeamMembersUtils teamMembersUtils;
+    private ColorsBuilder colorBuilder;
 
 
     public ConvEditTeamPrefix(StelyTeamPlugin plugin) {
@@ -31,6 +34,7 @@ public class ConvEditTeamPrefix extends StringPrompt {
         this.messageManager = plugin.getMessageManager();
         this.economyManager = plugin.getEconomyManager();
         this.teamMembersUtils = plugin.getTeamMembersUtils();
+        this.colorBuilder = new ColorsBuilder(plugin);
     }
 
     @Override
@@ -39,15 +43,19 @@ public class ConvEditTeamPrefix extends StringPrompt {
         String authorName = author.getName();
         String teamID = sqlManager.getTeamNameFromPlayerName(authorName);
         
-        if (prefixTeamIsTooLong(answer)) {
+        if (colorBuilder.prefixTeamIsTooLong(answer)) {
             // con.getForWhom().sendRawMessage("Le préfixe est trop long");
             con.getForWhom().sendRawMessage(messageManager.getMessage("common.prefix_is_too_long"));
+            return this;
+        }else if (colorBuilder.containsBlockedColors(answer)) {
+            // con.getForWhom().sendRawMessage("Le préfixe contient des couleurs interdites");
+            con.getForWhom().sendRawMessage(messageManager.getMessage("common.prefix_contains_blocked_colors"));
             return this;
         }
 
         economyManager.removeMoneyPlayer(author, config.getDouble("prices.editTeamPrefix"));
         // con.getForWhom().sendRawMessage("Le préfixe a été changé par " + new ColorsBuilder().replaceColor(answer));
-        con.getForWhom().sendRawMessage(messageManager.getReplaceMessage("manage_team.edit_team_prefix.team_prefix_edited", new ColorsBuilder().replaceColor(answer)));
+        con.getForWhom().sendRawMessage(messageManager.getReplaceMessage("manage_team.edit_team_prefix.team_prefix_edited", colorBuilder.replaceColor(answer)));
         sqlManager.updateTeamPrefix(teamID, answer);
         teamMembersUtils.refreshTeamMembersInventory(teamID, authorName);
         return null;
@@ -57,24 +65,5 @@ public class ConvEditTeamPrefix extends StringPrompt {
     public String getPromptText(ConversationContext arg0) {
         // return "Envoie le nouveau préfixe de team";
         return messageManager.getMessage("manage_team.edit_team_prefix.send_team_prefix");
-    }
-
-
-    private boolean prefixTeamIsTooLong(String prefixTeam){
-        Pattern pattern = Pattern.compile("&.");
-        Matcher matcher = pattern.matcher(prefixTeam);
-        int colors = 0;
-        while (matcher.find()) {
-            colors++;
-        }
-
-        Pattern hexPattern = Pattern.compile("&#[A-Fa-f0-9]{6}");
-        Matcher hexMatcher = hexPattern.matcher(prefixTeam);
-        int hexColors = 0;
-        while (hexMatcher.find()) {
-            hexColors++;
-        }
-
-        return prefixTeam.length() - (colors * pattern.pattern().length() + hexColors * hexPattern.pattern().length()) > config.getInt("teamPrefixMaxLength");
     }
 }

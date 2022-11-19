@@ -29,8 +29,7 @@ public class SubCmdInfo extends SubCommand {
         this.config = plugin.getConfig();
         this.messages = plugin.getMessages();
         this.messageManager = plugin.getMessageManager();
-        // this.colorsBuilder = plugin.getColorsBuilder();
-        this.colorsBuilder = new ColorsBuilder();
+        this.colorsBuilder = new ColorsBuilder(plugin);
     }
 
 

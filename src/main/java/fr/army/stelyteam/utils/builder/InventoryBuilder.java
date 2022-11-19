@@ -41,7 +41,7 @@ public class InventoryBuilder {
         this.sqlManager = plugin.getSQLManager();
         this.sqliteManager = plugin.getSQLiteManager();
         this.serializeManager = new SerializeManager();
-        this.colorBuilder = new ColorsBuilder();
+        this.colorBuilder = new ColorsBuilder(plugin);
     }
 
 
@@ -149,7 +149,7 @@ public class InventoryBuilder {
                 lore = replaceInLore(lore, "%MAX_MONEY%", DoubleToString(config.getDouble("teamMaxMoney")));
             }else if (name.equals(config.getString("inventories.member.teamInfos.itemName"))){
                 lore = replaceInLore(lore, "%NAME%", teamID);
-                lore = replaceInLore(lore, "%PREFIX%", new ColorsBuilder().replaceColor(teamPrefix));
+                lore = replaceInLore(lore, "%PREFIX%", colorBuilder.replaceColor(teamPrefix));
                 lore = replaceInLore(lore, "%OWNER%", teamOwner);
                 lore = replaceInLore(lore, "%RANK%", rankColor + memberRankName);
                 lore = replaceInLore(lore, "%DATE%", memberJoinDate);

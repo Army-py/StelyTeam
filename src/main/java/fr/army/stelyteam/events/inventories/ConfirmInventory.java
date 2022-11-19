@@ -101,7 +101,7 @@ public class ConfirmInventory {
                 String senderName = tempAction.getSenderName();
                 String receiverName = tempAction.getReceiverName();
                 Player receiver = Bukkit.getPlayer(receiverName);
-                sqlManager.updateTeamOwner(teamName, receiverName, senderName);
+                sqlManager.updateTeamOwner(teamName, senderName, receiverName);
                 player.closeInventory();
                 player.sendMessage(messageManager.getReplaceMessage("sender.promote_owner", receiverName));
                 if (receiver != null && receiver.getName().equals(receiverName)) receiver.sendMessage(messageManager.getReplaceMessage("receiver.promote_owner", teamName));

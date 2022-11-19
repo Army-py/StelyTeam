@@ -18,6 +18,25 @@ conversationCancelWords:
   - "quit"
 
 
+# Liste des couleurs bloquées
+blockedColors:
+  - "&4"
+  - "&c"
+
+# Liste des couleurs hexadécimales bloquées
+# Les couleurs hexa sont convertis en HSV
+# h: une valeur min et max, en degré (min: 0, max: 360)
+# s: une valeur min en pourcentage (min: 0, max: 100)
+# v: une valeur min en pourcentage (min: 0, max: 100)
+blockedHexColors:
+  range_1:
+    h:
+      min: 15
+      max: 340
+    s: 40
+    v: 35
+
+
 # Permet d'ouvrir le menu de la team après après la création de la team
 openTeamAfterCreate: true
 
