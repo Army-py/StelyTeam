@@ -11,6 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -711,6 +712,10 @@ public class InventoryBuilder {
             OfflinePlayer teamOwner;
             ItemStack item;
 
+            if (!sqliteManager.isRegistered(teamOwnerName)){
+                sqliteManager.registerOfflinePlayer(Bukkit.getOfflinePlayer(teamOwnerName));
+            }
+
             if (playerUUID == null) teamOwner = Bukkit.getOfflinePlayer(teamOwnerName);
             else teamOwner = Bukkit.getOfflinePlayer(playerUUID);
             
@@ -723,6 +728,7 @@ public class InventoryBuilder {
             lore = replaceInLore(lore, "%DESCRIPTION%", colorsBuilder.replaceColor(team.getTeamDescription()));
             
             item = ItemBuilder.getPlayerHead(teamOwner, itemName, lore);
+            // item = ItemBuilder.getItem(Material.DIRT, teamOwnerName, lore, null, false);
 
             inventory.setItem(headSlots.get(slotIndex), item);
             slotIndex ++;

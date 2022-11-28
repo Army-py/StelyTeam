@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import fr.army.stelyteam.StelyTeamPlugin;
@@ -265,6 +266,21 @@ public class SQLiteManager {
 
 
     public void registerPlayer(Player player){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("INSERT INTO players VALUES (?, ?)");
+                query.setString(1, player.getUniqueId().toString());
+                query.setString(2, player.getName());
+                query.executeUpdate();
+                query.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    public void registerOfflinePlayer(OfflinePlayer player){
         if(isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("INSERT INTO players VALUES (?, ?)");

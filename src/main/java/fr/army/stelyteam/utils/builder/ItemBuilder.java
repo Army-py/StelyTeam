@@ -44,33 +44,36 @@ public class ItemBuilder {
 
 
 	public static ItemStack getPlayerHead(OfflinePlayer player, String name, List<String> lore) {
-		ItemStack item = new ItemStack(Material.PLAYER_HEAD, 1);
-		SkullMeta meta = (SkullMeta) item.getItemMeta();
-		if (player != null) meta.setOwningPlayer(player);
-		meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-		meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
-		meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-		meta.addItemFlags(ItemFlag.HIDE_PLACED_ON);
-		meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
-		meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
-		if(!lore.isEmpty()) {
-			List<String> loreList = (List<String>) lore;
-			meta.setLore(loreList);
-		}
+		// ItemStack item = new ItemStack(Material.PLAYER_HEAD, 1);
+		// SkullMeta meta = (SkullMeta) item.getItemMeta();
+		// if (player != null) meta.setOwningPlayer(player);
+		// meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+		// meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
+		// meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+		// meta.addItemFlags(ItemFlag.HIDE_PLACED_ON);
+		// meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+		// meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+		// if(!lore.isEmpty()) {
+		// 	List<String> loreList = (List<String>) lore;
+		// 	meta.setLore(loreList);
+		// }
 
-		meta.setDisplayName(name);
-		item.setItemMeta(meta);
-		return item;
+		// meta.setDisplayName(name);
+		// item.setItemMeta(meta);
+		// return item;
+		return getCustomHead(null, name, lore, player);
 	}
 
 
-	private static ItemStack getCustomHead(String texture, String name, List<String> lore, UUID uuid) {
+	private static ItemStack getCustomHead(String texture, String name, List<String> lore, OfflinePlayer player) {
 		ItemStack item = new ItemStack(Material.PLAYER_HEAD);
 
         SkullMeta skullMeta = (SkullMeta) item.getItemMeta();
-        GameProfile profile = new GameProfile(uuid == null ? UUID.randomUUID() : uuid, null);
+        GameProfile profile = new GameProfile(player == null ? UUID.randomUUID() : player.getUniqueId(), player == null ? null : player.getName());
 
-        profile.getProperties().put("textures", new Property("textures", texture));
+		if (texture != null) {
+        	profile.getProperties().put("textures", new Property("textures", texture));
+		}
 
         try {
             Method mtd = skullMeta.getClass().getDeclaredMethod("setProfile", GameProfile.class);
