@@ -119,6 +119,15 @@ storageNotUnlock:
 # Préfixe à gauche du rang, affiché dans le menu de la gestion des membres de la team et dans la liste des membres
 prefixRankLore: "§r§e>> "
 
+# Description des teams dans la liste des teams
+teamListLore:
+  - "§aChef de la team : §e%OWNER%"
+  - "§aNom : §e%NAME%"
+  - "§aPréfixe : §r%PREFIX%"
+  - "§aNombre de membre : §e%MEMBER_COUNT% sur %MAX_MEMBERS%"
+  - "§aAllié depuis le §e%DATE%"
+  - "§aDescription : §e%DESCRIPTION%"
+
 # Description des teams dans la liste des alliances
 teamAllianceLore:
   - "§aChef de la team : §e%OWNER%"
@@ -135,6 +144,7 @@ teamAllianceLore:
 # * Respecter le nombre de slots en fonction de la taille d'une ligne de coffre (9 * nombre de lignes)
 inventoriesName:
   createTeam: "§5§lCréation de Team"
+  teamList : "§5§lListe des Teams"
   admin: "§5§lMenu principal"
   manage: "§5§lGérer la team"
   member: "§5§lOptions de la team"
@@ -159,6 +169,7 @@ inventoriesName:
 # Nombre de slots dans chaque inventaires. A modifier en fonction de la taille d'une ligne de coffre (9 * nombre de lignes) 
 inventoriesSlots:
   createTeam: 27
+  teamList : 54
   admin: 27
   manage: 45
   member: 45
@@ -890,3 +901,23 @@ inventories:
       itemType: ARROW
       headTexture: ""
       slot: 26
+
+
+  teamList:
+    teamOwnerHead:
+      slots: [10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34, 37, 38, 39, 40, 41, 42, 43]
+    previous:
+      itemName: "§c§oPage précédente"
+      itemType: PLAYER_HEAD
+      headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMzJmZjhhYWE0YjJlYzMwYmM1NTQxZDQxYzg3ODIxOTliYWEyNWFlNmQ4NTRjZGE2NTFmMTU5OWU2NTRjZmM3OSJ9fX0="
+      slot: 48
+    next:
+      itemName: "§c§oPage suivante"
+      itemType: PLAYER_HEAD
+      headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYWFiOTVhODc1MWFlYWEzYzY3MWE4ZTkwYjgzZGU3NmEwMjA0ZjFiZTY1NzUyYWMzMWJlMmY5OGZlYjY0YmY3ZiJ9fX0="
+      slot: 50
+    close:
+      itemName: "§c§oRetour"
+      itemType: ARROW
+      headTexture: ""
+      slot: 53

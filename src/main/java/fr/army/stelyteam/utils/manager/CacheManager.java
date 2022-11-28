@@ -2,6 +2,7 @@ package fr.army.stelyteam.utils.manager;
 
 import java.util.ArrayList;
 
+import fr.army.stelyteam.utils.Page;
 import fr.army.stelyteam.utils.Storage;
 import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.TemporaryAction;
@@ -16,6 +17,9 @@ public class CacheManager {
 
     // {playerName}
     private ArrayList<String> cachedInConversation = new ArrayList<String>();
+
+    // {authorName, currentPage, maxElementsPerPage, teams}
+    private ArrayList<Page> cachedPages = new ArrayList<Page>();
     
     // {teamName, teamPrefix, teamDescription, teamMoney, creationDate, improvLvlMembers, teamStorageLvl, unlockedTeamBank, teamOwnerName}
     private ArrayList<Team> cachedTeam = new ArrayList<Team>();
@@ -137,5 +141,40 @@ public class CacheManager {
 
     public boolean isInConversation(String playerName){
         return cachedInConversation.contains(playerName);
+    }
+
+
+    public void addPage(Page page){
+        cachedPages.add(page);
+    }
+
+    public void removePage(Page page){
+        cachedPages.remove(page);
+    }
+
+    public Page getPage(String authorName){
+        for(Page page : cachedPages){
+            if(page.getAuthorName().equals(authorName)){
+                return page;
+            }
+        }
+        return null;
+    }
+
+    public void replacePage(Page page){
+        for(Page cachedPage : cachedPages){
+            if(cachedPage.getAuthorName().equals(page.getAuthorName())){
+                cachedPage = page;
+            }
+        }
+    }
+
+    public boolean containsPage(String authorName){
+        for(Page page : cachedPages){
+            if(page.getAuthorName().equals(authorName)){
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -56,7 +56,6 @@ public class StorageInventory {
         String itemName;
         String storageName;
         
-        // Fermeture ou retour en arrière de l'inventaire
         if (clickEvent.getCurrentItem() != null){
             Material material = clickEvent.getCurrentItem().getType();
             itemName = clickEvent.getCurrentItem().getItemMeta().getDisplayName();

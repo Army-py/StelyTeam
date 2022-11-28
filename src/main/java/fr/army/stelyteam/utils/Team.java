@@ -16,17 +16,19 @@ public class Team {
     private String teamDescription = config.getString("team.defaultDescription");
     private Integer teamMoney = 0;
     private String creationDate = getCurrentDate();
+    private int teamMembersCount = 0;
     private Integer improvLvlMembers = 0;
     private Integer teamStorageLvl = 0;
     private boolean unlockedTeamBank = false;
     private String teamOwnerName;
 
-    public Team(String teamName, String teamPrefix, String teamDescription, int teamMoney, String creationDate, int improvLvlMembers, int teamStorageLvl, boolean unlockedTeamBank, String teamOwnerName){
+    public Team(String teamName, String teamPrefix, String teamDescription, int teamMoney, String creationDate, int teamMembersCount, int improvLvlMembers, int teamStorageLvl, boolean unlockedTeamBank, String teamOwnerName){
         this.teamName = teamName;
         this.teamPrefix = teamPrefix;
         this.teamDescription = teamDescription;
         this.teamMoney = teamMoney;
         this.creationDate = creationDate;
+        this.teamMembersCount = teamMembersCount;
         this.improvLvlMembers = improvLvlMembers;
         this.teamStorageLvl = teamStorageLvl;
         this.unlockedTeamBank = unlockedTeamBank;
@@ -65,6 +67,10 @@ public class Team {
         return creationDate;
     }
 
+    public int getTeamMembersCount() {
+        return teamMembersCount;
+    }
+
     public Integer getImprovLvlMembers() {
         return improvLvlMembers;
     }
@@ -99,6 +105,10 @@ public class Team {
 
     public void setCreationDate(String creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public void setTeamMembersCount(int teamMembersCount) {
+        this.teamMembersCount = teamMembersCount;
     }
 
     public void setImprovLvlMembers(Integer improvLvlMembers) {

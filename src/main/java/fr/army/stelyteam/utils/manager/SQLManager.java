@@ -540,6 +540,7 @@ public class SQLManager {
                         result.getString("teamDescription"),
                         result.getInt("teamMoney"),
                         result.getString("creationDate"),
+                        getTeamMembers(result.getString("teamName")).size(),
                         result.getInt("improvLvlMembers"),
                         result.getInt("teamStorageLvl"),
                         (1 == result.getInt("unlockedTeamBank")),
@@ -697,6 +698,36 @@ public class SQLManager {
                 }
                 query.close();
                 return teamsName;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+
+    public ArrayList<Team> getTeams(){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT * FROM team INNER JOIN player ON team.teamOwnerPlayerId = player.playerId");
+                ResultSet result = query.executeQuery();
+                ArrayList<Team> teams = new ArrayList<>();
+                while(result.next()){
+                    teams.add(new Team(
+                        result.getString("teamName"),
+                        result.getString("teamPrefix"),
+                        result.getString("teamDescription"),
+                        result.getInt("teamMoney"),
+                        result.getString("creationDate"),
+                        getTeamMembers(result.getString("teamName")).size(),
+                        result.getInt("improvLvlMembers"),
+                        result.getInt("teamStorageLvl"),
+                        (1 == result.getInt("unlockedTeamBank")),
+                        result.getString("playerName")
+                    ));
+                }
+                query.close();
+                return teams;
             } catch (SQLException e) {
                 e.printStackTrace();
             }

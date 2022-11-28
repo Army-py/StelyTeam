@@ -16,6 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.utils.Page;
 import fr.army.stelyteam.utils.Storage;
 import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.manager.CacheManager;
@@ -605,6 +606,7 @@ public class InventoryBuilder {
         Integer slots = config.getInt("inventoriesSlots.editAlliances");
         String teamId = sqlManager.getTeamNameFromPlayerName(playername);
         Inventory inventory = Bukkit.createInventory(null, slots, config.getString("inventoriesName.editAlliances"));
+        Integer maxMembers = config.getInt("teamMaxMembers");
 
         emptyCases(inventory, slots, 0);
         Integer headSlot = 0;
@@ -615,7 +617,6 @@ public class InventoryBuilder {
             String teamDescription = sqlManager.getTeamDescription(str);
             Integer teamMembersLelvel = sqlManager.getImprovLvlMembers(str);
             Integer teamMembers = sqlManager.getTeamMembers(str).size();
-            Integer maxMembers = config.getInt("teamMaxMembers");
             ArrayList<String> allianceMembers = sqlManager.getTeamMembers(str);
             UUID playerUUID = sqliteManager.getUUID(allianceOwnerName);
             String itemName = colorsBuilder.replaceColor(alliancePrefix);
@@ -679,6 +680,72 @@ public class InventoryBuilder {
             }
             inventory.setItem(slot, item);
         }
+        return inventory;
+    }
+
+
+    public Inventory createTeamListInventory(String playerName){
+        ArrayList<Team> teams = sqlManager.getTeams();
+        Integer slots = config.getInt("inventoriesSlots.teamList");
+        List<Integer> headSlots = config.getIntegerList("inventories.teamList.teamOwnerHead.slots");
+        Inventory inventory = Bukkit.createInventory(null, slots, config.getString("inventoriesName.teamList"));
+        Integer maxMembers = config.getInt("teamMaxMembers");
+        Page page;
+
+        if (cacheManager.containsPage(playerName)){
+            page = cacheManager.getPage(playerName);
+        }else{
+            page = new Page(playerName, headSlots.size(), teams);
+            cacheManager.addPage(page);
+        }
+        ArrayList<List<Team>> pages = page.getPages();
+        
+        emptyCases(inventory, slots, 0);
+        Integer slotIndex = 0;
+        for(Team team : pages.get(page.getCurrentPage())){
+            String teamOwnerName = team.getTeamOwnerName();
+            String teamPrefix = team.getTeamPrefix();
+            UUID playerUUID = sqliteManager.getUUID(teamOwnerName);
+            String itemName = colorsBuilder.replaceColor(teamPrefix);
+            List<String> lore = config.getStringList("teamListLore");
+            OfflinePlayer teamOwner;
+            ItemStack item;
+
+            if (playerUUID == null) teamOwner = Bukkit.getOfflinePlayer(teamOwnerName);
+            else teamOwner = Bukkit.getOfflinePlayer(playerUUID);
+            
+            lore = replaceInLore(lore, "%OWNER%", teamOwnerName);
+            lore = replaceInLore(lore, "%NAME%", team.getTeamName());
+            lore = replaceInLore(lore, "%PREFIX%", colorsBuilder.replaceColor(teamPrefix));
+            lore = replaceInLore(lore, "%DATE%", team.getCreationDate());
+            lore = replaceInLore(lore, "%MEMBER_COUNT%", IntegerToString(team.getTeamMembersCount()));
+            lore = replaceInLore(lore, "%MAX_MEMBERS%", IntegerToString(maxMembers+team.getImprovLvlMembers()));
+            lore = replaceInLore(lore, "%DESCRIPTION%", colorsBuilder.replaceColor(team.getTeamDescription()));
+            
+            item = ItemBuilder.getPlayerHead(teamOwner, itemName, lore);
+
+            inventory.setItem(headSlots.get(slotIndex), item);
+            slotIndex ++;
+        }
+
+        for(String str : config.getConfigurationSection("inventories.teamList").getKeys(false)){
+            if (str.equals("teamOwnerHead")) continue;
+
+            Integer slot = config.getInt("inventories.teamList."+str+".slot");
+            Material material = Material.getMaterial(config.getString("inventories.teamList."+str+".itemType"));
+            String name = config.getString("inventories.teamList."+str+".itemName");
+            List<String> lore = config.getStringList("inventories.teamList."+str+".lore");
+            String headTexture = config.getString("inventories.teamList."+str+".headTexture");
+
+            if (str.equals("previous")){
+                if (page.getCurrentPage() == 0) continue;
+            }else if (str.equals("next")){
+                if (page.getCurrentPage() == pages.size()-1) continue;
+            }
+
+            inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, false));
+        }
+
         return inventory;
     }
 

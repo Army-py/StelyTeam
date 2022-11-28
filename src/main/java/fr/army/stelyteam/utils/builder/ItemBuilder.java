@@ -19,7 +19,7 @@ import com.mojang.authlib.properties.Property;
 
 public class ItemBuilder {
 	public static ItemStack getItem(Material material, String name, List<String> lore, String headTexture, boolean isEnchanted) {
-		if (material.equals(Material.PLAYER_HEAD) && !headTexture.isBlank()) return getCustomHead(headTexture, name, lore);
+		if (material.equals(Material.PLAYER_HEAD) && !headTexture.isBlank()) return getCustomHead(headTexture, name, lore, null);
 
 		ItemStack item = new ItemStack(material, 1);
 		ItemMeta meta = item.getItemMeta();
@@ -64,11 +64,11 @@ public class ItemBuilder {
 	}
 
 
-	private static ItemStack getCustomHead(String texture, String name, List<String> lore) {
+	private static ItemStack getCustomHead(String texture, String name, List<String> lore, UUID uuid) {
 		ItemStack item = new ItemStack(Material.PLAYER_HEAD);
 
         SkullMeta skullMeta = (SkullMeta) item.getItemMeta();
-        GameProfile profile = new GameProfile(UUID.randomUUID(), null);
+        GameProfile profile = new GameProfile(uuid == null ? UUID.randomUUID() : uuid, null);
 
         profile.getProperties().put("textures", new Property("textures", texture));
 
