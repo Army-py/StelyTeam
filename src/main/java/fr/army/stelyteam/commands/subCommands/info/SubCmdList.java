@@ -1,5 +1,7 @@
 package fr.army.stelyteam.commands.subCommands.info;
 
+import java.util.List;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -31,6 +33,17 @@ public class SubCmdList extends SubCommand {
         player.openInventory(inventory);
 
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, String[] args) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public boolean isOpCommand() {
+        return false;
     }
     
 }

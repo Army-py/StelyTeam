@@ -26,4 +26,14 @@ public class SubCmdAdmin extends SubCommand {
 
         return true;
     }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, String[] args) {
+        return null;
+    }
+
+    @Override
+    public boolean isOpCommand() {
+        return true;
+    }
 }

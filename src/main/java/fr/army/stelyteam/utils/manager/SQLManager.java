@@ -1059,11 +1059,11 @@ public class SQLManager {
     public void removeAlliance(String teamName, String allianceName){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("DELETE FROM alliance WHERE (teamId = ? AND teamAllianceId = ?) OR (teamId = ? AND teamAllianceId = ?)");
-                query.setInt(1, getTeamId(teamName));
-                query.setInt(2, getTeamId(allianceName));
-                query.setInt(3, getTeamId(allianceName));
-                query.setInt(4, getTeamId(teamName));
+                PreparedStatement query = connection.prepareStatement("DELETE FROM alliance WHERE (teamId = (SELECT t.teamId FROM team t WHERE t.teamName = ?) AND teamAllianceId = (SELECT t.teamId FROM team t WHERE t.teamName = ?)) OR (teamId = (SELECT t.teamId FROM team t WHERE t.teamName = ?) AND teamAllianceId = (SELECT t.teamId FROM team t WHERE t.teamName = ?))");
+                query.setString(1, teamName);
+                query.setString(2, allianceName);
+                query.setString(3, allianceName);
+                query.setString(4, teamName);
                 query.executeUpdate();
                 query.close();
             } catch (SQLException e) {

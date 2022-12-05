@@ -1,5 +1,7 @@
 package fr.army.stelyteam.commands.subCommands.utility;
 
+import java.util.List;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -32,6 +34,16 @@ public class SubCmdVisual extends SubCommand {
             player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_visual.output", colorsBuilder.replaceColor(String.join(" ", args))));
         }
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, String[] args) {
+        return null;
+    }
+
+    @Override
+    public boolean isOpCommand() {
+        return false;
     }
 
 }

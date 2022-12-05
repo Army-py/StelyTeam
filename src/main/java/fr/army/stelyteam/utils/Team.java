@@ -1,6 +1,7 @@
 package fr.army.stelyteam.utils;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -21,6 +22,9 @@ public class Team {
     private Integer teamStorageLvl = 0;
     private boolean unlockedTeamBank = false;
     private String teamOwnerName;
+    private ArrayList<Member> teamMembers = new ArrayList<Member>();
+    private ArrayList<Permission> teamPermissions = new ArrayList<Permission>();
+    private ArrayList<Alliance> teamAlliances = new ArrayList<Alliance>();
 
     public Team(String teamName, String teamPrefix, String teamDescription, int teamMoney, String creationDate, int teamMembersCount, int improvLvlMembers, int teamStorageLvl, boolean unlockedTeamBank, String teamOwnerName){
         this.teamName = teamName;
@@ -87,6 +91,18 @@ public class Team {
         return teamOwnerName;
     }
 
+    public ArrayList<Member> getTeamMembers() {
+        return teamMembers;
+    }
+
+    public ArrayList<Permission> getTeamPermissions() {
+        return teamPermissions;
+    }
+
+    public ArrayList<Alliance> getTeamAlliances() {
+        return teamAlliances;
+    }
+
     public void setTeamName(String teamName) {
         this.teamName = teamName;
     }
@@ -125,6 +141,18 @@ public class Team {
 
     public void setTeamOwnerName(String teamOwnerName) {
         this.teamOwnerName = teamOwnerName;
+    }
+
+    public void setTeamMembers(ArrayList<Member> teamMembers) {
+        this.teamMembers = teamMembers;
+    }
+
+    public void setTeamPermissions(ArrayList<Permission> teamPermissions) {
+        this.teamPermissions = teamPermissions;
+    }
+
+    public void setTeamAlliances(ArrayList<Alliance> teamAlliances) {
+        this.teamAlliances = teamAlliances;
     }
 
     private String getCurrentDate(){
