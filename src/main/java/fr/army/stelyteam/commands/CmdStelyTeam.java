@@ -47,8 +47,8 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
     private MessageManager messageManager;
     private InventoryBuilder inventoryBuilder;
     private TeamMembersUtils teamMembersUtils;
-    private Map<String, Object> subCommands;
-    private Map<String, Object> subCommandsOp;
+    private Map<String, SubCommand> subCommands;
+    private Map<String, SubCommand> subCommandsOp;
 
 
     public CmdStelyTeam(StelyTeamPlugin plugin) {

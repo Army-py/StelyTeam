@@ -119,8 +119,8 @@ broadcasts:
 
 # Messages que recevra le membre qui a fait une certaine action
 sender:
-  accepted_invitation: "§e%VALUE% a accepté l'invitation."
-  refused_invitation: "§e%VALUE% a refusé l'invitation."
+  accepted_invitation: "§e%VALUE% §aa accepté l'invitation."
+  refused_invitation: "§c%VALUE% a refusé l'invitation."
   exclude_member: "§aVous avez exclu §e%VALUE% §ade la team."
   promote_owner: "§aVous avez promu §e%VALUE% §achef de la team."
   remove_alliance: "§aVous avez supprimé l'alliance avec §e%VALUE%§a."

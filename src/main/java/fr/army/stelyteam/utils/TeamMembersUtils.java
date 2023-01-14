@@ -37,10 +37,10 @@ public class TeamMembersUtils {
         Inventory inventory;
 
         if (!sqlManager.isMember(playerName)){
-            if (cacheManager.containsActionName(TemporaryActionNames.CREATE_TEAM)){
-                player.sendMessage(config.getString("common.team_already_in_creation"));
-                return;
-            }
+            // if (cacheManager.containsActionName(TemporaryActionNames.CREATE_TEAM)){
+            //     player.sendMessage(config.getString("common.team_already_in_creation"));
+            //     return;
+            // }
             inventory = inventoryBuilder.createTeamInventory();
         }else if(sqlManager.isOwner(player.getName())){
             inventory = inventoryBuilder.createAdminInventory();

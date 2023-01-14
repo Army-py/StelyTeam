@@ -268,24 +268,24 @@ public class SQLManager {
     public void removeTeam(String teamName){
         if(isConnected()){
             try {
-                PreparedStatement queryMembers = connection.prepareStatement("DELETE FROM player WHERE teamId = ?");
-                queryMembers.setInt(1, getTeamId(teamName));
+                PreparedStatement queryMembers = connection.prepareStatement("DELETE FROM player WHERE teamId = (SELECT teamId FROM team WHERE teamName = ?)");
+                queryMembers.setString(1, teamName);
                 queryMembers.executeUpdate();
                 queryMembers.close();
 
-                PreparedStatement queryPermissions = connection.prepareStatement("DELETE FROM assignement WHERE teamId = ?");
-                queryPermissions.setInt(1, getTeamId(teamName));
+                PreparedStatement queryPermissions = connection.prepareStatement("DELETE FROM assignement WHERE teamId = (SELECT teamId FROM team WHERE teamName = ?)");
+                queryPermissions.setString(1, teamName);
                 queryPermissions.executeUpdate();
                 queryPermissions.close();
 
-                PreparedStatement queryAlliances = connection.prepareStatement("DELETE FROM alliance WHERE teamId = ? OR teamAllianceId = ?");
-                queryAlliances.setInt(1, getTeamId(teamName));
-                queryAlliances.setInt(2, getTeamId(teamName));
+                PreparedStatement queryAlliances = connection.prepareStatement("DELETE FROM alliance WHERE teamId = (SELECT teamId FROM team WHERE teamName = ?) OR teamAllianceId = (SELECT teamId FROM team WHERE teamName = ?)");
+                queryAlliances.setString(1, teamName);
+                queryAlliances.setString(2, teamName);
                 queryAlliances.executeUpdate();
                 queryAlliances.close();
 
-                PreparedStatement queryTeamStorage = connection.prepareStatement("DELETE FROM teamStorage WHERE teamId = ?");
-                queryTeamStorage.setInt(1, getTeamId(teamName));
+                PreparedStatement queryTeamStorage = connection.prepareStatement("DELETE FROM teamStorage WHERE teamId = (SELECT teamId FROM team WHERE teamName = ?)");
+                queryTeamStorage.setString(1, teamName);
                 queryTeamStorage.executeUpdate();
                 queryTeamStorage.close();
 
@@ -305,9 +305,9 @@ public class SQLManager {
     public void removeMember(String playerName, String teamName){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("DELETE FROM player WHERE playerName = ? AND teamId = ?");
+                PreparedStatement query = connection.prepareStatement("DELETE FROM player WHERE playerName = ? AND teamId = (SELECT teamId FROM team WHERE teamName = ?)");
                 query.setString(1, playerName);
-                query.setInt(2, getTeamId(teamName));
+                query.setString(2, teamName);
                 query.executeUpdate();
                 query.close();
             } catch (SQLException e) {
@@ -365,16 +365,16 @@ public class SQLManager {
     public void updateTeamOwner(String teamName, String teamOwner, String newTeamOwner){
         if(isConnected()){
             try {
-                PreparedStatement queryOwner = connection.prepareStatement("UPDATE player SET teamRank = ? WHERE teamId = ? AND playerName = ?");
+                PreparedStatement queryOwner = connection.prepareStatement("UPDATE player SET teamRank = ? WHERE teamId = (SELECT teamId FROM team WHERE teamName = ?) AND playerName = ?");
                 queryOwner.setInt(1, 1);
-                queryOwner.setInt(2, getTeamId(teamName));
+                queryOwner.setString(2, teamName);
                 queryOwner.setString(3, teamOwner);
                 queryOwner.executeUpdate();
                 queryOwner.close();
 
-                PreparedStatement queryNewOwner = connection.prepareStatement("UPDATE player SET teamRank = ? WHERE teamId = ? AND playerName = ?");
+                PreparedStatement queryNewOwner = connection.prepareStatement("UPDATE player SET teamRank = ? WHERE teamId = (SELECT teamId FROM team WHERE teamName = ?) AND playerName = ?");
                 queryNewOwner.setInt(1, 0);
-                queryNewOwner.setInt(2, getTeamId(teamName));
+                queryNewOwner.setString(2, teamName);
                 queryNewOwner.setString(3, newTeamOwner);
                 queryNewOwner.executeUpdate();
                 queryNewOwner.close();
@@ -482,8 +482,8 @@ public class SQLManager {
     public void promoteMember(String teamName, String playerName){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("UPDATE player SET teamRank = teamRank - 1 WHERE teamId = ? AND playerName = ?");
-                query.setInt(1, getTeamId(teamName));
+                PreparedStatement query = connection.prepareStatement("UPDATE player SET teamRank = teamRank - 1 WHERE teamId = (SELECT teamId FROM team WHERE teamName = ?) AND playerName = ?");
+                query.setString(1, teamName);
                 query.setString(2, playerName);
                 query.executeUpdate();
                 query.close();
@@ -497,8 +497,8 @@ public class SQLManager {
     public void demoteMember(String teamName, String playerName){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("UPDATE player SET teamRank = teamRank + 1 WHERE teamId = ? AND playerName = ?");
-                query.setInt(1, getTeamId(teamName));
+                PreparedStatement query = connection.prepareStatement("UPDATE player SET teamRank = teamRank + 1 WHERE teamId = (SELECT teamId FROM team WHERE teamName = ?) AND playerName = ?");
+                query.setString(1, teamName);
                 query.setString(2, playerName);
                 query.executeUpdate();
                 query.close();
@@ -828,8 +828,8 @@ public class SQLManager {
     public void incrementAssignement(String teamName, String permLabel){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("UPDATE assignement SET teamRank = teamRank + 1 WHERE teamId = ? AND permLabel = ?");
-                query.setInt(1, getTeamId(teamName));
+                PreparedStatement query = connection.prepareStatement("UPDATE assignement SET teamRank = teamRank + 1 WHERE teamId = (SELECT teamId FROM team WHERE teamName = ?) AND permLabel = ?");
+                query.setString(1, teamName);
                 query.setString(2, permLabel);
                 query.executeUpdate();
                 query.close();
@@ -843,8 +843,8 @@ public class SQLManager {
     public void decrementAssignement(String teamName, String permLabel){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("UPDATE assignement SET teamRank = teamRank - 1 WHERE teamId = ? AND permLabel = ?");
-                query.setInt(1, getTeamId(teamName));
+                PreparedStatement query = connection.prepareStatement("UPDATE assignement SET teamRank = teamRank - 1 WHERE teamId = (SELECT teamId FROM team WHERE teamName = ?) AND permLabel = ?");
+                query.setString(1, teamName);
                 query.setString(2, permLabel);
                 query.executeUpdate();
                 query.close();
@@ -961,9 +961,9 @@ public class SQLManager {
     public void updateStorageContent(String teamName, Integer storageId, String storageContent){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("UPDATE teamStorage SET storageContent = ? WHERE teamId = ? AND storageId = ?");
+                PreparedStatement query = connection.prepareStatement("UPDATE teamStorage SET storageContent = ? WHERE teamId = (SELECT teamId FROM team WHERE teamName = ?) AND storageId = ?");
                 query.setString(1, storageContent);
-                query.setInt(2, getTeamId(teamName));
+                query.setString(2, teamName);
                 query.setInt(3, storageId);
                 query.executeUpdate();
                 query.close();
@@ -995,16 +995,16 @@ public class SQLManager {
         if(isConnected()){
             try {
                 ArrayList<String> alliances = new ArrayList<>();
-                PreparedStatement queryTeam = connection.prepareStatement("SELECT t.teamName FROM team AS t INNER JOIN alliance AS a ON t.teamId = a.teamAllianceId WHERE a.teamId = ?");
-                queryTeam.setInt(1, getTeamId(teamName));
+                PreparedStatement queryTeam = connection.prepareStatement("SELECT t.teamName FROM team AS t INNER JOIN alliance AS a ON t.teamId = a.teamAllianceId WHERE a.teamId = (SELECT teamId FROM team WHERE teamName = ?)");
+                queryTeam.setString(1, teamName);
                 ResultSet resultTeam = queryTeam.executeQuery();
                 while(resultTeam.next()){
                     alliances.add(resultTeam.getString("teamName"));
                 }
                 queryTeam.close();
                 
-                PreparedStatement queryAlliance = connection.prepareStatement("SELECT t.teamName FROM team AS t INNER JOIN alliance AS a ON t.teamId = a.teamId WHERE a.teamAllianceId = ?");
-                queryAlliance.setInt(1, getTeamId(teamName));
+                PreparedStatement queryAlliance = connection.prepareStatement("SELECT t.teamName FROM team AS t INNER JOIN alliance AS a ON t.teamId = a.teamId WHERE a.teamAllianceId = (SELECT teamId FROM team WHERE teamName = ?)");
+                queryAlliance.setString(1, teamName);
                 ResultSet resultAlliance = queryAlliance.executeQuery();
                 while(resultAlliance.next()){
                     alliances.add(resultAlliance.getString("teamName"));
@@ -1059,11 +1059,11 @@ public class SQLManager {
     public void removeAlliance(String teamName, String allianceName){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("DELETE FROM alliance WHERE (teamId = ? AND teamAllianceId = ?) OR (teamId = ? AND teamAllianceId = ?)");
-                query.setInt(1, getTeamId(teamName));
-                query.setInt(2, getTeamId(allianceName));
-                query.setInt(3, getTeamId(allianceName));
-                query.setInt(4, getTeamId(teamName));
+                PreparedStatement query = connection.prepareStatement("DELETE FROM alliance WHERE (teamId = (SELECT t.teamId FROM team t WHERE t.teamName = ?) AND teamAllianceId = (SELECT t.teamId FROM team t WHERE t.teamName = ?)) OR (teamId = (SELECT t.teamId FROM team t WHERE t.teamName = ?) AND teamAllianceId = (SELECT t.teamId FROM team t WHERE t.teamName = ?))");
+                query.setString(1, teamName);
+                query.setString(2, allianceName);
+                query.setString(3, allianceName);
+                query.setString(4, teamName);
                 query.executeUpdate();
                 query.close();
             } catch (SQLException e) {

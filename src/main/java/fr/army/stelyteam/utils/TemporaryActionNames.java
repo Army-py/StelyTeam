@@ -1,6 +1,7 @@
 package fr.army.stelyteam.utils;
 
 public enum TemporaryActionNames {
+    NULL,
     REMOVE_MEMBER,
     REMOVE_ALLIANCE,
     EDIT_OWNER,
