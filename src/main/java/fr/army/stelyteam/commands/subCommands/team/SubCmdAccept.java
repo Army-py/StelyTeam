@@ -1,5 +1,7 @@
 package fr.army.stelyteam.commands.subCommands.team;
 
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -68,5 +70,15 @@ public class SubCmdAccept extends SubCommand {
         }
 
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, String[] args) {
+        return null;
+    }
+
+    @Override
+    public boolean isOpCommand() {
+        return false;
     }
 }

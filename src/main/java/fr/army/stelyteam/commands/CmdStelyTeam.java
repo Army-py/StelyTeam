@@ -47,8 +47,8 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
     private MessageManager messageManager;
     private InventoryBuilder inventoryBuilder;
     private TeamMembersUtils teamMembersUtils;
-    private Map<String, SubCommand> subCommands;
-    private Map<String, SubCommand> subCommandsOp;
+    private Map<String, Object> subCommands;
+    // private Map<String, Object> subCommandsOp;
 
 
     public CmdStelyTeam(StelyTeamPlugin plugin) {
@@ -60,10 +60,8 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
         this.inventoryBuilder = new InventoryBuilder(plugin);
         this.teamMembersUtils = new TeamMembersUtils(plugin);
         this.subCommands = new HashMap<>();
-        this.subCommandsOp = new HashMap<>();
         initSubCommands();
     }
-
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -90,8 +88,8 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
                         return true;
                     }
                 }else if (sender.isOp()){
-                    if (subCommandsOp.containsKey(args[0])){
-                        SubCommand subCmd = (SubCommand) subCommandsOp.get(args[0]);
+                    if (subCommands.containsKey(args[0]) && ((SubCommand) subCommands.get(args[0])).isOpCommand()){
+                        SubCommand subCmd = (SubCommand) subCommands.get(args[0]);
                         if (subCmd.execute(player, args)){
                             return true;
                         }
@@ -115,29 +113,16 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
                 }
             }
             if (sender.isOp()){
-                for (String subcommand : subCommandsOp.keySet()) {
-                    if (subcommand.toLowerCase().toLowerCase().startsWith(args[0])){
+                for (String subcommand : subCommands.keySet()) {
+                    if (subcommand.toLowerCase().toLowerCase().startsWith(args[0]) && ((SubCommand) subCommands.get(subcommand)).isOpCommand()){
                         result.add(subcommand);
                     }
                 }
             }
             return result;
         }else if (args.length == 2){
-            if (args[0].equals("info")){
-                List<String> result = new ArrayList<>();
-                for (String teamID : sqlManager.getTeamsName()) {
-                    if (teamID.toLowerCase().startsWith(args[1].toLowerCase())){
-                        result.add(teamID);
-                    }
-                }
-                for (String playerName : sqlManager.getMembers()) {
-                    if (playerName.toLowerCase().startsWith(args[1].toLowerCase())){
-                        result.add(playerName);
-                    }
-                }
-                return result;
-            }else if (sender.isOp()){
-                if (subCommandsOp.containsKey(args[0])){
+            if (sender.isOp()){
+                if (subCommands.containsKey(args[0]) && ((SubCommand) subCommands.get(args[0])).isOpCommand()){
                     List<String> result = new ArrayList<>();
                     for (String teamID : sqlManager.getTeamsName()) {
                         if (teamID.toLowerCase().startsWith(args[1].toLowerCase())){
@@ -147,28 +132,11 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
                     return result;
                 }
             }
-        }else if (sender.isOp() && args.length == 3){
-            if (args[0].equals("changeowner")){
-                List<String> result = new ArrayList<>();
-                for (String member : sqlManager.getTeamMembers(args[1])) {
-                    Integer memberRank = sqlManager.getMemberRank(member);
-                    if (memberRank > 0 && member.toLowerCase().startsWith(args[2].toLowerCase())){
-                        result.add(member);
-                    }
-                }
-                return result;
-            }else if (args[0].equals("removemember")){
-                List<String> result = new ArrayList<>();
-                for (String member : sqlManager.getTeamMembers(args[1])) {
-                    Integer memberRank = sqlManager.getMemberRank(member);
-                    if (memberRank != 0 && member.toLowerCase().startsWith(args[2].toLowerCase())){
-                        result.add(member);
-                    }
-                }
-                return result;
-            }
         }
-
+        if (args.length > 1 && subCommands.containsKey(args[0].toLowerCase())) {
+            List<String> results = ((SubCommand) subCommands.get(args[0])).onTabComplete(sender, args);
+            return results;
+        } 
         return null;
     }
 
@@ -182,15 +150,15 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
         subCommands.put("deny", new SubCmdDeny(plugin));
         subCommands.put("list", new SubCmdList(plugin));
 
-        subCommandsOp.put("admin", new SubCmdAdmin(plugin));
-        subCommandsOp.put("delete", new SubCmdDelete(plugin));
-        subCommandsOp.put("money", new SubCmdMoney(plugin));
-        subCommandsOp.put("upgrade", new SubCmdUpgrade(plugin));
-        subCommandsOp.put("downgrade", new SubCmdDowngrade(plugin));
-        subCommandsOp.put("editname", new SubCmdEditName(plugin));
-        subCommandsOp.put("editprefix", new SubCmdEditPrefix(plugin));
-        subCommandsOp.put("changeowner", new SubCmdChangeOwner(plugin));
-        subCommandsOp.put("addmember", new SubCmdAddMember(plugin));
-        subCommandsOp.put("removemember", new SubCmdRemoveMember(plugin));
+        subCommands.put("admin", new SubCmdAdmin(plugin));
+        subCommands.put("delete", new SubCmdDelete(plugin));
+        subCommands.put("money", new SubCmdMoney(plugin));
+        subCommands.put("upgrade", new SubCmdUpgrade(plugin));
+        subCommands.put("downgrade", new SubCmdDowngrade(plugin));
+        subCommands.put("editname", new SubCmdEditName(plugin));
+        subCommands.put("editprefix", new SubCmdEditPrefix(plugin));
+        subCommands.put("changeowner", new SubCmdChangeOwner(plugin));
+        subCommands.put("addmember", new SubCmdAddMember(plugin));
+        subCommands.put("removemember", new SubCmdRemoveMember(plugin));
     }
 }

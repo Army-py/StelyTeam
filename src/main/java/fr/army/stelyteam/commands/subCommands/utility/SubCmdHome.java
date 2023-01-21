@@ -1,5 +1,7 @@
 package fr.army.stelyteam.commands.subCommands.utility;
 
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -45,6 +47,16 @@ public class SubCmdHome extends SubCommand {
             player.teleport(location);
         }
         return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, String[] args) {
+        return null;
+    }
+
+    @Override
+    public boolean isOpCommand() {
+        return false;
     }
 
 }

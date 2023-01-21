@@ -1,5 +1,7 @@
 package fr.army.stelyteam.commands.subCommands.manage;
 
+import java.util.List;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -40,6 +42,16 @@ public class SubCmdEditPrefix extends SubCommand {
                 player.sendMessage(messageManager.getMessage("common.team_not_exist"));
             }
         }
+        return true;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, String[] args) {
+        return null;
+    }
+
+    @Override
+    public boolean isOpCommand() {
         return true;
     }
 

@@ -78,6 +78,34 @@ public class SubCmdInfo extends SubCommand {
     }
 
 
+    @Override
+    public List<String> onTabComplete(CommandSender sender, String[] args) {
+        if (args.length == 2){
+            if (args[0].equals("info")){
+                List<String> result = new ArrayList<>();
+                for (String teamID : sqlManager.getTeamsName()) {
+                    if (teamID.toLowerCase().startsWith(args[1].toLowerCase())){
+                        result.add(teamID);
+                    }
+                }
+                for (String playerName : sqlManager.getMembers()) {
+                    if (playerName.toLowerCase().startsWith(args[1].toLowerCase())){
+                        result.add(playerName);
+                    }
+                }
+                return result;
+            }
+        }
+        return null;
+    }
+
+
+    @Override
+    public boolean isOpCommand() {
+        return false;
+    }
+
+
     private List<String> replaceInLore(List<String> lore, String value, String replace){
         List<String> newLore = new ArrayList<>();
         for(String str : lore){
@@ -90,4 +118,6 @@ public class SubCmdInfo extends SubCommand {
     private String IntegerToString(Integer value){
         return NumberFormat.getNumberInstance(Locale.US).format(value);
     }
+
+
 }

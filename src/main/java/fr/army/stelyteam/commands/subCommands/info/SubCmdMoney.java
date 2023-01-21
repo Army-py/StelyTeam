@@ -1,6 +1,7 @@
 package fr.army.stelyteam.commands.subCommands.info;
 
 import java.text.NumberFormat;
+import java.util.List;
 import java.util.Locale;
 
 import org.bukkit.command.CommandSender;
@@ -45,5 +46,15 @@ public class SubCmdMoney extends SubCommand {
 
     private String DoubleToString(double value){
         return NumberFormat.getNumberInstance(Locale.US).format(value);
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, String[] args) {
+        return null;
+    }
+
+    @Override
+    public boolean isOpCommand() {
+        return true;
     }
 }

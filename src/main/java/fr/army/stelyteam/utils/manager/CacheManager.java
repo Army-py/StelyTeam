@@ -22,7 +22,7 @@ public class CacheManager {
     private ArrayList<Page> cachedPages = new ArrayList<Page>();
     
     // {teamName, teamPrefix, teamDescription, teamMoney, creationDate, improvLvlMembers, teamStorageLvl, unlockedTeamBank, teamOwnerName}
-    private ArrayList<Team> cachedTeam = new ArrayList<Team>();
+    // private ArrayList<Team> cachedTeam = new ArrayList<Team>();
 
 
 
