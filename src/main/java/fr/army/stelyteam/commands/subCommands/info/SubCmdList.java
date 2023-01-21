@@ -37,7 +37,6 @@ public class SubCmdList extends SubCommand {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, String[] args) {
-        // TODO Auto-generated method stub
         return null;
     }
 

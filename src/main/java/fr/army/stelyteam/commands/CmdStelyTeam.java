@@ -60,12 +60,8 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
         this.inventoryBuilder = new InventoryBuilder(plugin);
         this.teamMembersUtils = new TeamMembersUtils(plugin);
         this.subCommands = new HashMap<>();
-        // this.subCommandsOp = new HashMap<>();
         initSubCommands();
     }
-
-    // q: En java est-il plus optimisé de stocker des objets dans le cache ou de faire de multiples requêtes SQL ?
-    // a: https://stackoverflow.com/questions/105007/should-i-store-a-database-connection-in-a-static-variable
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -125,21 +121,8 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
             }
             return result;
         }else if (args.length == 2){
-            // if (args[0].equals("info")){
-            //     List<String> result = new ArrayList<>();
-            //     for (String teamID : sqlManager.getTeamsName()) {
-            //         if (teamID.toLowerCase().startsWith(args[1].toLowerCase())){
-            //             result.add(teamID);
-            //         }
-            //     }
-            //     for (String playerName : sqlManager.getMembers()) {
-            //         if (playerName.toLowerCase().startsWith(args[1].toLowerCase())){
-            //             result.add(playerName);
-            //         }
-            //     }
-            //     return result;
             if (sender.isOp()){
-                if (subCommands.containsKey(args[0])){
+                if (subCommands.containsKey(args[0]) && ((SubCommand) subCommands.get(args[0])).isOpCommand()){
                     List<String> result = new ArrayList<>();
                     for (String teamID : sqlManager.getTeamsName()) {
                         if (teamID.toLowerCase().startsWith(args[1].toLowerCase())){
@@ -149,27 +132,6 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
                     return result;
                 }
             }
-        // }else if (sender.isOp() && args.length == 3){
-        //     if (args[0].equals("changeowner")){
-        //         List<String> result = new ArrayList<>();
-        //         for (String member : sqlManager.getTeamMembers(args[1])) {
-        //             Integer memberRank = sqlManager.getMemberRank(member);
-        //             if (memberRank > 0 && member.toLowerCase().startsWith(args[2].toLowerCase())){
-        //                 result.add(member);
-        //             }
-        //         }
-        //         return result;
-        //     }else if (args[0].equals("removemember")){
-        //         List<String> result = new ArrayList<>();
-        //         for (String member : sqlManager.getTeamMembers(args[1])) {
-        //             Integer memberRank = sqlManager.getMemberRank(member);
-        //             if (memberRank != 0 && member.toLowerCase().startsWith(args[2].toLowerCase())){
-        //                 result.add(member);
-        //             }
-        //         }
-        //         return result;
-        //     }
-        // }
         }
         if (args.length > 1 && subCommands.containsKey(args[0].toLowerCase())) {
             List<String> results = ((SubCommand) subCommands.get(args[0])).onTabComplete(sender, args);
