@@ -942,13 +942,14 @@ public class SQLManager {
     }
 
 
-    public void insertStorageContent(String teamName, Integer storageId, String storageContent){
+    public void insertStorageContent(String teamName, Integer storageId, byte[] storageContent){
         if(isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("INSERT INTO teamStorage VALUES (?, ?, ?)");
                 query.setInt(1, storageId);
                 query.setInt(2, getTeamId(teamName));
-                query.setString(3, storageContent);
+                // query.setString(3, storageContent);
+                query.setBytes(3, storageContent);
                 query.executeUpdate();
                 query.close();
             } catch (SQLException e) {
@@ -958,11 +959,12 @@ public class SQLManager {
     }
 
 
-    public void updateStorageContent(String teamName, Integer storageId, String storageContent){
+    public void updateStorageContent(String teamName, Integer storageId, byte[] storageContent){
         if(isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("UPDATE teamStorage SET storageContent = ? WHERE teamId = ? AND storageId = ?");
-                query.setString(1, storageContent);
+                // query.setString(1, storageContent);
+                query.setBytes(1, storageContent);
                 query.setInt(2, getTeamId(teamName));
                 query.setInt(3, storageId);
                 query.executeUpdate();
