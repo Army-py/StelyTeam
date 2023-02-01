@@ -23,7 +23,7 @@ import fr.army.stelyteam.utils.manager.EconomyManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
 import fr.army.stelyteam.utils.manager.SQLManager;
 import fr.army.stelyteam.utils.manager.SQLiteManager;
-import fr.army.stelyteam.utils.manager.SerializeManager;
+import fr.army.stelyteam.utils.manager.serialize.ItemStackSerializer;
 
 public class StelyTeamPlugin extends JavaPlugin {
 
@@ -40,7 +40,7 @@ public class StelyTeamPlugin extends JavaPlugin {
     private ConversationBuilder conversationBuilder;
     private InventoryBuilder inventoryBuilder;
     private TeamMembersUtils teamMembersUtils;
-    private SerializeManager serializeManager;
+    private ItemStackSerializer serializeManager;
 
 
     @Override
@@ -73,7 +73,7 @@ public class StelyTeamPlugin extends JavaPlugin {
         this.conversationBuilder = new ConversationBuilder(this);
         this.inventoryBuilder = new InventoryBuilder(this);
         this.teamMembersUtils = new TeamMembersUtils(this);
-        this.serializeManager = new SerializeManager();
+        this.serializeManager = new ItemStackSerializer();
         
         getServer().getPluginManager().registerEvents(new InventoryClickManager(this), this);
         getServer().getPluginManager().registerEvents(new InventoryCloseManager(this), this);
@@ -223,7 +223,7 @@ public class StelyTeamPlugin extends JavaPlugin {
         return teamMembersUtils;
     }
 
-    public SerializeManager getSerializeManager() {
+    public ItemStackSerializer getSerializeManager() {
         return serializeManager;
     }
 }

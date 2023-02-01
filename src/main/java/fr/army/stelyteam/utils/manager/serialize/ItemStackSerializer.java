@@ -1,4 +1,4 @@
-package fr.army.stelyteam.utils.manager;
+package fr.army.stelyteam.utils.manager.serialize;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -8,7 +8,7 @@ import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
-public class SerializeManager {
+public class ItemStackSerializer {
     
     public String serialize(ItemStack[] itemStack) {
         try {

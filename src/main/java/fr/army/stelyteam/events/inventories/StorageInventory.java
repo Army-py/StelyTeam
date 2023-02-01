@@ -14,7 +14,7 @@ import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.builder.InventoryBuilder;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.SQLManager;
-import fr.army.stelyteam.utils.manager.SerializeManager;
+import fr.army.stelyteam.utils.manager.serialize.ItemStackSerializer;
 
 public class StorageInventory {
     
@@ -25,7 +25,7 @@ public class StorageInventory {
     private YamlConfiguration config;
     private InventoryBuilder inventoryBuilder;
     private SQLManager sqlManager;
-    private SerializeManager serializeManager;
+    private ItemStackSerializer serializeManager;
 
 
     public StorageInventory(InventoryClickEvent clickEvent, StelyTeamPlugin plugin) {
