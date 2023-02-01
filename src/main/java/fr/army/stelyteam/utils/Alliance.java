@@ -2,24 +2,24 @@ package fr.army.stelyteam.utils;
 
 public class Alliance {
     
-    private String allianceName;
+    private String teamName;
     private String allianceDate;
 
-    public Alliance(String allianceName, String allianceDate){
-        this.allianceName = allianceName;
+    public Alliance(String teamName, String allianceDate){
+        this.teamName = teamName;
         this.allianceDate = allianceDate;
     }
 
-    public String getAllianceName() {
-        return allianceName;
+    public String getTeamName() {
+        return teamName;
     }
 
     public String getAllianceDate() {
         return allianceDate;
     }
 
-    public void setAllianceName(String allianceName) {
-        this.allianceName = allianceName;
+    public void setAllianceName(String teamName) {
+        this.teamName = teamName;
     }
 
     public void setAllianceDate(String allianceDate) {
