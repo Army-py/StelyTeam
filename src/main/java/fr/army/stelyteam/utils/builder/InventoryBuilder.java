@@ -42,7 +42,7 @@ public class InventoryBuilder {
         this.config = plugin.getConfig();
         this.sqlManager = plugin.getSQLManager();
         this.sqliteManager = plugin.getSQLiteManager();
-        this.serializeManager = new ItemStackSerializer();
+        this.serializeManager = new ItemStackSerializer(plugin);
         this.colorsBuilder = new ColorsBuilder(plugin);
     }
 
@@ -499,22 +499,22 @@ public class InventoryBuilder {
             inventory = cacheManager.getStorage(team, storageId).getStorageInstance();
         }else{
             inventory = Bukkit.createInventory(null, slots, storageName);
-            cacheManager.addStorage(
-                new Storage(
-                    team,
-                    storageId,
-                    inventory,
-                    serializeManager.serialize(inventory.getContents()))
-            );
+            // cacheManager.addStorage(
+            //     new Storage(
+            //         team,
+            //         storageId,
+            //         inventory,
+            //         serializeManager.serializeToByte(inventory.getContents()))
+            // );
 
             if (sqlManager.teamHasStorage(team.getTeamName(), storageId)){
-                String contentString = sqlManager.getStorageContent(team.getTeamName(), storageId);
-                ItemStack[] content = serializeManager.deserialize(contentString);
+                byte[] contentString = sqlManager.getStorageContent(team.getTeamName(), storageId);
+                ItemStack[] content = serializeManager.deserializeFromByte(contentString);
                 inventory.setContents(content);
             }
         }
 
-        emptyCases(inventory, slots, slots-9);
+        emptyCases(inventory, config.getIntegerList("inventories.storage.emptyCase.slots"));
 
         for(String str : config.getConfigurationSection("inventories.storage").getKeys(false)){
             Integer slot = config.getInt("inventories.storage."+str+".slot");
@@ -527,6 +527,8 @@ public class InventoryBuilder {
                 if (storageId == plugin.getMinStorageId()) continue;
             }else if (str.equals("next")){
                 if (storageId == sqlManager.getTeamStorageLvl(team.getTeamName())) continue;
+            }else if (str.equals("emptyCase")){
+                continue;
             }
 
             inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, false));
@@ -784,5 +786,16 @@ public class InventoryBuilder {
         for(int i = start; i < slots; i++) {
 			inventory.setItem(i, item);
 		}
+	}
+
+    public void emptyCases(Inventory inventory, List<Integer> list) {
+		ItemStack item = new ItemStack(Material.getMaterial(config.getString("emptyCase")), 1);
+		ItemMeta meta = item.getItemMeta();
+		meta.setDisplayName(" ");
+		item.setItemMeta(meta);
+
+        for(int i : list) {
+            inventory.setItem(i, item);
+        }
 	}
 }

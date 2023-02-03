@@ -73,7 +73,7 @@ public class StelyTeamPlugin extends JavaPlugin {
         this.conversationBuilder = new ConversationBuilder(this);
         this.inventoryBuilder = new InventoryBuilder(this);
         this.teamMembersUtils = new TeamMembersUtils(this);
-        this.serializeManager = new ItemStackSerializer();
+        this.serializeManager = new ItemStackSerializer(this);
         
         getServer().getPluginManager().registerEvents(new InventoryClickManager(this), this);
         getServer().getPluginManager().registerEvents(new InventoryCloseManager(this), this);

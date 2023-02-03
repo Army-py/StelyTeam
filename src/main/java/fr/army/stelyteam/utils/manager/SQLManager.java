@@ -923,7 +923,7 @@ public class SQLManager {
     }
 
 
-    public String getStorageContent(String teamName, Integer storageId){
+    public byte[] getStorageContent(String teamName, Integer storageId){
         if(isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("SELECT storageContent FROM teamStorage AS ts INNER JOIN team AS t ON ts.teamId = t.teamId WHERE t.teamName = ? AND ts.storageId = ?");
@@ -931,7 +931,7 @@ public class SQLManager {
                 query.setInt(2, storageId);
                 ResultSet result = query.executeQuery();
                 if(result.next()){
-                    return result.getString("storageContent");
+                    return result.getBytes("storageContent");
                 }
                 query.close();
             } catch (SQLException e) {

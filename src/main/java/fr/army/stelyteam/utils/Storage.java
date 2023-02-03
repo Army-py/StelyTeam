@@ -6,9 +6,9 @@ public class Storage {
     private Team team;
     private Integer storageId;
     private Inventory storageInstance;
-    private String storageContent;
+    private byte[] storageContent;
 
-    public Storage(Team team, Integer storageId, Inventory storageInstance, String storageContent){
+    public Storage(Team team, Integer storageId, Inventory storageInstance, byte[] storageContent){
         this.team = team;
         this.storageId = storageId;
         this.storageInstance = storageInstance;
@@ -27,7 +27,7 @@ public class Storage {
         return storageInstance;
     }
 
-    public String getStorageContent() {
+    public byte[] getStorageContent() {
         return storageContent;
     }
 
@@ -43,7 +43,7 @@ public class Storage {
         this.storageInstance = storageInstance;
     }
 
-    public void setStorageContent(String storageContent) {
+    public void setStorageContent(byte[] storageContent) {
         this.storageContent = storageContent;
     }
 }

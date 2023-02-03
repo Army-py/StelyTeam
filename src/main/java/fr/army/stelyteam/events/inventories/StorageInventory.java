@@ -96,7 +96,7 @@ public class StorageInventory {
         ItemStack[] inventoryContent = closeEvent.getInventory().getContents();
         int closeButtonSlot = config.getInt("inventories.storage.close.slot");
         inventoryContent[closeButtonSlot] = null;
-        Storage storage = new Storage(team, storageId, storageInventory, serializeManager.serialize(inventoryContent));
+        Storage storage = new Storage(team, storageId, storageInventory, serializeManager.serializeToByte(inventoryContent));
 
         if (cacheManager.containsStorage(team, storageId)){
             cacheManager.replaceStorage(storage);
@@ -104,17 +104,16 @@ public class StorageInventory {
             cacheManager.addStorage(storage);
         }
 
-        if (cacheManager.containsStorage(team, storageId)){
-            // String inventoryContentString = plugin.getTeamStorageContent(teamId, storageId.toString());
-            String inventoryContentString = serializeManager.serialize(inventoryContent);
-            if (!sqlManager.teamHasStorage(teamId, storageId)){
-                if (!sqlManager.storageExist(storageId)){
-                    sqlManager.insertStorage(storageId);
-                }
-                sqlManager.insertStorageContent(teamId, storageId, inventoryContentString);
-            }else{
-                sqlManager.updateStorageContent(teamId, storageId, inventoryContentString);
+        // String inventoryContentString = plugin.getTeamStorageContent(teamId, storageId.toString());
+        // byte[] inventoryContentString = serializeManager.serializeBytes(inventoryContent);
+        byte[] inventoryContentString = storage.getStorageContent();
+        if (!sqlManager.teamHasStorage(teamId, storageId)){
+            if (!sqlManager.storageExist(storageId)){
+                sqlManager.insertStorage(storageId);
             }
+            sqlManager.insertStorageContent(teamId, storageId, inventoryContentString);
+        }else{
+            sqlManager.updateStorageContent(teamId, storageId, inventoryContentString);
         }
     }
 

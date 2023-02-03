@@ -2,15 +2,27 @@ package fr.army.stelyteam.utils.manager.serialize;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
+import fr.army.stelyteam.StelyTeamPlugin;
+
 public class ItemStackSerializer {
-    
-    public String serialize(ItemStack[] itemStack) {
+
+    private YamlConfiguration config;
+
+
+    public ItemStackSerializer(StelyTeamPlugin plugin) {
+        this.config = plugin.getConfig();
+    }
+
+
+    public String serializeToBase64(ItemStack[] itemStack) {
         try {
             final ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
             final BukkitObjectOutputStream objectOutputStream = new BukkitObjectOutputStream(arrayOutputStream);
@@ -23,7 +35,7 @@ public class ItemStackSerializer {
     }
 
 
-    public ItemStack[] deserialize(String base64) {
+    public ItemStack[] deserializeFromBase64(String base64) {
         try {
             final ByteArrayInputStream arrayInputStream = new ByteArrayInputStream(Base64Coder.decodeLines(base64));
             // final ByteArrayInputStream arrayInputStream = new ByteArrayInputStream(new BigInteger(base64, 64).toByteArray());
@@ -32,5 +44,59 @@ public class ItemStackSerializer {
         } catch (final Exception exception) {
             throw new RuntimeException("Error turning base64 into ItemStack", exception);
         }
+    }
+
+
+    public byte[] serializeToByte(ItemStack[] itemStack) {
+        try {
+            final ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
+
+            System.out.println(arrayOutputStream.size());
+
+            final BukkitObjectOutputStream objectOutputStream = new BukkitObjectOutputStream(arrayOutputStream);
+            // objectOutputStream.writeObject(removeEmptySlots(itemStack));
+            objectOutputStream.writeObject(removeUnsedSlots(itemStack));
+            objectOutputStream.flush();
+
+            System.out.println(arrayOutputStream.size());
+
+            return arrayOutputStream.toByteArray();
+        } catch (final Exception exception) {
+            throw new RuntimeException("Error turning ItemStack into byte", exception);
+        }
+    }
+
+
+    public ItemStack[] deserializeFromByte(byte[] bytes) {
+        try {
+            final ByteArrayInputStream arrayInputStream = new ByteArrayInputStream(bytes);
+            // final ByteArrayInputStream arrayInputStream = new ByteArrayInputStream(new BigInteger(base64, 64).toByteArray());
+            final BukkitObjectInputStream objectInputStream = new BukkitObjectInputStream(arrayInputStream);
+            return (ItemStack[]) objectInputStream.readObject();
+        } catch (final Exception exception) {
+            throw new RuntimeException("Error turning byte into ItemStack", exception);
+        }
+    }
+
+
+    private ItemStack[] removeEmptySlots(ItemStack[] itemStacks){
+        ArrayList<ItemStack> items = new ArrayList<ItemStack>();
+        for (ItemStack itemStack : itemStacks) {
+            if(itemStack != null){
+                items.add(itemStack);
+            }
+        }
+        return items.toArray(new ItemStack[items.size()]);
+    }
+
+
+    private ItemStack[] removeUnsedSlots(ItemStack[] itemStacks){
+        ArrayList<ItemStack> items = new ArrayList<ItemStack>();
+
+        for (int i = 0; i < itemStacks.length-9; i++) {
+            items.add(itemStacks[i]);
+        }
+
+        return items.toArray(new ItemStack[items.size()]);
     }
 }

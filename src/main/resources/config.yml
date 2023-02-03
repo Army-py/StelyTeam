@@ -843,6 +843,8 @@ inventories:
 
 
   storage:
+    emptyCase:
+      slots: [45, 46, 47, 48, 49, 50, 51, 52, 53]
     previous:
       itemName: "§c§oStockage précédent"
       itemType: PLAYER_HEAD
