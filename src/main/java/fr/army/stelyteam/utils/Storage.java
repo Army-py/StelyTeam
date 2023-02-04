@@ -2,6 +2,8 @@ package fr.army.stelyteam.utils;
 
 import org.bukkit.inventory.Inventory;
 
+import fr.army.stelyteam.StelyTeamPlugin;
+
 public class Storage {
     private Team team;
     private Integer storageId;
@@ -14,6 +16,12 @@ public class Storage {
         this.storageInstance = storageInstance;
         this.storageContent = storageContent;
     }
+
+
+    public void saveStorage(){
+        StelyTeamPlugin.getPlugin().getSQLManager().saveStorage(this);
+    }
+
 
     public Team getTeam() {
         return team;

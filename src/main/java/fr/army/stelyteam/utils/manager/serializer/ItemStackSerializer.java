@@ -1,26 +1,16 @@
-package fr.army.stelyteam.utils.manager.serialize;
+package fr.army.stelyteam.utils.manager.serializer;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
-import fr.army.stelyteam.StelyTeamPlugin;
 
 public class ItemStackSerializer {
-
-    private YamlConfiguration config;
-
-
-    public ItemStackSerializer(StelyTeamPlugin plugin) {
-        this.config = plugin.getConfig();
-    }
-
 
     public String serializeToBase64(ItemStack[] itemStack) {
         try {

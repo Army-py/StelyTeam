@@ -13,10 +13,10 @@ import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.commands.SubCommand;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
 import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.SQLManager;
+import fr.army.stelyteam.utils.manager.MySQLManager;
 
 public class SubCmdInfo extends SubCommand {
-    private SQLManager sqlManager;
+    private MySQLManager sqlManager;
     private YamlConfiguration config;
     private YamlConfiguration messages;
     private MessageManager messageManager;

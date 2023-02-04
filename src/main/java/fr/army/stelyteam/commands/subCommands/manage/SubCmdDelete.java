@@ -8,11 +8,11 @@ import org.bukkit.entity.Player;
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.commands.SubCommand;
 import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.SQLManager;
+import fr.army.stelyteam.utils.manager.MySQLManager;
 import fr.army.stelyteam.utils.manager.SQLiteManager;
 
 public class SubCmdDelete extends SubCommand {
-    private SQLManager sqlManager;
+    private MySQLManager sqlManager;
     private SQLiteManager sqliteManager;
     private MessageManager messageManager;
 

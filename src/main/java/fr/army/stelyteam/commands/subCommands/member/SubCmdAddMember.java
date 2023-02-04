@@ -8,11 +8,11 @@ import org.bukkit.entity.Player;
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.commands.SubCommand;
 import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.SQLManager;
+import fr.army.stelyteam.utils.manager.MySQLManager;
 
 public class SubCmdAddMember extends SubCommand {
 
-    private SQLManager sqlManager;
+    private MySQLManager sqlManager;
     private MessageManager messageManager;
 
     public SubCmdAddMember(StelyTeamPlugin plugin) {

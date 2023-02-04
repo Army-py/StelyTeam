@@ -21,9 +21,9 @@ import fr.army.stelyteam.utils.builder.conversation.ConversationBuilder;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.EconomyManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.SQLManager;
+import fr.army.stelyteam.utils.manager.MySQLManager;
 import fr.army.stelyteam.utils.manager.SQLiteManager;
-import fr.army.stelyteam.utils.manager.serialize.ItemStackSerializer;
+import fr.army.stelyteam.utils.manager.serializer.ItemStackSerializer;
 
 public class StelyTeamPlugin extends JavaPlugin {
 
@@ -31,7 +31,7 @@ public class StelyTeamPlugin extends JavaPlugin {
     private YamlConfiguration config;
     private YamlConfiguration messages;
     private CacheManager cacheManager;
-    private SQLManager sqlManager;
+    private MySQLManager sqlManager;
     private SQLiteManager sqliteManager;
     private EconomyManager economyManager;
     private CommandManager commandManager;
@@ -51,7 +51,7 @@ public class StelyTeamPlugin extends JavaPlugin {
         this.config = initFile(this.getDataFolder(), "config.yml");
         this.messages = initFile(this.getDataFolder(), "messages.yml");
 
-        this.sqlManager = new SQLManager(this);
+        this.sqlManager = new MySQLManager(this);
         this.sqliteManager = new SQLiteManager(this);
 
         try {
@@ -73,7 +73,7 @@ public class StelyTeamPlugin extends JavaPlugin {
         this.conversationBuilder = new ConversationBuilder(this);
         this.inventoryBuilder = new InventoryBuilder(this);
         this.teamMembersUtils = new TeamMembersUtils(this);
-        this.serializeManager = new ItemStackSerializer(this);
+        this.serializeManager = new ItemStackSerializer();
         
         getServer().getPluginManager().registerEvents(new InventoryClickManager(this), this);
         getServer().getPluginManager().registerEvents(new InventoryCloseManager(this), this);
@@ -191,7 +191,7 @@ public class StelyTeamPlugin extends JavaPlugin {
         return cacheManager;
     }
 
-    public SQLManager getSQLManager() {
+    public MySQLManager getSQLManager() {
         return sqlManager;
     }
 

@@ -3,7 +3,7 @@ package fr.army.stelyteam.conversations;
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.utils.manager.EconomyManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.SQLManager;
+import fr.army.stelyteam.utils.manager.MySQLManager;
 
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 
 public class ConvWithdrawMoney extends StringPrompt {
 
-    private SQLManager sqlManager;
+    private MySQLManager sqlManager;
     private MessageManager messageManager;
     private EconomyManager economyManager;
 

@@ -13,8 +13,8 @@ import fr.army.stelyteam.utils.Storage;
 import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.builder.InventoryBuilder;
 import fr.army.stelyteam.utils.manager.CacheManager;
-import fr.army.stelyteam.utils.manager.SQLManager;
-import fr.army.stelyteam.utils.manager.serialize.ItemStackSerializer;
+import fr.army.stelyteam.utils.manager.MySQLManager;
+import fr.army.stelyteam.utils.manager.serializer.ItemStackSerializer;
 
 public class StorageInventory {
     
@@ -24,7 +24,7 @@ public class StorageInventory {
     private CacheManager cacheManager;
     private YamlConfiguration config;
     private InventoryBuilder inventoryBuilder;
-    private SQLManager sqlManager;
+    private MySQLManager sqlManager;
     private ItemStackSerializer serializeManager;
 
 
@@ -104,17 +104,17 @@ public class StorageInventory {
             cacheManager.addStorage(storage);
         }
 
-        // String inventoryContentString = plugin.getTeamStorageContent(teamId, storageId.toString());
-        // byte[] inventoryContentString = serializeManager.serializeBytes(inventoryContent);
-        byte[] inventoryContentString = storage.getStorageContent();
-        if (!sqlManager.teamHasStorage(teamId, storageId)){
-            if (!sqlManager.storageExist(storageId)){
-                sqlManager.insertStorage(storageId);
-            }
-            sqlManager.insertStorageContent(teamId, storageId, inventoryContentString);
-        }else{
-            sqlManager.updateStorageContent(teamId, storageId, inventoryContentString);
-        }
+        // byte[] inventoryContentString = storage.getStorageContent();
+        // if (!sqlManager.teamHasStorage(teamId, storageId)){
+        //     if (!sqlManager.storageIdExist(storageId)){
+        //         sqlManager.insertStorageId(storageId);
+        //     }
+        //     sqlManager.insertStorageContent(teamId, storageId, inventoryContentString);
+        // }else{
+        //     sqlManager.updateStorageContent(teamId, storageId, inventoryContentString);
+        // }
+
+        storage.saveStorage();
     }
 
 

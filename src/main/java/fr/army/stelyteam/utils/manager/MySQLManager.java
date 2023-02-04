@@ -12,9 +12,10 @@ import java.util.Calendar;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.utils.Storage;
 import fr.army.stelyteam.utils.Team;
 
-public class SQLManager {
+public class MySQLManager {
     
     private String host;
     private String database;
@@ -26,7 +27,7 @@ public class SQLManager {
     private StelyTeamPlugin plugin;
     private YamlConfiguration config;
 
-    public SQLManager(StelyTeamPlugin plugin) {
+    public MySQLManager(StelyTeamPlugin plugin) {
         // this.host = App.config.getString("sql.host");
         // this.database = App.config.getString("sql.database");
         // this.user = App.config.getString("sql.user");
@@ -873,7 +874,7 @@ public class SQLManager {
     }
 
 
-    public void insertStorage(int storageId){
+    public void insertStorageId(int storageId){
         if(isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("INSERT INTO storage (storageId) VALUES (?)");
@@ -887,7 +888,7 @@ public class SQLManager {
     }
 
 
-    public boolean storageExist(int storageId){
+    public boolean storageIdExist(int storageId){
         if(isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("SELECT storageId FROM storage WHERE storageId = ?");
@@ -976,20 +977,18 @@ public class SQLManager {
     }
 
 
-    private int getPlayerId(String playerName){
-        if (isConnected()){
-            try {
-                PreparedStatement query = connection.prepareStatement("SELECT playerId FROM player WHERE playerName = ?");
-                query.setString(1, playerName);
-                ResultSet result = query.executeQuery();
-                int playerId = result.getInt("playerId");
-                query.close();
-                return playerId;
-            } catch (Exception e){
-                e.printStackTrace();
+    public void saveStorage(Storage storage){
+        String teamName = storage.getTeam().getTeamName();
+        int storageId = storage.getStorageId();
+        byte[] storageContent = storage.getStorageContent();
+        if (!teamHasStorage(teamName, storageId)){
+            if (!storageIdExist(storageId)){
+                insertStorageId(storageId);
             }
+            insertStorageContent(teamName, storageId, storageContent);
+        }else{
+            updateStorageContent(teamName, storageId, storageContent);
         }
-        return 0;
     }
 
 
@@ -1112,6 +1111,23 @@ public class SQLManager {
             }
         }
         return null;
+    }
+
+
+    private int getPlayerId(String playerName){
+        if (isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT playerId FROM player WHERE playerName = ?");
+                query.setString(1, playerName);
+                ResultSet result = query.executeQuery();
+                int playerId = result.getInt("playerId");
+                query.close();
+                return playerId;
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return 0;
     }
 
 

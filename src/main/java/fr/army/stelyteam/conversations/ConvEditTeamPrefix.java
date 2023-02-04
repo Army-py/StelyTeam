@@ -5,7 +5,7 @@ import fr.army.stelyteam.utils.TeamMembersUtils;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
 import fr.army.stelyteam.utils.manager.EconomyManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.SQLManager;
+import fr.army.stelyteam.utils.manager.MySQLManager;
 
 import org.bukkit.Color;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 
 public class ConvEditTeamPrefix extends StringPrompt {
 
-    private SQLManager sqlManager;
+    private MySQLManager sqlManager;
     private YamlConfiguration config;
     private MessageManager messageManager;
     private EconomyManager economyManager;
