@@ -499,13 +499,6 @@ public class InventoryBuilder {
             inventory = cacheManager.getStorage(team, storageId).getStorageInstance();
         }else{
             inventory = Bukkit.createInventory(null, slots, storageName);
-            // cacheManager.addStorage(
-            //     new Storage(
-            //         team,
-            //         storageId,
-            //         inventory,
-            //         serializeManager.serializeToByte(inventory.getContents()))
-            // );
 
             if (sqlManager.teamHasStorage(team.getTeamName(), storageId)){
                 byte[] contentString = sqlManager.getStorageContent(team.getTeamName(), storageId);

@@ -3,11 +3,14 @@ package fr.army.stelyteam.utils.manager.serializer;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
+
+import fr.army.stelyteam.StelyTeamPlugin;
 
 
 public class ItemStackSerializer {
@@ -69,24 +72,40 @@ public class ItemStackSerializer {
     }
 
 
-    private ItemStack[] removeEmptySlots(ItemStack[] itemStacks){
+    private ArrayList<ItemStack> removeEmptySlots(ItemStack[] itemStacks){
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
         for (ItemStack itemStack : itemStacks) {
             if(itemStack != null){
                 items.add(itemStack);
             }
         }
-        return items.toArray(new ItemStack[items.size()]);
+        return items;
     }
 
 
     private ItemStack[] removeUnsedSlots(ItemStack[] itemStacks){
         ArrayList<ItemStack> items = new ArrayList<ItemStack>();
-
-        for (int i = 0; i < itemStacks.length-9; i++) {
-            items.add(itemStacks[i]);
+        List<Integer> unsedSlots = StelyTeamPlugin.getPlugin().getConfig().getIntegerList("inventories.storage.emptyCase.slots");
+        for (int i = 0; i < itemStacks.length; i++) {
+            if (!unsedSlots.contains(i)){
+                items.add(itemStacks[i]);
+            }
         }
 
-        return items.toArray(new ItemStack[items.size()]);
+        // int countNull = 0;
+        // for (ItemStack item : items) {
+        //     if (item == null){
+        //         countNull++;
+        //     }
+        // }
+
+        // if (countNull == items.size()) {
+        // items = removeEmptySlots(items.toArray(new ItemStack[0]));
+        // }
+
+        // System.out.println("countNull: " + countNull);
+        // System.out.println("items.size(): " + items.size());
+
+        return items.toArray(new ItemStack[0]);
     }
 }
