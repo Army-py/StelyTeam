@@ -496,7 +496,7 @@ public class InventoryBuilder {
         Inventory inventory;
 
         if (cacheManager.containsStorage(team, storageId)){
-            inventory = cacheManager.getStorage(team, storageId).getStorageInstance();
+            inventory = cacheManager.getStorage(team, storageId).getInventoryInstance();
         }else{
             inventory = Bukkit.createInventory(null, slots, storageName);
 

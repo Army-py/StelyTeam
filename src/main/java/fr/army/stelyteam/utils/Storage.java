@@ -7,21 +7,24 @@ import fr.army.stelyteam.StelyTeamPlugin;
 public class Storage {
     private Team team;
     private Integer storageId;
-    private Inventory storageInstance;
+    private Inventory inventoryInstance;
     private byte[] storageContent;
 
-    public Storage(Team team, Integer storageId, Inventory storageInstance, byte[] storageContent){
+    public Storage(Team team, Integer storageId, Inventory inventoryInstance, byte[] storageContent){
         this.team = team;
         this.storageId = storageId;
-        this.storageInstance = storageInstance;
+        this.inventoryInstance = inventoryInstance;
         this.storageContent = storageContent;
     }
 
 
-    public void saveStorage(){
-        StelyTeamPlugin.getPlugin().getSQLManager().saveStorage(this);
+    public void saveStorageToCache(){
+        StelyTeamPlugin.getPlugin().getCacheManager().saveStorage(this);
     }
 
+    public void saveStorageToDatabase(){
+        StelyTeamPlugin.getPlugin().getSQLManager().saveStorage(this);
+    }
 
     public Team getTeam() {
         return team;
@@ -31,8 +34,8 @@ public class Storage {
         return storageId;
     }
 
-    public Inventory getStorageInstance() {
-        return storageInstance;
+    public Inventory getInventoryInstance() {
+        return inventoryInstance;
     }
 
     public byte[] getStorageContent() {
@@ -47,8 +50,8 @@ public class Storage {
         this.storageId = storageId;
     }
 
-    public void setStorageInstance(Inventory storageInstance) {
-        this.storageInstance = storageInstance;
+    public void setStorageInstance(Inventory inventoryInstance) {
+        this.inventoryInstance = inventoryInstance;
     }
 
     public void setStorageContent(byte[] storageContent) {

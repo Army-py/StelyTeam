@@ -90,18 +90,15 @@ public class StorageInventory {
         Player player = (org.bukkit.entity.Player) closeEvent.getPlayer();
         Inventory storageInventory = closeEvent.getInventory();
         String playerName = player.getName();
-        String teamId = sqlManager.getTeamNameFromPlayerName(playerName);
         Team team = sqlManager.getTeamFromPlayerName(playerName);
         Integer storageId = getStorageId(closeEvent.getView().getTitle());
         ItemStack[] inventoryContent = closeEvent.getInventory().getContents();
-        int closeButtonSlot = config.getInt("inventories.storage.close.slot");
-        inventoryContent[closeButtonSlot] = null;
-        Storage storage = new Storage(team, storageId, storageInventory, serializeManager.serializeToByte(inventoryContent));
+        Storage storage;
 
         if (cacheManager.containsStorage(team, storageId)){
-            cacheManager.replaceStorage(storage);
+            storage = cacheManager.getStorage(team, storageId);
         }else{
-            cacheManager.addStorage(storage);
+            storage = new Storage(team, storageId, storageInventory, serializeManager.serializeToByte(inventoryContent));
         }
 
         // byte[] inventoryContentString = storage.getStorageContent();
@@ -113,17 +110,16 @@ public class StorageInventory {
         // }else{
         //     sqlManager.updateStorageContent(teamId, storageId, inventoryContentString);
         // }
-
-        storage.saveStorage();
+        
+        storage.saveStorageToCache();
+        storage.saveStorageToDatabase();
     }
 
 
     private Integer getStorageId(String inventoryTitle){
-        Integer storageId;
         for(String str : config.getConfigurationSection("inventories.storageDirectory").getKeys(false)){
             if (config.getString(config.getString("inventories.storageDirectory." + str + ".itemName")).equals(inventoryTitle)){
-                storageId = config.getInt("inventories.storageDirectory." + str + ".storageId");
-                return storageId;
+                return config.getInt("inventories.storageDirectory." + str + ".storageId");
             }
         }
         return null;

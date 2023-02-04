@@ -130,6 +130,14 @@ public class CacheManager {
         return false;
     }
 
+    public void saveStorage(Storage storage){
+        if(containsStorage(storage.getTeam(), storage.getStorageId())){
+            replaceStorage(storage);
+        } else {
+            addStorage(storage);
+        }
+    }
+
 
     public void addInConversation(String playerName){
         cachedInConversation.add(playerName);

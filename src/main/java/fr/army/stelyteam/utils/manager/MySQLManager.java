@@ -42,7 +42,7 @@ public class MySQLManager {
 
 
     public boolean isConnected() {
-        return connection == null ? false : true;
+        return this.connection == null ? false : true;
     }
 
 
