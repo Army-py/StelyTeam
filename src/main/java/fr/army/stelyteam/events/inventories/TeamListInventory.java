@@ -1,6 +1,5 @@
 package fr.army.stelyteam.events.inventories;
 
-import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;

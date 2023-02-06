@@ -17,7 +17,6 @@ import fr.army.stelyteam.utils.manager.MySQLManager;
 
 public class CreateTeamInventory {
     private InventoryClickEvent event;
-    private StelyTeamPlugin plugin;
     private CacheManager cacheManager;
     private YamlConfiguration config;
     private MySQLManager mysqlManager;
@@ -27,7 +26,6 @@ public class CreateTeamInventory {
 
     public CreateTeamInventory(InventoryClickEvent event, StelyTeamPlugin plugin) {
         this.event = event;
-        this.plugin = plugin;
         this.cacheManager = plugin.getCacheManager();
         this.config = plugin.getConfig();
         this.mysqlManager = plugin.getSQLManager();

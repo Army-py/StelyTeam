@@ -54,7 +54,6 @@ public class EditMembersInventory {
         Player player = (Player) event.getWhoClicked();
         String playerName = player.getName();
         Team team = sqlManager.getTeamFromPlayerName(playerName);
-        String teamName = team.getTeamName();
 
 
         if (itemType.equals(Material.getMaterial(config.getString("noPermission.itemType"))) && lore.equals(config.getStringList("noPermission.lore"))){

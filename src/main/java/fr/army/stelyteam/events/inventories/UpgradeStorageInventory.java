@@ -20,7 +20,6 @@ import fr.army.stelyteam.utils.manager.MySQLManager;
 public class UpgradeStorageInventory {
 
     private InventoryClickEvent event;
-    private StelyTeamPlugin plugin;
     private CacheManager cacheManager;
     private YamlConfiguration config;
     private MySQLManager sqlManager;
@@ -31,7 +30,6 @@ public class UpgradeStorageInventory {
 
     public UpgradeStorageInventory(InventoryClickEvent event, StelyTeamPlugin plugin) {
         this.event = event;
-        this.plugin = plugin;
         this.cacheManager = plugin.getCacheManager();
         this.config = plugin.getConfig();
         this.sqlManager = plugin.getSQLManager();

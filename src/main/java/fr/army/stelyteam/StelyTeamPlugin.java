@@ -237,3 +237,11 @@ public class StelyTeamPlugin extends JavaPlugin {
         return serializeManager;
     }
 }
+
+
+
+/*
+ * 
+ * Problème à regler :
+ *  - si il y a un changement de nom de team alors qu'un stockage est dans le cache
+ */

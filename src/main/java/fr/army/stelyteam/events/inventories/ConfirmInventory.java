@@ -199,11 +199,13 @@ public class ConfirmInventory {
                 player.closeInventory();
             }else if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.EDIT_OWNER)){
                 player.closeInventory();
+                
             }else if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.CREATE_HOME)){
-                player.closeInventory();
+                Inventory inventory = inventoryBuilder.createManageInventory(playerName, team);
+                player.openInventory(inventory);
             }else if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.DELETE_HOME)){
-                player.closeInventory();
-
+                Inventory inventory = inventoryBuilder.createManageInventory(playerName, team);
+                player.openInventory(inventory);
             }else if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.CREATE_TEAM)){
                 Inventory inventory = inventoryBuilder.createTeamInventory();
                 player.openInventory(inventory);
