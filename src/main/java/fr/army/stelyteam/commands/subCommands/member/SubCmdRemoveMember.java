@@ -33,9 +33,10 @@ public class SubCmdRemoveMember extends SubCommand {
             // player.sendMessage("Utilisation : /stelyteam removemember <nom de team> <membre>");
             player.sendMessage(messageManager.getMessage("commands.stelyteam_removemember.usage"));
         }else{
-            if (sqlManager.teamNameExists(args[1])){
-                if (sqlManager.isMemberInTeam(args[2], args[1])){
-                    sqlManager.removeMember(args[2], args[1]);
+            Team team = sqlManager.getTeamFromTeamName(args[1]);
+            if (team != null){
+                if (team.isTeamMember(args[2])){
+                    team.removeMember(args[2]);
                     // player.sendMessage("Joueur retiré de la team");
                     player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_removemember.output", args[2]));
                 }else{

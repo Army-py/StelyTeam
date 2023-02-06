@@ -38,9 +38,8 @@ public class ConvRemoveMember extends StringPrompt {
         Player author = (Player) con.getForWhom();
         String authorName = author.getName();
         Team team = sqlManager.getTeamFromPlayerName(author.getName());
-        String teamName = team.getTeamName();
 
-        if (!sqlManager.isMemberInTeam(answer, teamName)){
+        if (!team.isTeamMember(answer)){
             // con.getForWhom().sendRawMessage("Le joueur n'est pas dans ta team");
             con.getForWhom().sendRawMessage(messageManager.getMessage("common.player_not_in_your_team"));
             return null;
@@ -48,7 +47,7 @@ public class ConvRemoveMember extends StringPrompt {
             // con.getForWhom().sendRawMessage("Tu ne peux pas exclure toi-même");
             con.getForWhom().sendRawMessage(messageManager.getMessage("manage_members.remove_member.cant_exclude_yourself"));
             return null;
-        }else if (sqlManager.getMemberRank(answer) <= sqlManager.getMemberRank(authorName)){
+        }else if (team.getMemberRank(answer) <= team.getMemberRank(authorName)){
             // con.getForWhom().sendRawMessage("Vous ne pouvez pas exclure un membre de rang supérieur à vous");
             con.getForWhom().sendRawMessage(messageManager.getMessage("manage_members.remove_member.cant_exclude_higher_rank"));
             return null;

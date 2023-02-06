@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.commands.SubCommand;
+import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.manager.MessageManager;
 import fr.army.stelyteam.utils.manager.MySQLManager;
 
@@ -31,16 +32,17 @@ public class SubCmdDowngrade extends SubCommand {
             // player.sendMessage("Utilisation : /stelyteam downgrade <nom de team>");
             player.sendMessage(messageManager.getMessage("commands.stelyteam_downgrade.usage"));
         }else{
-            String teamID = String.join("", args);
-            if (sqlManager.teamNameExists(teamID)){
-                Integer teamUpgrades = sqlManager.getImprovLvlMembers(teamID);
+            String teamName = String.join("", args);
+            Team team = sqlManager.getTeamFromTeamName(teamName);
+            if (team != null){
+                Integer teamUpgrades = team.getImprovLvlMembers();
                 if (teamUpgrades == 0){
                     // player.sendMessage("Cette team est déjà au niveau minimum");
                     player.sendMessage(messageManager.getMessage("commands.stelyteam_downgrade.min_level"));
                 }else{
                     // player.sendMessage("Nombre de membres diminué");
-                    player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_downgrade.output", teamID));
-                    sqlManager.decrementImprovLvlMembers(teamID);
+                    player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_downgrade.output", teamName));
+                    team.decrementImprovLvlMembers();
                 }
             }else{
                 // player.sendMessage("Cette team n'existe pas");

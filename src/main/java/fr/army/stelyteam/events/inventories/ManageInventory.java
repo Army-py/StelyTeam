@@ -22,7 +22,6 @@ import org.bukkit.inventory.Inventory;
 
 public class ManageInventory {
     private InventoryClickEvent event;
-    private StelyTeamPlugin plugin;
     private CacheManager cacheManager;
     private YamlConfiguration config;
     private MySQLManager sqlManager;
@@ -34,7 +33,6 @@ public class ManageInventory {
 
     public ManageInventory(InventoryClickEvent event, StelyTeamPlugin plugin) {
         this.event = event;
-        this.plugin = plugin;
         this.cacheManager = plugin.getCacheManager();
         this.config = plugin.getConfig();
         this.sqlManager = plugin.getSQLManager();
@@ -78,8 +76,7 @@ public class ManageInventory {
 
 
         }else if (itemName.equals(config.getString("inventories.manage.removeTeamHome.itemName"))){
-            String teamName = sqlManager.getTeamNameFromPlayerName(playerName);
-            if (!sqliteManager.isSet(teamName)){
+            if (!sqliteManager.isSet(team.getTeamName())){
                 player.sendMessage(messageManager.getMessage("manage_team.team_home.not_set"));
             }else{
                 cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.DELETE_HOME, team));
@@ -88,10 +85,8 @@ public class ManageInventory {
             }
 
 
-        }else if (itemName.equals(config.getString("inventories.manage.buyTeamBank.itemName"))){
-            String teamID = sqlManager.getTeamNameFromPlayerName(playerName);
-            
-            if (!sqlManager.hasUnlockedTeamBank(teamID)){
+        }else if (itemName.equals(config.getString("inventories.manage.buyTeamBank.itemName"))){            
+            if (!team.isUnlockedTeamBank()){
                 if (economyManager.checkMoneyPlayer(player, config.getDouble("prices.buyTeamBank"))){
                     cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.BUY_TEAM_BANK, team));
 
@@ -106,12 +101,12 @@ public class ManageInventory {
 
 
         }else if (itemName.equals(config.getString("inventories.manage.upgradeTotalMembers.itemName"))){
-            Inventory inventory = inventoryBuilder.createUpgradeTotalMembersInventory(playerName);
+            Inventory inventory = inventoryBuilder.createUpgradeTotalMembersInventory(playerName, team);
             player.openInventory(inventory);
 
 
         }else if (itemName.equals(config.getString("inventories.manage.upgradeStorageAmount.itemName"))){
-            Inventory inventory = inventoryBuilder.createUpgradeStorageInventory(playerName);
+            Inventory inventory = inventoryBuilder.createUpgradeStorageInventory(playerName, team);
             player.openInventory(inventory);
 
 
@@ -154,7 +149,7 @@ public class ManageInventory {
 
 
         }else if (itemName.equals(config.getString("inventories.manage.editPermissions.itemName"))){
-            Inventory inventory = inventoryBuilder.createPermissionsInventory(playerName);
+            Inventory inventory = inventoryBuilder.createPermissionsInventory(playerName, team);
             player.openInventory(inventory);
 
 

@@ -76,7 +76,7 @@ public class StorageInventory {
                 if (itemName.equals(config.getString("inventories.storage.close.itemName"))){
                     clickEvent.setCancelled(true);
                     if (clickEvent.getCursor().getType().equals(Material.AIR)){
-                        player.openInventory(inventoryBuilder.createStorageDirectoryInventory(playerName));
+                        player.openInventory(inventoryBuilder.createStorageDirectoryInventory(playerName, team));
                         return;
                     }else return;
                 }

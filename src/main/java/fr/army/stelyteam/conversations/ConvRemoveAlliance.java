@@ -37,10 +37,9 @@ public class ConvRemoveAlliance extends StringPrompt {
     public Prompt acceptInput(ConversationContext con, String answer) {
         Player author = (Player) con.getForWhom();
         String authorName = author.getName();
-        String teamName = sqlManager.getTeamNameFromPlayerName(authorName);
         Team team = sqlManager.getTeamFromPlayerName(authorName);
 
-        if (!sqlManager.isAlliance(answer, teamName)){
+        if (!team.isTeamAlliance(answer)){
             con.getForWhom().sendRawMessage(messageManager.getMessage("common.not_in_alliance"));
             return null;
         }

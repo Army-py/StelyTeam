@@ -37,14 +37,13 @@ public class ConvEditOwner extends StringPrompt {
         Player player = Bukkit.getPlayer(answer);
         Player author = (Player) con.getForWhom();
         String authorName = author.getName();
-        String teamId = sqlManager.getTeamNameFromPlayerName(author.getName());
         Team team = sqlManager.getTeamFromPlayerName(author.getName());
         
         if (player == null) {
             // con.getForWhom().sendRawMessage("Ce joueur n'existe pas");
             con.getForWhom().sendRawMessage(messageManager.getMessage("common.player_not_exist"));
             return null;
-        }else if (!sqlManager.isMemberInTeam(answer, teamId)) {
+        }else if (!team.isTeamMember(answer)) {
             // con.getForWhom().sendRawMessage("Ce joueur n'est pas dans ta team");
             con.getForWhom().sendRawMessage(messageManager.getMessage("common.player_not_in_your_team"));
             return null;

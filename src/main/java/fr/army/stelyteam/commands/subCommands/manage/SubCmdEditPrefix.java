@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.commands.SubCommand;
+import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
 import fr.army.stelyteam.utils.manager.MessageManager;
 import fr.army.stelyteam.utils.manager.MySQLManager;
@@ -33,8 +34,9 @@ public class SubCmdEditPrefix extends SubCommand {
             // player.sendMessage("Utilisation : /stelyteam editprefix <nom de team> <nouveau prefix>");
             player.sendMessage(messageManager.getMessage("commands.stelyteam_editprefix.usage"));
         }else{
-            if (sqlManager.teamNameExists(args[1])){
-                sqlManager.updateTeamPrefix(args[1], args[2]);
+            Team team = sqlManager.getTeamFromTeamName(args[1]);
+            if (team != null){
+                team.updateTeamPrefix(args[2]);
                 // player.sendMessage("Préfixe de team modifié en " + new ColorsBuilder().replaceColor(args[2]));
                 player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_editprefix.output", colorsBuilder.replaceColor(args[2])));
             }else{

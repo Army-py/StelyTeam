@@ -88,16 +88,16 @@ public class EditMembersInventory {
 
         itemName = removeFirstColors(event.getCurrentItem().getItemMeta().getDisplayName());
         if (team.isTeamMember(playerName)){
-            Integer authorRank = sqlManager.getMemberRank(playerName);
-            Integer memberRank = sqlManager.getMemberRank(itemName);
+            Integer authorRank = team.getMemberRank(playerName);
+            Integer memberRank = team.getMemberRank(itemName);
             Player member = Bukkit.getPlayer(itemName);
 
             if (event.getClick().isRightClick()){
                 if (memberRank <= authorRank){
                     return;
                 }
-                if (!sqlManager.isOwner(itemName) && memberRank < plugin.getLastRank()){
-                    sqlManager.demoteMember(teamName, itemName);
+                if (!team.isTeamOwner(itemName) && memberRank < plugin.getLastRank()){
+                    team.getMember(playerName).demoteMember();
 
                     if (member != null && removeFirstColors(itemName).equals(member.getName())){
                         String newRank = plugin.getRankFromId(memberRank+1);
@@ -112,7 +112,7 @@ public class EditMembersInventory {
                     return;
                 }
                 if (!sqlManager.isOwner(itemName) && memberRank != 1){
-                    sqlManager.promoteMember(teamName, itemName);
+                    team.getMember(playerName).promoteMember();
 
                     if (member != null && removeFirstColors(itemName).equals(member.getName())){
                         String newRank = plugin.getRankFromId(memberRank-1);

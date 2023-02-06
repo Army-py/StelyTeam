@@ -34,7 +34,6 @@ public class PermissionsInventory {
         String playerName = player.getName();
         String itemName = event.getCurrentItem().getItemMeta().getDisplayName();
         Team team = sqlManager.getTeamFromPlayerName(playerName);
-        String teamName = team.getTeamName();
 
         // Fermeture ou retour en arrière de l'inventaire
         if (itemName.equals(config.getString("inventories.permissions.close.itemName"))){
@@ -79,7 +78,7 @@ public class PermissionsInventory {
                     team.insertAssignement(permission, defaultRankId);
                 }
             }else return;
-            Inventory inventory = inventoryBuilder.createPermissionsInventory(playerName);
+            Inventory inventory = inventoryBuilder.createPermissionsInventory(playerName, team);
             player.openInventory(inventory);
             team.refreshTeamMembersInventory(playerName);
         }

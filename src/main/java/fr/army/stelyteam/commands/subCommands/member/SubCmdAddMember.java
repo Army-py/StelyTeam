@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.commands.SubCommand;
+import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.manager.MessageManager;
 import fr.army.stelyteam.utils.manager.MySQLManager;
 
@@ -30,12 +31,13 @@ public class SubCmdAddMember extends SubCommand {
             // player.sendMessage("Utilisation : /stelyteam addmember <nom de team> <membre>");
             player.sendMessage(messageManager.getMessage("commands.stelyteam_addmember.usage"));
         }else{
-            if (sqlManager.teamNameExists(args[1])){
+            Team team = sqlManager.getTeamFromTeamName(args[1]);
+            if (team != null){
                 if (sqlManager.isMember(args[2])){
                     // player.sendMessage("Ce joueur est déjà dans une team");
                     player.sendMessage(messageManager.getMessage("common.player_already_in_team"));
                 }else{
-                    sqlManager.insertMember(args[2], args[1]);
+                    team.insertMember(args[2]);
                     // player.sendMessage("Joueur ajouté dans la team");
                     player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_addmember.output", args[2]));
                 }

@@ -107,7 +107,7 @@ public class MemberInventory {
                 player.sendMessage(messageManager.getMessage("other.owner_cant_leave_team"));
             }
         }else if (itemName.equals(config.getString("inventories.member.storageDirectory.itemName"))){
-            Inventory inventory = inventoryBuilder.createStorageDirectoryInventory(playerName);
+            Inventory inventory = inventoryBuilder.createStorageDirectoryInventory(playerName, team);
             player.openInventory(inventory);
         }
     }

@@ -133,7 +133,7 @@ public class InventoryBuilder {
         Double teamMoney = team.getTeamMoney();
         String teamDescription = team.getTeamDescription();
         Integer maxMembers = config.getInt("teamMaxMembers");
-        String memberRank = plugin.getRankFromId(sqlManager.getMemberRank(playername));
+        String memberRank = plugin.getRankFromId(team.getMemberRank(playername));
         String memberRankName = config.getString("ranks." + memberRank + ".name");
         String rankColor = config.getString("ranks." + memberRank + ".color");
         Inventory inventory = Bukkit.createInventory(null, slots, config.getString("inventoriesName.member"));
@@ -175,7 +175,7 @@ public class InventoryBuilder {
             }
 
             if (name.equals(config.getString("inventories.member.seeTeamBank.itemName"))){
-                if (!sqlManager.hasUnlockedTeamBank(teamName)){
+                if (!team.isUnlockedTeamBank()){
                     item = ItemBuilder.getItem(
                         Material.getMaterial(config.getString("teamBankNotUnlock.itemType")),
                         config.getString("teamBankNotUnlock.itemName"),
@@ -212,10 +212,9 @@ public class InventoryBuilder {
     }
 
 
-    public Inventory createUpgradeTotalMembersInventory(String playername) {
+    public Inventory createUpgradeTotalMembersInventory(String playername, Team team) {
         Integer slots = config.getInt("inventoriesSlots.upgradeTotalMembers");
-        String teamID = sqlManager.getTeamNameFromPlayerName(playername);
-        Integer level = sqlManager.getImprovLvlMembers(teamID);
+        Integer level = team.getImprovLvlMembers();
         Inventory inventory = Bukkit.createInventory(null, slots, config.getString("inventoriesName.upgradeTotalMembers"));
         Material material;
         String headTexture;
@@ -251,10 +250,9 @@ public class InventoryBuilder {
     }
 
 
-    public Inventory createUpgradeStorageInventory(String playername) {
+    public Inventory createUpgradeStorageInventory(String playername, Team team) {
         Integer slots = config.getInt("inventoriesSlots.upgradeStorageAmount");
-        String teamID = sqlManager.getTeamNameFromPlayerName(playername);
-        Integer level = sqlManager.getTeamStorageLvl(teamID);
+        Integer level = team.getTeamStorageLvl();
         Inventory inventory = Bukkit.createInventory(null, slots, config.getString("inventoriesName.upgradeStorageAmount"));
         Material material;
         String headTexture;
@@ -307,7 +305,7 @@ public class InventoryBuilder {
             if (playerUUID == null) offlinePlayer = Bukkit.getOfflinePlayer(memberName);
             else offlinePlayer = Bukkit.getOfflinePlayer(playerUUID);
 
-            String memberRank = plugin.getRankFromId(sqlManager.getMemberRank(memberName));
+            String memberRank = plugin.getRankFromId(team.getMemberRank(memberName));
             String rankColor = config.getString("ranks." + memberRank + ".color");
             itemName = rankColor + memberName;
             
@@ -422,10 +420,9 @@ public class InventoryBuilder {
     }
 
 
-    public Inventory createPermissionsInventory(String playerName) {
+    public Inventory createPermissionsInventory(String playerName, Team team) {
         Integer slots = config.getInt("inventoriesSlots.permissions");
         Inventory inventory = Bukkit.createInventory(null, slots, config.getString("inventoriesName.permissions"));
-        String teamId = sqlManager.getTeamNameFromPlayerName(playerName);
 
         emptyCases(inventory, slots, 0);
 
@@ -438,7 +435,7 @@ public class InventoryBuilder {
             
             String rankPath = config.getString("inventories.permissions."+str+".rankPath");
             Integer defaultRankId = config.getInt("inventories."+rankPath+".rank");
-            Integer permissionRank = sqlManager.getRankAssignement(teamId, str);
+            Integer permissionRank = team.getPermissionRank(str);
             String lorePrefix = config.getString("prefixRankLore");
             Material material;
 
@@ -469,11 +466,10 @@ public class InventoryBuilder {
     }
 
 
-    public Inventory createStorageDirectoryInventory(String playerName) {
+    public Inventory createStorageDirectoryInventory(String playerName, Team team) {
         Integer slots = config.getInt("inventoriesSlots.storageDirectory");
-        String teamId = sqlManager.getTeamNameFromPlayerName(playerName);
         Inventory inventory = Bukkit.createInventory(null, slots, config.getString("inventoriesName.storageDirectory"));
-        Integer level = sqlManager.getTeamStorageLvl(teamId);
+        Integer level = team.getTeamStorageLvl();
 
         emptyCases(inventory, slots, 0);
 

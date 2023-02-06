@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.commands.SubCommand;
+import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.manager.MessageManager;
 import fr.army.stelyteam.utils.manager.MySQLManager;
 
@@ -33,17 +34,18 @@ public class SubCmdUpgrade extends SubCommand {
             // player.sendMessage("Utilisation : /stelyteam upgrade <nom de team>");
             player.sendMessage(messageManager.getMessage("commands.stelyteam_upgrade.usage"));
         }else{
-            String teamID = String.join("", args);
-            if (sqlManager.teamNameExists(teamID)){
+            String teamName = String.join("", args);
+            Team team = sqlManager.getTeamFromTeamName(teamName);
+            if (team != null){
                 Integer maxUpgrades = config.getConfigurationSection("inventories.upgradeTotalMembers").getValues(false).size() - 1;
-                Integer teamUpgrades = sqlManager.getImprovLvlMembers(teamID);
+                Integer teamUpgrades = team.getImprovLvlMembers();
                 if (maxUpgrades == teamUpgrades){
                     // player.sendMessage("Cette team est déjà au niveau maximum");
                     player.sendMessage(messageManager.getMessage("commands.stelyteam_upgrade.max_level"));
                 }else{
-                    sqlManager.incrementImprovLvlMembers(teamID);
+                    team.incrementImprovLvlMembers();
                     // player.sendMessage("Nombre de membres augmenté");
-                    player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_upgrade.output", teamID));
+                    player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_upgrade.output", teamName));
                 }
             }else{
                 // player.sendMessage("Cette team n'existe pas");

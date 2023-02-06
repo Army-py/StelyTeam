@@ -168,13 +168,13 @@ public class StelyTeamPlugin extends JavaPlugin {
     public boolean playerHasPermission(String playerName, Team team, String permissionName){
         Integer permissionRank = team.getPermissionRank(permissionName);
         if (permissionRank != null){
-            return permissionRank >= sqlManager.getMemberRank(playerName);
+            return permissionRank >= team.getMemberRank(playerName);
         }
 
         String rankPath = config.getString("inventories.permissions."+permissionName+".rankPath");
         if (team.isTeamOwner(playerName) || config.getInt("inventories."+rankPath+".rank") == -1){
             return true;
-        }else if (config.getInt("inventories."+rankPath+".rank") >= sqlManager.getMemberRank(playerName)){
+        }else if (config.getInt("inventories."+rankPath+".rank") >= team.getMemberRank(playerName)){
             return true;
         }else if (permissionName.equals("close") || permissionName.equals("leaveTeam") || permissionName.equals("teamInfos")){
             return true;

@@ -69,6 +69,14 @@ public class Team {
     }
 
 
+    public boolean isTeamAlliance(String allianceName){
+        for (Alliance alliance : this.teamAlliances) {
+            if (alliance.getTeamName().equals(allianceName)) return true;
+        }
+        return false;
+    }
+
+
     public boolean isTeamOwner(String playerName){
         if (this.teamOwnerName.equals(playerName)) return true;
         return false;
@@ -87,6 +95,14 @@ public class Team {
             membersName.add(member.getMemberName());
         }
         return membersName;
+    }
+
+
+    public Member getMember(String playerName){
+        for (Member member : this.teamMembers) {
+            if (member.getMemberName().equals(playerName)) return member;
+        }
+        return null;
     }
 
 
@@ -145,9 +161,21 @@ public class Team {
     }
 
 
+    public void insertMember(String playerName){
+        this.teamMembers.add(new Member(playerName, StelyTeamPlugin.getPlugin().getLastRank(), getCurrentDate()));
+        StelyTeamPlugin.getPlugin().getSQLManager().insertMember(playerName, teamName);
+    }
+
+
+    public void insertAlliance(String allianceName){
+        this.teamAlliances.add(new Alliance(allianceName, getCurrentDate()));
+        StelyTeamPlugin.getPlugin().getSQLManager().insertAlliance(teamName, allianceName);
+    }
+
+
     public void removeMember(String playerName){
         this.teamMembers.removeIf(member -> member.getMemberName().equals(playerName));
-        StelyTeamPlugin.getPlugin().getSQLManager().removeMember(teamName, playerName);
+        StelyTeamPlugin.getPlugin().getSQLManager().removeMember(playerName, teamName);
     }
 
 
@@ -160,6 +188,12 @@ public class Team {
     public void incrementImprovLvlMembers(){
         this.improvLvlMembers++;
         StelyTeamPlugin.getPlugin().getSQLManager().incrementImprovLvlMembers(teamName);
+    }
+
+
+    public void decrementImprovLvlMembers(){
+        this.improvLvlMembers--;
+        StelyTeamPlugin.getPlugin().getSQLManager().decrementImprovLvlMembers(teamName);
     }
 
 
@@ -197,6 +231,18 @@ public class Team {
     }
 
 
+    public void incrementTeamMoney(Double amount){
+        this.teamMoney += amount;
+        StelyTeamPlugin.getPlugin().getSQLManager().incrementTeamMoney(teamName, amount);
+    }
+
+
+    public void decrementTeamMoney(Double amount){
+        this.teamMoney -= amount;
+        StelyTeamPlugin.getPlugin().getSQLManager().decrementTeamMoney(teamName, amount);
+    }
+
+
     public void refreshTeamMembersInventory(String authorName) {
         InventoryBuilder inventoryBuilder = StelyTeamPlugin.getPlugin().getInventoryBuilder();
         for (Member member : this.teamMembers) {
@@ -216,15 +262,15 @@ public class Team {
                 }else if (openInventoryTitle.equals(config.getString("inventoriesName.member"))){
                     player.openInventory(inventoryBuilder.createMemberInventory(player.getName(), this));
                 }else if (openInventoryTitle.equals(config.getString("inventoriesName.upgradeTotalMembers"))){
-                    player.openInventory(inventoryBuilder.createUpgradeTotalMembersInventory(player.getName()));
+                    player.openInventory(inventoryBuilder.createUpgradeTotalMembersInventory(player.getName(), this));
                 }else if (openInventoryTitle.equals(config.getString("inventoriesName.editMembers"))){
                     player.openInventory(inventoryBuilder.createEditMembersInventory(player.getName(), this));
                 }else if (openInventoryTitle.equals(config.getString("inventoriesName.teamMembers"))){
                     player.openInventory(inventoryBuilder.createMembersInventory(this));
                 }else if (openInventoryTitle.equals(config.getString("inventoriesName.permissions"))){
-                    player.openInventory(inventoryBuilder.createPermissionsInventory(player.getName()));
+                    player.openInventory(inventoryBuilder.createPermissionsInventory(player.getName(), this));
                 }else if (openInventoryTitle.equals(config.getString("inventoriesName.storageDirectory"))){
-                    player.openInventory(inventoryBuilder.createStorageDirectoryInventory(player.getName()));
+                    player.openInventory(inventoryBuilder.createStorageDirectoryInventory(player.getName(), this));
                 }
             }
         }

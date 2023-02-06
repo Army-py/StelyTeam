@@ -57,13 +57,13 @@ public class MembersInventory {
         if (clickEvent.getView().getTitle().equals(config.getString("inventoriesName.removeMembers"))){
             if (material.equals(Material.getMaterial("PLAYER_HEAD"))){
                 if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.CLICK_REMOVE_MEMBER)){
-                    if (!sqlManager.isMemberInTeam(memberName, team.getTeamName())){
+                    if (!team.isTeamMember(playerName)){
                         player.sendRawMessage(messageManager.getMessage("common.player_not_in_your_team"));
                         return;
                     }else if (playerName.equals(memberName)){
                         player.sendRawMessage(messageManager.getMessage("manage_members.remove_member.cant_exclude_yourself"));
                         return;
-                    }else if (sqlManager.getMemberRank(memberName) <= sqlManager.getMemberRank(playerName)){
+                    }else if (team.getMemberRank(memberName) <= team.getMemberRank(playerName)){
                         player.sendRawMessage(messageManager.getMessage("manage_members.remove_member.cant_exclude_higher_rank"));
                         return;
                     }

@@ -1,5 +1,7 @@
 package fr.army.stelyteam.utils;
 
+import fr.army.stelyteam.StelyTeamPlugin;
+
 public class Member {
     private String memberName;
     private int teamRank;
@@ -10,6 +12,18 @@ public class Member {
         this.teamRank = teamRank;
         this.joinDate = joinDate;
     }
+
+
+    public void promoteMember(){
+        this.teamRank++;
+        StelyTeamPlugin.getPlugin().getSQLManager().promoteMember(memberName);
+    }
+
+    public void demoteMember(){
+        this.teamRank--;
+        StelyTeamPlugin.getPlugin().getSQLManager().demoteMember(memberName);
+    }
+
 
     public String getMemberName() {
         return memberName;

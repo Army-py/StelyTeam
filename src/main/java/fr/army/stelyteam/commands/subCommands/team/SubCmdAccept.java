@@ -47,7 +47,7 @@ public class SubCmdAccept extends SubCommand {
                 invitationSender.sendMessage(messageManager.getReplaceMessage("sender.accepted_invitation", playerName));
             }
             team.teamBroadcast(senderName, messageManager.replaceAuthorAndReceiver("broadcasts.player_add_new_member", senderName, playerName));
-            sqlManager.insertMember(playerName, teamName);
+            team.insertMember(playerName);
             team.refreshTeamMembersInventory(playerName);
         }else if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.ADD_ALLIANCE)){
             TemporaryAction tempAction = cacheManager.getTempAction(playerName);
@@ -63,7 +63,7 @@ public class SubCmdAccept extends SubCommand {
                 invitationSender.sendMessage(messageManager.getReplaceMessage("sender.accepted_invitation", receiverName));
             }
             team.teamBroadcast(senderName, messageManager.replaceAuthorAndTeamName("broadcasts.player_add_new_alliance", senderName, allianceName));
-            sqlManager.insertAlliance(teamName, allianceName);
+            team.insertAlliance(allianceName);
             team.refreshTeamMembersInventory(playerName);
         }else{
             player.sendMessage(messageManager.getMessage("common.no_invitation"));

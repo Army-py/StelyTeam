@@ -65,6 +65,7 @@ public class ConfirmInventory {
         String playerName = player.getName();
         TemporaryAction tempAction = cacheManager.getTempAction(playerName);
         Team team = tempAction.getTeam();
+        String teamName = team.getTeamName();
 
         if (itemName.equals(config.getString("inventories.confirmInventory.confirm.itemName"))){
             if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.REMOVE_MEMBER)){
@@ -78,7 +79,6 @@ public class ConfirmInventory {
                 team.teamBroadcast(playerName, messageManager.replaceAuthorAndReceiver("broadcasts.player_exclude_member", playerName, receiverName));
             
             }else if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.REMOVE_ALLIANCE)){
-                String teamName = team.getTeamName();
                 Team alliance = sqlManager.getTeamFromTeamName(tempAction.getReceiverName());
                 String allianceName = alliance.getTeamName();
                 
@@ -101,7 +101,6 @@ public class ConfirmInventory {
             
             }else if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.CREATE_HOME)){
                 player.closeInventory();
-                String teamName = sqlManager.getTeamNameFromPlayerName(playerName);
                 String worldName = player.getWorld().getName();
                 Double x = player.getLocation().getX();
                 Double y = player.getLocation().getY();
@@ -118,7 +117,6 @@ public class ConfirmInventory {
 
             }else if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.DELETE_HOME)){
                 player.closeInventory();
-                String teamName = sqlManager.getTeamNameFromPlayerName(playerName);
 
                 sqliteManager.removeHome(teamName);
                 player.sendMessage(messageManager.getMessage("manage_team.team_home.deleted"));
@@ -168,7 +166,7 @@ public class ConfirmInventory {
                 economyManager.removeMoneyPlayer(player, config.getDouble("prices.upgrade.teamPlaces.level"+newLevel));
                 player.sendMessage(messageManager.getReplaceMessage("manage_team.upgrade_member_amount.new_upgrade", newLevel.toString()));
 
-                Inventory inventory = inventoryBuilder.createUpgradeTotalMembersInventory(playerName);
+                Inventory inventory = inventoryBuilder.createUpgradeTotalMembersInventory(playerName, team);
                 player.openInventory(inventory);
                 team.refreshTeamMembersInventory(playerName);
                 team.teamBroadcast(playerName, messageManager.replaceTeamId("broadcasts.new_member_amount_upgrade", team.getTeamName()));
@@ -180,7 +178,7 @@ public class ConfirmInventory {
                 economyManager.removeMoneyPlayer(player, config.getDouble("prices.upgrade.teamStorages.level"+newLevel));
                 player.sendMessage(messageManager.getReplaceMessage("manage_team.upgrade_storages.new_upgrade", newLevel.toString()));
 
-                Inventory inventory = inventoryBuilder.createUpgradeStorageInventory(playerName);
+                Inventory inventory = inventoryBuilder.createUpgradeStorageInventory(playerName, team);
                 player.openInventory(inventory);
                 team.refreshTeamMembersInventory(playerName);
                 team.teamBroadcast(playerName, messageManager.replaceTeamId("broadcasts.new_storage_upgrade", team.getTeamName()));
@@ -225,10 +223,10 @@ public class ConfirmInventory {
                 Inventory inventory = inventoryBuilder.createManageInventory(playerName, team);
                 player.openInventory(inventory);
             }else if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.IMPROV_LVL_MEMBERS)){
-                Inventory inventory = inventoryBuilder.createUpgradeTotalMembersInventory(playerName);
+                Inventory inventory = inventoryBuilder.createUpgradeTotalMembersInventory(playerName, team);
                 player.openInventory(inventory);
             }else if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.IMPROV_LVL_STORAGE)){
-                Inventory inventory = inventoryBuilder.createUpgradeStorageInventory(playerName);
+                Inventory inventory = inventoryBuilder.createUpgradeStorageInventory(playerName, team);
                 player.openInventory(inventory);
             }else if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.LEAVE_TEAM)){
                 Inventory inventory = inventoryBuilder.createMemberInventory(playerName, team);

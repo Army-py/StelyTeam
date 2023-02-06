@@ -33,12 +33,13 @@ public class SubCmdChangeOwner extends SubCommand {
             // player.sendMessage("Utilisation : /stelyteam changeowner <nom de team> <membre>");
             player.sendMessage(messageManager.getMessage("commands.stelyteam_changeowner.usage"));
         }else{
-            if (sqlManager.teamNameExists(args[1])){
-                if (sqlManager.isMemberInTeam(args[2], args[1])){
-                    Integer memberRank = sqlManager.getMemberRank(args[2]);
+            Team team = sqlManager.getTeamFromTeamName(args[1]);
+            if (team != null){
+                if (team.isTeamMember(args[2])){
+                    Integer memberRank = team.getMemberRank(args[2]);
                     if (memberRank != 0){
-                        String owner = sqlManager.getTeamOwnerName(args[1]);
-                        sqlManager.updateTeamOwner(args[1], args[2], owner);
+                        String owner = team.getTeamOwnerName();
+                        team.updateTeamOwner(owner);
                         // player.sendMessage("Gérant changé");
                         player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_changeowner.output", args[2]));
                     }else{

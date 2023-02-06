@@ -45,7 +45,7 @@ public class SubCmdInfo extends SubCommand {
         }else{
             String memberName = String.join("", args);
             // String teamID = sqlManager.getTeamNameFromPlayerName(memberName) == null ? String.join("", args) : sqlManager.getTeamNameFromPlayerName(memberName);
-            Team team = sqlManager.getTeamNameFromPlayerName(memberName) == null ? sqlManager.getTeamFromTeamName(String.join("", args)) : sqlManager.getTeamFromPlayerName(memberName);
+            Team team = sqlManager.getTeamFromPlayerName(memberName) == null ? sqlManager.getTeamFromTeamName(String.join("", args)) : sqlManager.getTeamFromPlayerName(memberName);
             if (team != null){
                 String yesMessage = messages.getString("commands.stelyteam_info.true");
                 String noMessage = messages.getString("commands.stelyteam_info.false");
