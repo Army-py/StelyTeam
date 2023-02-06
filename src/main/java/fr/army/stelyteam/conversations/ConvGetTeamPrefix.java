@@ -7,7 +7,6 @@ import fr.army.stelyteam.utils.builder.ColorsBuilder;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.EconomyManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.MySQLManager;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.conversations.ConversationContext;

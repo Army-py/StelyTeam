@@ -17,7 +17,6 @@ import fr.army.stelyteam.utils.manager.MySQLManager;
 
 public class ConvRemoveMember extends StringPrompt {
 
-    private StelyTeamPlugin plugin;
     private CacheManager cacheManager;
     private MySQLManager sqlManager;
     private MessageManager messageManager;
@@ -25,7 +24,6 @@ public class ConvRemoveMember extends StringPrompt {
 
 
     public ConvRemoveMember(StelyTeamPlugin plugin) {
-        this.plugin = plugin;
         this.cacheManager = plugin.getCacheManager();
         this.sqlManager = plugin.getSQLManager();
         this.messageManager = plugin.getMessageManager();

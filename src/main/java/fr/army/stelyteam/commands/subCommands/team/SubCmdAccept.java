@@ -17,14 +17,12 @@ import fr.army.stelyteam.utils.manager.MySQLManager;
 
 public class SubCmdAccept extends SubCommand {
 
-    private StelyTeamPlugin plugin;
     private CacheManager cacheManager;
     private MySQLManager sqlManager;
     private MessageManager messageManager;
 
     public SubCmdAccept(StelyTeamPlugin plugin) {
         super(plugin);
-        this.plugin = plugin;
         this.cacheManager = plugin.getCacheManager();
         this.sqlManager = plugin.getSQLManager();
         this.messageManager = plugin.getMessageManager();

@@ -15,7 +15,6 @@ import fr.army.stelyteam.utils.manager.MessageManager;
 
 public class SubCmdDeny extends SubCommand {
 
-    private StelyTeamPlugin plugin;
     private CacheManager cacheManager;
     private MessageManager messageManager;
 

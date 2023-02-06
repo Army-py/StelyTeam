@@ -11,7 +11,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -20,7 +19,6 @@ import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.utils.Alliance;
 import fr.army.stelyteam.utils.Member;
 import fr.army.stelyteam.utils.Page;
-import fr.army.stelyteam.utils.Storage;
 import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.MySQLManager;
@@ -378,7 +376,6 @@ public class InventoryBuilder {
             Material material = Material.getMaterial(config.getString("inventories.editMembers."+str+".itemType"));
             String name = config.getString("inventories.editMembers."+str+".itemName");
             String headTexture = config.getString("inventories.editMembers."+str+".headTexture");
-            List<String> lore;
             ItemStack item;
 
             // if (sqlManager.isOwner(playerName)) lore = config.getStringList("inventories.editMembers."+str+".lore");
@@ -546,7 +543,6 @@ public class InventoryBuilder {
 
     public Inventory createAlliancesInventory(String playername, Team team) {
         Integer slots = config.getInt("inventoriesSlots.teamAlliances");
-        String teamName = team.getTeamName();
         Inventory inventory = Bukkit.createInventory(null, slots, config.getString("inventoriesName.teamAlliances"));
 
         emptyCases(inventory, slots, 0);

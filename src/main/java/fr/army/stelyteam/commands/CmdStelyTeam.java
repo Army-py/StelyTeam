@@ -30,7 +30,6 @@ import fr.army.stelyteam.commands.subCommands.team.SubCmdDeny;
 import fr.army.stelyteam.commands.subCommands.utility.SubCmdHome;
 import fr.army.stelyteam.commands.subCommands.utility.SubCmdVisual;
 import fr.army.stelyteam.utils.Team;
-import fr.army.stelyteam.utils.builder.InventoryBuilder;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
 import fr.army.stelyteam.utils.manager.MySQLManager;

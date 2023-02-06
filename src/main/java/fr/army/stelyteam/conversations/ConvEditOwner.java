@@ -18,14 +18,12 @@ import fr.army.stelyteam.utils.manager.MySQLManager;
 
 public class ConvEditOwner extends StringPrompt {
 
-    private StelyTeamPlugin plugin;
     private CacheManager cacheManager;
     private MySQLManager sqlManager;
     private MessageManager messageManager;
     private InventoryBuilder inventoryBuilder;
 
     public ConvEditOwner(StelyTeamPlugin plugin) {
-        this.plugin = plugin;
         this.cacheManager = plugin.getCacheManager();
         this.sqlManager = plugin.getSQLManager();
         this.messageManager = plugin.getMessageManager();
