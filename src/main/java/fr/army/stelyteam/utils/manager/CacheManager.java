@@ -9,14 +9,14 @@ import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.TemporaryActionNames;
 
 public class CacheManager {
-    // {senderName, receiverName, actionName, teamName, teamPrefix}
+    // {senderName, receiverName, actionName, Team}
     private ArrayList<TemporaryAction> cachedTempAction = new ArrayList<TemporaryAction>();
 
     // {teamName, storageId, storageInstance, storageContent}
     private ArrayList<Storage> cachedStorage = new ArrayList<Storage>();
 
     // {playerName}
-    private ArrayList<String> cachedInConversation = new ArrayList<String>();
+    private ArrayList<String> cachedPlayerInConversation = new ArrayList<String>();
 
     // {authorName, currentPage, maxElementsPerPage, teams}
     private ArrayList<Page> cachedPages = new ArrayList<Page>();
@@ -140,15 +140,15 @@ public class CacheManager {
 
 
     public void addInConversation(String playerName){
-        cachedInConversation.add(playerName);
+        cachedPlayerInConversation.add(playerName);
     }
 
     public void removeInConversation(String playerName){
-        cachedInConversation.remove(playerName);
+        cachedPlayerInConversation.remove(playerName);
     }
 
     public boolean isInConversation(String playerName){
-        return cachedInConversation.contains(playerName);
+        return cachedPlayerInConversation.contains(playerName);
     }
 
 

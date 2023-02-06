@@ -8,6 +8,8 @@ import org.bukkit.entity.Player;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.commands.SubCommand;
+import fr.army.stelyteam.utils.Member;
+import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.manager.MessageManager;
 import fr.army.stelyteam.utils.manager.MySQLManager;
 
@@ -52,11 +54,13 @@ public class SubCmdRemoveMember extends SubCommand {
     public List<String> onTabComplete(CommandSender sender, String[] args) {
         if (sender.isOp() && args.length == 3){
             if (args[0].equals("removemember")){
+                Team team = sqlManager.getTeamFromTeamName(args[1]);
                 List<String> result = new ArrayList<>();
-                for (String member : sqlManager.getTeamMembers(args[1])) {
-                    Integer memberRank = sqlManager.getMemberRank(member);
-                    if (memberRank != 0 && member.toLowerCase().startsWith(args[2].toLowerCase())){
-                        result.add(member);
+                for (Member member : team.getTeamMembers()) {
+                    String memberName = member.getMemberName();
+                    Integer memberRank = member.getTeamRank();
+                    if (memberRank > 0 && memberName.toLowerCase().startsWith(args[2].toLowerCase())){
+                        result.add(memberName);
                     }
                 }
                 return result;

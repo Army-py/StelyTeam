@@ -81,12 +81,12 @@ public class MembersInventory {
                     player.openInventory(inventory);
                 }
             }else if (itemName.equals(config.getString("inventories.teamMembers.close.itemName"))){
-                Inventory inventory = inventoryBuilder.createEditMembersInventory(playerName);
+                Inventory inventory = inventoryBuilder.createEditMembersInventory(playerName, team);
                 player.openInventory(inventory);
             }
         }else{
             if (itemName.equals(config.getString("inventories.teamMembers.close.itemName"))){
-                Inventory inventory = inventoryBuilder.createMemberInventory(playerName);
+                Inventory inventory = inventoryBuilder.createMemberInventory(playerName, team);
                 player.openInventory(inventory);
             }
         }

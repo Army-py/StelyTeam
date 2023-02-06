@@ -12,6 +12,9 @@ import java.util.Calendar;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.utils.Alliance;
+import fr.army.stelyteam.utils.Member;
+import fr.army.stelyteam.utils.Permission;
 import fr.army.stelyteam.utils.Storage;
 import fr.army.stelyteam.utils.Team;
 
@@ -528,35 +531,6 @@ public class MySQLManager {
     }
 
 
-    public Team getTeamFromPlayerName(String playerName){
-        if(isConnected()){
-            try {
-                PreparedStatement query = connection.prepareStatement("SELECT t.teamName, t.teamPrefix, t.teamDescription, t.teamMoney, t.creationDate, t.improvLvlMembers, t.teamStorageLvl, t.unlockedTeamBank, o.playerName AS 'ownerName' FROM team AS t INNER JOIN player p ON t.teamId = p.teamId INNER JOIN player o ON t.teamOwnerPlayerId = o.playerId WHERE p.playerName = ?");
-                query.setString(1, playerName);
-                ResultSet result = query.executeQuery();
-                if(result.next()){
-                    return new Team(
-                        result.getString("teamName"),
-                        result.getString("teamPrefix"),
-                        result.getString("teamDescription"),
-                        result.getInt("teamMoney"),
-                        result.getString("creationDate"),
-                        getTeamMembers(result.getString("teamName")).size(),
-                        result.getInt("improvLvlMembers"),
-                        result.getInt("teamStorageLvl"),
-                        (1 == result.getInt("unlockedTeamBank")),
-                        result.getString("ownerName")
-                    );
-                }
-                query.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
-
-
     public String getTeamPrefix(String teamName){
         if(isConnected()){
             try {
@@ -647,24 +621,24 @@ public class MySQLManager {
     }
 
 
-    public ArrayList<String> getTeamMembers(String teamName){
-        if(isConnected()){
-            try {
-                PreparedStatement query = connection.prepareStatement("SELECT p.playerName FROM player AS p INNER JOIN team AS t ON p.teamId = t.teamId WHERE t.teamName = ?");
-                query.setString(1, teamName);
-                ResultSet result = query.executeQuery();
-                ArrayList<String> teamMembers = new ArrayList<>();
-                while(result.next()){
-                    teamMembers.add(result.getString("playerName"));
-                }
-                query.close();
-                return teamMembers;
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
+    // public ArrayList<String> getTeamMembers(String teamName){
+    //     if(isConnected()){
+    //         try {
+    //             PreparedStatement query = connection.prepareStatement("SELECT p.playerName FROM player AS p INNER JOIN team AS t ON p.teamId = t.teamId WHERE t.teamName = ?");
+    //             query.setString(1, teamName);
+    //             ResultSet result = query.executeQuery();
+    //             ArrayList<String> teamMembers = new ArrayList<>();
+    //             while(result.next()){
+    //                 teamMembers.add(result.getString("playerName"));
+    //             }
+    //             query.close();
+    //             return teamMembers;
+    //         } catch (SQLException e) {
+    //             e.printStackTrace();
+    //         }
+    //     }
+    //     return null;
+    // }
 
 
     public ArrayList<String> getTeamMembersWithRank(String teamName, int rank){
@@ -720,7 +694,6 @@ public class MySQLManager {
                         result.getString("teamDescription"),
                         result.getInt("teamMoney"),
                         result.getString("creationDate"),
-                        getTeamMembers(result.getString("teamName")).size(),
                         result.getInt("improvLvlMembers"),
                         result.getInt("teamStorageLvl"),
                         (1 == result.getInt("unlockedTeamBank")),
@@ -1112,6 +1085,210 @@ public class MySQLManager {
         }
         return null;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public Team getTeamFromPlayerName(String playerName){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT t.teamName, t.teamPrefix, t.teamDescription, t.teamMoney, t.creationDate, t.improvLvlMembers, t.teamStorageLvl, t.unlockedTeamBank, o.playerName AS 'ownerName' FROM team AS t INNER JOIN player p ON t.teamId = p.teamId INNER JOIN player o ON t.teamOwnerPlayerId = o.playerId WHERE p.playerName = ?");
+                query.setString(1, playerName);
+                ResultSet result = query.executeQuery();
+                if(result.next()){
+                    return new Team(
+                        result.getString("teamName"),
+                        result.getString("teamPrefix"),
+                        result.getString("teamDescription"),
+                        result.getInt("teamMoney"),
+                        result.getString("creationDate"),
+                        result.getInt("improvLvlMembers"),
+                        result.getInt("teamStorageLvl"),
+                        (1 == result.getInt("unlockedTeamBank")),
+                        result.getString("ownerName")
+                    );
+                }
+                query.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+
+    public Team getTeamFromTeamName(String teamName){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT t.teamName, t.teamPrefix, t.teamDescription, t.teamMoney, t.creationDate, t.improvLvlMembers, t.teamStorageLvl, t.unlockedTeamBank, o.playerName AS 'ownerName' FROM team AS t INNER JOIN player o ON t.teamOwnerPlayerId = o.playerId WHERE t.teamName = ?");
+                query.setString(1, teamName);
+                ResultSet result = query.executeQuery();
+                if(result.next()){
+                    return new Team(
+                        result.getString("teamName"),
+                        result.getString("teamPrefix"),
+                        result.getString("teamDescription"),
+                        result.getInt("teamMoney"),
+                        result.getString("creationDate"),
+                        result.getInt("improvLvlMembers"),
+                        result.getInt("teamStorageLvl"),
+                        (1 == result.getInt("unlockedTeamBank")),
+                        result.getString("ownerName")
+                    );
+                }
+                query.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+
+    public ArrayList<Member> getTeamMembers(String teamName){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT p.playerName, p.teamRank, p.joinDate FROM player AS p INNER JOIN team AS t ON p.teamId = t.teamId WHERE t.teamName = ?;");
+                query.setString(1, teamName);
+                ResultSet result = query.executeQuery();
+                ArrayList<Member> teamMembers = new ArrayList<>();
+                while(result.next()){
+                    teamMembers.add(
+                        new Member(
+                            result.getString("playerName"),
+                            result.getInt("teamRank"),
+                            result.getString("joinDate")
+                        )
+                    );
+                }
+                query.close();
+                return teamMembers;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+
+    public ArrayList<Permission> getTeamAssignement(String teamName){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT a.permLabel, a.teamRank FROM assignement AS a INNER JOIN team AS t ON a.teamId = t.teamId WHERE t.teamName = ?;");
+                query.setString(1, teamName);
+                ResultSet result = query.executeQuery();
+                ArrayList<Permission> teamAssignement = new ArrayList<>();
+                while(result.next()){
+                    teamAssignement.add(
+                        new Permission(
+                            result.getString("permLabel"),
+                            result.getInt("teamRank")
+                        )
+                    );
+                }
+                query.close();
+                return teamAssignement;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+
+    public ArrayList<Alliance> getTeamAlliances(String teamName){
+        if(isConnected()){
+            try {
+                ArrayList<Alliance> alliances = new ArrayList<>();
+                PreparedStatement queryTeam = connection.prepareStatement("SELECT t.teamName, a.allianceDate FROM team AS t INNER JOIN alliance AS a ON t.teamId = a.teamAllianceId WHERE a.teamId = ?");
+                queryTeam.setInt(1, getTeamId(teamName));
+                ResultSet resultTeam = queryTeam.executeQuery();
+                while(resultTeam.next()){
+                    // alliances.add(resultTeam.getString("teamName"));
+                    alliances.add(
+                        new Alliance(
+                            resultTeam.getString("teamName"),
+                            resultTeam.getString("allianceDate")
+                        )
+                    );
+                }
+                queryTeam.close();
+                
+                PreparedStatement queryAlliance = connection.prepareStatement("SELECT t.teamName, a.allianceDate FROM team AS t INNER JOIN alliance AS a ON t.teamId = a.teamId WHERE a.teamAllianceId = ?");
+                queryAlliance.setInt(1, getTeamId(teamName));
+                ResultSet resultAlliance = queryAlliance.executeQuery();
+                while(resultAlliance.next()){
+                    // alliances.add(resultAlliance.getString("teamName"));
+                    alliances.add(
+                        new Alliance(
+                            resultTeam.getString("teamName"),
+                            resultTeam.getString("allianceDate")
+                        )
+                    );
+                }
+                queryAlliance.close();
+                return alliances;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+
+    // public Map<Integer, Storage> getTeamStorages(String teamName){
+    //     if(isConnected()){
+    //         try {
+    //             PreparedStatement query = connection.prepareStatement("SELECT s.storageId, s.storageContent FROM teamStorage AS s INNER JOIN team AS t ON s.teamId = t.teamId WHERE t.teamName = ?;");
+    //             query.setString(1, teamName);
+    //             ResultSet result = query.executeQuery();
+    //             Map<Integer, Storage> teamStorage = new HashMap<Integer, Storage>();
+    //             while(result.next()){
+    //                 // teamStorage.add(
+    //                 //     new Permission(
+    //                 //         result.getString("permLabel"),
+    //                 //         result.getInt("teamRank")
+    //                 //     )
+    //                 // );
+    //                 teamStorage.put(
+    //                     result.getInt("storageId"), 
+    //                     new Storage(
+    //                         result.getBytes("storageContent")
+    //                     )
+    //                 );
+    //             }
+    //             query.close();
+    //             return teamStorage;
+    //         } catch (SQLException e) {
+    //             e.printStackTrace();
+    //         }
+    //     }
+    //     return null;
+    // }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     private int getPlayerId(String playerName){

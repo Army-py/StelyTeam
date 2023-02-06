@@ -14,8 +14,7 @@ import org.bukkit.inventory.Inventory;
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.conversations.ConvAddMember;
 import fr.army.stelyteam.conversations.ConvEditOwner;
-import fr.army.stelyteam.conversations.ConvRemoveMember;
-import fr.army.stelyteam.utils.TeamMembersUtils;
+import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.TemporaryActionNames;
 import fr.army.stelyteam.utils.builder.InventoryBuilder;
@@ -34,7 +33,6 @@ public class EditMembersInventory {
     private MessageManager messageManager;
     private ConversationBuilder conversationBuilder;
     private InventoryBuilder inventoryBuilder;
-    private TeamMembersUtils teamMembersUtils;
 
 
     public EditMembersInventory(InventoryClickEvent event, StelyTeamPlugin plugin) {
@@ -46,7 +44,6 @@ public class EditMembersInventory {
         this.messageManager = plugin.getMessageManager();
         this.conversationBuilder = plugin.getConversationBuilder();
         this.inventoryBuilder = plugin.getInventoryBuilder();
-        this.teamMembersUtils = plugin.getTeamMembersUtils();
     }
 
 
@@ -56,8 +53,8 @@ public class EditMembersInventory {
         List<String> lore = event.getCurrentItem().getItemMeta().getLore();
         Player player = (Player) event.getWhoClicked();
         String playerName = player.getName();
-        String teamId = sqlManager.getTeamNameFromPlayerName(playerName);
-        
+        Team team = sqlManager.getTeamFromPlayerName(playerName);
+        String teamName = team.getTeamName();
 
 
         if (itemType.equals(Material.getMaterial(config.getString("noPermission.itemType"))) && lore.equals(config.getStringList("noPermission.lore"))){
@@ -68,7 +65,7 @@ public class EditMembersInventory {
         // Fermeture ou retour en arrière de l'inventaire
         itemName = event.getCurrentItem().getItemMeta().getDisplayName();
         if (itemName.equals(config.getString("inventories.editMembers.close.itemName"))){
-            Inventory inventory = inventoryBuilder.createManageInventory(playerName);
+            Inventory inventory = inventoryBuilder.createManageInventory(playerName, team);
             player.openInventory(inventory);
             return;
         }else if (itemName.equals(config.getString("inventories.editMembers.addMember.itemName"))){
@@ -79,9 +76,9 @@ public class EditMembersInventory {
             // player.closeInventory();
             // conversationBuilder.getNameInput(player, new ConvRemoveMember(plugin));
             cacheManager.addTempAction(
-                new TemporaryAction(playerName, TemporaryActionNames.CLICK_REMOVE_MEMBER)
+                new TemporaryAction(playerName, TemporaryActionNames.CLICK_REMOVE_MEMBER, team)
             );
-            player.openInventory(inventoryBuilder.createMembersInventory(playerName, config.getString("inventoriesName.removeMembers")));
+            player.openInventory(inventoryBuilder.createMembersInventory(team));
             return;
         }else if (itemName.equals(config.getString("inventories.editMembers.editOwner.itemName"))){
             player.closeInventory();
@@ -90,7 +87,7 @@ public class EditMembersInventory {
         }
 
         itemName = removeFirstColors(event.getCurrentItem().getItemMeta().getDisplayName());
-        if (sqlManager.getTeamMembers(teamId).contains(itemName)){
+        if (team.isTeamMember(playerName)){
             Integer authorRank = sqlManager.getMemberRank(playerName);
             Integer memberRank = sqlManager.getMemberRank(itemName);
             Player member = Bukkit.getPlayer(itemName);
@@ -100,7 +97,7 @@ public class EditMembersInventory {
                     return;
                 }
                 if (!sqlManager.isOwner(itemName) && memberRank < plugin.getLastRank()){
-                    sqlManager.demoteMember(teamId, itemName);
+                    sqlManager.demoteMember(teamName, itemName);
 
                     if (member != null && removeFirstColors(itemName).equals(member.getName())){
                         String newRank = plugin.getRankFromId(memberRank+1);
@@ -115,7 +112,7 @@ public class EditMembersInventory {
                     return;
                 }
                 if (!sqlManager.isOwner(itemName) && memberRank != 1){
-                    sqlManager.promoteMember(teamId, itemName);
+                    sqlManager.promoteMember(teamName, itemName);
 
                     if (member != null && removeFirstColors(itemName).equals(member.getName())){
                         String newRank = plugin.getRankFromId(memberRank-1);
@@ -126,9 +123,9 @@ public class EditMembersInventory {
                     }
                 }
             }else return;
-            Inventory inventory = inventoryBuilder.createEditMembersInventory(playerName);
+            Inventory inventory = inventoryBuilder.createEditMembersInventory(playerName, team);
             player.openInventory(inventory);
-            teamMembersUtils.refreshTeamMembersInventory(teamId, playerName);
+            team.refreshTeamMembersInventory(playerName);
         }
     }
 

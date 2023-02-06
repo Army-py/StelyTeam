@@ -12,6 +12,7 @@ import fr.army.stelyteam.utils.builder.InventoryBuilder;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.EconomyManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
+import fr.army.stelyteam.utils.manager.MySQLManager;
 
 
 public class CreateTeamInventory {
@@ -19,6 +20,7 @@ public class CreateTeamInventory {
     private StelyTeamPlugin plugin;
     private CacheManager cacheManager;
     private YamlConfiguration config;
+    private MySQLManager mysqlManager;
     private EconomyManager economyManager;
     private MessageManager messageManager;
     private InventoryBuilder inventoryBuilder;
@@ -28,6 +30,7 @@ public class CreateTeamInventory {
         this.plugin = plugin;
         this.cacheManager = plugin.getCacheManager();
         this.config = plugin.getConfig();
+        this.mysqlManager = plugin.getSQLManager();
         this.economyManager = plugin.getEconomyManager();
         this.messageManager = plugin.getMessageManager();
         this.inventoryBuilder = plugin.getInventoryBuilder();
@@ -43,7 +46,11 @@ public class CreateTeamInventory {
             if (economyManager.checkMoneyPlayer(player, config.getDouble("prices.createTeam"))){
                 Inventory confirmInventory = inventoryBuilder.createConfirmInventory();
                 player.openInventory(confirmInventory);
-                cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.CREATE_TEAM));
+                cacheManager.addTempAction(
+                    new TemporaryAction(
+                        playerName,
+                        TemporaryActionNames.CREATE_TEAM,
+                        mysqlManager.getTeamFromPlayerName(playerName)));
             }else{
                 // player.sendMessage("Vous n'avez pas assez d'argent");
                 player.sendMessage(messageManager.getMessage("common.not_enough_money"));

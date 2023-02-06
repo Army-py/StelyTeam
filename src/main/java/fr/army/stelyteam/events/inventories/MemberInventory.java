@@ -14,6 +14,7 @@ import org.bukkit.inventory.Inventory;
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.conversations.ConvAddMoney;
 import fr.army.stelyteam.conversations.ConvWithdrawMoney;
+import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.TemporaryActionNames;
 import fr.army.stelyteam.utils.builder.InventoryBuilder;
@@ -51,7 +52,7 @@ public class MemberInventory {
         Player player = (Player) event.getWhoClicked();
         String playerName = player.getName();
         String itemName = event.getCurrentItem().getItemMeta().getDisplayName();
-        String teamId = sqlManager.getTeamNameFromPlayerName(playerName);
+        Team team = sqlManager.getTeamFromPlayerName(playerName);
         Material itemType = event.getCurrentItem().getType();
         List<String> lore = event.getCurrentItem().getItemMeta().getLore();
 
@@ -60,7 +61,7 @@ public class MemberInventory {
         }
 
         // Fermeture ou retour en arrière de l'inventaire
-        if (sqlManager.isOwner(playerName) || sqlManager.getMemberRank(playerName) <= 3){
+        if (team.isTeamOwner(playerName) || team.getMemberRank(playerName) <= 3){
             if (itemName.equals(config.getString("inventories.member.close.itemName"))){
                 Inventory inventory = inventoryBuilder.createAdminInventory();
                 player.openInventory(inventory);
@@ -72,15 +73,15 @@ public class MemberInventory {
         }
         
         if (itemName.equals(config.getString("inventories.member.seeTeamMembers.itemName"))){
-            Inventory inventory = inventoryBuilder.createMembersInventory(playerName, config.getString("inventoriesName.teamMembers"));
+            Inventory inventory = inventoryBuilder.createMembersInventory(team);
             player.openInventory(inventory);
         
         }else if (itemName.equals(config.getString("inventories.member.seeTeamAlliances.itemName"))){
-            Inventory inventory = inventoryBuilder.createAlliancesInventory(playerName);
+            Inventory inventory = inventoryBuilder.createAlliancesInventory(playerName, team);
             player.openInventory(inventory);
         
         }else if (itemName.equals(config.getString("inventories.member.addTeamMoney.itemName"))){
-            if (!sqlManager.hasUnlockedTeamBank(teamId)) {
+            if (!team.isUnlockedTeamBank()) {
                 // player.sendMessage("Le compte de la team n'a pas encore été débloqué");
                 player.sendMessage(messageManager.getMessage("common.team_bank_not_unlock"));
             }else{
@@ -88,7 +89,7 @@ public class MemberInventory {
                 conversationBuilder.getNameInput(player, new ConvAddMoney(plugin));
             }
         }else if (itemName.equals(config.getString("inventories.member.withdrawTeamMoney.itemName"))){
-            if (!sqlManager.hasUnlockedTeamBank(teamId)) {
+            if (!team.isUnlockedTeamBank()) {
                 // player.sendMessage("Le compte de la team n'a pas encore été débloqué");
                 player.sendMessage(messageManager.getMessage("common.team_bank_not_unlock"));
             }else{
@@ -97,8 +98,8 @@ public class MemberInventory {
             }
         }else if (itemName.equals(config.getString("inventories.member.leaveTeam.itemName"))){
             player.closeInventory();
-            if (!sqlManager.isOwner(playerName)){
-                cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.EDIT_NAME));
+            if (!team.isTeamOwner(playerName)){
+                cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.EDIT_NAME, team));
                 Inventory inventory = inventoryBuilder.createConfirmInventory();
                 player.openInventory(inventory);
             }else {

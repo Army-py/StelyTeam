@@ -21,7 +21,6 @@ import net.md_5.bungee.api.chat.ClickEvent.Action;
 
 public class ConvAddMember extends StringPrompt {
 
-    private StelyTeamPlugin plugin;
     private CacheManager cacheManager;
     private MySQLManager sqlManager;
     private YamlConfiguration config;
@@ -29,7 +28,6 @@ public class ConvAddMember extends StringPrompt {
 
 
     public ConvAddMember(StelyTeamPlugin plugin){
-        this.plugin = plugin;
         this.cacheManager = plugin.getCacheManager();
         this.sqlManager = plugin.getSQLManager();
         this.config = plugin.getConfig();
@@ -42,7 +40,6 @@ public class ConvAddMember extends StringPrompt {
         Player author = (Player) con.getForWhom();
         String authorName = author.getName();
         Player player = Bukkit.getPlayer(answer);
-        String teamId = sqlManager.getTeamNameFromPlayerName(author.getName());
         Team team = sqlManager.getTeamFromPlayerName(author.getName());
         
         if (player == null) {
@@ -54,7 +51,7 @@ public class ConvAddMember extends StringPrompt {
         }else if (cacheManager.playerHasActionName(answer, TemporaryActionNames.ADD_MEMBER)) {
             con.getForWhom().sendRawMessage(messageManager.getMessage("common.player_already_action"));
             return null;
-        }else if (hasReachedMaxMember(teamId)) {
+        }else if (hasReachedMaxMember(team)) {
             con.getForWhom().sendRawMessage(messageManager.getMessage("manage_members.add_member.max_members"));
             return null;
         }
@@ -86,10 +83,10 @@ public class ConvAddMember extends StringPrompt {
     }
 
 
-    private boolean hasReachedMaxMember(String teamId) {
-        Integer memberAmount = sqlManager.getTeamMembers(teamId).size();
+    private boolean hasReachedMaxMember(Team team) {
+        Integer memberAmount = team.getTeamMembers().size();
         Integer maxMember = config.getInt("teamMaxMembers");
-        Integer teamMembersLelvel = sqlManager.getImprovLvlMembers(teamId);
+        Integer teamMembersLelvel = team.getImprovLvlMembers();
         return memberAmount >= maxMember + teamMembersLelvel;
     }
 

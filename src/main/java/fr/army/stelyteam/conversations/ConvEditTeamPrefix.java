@@ -1,7 +1,7 @@
 package fr.army.stelyteam.conversations;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.utils.TeamMembersUtils;
+import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
 import fr.army.stelyteam.utils.manager.EconomyManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
@@ -24,7 +24,6 @@ public class ConvEditTeamPrefix extends StringPrompt {
     private YamlConfiguration config;
     private MessageManager messageManager;
     private EconomyManager economyManager;
-    private TeamMembersUtils teamMembersUtils;
     private ColorsBuilder colorBuilder;
 
 
@@ -33,7 +32,6 @@ public class ConvEditTeamPrefix extends StringPrompt {
         this.config = plugin.getConfig();
         this.messageManager = plugin.getMessageManager();
         this.economyManager = plugin.getEconomyManager();
-        this.teamMembersUtils = plugin.getTeamMembersUtils();
         this.colorBuilder = new ColorsBuilder(plugin);
     }
 
@@ -41,7 +39,7 @@ public class ConvEditTeamPrefix extends StringPrompt {
     public Prompt acceptInput(ConversationContext con, String answer) {
         Player author = (Player) con.getForWhom();
         String authorName = author.getName();
-        String teamID = sqlManager.getTeamNameFromPlayerName(authorName);
+        Team team = sqlManager.getTeamFromPlayerName(authorName);
         
         if (colorBuilder.prefixTeamIsTooLong(answer)) {
             // con.getForWhom().sendRawMessage("Le préfixe est trop long");
@@ -56,8 +54,8 @@ public class ConvEditTeamPrefix extends StringPrompt {
         economyManager.removeMoneyPlayer(author, config.getDouble("prices.editTeamPrefix"));
         // con.getForWhom().sendRawMessage("Le préfixe a été changé par " + new ColorsBuilder().replaceColor(answer));
         con.getForWhom().sendRawMessage(messageManager.getReplaceMessage("manage_team.edit_team_prefix.team_prefix_edited", colorBuilder.replaceColor(answer)));
-        sqlManager.updateTeamPrefix(teamID, answer);
-        teamMembersUtils.refreshTeamMembersInventory(teamID, authorName);
+        team.updateTeamPrefix(answer);
+        team.refreshTeamMembersInventory(authorName);
         return null;
     }
 

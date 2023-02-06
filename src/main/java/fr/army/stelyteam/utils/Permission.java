@@ -10,19 +10,22 @@ public class Permission {
         this.teamRank = teamRank;
     }
 
+
+    public void incrementTeamRank(){
+        this.teamRank++;
+    }
+
+
+    public void decrementTeamRank(){
+        this.teamRank--;
+    }
+
+
     public String getPermissionName() {
         return permissionName;
     }
 
     public int getTeamRank() {
         return teamRank;
-    }
-
-    public void setPermissionName(String permissionName) {
-        this.permissionName = permissionName;
-    }
-
-    public void setTeamRank(int teamRank) {
-        this.teamRank = teamRank;
     }
 }

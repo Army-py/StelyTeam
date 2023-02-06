@@ -20,14 +20,12 @@ import net.md_5.bungee.api.chat.ClickEvent.Action;
 
 public class ConvAddAlliance extends StringPrompt {
 
-    private StelyTeamPlugin plugin;
     private CacheManager cacheManager;
     private MySQLManager sqlManager;
     private MessageManager messageManager;
 
 
     public ConvAddAlliance(StelyTeamPlugin plugin){
-        this.plugin = plugin;
         this.cacheManager = plugin.getCacheManager();
         this.sqlManager = plugin.getSQLManager();
         this.messageManager = plugin.getMessageManager();
@@ -38,8 +36,8 @@ public class ConvAddAlliance extends StringPrompt {
     public Prompt acceptInput(ConversationContext con, String answer) {
         Player author = (Player) con.getForWhom();
         String authorName = author.getName();
-        String teamName = sqlManager.getTeamNameFromPlayerName(authorName);
         Team team = sqlManager.getTeamFromPlayerName(authorName);
+        String teamName = team.getTeamName();
 
         if (!sqlManager.teamNameExists(answer)) {
             con.getForWhom().sendRawMessage(messageManager.getMessage("common.team_not_exist"));

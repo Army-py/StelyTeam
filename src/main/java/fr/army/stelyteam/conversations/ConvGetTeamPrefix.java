@@ -2,7 +2,6 @@ package fr.army.stelyteam.conversations;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.utils.Team;
-import fr.army.stelyteam.utils.TeamMembersUtils;
 import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
 import fr.army.stelyteam.utils.manager.CacheManager;
@@ -19,24 +18,18 @@ import org.bukkit.entity.Player;
 
 public class ConvGetTeamPrefix extends StringPrompt {
 
-    private StelyTeamPlugin plugin;
     private CacheManager cacheManager;
-    private MySQLManager sqlManager;
     private YamlConfiguration config;
     private MessageManager messageManager;
     private EconomyManager economyManager;
-    private TeamMembersUtils teamMembersUtils;
     private ColorsBuilder colorBuilder;
 
 
     public ConvGetTeamPrefix(StelyTeamPlugin plugin) {
-        this.plugin = plugin;
         this.cacheManager = plugin.getCacheManager();
-        this.sqlManager = plugin.getSQLManager();
         this.config = plugin.getConfig();
         this.messageManager = plugin.getMessageManager();
         this.economyManager = plugin.getEconomyManager();
-        this.teamMembersUtils = plugin.getTeamMembersUtils();
         this.colorBuilder = new ColorsBuilder(plugin);
     }
 
@@ -61,12 +54,12 @@ public class ConvGetTeamPrefix extends StringPrompt {
         TemporaryAction tempAction = cacheManager.getTempAction(authorName);
         Team team = tempAction.getTeam();
 
-        sqlManager.insertTeam(team.getTeamName(), team.getTeamPrefix(), authorName);
+        team.createTeam();
         cacheManager.removePlayerAction(authorName);
         economyManager.removeMoneyPlayer(author, config.getDouble("prices.createTeam"));
         con.getForWhom().sendRawMessage(messageManager.getMessage("manage_team.creation.team_created"));
         
-        if (config.getBoolean("openTeamAfterCreate")) teamMembersUtils.openMainInventory(author);
+        if (config.getBoolean("openTeamAfterCreate")) StelyTeamPlugin.getPlugin().openMainInventory(author, team);
         return null;
     }
 

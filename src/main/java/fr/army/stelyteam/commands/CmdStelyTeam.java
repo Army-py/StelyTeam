@@ -5,13 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.commands.subCommands.help.SubCmdAdmin;
@@ -31,7 +29,7 @@ import fr.army.stelyteam.commands.subCommands.team.SubCmdAccept;
 import fr.army.stelyteam.commands.subCommands.team.SubCmdDeny;
 import fr.army.stelyteam.commands.subCommands.utility.SubCmdHome;
 import fr.army.stelyteam.commands.subCommands.utility.SubCmdVisual;
-import fr.army.stelyteam.utils.TeamMembersUtils;
+import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.builder.InventoryBuilder;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
@@ -45,8 +43,6 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
     private MySQLManager sqlManager;
     private SQLiteManager sqliteManager;
     private MessageManager messageManager;
-    private InventoryBuilder inventoryBuilder;
-    private TeamMembersUtils teamMembersUtils;
     private Map<String, Object> subCommands;
     // private Map<String, Object> subCommandsOp;
 
@@ -57,8 +53,6 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
         this.sqlManager = plugin.getSQLManager();
         this.sqliteManager = plugin.getSQLiteManager();
         this.messageManager = plugin.getMessageManager();
-        this.inventoryBuilder = new InventoryBuilder(plugin);
-        this.teamMembersUtils = new TeamMembersUtils(plugin);
         this.subCommands = new HashMap<>();
         initSubCommands();
     }
@@ -68,6 +62,7 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
         if(sender instanceof Player){
             Player player = (Player) sender;
             String playerName = player.getName();
+            Team team = sqlManager.getTeamFromPlayerName(playerName);
 
             if (cacheManager.isInConversation(playerName)){
                 player.sendRawMessage(messageManager.getMessage("common.no_command_in_conv"));
@@ -80,7 +75,7 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
 
             
             if (args.length == 0){
-                teamMembersUtils.openMainInventory(player);
+                StelyTeamPlugin.getPlugin().openMainInventory(player, team);
             }else{
                 if (subCommands.containsKey(args[0])){
                     SubCommand subCmd = (SubCommand) subCommands.get(args[0]);

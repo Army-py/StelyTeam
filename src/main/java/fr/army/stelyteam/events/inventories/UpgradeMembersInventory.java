@@ -7,6 +7,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.TemporaryActionNames;
 import fr.army.stelyteam.utils.builder.InventoryBuilder;
@@ -46,12 +47,12 @@ public class UpgradeMembersInventory {
         String itemName = event.getCurrentItem().getItemMeta().getDisplayName();
         Material material = event.getCurrentItem().getType();
 
-        String teamID = sqlManager.getTeamNameFromPlayerName(playerName);
-        Integer level = sqlManager.getImprovLvlMembers(teamID);
+        Team team = sqlManager.getTeamFromPlayerName(playerName);
+        Integer level = team.getImprovLvlMembers();
         
         // Gestion des items
         if (itemName.equals(config.getString("inventories.upgradeTotalMembers.close.itemName"))){
-            Inventory inventory = inventoryBuilder.createManageInventory(playerName);
+            Inventory inventory = inventoryBuilder.createManageInventory(playerName, team);
             player.openInventory(inventory);
         }else if (!material.name().equals(config.getString("emptyCase"))){
             for(String str : config.getConfigurationSection("inventories.upgradeTotalMembers").getKeys(false)){
@@ -59,7 +60,7 @@ public class UpgradeMembersInventory {
                 
                 if (itemName.equals(name) && level+1 == config.getInt("inventories.upgradeTotalMembers."+str+".level")){
                     if (economyManager.checkMoneyPlayer(player, config.getDouble("prices.upgrade.teamPlaces.level"+(level+1)))){
-                        cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.IMPROV_LVL_MEMBERS));
+                        cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.IMPROV_LVL_MEMBERS, team));
                         Inventory inventory = inventoryBuilder.createConfirmInventory();
                         player.openInventory(inventory);
                         return;

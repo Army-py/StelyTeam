@@ -36,14 +36,13 @@ public class StorageDirectoryInventory {
     public void onInventoryClick(){
         Player player = (Player) event.getWhoClicked();
         String playerName = player.getName();
-        String teamId = sqlManager.getTeamNameFromPlayerName(playerName);
         Team team = sqlManager.getTeamFromPlayerName(playerName);
         String itemName = event.getCurrentItem().getItemMeta().getDisplayName();
         Material itemType = event.getCurrentItem().getType();
 
         // Fermeture ou retour en arrière de l'inventaire
         if (itemName.equals(config.getString("inventories.storageDirectory.close.itemName"))){
-            Inventory inventory = inventoryBuilder.createMemberInventory(playerName);
+            Inventory inventory = inventoryBuilder.createMemberInventory(playerName, team);
             player.openInventory(inventory);
         }else{
             for(String str : config.getConfigurationSection("inventories.storageDirectory").getKeys(false)){

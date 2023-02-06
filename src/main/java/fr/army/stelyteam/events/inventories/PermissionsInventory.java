@@ -6,7 +6,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.utils.TeamMembersUtils;
+import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.builder.InventoryBuilder;
 import fr.army.stelyteam.utils.manager.MySQLManager;
 
@@ -18,7 +18,6 @@ public class PermissionsInventory {
     private YamlConfiguration config;
     private MySQLManager sqlManager;
     private InventoryBuilder inventoryBuilder;
-    private TeamMembersUtils teamMembersUtils;
 
 
     public PermissionsInventory(InventoryClickEvent event, StelyTeamPlugin plugin){
@@ -27,7 +26,6 @@ public class PermissionsInventory {
         this.config = plugin.getConfig();
         this.sqlManager = plugin.getSQLManager();
         this.inventoryBuilder = plugin.getInventoryBuilder();
-        this.teamMembersUtils = new TeamMembersUtils(plugin);
     }
 
 
@@ -35,26 +33,27 @@ public class PermissionsInventory {
         Player player = (Player) event.getWhoClicked();
         String playerName = player.getName();
         String itemName = event.getCurrentItem().getItemMeta().getDisplayName();
-        String teamId = sqlManager.getTeamNameFromPlayerName(playerName);
+        Team team = sqlManager.getTeamFromPlayerName(playerName);
+        String teamName = team.getTeamName();
 
         // Fermeture ou retour en arrière de l'inventaire
         if (itemName.equals(config.getString("inventories.permissions.close.itemName"))){
-            Inventory inventory = inventoryBuilder.createManageInventory(playerName);
+            Inventory inventory = inventoryBuilder.createManageInventory(playerName, team);
             player.openInventory(inventory);
             return;
         }
 
         if (getPermissionFromName(itemName) != null){
             String permission = getPermissionFromName(itemName);
-            Integer permissionRank = sqlManager.getRankAssignement(teamId, permission);
-            Integer authorRank = sqlManager.getMemberRank(playerName);
-            boolean authorIsOwner = sqlManager.isOwner(playerName);
+            Integer permissionRank = team.getPermissionRank(permission);
+            Integer authorRank = team.getMemberRank(playerName);
+            boolean authorIsOwner = team.isTeamOwner(playerName);
             if (event.getClick().isRightClick()){
                 if (permissionRank != null){
                     if (!authorIsOwner && permissionRank <= authorRank){
                         return;
                     }
-                    if (permissionRank < plugin.getLastRank()) sqlManager.incrementAssignement(teamId, permission);
+                    if (permissionRank < plugin.getLastRank()) team.incrementAssignement(permission);
                 }else{
                     String rankPath = config.getString("inventories.permissions."+permission+".rankPath");
                     Integer defaultRankId = config.getInt("inventories."+rankPath+".rank");
@@ -62,14 +61,14 @@ public class PermissionsInventory {
                         return;
                     }
                     if (defaultRankId != plugin.getLastRank()) defaultRankId = defaultRankId+1;
-                    sqlManager.insertAssignement(teamId, permission, defaultRankId);
+                    team.insertAssignement(permission, defaultRankId);
                 }
             }else if (event.getClick().isLeftClick()){
                 if (permissionRank != null){
                     if (!authorIsOwner && permissionRank-1 <= authorRank){
                         return;
                     }
-                    if (permissionRank > 0) sqlManager.decrementAssignement(teamId, permission);
+                    if (permissionRank > 0) team.decrementAssignement(permission);
                 }else{
                     String rankPath = config.getString("inventories.permissions."+permission+".rankPath");
                     Integer defaultRankId = config.getInt("inventories."+rankPath+".rank");
@@ -77,12 +76,12 @@ public class PermissionsInventory {
                         return;
                     }
                     if (defaultRankId != 0) defaultRankId = defaultRankId-1;
-                    sqlManager.insertAssignement(teamId, permission, defaultRankId);
+                    team.insertAssignement(permission, defaultRankId);
                 }
             }else return;
             Inventory inventory = inventoryBuilder.createPermissionsInventory(playerName);
             player.openInventory(inventory);
-            teamMembersUtils.refreshTeamMembersInventory(teamId, playerName);
+            team.refreshTeamMembersInventory(playerName);
         }
     }
 
