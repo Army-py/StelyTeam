@@ -96,7 +96,7 @@ public class StorageInventory {
         Storage storage;
 
         if (cacheManager.containsStorage(team, storageId)){
-            storage = cacheManager.getStorage(team, storageId);
+            storage = cacheManager.replaceStorageContent(team, storageId, serializeManager.serializeToByte(inventoryContent));
         }else{
             storage = new Storage(team, storageId, storageInventory, serializeManager.serializeToByte(inventoryContent));
         }

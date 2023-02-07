@@ -12,7 +12,7 @@ public class CacheManager {
     // {senderName, receiverName, actionName, Team}
     private ArrayList<TemporaryAction> cachedTempAction = new ArrayList<TemporaryAction>();
 
-    // {teamName, storageId, storageInstance, storageContent}
+    // {Team, storageId, storageInstance, storageContent}
     private ArrayList<Storage> cachedStorage = new ArrayList<Storage>();
 
     // {playerName}
@@ -119,6 +119,16 @@ public class CacheManager {
                 cachedStorage = storage;
             }
         }
+    }
+
+    public Storage replaceStorageContent(Team team, int storageId, byte[] content){
+        for(Storage cachedStorage : cachedStorage){
+            if(cachedStorage.getTeam().getTeamName().equals(team.getTeamName()) && cachedStorage.getStorageId() == storageId){
+                cachedStorage.setStorageContent(content);
+                return cachedStorage;
+            }
+        }
+        return null;
     }
 
     public boolean containsStorage(Team team, int storageId){
