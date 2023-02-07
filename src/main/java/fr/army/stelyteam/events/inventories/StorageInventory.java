@@ -95,8 +95,8 @@ public class StorageInventory {
         ItemStack[] inventoryContent = closeEvent.getInventory().getContents();
         Storage storage;
 
-        if (cacheManager.containsStorage(team, storageId)){
-            storage = cacheManager.replaceStorageContent(team, storageId, serializeManager.serializeToByte(inventoryContent));
+        if (cacheManager.containsStorage(team.getTeamName(), storageId)){
+            storage = cacheManager.replaceStorageContent(team.getTeamName(), storageId, serializeManager.serializeToByte(inventoryContent));
         }else{
             storage = new Storage(team, storageId, storageInventory, serializeManager.serializeToByte(inventoryContent));
         }

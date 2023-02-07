@@ -104,9 +104,9 @@ public class CacheManager {
         cachedStorage.remove(storage);
     }
 
-    public Storage getStorage(Team team, int storageId){
+    public Storage getStorage(String teamName, int storageId){
         for(Storage storage : cachedStorage){
-            if(storage.getTeam().getTeamName().equals(team.getTeamName()) && storage.getStorageId() == storageId){
+            if(storage.getTeam().getTeamName().equals(teamName) && storage.getStorageId() == storageId){
                 return storage;
             }
         }
@@ -121,9 +121,10 @@ public class CacheManager {
         }
     }
 
-    public Storage replaceStorageContent(Team team, int storageId, byte[] content){
+    public Storage replaceStorageContent(String teamName, int storageId, byte[] content){
+        if (!containsStorage(teamName, storageId)) return null;
         for(Storage cachedStorage : cachedStorage){
-            if(cachedStorage.getTeam().getTeamName().equals(team.getTeamName()) && cachedStorage.getStorageId() == storageId){
+            if(cachedStorage.getTeam().getTeamName().equals(teamName) && cachedStorage.getStorageId() == storageId){
                 cachedStorage.setStorageContent(content);
                 return cachedStorage;
             }
@@ -131,9 +132,19 @@ public class CacheManager {
         return null;
     }
 
-    public boolean containsStorage(Team team, int storageId){
+    public void replaceStorageTeam(String teamName, Team team){
+        if (cachedStorage.isEmpty()) return;
+        for(Storage cachedStorage : cachedStorage){
+            if(cachedStorage.getTeam().getTeamName().equals(teamName)){
+                cachedStorage.setTeam(team);
+            }
+        }
+    }
+
+    public boolean containsStorage(String teamName, int storageId){
+        if (cachedStorage.isEmpty()) return false;
         for(Storage storage : cachedStorage){
-            if(storage.getTeam().getTeamName().equals(team.getTeamName()) && storage.getStorageId() == storageId){
+            if(storage.getTeam().getTeamName().equals(teamName) && storage.getStorageId() == storageId){
                 return true;
             }
         }
@@ -141,7 +152,7 @@ public class CacheManager {
     }
 
     public void saveStorage(Storage storage){
-        if(containsStorage(storage.getTeam(), storage.getStorageId())){
+        if(containsStorage(storage.getTeam().getTeamName(), storage.getStorageId())){
             replaceStorage(storage);
         } else {
             addStorage(storage);

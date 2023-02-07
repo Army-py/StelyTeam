@@ -132,6 +132,7 @@ public class Team {
 
     public void updateTeamName(String newTeamName){
         this.teamName = newTeamName;
+        StelyTeamPlugin.getPlugin().getCacheManager().replaceStorageTeam(this.teamName, this);
         StelyTeamPlugin.getPlugin().getSQLManager().updateTeamName(teamName, newTeamName);
         StelyTeamPlugin.getPlugin().getSQLiteManager().updateTeamID(teamName, newTeamName);
     }

@@ -503,14 +503,15 @@ public class InventoryBuilder {
 
     public Inventory createStorageInventory(Team team, Integer storageId, String storageName){
         Integer slots = config.getInt("inventoriesSlots.storage");
+        String teamName = team.getTeamName();
         Inventory inventory;
 
-        if (cacheManager.containsStorage(team, storageId)){
-            inventory = cacheManager.getStorage(team, storageId).getInventoryInstance();
+        if (cacheManager.containsStorage(teamName, storageId)){
+            inventory = cacheManager.getStorage(teamName, storageId).getInventoryInstance();
         }else{
             inventory = Bukkit.createInventory(null, slots, storageName);
 
-            if (sqlManager.teamHasStorage(team.getTeamName(), storageId)){
+            if (sqlManager.teamHasStorage(teamName, storageId)){
                 byte[] contentString = sqlManager.getStorageContent(team.getTeamName(), storageId);
                 ItemStack[] content = serializeManager.deserializeFromByte(contentString);
                 inventory.setContents(content);
