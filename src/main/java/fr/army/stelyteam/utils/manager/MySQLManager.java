@@ -20,6 +20,7 @@ import fr.army.stelyteam.utils.Team;
 
 public class MySQLManager {
     
+    private String driver;
     private String host;
     private String database;
     private String user;
@@ -31,6 +32,7 @@ public class MySQLManager {
     private YamlConfiguration config;
 
     public MySQLManager(StelyTeamPlugin plugin) {
+        this.driver = "mysql";
         // this.host = App.config.getString("sql.host");
         // this.database = App.config.getString("sql.database");
         // this.user = App.config.getString("sql.user");
@@ -51,7 +53,7 @@ public class MySQLManager {
 
     public void connect() throws ClassNotFoundException, SQLException{
         if(!isConnected()){
-            this.connection = DriverManager.getConnection("jdbc:sqlite:"+ plugin.getDataFolder().getAbsolutePath()+"/"+this.database);
+            this.connection = DriverManager.getConnection("jdbc:"+this.driver +":"+ plugin.getDataFolder().getAbsolutePath()+"/"+this.database);
         }
     }
 
@@ -77,6 +79,19 @@ public class MySQLManager {
             try {
                 connection.close();
             } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    public void createDatabase(){
+        if (isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("CREATE DATABASE IF NOT EXISTS "+this.database+";");
+                query.executeUpdate();
+                query.close();
+            } catch (Exception e){
                 e.printStackTrace();
             }
         }
