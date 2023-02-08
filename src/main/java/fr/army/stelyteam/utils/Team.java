@@ -83,53 +83,6 @@ public class Team {
     }
 
 
-    public void removeAlliance(String allianceName){
-        this.teamAlliances.removeIf(alliance -> alliance.getTeamName().equals(allianceName));
-        StelyTeamPlugin.getPlugin().getSQLManager().removeAlliance(teamName, allianceName);
-    }
-
-
-    public ArrayList<String> getMembersName(){
-        ArrayList<String> membersName = new ArrayList<String>();
-        for (Member member : this.teamMembers) {
-            membersName.add(member.getMemberName());
-        }
-        return membersName;
-    }
-
-
-    public Member getMember(String playerName){
-        for (Member member : this.teamMembers) {
-            if (member.getMemberName().equals(playerName)) return member;
-        }
-        return null;
-    }
-
-
-    public String getMembershipDate(String playerName){
-        for (Member member : this.teamMembers) {
-            if (member.getMemberName().equals(playerName)) return member.getJoinDate();
-        }
-        return null;
-    }
-
-
-    public Integer getPermissionRank(String permissionName){
-        for (Permission permission : this.teamPermissions) {
-            if (permission.getPermissionName().equals(permissionName)) return permission.getTeamRank();
-        }
-        return null;
-    }
-
-
-    public Integer getMemberRank(String playerName){
-        for (Member member : this.teamMembers) {
-            if (member.getMemberName().equals(playerName)) return member.getTeamRank();
-        }
-        return null;
-    }
-
-
     public void updateTeamName(String newTeamName){
         this.teamName = newTeamName;
         StelyTeamPlugin.getPlugin().getCacheManager().replaceStorageTeam(this.teamName, this);
@@ -180,27 +133,27 @@ public class Team {
     }
 
 
+    public void removeAlliance(String allianceName){
+        this.teamAlliances.removeIf(alliance -> alliance.getTeamName().equals(allianceName));
+        StelyTeamPlugin.getPlugin().getSQLManager().removeAlliance(teamName, allianceName);
+    }
+
+
     public void removeTeam(){
         StelyTeamPlugin.getPlugin().getSQLManager().removeTeam(teamName);
         StelyTeamPlugin.getPlugin().getSQLiteManager().removeHome(teamName);
     }
 
 
-    public void incrementImprovLvlMembers(){
-        this.improvLvlMembers++;
-        StelyTeamPlugin.getPlugin().getSQLManager().incrementImprovLvlMembers(teamName);
-    }
-
-
-    public void decrementImprovLvlMembers(){
-        this.improvLvlMembers--;
-        StelyTeamPlugin.getPlugin().getSQLManager().decrementImprovLvlMembers(teamName);
-    }
-
-
     public void incrementTeamStorageLvl(){
         this.teamStorageLvl++;
         StelyTeamPlugin.getPlugin().getSQLManager().incrementTeamStorageLvl(teamName);
+    }
+
+
+    public void incrementImprovLvlMembers(){
+        this.improvLvlMembers++;
+        StelyTeamPlugin.getPlugin().getSQLManager().incrementImprovLvlMembers(teamName);
     }
 
 
@@ -212,6 +165,12 @@ public class Team {
                 return;
             }
         }
+    }
+
+
+    public void decrementImprovLvlMembers(){
+        this.improvLvlMembers--;
+        StelyTeamPlugin.getPlugin().getSQLManager().decrementImprovLvlMembers(teamName);
     }
 
 
@@ -303,6 +262,47 @@ public class Team {
                 player.sendMessage(message);
             }
         }
+    }
+
+
+    public ArrayList<String> getMembersName(){
+        ArrayList<String> membersName = new ArrayList<String>();
+        for (Member member : this.teamMembers) {
+            membersName.add(member.getMemberName());
+        }
+        return membersName;
+    }
+
+
+    public Member getMember(String playerName){
+        for (Member member : this.teamMembers) {
+            if (member.getMemberName().equals(playerName)) return member;
+        }
+        return null;
+    }
+
+
+    public String getMembershipDate(String playerName){
+        for (Member member : this.teamMembers) {
+            if (member.getMemberName().equals(playerName)) return member.getJoinDate();
+        }
+        return null;
+    }
+
+
+    public Integer getPermissionRank(String permissionName){
+        for (Permission permission : this.teamPermissions) {
+            if (permission.getPermissionName().equals(permissionName)) return permission.getTeamRank();
+        }
+        return null;
+    }
+
+
+    public Integer getMemberRank(String playerName){
+        for (Member member : this.teamMembers) {
+            if (member.getMemberName().equals(playerName)) return member.getTeamRank();
+        }
+        return null;
     }
 
 
