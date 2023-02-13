@@ -1,10 +1,15 @@
 # Connection à la base de donnée
+
+database_type: "sqlite" # mysql ou sqlite
 sql:
   host: "localhost"
   database: "bungeecord_StelyTeam"
   user: "username"
   password: "password"
   port: 3306
+
+sqlite:
+  file: "bungeecord_StelyTeam.db"
 
 
 # Timeout des conversations (message demandant une information aux joueurs lors de la création de team par exemple)

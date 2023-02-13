@@ -14,7 +14,8 @@ import fr.army.stelyteam.utils.builder.InventoryBuilder;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.EconomyManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.MySQLManager;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 
 public class UpgradeMembersInventory {
@@ -22,7 +23,7 @@ public class UpgradeMembersInventory {
     private InventoryClickEvent event;
     private CacheManager cacheManager;
     private YamlConfiguration config;
-    private MySQLManager sqlManager;
+    private DatabaseManager sqlManager;
     private MessageManager messageManager;
     private EconomyManager economyManager;
     private InventoryBuilder inventoryBuilder;
@@ -32,7 +33,7 @@ public class UpgradeMembersInventory {
         this.event = event;
         this.cacheManager = plugin.getCacheManager();
         this.config = plugin.getConfig();
-        this.sqlManager = plugin.getSQLManager();
+        this.sqlManager = plugin.getDatabaseManager();
         this.messageManager = plugin.getMessageManager();
         this.economyManager = plugin.getEconomyManager();
         this.inventoryBuilder = plugin.getInventoryBuilder();

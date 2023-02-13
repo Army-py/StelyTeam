@@ -8,8 +8,8 @@ import fr.army.stelyteam.utils.builder.InventoryBuilder;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.EconomyManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.MySQLManager;
-import fr.army.stelyteam.utils.manager.SQLiteManager;
+import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 import java.util.List;
 
@@ -24,8 +24,8 @@ public class ManageInventory {
     private InventoryClickEvent event;
     private CacheManager cacheManager;
     private YamlConfiguration config;
-    private MySQLManager sqlManager;
-    private SQLiteManager sqliteManager;
+    private DatabaseManager sqlManager;
+    private SQLiteDataManager sqliteManager;
     private MessageManager messageManager;
     private EconomyManager economyManager;
     private InventoryBuilder inventoryBuilder;
@@ -35,7 +35,7 @@ public class ManageInventory {
         this.event = event;
         this.cacheManager = plugin.getCacheManager();
         this.config = plugin.getConfig();
-        this.sqlManager = plugin.getSQLManager();
+        this.sqlManager = plugin.getDatabaseManager();
         this.sqliteManager = plugin.getSQLiteManager();
         this.messageManager = plugin.getMessageManager();
         this.economyManager = plugin.getEconomyManager();

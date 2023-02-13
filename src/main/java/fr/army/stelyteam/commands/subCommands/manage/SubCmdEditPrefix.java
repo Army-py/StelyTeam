@@ -10,18 +10,18 @@ import fr.army.stelyteam.commands.SubCommand;
 import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
 import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.MySQLManager;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 public class SubCmdEditPrefix extends SubCommand {
 
     private MessageManager messageManager;
-    private MySQLManager sqlManager;
+    private DatabaseManager sqlManager;
     private ColorsBuilder colorsBuilder;
 
     public SubCmdEditPrefix(StelyTeamPlugin plugin) {
         super(plugin);
         this.messageManager = plugin.getMessageManager();
-        this.sqlManager = plugin.getSQLManager();
+        this.sqlManager = plugin.getDatabaseManager();
         this.colorsBuilder = new ColorsBuilder(plugin);
     }
 

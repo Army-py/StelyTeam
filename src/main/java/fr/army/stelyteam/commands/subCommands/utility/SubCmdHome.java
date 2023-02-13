@@ -11,18 +11,18 @@ import org.bukkit.entity.Player;
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.commands.SubCommand;
 import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.MySQLManager;
-import fr.army.stelyteam.utils.manager.SQLiteManager;
+import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 public class SubCmdHome extends SubCommand {
 
-    private MySQLManager sqlManager;
-    private SQLiteManager sqliteManager;
+    private DatabaseManager sqlManager;
+    private SQLiteDataManager sqliteManager;
     private MessageManager messageManager;
 
     public SubCmdHome(StelyTeamPlugin plugin) {
         super(plugin);
-        this.sqlManager = plugin.getSQLManager();
+        this.sqlManager = plugin.getDatabaseManager();
         this.sqliteManager = plugin.getSQLiteManager();
         this.messageManager = plugin.getMessageManager();
     }

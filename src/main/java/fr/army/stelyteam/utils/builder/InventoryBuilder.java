@@ -21,8 +21,9 @@ import fr.army.stelyteam.utils.Member;
 import fr.army.stelyteam.utils.Page;
 import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.manager.CacheManager;
-import fr.army.stelyteam.utils.manager.MySQLManager;
-import fr.army.stelyteam.utils.manager.SQLiteManager;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
+import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 import fr.army.stelyteam.utils.manager.serializer.ItemStackSerializer;
 
 public class InventoryBuilder {
@@ -30,8 +31,8 @@ public class InventoryBuilder {
     private StelyTeamPlugin plugin;
     private CacheManager cacheManager;
     private YamlConfiguration config;
-    private MySQLManager sqlManager;
-    private SQLiteManager sqliteManager;
+    private DatabaseManager sqlManager;
+    private SQLiteDataManager sqliteManager;
     private ItemStackSerializer serializeManager;
     private ColorsBuilder colorsBuilder;
 
@@ -40,7 +41,7 @@ public class InventoryBuilder {
         this.plugin = plugin;
         this.cacheManager = plugin.getCacheManager();
         this.config = plugin.getConfig();
-        this.sqlManager = plugin.getSQLManager();
+        this.sqlManager = plugin.getDatabaseManager();
         this.sqliteManager = plugin.getSQLiteManager();
         this.serializeManager = new ItemStackSerializer();
         this.colorsBuilder = new ColorsBuilder(plugin);

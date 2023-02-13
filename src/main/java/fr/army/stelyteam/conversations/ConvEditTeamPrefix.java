@@ -5,7 +5,7 @@ import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
 import fr.army.stelyteam.utils.manager.EconomyManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.MySQLManager;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.conversations.ConversationContext;
@@ -16,7 +16,7 @@ import org.bukkit.entity.Player;
 
 public class ConvEditTeamPrefix extends StringPrompt {
 
-    private MySQLManager sqlManager;
+    private DatabaseManager sqlManager;
     private YamlConfiguration config;
     private MessageManager messageManager;
     private EconomyManager economyManager;
@@ -24,7 +24,7 @@ public class ConvEditTeamPrefix extends StringPrompt {
 
 
     public ConvEditTeamPrefix(StelyTeamPlugin plugin) {
-        this.sqlManager = plugin.getSQLManager();
+        this.sqlManager = plugin.getDatabaseManager();
         this.config = plugin.getConfig();
         this.messageManager = plugin.getMessageManager();
         this.economyManager = plugin.getEconomyManager();

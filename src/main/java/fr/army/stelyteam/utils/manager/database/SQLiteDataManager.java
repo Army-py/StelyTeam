@@ -1,4 +1,4 @@
-package fr.army.stelyteam.utils.manager;
+package fr.army.stelyteam.utils.manager.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,13 +12,13 @@ import org.bukkit.entity.Player;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 
-public class SQLiteManager {
+public class SQLiteDataManager {
 
     private String database;
     private Connection connection;
     private StelyTeamPlugin plugin;
 
-    public SQLiteManager(StelyTeamPlugin plugin) {
+    public SQLiteDataManager(StelyTeamPlugin plugin) {
         this.database = "data.db";
         
         this.plugin = plugin;

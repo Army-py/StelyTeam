@@ -21,7 +21,7 @@ import fr.army.stelyteam.utils.builder.InventoryBuilder;
 import fr.army.stelyteam.utils.builder.conversation.ConversationBuilder;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.MySQLManager;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 
 public class EditMembersInventory {
@@ -29,7 +29,7 @@ public class EditMembersInventory {
     private StelyTeamPlugin plugin;
     private YamlConfiguration config;
     private CacheManager cacheManager;
-    private MySQLManager sqlManager;
+    private DatabaseManager sqlManager;
     private MessageManager messageManager;
     private ConversationBuilder conversationBuilder;
     private InventoryBuilder inventoryBuilder;
@@ -40,7 +40,7 @@ public class EditMembersInventory {
         this.plugin = plugin;
         this.config = plugin.getConfig();
         this.cacheManager = plugin.getCacheManager();
-        this.sqlManager = plugin.getSQLManager();
+        this.sqlManager = plugin.getDatabaseManager();
         this.messageManager = plugin.getMessageManager();
         this.conversationBuilder = plugin.getConversationBuilder();
         this.inventoryBuilder = plugin.getInventoryBuilder();

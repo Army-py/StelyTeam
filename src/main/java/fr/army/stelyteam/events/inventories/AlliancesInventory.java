@@ -7,20 +7,20 @@ import org.bukkit.inventory.Inventory;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.utils.builder.InventoryBuilder;
-import fr.army.stelyteam.utils.manager.MySQLManager;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 
 public class AlliancesInventory {
 
     private InventoryClickEvent event;
     private YamlConfiguration config;
-    private MySQLManager mysqlManager;
+    private DatabaseManager mysqlManager;
     private InventoryBuilder inventoryBuilder;
 
     public AlliancesInventory(InventoryClickEvent event, StelyTeamPlugin plugin) {
         this.event = event;
         this.config = plugin.getConfig();
-        this.mysqlManager = plugin.getSQLManager();
+        this.mysqlManager = plugin.getDatabaseManager();
         this.inventoryBuilder = plugin.getInventoryBuilder();
     }
 

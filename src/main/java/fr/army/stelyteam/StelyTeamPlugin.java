@@ -22,8 +22,9 @@ import fr.army.stelyteam.utils.builder.conversation.ConversationBuilder;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.EconomyManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.MySQLManager;
-import fr.army.stelyteam.utils.manager.SQLiteManager;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
+import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 import fr.army.stelyteam.utils.manager.serializer.ItemStackSerializer;
 
 public class StelyTeamPlugin extends JavaPlugin {
@@ -32,8 +33,7 @@ public class StelyTeamPlugin extends JavaPlugin {
     private YamlConfiguration config;
     private YamlConfiguration messages;
     private CacheManager cacheManager;
-    private MySQLManager sqlManager;
-    private SQLiteManager sqliteManager;
+    private SQLiteDataManager sqliteManager;
     private EconomyManager economyManager;
     private CommandManager commandManager;
     private MessageManager messageManager;
@@ -41,6 +41,7 @@ public class StelyTeamPlugin extends JavaPlugin {
     private ConversationBuilder conversationBuilder;
     private InventoryBuilder inventoryBuilder;
     private ItemStackSerializer serializeManager;
+    private DatabaseManager databaseManager;
 
 
     @Override
@@ -51,12 +52,14 @@ public class StelyTeamPlugin extends JavaPlugin {
         this.config = initFile(this.getDataFolder(), "config.yml");
         this.messages = initFile(this.getDataFolder(), "messages.yml");
 
-        this.sqlManager = new MySQLManager(this);
-        this.sqliteManager = new SQLiteManager(this);
+        // this.sqlManager = new DatabaseManager(this);
+        this.sqliteManager = new SQLiteDataManager(this);
 
         try {
-            this.sqlManager.connect();
-            this.sqliteManager.connect();
+            // this.sqlManager.connect();
+            // this.sqliteManager.connect();
+            this.databaseManager = DatabaseManager.connect(this);
+            this.databaseManager.createTables();
             this.getLogger().info("SQL connectée au plugin !");
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
@@ -64,8 +67,8 @@ public class StelyTeamPlugin extends JavaPlugin {
         }
         
         this.cacheManager = new CacheManager();
-        this.sqlManager.createTables();
-        this.sqliteManager.createTables();
+        // this.sqlManager.createTables();
+        // this.sqliteManager.createTables();
         this.economyManager = new EconomyManager(this);
         this.messageManager = new MessageManager(this);
         this.commandManager = new CommandManager(this);
@@ -84,8 +87,9 @@ public class StelyTeamPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        sqlManager.disconnect();
-        sqliteManager.disconnect();
+        // sqlManager.disconnect();
+        // sqliteManager.disconnect();
+        this.databaseManager.disconnect();
         getLogger().info("StelyTeam OFF");
     }
 
@@ -205,12 +209,16 @@ public class StelyTeamPlugin extends JavaPlugin {
         return cacheManager;
     }
 
-    public MySQLManager getSQLManager() {
-        return sqlManager;
+    // public DatabaseManager getSQLManager() {
+    //     return sqlManager;
+    // }
+
+    public SQLiteDataManager getSQLiteManager() {
+        return sqliteManager;
     }
 
-    public SQLiteManager getSQLiteManager() {
-        return sqliteManager;
+    public DatabaseManager getDatabaseManager() {
+        return databaseManager;
     }
 
     public EconomyManager getEconomyManager() {

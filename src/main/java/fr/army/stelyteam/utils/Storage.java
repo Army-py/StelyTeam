@@ -23,7 +23,7 @@ public class Storage {
     }
 
     public void saveStorageToDatabase(){
-        StelyTeamPlugin.getPlugin().getSQLManager().saveStorage(this);
+        StelyTeamPlugin.getPlugin().getDatabaseManager().saveStorage(this);
     }
 
     public Team getTeam() {

@@ -12,14 +12,14 @@ import fr.army.stelyteam.utils.builder.InventoryBuilder;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.EconomyManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.MySQLManager;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 
 public class CreateTeamInventory {
     private InventoryClickEvent event;
     private CacheManager cacheManager;
     private YamlConfiguration config;
-    private MySQLManager mysqlManager;
+    private DatabaseManager mysqlManager;
     private EconomyManager economyManager;
     private MessageManager messageManager;
     private InventoryBuilder inventoryBuilder;
@@ -28,7 +28,7 @@ public class CreateTeamInventory {
         this.event = event;
         this.cacheManager = plugin.getCacheManager();
         this.config = plugin.getConfig();
-        this.mysqlManager = plugin.getSQLManager();
+        this.mysqlManager = plugin.getDatabaseManager();
         this.economyManager = plugin.getEconomyManager();
         this.messageManager = plugin.getMessageManager();
         this.inventoryBuilder = plugin.getInventoryBuilder();

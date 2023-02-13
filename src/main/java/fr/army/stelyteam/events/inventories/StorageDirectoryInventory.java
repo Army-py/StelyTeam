@@ -12,7 +12,7 @@ import org.bukkit.inventory.Inventory;
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.builder.InventoryBuilder;
-import fr.army.stelyteam.utils.manager.MySQLManager;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 
 public class StorageDirectoryInventory {
@@ -20,7 +20,7 @@ public class StorageDirectoryInventory {
     private InventoryClickEvent event;
     private StelyTeamPlugin plugin;
     private YamlConfiguration config;
-    private MySQLManager sqlManager;
+    private DatabaseManager sqlManager;
     private InventoryBuilder inventoryBuilder;
 
 
@@ -28,7 +28,7 @@ public class StorageDirectoryInventory {
         this.event = event;
         this.plugin = plugin;
         this.config = plugin.getConfig();
-        this.sqlManager = plugin.getSQLManager();
+        this.sqlManager = plugin.getDatabaseManager();
         this.inventoryBuilder = plugin.getInventoryBuilder();
     }
 

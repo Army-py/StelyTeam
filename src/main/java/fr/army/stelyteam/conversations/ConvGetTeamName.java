@@ -6,7 +6,7 @@ import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.builder.conversation.ConversationBuilder;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.MySQLManager;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.conversations.ConversationContext;
@@ -18,7 +18,7 @@ public class ConvGetTeamName extends StringPrompt {
 
     private StelyTeamPlugin plugin;
     private CacheManager cacheManager;
-    private MySQLManager sqlManager;
+    private DatabaseManager sqlManager;
     private YamlConfiguration config;
     private MessageManager messageManager;
     private ConversationBuilder conversationBuilder;
@@ -27,7 +27,7 @@ public class ConvGetTeamName extends StringPrompt {
     public ConvGetTeamName(StelyTeamPlugin plugin) {
         this.plugin = plugin;
         this.cacheManager = plugin.getCacheManager();
-        this.sqlManager = plugin.getSQLManager();
+        this.sqlManager = plugin.getDatabaseManager();
         this.config = plugin.getConfig();
         this.messageManager = plugin.getMessageManager();
         this.conversationBuilder = plugin.getConversationBuilder();

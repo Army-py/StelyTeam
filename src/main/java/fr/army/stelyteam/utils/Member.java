@@ -16,12 +16,12 @@ public class Member {
 
     public void promoteMember(){
         this.teamRank++;
-        StelyTeamPlugin.getPlugin().getSQLManager().promoteMember(memberName);
+        StelyTeamPlugin.getPlugin().getDatabaseManager().promoteMember(memberName);
     }
 
     public void demoteMember(){
         this.teamRank--;
-        StelyTeamPlugin.getPlugin().getSQLManager().demoteMember(memberName);
+        StelyTeamPlugin.getPlugin().getDatabaseManager().demoteMember(memberName);
     }
 
 

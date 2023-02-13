@@ -17,7 +17,7 @@ import fr.army.stelyteam.utils.TemporaryActionNames;
 import fr.army.stelyteam.utils.builder.InventoryBuilder;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.MySQLManager;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 
 public class MembersInventory {
@@ -28,7 +28,7 @@ public class MembersInventory {
     private CacheManager cacheManager;
     private MessageManager messageManager;
     private InventoryBuilder inventoryBuilder;
-    private MySQLManager sqlManager;
+    private DatabaseManager sqlManager;
 
     public MembersInventory(InventoryClickEvent clickEvent, StelyTeamPlugin plugin) {
         this.clickEvent = clickEvent;
@@ -36,7 +36,7 @@ public class MembersInventory {
         this.cacheManager = plugin.getCacheManager();
         this.messageManager = plugin.getMessageManager();
         this.inventoryBuilder = plugin.getInventoryBuilder();
-        this.sqlManager = plugin.getSQLManager();
+        this.sqlManager = plugin.getDatabaseManager();
     }
 
     public MembersInventory(InventoryCloseEvent closeEvent, StelyTeamPlugin plugin){

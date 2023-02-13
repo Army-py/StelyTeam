@@ -13,7 +13,8 @@ import fr.army.stelyteam.utils.Storage;
 import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.builder.InventoryBuilder;
 import fr.army.stelyteam.utils.manager.CacheManager;
-import fr.army.stelyteam.utils.manager.MySQLManager;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 import fr.army.stelyteam.utils.manager.serializer.ItemStackSerializer;
 
 public class StorageInventory {
@@ -24,7 +25,7 @@ public class StorageInventory {
     private CacheManager cacheManager;
     private YamlConfiguration config;
     private InventoryBuilder inventoryBuilder;
-    private MySQLManager sqlManager;
+    private DatabaseManager sqlManager;
     private ItemStackSerializer serializeManager;
 
 
@@ -33,7 +34,7 @@ public class StorageInventory {
         this.cacheManager = plugin.getCacheManager();
         this.clickEvent = clickEvent;
         this.config = plugin.getConfig();
-        this.sqlManager = plugin.getSQLManager();
+        this.sqlManager = plugin.getDatabaseManager();
         this.inventoryBuilder = plugin.getInventoryBuilder();
         this.serializeManager = plugin.getSerializeManager();
     }
@@ -43,7 +44,7 @@ public class StorageInventory {
         this.cacheManager = plugin.getCacheManager();
         this.closeEvent = closeEvent;
         this.config = plugin.getConfig();
-        this.sqlManager = plugin.getSQLManager();
+        this.sqlManager = plugin.getDatabaseManager();
         this.serializeManager = plugin.getSerializeManager();
     }
 

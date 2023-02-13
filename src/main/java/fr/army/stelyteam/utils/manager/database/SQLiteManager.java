@@ -1,4 +1,4 @@
-package fr.army.stelyteam.utils.manager;
+package fr.army.stelyteam.utils.manager.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -18,46 +18,33 @@ import fr.army.stelyteam.utils.Permission;
 import fr.army.stelyteam.utils.Storage;
 import fr.army.stelyteam.utils.Team;
 
-public class MySQLManager {
-    
-    private String driver;
-    private String host;
-    private String database;
-    private String user;
-    private String password;
-    private int port;
-
+public class SQLiteManager extends DatabaseManager {
     private Connection connection;
     private StelyTeamPlugin plugin;
     private YamlConfiguration config;
+    private String filename;
 
-    public MySQLManager(StelyTeamPlugin plugin) {
-        this.driver = "mysql";
-        // this.host = App.config.getString("sql.host");
-        // this.database = App.config.getString("sql.database");
-        // this.user = App.config.getString("sql.user");
-        // this.password = App.config.getString("sql.password");
-        // this.port = App.config.getInt("sql.port");
-
-        this.database = "bungeecord_StelyTeam.db";
-
-        this.plugin = plugin;
+    public SQLiteManager(StelyTeamPlugin plugin) {
+        super(plugin);
         this.config = plugin.getConfig();
+        this.plugin = plugin;
+        
+        this.filename = this.config.getString("sqlite.filename");
     }
 
-
+    @Override
     public boolean isConnected() {
         return this.connection == null ? false : true;
     }
 
-
-    public void connect() throws ClassNotFoundException, SQLException{
+    @Override
+    public void init() throws ClassNotFoundException, SQLException{
         if(!isConnected()){
-            this.connection = DriverManager.getConnection("jdbc:"+this.driver +":"+ plugin.getDataFolder().getAbsolutePath()+"/"+this.database);
+            this.connection = DriverManager.getConnection("jdbc:sqlite:"+plugin.getDataFolder().getAbsolutePath()+"/"+this.filename);
         }
     }
 
-
+    @Override
     public void disconnect() {
         if(isConnected()){
             try {
@@ -68,36 +55,25 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public Connection getConnection() {
         return connection;
     }
 
 
-    public void disconnect(Connection connection) {
-        if(connection != null){
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+    // public void createDatabase(){
+    //     if (isConnected()){
+    //         try {
+    //             PreparedStatement query = connection.prepareStatement("CREATE DATABASE IF NOT EXISTS "+this.database+";");
+    //             query.executeUpdate();
+    //             query.close();
+    //         } catch (Exception e){
+    //             e.printStackTrace();
+    //         }
+    //     }
+    // }
 
-
-    public void createDatabase(){
-        if (isConnected()){
-            try {
-                PreparedStatement query = connection.prepareStatement("CREATE DATABASE IF NOT EXISTS "+this.database+";");
-                query.executeUpdate();
-                query.close();
-            } catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-    }
-
-
+        @Override
     public void createTables(){
         if (isConnected()){
             try {
@@ -127,7 +103,7 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public boolean isOwner(String playerName){
         if (isConnected()){
             try {
@@ -144,7 +120,7 @@ public class MySQLManager {
         return false;
     }
 
-
+    @Override
     public boolean isMember(String playerName){
         if (isConnected()){
             try {
@@ -161,7 +137,7 @@ public class MySQLManager {
         return false;
     }
 
-
+    @Override
     public boolean teamNameExists(String teamName){
         if (isConnected()){
             try {
@@ -178,7 +154,7 @@ public class MySQLManager {
         return false;
     }
 
-
+    @Override
     public void insertTeam(String teamName, String teamPrefix, String ownerName){
         if(isConnected()){
             try {
@@ -214,7 +190,7 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public void insertMember(String playerName, String teamName){
         if(isConnected()){
             try {
@@ -231,7 +207,7 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public void removeTeam(String teamName){
         if(isConnected()){
             try {
@@ -268,7 +244,7 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public void removeMember(String playerName, String teamName){
         if(isConnected()){
             try {
@@ -283,7 +259,7 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public void updateTeamName(String teamName, String newTeamName){
         if(isConnected()){
             try {
@@ -298,7 +274,7 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public void updateTeamPrefix(String teamName, String newTeamPrefix){
         if(isConnected()){
             try {
@@ -313,7 +289,7 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public void updateTeamDescription(String teamName, String newTeamDescription){
         if(isConnected()){
             try {
@@ -328,7 +304,7 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public void updateTeamOwner(String teamName, String teamOwner, String newTeamOwner){
         if(isConnected()){
             try {
@@ -358,7 +334,7 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public void updateUnlockedTeamBank(String teamName){
         if(isConnected()){
             try {
@@ -373,7 +349,7 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public void incrementImprovLvlMembers(String teamName){
         if(isConnected()){
             try {
@@ -387,7 +363,7 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public void incrementTeamStorageLvl(String teamName){
         if(isConnected()){
             try {
@@ -401,7 +377,7 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public void incrementTeamMoney(String teamName, double money){
         if(isConnected()){
             try {
@@ -416,7 +392,7 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public void decrementImprovLvlMembers(String teamName){
         if(isConnected()){
             try {
@@ -430,7 +406,7 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public void decrementTeamMoney(String teamName, double money){
         if(isConnected()){
             try {
@@ -445,7 +421,7 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public void promoteMember(String playerName){
         if(isConnected()){
             try {
@@ -459,7 +435,7 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public void demoteMember(String playerName){
         if(isConnected()){
             try {
@@ -473,7 +449,7 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public String getTeamNameFromPlayerName(String playerName){
         if(isConnected()){
             try {
@@ -491,7 +467,7 @@ public class MySQLManager {
         return null;
     }
 
-
+    @Override
     public Double getTeamMoney(String teamName){
         if(isConnected()){
             try {
@@ -529,7 +505,7 @@ public class MySQLManager {
     //     return null;
     // }
 
-
+        @Override
     public ArrayList<String> getTeamMembersWithRank(String teamName, int rank){
         if(isConnected()){
             try {
@@ -550,7 +526,7 @@ public class MySQLManager {
         return null;
     }
 
-
+    @Override
     public ArrayList<String> getTeamsName(){
         if(isConnected()){
             try {
@@ -569,7 +545,7 @@ public class MySQLManager {
         return null;
     }
 
-
+    @Override
     public ArrayList<Team> getTeams(){
         if(isConnected()){
             try {
@@ -598,7 +574,7 @@ public class MySQLManager {
         return null;
     }
 
-
+    @Override
     public void insertAssignement(String teamName, String permLabel, Integer teamRank){
         if(isConnected()){
             try {
@@ -629,7 +605,7 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public void decrementAssignement(String teamName, String permLabel){
         if(isConnected()){
             try {
@@ -644,7 +620,7 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public void insertStorageId(int storageId){
         if(isConnected()){
             try {
@@ -658,7 +634,7 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public boolean storageIdExist(int storageId){
         if(isConnected()){
             try {
@@ -676,7 +652,7 @@ public class MySQLManager {
         return false;
     }
 
-
+    @Override
     public boolean teamHasStorage(String teamName, Integer storageId){
         if(isConnected()){
             try {
@@ -694,7 +670,7 @@ public class MySQLManager {
         return false;
     }
 
-
+    @Override
     public byte[] getStorageContent(String teamName, Integer storageId){
         if(isConnected()){
             try {
@@ -713,7 +689,7 @@ public class MySQLManager {
         return null;
     }
 
-
+    @Override
     public void insertStorageContent(String teamName, Integer storageId, byte[] storageContent){
         if(isConnected()){
             try {
@@ -730,7 +706,7 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public void updateStorageContent(String teamName, Integer storageId, byte[] storageContent){
         if(isConnected()){
             try {
@@ -747,7 +723,7 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public void saveStorage(Storage storage){
         String teamName = storage.getTeam().getTeamName();
         int storageId = storage.getStorageId();
@@ -762,7 +738,7 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public void insertAlliance(String teamName, String allianceName){
         if(isConnected()){
             try {
@@ -778,7 +754,7 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public void removeAlliance(String teamName, String allianceName){
         if(isConnected()){
             try {
@@ -795,7 +771,7 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public boolean isAlliance(String teamName, String allianceName){
         if(isConnected()){
             try {
@@ -816,7 +792,7 @@ public class MySQLManager {
         return false;
     }
 
-
+    @Override
     public ArrayList<String> getMembers(){
         if(isConnected()){
             try {
@@ -835,7 +811,7 @@ public class MySQLManager {
         return null;
     }
 
-
+    @Override
     public Team getTeamFromPlayerName(String playerName){
         if(isConnected()){
             try {
@@ -863,7 +839,7 @@ public class MySQLManager {
         return null;
     }
 
-
+    @Override
     public Team getTeamFromTeamName(String teamName){
         if(isConnected()){
             try {
@@ -891,7 +867,7 @@ public class MySQLManager {
         return null;
     }
 
-
+    @Override
     public ArrayList<Member> getTeamMembers(String teamName){
         if(isConnected()){
             try {
@@ -917,7 +893,7 @@ public class MySQLManager {
         return null;
     }
 
-
+    @Override
     public ArrayList<Permission> getTeamAssignement(String teamName){
         if(isConnected()){
             try {
@@ -942,7 +918,7 @@ public class MySQLManager {
         return null;
     }
 
-
+    @Override
     public ArrayList<Alliance> getTeamAlliances(String teamName){
         if(isConnected()){
             try {
@@ -982,8 +958,8 @@ public class MySQLManager {
         return null;
     }
 
-
-    private int getPlayerId(String playerName){
+    @Override
+    public int getPlayerId(String playerName){
         if (isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("SELECT playerId FROM player WHERE playerName = ?");
@@ -999,8 +975,8 @@ public class MySQLManager {
         return 0;
     }
 
-
-    private int getTeamId(String teamName){
+    @Override
+    public int getTeamId(String teamName){
         if (isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("SELECT teamId FROM team WHERE teamName = ?");
@@ -1019,8 +995,8 @@ public class MySQLManager {
         return 0;
     }
 
-
-    private String getCurrentDate(){
+    @Override
+    public String getCurrentDate(){
         return new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime());
     }
 }

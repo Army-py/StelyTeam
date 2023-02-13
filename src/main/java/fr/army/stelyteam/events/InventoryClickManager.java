@@ -8,13 +8,13 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.events.inventories.*;
-import fr.army.stelyteam.utils.manager.SQLiteManager;
+import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
 
 
 public class InventoryClickManager implements Listener{    
 
     private StelyTeamPlugin plugin;
-    private SQLiteManager sqliteManager;
+    private SQLiteDataManager sqliteManager;
     private YamlConfiguration config;
 
     public InventoryClickManager(StelyTeamPlugin plugin) {

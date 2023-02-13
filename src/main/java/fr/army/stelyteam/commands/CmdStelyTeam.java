@@ -32,15 +32,15 @@ import fr.army.stelyteam.commands.subCommands.utility.SubCmdVisual;
 import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.MySQLManager;
-import fr.army.stelyteam.utils.manager.SQLiteManager;
+import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 public class CmdStelyTeam implements CommandExecutor, TabCompleter {
 
     private StelyTeamPlugin plugin;
     private CacheManager cacheManager;
-    private MySQLManager sqlManager;
-    private SQLiteManager sqliteManager;
+    private DatabaseManager sqlManager;
+    private SQLiteDataManager sqliteManager;
     private MessageManager messageManager;
     private Map<String, Object> subCommands;
     // private Map<String, Object> subCommandsOp;
@@ -49,7 +49,7 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
     public CmdStelyTeam(StelyTeamPlugin plugin) {
         this.plugin = plugin;
         this.cacheManager = plugin.getCacheManager();
-        this.sqlManager = plugin.getSQLManager();
+        this.sqlManager = plugin.getDatabaseManager();
         this.sqliteManager = plugin.getSQLiteManager();
         this.messageManager = plugin.getMessageManager();
         this.subCommands = new HashMap<>();

@@ -15,10 +15,10 @@ import fr.army.stelyteam.utils.Member;
 import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
 import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.MySQLManager;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 public class SubCmdInfo extends SubCommand {
-    private MySQLManager sqlManager;
+    private DatabaseManager sqlManager;
     private YamlConfiguration config;
     private YamlConfiguration messages;
     private MessageManager messageManager;
@@ -27,7 +27,7 @@ public class SubCmdInfo extends SubCommand {
 
     public SubCmdInfo(StelyTeamPlugin plugin) {
         super(plugin);
-        this.sqlManager = plugin.getSQLManager();
+        this.sqlManager = plugin.getDatabaseManager();
         this.config = plugin.getConfig();
         this.messages = plugin.getMessages();
         this.messageManager = plugin.getMessageManager();

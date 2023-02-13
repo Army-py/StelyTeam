@@ -11,14 +11,14 @@ import fr.army.stelyteam.conversations.ConvRemoveAlliance;
 import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.builder.InventoryBuilder;
 import fr.army.stelyteam.utils.builder.conversation.ConversationBuilder;
-import fr.army.stelyteam.utils.manager.MySQLManager;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 
 public class EditAlliancesInventory {
     private InventoryClickEvent event;
     private StelyTeamPlugin plugin;
     private YamlConfiguration config;
-    private MySQLManager mysqlManager;
+    private DatabaseManager mysqlManager;
     private ConversationBuilder conversationBuilder;
     private InventoryBuilder inventoryBuilder;
 
@@ -27,7 +27,7 @@ public class EditAlliancesInventory {
         this.event = event;
         this.plugin = plugin;
         this.config = plugin.getConfig();
-        this.mysqlManager = plugin.getSQLManager();
+        this.mysqlManager = plugin.getDatabaseManager();
         this.conversationBuilder = plugin.getConversationBuilder();
         this.inventoryBuilder = plugin.getInventoryBuilder();
     }

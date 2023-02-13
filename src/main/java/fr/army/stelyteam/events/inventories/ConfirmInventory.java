@@ -19,8 +19,8 @@ import fr.army.stelyteam.utils.builder.conversation.ConversationBuilder;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.EconomyManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.MySQLManager;
-import fr.army.stelyteam.utils.manager.SQLiteManager;
+import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 public class ConfirmInventory {
 
@@ -29,8 +29,8 @@ public class ConfirmInventory {
     private StelyTeamPlugin plugin;
     private CacheManager cacheManager;
     private YamlConfiguration config;
-    private MySQLManager sqlManager;
-    private SQLiteManager sqliteManager;
+    private DatabaseManager sqlManager;
+    private SQLiteDataManager sqliteManager;
     private MessageManager messageManager;
     private EconomyManager economyManager;
     private ConversationBuilder conversationBuilder;
@@ -42,7 +42,7 @@ public class ConfirmInventory {
         this.plugin = plugin;
         this.cacheManager = plugin.getCacheManager();
         this.config = plugin.getConfig();
-        this.sqlManager = plugin.getSQLManager();
+        this.sqlManager = plugin.getDatabaseManager();
         this.sqliteManager = plugin.getSQLiteManager();
         this.messageManager = plugin.getMessageManager();
         this.economyManager = plugin.getEconomyManager();
@@ -64,7 +64,7 @@ public class ConfirmInventory {
         String playerName = player.getName();
         TemporaryAction tempAction = cacheManager.getTempAction(playerName);
         Team team = tempAction.getTeam();
-        String teamName = team.getTeamName();
+        String teamName;
 
         if (itemName.equals(config.getString("inventories.confirmInventory.confirm.itemName"))){
             String receiverName;
@@ -86,6 +86,7 @@ public class ConfirmInventory {
                 case REMOVE_ALLIANCE:
                     Team alliance = sqlManager.getTeamFromTeamName(tempAction.getReceiverName());
                     String allianceName = alliance.getTeamName();
+                    teamName = team.getTeamName();
                     
                     team.removeAlliance(allianceName);
                     team.refreshTeamMembersInventory(playerName);
@@ -111,6 +112,7 @@ public class ConfirmInventory {
                     Double y = player.getLocation().getY();
                     Double z = player.getLocation().getZ();
                     Double yaw = (double) player.getLocation().getYaw();
+                    teamName = team.getTeamName();
 
                     if (sqliteManager.isSet(teamName)){
                         sqliteManager.updateHome(teamName, worldName, x, y, z, yaw);
@@ -121,6 +123,7 @@ public class ConfirmInventory {
                     }
                     break;
                 case DELETE_HOME:
+                    teamName = team.getTeamName();
                     player.closeInventory();
                     sqliteManager.removeHome(teamName);
                     player.sendMessage(messageManager.getMessage("manage_team.team_home.deleted"));
