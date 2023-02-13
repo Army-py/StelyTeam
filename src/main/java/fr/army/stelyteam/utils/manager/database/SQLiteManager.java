@@ -29,7 +29,7 @@ public class SQLiteManager extends DatabaseManager {
         this.config = plugin.getConfig();
         this.plugin = plugin;
         
-        this.filename = this.config.getString("sqlite.filename");
+        this.filename = this.config.getString("sqlite.file");
     }
 
     @Override
