@@ -985,7 +985,10 @@ public class MySQLManager extends DatabaseManager {
                 PreparedStatement query = connection.prepareStatement("SELECT playerId FROM player WHERE playerName = ?");
                 query.setString(1, playerName);
                 ResultSet result = query.executeQuery();
-                int playerId = result.getInt("playerId");
+                int playerId = 0;
+                if(result.next()){
+                    playerId = result.getInt("playerId");
+                }
                 query.close();
                 return playerId;
             } catch (Exception e){
