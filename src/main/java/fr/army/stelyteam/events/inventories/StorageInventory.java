@@ -94,19 +94,13 @@ public class StorageInventory {
 
         if (cacheManager.containsStorage(team.getTeamName(), storageId)){
             storage = cacheManager.replaceStorageContent(team.getTeamName(), storageId, serializeManager.serializeToByte(inventoryContent));
+        }else if (team.hasStorage(storageId)){
+            storage = team.getStorage(storageId);
+            storage.setStorageInstance(storageInventory);
+            storage.setStorageContent(serializeManager.serializeToByte(inventoryContent));
         }else{
             storage = new Storage(team, storageId, storageInventory, serializeManager.serializeToByte(inventoryContent));
         }
-
-        // byte[] inventoryContentString = storage.getStorageContent();
-        // if (!sqlManager.teamHasStorage(teamId, storageId)){
-        //     if (!sqlManager.storageIdExist(storageId)){
-        //         sqlManager.insertStorageId(storageId);
-        //     }
-        //     sqlManager.insertStorageContent(teamId, storageId, inventoryContentString);
-        // }else{
-        //     sqlManager.updateStorageContent(teamId, storageId, inventoryContentString);
-        // }
         
         storage.saveStorageToCache();
         storage.saveStorageToDatabase();

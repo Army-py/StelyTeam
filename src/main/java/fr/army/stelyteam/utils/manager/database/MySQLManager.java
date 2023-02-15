@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -971,6 +973,34 @@ public class MySQLManager extends DatabaseManager {
                 }
                 queryAlliance.close();
                 return alliances;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Map<Integer, Storage> getTeamStorages(Team team){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT s.storageId, s.storageContent FROM teamStorage AS ts INNER JOIN team AS t ON ts.teamId = t.teamId WHERE t.teamName = ?;");
+                query.setString(1, team.getTeamName());
+                ResultSet result = query.executeQuery();
+                Map<Integer, Storage> teamStorage = new HashMap<>();
+                while(result.next()){
+                    teamStorage.put(
+                        result.getInt("storageId"),
+                        new Storage(
+                            team,
+                            result.getInt("storageId"),
+                            null,
+                            result.getBytes("storageContent")
+                        )
+                    );
+                }
+                query.close();
+                return teamStorage;
             } catch (SQLException e) {
                 e.printStackTrace();
             }

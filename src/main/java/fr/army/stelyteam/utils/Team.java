@@ -3,6 +3,7 @@ package fr.army.stelyteam.utils;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -22,11 +23,12 @@ public class Team {
     private String creationDate = getCurrentDate();
     private Integer improvLvlMembers = 0;
     private Integer teamStorageLvl = 0;
-    private boolean unlockedTeamBank = false;
+    private Boolean unlockedTeamBank = false;
     private String teamOwnerName;
     private ArrayList<Member> teamMembers;
     private ArrayList<Permission> teamPermissions;
     private ArrayList<Alliance> teamAlliances;
+    private Map<Integer, Storage> teamStorages;
 
     public Team(String teamName, String teamPrefix, String teamDescription, double teamMoney, String creationDate, int improvLvlMembers, int teamStorageLvl, boolean unlockedTeamBank, String teamOwnerName){
         this.teamName = teamName;
@@ -42,6 +44,7 @@ public class Team {
         this.teamMembers = this.plugin.getDatabaseManager().getTeamMembers(teamName);
         this.teamPermissions = this.plugin.getDatabaseManager().getTeamAssignement(teamName);
         this.teamAlliances = this.plugin.getDatabaseManager().getTeamAlliances(teamName);
+        this.teamStorages = this.plugin.getDatabaseManager().getTeamStorages(this);
     }
 
     public Team(String teamName, String teamPrefix, String creationDate, String teamOwnerName){
@@ -303,6 +306,16 @@ public class Team {
             if (member.getMemberName().equals(playerName)) return member.getTeamRank();
         }
         return null;
+    }
+
+    
+    public boolean hasStorage(int storageId){
+        return this.teamStorages.containsKey(storageId);
+    }
+
+
+    public Storage getStorage(int storageId){
+        return this.teamStorages.get(storageId);
     }
 
 

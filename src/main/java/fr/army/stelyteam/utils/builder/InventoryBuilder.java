@@ -513,9 +513,15 @@ public class InventoryBuilder {
         }else{
             inventory = Bukkit.createInventory(null, slots, inventoryName);
 
-            if (sqlManager.teamHasStorage(teamName, storageId)){
-                byte[] contentString = sqlManager.getStorageContent(team.getTeamName(), storageId);
-                ItemStack[] content = serializeManager.deserializeFromByte(contentString);
+            // if (sqlManager.teamHasStorage(teamName, storageId)){
+            //     byte[] contentString = sqlManager.getStorageContent(team.getTeamName(), storageId);
+            //     ItemStack[] content = serializeManager.deserializeFromByte(contentString);
+            //     inventory.setContents(content);
+            // }
+
+            if (team.hasStorage(storageId)){
+                byte[] contentBytes = team.getStorage(storageId).getStorageContent();
+                ItemStack[] content = serializeManager.deserializeFromByte(contentBytes);
                 inventory.setContents(content);
             }
         }

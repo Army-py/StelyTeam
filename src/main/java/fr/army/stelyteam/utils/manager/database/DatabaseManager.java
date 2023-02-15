@@ -3,6 +3,7 @@ package fr.army.stelyteam.utils.manager.database;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Map;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -132,6 +133,8 @@ public abstract class DatabaseManager {
     public abstract ArrayList<Permission> getTeamAssignement(String teamName);
 
     public abstract ArrayList<Alliance> getTeamAlliances(String teamName);
+
+    public abstract Map<Integer, Storage> getTeamStorages(Team team);
 
     public abstract int getPlayerId(String playerName);
 
