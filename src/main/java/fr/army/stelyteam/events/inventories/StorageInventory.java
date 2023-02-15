@@ -55,7 +55,6 @@ public class StorageInventory {
         Team team = sqlManager.getTeamFromPlayerName(playerName);
         Integer storageId = getStorageId(clickEvent.getView().getTitle());
         String itemName;
-        String storageName;
         
         if (clickEvent.getCurrentItem() != null){
             Material material = clickEvent.getCurrentItem().getType();
@@ -65,14 +64,11 @@ public class StorageInventory {
                 return;
             }else if (itemName.equals(config.getString("inventories.storage.previous.itemName"))){
                 clickEvent.setCancelled(true);
-                storageName = config.getString(config.getString("inventories.storageDirectory."+plugin.getStorageFromId(storageId-1)+".itemName"));
-                player.openInventory(inventoryBuilder.createStorageInventory(team, storageId-1, storageName));
+                player.openInventory(inventoryBuilder.createStorageInventory(team, storageId-1));
                 return;
             }else if (itemName.equals(config.getString("inventories.storage.next.itemName"))){
                 clickEvent.setCancelled(true);
-                storageName = config.getString(config.getString("inventories.storageDirectory."+plugin.getStorageFromId(storageId+1)+".itemName"));
-                player.openInventory(inventoryBuilder.createStorageInventory(team, storageId+1, storageName));
-                return;
+                player.openInventory(inventoryBuilder.createStorageInventory(team, storageId+1));
             }else{
                 if (itemName.equals(config.getString("inventories.storage.close.itemName"))){
                     clickEvent.setCancelled(true);

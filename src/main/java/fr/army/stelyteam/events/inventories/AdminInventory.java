@@ -6,6 +6,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.utils.Team;
+import fr.army.stelyteam.utils.TeamInventory;
 import fr.army.stelyteam.utils.builder.InventoryBuilder;
 import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
@@ -17,8 +19,13 @@ public class AdminInventory {
     private DatabaseManager sqlManager;
     private InventoryBuilder inventoryBuilder;
 
+    public AdminInventory(StelyTeamPlugin plugin) {
+        this.config = plugin.getConfig();
+        this.sqlManager = plugin.getDatabaseManager();
+        this.inventoryBuilder = plugin.getInventoryBuilder();
+    }
 
-    public AdminInventory(InventoryClickEvent event, StelyTeamPlugin plugin) {
+    public AdminInventory(StelyTeamPlugin plugin, InventoryClickEvent event) {
         this.event = event;
         this.config = plugin.getConfig();
         this.sqlManager = plugin.getDatabaseManager();

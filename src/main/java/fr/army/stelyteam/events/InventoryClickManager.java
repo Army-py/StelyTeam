@@ -37,7 +37,7 @@ public class InventoryClickManager implements Listener{
         
         if (event.getCurrentItem() != null){
             if (event.getView().getTitle().equals(config.getString("inventoriesName.admin"))){
-                new AdminInventory(event, plugin).onInventoryClick();
+                new AdminInventory(plugin, event).onInventoryClick();
             }else if (event.getView().getTitle().equals(config.getString("inventoriesName.confirmInventory"))){
                 new ConfirmInventory(event, plugin).onInventoryClick();
             }else if (event.getView().getTitle().equals(config.getString("inventoriesName.createTeam"))){

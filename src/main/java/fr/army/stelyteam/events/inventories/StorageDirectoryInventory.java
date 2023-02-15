@@ -52,7 +52,7 @@ public class StorageDirectoryInventory {
 
                 if (itemName.equals(name) && itemType.equals(type)){
                     // Inventory inventory = inventoryBuilder.createStorageInventory(teamId, storageId, name);
-                    Inventory inventory = inventoryBuilder.createStorageInventory(team, storageId, name);
+                    Inventory inventory = inventoryBuilder.createStorageInventory(team, storageId);
                     player.openInventory(inventory);
                     return;
                 }
