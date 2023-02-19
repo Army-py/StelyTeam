@@ -616,7 +616,6 @@ public class InventoryBuilder {
 
     public Inventory createEditAlliancesInventory(String playername, Team team) {
         Integer slots = config.getInt("inventoriesSlots.editAlliances");
-        String teamName = team.getTeamName();
         Inventory inventory = Bukkit.createInventory(null, slots, config.getString("inventoriesName.editAlliances"));
         Integer maxMembers = config.getInt("teamMaxMembers");
 
@@ -644,7 +643,7 @@ public class InventoryBuilder {
 
             
             lore = replaceInLore(lore, "%OWNER%", allianceOwnerName);
-            lore = replaceInLore(lore, "%NAME%", teamName);
+            lore = replaceInLore(lore, "%NAME%", allianceName);
             lore = replaceInLore(lore, "%PREFIX%", colorsBuilder.replaceColor(alliancePrefix));
             lore = replaceInLore(lore, "%DATE%", allianceDate);
             lore = replaceInLore(lore, "%MEMBER_COUNT%", IntegerToString(teamMembers));
