@@ -225,15 +225,15 @@ public class Team {
                 }else if (openInventoryTitle.equals(config.getString("inventoriesName.member"))){
                     player.openInventory(inventoryBuilder.createMemberInventory(player.getName(), this));
                 }else if (openInventoryTitle.equals(config.getString("inventoriesName.upgradeTotalMembers"))){
-                    player.openInventory(inventoryBuilder.createUpgradeTotalMembersInventory(player.getName(), this));
+                    player.openInventory(inventoryBuilder.createUpgradeTotalMembersInventory(this));
                 }else if (openInventoryTitle.equals(config.getString("inventoriesName.editMembers"))){
                     player.openInventory(inventoryBuilder.createEditMembersInventory(player.getName(), this));
                 }else if (openInventoryTitle.equals(config.getString("inventoriesName.teamMembers"))){
                     player.openInventory(inventoryBuilder.createMembersInventory(this));
                 }else if (openInventoryTitle.equals(config.getString("inventoriesName.permissions"))){
-                    player.openInventory(inventoryBuilder.createPermissionsInventory(player.getName(), this));
+                    player.openInventory(inventoryBuilder.createPermissionsInventory(this));
                 }else if (openInventoryTitle.equals(config.getString("inventoriesName.storageDirectory"))){
-                    player.openInventory(inventoryBuilder.createStorageDirectoryInventory(player.getName(), this));
+                    player.openInventory(inventoryBuilder.createStorageDirectoryInventory(this));
                 }
             }
         }

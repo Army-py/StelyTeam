@@ -211,7 +211,7 @@ public class InventoryBuilder {
     }
 
 
-    public Inventory createUpgradeTotalMembersInventory(String playername, Team team) {
+    public Inventory createUpgradeTotalMembersInventory(Team team) {
         Integer slots = config.getInt("inventoriesSlots.upgradeTotalMembers");
         Integer level = team.getImprovLvlMembers();
         Inventory inventory = Bukkit.createInventory(null, slots, config.getString("inventoriesName.upgradeTotalMembers"));
@@ -249,7 +249,7 @@ public class InventoryBuilder {
     }
 
 
-    public Inventory createUpgradeStorageInventory(String playername, Team team) {
+    public Inventory createUpgradeStorageInventory(Team team) {
         Integer slots = config.getInt("inventoriesSlots.upgradeStorageAmount");
         Integer level = team.getTeamStorageLvl();
         Inventory inventory = Bukkit.createInventory(null, slots, config.getString("inventoriesName.upgradeStorageAmount"));
@@ -418,7 +418,7 @@ public class InventoryBuilder {
     }
 
 
-    public Inventory createPermissionsInventory(String playerName, Team team) {
+    public Inventory createPermissionsInventory(Team team) {
         Integer slots = config.getInt("inventoriesSlots.permissions");
         Inventory inventory = Bukkit.createInventory(null, slots, config.getString("inventoriesName.permissions"));
 
@@ -464,7 +464,7 @@ public class InventoryBuilder {
     }
 
 
-    public Inventory createStorageDirectoryInventory(String playerName, Team team) {
+    public Inventory createStorageDirectoryInventory(Team team) {
         Integer slots = config.getInt("inventoriesSlots.storageDirectory");
         Inventory inventory = Bukkit.createInventory(null, slots, config.getString("inventoriesName.storageDirectory"));
         Integer level = team.getTeamStorageLvl();
@@ -788,7 +788,7 @@ public class InventoryBuilder {
     }
 
 
-	public void emptyCases(Inventory inventory, Integer slots, Integer start) {
+	private void emptyCases(Inventory inventory, Integer slots, Integer start) {
 		ItemStack item = new ItemStack(Material.getMaterial(config.getString("emptyCase")), 1);
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName(" ");
@@ -799,7 +799,7 @@ public class InventoryBuilder {
 		}
 	}
 
-    public void emptyCases(Inventory inventory, List<Integer> list) {
+    private void emptyCases(Inventory inventory, List<Integer> list) {
 		ItemStack item = new ItemStack(Material.getMaterial(config.getString("emptyCase")), 1);
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName(" ");

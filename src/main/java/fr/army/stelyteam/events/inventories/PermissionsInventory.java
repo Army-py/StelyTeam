@@ -78,7 +78,7 @@ public class PermissionsInventory {
                     team.insertAssignement(permission, defaultRankId);
                 }
             }else return;
-            Inventory inventory = inventoryBuilder.createPermissionsInventory(playerName, team);
+            Inventory inventory = inventoryBuilder.createPermissionsInventory(team);
             player.openInventory(inventory);
             team.refreshTeamMembersInventory(playerName);
         }

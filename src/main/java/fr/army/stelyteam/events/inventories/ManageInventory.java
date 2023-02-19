@@ -101,12 +101,12 @@ public class ManageInventory {
 
 
         }else if (itemName.equals(config.getString("inventories.manage.upgradeTotalMembers.itemName"))){
-            Inventory inventory = inventoryBuilder.createUpgradeTotalMembersInventory(playerName, team);
+            Inventory inventory = inventoryBuilder.createUpgradeTotalMembersInventory(team);
             player.openInventory(inventory);
 
 
         }else if (itemName.equals(config.getString("inventories.manage.upgradeStorageAmount.itemName"))){
-            Inventory inventory = inventoryBuilder.createUpgradeStorageInventory(playerName, team);
+            Inventory inventory = inventoryBuilder.createUpgradeStorageInventory(team);
             player.openInventory(inventory);
 
 
@@ -149,7 +149,7 @@ public class ManageInventory {
 
 
         }else if (itemName.equals(config.getString("inventories.manage.editPermissions.itemName"))){
-            Inventory inventory = inventoryBuilder.createPermissionsInventory(playerName, team);
+            Inventory inventory = inventoryBuilder.createPermissionsInventory(team);
             player.openInventory(inventory);
 
 

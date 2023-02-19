@@ -172,7 +172,7 @@ public class ConfirmInventory {
                     economyManager.removeMoneyPlayer(player, config.getDouble("prices.upgrade.teamPlaces.level"+newLevel));
                     player.sendMessage(messageManager.getReplaceMessage("manage_team.upgrade_member_amount.new_upgrade", newLevel.toString()));
 
-                    inventory = inventoryBuilder.createUpgradeTotalMembersInventory(playerName, team);
+                    inventory = inventoryBuilder.createUpgradeTotalMembersInventory(team);
                     player.openInventory(inventory);
                     team.refreshTeamMembersInventory(playerName);
                     team.teamBroadcast(playerName, messageManager.replaceTeamId("broadcasts.new_member_amount_upgrade", team.getTeamName()));
@@ -184,7 +184,7 @@ public class ConfirmInventory {
                     economyManager.removeMoneyPlayer(player, config.getDouble("prices.upgrade.teamStorages.level"+newLevel));
                     player.sendMessage(messageManager.getReplaceMessage("manage_team.upgrade_storages.new_upgrade", newLevel.toString()));
 
-                    inventory = inventoryBuilder.createUpgradeStorageInventory(playerName, team);
+                    inventory = inventoryBuilder.createUpgradeStorageInventory(team);
                     player.openInventory(inventory);
                     team.refreshTeamMembersInventory(playerName);
                     team.teamBroadcast(playerName, messageManager.replaceTeamId("broadcasts.new_storage_upgrade", team.getTeamName()));
@@ -246,11 +246,11 @@ public class ConfirmInventory {
                     player.openInventory(inventory);
                     break;
                 case IMPROV_LVL_MEMBERS:
-                    inventory = inventoryBuilder.createUpgradeTotalMembersInventory(playerName, team);
+                    inventory = inventoryBuilder.createUpgradeTotalMembersInventory(team);
                     player.openInventory(inventory);
                     break;
                 case IMPROV_LVL_STORAGE:
-                    inventory = inventoryBuilder.createUpgradeStorageInventory(playerName, team);
+                    inventory = inventoryBuilder.createUpgradeStorageInventory(team);
                     player.openInventory(inventory);
                     break;
                 case LEAVE_TEAM:
