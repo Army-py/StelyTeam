@@ -30,7 +30,7 @@ public class ConvGetTeamName extends StringPrompt {
         this.sqlManager = plugin.getDatabaseManager();
         this.config = plugin.getConfig();
         this.messageManager = plugin.getMessageManager();
-        this.conversationBuilder = plugin.getConversationBuilder();
+        this.conversationBuilder = new ConversationBuilder(plugin);
     }
 
     @Override

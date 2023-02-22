@@ -85,6 +85,16 @@ public class CacheManager {
         return false;
     }
 
+    public boolean containsActionName(TemporaryActionNames actionName){
+        if (cachedTempAction.isEmpty()) return false;
+        for(TemporaryAction tempAction : cachedTempAction){
+            if(tempAction.getActionName().equals(actionName)){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void setActionTeamPrefix(String playerName, String teamPrefix){
         TemporaryAction action = getTempAction(playerName);
         Team team = action.getTeam();
