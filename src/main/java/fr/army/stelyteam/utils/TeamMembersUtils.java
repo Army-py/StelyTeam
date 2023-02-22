@@ -10,6 +10,7 @@ import org.bukkit.inventory.Inventory;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.utils.builder.InventoryBuilder;
+import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.MySQLManager;
 
 public class TeamMembersUtils {
@@ -18,6 +19,7 @@ public class TeamMembersUtils {
     private MySQLManager sqlManager;
     private YamlConfiguration config;
     private InventoryBuilder inventoryBuilder;
+    private CacheManager cacheManager;
 
 
     public TeamMembersUtils(StelyTeamPlugin plugin) {
@@ -25,6 +27,7 @@ public class TeamMembersUtils {
         this.sqlManager = plugin.getSQLManager();
         this.config = plugin.getConfig();
         this.inventoryBuilder = new InventoryBuilder(plugin);
+        this.cacheManager = plugin.getCacheManager();
     }
 
 
@@ -34,6 +37,10 @@ public class TeamMembersUtils {
         Inventory inventory;
 
         if (!sqlManager.isMember(playerName)){
+            // if (cacheManager.containsActionName(TemporaryActionNames.CREATE_TEAM)){
+            //     player.sendMessage(config.getString("common.team_already_in_creation"));
+            //     return;
+            // }
             inventory = inventoryBuilder.createTeamInventory();
         }else if(sqlManager.isOwner(player.getName())){
             inventory = inventoryBuilder.createAdminInventory();

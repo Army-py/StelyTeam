@@ -26,7 +26,7 @@ public class ConversationBuilder {
         ConversationFactory cf = new ConversationFactory(plugin);
 
         cf.withFirstPrompt(prompt);
-        cf.withLocalEcho(true);
+        cf.withLocalEcho(false);
         cf.addConversationAbandonedListener(new ConversationAbandoned(plugin));
         cf.withConversationCanceller(new ConversationSetCanceller(plugin));
         cf.withTimeout(config.getInt("conversationTimeout"));

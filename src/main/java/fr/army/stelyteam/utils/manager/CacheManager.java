@@ -21,8 +21,8 @@ public class CacheManager {
     // {authorName, currentPage, maxElementsPerPage, teams}
     private ArrayList<Page> cachedPages = new ArrayList<Page>();
     
-    // {teamName, teamPrefix, teamDescription, teamMoney, creationDate, improvLvlMembers, teamStorageLvl, unlockedTeamBank, teamOwnerName, teamMembers, teamPermissions, teamAlliances}
-    private ArrayList<Team> cachedTeam = new ArrayList<Team>();
+    // {teamName, teamPrefix, teamDescription, teamMoney, creationDate, improvLvlMembers, teamStorageLvl, unlockedTeamBank, teamOwnerName}
+    // private ArrayList<Team> cachedTeam = new ArrayList<Team>();
 
 
 
@@ -82,6 +82,16 @@ public class CacheManager {
         if (cachedTempAction.isEmpty()) return false;
         for(TemporaryAction tempAction : cachedTempAction){
             if((tempAction.getSenderName().equals(playerName) || tempAction.getReceiverName().equals(playerName)) && tempAction.getActionName().equals(actionName)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean containsActionName(TemporaryActionNames actionName){
+        if (cachedTempAction.isEmpty()) return false;
+        for(TemporaryAction tempAction : cachedTempAction){
+            if(tempAction.getActionName().equals(actionName)){
                 return true;
             }
         }
@@ -180,50 +190,6 @@ public class CacheManager {
     public boolean containsPage(String authorName){
         for(Page page : cachedPages){
             if(page.getAuthorName().equals(authorName)){
-                return true;
-            }
-        }
-        return false;
-    }
-
-
-    public void addTeam(Team team){
-        cachedTeam.add(team);
-    }
-
-    public void removeTeam(Team team){
-        cachedTeam.remove(team);
-    }
-
-    public Team getTeam(String teamName){
-        for(Team team : cachedTeam){
-            if(team.getTeamName().equals(teamName)){
-                return team;
-            }
-        }
-        return null;
-    }
-
-    public void replaceTeam(Team team){
-        for(Team cachedTeam : cachedTeam){
-            if(cachedTeam.getTeamName().equals(team.getTeamName())){
-                cachedTeam = team;
-            }
-        }
-    }
-
-    public boolean containsTeam(String teamName){
-        for(Team team : cachedTeam){
-            if(team.getTeamName().equals(teamName)){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean containsTeam(Team team){
-        for(Team cachedTeam : cachedTeam){
-            if(cachedTeam.getTeamName().equals(team.getTeamName())){
                 return true;
             }
         }

@@ -26,3 +26,4 @@ public class Alliance {
         this.allianceDate = allianceDate;
     }
 }
+
