@@ -1,4 +1,4 @@
-package fr.army.stelyteam.events.inventories;
+package fr.army.stelyteam.events.menu;
 
 import java.util.List;
 
@@ -17,40 +17,40 @@ import fr.army.stelyteam.utils.builder.ItemBuilder;
 import fr.army.stelyteam.utils.manager.MessageManager;
 
 
-
-public class UpgradeMembersInventory extends TeamMenu {
+public class UpgradeStorageInventory extends TeamMenu {
 
     final MessageManager messageManager = plugin.getMessageManager();
 
-    public UpgradeMembersInventory(Player viewer){
+    public UpgradeStorageInventory(Player viewer){
         super(viewer);
     }
 
 
     public Inventory createInventory(Team team) {
-        Integer slots = config.getInt("inventoriesSlots.upgradeTotalMembers");
-        Integer level = team.getImprovLvlMembers();
-        Inventory inventory = Bukkit.createInventory(this, slots, config.getString("inventoriesName.upgradeTotalMembers"));
+        Integer slots = config.getInt("inventoriesSlots.upgradeStorageAmount");
+        Integer level = team.getTeamStorageLvl();
+        Inventory inventory = Bukkit.createInventory(this, slots, config.getString("inventoriesName.upgradeStorageAmount"));
         Material material;
         String headTexture;
 
         emptyCases(inventory, slots, 0);
 
-        for(String str : config.getConfigurationSection("inventories.upgradeTotalMembers").getKeys(false)){
-            Integer slot = config.getInt("inventories.upgradeTotalMembers."+str+".slot");
-            String name = config.getString("inventories.upgradeTotalMembers."+str+".itemName");
-            List<String> lore = config.getStringList("inventories.upgradeTotalMembers."+str+".lore");
-
+        for(String str : config.getConfigurationSection("inventories.upgradeStorageAmount").getKeys(false)){
+            Integer slot = config.getInt("inventories.upgradeStorageAmount."+str+".slot");
+            String name = config.getString("inventories.upgradeStorageAmount."+str+".itemName");
+            List<String> lore = config.getStringList("inventories.upgradeStorageAmount."+str+".lore");
+            
             if (str.equals("close")){
-                material = Material.getMaterial(config.getString("inventories.upgradeTotalMembers."+str+".itemType"));
-                headTexture = config.getString("inventories.upgradeTotalMembers."+str+".headTexture");
-            }else if (level >= config.getInt("inventories.upgradeTotalMembers."+str+".level")){
-                material = Material.getMaterial(config.getString("inventories.upgradeTotalMembers."+str+".unlock.itemType"));
-                headTexture = config.getString("inventories.upgradeTotalMembers."+str+".unlock.headTexture");
+                material = Material.getMaterial(config.getString("inventories.upgradeStorageAmount."+str+".itemType"));
+                headTexture = config.getString("inventories.upgradeStorageAmount."+str+".headTexture");
+            }else if (level >= config.getInt("inventories.upgradeStorageAmount."+str+".level")){
+                material = Material.getMaterial(config.getString("inventories.upgradeStorageAmount."+str+".unlock.itemType"));
+                headTexture = config.getString("inventories.upgradeStorageAmount."+str+".unlock.headTexture");
             }else{
-                material = Material.getMaterial(config.getString("inventories.upgradeTotalMembers."+str+".lock.itemType"));
-                headTexture = config.getString("inventories.upgradeTotalMembers."+str+".lock.headTexture");
+                material = Material.getMaterial(config.getString("inventories.upgradeStorageAmount."+str+".lock.itemType"));
+                headTexture = config.getString("inventories.upgradeStorageAmount."+str+".lock.headTexture");
             }
+
             inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, false));
         }
         return inventory;
@@ -70,20 +70,21 @@ public class UpgradeMembersInventory extends TeamMenu {
         Material material = clickEvent.getCurrentItem().getType();
 
         Team team = plugin.getDatabaseManager().getTeamFromPlayerName(playerName);
-        Integer level = team.getImprovLvlMembers();
+        Integer level = team.getTeamStorageLvl();
         
         // Gestion des items
-        if (itemName.equals(config.getString("inventories.upgradeTotalMembers.close.itemName"))){
+        if (itemName.equals(config.getString("inventories.upgradeStorageAmount.close.itemName"))){
+            // Retour en arrière de l'inventaire
             // Inventory inventory = inventoryBuilder.createManageInventory(playerName, team);
             // player.openInventory(inventory);
             new ManageInventory(player).openMenu(team);
         }else if (!material.name().equals(config.getString("emptyCase"))){
-            for(String str : config.getConfigurationSection("inventories.upgradeTotalMembers").getKeys(false)){
-                String name = config.getString("inventories.upgradeTotalMembers."+str+".itemName");
+            for(String str : config.getConfigurationSection("inventories.upgradeStorageAmount").getKeys(false)){
+                String name = config.getString("inventories.upgradeStorageAmount."+str+".itemName");
                 
-                if (itemName.equals(name) && level+1 == config.getInt("inventories.upgradeTotalMembers."+str+".level")){
-                    if (plugin.getEconomyManager().checkMoneyPlayer(player, config.getDouble("prices.upgrade.teamPlaces.level"+(level+1)))){
-                        plugin.getCacheManager().addTempAction(new TemporaryAction(playerName, TemporaryActionNames.IMPROV_LVL_MEMBERS, team));
+                if (itemName.equals(name) && level+1 == config.getInt("inventories.upgradeStorageAmount."+str+".level")){
+                    if (plugin.getEconomyManager().checkMoneyPlayer(player, config.getDouble("prices.upgrade.teamStorages.level"+(level+1)))){
+                        plugin.getCacheManager().addTempAction(new TemporaryAction(playerName, TemporaryActionNames.IMPROV_LVL_STORAGE, team));
                         // Inventory inventory = inventoryBuilder.createConfirmInventory();
                         // player.openInventory(inventory);
                         new ConfirmInventory(player).openMenu();
@@ -93,14 +94,14 @@ public class UpgradeMembersInventory extends TeamMenu {
                         player.sendMessage(messageManager.getMessage("common.not_enough_money"));
                         return;
                     }
-                }else if (itemName.equals(name) && level >= config.getInt("inventories.upgradeTotalMembers."+str+".level")){
+                }else if (itemName.equals(name) && level >= config.getInt("inventories.upgradeStorageAmount."+str+".level")){
                     // player.sendMessage("Vous avez déjà débloqué cette amélioration");
                     player.sendMessage(messageManager.getMessage("common.already_unlocked"));
                     return;
                 }
             }
             // player.sendMessage("Vous devez débloquer le niveau précédent pour pouvoir acheter cette amélioration"); 
-            player.sendMessage(messageManager.getMessage("manage_team.upgrade_member_amount.must_unlock_previous_level"));
+            player.sendMessage(messageManager.getMessage("manage_team.upgrade_storages.must_unlock_previous_level"));
         }
     }
 

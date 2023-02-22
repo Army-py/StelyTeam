@@ -8,7 +8,7 @@ import org.bukkit.inventory.Inventory;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.commands.SubCommand;
-import fr.army.stelyteam.events.inventories.CreateTeamInventory;
+import fr.army.stelyteam.events.menu.CreateTeamInventory;
 import fr.army.stelyteam.utils.manager.CacheManager;
 
 public class SubCmdList extends SubCommand {

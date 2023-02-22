@@ -11,14 +11,14 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.events.inventories.AdminInventory;
-import fr.army.stelyteam.events.inventories.EditMembersInventory;
-import fr.army.stelyteam.events.inventories.ManageInventory;
-import fr.army.stelyteam.events.inventories.MemberInventory;
-import fr.army.stelyteam.events.inventories.MembersInventory;
-import fr.army.stelyteam.events.inventories.PermissionsInventory;
-import fr.army.stelyteam.events.inventories.StorageDirectoryInventory;
-import fr.army.stelyteam.events.inventories.UpgradeMembersInventory;
+import fr.army.stelyteam.events.menu.AdminInventory;
+import fr.army.stelyteam.events.menu.EditMembersInventory;
+import fr.army.stelyteam.events.menu.ManageInventory;
+import fr.army.stelyteam.events.menu.MemberInventory;
+import fr.army.stelyteam.events.menu.MembersInventory;
+import fr.army.stelyteam.events.menu.PermissionsInventory;
+import fr.army.stelyteam.events.menu.StorageDirectoryInventory;
+import fr.army.stelyteam.events.menu.UpgradeMembersInventory;
 
 public class Team {
     private StelyTeamPlugin plugin = StelyTeamPlugin.getPlugin();

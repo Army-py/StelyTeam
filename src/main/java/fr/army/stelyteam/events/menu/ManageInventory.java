@@ -1,4 +1,4 @@
-package fr.army.stelyteam.events.inventories;
+package fr.army.stelyteam.events.menu;
 
 import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.TeamMenu;
