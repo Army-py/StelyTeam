@@ -13,13 +13,13 @@ import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.TemporaryActionNames;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.SQLManager;
+import fr.army.stelyteam.utils.manager.MySQLManager;
 
 public class SubCmdAccept extends SubCommand {
 
     private StelyTeamPlugin plugin;
     private CacheManager cacheManager;
-    private SQLManager sqlManager;
+    private MySQLManager sqlManager;
     private MessageManager messageManager;
     private TeamMembersUtils teamMembersUtils;
 

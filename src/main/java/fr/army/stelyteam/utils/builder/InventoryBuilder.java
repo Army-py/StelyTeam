@@ -21,18 +21,18 @@ import fr.army.stelyteam.utils.Page;
 import fr.army.stelyteam.utils.Storage;
 import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.manager.CacheManager;
-import fr.army.stelyteam.utils.manager.SQLManager;
+import fr.army.stelyteam.utils.manager.MySQLManager;
 import fr.army.stelyteam.utils.manager.SQLiteManager;
-import fr.army.stelyteam.utils.manager.SerializeManager;
+import fr.army.stelyteam.utils.manager.serializer.ItemStackSerializer;
 
 public class InventoryBuilder {
 
     private StelyTeamPlugin plugin;
     private CacheManager cacheManager;
     private YamlConfiguration config;
-    private SQLManager sqlManager;
+    private MySQLManager sqlManager;
     private SQLiteManager sqliteManager;
-    private SerializeManager serializeManager;
+    private ItemStackSerializer serializeManager;
     private ColorsBuilder colorsBuilder;
 
 
@@ -42,7 +42,7 @@ public class InventoryBuilder {
         this.config = plugin.getConfig();
         this.sqlManager = plugin.getSQLManager();
         this.sqliteManager = plugin.getSQLiteManager();
-        this.serializeManager = new SerializeManager();
+        this.serializeManager = new ItemStackSerializer();
         this.colorsBuilder = new ColorsBuilder(plugin);
     }
 
@@ -496,25 +496,18 @@ public class InventoryBuilder {
         Inventory inventory;
 
         if (cacheManager.containsStorage(team, storageId)){
-            inventory = cacheManager.getStorage(team, storageId).getStorageInstance();
+            inventory = cacheManager.getStorage(team, storageId).getInventoryInstance();
         }else{
             inventory = Bukkit.createInventory(null, slots, storageName);
-            cacheManager.addStorage(
-                new Storage(
-                    team,
-                    storageId,
-                    inventory,
-                    serializeManager.serialize(inventory.getContents()))
-            );
 
             if (sqlManager.teamHasStorage(team.getTeamName(), storageId)){
-                String contentString = sqlManager.getStorageContent(team.getTeamName(), storageId);
-                ItemStack[] content = serializeManager.deserialize(contentString);
+                byte[] contentString = sqlManager.getStorageContent(team.getTeamName(), storageId);
+                ItemStack[] content = serializeManager.deserializeFromByte(contentString);
                 inventory.setContents(content);
             }
         }
 
-        emptyCases(inventory, slots, slots-9);
+        emptyCases(inventory, config.getIntegerList("inventories.storage.emptyCase.slots"));
 
         for(String str : config.getConfigurationSection("inventories.storage").getKeys(false)){
             Integer slot = config.getInt("inventories.storage."+str+".slot");
@@ -527,6 +520,8 @@ public class InventoryBuilder {
                 if (storageId == plugin.getMinStorageId()) continue;
             }else if (str.equals("next")){
                 if (storageId == sqlManager.getTeamStorageLvl(team.getTeamName())) continue;
+            }else if (str.equals("emptyCase")){
+                continue;
             }
 
             inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, false));
@@ -784,5 +779,16 @@ public class InventoryBuilder {
         for(int i = start; i < slots; i++) {
 			inventory.setItem(i, item);
 		}
+	}
+
+    public void emptyCases(Inventory inventory, List<Integer> list) {
+		ItemStack item = new ItemStack(Material.getMaterial(config.getString("emptyCase")), 1);
+		ItemMeta meta = item.getItemMeta();
+		meta.setDisplayName(" ");
+		item.setItemMeta(meta);
+
+        for(int i : list) {
+            inventory.setItem(i, item);
+        }
 	}
 }

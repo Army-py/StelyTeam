@@ -9,12 +9,12 @@ import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.commands.SubCommand;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
 import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.SQLManager;
+import fr.army.stelyteam.utils.manager.MySQLManager;
 
 public class SubCmdEditPrefix extends SubCommand {
 
     private MessageManager messageManager;
-    private SQLManager sqlManager;
+    private MySQLManager sqlManager;
     private ColorsBuilder colorsBuilder;
 
     public SubCmdEditPrefix(StelyTeamPlugin plugin) {

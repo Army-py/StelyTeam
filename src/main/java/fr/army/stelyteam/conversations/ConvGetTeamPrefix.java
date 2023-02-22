@@ -8,7 +8,7 @@ import fr.army.stelyteam.utils.builder.ColorsBuilder;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.EconomyManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.SQLManager;
+import fr.army.stelyteam.utils.manager.MySQLManager;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.conversations.ConversationContext;
@@ -21,7 +21,7 @@ public class ConvGetTeamPrefix extends StringPrompt {
 
     private StelyTeamPlugin plugin;
     private CacheManager cacheManager;
-    private SQLManager sqlManager;
+    private MySQLManager sqlManager;
     private YamlConfiguration config;
     private MessageManager messageManager;
     private EconomyManager economyManager;

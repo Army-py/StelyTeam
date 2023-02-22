@@ -2,17 +2,28 @@ package fr.army.stelyteam.utils;
 
 import org.bukkit.inventory.Inventory;
 
+import fr.army.stelyteam.StelyTeamPlugin;
+
 public class Storage {
     private Team team;
     private Integer storageId;
-    private Inventory storageInstance;
-    private String storageContent;
+    private Inventory inventoryInstance;
+    private byte[] storageContent;
 
-    public Storage(Team team, Integer storageId, Inventory storageInstance, String storageContent){
+    public Storage(Team team, Integer storageId, Inventory inventoryInstance, byte[] storageContent){
         this.team = team;
         this.storageId = storageId;
-        this.storageInstance = storageInstance;
+        this.inventoryInstance = inventoryInstance;
         this.storageContent = storageContent;
+    }
+
+
+    public void saveStorageToCache(){
+        StelyTeamPlugin.getPlugin().getCacheManager().saveStorage(this);
+    }
+
+    public void saveStorageToDatabase(){
+        StelyTeamPlugin.getPlugin().getSQLManager().saveStorage(this);
     }
 
     public Team getTeam() {
@@ -23,11 +34,11 @@ public class Storage {
         return storageId;
     }
 
-    public Inventory getStorageInstance() {
-        return storageInstance;
+    public Inventory getInventoryInstance() {
+        return inventoryInstance;
     }
 
-    public String getStorageContent() {
+    public byte[] getStorageContent() {
         return storageContent;
     }
 
@@ -39,11 +50,11 @@ public class Storage {
         this.storageId = storageId;
     }
 
-    public void setStorageInstance(Inventory storageInstance) {
-        this.storageInstance = storageInstance;
+    public void setStorageInstance(Inventory inventoryInstance) {
+        this.inventoryInstance = inventoryInstance;
     }
 
-    public void setStorageContent(String storageContent) {
+    public void setStorageContent(byte[] storageContent) {
         this.storageContent = storageContent;
     }
 }

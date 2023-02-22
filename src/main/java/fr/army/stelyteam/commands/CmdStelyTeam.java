@@ -35,14 +35,14 @@ import fr.army.stelyteam.utils.TeamMembersUtils;
 import fr.army.stelyteam.utils.builder.InventoryBuilder;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.SQLManager;
+import fr.army.stelyteam.utils.manager.MySQLManager;
 import fr.army.stelyteam.utils.manager.SQLiteManager;
 
 public class CmdStelyTeam implements CommandExecutor, TabCompleter {
 
     private StelyTeamPlugin plugin;
     private CacheManager cacheManager;
-    private SQLManager sqlManager;
+    private MySQLManager sqlManager;
     private SQLiteManager sqliteManager;
     private MessageManager messageManager;
     private InventoryBuilder inventoryBuilder;

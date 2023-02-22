@@ -20,7 +20,7 @@ import fr.army.stelyteam.utils.builder.conversation.ConversationBuilder;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.EconomyManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.SQLManager;
+import fr.army.stelyteam.utils.manager.MySQLManager;
 import fr.army.stelyteam.utils.manager.SQLiteManager;
 
 public class ConfirmInventory {
@@ -30,7 +30,7 @@ public class ConfirmInventory {
     private StelyTeamPlugin plugin;
     private CacheManager cacheManager;
     private YamlConfiguration config;
-    private SQLManager sqlManager;
+    private MySQLManager sqlManager;
     private SQLiteManager sqliteManager;
     private MessageManager messageManager;
     private EconomyManager economyManager;

@@ -11,12 +11,12 @@ import org.bukkit.inventory.Inventory;
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.utils.builder.InventoryBuilder;
 import fr.army.stelyteam.utils.manager.CacheManager;
-import fr.army.stelyteam.utils.manager.SQLManager;
+import fr.army.stelyteam.utils.manager.MySQLManager;
 
 public class TeamMembersUtils {
 
     private StelyTeamPlugin plugin;
-    private SQLManager sqlManager;
+    private MySQLManager sqlManager;
     private YamlConfiguration config;
     private InventoryBuilder inventoryBuilder;
     private CacheManager cacheManager;
