@@ -26,7 +26,7 @@ import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 
 
-public class MemberInventory extends TeamMenu {
+public class MemberMenu extends TeamMenu {
 
     final DatabaseManager mySqlManager = plugin.getDatabaseManager();
     final CacheManager cacheManager = plugin.getCacheManager();
@@ -34,7 +34,7 @@ public class MemberInventory extends TeamMenu {
     final ConversationBuilder conversationBuilder = plugin.getConversationBuilder();
     final ColorsBuilder colorsBuilder = plugin.getColorsBuilder();
 
-    public MemberInventory(Player viewer){
+    public MemberMenu(Player viewer){
         super(viewer);
     }
 
@@ -130,7 +130,7 @@ public class MemberInventory extends TeamMenu {
         // Fermeture ou retour en arrière de l'inventaire
         if (team.isTeamOwner(playerName) || team.getMemberRank(playerName) <= 3){
             if (itemName.equals(config.getString("inventories.member.close.itemName"))){
-                new AdminInventory(player).openMenu();
+                new AdminMenu(player).openMenu();
             }
         }else{
             if (itemName.equals(config.getString("inventories.member.close.itemName"))){
@@ -139,10 +139,10 @@ public class MemberInventory extends TeamMenu {
         }
         
         if (itemName.equals(config.getString("inventories.member.seeTeamMembers.itemName"))){
-            new MembersInventory(player).openMenu(team);
+            new MembersMenu(player).openMenu(team);
         
         }else if (itemName.equals(config.getString("inventories.member.seeTeamAlliances.itemName"))){
-            new AlliancesInventory(player).openMenu(team);
+            new AlliancesMenu(player).openMenu(team);
         
         }else if (itemName.equals(config.getString("inventories.member.addTeamMoney.itemName"))){
             if (!team.isUnlockedTeamBank()) {
@@ -162,12 +162,12 @@ public class MemberInventory extends TeamMenu {
             player.closeInventory();
             if (!team.isTeamOwner(playerName)){
                 cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.EDIT_NAME, team));
-                new ConfirmInventory(player).openMenu();
+                new ConfirmMenu(player).openMenu();
             }else {
                 player.sendMessage(messageManager.getMessage("other.owner_cant_leave_team"));
             }
         }else if (itemName.equals(config.getString("inventories.member.storageDirectory.itemName"))){
-            new StorageDirectoryInventory(player).openMenu(team);
+            new StorageDirectoryMenu(player).openMenu(team);
         }
     }
 

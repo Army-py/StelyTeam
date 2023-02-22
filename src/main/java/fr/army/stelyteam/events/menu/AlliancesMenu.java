@@ -1,6 +1,7 @@
 package fr.army.stelyteam.events.menu;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,35 +14,29 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import fr.army.stelyteam.conversations.ConvAddAlliance;
-import fr.army.stelyteam.conversations.ConvRemoveAlliance;
 import fr.army.stelyteam.utils.Alliance;
 import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.TeamMenu;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
 import fr.army.stelyteam.utils.builder.ItemBuilder;
-import fr.army.stelyteam.utils.builder.conversation.ConversationBuilder;
 import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
 
 
-public class EditAlliancesInventory extends TeamMenu {
+public class AlliancesMenu extends TeamMenu {
 
-    final DatabaseManager mySqlManager = plugin.getDatabaseManager();
-    final SQLiteDataManager sqliteManager = plugin.getSQLiteManager();
-    final ColorsBuilder colorsBuilder = plugin.getColorsBuilder();
-    final ConversationBuilder conversationBuilder = plugin.getConversationBuilder();
+    DatabaseManager mySqlManager = plugin.getDatabaseManager();
+    SQLiteDataManager sqliteManager = plugin.getSQLiteManager();
+    ColorsBuilder colorsBuilder = plugin.getColorsBuilder();
 
-
-    public EditAlliancesInventory(Player viewer){
+    public AlliancesMenu(Player viewer){
         super(viewer);
     }
 
 
     public Inventory createInventory(Team team, String playerName) {
-        Integer slots = config.getInt("inventoriesSlots.editAlliances");
-        Inventory inventory = Bukkit.createInventory(this, slots, config.getString("inventoriesName.editAlliances"));
-        Integer maxMembers = config.getInt("teamMaxMembers");
+        Integer slots = config.getInt("inventoriesSlots.teamAlliances");
+        Inventory inventory = Bukkit.createInventory(this, slots, config.getString("inventoriesName.teamAlliances"));
 
         emptyCases(inventory, slots, 0);
         Integer headSlot = 0;
@@ -51,9 +46,10 @@ public class EditAlliancesInventory extends TeamMenu {
             String alliancePrefix = teamAlliance.getTeamPrefix();
             String allianceOwnerName = teamAlliance.getTeamOwnerName();
             String allianceDate = alliance.getAllianceDate();
-            String allianceDescription = teamAlliance.getTeamDescription();
             Integer teamMembersLelvel = teamAlliance.getImprovLvlMembers();
             Integer teamMembers = teamAlliance.getTeamMembers().size();
+            Integer maxMembers = config.getInt("teamMaxMembers");
+            String allianceDescription = teamAlliance.getTeamDescription();
             ArrayList<String> allianceMembers = teamAlliance.getMembersName();
             UUID playerUUID = sqliteManager.getUUID(allianceOwnerName);
             String itemName = colorsBuilder.replaceColor(alliancePrefix);
@@ -61,10 +57,8 @@ public class EditAlliancesInventory extends TeamMenu {
             OfflinePlayer allianceOwner;
             ItemStack item;
 
-
             if (playerUUID == null) allianceOwner = Bukkit.getOfflinePlayer(allianceOwnerName);
             else allianceOwner = Bukkit.getOfflinePlayer(playerUUID);
-
             
             lore = replaceInLore(lore, "%OWNER%", allianceOwnerName);
             lore = replaceInLore(lore, "%NAME%", allianceName);
@@ -76,13 +70,13 @@ public class EditAlliancesInventory extends TeamMenu {
             lore = replaceInLore(lore, "%DESCRIPTION%", colorsBuilder.replaceColor(allianceDescription));
             
             
-            if (plugin.playerHasPermission(playerName, team, "seeAllliances")){ 
+            if (plugin.playerHasPermission(playerName, team, "seeTeamAlliances")){ 
                 item = ItemBuilder.getPlayerHead(allianceOwner, itemName, lore);
             }else{
                 item = ItemBuilder.getItem(
                     Material.getMaterial(config.getString("noPermission.itemType")), 
                     itemName, 
-                    config.getStringList("noPermission.lore"), 
+                    config.getStringList("noPermission.lore"),
                     config.getString("noPermission.headTexture"),
                     false
                 );
@@ -92,30 +86,13 @@ public class EditAlliancesInventory extends TeamMenu {
             headSlot ++;
         }
 
-        for(String str : config.getConfigurationSection("inventories.editAlliances").getKeys(false)){
-            Integer slot = config.getInt("inventories.editAlliances."+str+".slot");
-            Material material = Material.getMaterial(config.getString("inventories.editAlliances."+str+".itemType"));
-            String name = config.getString("inventories.editAlliances."+str+".itemName");
-            String headTexture = config.getString("inventories.editAlliances."+str+".headTexture");
-            ItemStack item;
-
-            if (plugin.playerHasPermission(playerName, team, str)){ 
-                item = ItemBuilder.getItem(
-                    material,
-                    name,
-                    config.getStringList("inventories.editAlliances."+str+".lore"),
-                    headTexture,
-                    false);
-            }else{
-                item = ItemBuilder.getItem(
-                    Material.getMaterial(config.getString("noPermission.itemType")), 
-                    name, 
-                    config.getStringList("noPermission.lore"),
-                    config.getString("noPermission.headTexture"),
-                    false
-                );
-            }
-            inventory.setItem(slot, item);
+        for(String str : config.getConfigurationSection("inventories.teamAlliances").getKeys(false)){
+            Integer slot = config.getInt("inventories.teamAlliances."+str+".slot");
+            Material material = Material.getMaterial(config.getString("inventories.teamAlliances."+str+".itemType"));
+            String name = config.getString("inventories.teamAlliances."+str+".itemName");
+            String headTexture = config.getString("inventories.teamAlliances."+str+".headTexture");
+            
+            inventory.setItem(slot, ItemBuilder.getItem(material, name, Collections.emptyList(), headTexture, false));
         }
         return inventory;
     }
@@ -128,27 +105,16 @@ public class EditAlliancesInventory extends TeamMenu {
 
     @Override
     public void onClick(InventoryClickEvent clickEvent) {
-        String itemName;
         Player player = (Player) clickEvent.getWhoClicked();
         String playerName = player.getName();
-        Team team = mySqlManager.getTeamFromPlayerName(playerName);
+        String itemName = clickEvent.getCurrentItem().getItemMeta().getDisplayName();
 
 
-        itemName = clickEvent.getCurrentItem().getItemMeta().getDisplayName();
-        if (itemName.equals(config.getString("inventories.editAlliances.close.itemName"))){
-            new ManageInventory(player).openMenu(team);
-            return;
-        }else if (itemName.equals(config.getString("inventories.editAlliances.addAlliance.itemName"))){
-            player.closeInventory();
-            conversationBuilder.getNameInput(player, new ConvAddAlliance(plugin));
-            return;
-        }else if (itemName.equals(config.getString("inventories.editAlliances.removeAlliance.itemName"))){
-            player.closeInventory();
-            conversationBuilder.getNameInput(player, new ConvRemoveAlliance(plugin));
-            return;
+        // Fermeture ou retour en arrière de l'inventaire
+        if (itemName.equals(config.getString("inventories.teamAlliances.close.itemName"))){
+            new MemberMenu(player).openMenu(mySqlManager.getTeamFromPlayerName(playerName));
         }
     }
-
 
     @Override
     public void onClose(InventoryCloseEvent closeEvent) {}

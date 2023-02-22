@@ -18,12 +18,12 @@ import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.serializer.ItemStackSerializer;
 
 
-public class StorageInventory extends TeamMenu {
+public class StorageMenu extends TeamMenu {
 
     final CacheManager cacheManager = plugin.getCacheManager();
     final ItemStackSerializer serializeManager = plugin.getSerializeManager();
 
-    public StorageInventory(Player viewer){
+    public StorageMenu(Player viewer){
         super(viewer);
     }
 
@@ -91,17 +91,17 @@ public class StorageInventory extends TeamMenu {
                 return;
             }else if (itemName.equals(config.getString("inventories.storage.previous.itemName"))){
                 clickEvent.setCancelled(true);
-                new StorageInventory(player).openMenu(team, storageId-1);
+                new StorageMenu(player).openMenu(team, storageId-1);
                 return;
             }else if (itemName.equals(config.getString("inventories.storage.next.itemName"))){
                 clickEvent.setCancelled(true);
-                new StorageInventory(player).openMenu(team, storageId+1);
+                new StorageMenu(player).openMenu(team, storageId+1);
             }else{
                 if (itemName.equals(config.getString("inventories.storage.close.itemName"))){
                     clickEvent.setCancelled(true);
                     if (clickEvent.getCursor().getType().equals(Material.AIR)){
                         // player.openInventory(inventoryBuilder.createStorageDirectoryInventory(team));
-                        new StorageDirectoryInventory(player).openMenu(team);
+                        new StorageDirectoryMenu(player).openMenu(team);
                         return;
                     }else return;
                 }

@@ -17,11 +17,11 @@ import fr.army.stelyteam.utils.builder.ItemBuilder;
 import fr.army.stelyteam.utils.manager.MessageManager;
 
 
-public class UpgradeStorageInventory extends TeamMenu {
+public class UpgradeStorageMenu extends TeamMenu {
 
     final MessageManager messageManager = plugin.getMessageManager();
 
-    public UpgradeStorageInventory(Player viewer){
+    public UpgradeStorageMenu(Player viewer){
         super(viewer);
     }
 
@@ -74,7 +74,7 @@ public class UpgradeStorageInventory extends TeamMenu {
         
         // Gestion des items
         if (itemName.equals(config.getString("inventories.upgradeStorageAmount.close.itemName"))){
-            new ManageInventory(player).openMenu(team);
+            new ManageMenu(player).openMenu(team);
         }else if (!material.name().equals(config.getString("emptyCase"))){
             for(String str : config.getConfigurationSection("inventories.upgradeStorageAmount").getKeys(false)){
                 String name = config.getString("inventories.upgradeStorageAmount."+str+".itemName");
@@ -82,7 +82,7 @@ public class UpgradeStorageInventory extends TeamMenu {
                 if (itemName.equals(name) && level+1 == config.getInt("inventories.upgradeStorageAmount."+str+".level")){
                     if (plugin.getEconomyManager().checkMoneyPlayer(player, config.getDouble("prices.upgrade.teamStorages.level"+(level+1)))){
                         plugin.getCacheManager().addTempAction(new TemporaryAction(playerName, TemporaryActionNames.IMPROV_LVL_STORAGE, team));
-                        new ConfirmInventory(player).openMenu();
+                        new ConfirmMenu(player).openMenu();
                         return;
                     }else{
                         player.sendMessage(messageManager.getMessage("common.not_enough_money"));

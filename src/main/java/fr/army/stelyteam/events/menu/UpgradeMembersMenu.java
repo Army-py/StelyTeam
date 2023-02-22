@@ -18,11 +18,11 @@ import fr.army.stelyteam.utils.manager.MessageManager;
 
 
 
-public class UpgradeMembersInventory extends TeamMenu {
+public class UpgradeMembersMenu extends TeamMenu {
 
     final MessageManager messageManager = plugin.getMessageManager();
 
-    public UpgradeMembersInventory(Player viewer){
+    public UpgradeMembersMenu(Player viewer){
         super(viewer);
     }
 
@@ -73,7 +73,7 @@ public class UpgradeMembersInventory extends TeamMenu {
         Integer level = team.getImprovLvlMembers();
         
         if (itemName.equals(config.getString("inventories.upgradeTotalMembers.close.itemName"))){
-            new ManageInventory(player).openMenu(team);
+            new ManageMenu(player).openMenu(team);
         }else if (!material.name().equals(config.getString("emptyCase"))){
             for(String str : config.getConfigurationSection("inventories.upgradeTotalMembers").getKeys(false)){
                 String name = config.getString("inventories.upgradeTotalMembers."+str+".itemName");
@@ -81,7 +81,7 @@ public class UpgradeMembersInventory extends TeamMenu {
                 if (itemName.equals(name) && level+1 == config.getInt("inventories.upgradeTotalMembers."+str+".level")){
                     if (plugin.getEconomyManager().checkMoneyPlayer(player, config.getDouble("prices.upgrade.teamPlaces.level"+(level+1)))){
                         plugin.getCacheManager().addTempAction(new TemporaryAction(playerName, TemporaryActionNames.IMPROV_LVL_MEMBERS, team));
-                        new ConfirmInventory(player).openMenu();
+                        new ConfirmMenu(player).openMenu();
                         return;
                     }else{
                         player.sendMessage(messageManager.getMessage("common.not_enough_money"));

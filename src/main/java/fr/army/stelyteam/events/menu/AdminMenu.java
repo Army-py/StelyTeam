@@ -14,11 +14,11 @@ import fr.army.stelyteam.utils.builder.ItemBuilder;
 import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 
-public class AdminInventory extends TeamMenu {
+public class AdminMenu extends TeamMenu {
 
     DatabaseManager mySqlManager = plugin.getDatabaseManager();
 
-    public AdminInventory(Player viewer) {
+    public AdminMenu(Player viewer) {
         super(viewer);
     }
 
@@ -55,9 +55,9 @@ public class AdminInventory extends TeamMenu {
 
         // Ouverture des inventaires
         if (itemName.equals(config.getString("inventories.admin.manage.itemName"))){
-            new ManageInventory(viewer).openMenu(mySqlManager.getTeamFromPlayerName(playerName));
+            new ManageMenu(viewer).openMenu(mySqlManager.getTeamFromPlayerName(playerName));
         }else if (itemName.equals(config.getString("inventories.admin.member.itemName"))){
-            new MemberInventory(viewer).openMenu(mySqlManager.getTeamFromPlayerName(playerName));
+            new MemberMenu(viewer).openMenu(mySqlManager.getTeamFromPlayerName(playerName));
             
         // Fermeture ou retour en arrière de l'inventaire
         }else if (itemName.equals(config.getString("inventories.admin.close.itemName"))){

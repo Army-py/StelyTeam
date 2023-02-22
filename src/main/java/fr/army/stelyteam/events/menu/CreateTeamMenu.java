@@ -15,10 +15,10 @@ import fr.army.stelyteam.utils.TemporaryActionNames;
 import fr.army.stelyteam.utils.builder.ItemBuilder;
 
 
-public class CreateTeamInventory extends TeamMenu {
+public class CreateTeamMenu extends TeamMenu {
 
 
-    public CreateTeamInventory(Player viewer){
+    public CreateTeamMenu(Player viewer){
         super(viewer);
     }
 
@@ -54,7 +54,7 @@ public class CreateTeamInventory extends TeamMenu {
 
         if (itemName.equals(config.getString("inventories.createTeam.itemName"))){
             if (plugin.getEconomyManager().checkMoneyPlayer(player, config.getDouble("prices.createTeam"))){
-                new ConfirmInventory(viewer).openMenu();
+                new ConfirmMenu(viewer).openMenu();
                 plugin.getCacheManager().addTempAction(
                     new TemporaryAction(
                         playerName,

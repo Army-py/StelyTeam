@@ -22,7 +22,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 
-public class ManageInventory extends TeamMenu {
+public class ManageMenu extends TeamMenu {
 
     final DatabaseManager mySqlManager = plugin.getDatabaseManager();
     final SQLiteDataManager sqliteManager = plugin.getSQLiteManager();
@@ -30,7 +30,7 @@ public class ManageInventory extends TeamMenu {
     final MessageManager messageManager = plugin.getMessageManager();
     final EconomyManager economyManager = plugin.getEconomyManager();
 
-    public ManageInventory(Player viewer){
+    public ManageMenu(Player viewer){
         super(viewer);
     }
 
@@ -95,16 +95,16 @@ public class ManageInventory extends TeamMenu {
         
         // Liaisin des items avec leur fonction
         if (itemName.equals(config.getString("inventories.manage.editMembers.itemName"))){
-            new EditMembersInventory(player).openMenu(team);
+            new EditMembersMenu(player).openMenu(team);
 
 
         }else if (itemName.equals(config.getString("inventories.manage.editAlliances.itemName"))){
-            new EditAlliancesInventory(player).openMenu(team);
+            new EditAlliancesMenu(player).openMenu(team);
 
 
         }else if (itemName.equals(config.getString("inventories.manage.setTeamHome.itemName"))){
             cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.CREATE_HOME, team));
-            new ConfirmInventory(player).openMenu();
+            new ConfirmMenu(player).openMenu();
 
 
         }else if (itemName.equals(config.getString("inventories.manage.removeTeamHome.itemName"))){
@@ -112,7 +112,7 @@ public class ManageInventory extends TeamMenu {
                 player.sendMessage(messageManager.getMessage("manage_team.team_home.not_set"));
             }else{
                 cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.DELETE_HOME, team));
-                new ConfirmInventory(player).openMenu();
+                new ConfirmMenu(player).openMenu();
             }
 
 
@@ -121,7 +121,7 @@ public class ManageInventory extends TeamMenu {
                 if (economyManager.checkMoneyPlayer(player, config.getDouble("prices.buyTeamBank"))){
                     cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.BUY_TEAM_BANK, team));
 
-                    new ConfirmInventory(player).openMenu();
+                    new ConfirmMenu(player).openMenu();
                 }else{
                     player.sendMessage(messageManager.getMessage("common.not_enough_money"));
                 }
@@ -131,17 +131,17 @@ public class ManageInventory extends TeamMenu {
 
 
         }else if (itemName.equals(config.getString("inventories.manage.upgradeTotalMembers.itemName"))){
-            new UpgradeMembersInventory(player).openMenu(team);
+            new UpgradeMembersMenu(player).openMenu(team);
 
 
         }else if (itemName.equals(config.getString("inventories.manage.upgradeStorageAmount.itemName"))){
-            new UpgradeStorageInventory(player).openMenu(team);
+            new UpgradeStorageMenu(player).openMenu(team);
 
 
         }else if (itemName.equals(config.getString("inventories.manage.editName.itemName"))){
             if (economyManager.checkMoneyPlayer(player, config.getDouble("prices.editTeamId"))){
                 cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.EDIT_NAME, team));
-                new ConfirmInventory(player).openMenu();
+                new ConfirmMenu(player).openMenu();
             }else{
                 player.sendMessage(messageManager.getMessage("common.not_enough_money"));
             }
@@ -150,7 +150,7 @@ public class ManageInventory extends TeamMenu {
         }else if (itemName.equals(config.getString("inventories.manage.editPrefix.itemName"))){
             if (economyManager.checkMoneyPlayer(player, config.getDouble("prices.editTeamPrefix"))){
                 cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.EDIT_PREFIX, team));
-                new ConfirmInventory(player).openMenu();
+                new ConfirmMenu(player).openMenu();
             }else{
                 player.sendMessage(messageManager.getMessage("common.not_enough_money"));
             }
@@ -159,7 +159,7 @@ public class ManageInventory extends TeamMenu {
         }else if (itemName.equals(config.getString("inventories.manage.editDescription.itemName"))){
             if (economyManager.checkMoneyPlayer(player, config.getDouble("prices.editTeamDescription"))){
                 cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.EDIT_DESCRIPTION, team));
-                new ConfirmInventory(player).openMenu();
+                new ConfirmMenu(player).openMenu();
             }else{
                 player.sendMessage(messageManager.getMessage("common.not_enough_money"));
             }
@@ -167,16 +167,16 @@ public class ManageInventory extends TeamMenu {
 
         }else if (itemName.equals(config.getString("inventories.manage.removeTeam.itemName"))){
             cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.DELETE_TEAM, team));
-            new ConfirmInventory(player).openMenu();
+            new ConfirmMenu(player).openMenu();
 
 
         }else if (itemName.equals(config.getString("inventories.manage.editPermissions.itemName"))){
-            new PermissionsInventory(player).openMenu(team);
+            new PermissionsMenu(player).openMenu(team);
 
 
         // Fermeture ou retour en arrière de l'inventaire
         }else if (itemName.equals(config.getString("inventories.manage.close.itemName"))){
-            new AdminInventory(player).openMenu();
+            new AdminMenu(player).openMenu();
         }
     }
 

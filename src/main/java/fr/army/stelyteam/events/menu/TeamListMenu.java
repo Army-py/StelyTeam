@@ -22,13 +22,13 @@ import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
 
 
-public class TeamListInventory extends TeamMenu {
+public class TeamListMenu extends TeamMenu {
 
     final SQLiteDataManager sqliteManager = plugin.getSQLiteManager();
     final CacheManager cacheManager = plugin.getCacheManager();
     final ColorsBuilder colorsBuilder = plugin.getColorsBuilder();
 
-    public TeamListInventory(Player viewer) {
+    public TeamListMenu(Player viewer) {
         super(viewer);
     }
 
@@ -120,12 +120,12 @@ public class TeamListInventory extends TeamMenu {
                 Page page = cacheManager.getPage(playerName);
                 page.setCurrentPage(page.getCurrentPage()-1);
                 cacheManager.replacePage(page);
-                new TeamListInventory(player).openMenu();
+                new TeamListMenu(player).openMenu();
             }else if (itemName.equals(config.getString("inventories.teamList.next.itemName"))){
                 Page page = cacheManager.getPage(playerName);
                 page.setCurrentPage(page.getCurrentPage()+1);
                 cacheManager.replacePage(page);
-                new TeamListInventory(player).openMenu();
+                new TeamListMenu(player).openMenu();
             }else if (itemName.equals(config.getString("inventories.teamList.close.itemName"))){
                 cacheManager.removePage(cacheManager.getPage(playerName));
                 player.closeInventory();

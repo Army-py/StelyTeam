@@ -15,9 +15,9 @@ import fr.army.stelyteam.commands.CommandManager;
 import fr.army.stelyteam.events.InventoryClickManager;
 import fr.army.stelyteam.events.InventoryCloseManager;
 import fr.army.stelyteam.events.PlayerQuit;
-import fr.army.stelyteam.events.menu.AdminInventory;
-import fr.army.stelyteam.events.menu.CreateTeamInventory;
-import fr.army.stelyteam.events.menu.MemberInventory;
+import fr.army.stelyteam.events.menu.AdminMenu;
+import fr.army.stelyteam.events.menu.CreateTeamMenu;
+import fr.army.stelyteam.events.menu.MemberMenu;
 import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
 import fr.army.stelyteam.utils.builder.conversation.ConversationBuilder;
@@ -107,13 +107,13 @@ public class StelyTeamPlugin extends JavaPlugin {
         String playerName = player.getName();
 
         if (team == null){
-            new CreateTeamInventory(player).openMenu();
+            new CreateTeamMenu(player).openMenu();
         }else if(team.isTeamOwner(playerName)){
-            new AdminInventory(player).openMenu();
+            new AdminMenu(player).openMenu();
         }else if (plugin.playerHasPermissionInSection(playerName, team, "manage")){
-            new AdminInventory(player).openMenu();
+            new AdminMenu(player).openMenu();
         }else{
-            new MemberInventory(player).openMenu(team);
+            new MemberMenu(player).openMenu(team);
         }
     }
 

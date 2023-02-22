@@ -29,7 +29,7 @@ import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
 
 
-public class EditMembersInventory extends TeamMenu {
+public class EditMembersMenu extends TeamMenu {
 
     final DatabaseManager mySqlManager = plugin.getDatabaseManager();
     final SQLiteDataManager sqliteManager = plugin.getSQLiteManager();
@@ -37,7 +37,7 @@ public class EditMembersInventory extends TeamMenu {
     final MessageManager messageManager = plugin.getMessageManager();
     final ConversationBuilder conversationBuilder = plugin.getConversationBuilder();
 
-    public EditMembersInventory(Player viewer){
+    public EditMembersMenu(Player viewer){
         super(viewer);
     }
 
@@ -139,7 +139,7 @@ public class EditMembersInventory extends TeamMenu {
         // Fermeture ou retour en arrière de l'inventaire
         itemName = clickEvent.getCurrentItem().getItemMeta().getDisplayName();
         if (itemName.equals(config.getString("inventories.editMembers.close.itemName"))){
-            new ManageInventory(player).openMenu(team);
+            new ManageMenu(player).openMenu(team);
             return;
         }else if (itemName.equals(config.getString("inventories.editMembers.addMember.itemName"))){
             player.closeInventory();
@@ -149,7 +149,7 @@ public class EditMembersInventory extends TeamMenu {
             cacheManager.addTempAction(
                 new TemporaryAction(playerName, TemporaryActionNames.CLICK_REMOVE_MEMBER, team)
             );
-            new MembersInventory(player).openMenu(team);
+            new MembersMenu(player).openMenu(team);
             return;
         }else if (itemName.equals(config.getString("inventories.editMembers.editOwner.itemName"))){
             player.closeInventory();
@@ -193,7 +193,7 @@ public class EditMembersInventory extends TeamMenu {
                 }
             }else return;
 
-            new EditMembersInventory(player).openMenu(team);
+            new EditMembersMenu(player).openMenu(team);
             team.refreshTeamMembersInventory(playerName);
         }
     }

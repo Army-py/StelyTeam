@@ -6,7 +6,7 @@ import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.events.menu.ConfirmInventory;
+import fr.army.stelyteam.events.menu.ConfirmMenu;
 import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.TemporaryActionNames;
@@ -52,7 +52,7 @@ public class ConvRemoveMember extends StringPrompt {
                 TemporaryActionNames.REMOVE_MEMBER,
                 team)
         );
-        new ConfirmInventory(author).openMenu();
+        new ConfirmMenu(author).openMenu();
         return null;
     }
 

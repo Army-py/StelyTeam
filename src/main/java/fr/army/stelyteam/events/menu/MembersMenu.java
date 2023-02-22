@@ -25,12 +25,12 @@ import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
 
 
-public class MembersInventory extends TeamMenu {
+public class MembersMenu extends TeamMenu {
 
     final CacheManager cacheManager = plugin.getCacheManager();
     final MessageManager messageManager = plugin.getMessageManager();
 
-    public MembersInventory(Player viewer) {
+    public MembersMenu(Player viewer) {
         super(viewer);
     }
 
@@ -109,14 +109,14 @@ public class MembersInventory extends TeamMenu {
                                 team
                             )
                         );
-                    new ConfirmInventory(player).openMenu();
+                    new ConfirmMenu(player).openMenu();
                 }
             }else if (itemName.equals(config.getString("inventories.teamMembers.close.itemName"))){
-                new EditMembersInventory(player).openMenu(team);
+                new EditMembersMenu(player).openMenu(team);
             }
         }else{
             if (itemName.equals(config.getString("inventories.teamMembers.close.itemName"))){
-                new MemberInventory(player).openMenu(team);
+                new MemberMenu(player).openMenu(team);
             }
         }
     }

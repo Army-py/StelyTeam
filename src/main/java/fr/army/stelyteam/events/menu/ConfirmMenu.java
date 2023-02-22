@@ -25,7 +25,7 @@ import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
 
 
-public class ConfirmInventory extends TeamMenu {
+public class ConfirmMenu extends TeamMenu {
 
     final DatabaseManager mySqlManager = plugin.getDatabaseManager();
     final SQLiteDataManager sqliteManager = plugin.getSQLiteManager();
@@ -34,7 +34,7 @@ public class ConfirmInventory extends TeamMenu {
     final EconomyManager economyManager = plugin.getEconomyManager();
     final ConversationBuilder conversationBuilder = plugin.getConversationBuilder();
 
-    public ConfirmInventory(Player viewer){
+    public ConfirmMenu(Player viewer){
         super(viewer);
     }
 
@@ -144,7 +144,7 @@ public class ConfirmInventory extends TeamMenu {
                     team.unlockedTeamBank();
                     player.sendMessage(messageManager.getMessage("manage_team.team_bank.unlock"));
 
-                    new ManageInventory(player).openMenu(team);
+                    new ManageMenu(player).openMenu(team);
                     team.refreshTeamMembersInventory(playerName);
                     team.teamBroadcast(playerName, messageManager.replaceAuthor("broadcasts.team_bank_unlocked", playerName));
                     break;
@@ -177,7 +177,7 @@ public class ConfirmInventory extends TeamMenu {
                     economyManager.removeMoneyPlayer(player, config.getDouble("prices.upgrade.teamPlaces.level"+newLevel));
                     player.sendMessage(messageManager.getReplaceMessage("manage_team.upgrade_member_amount.new_upgrade", newLevel.toString()));
 
-                    new UpgradeMembersInventory(player).openMenu(team);
+                    new UpgradeMembersMenu(player).openMenu(team);
                     team.refreshTeamMembersInventory(playerName);
                     team.teamBroadcast(playerName, messageManager.replaceTeamId("broadcasts.new_member_amount_upgrade", team.getTeamName()));
                     break;
@@ -188,7 +188,7 @@ public class ConfirmInventory extends TeamMenu {
                     economyManager.removeMoneyPlayer(player, config.getDouble("prices.upgrade.teamStorages.level"+newLevel));
                     player.sendMessage(messageManager.getReplaceMessage("manage_team.upgrade_storages.new_upgrade", newLevel.toString()));
 
-                    new UpgradeStorageInventory(player).openMenu(team);
+                    new UpgradeStorageMenu(player).openMenu(team);
                     team.refreshTeamMembersInventory(playerName);
                     team.teamBroadcast(playerName, messageManager.replaceTeamId("broadcasts.new_storage_upgrade", team.getTeamName()));
                     break;
@@ -216,37 +216,37 @@ public class ConfirmInventory extends TeamMenu {
                     player.closeInventory();
                     break;
                 case CREATE_HOME:
-                    new ManageInventory(player).openMenu(team);
+                    new ManageMenu(player).openMenu(team);
                     break;
                 case DELETE_HOME:
-                    new ManageInventory(player).openMenu(team);
+                    new ManageMenu(player).openMenu(team);
                     break;
                 case CREATE_TEAM:
-                    new CreateTeamInventory(player).openMenu();
+                    new CreateTeamMenu(player).openMenu();
                     break;
                 case BUY_TEAM_BANK:
-                    new ManageInventory(player).openMenu(team);
+                    new ManageMenu(player).openMenu(team);
                     break;
                 case EDIT_NAME:
-                    new ManageInventory(player).openMenu(team);
+                    new ManageMenu(player).openMenu(team);
                     break;
                 case EDIT_PREFIX:
-                    new ManageInventory(player).openMenu(team);
+                    new ManageMenu(player).openMenu(team);
                     break;
                 case EDIT_DESCRIPTION:
-                    new ManageInventory(player).openMenu(team);
+                    new ManageMenu(player).openMenu(team);
                     break;
                 case DELETE_TEAM:
-                    new ManageInventory(player).openMenu(team);
+                    new ManageMenu(player).openMenu(team);
                     break;
                 case IMPROV_LVL_MEMBERS:
-                    new UpgradeMembersInventory(player).openMenu(team);
+                    new UpgradeMembersMenu(player).openMenu(team);
                     break;
                 case IMPROV_LVL_STORAGE:
-                    new UpgradeStorageInventory(player).openMenu(team);
+                    new UpgradeStorageMenu(player).openMenu(team);
                     break;
                 case LEAVE_TEAM:
-                    new MemberInventory(player).openMenu(team);
+                    new MemberMenu(player).openMenu(team);
                     break;
                 default:
                     break;

@@ -14,10 +14,10 @@ import fr.army.stelyteam.utils.TeamMenu;
 import fr.army.stelyteam.utils.builder.ItemBuilder;
 
 
-public class StorageDirectoryInventory extends TeamMenu {
+public class StorageDirectoryMenu extends TeamMenu {
 
 
-    public StorageDirectoryInventory(Player viewer){
+    public StorageDirectoryMenu(Player viewer){
         super(viewer);
     }
 
@@ -75,7 +75,7 @@ public class StorageDirectoryInventory extends TeamMenu {
 
         // Fermeture ou retour en arrière de l'inventaire
         if (itemName.equals(config.getString("inventories.storageDirectory.close.itemName"))){
-            new MemberInventory(player).openMenu(team);
+            new MemberMenu(player).openMenu(team);
         }else{
             for(String str : config.getConfigurationSection("inventories.storageDirectory").getKeys(false)){
                 String name = config.getString(config.getString("inventories.storageDirectory."+str+".itemName"));
@@ -83,7 +83,7 @@ public class StorageDirectoryInventory extends TeamMenu {
                 Integer storageId = config.getInt("inventories.storageDirectory."+str+".storageId");
 
                 if (itemName.equals(name) && itemType.equals(type)){
-                    new StorageInventory(player).openMenu(team, storageId);
+                    new StorageMenu(player).openMenu(team, storageId);
                     return;
                 }
             }

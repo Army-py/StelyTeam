@@ -11,14 +11,14 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.events.menu.AdminInventory;
-import fr.army.stelyteam.events.menu.EditMembersInventory;
-import fr.army.stelyteam.events.menu.ManageInventory;
-import fr.army.stelyteam.events.menu.MemberInventory;
-import fr.army.stelyteam.events.menu.MembersInventory;
-import fr.army.stelyteam.events.menu.PermissionsInventory;
-import fr.army.stelyteam.events.menu.StorageDirectoryInventory;
-import fr.army.stelyteam.events.menu.UpgradeMembersInventory;
+import fr.army.stelyteam.events.menu.AdminMenu;
+import fr.army.stelyteam.events.menu.EditMembersMenu;
+import fr.army.stelyteam.events.menu.ManageMenu;
+import fr.army.stelyteam.events.menu.MemberMenu;
+import fr.army.stelyteam.events.menu.MembersMenu;
+import fr.army.stelyteam.events.menu.PermissionsMenu;
+import fr.army.stelyteam.events.menu.StorageDirectoryMenu;
+import fr.army.stelyteam.events.menu.UpgradeMembersMenu;
 
 public class Team {
     private StelyTeamPlugin plugin = StelyTeamPlugin.getPlugin();
@@ -233,21 +233,21 @@ public class Team {
                 
                 String openInventoryTitle = player.getOpenInventory().getTitle();
                 if (openInventoryTitle.equals(config.getString("inventoriesName.admin"))){
-                    new AdminInventory(player).openMenu();
+                    new AdminMenu(player).openMenu();
                 }else if (openInventoryTitle.equals(config.getString("inventoriesName.manage"))){
-                    new ManageInventory(player).openMenu(this);
+                    new ManageMenu(player).openMenu(this);
                 }else if (openInventoryTitle.equals(config.getString("inventoriesName.member"))){
-                    new MemberInventory(player).openMenu(this);
+                    new MemberMenu(player).openMenu(this);
                 }else if (openInventoryTitle.equals(config.getString("inventoriesName.upgradeTotalMembers"))){
-                    new UpgradeMembersInventory(player).openMenu(this);
+                    new UpgradeMembersMenu(player).openMenu(this);
                 }else if (openInventoryTitle.equals(config.getString("inventoriesName.editMembers"))){
-                    new EditMembersInventory(player).openMenu(this);
+                    new EditMembersMenu(player).openMenu(this);
                 }else if (openInventoryTitle.equals(config.getString("inventoriesName.teamMembers"))){
-                    new MembersInventory(player).openMenu(this);
+                    new MembersMenu(player).openMenu(this);
                 }else if (openInventoryTitle.equals(config.getString("inventoriesName.permissions"))){
-                    new PermissionsInventory(player).openMenu(this);
+                    new PermissionsMenu(player).openMenu(this);
                 }else if (openInventoryTitle.equals(config.getString("inventoriesName.storageDirectory"))){
-                    new StorageDirectoryInventory(player).openMenu(this);
+                    new StorageDirectoryMenu(player).openMenu(this);
                 }
             }
         }

@@ -14,9 +14,9 @@ import fr.army.stelyteam.utils.TeamMenu;
 import fr.army.stelyteam.utils.builder.ItemBuilder;
 
 
-public class PermissionsInventory extends TeamMenu {
+public class PermissionsMenu extends TeamMenu {
 
-    public PermissionsInventory(Player viewer) {
+    public PermissionsMenu(Player viewer) {
         super(viewer);
     }
 
@@ -80,7 +80,7 @@ public class PermissionsInventory extends TeamMenu {
 
         // Fermeture ou retour en arrière de l'inventaire
         if (itemName.equals(config.getString("inventories.permissions.close.itemName"))){
-            new ManageInventory(player).openMenu(team);
+            new ManageMenu(player).openMenu(team);
             return;
         }
 
@@ -120,7 +120,7 @@ public class PermissionsInventory extends TeamMenu {
                     team.insertAssignement(permission, defaultRankId);
                 }
             }else return;
-            new PermissionsInventory(player).openMenu(team);
+            new PermissionsMenu(player).openMenu(team);
             team.refreshTeamMembersInventory(playerName);
         }
     }
