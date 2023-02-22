@@ -30,7 +30,6 @@ public class SubCmdChangeOwner extends SubCommand {
         args[0] = "";
 
         if (args.length < 3){
-            // player.sendMessage("Utilisation : /stelyteam changeowner <nom de team> <membre>");
             player.sendMessage(messageManager.getMessage("commands.stelyteam_changeowner.usage"));
         }else{
             Team team = sqlManager.getTeamFromTeamName(args[1]);
@@ -40,18 +39,14 @@ public class SubCmdChangeOwner extends SubCommand {
                     if (memberRank != 0){
                         String owner = team.getTeamOwnerName();
                         team.updateTeamOwner(owner);
-                        // player.sendMessage("Gérant changé");
                         player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_changeowner.output", args[2]));
                     }else{
-                        // player.sendMessage("Ce joueur est déjà le gérant");
                         player.sendMessage(messageManager.getMessage("commands.stelyteam_changeowner.already_owner"));
                     }
                 }else{
-                    // player.sendMessage("Ce joueur n'est pas dans cette team");
                     player.sendMessage(messageManager.getMessage("commands.stelyteam_changeowner.not_in_team"));
                 }
             }else{
-                // player.sendMessage("Cette team n'existe pas");
                 player.sendMessage(messageManager.getMessage("common.team_not_exist"));
             }
         }

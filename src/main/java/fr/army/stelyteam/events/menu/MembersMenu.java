@@ -1,57 +1,89 @@
-package fr.army.stelyteam.events.inventories;
+package fr.army.stelyteam.events.menu;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 
-import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.utils.Member;
 import fr.army.stelyteam.utils.Team;
+import fr.army.stelyteam.utils.TeamMenu;
 import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.TemporaryActionNames;
-import fr.army.stelyteam.utils.builder.InventoryBuilder;
+import fr.army.stelyteam.utils.builder.ItemBuilder;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 
-public class MembersInventory {
+public class MembersMenu extends TeamMenu {
 
-    private InventoryClickEvent clickEvent;
-    private InventoryCloseEvent closeEvent;
-    private YamlConfiguration config;
-    private CacheManager cacheManager;
-    private MessageManager messageManager;
-    private InventoryBuilder inventoryBuilder;
-    private DatabaseManager sqlManager;
+    final CacheManager cacheManager = plugin.getCacheManager();
+    final MessageManager messageManager = plugin.getMessageManager();
 
-    public MembersInventory(InventoryClickEvent clickEvent, StelyTeamPlugin plugin) {
-        this.clickEvent = clickEvent;
-        this.config = plugin.getConfig();
-        this.cacheManager = plugin.getCacheManager();
-        this.messageManager = plugin.getMessageManager();
-        this.inventoryBuilder = plugin.getInventoryBuilder();
-        this.sqlManager = plugin.getDatabaseManager();
-    }
-
-    public MembersInventory(InventoryCloseEvent closeEvent, StelyTeamPlugin plugin){
-        this.closeEvent = closeEvent;
-        this.config = plugin.getConfig();
-        this.cacheManager = plugin.getCacheManager();
+    public MembersMenu(Player viewer) {
+        super(viewer);
     }
 
 
-    public void onInventoryClick(){
+    public Inventory createInventory(Team team) {
+        Integer slots = config.getInt("inventoriesSlots.teamMembers");
+        Inventory inventory = Bukkit.createInventory(this, slots, config.getString("inventoriesName.teamMembers"));
+
+        emptyCases(inventory, slots, 0);
+        Integer headSlot = 0;
+        for(Member member : team.getTeamMembers()){
+            String memberName = member.getMemberName();
+            UUID playerUUID = plugin.getSQLiteManager().getUUID(member.getMemberName());
+            String itemName;
+            List<String> lore = new ArrayList<>();
+            OfflinePlayer offlinePlayer;
+
+            if (playerUUID == null) offlinePlayer = Bukkit.getOfflinePlayer(memberName);
+            else offlinePlayer = Bukkit.getOfflinePlayer(playerUUID);
+
+            String memberRank = plugin.getRankFromId(team.getMemberRank(memberName));
+            String rankColor = config.getString("ranks." + memberRank + ".color");
+            itemName = rankColor + memberName;
+            
+            lore.add(config.getString("prefixRankLore") + rankColor + config.getString("ranks." + memberRank + ".name"));
+            inventory.setItem(headSlot, ItemBuilder.getPlayerHead(offlinePlayer, itemName, lore));
+            headSlot ++;
+        }
+
+        for(String str : config.getConfigurationSection("inventories.teamMembers").getKeys(false)){
+            Integer slot = config.getInt("inventories.teamMembers."+str+".slot");
+            Material material = Material.getMaterial(config.getString("inventories.teamMembers."+str+".itemType"));
+            String name = config.getString("inventories.teamMembers."+str+".itemName");
+            String headTexture = config.getString("inventories.teamMembers."+str+".headTexture");
+            
+            inventory.setItem(slot, ItemBuilder.getItem(material, name, Collections.emptyList(), headTexture, false));
+        }
+        return inventory;
+    }
+
+
+    public void openMenu(Team team) {
+        this.open(createInventory(team));
+    }
+
+
+    @Override
+    public void onClick(InventoryClickEvent clickEvent) {
         Player player = (Player) clickEvent.getWhoClicked();
         String playerName = player.getName();
         String itemName = clickEvent.getCurrentItem().getItemMeta().getDisplayName();
         Material material = clickEvent.getCurrentItem().getType();
-        Team team = sqlManager.getTeamFromPlayerName(playerName);
+        Team team = plugin.getDatabaseManager().getTeamFromPlayerName(playerName);
         String memberName = removeFirstColors(itemName);
 
         if (clickEvent.getView().getTitle().equals(config.getString("inventoriesName.removeMembers"))){
@@ -77,23 +109,21 @@ public class MembersInventory {
                                 team
                             )
                         );
-                    Inventory inventory = inventoryBuilder.createConfirmInventory();
-                    player.openInventory(inventory);
+                    new ConfirmMenu(player).openMenu();
                 }
             }else if (itemName.equals(config.getString("inventories.teamMembers.close.itemName"))){
-                Inventory inventory = inventoryBuilder.createEditMembersInventory(playerName, team);
-                player.openInventory(inventory);
+                new EditMembersMenu(player).openMenu(team);
             }
         }else{
             if (itemName.equals(config.getString("inventories.teamMembers.close.itemName"))){
-                Inventory inventory = inventoryBuilder.createMemberInventory(playerName, team);
-                player.openInventory(inventory);
+                new MemberMenu(player).openMenu(team);
             }
         }
     }
 
 
-    public void onInventoryClose(){
+    @Override
+    public void onClose(InventoryCloseEvent closeEvent) {
         Player player = (Player) closeEvent.getPlayer();
         String playerName = player.getName();
 
@@ -103,6 +133,7 @@ public class MembersInventory {
             }
         }
     }
+
 
 
     private String removeFirstColors(String name){

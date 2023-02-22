@@ -29,17 +29,14 @@ public class SubCmdDelete extends SubCommand {
         args[0] = "";
 
         if (args.length == 1){
-            // player.sendMessage("Utilisation : /stelyteam delete <nom de team>");
             player.sendMessage(messageManager.getMessage("commands.stelyteam_delete.usage"));
         }else{
             String teamID = String.join("", args);
             Team team = sqlManager.getTeamFromTeamName(teamID);
             if (team != null){
                 team.removeTeam();
-                // player.sendMessage("Team supprimée");
                 player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_delete.output", teamID));
             }else{
-                // player.sendMessage("Cette team n'existe pas");
                 player.sendMessage(messageManager.getMessage("common.team_not_exist"));
             }
         }

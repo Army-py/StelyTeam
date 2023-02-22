@@ -3,13 +3,22 @@ package fr.army.stelyteam.utils;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.Player;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.utils.builder.InventoryBuilder;
+import fr.army.stelyteam.events.menu.AdminMenu;
+import fr.army.stelyteam.events.menu.EditMembersMenu;
+import fr.army.stelyteam.events.menu.ManageMenu;
+import fr.army.stelyteam.events.menu.MemberMenu;
+import fr.army.stelyteam.events.menu.MembersMenu;
+import fr.army.stelyteam.events.menu.PermissionsMenu;
+import fr.army.stelyteam.events.menu.StorageDirectoryMenu;
+import fr.army.stelyteam.events.menu.UpgradeMembersMenu;
 
 public class Team {
     private StelyTeamPlugin plugin = StelyTeamPlugin.getPlugin();
@@ -22,11 +31,12 @@ public class Team {
     private String creationDate = getCurrentDate();
     private Integer improvLvlMembers = 0;
     private Integer teamStorageLvl = 0;
-    private boolean unlockedTeamBank = false;
+    private Boolean unlockedTeamBank = false;
     private String teamOwnerName;
     private ArrayList<Member> teamMembers;
     private ArrayList<Permission> teamPermissions;
     private ArrayList<Alliance> teamAlliances;
+    private Map<Integer, Storage> teamStorages;
 
     public Team(String teamName, String teamPrefix, String teamDescription, double teamMoney, String creationDate, int improvLvlMembers, int teamStorageLvl, boolean unlockedTeamBank, String teamOwnerName){
         this.teamName = teamName;
@@ -42,6 +52,7 @@ public class Team {
         this.teamMembers = this.plugin.getDatabaseManager().getTeamMembers(teamName);
         this.teamPermissions = this.plugin.getDatabaseManager().getTeamAssignement(teamName);
         this.teamAlliances = this.plugin.getDatabaseManager().getTeamAlliances(teamName);
+        this.teamStorages = this.plugin.getDatabaseManager().getTeamStorages(this);
     }
 
     public Team(String teamName, String teamPrefix, String creationDate, String teamOwnerName){
@@ -116,7 +127,14 @@ public class Team {
 
 
     public void insertMember(String playerName){
-        this.teamMembers.add(new Member(playerName, this.plugin.getLastRank(), getCurrentDate()));
+        this.teamMembers.add(
+            new Member(
+                playerName,
+                this.plugin.getLastRank(),
+                getCurrentDate(),
+                StelyTeamPlugin.getPlugin().getSQLiteManager().getUUID(playerName)
+            )
+        );
         this.plugin.getDatabaseManager().insertMember(playerName, teamName);
     }
 
@@ -204,11 +222,10 @@ public class Team {
 
 
     public void refreshTeamMembersInventory(String authorName) {
-        InventoryBuilder inventoryBuilder = this.plugin.getInventoryBuilder();
         for (Member member : this.teamMembers) {
             if (member.getMemberName().equals(authorName)) continue;
 
-            HumanEntity player = Bukkit.getPlayer(member.getMemberName());
+            Player player = Bukkit.getPlayer(member.getMemberName());
             if (player != null) {
                 if (!config.getConfigurationSection("inventoriesName").getValues(true).containsValue(player.getOpenInventory().getTitle())){
                     continue;
@@ -216,21 +233,21 @@ public class Team {
                 
                 String openInventoryTitle = player.getOpenInventory().getTitle();
                 if (openInventoryTitle.equals(config.getString("inventoriesName.admin"))){
-                    player.openInventory(inventoryBuilder.createAdminInventory());
+                    new AdminMenu(player).openMenu();
                 }else if (openInventoryTitle.equals(config.getString("inventoriesName.manage"))){
-                    player.openInventory(inventoryBuilder.createManageInventory(player.getName(), this));
+                    new ManageMenu(player).openMenu(this);
                 }else if (openInventoryTitle.equals(config.getString("inventoriesName.member"))){
-                    player.openInventory(inventoryBuilder.createMemberInventory(player.getName(), this));
+                    new MemberMenu(player).openMenu(this);
                 }else if (openInventoryTitle.equals(config.getString("inventoriesName.upgradeTotalMembers"))){
-                    player.openInventory(inventoryBuilder.createUpgradeTotalMembersInventory(player.getName(), this));
+                    new UpgradeMembersMenu(player).openMenu(this);
                 }else if (openInventoryTitle.equals(config.getString("inventoriesName.editMembers"))){
-                    player.openInventory(inventoryBuilder.createEditMembersInventory(player.getName(), this));
+                    new EditMembersMenu(player).openMenu(this);
                 }else if (openInventoryTitle.equals(config.getString("inventoriesName.teamMembers"))){
-                    player.openInventory(inventoryBuilder.createMembersInventory(this));
+                    new MembersMenu(player).openMenu(this);
                 }else if (openInventoryTitle.equals(config.getString("inventoriesName.permissions"))){
-                    player.openInventory(inventoryBuilder.createPermissionsInventory(player.getName(), this));
+                    new PermissionsMenu(player).openMenu(this);
                 }else if (openInventoryTitle.equals(config.getString("inventoriesName.storageDirectory"))){
-                    player.openInventory(inventoryBuilder.createStorageDirectoryInventory(player.getName(), this));
+                    new StorageDirectoryMenu(player).openMenu(this);
                 }
             }
         }
@@ -305,6 +322,16 @@ public class Team {
         return null;
     }
 
+    
+    public boolean hasStorage(int storageId){
+        return this.teamStorages.containsKey(storageId);
+    }
+
+
+    public Storage getStorage(int storageId){
+        return this.teamStorages.get(storageId);
+    }
+
 
     public String getTeamName() {
         return teamName;
@@ -342,45 +369,21 @@ public class Team {
         return teamOwnerName;
     }
 
+    public ArrayList<Member> getTeamMembers() {
+        return teamMembers;
+    }
+
+    public ArrayList<Permission> getTeamPermissions() {
+        return teamPermissions;
+    }
+
+    public ArrayList<Alliance> getTeamAlliances() {
+        return teamAlliances;
+    }
+
 
     public void setTeamPrefix(String teamPrefix) {
         this.teamPrefix = teamPrefix;
-    }
-
-    public void setTeamDescription(String teamDescription) {
-        this.teamDescription = teamDescription;
-    }
-
-    public void setCreationDate(String creationDate) {
-        this.creationDate = creationDate;
-    }
-
-    public void setImprovLvlMembers(Integer improvLvlMembers) {
-        this.improvLvlMembers = improvLvlMembers;
-    }
-
-    public void setTeamStorageLvl(Integer teamStorageLvl) {
-        this.teamStorageLvl = teamStorageLvl;
-    }
-
-    public void setUnlockedTeamBank(boolean unlockedTeamBank) {
-        this.unlockedTeamBank = unlockedTeamBank;
-    }
-
-    public void setTeamOwnerName(String teamOwnerName) {
-        this.teamOwnerName = teamOwnerName;
-    }
-
-    public void setTeamMembers(ArrayList<Member> teamMembers) {
-        this.teamMembers = teamMembers;
-    }
-
-    public void setTeamPermissions(ArrayList<Permission> teamPermissions) {
-        this.teamPermissions = teamPermissions;
-    }
-
-    public void setTeamAlliances(ArrayList<Alliance> teamAlliances) {
-        this.teamAlliances = teamAlliances;
     }
 
     private String getCurrentDate(){

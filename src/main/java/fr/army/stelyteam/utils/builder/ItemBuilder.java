@@ -44,23 +44,6 @@ public class ItemBuilder {
 
 
 	public static ItemStack getPlayerHead(OfflinePlayer player, String name, List<String> lore) {
-		// ItemStack item = new ItemStack(Material.PLAYER_HEAD, 1);
-		// SkullMeta meta = (SkullMeta) item.getItemMeta();
-		// if (player != null) meta.setOwningPlayer(player);
-		// meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-		// meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
-		// meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-		// meta.addItemFlags(ItemFlag.HIDE_PLACED_ON);
-		// meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
-		// meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
-		// if(!lore.isEmpty()) {
-		// 	List<String> loreList = (List<String>) lore;
-		// 	meta.setLore(loreList);
-		// }
-
-		// meta.setDisplayName(name);
-		// item.setItemMeta(meta);
-		// return item;
 		return getCustomHead(null, name, lore, player);
 	}
 

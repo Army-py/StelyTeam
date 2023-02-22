@@ -29,7 +29,6 @@ public class SubCmdDowngrade extends SubCommand {
         args[0] = "";
 
         if (args.length == 1){
-            // player.sendMessage("Utilisation : /stelyteam downgrade <nom de team>");
             player.sendMessage(messageManager.getMessage("commands.stelyteam_downgrade.usage"));
         }else{
             String teamName = String.join("", args);
@@ -37,15 +36,12 @@ public class SubCmdDowngrade extends SubCommand {
             if (team != null){
                 Integer teamUpgrades = team.getImprovLvlMembers();
                 if (teamUpgrades == 0){
-                    // player.sendMessage("Cette team est déjà au niveau minimum");
                     player.sendMessage(messageManager.getMessage("commands.stelyteam_downgrade.min_level"));
                 }else{
-                    // player.sendMessage("Nombre de membres diminué");
                     player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_downgrade.output", teamName));
                     team.decrementImprovLvlMembers();
                 }
             }else{
-                // player.sendMessage("Cette team n'existe pas");
                 player.sendMessage(messageManager.getMessage("common.team_not_exist"));
             }
         }

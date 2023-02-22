@@ -27,10 +27,8 @@ public class SubCmdVisual extends SubCommand {
         args[0] = "";
 
         if (args.length == 1){
-            // player.sendMessage("Utilisation : /stelyteam visual <&3 texte>");
             player.sendMessage(messageManager.getMessage("commands.stelyteam_visual.usage"));
         }else{
-            // player.sendMessage("Ton texte :" + new ColorsBuilder().replaceColor(String.join(" ", args)));
             player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_visual.output", colorsBuilder.replaceColor(String.join(" ", args))));
         }
         return true;

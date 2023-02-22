@@ -31,7 +31,6 @@ public class SubCmdUpgrade extends SubCommand {
         args[0] = "";
 
         if (args.length == 1){
-            // player.sendMessage("Utilisation : /stelyteam upgrade <nom de team>");
             player.sendMessage(messageManager.getMessage("commands.stelyteam_upgrade.usage"));
         }else{
             String teamName = String.join("", args);
@@ -40,15 +39,12 @@ public class SubCmdUpgrade extends SubCommand {
                 Integer maxUpgrades = config.getConfigurationSection("inventories.upgradeTotalMembers").getValues(false).size() - 1;
                 Integer teamUpgrades = team.getImprovLvlMembers();
                 if (maxUpgrades == teamUpgrades){
-                    // player.sendMessage("Cette team est déjà au niveau maximum");
                     player.sendMessage(messageManager.getMessage("commands.stelyteam_upgrade.max_level"));
                 }else{
                     team.incrementImprovLvlMembers();
-                    // player.sendMessage("Nombre de membres augmenté");
                     player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_upgrade.output", teamName));
                 }
             }else{
-                // player.sendMessage("Cette team n'existe pas");
                 player.sendMessage(messageManager.getMessage("common.team_not_exist"));
             }
         }

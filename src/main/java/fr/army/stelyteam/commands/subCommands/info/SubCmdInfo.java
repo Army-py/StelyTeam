@@ -40,11 +40,9 @@ public class SubCmdInfo extends SubCommand {
         Player player = (Player) sender;
         args[0] = "";
         if (args.length == 1){
-            // player.sendMessage("Utilisation : /stelyteam info <nom de team>");
             player.sendMessage(messageManager.getMessage("commands.stelyteam_info.usage"));
         }else{
             String memberName = String.join("", args);
-            // String teamID = sqlManager.getTeamNameFromPlayerName(memberName) == null ? String.join("", args) : sqlManager.getTeamNameFromPlayerName(memberName);
             Team team = sqlManager.getTeamFromPlayerName(memberName) == null ? sqlManager.getTeamFromTeamName(String.join("", args)) : sqlManager.getTeamFromPlayerName(memberName);
             if (team != null){
                 String yesMessage = messages.getString("commands.stelyteam_info.true");
@@ -73,7 +71,6 @@ public class SubCmdInfo extends SubCommand {
 
                 player.sendMessage(String.join("\n", lore));
             }else{
-                // player.sendMessage("Cette team n'existe pas");
                 player.sendMessage(messageManager.getMessage("common.team_not_exist"));
             }
         }

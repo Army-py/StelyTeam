@@ -21,6 +21,8 @@ public class CacheManager {
     // {authorName, currentPage, maxElementsPerPage, teams}
     private ArrayList<Page> cachedPages = new ArrayList<Page>();
 
+    
+
 
 
     public void addTempAction(TemporaryAction tempAction){

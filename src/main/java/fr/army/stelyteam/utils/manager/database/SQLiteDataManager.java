@@ -48,11 +48,6 @@ public class SQLiteDataManager {
     }
 
 
-    public Connection getConnection() {
-        return connection;
-    }
-
-
     public void disconnect(Connection connection) {
         if(connection != null){
             try {
@@ -280,7 +275,7 @@ public class SQLiteDataManager {
     }
 
 
-    public void registerOfflinePlayer(OfflinePlayer player){
+    public void registerPlayer(OfflinePlayer player){
         if(isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("INSERT INTO players VALUES (?, ?)");

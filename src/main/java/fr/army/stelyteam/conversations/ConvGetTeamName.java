@@ -39,15 +39,12 @@ public class ConvGetTeamName extends StringPrompt {
         String authorName = author.getName();
 
         if (nameTeamIsTooLong(answer)) {
-            // con.getForWhom().sendRawMessage("Le nom est trop long");
             con.getForWhom().sendRawMessage(messageManager.getMessage("common.name_is_too_long"));
             return this;
         }else if (sqlManager.teamNameExists(answer)){
-            // con.getForWhom().sendRawMessage("Ce nom de team existe déjà");
             con.getForWhom().sendRawMessage(messageManager.getMessage("common.name_already_exists"));
             return this;
         }else if (answer.contains(" ")){
-            // con.getForWhom().sendRawMessage("Le nom ne doit pas contenir d'espace");
             con.getForWhom().sendRawMessage(messageManager.getMessage("common.name_cannot_contain_space"));
             return this;
         }
@@ -68,7 +65,6 @@ public class ConvGetTeamName extends StringPrompt {
 
     @Override
     public String getPromptText(ConversationContext arg0) {
-        // return "Envoie le nom de team";
         return messageManager.getMessage("manage_team.creation.send_team_id");
     }
 

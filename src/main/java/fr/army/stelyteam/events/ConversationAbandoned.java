@@ -33,10 +33,8 @@ public class ConversationAbandoned implements ConversationAbandonedListener {
 
 
         if (canceller.getClass().equals(InactivityConversationCanceller.class)) {
-            // context.getForWhom().sendRawMessage("Temps de réponse dépassé");
             author.sendRawMessage(messageManager.getMessage("conversation.timeout"));
         }else if (canceller.getClass().equals(ConversationSetCanceller.class)){
-            // context.getForWhom().sendRawMessage("Action annulée");
             author.sendRawMessage(messageManager.getMessage("conversation.cancel"));
         }
     }

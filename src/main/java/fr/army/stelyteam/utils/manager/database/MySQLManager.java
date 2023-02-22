@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -182,7 +184,6 @@ public class MySQLManager extends DatabaseManager {
                 queryMember.setString(1, ownerName);
                 queryMember.setInt(2, 0);
                 queryMember.setString(3, getCurrentDate());
-                // queryMember.setInt(4, null);
                 queryMember.executeUpdate();
                 queryMember.close();
                 
@@ -505,27 +506,7 @@ public class MySQLManager extends DatabaseManager {
         return null;
     }
 
-
-    // public ArrayList<String> getTeamMembers(String teamName){
-    //     if(isConnected()){
-    //         try {
-    //             PreparedStatement query = connection.prepareStatement("SELECT p.playerName FROM player AS p INNER JOIN team AS t ON p.teamId = t.teamId WHERE t.teamName = ?");
-    //             query.setString(1, teamName);
-    //             ResultSet result = query.executeQuery();
-    //             ArrayList<String> teamMembers = new ArrayList<>();
-    //             while(result.next()){
-    //                 teamMembers.add(result.getString("playerName"));
-    //             }
-    //             query.close();
-    //             return teamMembers;
-    //         } catch (SQLException e) {
-    //             e.printStackTrace();
-    //         }
-    //     }
-    //     return null;
-    // }
-
-        @Override
+    @Override
     public ArrayList<String> getTeamMembersWithRank(String teamName, int rank){
         if(isConnected()){
             try {
@@ -687,7 +668,6 @@ public class MySQLManager extends DatabaseManager {
                 PreparedStatement query = connection.prepareStatement("INSERT INTO teamStorage VALUES (?, ?, ?)");
                 query.setInt(1, storageId);
                 query.setInt(2, getTeamId(teamName));
-                // query.setString(3, storageContent);
                 query.setBytes(3, storageContent);
                 query.executeUpdate();
                 query.close();
@@ -702,7 +682,6 @@ public class MySQLManager extends DatabaseManager {
         if(isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("UPDATE teamStorage SET storageContent = ? WHERE teamId = ? AND storageId = ?");
-                // query.setString(1, storageContent);
                 query.setBytes(1, storageContent);
                 query.setInt(2, getTeamId(teamName));
                 query.setInt(3, storageId);
@@ -900,7 +879,8 @@ public class MySQLManager extends DatabaseManager {
                         new Member(
                             result.getString("playerName"),
                             result.getInt("teamRank"),
-                            result.getString("joinDate")
+                            result.getString("joinDate"),
+                            StelyTeamPlugin.getPlugin().getSQLiteManager().getUUID(result.getString("playerName"))
                         )
                     );
                 }
@@ -947,7 +927,6 @@ public class MySQLManager extends DatabaseManager {
                 queryTeam.setInt(1, getTeamId(teamName));
                 ResultSet resultTeam = queryTeam.executeQuery();
                 while(resultTeam.next()){
-                    // alliances.add(resultTeam.getString("teamName"));
                     alliances.add(
                         new Alliance(
                             resultTeam.getString("teamName"),
@@ -961,7 +940,6 @@ public class MySQLManager extends DatabaseManager {
                 queryAlliance.setInt(1, getTeamId(teamName));
                 ResultSet resultAlliance = queryAlliance.executeQuery();
                 while(resultAlliance.next()){
-                    // alliances.add(resultAlliance.getString("teamName"));
                     alliances.add(
                         new Alliance(
                             resultTeam.getString("teamName"),
@@ -971,6 +949,34 @@ public class MySQLManager extends DatabaseManager {
                 }
                 queryAlliance.close();
                 return alliances;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Map<Integer, Storage> getTeamStorages(Team team){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT ts.storageId, ts.storageContent FROM teamStorage AS ts INNER JOIN team AS t ON ts.teamId = t.teamId WHERE t.teamName = ?;");
+                query.setString(1, team.getTeamName());
+                ResultSet result = query.executeQuery();
+                Map<Integer, Storage> teamStorage = new HashMap<>();
+                while(result.next()){
+                    teamStorage.put(
+                        result.getInt("storageId"),
+                        new Storage(
+                            team,
+                            result.getInt("storageId"),
+                            null,
+                            result.getBytes("storageContent")
+                        )
+                    );
+                }
+                query.close();
+                return teamStorage;
             } catch (SQLException e) {
                 e.printStackTrace();
             }

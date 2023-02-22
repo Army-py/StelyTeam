@@ -38,17 +38,14 @@ public class ConvEditTeamDesc extends StringPrompt {
         Team team = sqlManager.getTeamFromPlayerName(authorName);
         
         if (colorBuilder.descriptionTeamIsTooLong(answer)) {
-            // con.getForWhom().sendRawMessage("Le préfixe est trop long");
             con.getForWhom().sendRawMessage(messageManager.getMessage("common.description_is_too_long"));
             return this;
         }else if (colorBuilder.containsBlockedColors(answer)) {
-            // con.getForWhom().sendRawMessage("Le préfixe contient des couleurs interdites");
             con.getForWhom().sendRawMessage(messageManager.getMessage("common.description_contains_blocked_colors"));
             return this;
         }
 
         economyManager.removeMoneyPlayer(author, config.getDouble("prices.editTeamDescription"));
-        // con.getForWhom().sendRawMessage("Le préfixe a été changé par " + new ColorsBuilder().replaceColor(answer));
         con.getForWhom().sendRawMessage(messageManager.getReplaceMessage("manage_team.edit_team_description.team_description_edited", colorBuilder.replaceColor(answer)));
         team.updateTeamDescription(answer);
         team.refreshTeamMembersInventory(authorName);
@@ -57,7 +54,6 @@ public class ConvEditTeamDesc extends StringPrompt {
 
     @Override
     public String getPromptText(ConversationContext arg0) {
-        // return "Envoie le nouveau préfixe de team";
         return messageManager.getMessage("manage_team.edit_team_description.send_team_description");
     }
 }

@@ -33,7 +33,6 @@ public class SubCmdHome extends SubCommand {
         String teamID = sqlManager.getTeamNameFromPlayerName(player.getName());
         
         if (!sqliteManager.isSet(teamID)){
-            // player.sendMessage("Le home de team n'est pas défini");
             player.sendMessage(messageManager.getMessage("commands.stelyteam_home.not_set"));
         }else{
             World world = Bukkit.getWorld(sqliteManager.getWorld(teamID));
@@ -42,7 +41,6 @@ public class SubCmdHome extends SubCommand {
             double z = sqliteManager.getZ(teamID);
             float yaw = (float) sqliteManager.getYaw(teamID);
             Location location = new Location(world, x, y, z, yaw, 0);
-            // player.sendMessage("Téléportation au home");
             player.sendMessage(messageManager.getMessage("commands.stelyteam_home.teleport"));
             player.teleport(location);
         }
