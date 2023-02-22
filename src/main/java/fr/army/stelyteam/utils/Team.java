@@ -8,9 +8,17 @@ import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.Player;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.utils.builder.InventoryBuilder;
+import fr.army.stelyteam.events.inventories.AdminInventory;
+import fr.army.stelyteam.events.inventories.EditMembersInventory;
+import fr.army.stelyteam.events.inventories.ManageInventory;
+import fr.army.stelyteam.events.inventories.MemberInventory;
+import fr.army.stelyteam.events.inventories.MembersInventory;
+import fr.army.stelyteam.events.inventories.PermissionsInventory;
+import fr.army.stelyteam.events.inventories.StorageDirectoryInventory;
+import fr.army.stelyteam.events.inventories.UpgradeMembersInventory;
 
 public class Team {
     private StelyTeamPlugin plugin = StelyTeamPlugin.getPlugin();
@@ -119,7 +127,14 @@ public class Team {
 
 
     public void insertMember(String playerName){
-        this.teamMembers.add(new Member(playerName, this.plugin.getLastRank(), getCurrentDate()));
+        this.teamMembers.add(
+            new Member(
+                playerName,
+                this.plugin.getLastRank(),
+                getCurrentDate(),
+                StelyTeamPlugin.getPlugin().getSQLiteManager().getUUID(playerName)
+            )
+        );
         this.plugin.getDatabaseManager().insertMember(playerName, teamName);
     }
 
@@ -207,11 +222,10 @@ public class Team {
 
 
     public void refreshTeamMembersInventory(String authorName) {
-        InventoryBuilder inventoryBuilder = this.plugin.getInventoryBuilder();
         for (Member member : this.teamMembers) {
             if (member.getMemberName().equals(authorName)) continue;
 
-            HumanEntity player = Bukkit.getPlayer(member.getMemberName());
+            Player player = Bukkit.getPlayer(member.getMemberName());
             if (player != null) {
                 if (!config.getConfigurationSection("inventoriesName").getValues(true).containsValue(player.getOpenInventory().getTitle())){
                     continue;
@@ -219,21 +233,29 @@ public class Team {
                 
                 String openInventoryTitle = player.getOpenInventory().getTitle();
                 if (openInventoryTitle.equals(config.getString("inventoriesName.admin"))){
-                    player.openInventory(inventoryBuilder.createAdminInventory());
+                    // player.openInventory(inventoryBuilder.createAdminInventory());
+                    new AdminInventory(player).openMenu();
                 }else if (openInventoryTitle.equals(config.getString("inventoriesName.manage"))){
-                    player.openInventory(inventoryBuilder.createManageInventory(player.getName(), this));
+                    // player.openInventory(inventoryBuilder.createManageInventory(player.getName(), this));
+                    new ManageInventory(player).openMenu(this);
                 }else if (openInventoryTitle.equals(config.getString("inventoriesName.member"))){
-                    player.openInventory(inventoryBuilder.createMemberInventory(player.getName(), this));
+                    // player.openInventory(inventoryBuilder.createMemberInventory(player.getName(), this));
+                    new MemberInventory(player).openMenu(this);
                 }else if (openInventoryTitle.equals(config.getString("inventoriesName.upgradeTotalMembers"))){
-                    player.openInventory(inventoryBuilder.createUpgradeTotalMembersInventory(this));
+                    // player.openInventory(inventoryBuilder.createUpgradeTotalMembersInventory(this));
+                    new UpgradeMembersInventory(player).openMenu(this);
                 }else if (openInventoryTitle.equals(config.getString("inventoriesName.editMembers"))){
-                    player.openInventory(inventoryBuilder.createEditMembersInventory(player.getName(), this));
+                    // player.openInventory(inventoryBuilder.createEditMembersInventory(player.getName(), this));
+                    new EditMembersInventory(player).openMenu(this);
                 }else if (openInventoryTitle.equals(config.getString("inventoriesName.teamMembers"))){
-                    player.openInventory(inventoryBuilder.createMembersInventory(this));
+                    // player.openInventory(inventoryBuilder.createMembersInventory(this));
+                    new MembersInventory(player).openMenu(this);
                 }else if (openInventoryTitle.equals(config.getString("inventoriesName.permissions"))){
-                    player.openInventory(inventoryBuilder.createPermissionsInventory(this));
+                    // player.openInventory(inventoryBuilder.createPermissionsInventory(this));
+                    new PermissionsInventory(player).openMenu(this);
                 }else if (openInventoryTitle.equals(config.getString("inventoriesName.storageDirectory"))){
-                    player.openInventory(inventoryBuilder.createStorageDirectoryInventory(this));
+                    // player.openInventory(inventoryBuilder.createStorageDirectoryInventory(this));
+                    new StorageDirectoryInventory(player).openMenu(this);
                 }
             }
         }

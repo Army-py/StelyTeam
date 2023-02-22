@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.events.inventories.ConfirmInventory;
 import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.TemporaryActionNames;
@@ -58,8 +59,9 @@ public class ConvEditOwner extends StringPrompt {
                 TemporaryActionNames.EDIT_OWNER, 
                 team)
         );
-        Inventory inventory = inventoryBuilder.createConfirmInventory();
-        author.openInventory(inventory);
+        // Inventory inventory = inventoryBuilder.createConfirmInventory();
+        // author.openInventory(inventory);
+        new ConfirmInventory(author).openMenu();
         return null;
     }
 

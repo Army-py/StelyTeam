@@ -882,7 +882,8 @@ public class SQLiteManager extends DatabaseManager {
                         new Member(
                             result.getString("playerName"),
                             result.getInt("teamRank"),
-                            result.getString("joinDate")
+                            result.getString("joinDate"),
+                            StelyTeamPlugin.getPlugin().getSQLiteManager().getUUID(result.getString("playerName"))
                         )
                     );
                 }
@@ -964,7 +965,7 @@ public class SQLiteManager extends DatabaseManager {
     public Map<Integer, Storage> getTeamStorages(Team team){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("SELECT s.storageId, s.storageContent FROM teamStorage AS ts INNER JOIN team AS t ON ts.teamId = t.teamId WHERE t.teamName = ?;");
+                PreparedStatement query = connection.prepareStatement("SELECT ts.storageId, ts.storageContent FROM teamStorage AS ts INNER JOIN team AS t ON ts.teamId = t.teamId WHERE t.teamName = ?;");
                 query.setString(1, team.getTeamName());
                 ResultSet result = query.executeQuery();
                 Map<Integer, Storage> teamStorage = new HashMap<>();

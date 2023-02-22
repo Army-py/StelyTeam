@@ -725,7 +725,7 @@ public class InventoryBuilder {
             ItemStack item;
 
             if (!sqliteManager.isRegistered(teamOwnerName)){
-                sqliteManager.registerOfflinePlayer(Bukkit.getOfflinePlayer(teamOwnerName));
+                sqliteManager.registerPlayer(Bukkit.getOfflinePlayer(teamOwnerName));
             }
 
             if (playerUUID == null) teamOwner = Bukkit.getOfflinePlayer(teamOwnerName);

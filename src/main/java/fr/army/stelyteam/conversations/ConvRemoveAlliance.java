@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.events.inventories.ConfirmInventory;
 import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.TemporaryActionNames;
@@ -49,8 +50,9 @@ public class ConvRemoveAlliance extends StringPrompt {
                 TemporaryActionNames.REMOVE_ALLIANCE,
                 team)
         );
-        Inventory inventory = inventoryBuilder.createConfirmInventory();
-        author.openInventory(inventory);
+        // Inventory inventory = inventoryBuilder.createConfirmInventory();
+        // author.openInventory(inventory);
+        new ConfirmInventory(author).openMenu();
         return null;
     }
 

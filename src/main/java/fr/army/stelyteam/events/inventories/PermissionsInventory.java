@@ -1,44 +1,89 @@
 package fr.army.stelyteam.events.inventories;
 
-import org.bukkit.configuration.file.YamlConfiguration;
+import java.util.List;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 
-import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.utils.Team;
-import fr.army.stelyteam.utils.builder.InventoryBuilder;
-import fr.army.stelyteam.utils.manager.database.DatabaseManager;
+import fr.army.stelyteam.utils.TeamMenu;
+import fr.army.stelyteam.utils.builder.ItemBuilder;
 
 
-public class PermissionsInventory {
+public class PermissionsInventory extends TeamMenu {
 
-    private InventoryClickEvent event;
-    private StelyTeamPlugin plugin;
-    private YamlConfiguration config;
-    private DatabaseManager sqlManager;
-    private InventoryBuilder inventoryBuilder;
-
-
-    public PermissionsInventory(InventoryClickEvent event, StelyTeamPlugin plugin){
-        this.event = event;
-        this.plugin = plugin;
-        this.config = plugin.getConfig();
-        this.sqlManager = plugin.getDatabaseManager();
-        this.inventoryBuilder = plugin.getInventoryBuilder();
+    public PermissionsInventory(Player viewer) {
+        super(viewer);
     }
 
 
-    public void onInventoryClick(){
-        Player player = (Player) event.getWhoClicked();
+    public Inventory createInventory(Team team) {
+        Integer slots = config.getInt("inventoriesSlots.permissions");
+        Inventory inventory = Bukkit.createInventory(this, slots, config.getString("inventoriesName.permissions"));
+
+        emptyCases(inventory, slots, 0);
+
+        for(String str : config.getConfigurationSection("inventories.permissions").getKeys(false)){
+            Integer slot = config.getInt("inventories.permissions."+str+".slot");
+            // Material material = Material.getMaterial(config.getString("inventories.permissions."+str+".itemType"));
+            String name = config.getString("inventories.permissions."+str+".itemName");
+            List<String> lore = config.getStringList("inventories.permissions."+str+".lore");
+            String headTexture;
+            
+            String rankPath = config.getString("inventories.permissions."+str+".rankPath");
+            Integer defaultRankId = config.getInt("inventories."+rankPath+".rank");
+            Integer permissionRank = team.getPermissionRank(str);
+            String lorePrefix = config.getString("prefixRankLore");
+            Material material;
+
+            if (str.equals("close")){
+                material = Material.getMaterial(config.getString("inventories.permissions."+str+".itemType"));
+                headTexture = config.getString("inventories.permissions."+str+".headTexture");
+            }else{
+                material = Material.getMaterial(config.getString("ranks."+plugin.getRankFromId(permissionRank != null ? permissionRank : defaultRankId)+".itemType"));
+                headTexture = config.getString("ranks."+plugin.getRankFromId(permissionRank != null ? permissionRank : defaultRankId)+".headTexture");
+            }
+
+            if (permissionRank != null){
+                String rankColor = config.getString("ranks." + plugin.getRankFromId(permissionRank) + ".color");
+                lore.add(0, lorePrefix + rankColor + config.getString("ranks." + plugin.getRankFromId(permissionRank) + ".name"));
+            }else if (rankPath != null){
+                String rankColor = config.getString("ranks." + plugin.getRankFromId(defaultRankId) + ".color");
+                lore.add(0, lorePrefix + rankColor + config.getString("ranks." + plugin.getRankFromId(defaultRankId) + ".name"));
+            }
+
+            boolean isDefault = false;
+            if (!str.equals("close") && (permissionRank == null || defaultRankId == permissionRank)){
+                isDefault = true;
+            }
+
+            inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, isDefault));
+        }
+        return inventory;
+    }
+
+
+    public void openMenu(Team team) {
+        this.open(createInventory(team));
+    }
+
+
+    @Override
+    public void onClick(InventoryClickEvent clickEvent) {
+        Player player = (Player) clickEvent.getWhoClicked();
         String playerName = player.getName();
-        String itemName = event.getCurrentItem().getItemMeta().getDisplayName();
-        Team team = sqlManager.getTeamFromPlayerName(playerName);
+        String itemName = clickEvent.getCurrentItem().getItemMeta().getDisplayName();
+        Team team = plugin.getDatabaseManager().getTeamFromPlayerName(playerName);
 
         // Fermeture ou retour en arrière de l'inventaire
         if (itemName.equals(config.getString("inventories.permissions.close.itemName"))){
-            Inventory inventory = inventoryBuilder.createManageInventory(playerName, team);
-            player.openInventory(inventory);
+            // Inventory inventory = inventoryBuilder.createManageInventory(playerName, team);
+            // player.openInventory(inventory);
+            new ManageInventory(player).openMenu(team);
             return;
         }
 
@@ -47,7 +92,7 @@ public class PermissionsInventory {
             Integer permissionRank = team.getPermissionRank(permission);
             Integer authorRank = team.getMemberRank(playerName);
             boolean authorIsOwner = team.isTeamOwner(playerName);
-            if (event.getClick().isRightClick()){
+            if (clickEvent.getClick().isRightClick()){
                 if (permissionRank != null){
                     if (!authorIsOwner && permissionRank <= authorRank){
                         return;
@@ -62,7 +107,7 @@ public class PermissionsInventory {
                     if (defaultRankId != plugin.getLastRank()) defaultRankId = defaultRankId+1;
                     team.insertAssignement(permission, defaultRankId);
                 }
-            }else if (event.getClick().isLeftClick()){
+            }else if (clickEvent.getClick().isLeftClick()){
                 if (permissionRank != null){
                     if (!authorIsOwner && permissionRank-1 <= authorRank){
                         return;
@@ -78,14 +123,20 @@ public class PermissionsInventory {
                     team.insertAssignement(permission, defaultRankId);
                 }
             }else return;
-            Inventory inventory = inventoryBuilder.createPermissionsInventory(team);
-            player.openInventory(inventory);
+            // Inventory inventory = inventoryBuilder.createPermissionsInventory(team);
+            // player.openInventory(inventory);
+            new PermissionsInventory(player).openMenu(team);
             team.refreshTeamMembersInventory(playerName);
         }
     }
 
 
-    public String getPermissionFromName(String value) {
+    @Override
+    public void onClose(InventoryCloseEvent closeEvent) {}
+
+
+
+    private String getPermissionFromName(String value) {
         for (String key : config.getConfigurationSection("inventories.permissions").getKeys(false)) {
             if (config.getString("inventories.permissions." + key + ".itemName").equals(value)) {
                 return key;

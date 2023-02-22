@@ -15,6 +15,9 @@ import fr.army.stelyteam.commands.CommandManager;
 import fr.army.stelyteam.events.InventoryClickManager;
 import fr.army.stelyteam.events.InventoryCloseManager;
 import fr.army.stelyteam.events.PlayerQuit;
+import fr.army.stelyteam.events.inventories.AdminInventory;
+import fr.army.stelyteam.events.inventories.CreateTeamInventory;
+import fr.army.stelyteam.events.inventories.MemberInventory;
 import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
 import fr.army.stelyteam.utils.builder.InventoryBuilder;
@@ -113,16 +116,21 @@ public class StelyTeamPlugin extends JavaPlugin {
 
     public void openMainInventory(Player player, Team team){
         String playerName = player.getName();
-        Inventory inventory;
 
         if (team == null){
-            inventory = inventoryBuilder.createTeamInventory();
+            // inventory = inventoryBuilder.createTeamInventory();
+            new CreateTeamInventory(player).openMenu();
         }else if(team.isTeamOwner(playerName)){
-            inventory = inventoryBuilder.createAdminInventory();
+            // inventory = inventoryBuilder.createAdminInventory();
+            new AdminInventory(player).openMenu();
         }else if (plugin.playerHasPermissionInSection(playerName, team, "manage")){
-            inventory = inventoryBuilder.createAdminInventory();
-        }else inventory = inventoryBuilder.createMemberInventory(playerName, team);
-        player.openInventory(inventory);
+            // inventory = inventoryBuilder.createAdminInventory();
+            new AdminInventory(player).openMenu();
+        }else{
+            // inventory = inventoryBuilder.createMemberInventory(playerName, team);
+            new MemberInventory(player).openMenu(team);
+        }
+        // player.openInventory(inventory);
     }
 
 

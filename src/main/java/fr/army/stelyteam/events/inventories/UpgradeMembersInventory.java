@@ -1,67 +1,92 @@
 package fr.army.stelyteam.events.inventories;
 
+import java.util.List;
+
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 
-import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.utils.Team;
+import fr.army.stelyteam.utils.TeamMenu;
 import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.TemporaryActionNames;
-import fr.army.stelyteam.utils.builder.InventoryBuilder;
-import fr.army.stelyteam.utils.manager.CacheManager;
-import fr.army.stelyteam.utils.manager.EconomyManager;
+import fr.army.stelyteam.utils.builder.ItemBuilder;
 import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.database.DatabaseManager;
-import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 
-public class UpgradeMembersInventory {
 
-    private InventoryClickEvent event;
-    private CacheManager cacheManager;
-    private YamlConfiguration config;
-    private DatabaseManager sqlManager;
-    private MessageManager messageManager;
-    private EconomyManager economyManager;
-    private InventoryBuilder inventoryBuilder;
+public class UpgradeMembersInventory extends TeamMenu {
 
+    final MessageManager messageManager = plugin.getMessageManager();
 
-    public UpgradeMembersInventory(InventoryClickEvent event, StelyTeamPlugin plugin) {
-        this.event = event;
-        this.cacheManager = plugin.getCacheManager();
-        this.config = plugin.getConfig();
-        this.sqlManager = plugin.getDatabaseManager();
-        this.messageManager = plugin.getMessageManager();
-        this.economyManager = plugin.getEconomyManager();
-        this.inventoryBuilder = plugin.getInventoryBuilder();
+    public UpgradeMembersInventory(Player viewer){
+        super(viewer);
     }
 
 
-    public void onInventoryClick(){
-        Player player = (Player) event.getWhoClicked();
-        String playerName = player.getName();
-        String itemName = event.getCurrentItem().getItemMeta().getDisplayName();
-        Material material = event.getCurrentItem().getType();
+    public Inventory createInventory(Team team) {
+        Integer slots = config.getInt("inventoriesSlots.upgradeTotalMembers");
+        Integer level = team.getImprovLvlMembers();
+        Inventory inventory = Bukkit.createInventory(this, slots, config.getString("inventoriesName.upgradeTotalMembers"));
+        Material material;
+        String headTexture;
 
-        Team team = sqlManager.getTeamFromPlayerName(playerName);
+        emptyCases(inventory, slots, 0);
+
+        for(String str : config.getConfigurationSection("inventories.upgradeTotalMembers").getKeys(false)){
+            Integer slot = config.getInt("inventories.upgradeTotalMembers."+str+".slot");
+            String name = config.getString("inventories.upgradeTotalMembers."+str+".itemName");
+            List<String> lore = config.getStringList("inventories.upgradeTotalMembers."+str+".lore");
+
+            if (str.equals("close")){
+                material = Material.getMaterial(config.getString("inventories.upgradeTotalMembers."+str+".itemType"));
+                headTexture = config.getString("inventories.upgradeTotalMembers."+str+".headTexture");
+            }else if (level >= config.getInt("inventories.upgradeTotalMembers."+str+".level")){
+                material = Material.getMaterial(config.getString("inventories.upgradeTotalMembers."+str+".unlock.itemType"));
+                headTexture = config.getString("inventories.upgradeTotalMembers."+str+".unlock.headTexture");
+            }else{
+                material = Material.getMaterial(config.getString("inventories.upgradeTotalMembers."+str+".lock.itemType"));
+                headTexture = config.getString("inventories.upgradeTotalMembers."+str+".lock.headTexture");
+            }
+            inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, false));
+        }
+        return inventory;
+    }
+
+
+    public void openMenu(Team team){
+        this.open(createInventory(team));
+    }
+
+
+    @Override
+    public void onClick(InventoryClickEvent clickEvent) {
+        Player player = (Player) clickEvent.getWhoClicked();
+        String playerName = player.getName();
+        String itemName = clickEvent.getCurrentItem().getItemMeta().getDisplayName();
+        Material material = clickEvent.getCurrentItem().getType();
+
+        Team team = plugin.getDatabaseManager().getTeamFromPlayerName(playerName);
         Integer level = team.getImprovLvlMembers();
         
         // Gestion des items
         if (itemName.equals(config.getString("inventories.upgradeTotalMembers.close.itemName"))){
-            Inventory inventory = inventoryBuilder.createManageInventory(playerName, team);
-            player.openInventory(inventory);
+            // Inventory inventory = inventoryBuilder.createManageInventory(playerName, team);
+            // player.openInventory(inventory);
+            new ManageInventory(player).openMenu(team);
         }else if (!material.name().equals(config.getString("emptyCase"))){
             for(String str : config.getConfigurationSection("inventories.upgradeTotalMembers").getKeys(false)){
                 String name = config.getString("inventories.upgradeTotalMembers."+str+".itemName");
                 
                 if (itemName.equals(name) && level+1 == config.getInt("inventories.upgradeTotalMembers."+str+".level")){
-                    if (economyManager.checkMoneyPlayer(player, config.getDouble("prices.upgrade.teamPlaces.level"+(level+1)))){
-                        cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.IMPROV_LVL_MEMBERS, team));
-                        Inventory inventory = inventoryBuilder.createConfirmInventory();
-                        player.openInventory(inventory);
+                    if (plugin.getEconomyManager().checkMoneyPlayer(player, config.getDouble("prices.upgrade.teamPlaces.level"+(level+1)))){
+                        plugin.getCacheManager().addTempAction(new TemporaryAction(playerName, TemporaryActionNames.IMPROV_LVL_MEMBERS, team));
+                        // Inventory inventory = inventoryBuilder.createConfirmInventory();
+                        // player.openInventory(inventory);
+                        new ConfirmInventory(player).openMenu();
                         return;
                     }else{
                         // player.sendMessage("Vous n'avez pas assez d'argent");
@@ -78,4 +103,8 @@ public class UpgradeMembersInventory {
             player.sendMessage(messageManager.getMessage("manage_team.upgrade_member_amount.must_unlock_previous_level"));
         }
     }
+
+
+    @Override
+    public void onClose(InventoryCloseEvent closeEvent) {}
 }

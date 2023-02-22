@@ -1,49 +1,83 @@
 package fr.army.stelyteam.events.inventories;
 
+import java.util.List;
+
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.conversations.Conversation;
-import org.bukkit.conversations.ConversationFactory;
-import org.bukkit.conversations.Prompt;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 
-import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.utils.Team;
-import fr.army.stelyteam.utils.builder.InventoryBuilder;
-import fr.army.stelyteam.utils.manager.database.DatabaseManager;
+import fr.army.stelyteam.utils.TeamMenu;
+import fr.army.stelyteam.utils.builder.ItemBuilder;
 
 
-public class StorageDirectoryInventory {
-
-    private InventoryClickEvent event;
-    private StelyTeamPlugin plugin;
-    private YamlConfiguration config;
-    private DatabaseManager sqlManager;
-    private InventoryBuilder inventoryBuilder;
+public class StorageDirectoryInventory extends TeamMenu {
 
 
-    public StorageDirectoryInventory(InventoryClickEvent event, StelyTeamPlugin plugin) {
-        this.event = event;
-        this.plugin = plugin;
-        this.config = plugin.getConfig();
-        this.sqlManager = plugin.getDatabaseManager();
-        this.inventoryBuilder = plugin.getInventoryBuilder();
+    public StorageDirectoryInventory(Player viewer){
+        super(viewer);
     }
 
 
-    public void onInventoryClick(){
-        Player player = (Player) event.getWhoClicked();
+    public Inventory createInventory(Team team) {
+        Integer slots = config.getInt("inventoriesSlots.storageDirectory");
+        Inventory inventory = Bukkit.createInventory(this, slots, config.getString("inventoriesName.storageDirectory"));
+        Integer level = team.getTeamStorageLvl();
+
+        emptyCases(inventory, slots, 0);
+
+        for(String str : config.getConfigurationSection("inventories.storageDirectory").getKeys(false)){
+            Integer slot = config.getInt("inventories.storageDirectory."+str+".slot");
+            String headTexture;
+            Material material;
+            String name;
+            List<String> lore;
+
+            if (level >= config.getInt("inventories.storageDirectory."+str+".level") || str.equals("close")){
+                material = Material.getMaterial(config.getString("inventories.storageDirectory."+str+".itemType"));
+                headTexture = config.getString("inventories.storageDirectory."+str+".headTexture");
+                if (str.equals("close")){
+                    name = config.getString("inventories.storageDirectory."+str+".itemName");
+                }else{
+                    name = config.getString(config.getString("inventories.storageDirectory."+str+".itemName"));
+                }
+                lore = config.getStringList("inventories.storageDirectory."+str+".lore");
+
+                inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, false));
+            }else{
+                material = Material.getMaterial(config.getString("storageNotUnlock.itemType"));
+                name = config.getString("storageNotUnlock.itemName");
+                lore = config.getStringList("storageNotUnlock.lore");
+                headTexture = config.getString("storageNotUnlock.headTexture");
+
+                inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, false));
+            }
+        }
+        return inventory;
+    }
+
+
+    public void openMenu(Team team){
+        this.open(createInventory(team));
+    }
+
+
+    @Override
+    public void onClick(InventoryClickEvent clickEvent) {
+        Player player = (Player) clickEvent.getWhoClicked();
         String playerName = player.getName();
-        Team team = sqlManager.getTeamFromPlayerName(playerName);
-        String itemName = event.getCurrentItem().getItemMeta().getDisplayName();
-        Material itemType = event.getCurrentItem().getType();
+        Team team = plugin.getDatabaseManager().getTeamFromPlayerName(playerName);
+        String itemName = clickEvent.getCurrentItem().getItemMeta().getDisplayName();
+        Material itemType = clickEvent.getCurrentItem().getType();
 
         // Fermeture ou retour en arrière de l'inventaire
         if (itemName.equals(config.getString("inventories.storageDirectory.close.itemName"))){
-            Inventory inventory = inventoryBuilder.createMemberInventory(playerName, team);
-            player.openInventory(inventory);
+            // Inventory inventory = inventoryBuilder.createMemberInventory(playerName, team);
+            // player.openInventory(inventory);
+            new MemberInventory(player).openMenu(team);
         }else{
             for(String str : config.getConfigurationSection("inventories.storageDirectory").getKeys(false)){
                 String name = config.getString(config.getString("inventories.storageDirectory."+str+".itemName"));
@@ -52,8 +86,9 @@ public class StorageDirectoryInventory {
 
                 if (itemName.equals(name) && itemType.equals(type)){
                     // Inventory inventory = inventoryBuilder.createStorageInventory(teamId, storageId, name);
-                    Inventory inventory = inventoryBuilder.createStorageInventory(team, storageId);
-                    player.openInventory(inventory);
+                    // Inventory inventory = inventoryBuilder.createStorageInventory(team, storageId);
+                    // player.openInventory(inventory);
+                    new StorageInventory(player).openMenu(team, storageId);
                     return;
                 }
             }
@@ -61,10 +96,6 @@ public class StorageDirectoryInventory {
     }
 
 
-    public void getNameInput(Player player, Prompt prompt) {
-        ConversationFactory cf = new ConversationFactory(plugin);
-        Conversation conv = cf.withFirstPrompt(prompt).withLocalEcho(false).buildConversation(player);
-        conv.begin();
-        return;
-    }
+    @Override
+    public void onClose(InventoryCloseEvent closeEvent) {}
 }

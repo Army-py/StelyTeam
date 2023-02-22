@@ -1,58 +1,91 @@
 package fr.army.stelyteam.events.inventories;
 
+import java.util.List;
+
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.utils.Storage;
 import fr.army.stelyteam.utils.Team;
-import fr.army.stelyteam.utils.builder.InventoryBuilder;
+import fr.army.stelyteam.utils.TeamMenu;
+import fr.army.stelyteam.utils.builder.ItemBuilder;
 import fr.army.stelyteam.utils.manager.CacheManager;
-import fr.army.stelyteam.utils.manager.database.DatabaseManager;
-import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 import fr.army.stelyteam.utils.manager.serializer.ItemStackSerializer;
 
-public class StorageInventory {
-    
-    private InventoryClickEvent clickEvent;
-    private InventoryCloseEvent closeEvent;
-    private StelyTeamPlugin plugin;
-    private CacheManager cacheManager;
-    private YamlConfiguration config;
-    private InventoryBuilder inventoryBuilder;
-    private DatabaseManager sqlManager;
-    private ItemStackSerializer serializeManager;
 
+public class StorageInventory extends TeamMenu {
 
-    public StorageInventory(InventoryClickEvent clickEvent, StelyTeamPlugin plugin) {
-        this.plugin = plugin;
-        this.cacheManager = plugin.getCacheManager();
-        this.clickEvent = clickEvent;
-        this.config = plugin.getConfig();
-        this.sqlManager = plugin.getDatabaseManager();
-        this.inventoryBuilder = plugin.getInventoryBuilder();
-        this.serializeManager = plugin.getSerializeManager();
-    }
+    final CacheManager cacheManager = plugin.getCacheManager();
+    final ItemStackSerializer serializeManager = plugin.getSerializeManager();
 
-    public StorageInventory(InventoryCloseEvent closeEvent, StelyTeamPlugin plugin) {
-        this.plugin = plugin;
-        this.cacheManager = plugin.getCacheManager();
-        this.closeEvent = closeEvent;
-        this.config = plugin.getConfig();
-        this.sqlManager = plugin.getDatabaseManager();
-        this.serializeManager = plugin.getSerializeManager();
+    public StorageInventory(Player viewer){
+        super(viewer);
     }
 
 
-    public void onInventoryClick(){
+    public Inventory createInventory(Team team, Integer storageId) {
+        Integer slots = config.getInt("inventoriesSlots.storage");
+        String inventoryName = config.getString(config.getString("inventories.storageDirectory."+plugin.getStorageFromId(storageId)+".itemName"));
+        String teamName = team.getTeamName();
+        Inventory inventory;
+
+        if (cacheManager.containsStorage(teamName, storageId)){
+            inventory = cacheManager.getStorage(teamName, storageId).getInventoryInstance();
+        }else{
+            inventory = Bukkit.createInventory(this, slots, inventoryName);
+
+            // if (sqlManager.teamHasStorage(teamName, storageId)){
+            //     byte[] contentString = sqlManager.getStorageContent(team.getTeamName(), storageId);
+            //     ItemStack[] content = serializeManager.deserializeFromByte(contentString);
+            //     inventory.setContents(content);
+            // }
+
+            if (team.hasStorage(storageId)){
+                byte[] contentBytes = team.getStorage(storageId).getStorageContent();
+                ItemStack[] content = serializeManager.deserializeFromByte(contentBytes);
+                inventory.setContents(content);
+            }
+        }
+
+        emptyCases(inventory, config.getIntegerList("inventories.storage.emptyCase.slots"));
+
+        for(String str : config.getConfigurationSection("inventories.storage").getKeys(false)){
+            Integer slot = config.getInt("inventories.storage."+str+".slot");
+            Material material = Material.getMaterial(config.getString("inventories.storage."+str+".itemType"));
+            String name = config.getString("inventories.storage."+str+".itemName");
+            List<String> lore = config.getStringList("inventories.storage."+str+".lore");
+            String headTexture = config.getString("inventories.storage."+str+".headTexture");
+
+            if (str.equals("previous")){
+                if (storageId == plugin.getMinStorageId()) continue;
+            }else if (str.equals("next")){
+                if (storageId == team.getTeamStorageLvl()) continue;
+            }else if (str.equals("emptyCase")){
+                continue;
+            }
+
+            inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, false));
+        }
+
+        return inventory;
+    }
+
+
+    public void openMenu(Team team, Integer storageId){
+        this.open(createInventory(team, storageId));
+    }
+
+
+    @Override
+    public void onClick(InventoryClickEvent clickEvent) {
         Player player = (Player) clickEvent.getWhoClicked();
         String playerName = player.getName();
-        Team team = sqlManager.getTeamFromPlayerName(playerName);
+        Team team = plugin.getDatabaseManager().getTeamFromPlayerName(playerName);
         Integer storageId = getStorageId(clickEvent.getView().getTitle());
         String itemName;
         
@@ -64,16 +97,19 @@ public class StorageInventory {
                 return;
             }else if (itemName.equals(config.getString("inventories.storage.previous.itemName"))){
                 clickEvent.setCancelled(true);
-                player.openInventory(inventoryBuilder.createStorageInventory(team, storageId-1));
+                // player.openInventory(inventoryBuilder.createStorageInventory(team, storageId-1));
+                new StorageInventory(player).openMenu(team, storageId-1);
                 return;
             }else if (itemName.equals(config.getString("inventories.storage.next.itemName"))){
                 clickEvent.setCancelled(true);
-                player.openInventory(inventoryBuilder.createStorageInventory(team, storageId+1));
+                // player.openInventory(inventoryBuilder.createStorageInventory(team, storageId+1));
+                new StorageInventory(player).openMenu(team, storageId+1);
             }else{
                 if (itemName.equals(config.getString("inventories.storage.close.itemName"))){
                     clickEvent.setCancelled(true);
                     if (clickEvent.getCursor().getType().equals(Material.AIR)){
-                        player.openInventory(inventoryBuilder.createStorageDirectoryInventory(team));
+                        // player.openInventory(inventoryBuilder.createStorageDirectoryInventory(team));
+                        new StorageDirectoryInventory(player).openMenu(team);
                         return;
                     }else return;
                 }
@@ -83,11 +119,12 @@ public class StorageInventory {
     }
 
 
-    public void onInventoryClose(){
+    @Override
+    public void onClose(InventoryCloseEvent closeEvent) {
         Player player = (org.bukkit.entity.Player) closeEvent.getPlayer();
         Inventory storageInventory = closeEvent.getInventory();
         String playerName = player.getName();
-        Team team = sqlManager.getTeamFromPlayerName(playerName);
+        Team team = plugin.getDatabaseManager().getTeamFromPlayerName(playerName);
         Integer storageId = getStorageId(closeEvent.getView().getTitle());
         ItemStack[] inventoryContent = closeEvent.getInventory().getContents();
         Storage storage;
@@ -105,6 +142,7 @@ public class StorageInventory {
         storage.saveStorageToCache();
         storage.saveStorageToDatabase();
     }
+
 
 
     private Integer getStorageId(String inventoryTitle){
