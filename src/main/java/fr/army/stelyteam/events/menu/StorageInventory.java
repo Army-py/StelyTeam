@@ -39,12 +39,6 @@ public class StorageInventory extends TeamMenu {
         }else{
             inventory = Bukkit.createInventory(this, slots, inventoryName);
 
-            // if (sqlManager.teamHasStorage(teamName, storageId)){
-            //     byte[] contentString = sqlManager.getStorageContent(team.getTeamName(), storageId);
-            //     ItemStack[] content = serializeManager.deserializeFromByte(contentString);
-            //     inventory.setContents(content);
-            // }
-
             if (team.hasStorage(storageId)){
                 byte[] contentBytes = team.getStorage(storageId).getStorageContent();
                 ItemStack[] content = serializeManager.deserializeFromByte(contentBytes);
@@ -97,12 +91,10 @@ public class StorageInventory extends TeamMenu {
                 return;
             }else if (itemName.equals(config.getString("inventories.storage.previous.itemName"))){
                 clickEvent.setCancelled(true);
-                // player.openInventory(inventoryBuilder.createStorageInventory(team, storageId-1));
                 new StorageInventory(player).openMenu(team, storageId-1);
                 return;
             }else if (itemName.equals(config.getString("inventories.storage.next.itemName"))){
                 clickEvent.setCancelled(true);
-                // player.openInventory(inventoryBuilder.createStorageInventory(team, storageId+1));
                 new StorageInventory(player).openMenu(team, storageId+1);
             }else{
                 if (itemName.equals(config.getString("inventories.storage.close.itemName"))){

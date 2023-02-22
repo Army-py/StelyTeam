@@ -65,9 +65,6 @@ public class MembersInventory extends TeamMenu {
             Material material = Material.getMaterial(config.getString("inventories.teamMembers."+str+".itemType"));
             String name = config.getString("inventories.teamMembers."+str+".itemName");
             String headTexture = config.getString("inventories.teamMembers."+str+".headTexture");
-
-            // if (sqlManager.isOwner(playername)) lore = config.getStringList("inventories.teamMembers."+str+".lore");
-            // else lore = Collections.emptyList();
             
             inventory.setItem(slot, ItemBuilder.getItem(material, name, Collections.emptyList(), headTexture, false));
         }
@@ -112,19 +109,13 @@ public class MembersInventory extends TeamMenu {
                                 team
                             )
                         );
-                    // Inventory inventory = inventoryBuilder.createConfirmInventory();
-                    // player.openInventory(inventory);
                     new ConfirmInventory(player).openMenu();
                 }
             }else if (itemName.equals(config.getString("inventories.teamMembers.close.itemName"))){
-                // Inventory inventory = inventoryBuilder.createEditMembersInventory(playerName, team);
-                // player.openInventory(inventory);
                 new EditMembersInventory(player).openMenu(team);
             }
         }else{
             if (itemName.equals(config.getString("inventories.teamMembers.close.itemName"))){
-                // Inventory inventory = inventoryBuilder.createMemberInventory(playerName, team);
-                // player.openInventory(inventory);
                 new MemberInventory(player).openMenu(team);
             }
         }

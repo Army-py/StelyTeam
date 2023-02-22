@@ -28,21 +28,17 @@ public class SubCmdAddMember extends SubCommand {
         args[0] = "";
 
         if (args.length < 3){
-            // player.sendMessage("Utilisation : /stelyteam addmember <nom de team> <membre>");
             player.sendMessage(messageManager.getMessage("commands.stelyteam_addmember.usage"));
         }else{
             Team team = sqlManager.getTeamFromTeamName(args[1]);
             if (team != null){
                 if (sqlManager.isMember(args[2])){
-                    // player.sendMessage("Ce joueur est déjà dans une team");
                     player.sendMessage(messageManager.getMessage("common.player_already_in_team"));
                 }else{
                     team.insertMember(args[2]);
-                    // player.sendMessage("Joueur ajouté dans la team");
                     player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_addmember.output", args[2]));
                 }
             }else{
-                // player.sendMessage("Cette team n'existe pas");
                 player.sendMessage(messageManager.getMessage("common.team_not_exist"));
             }
         }

@@ -233,28 +233,20 @@ public class Team {
                 
                 String openInventoryTitle = player.getOpenInventory().getTitle();
                 if (openInventoryTitle.equals(config.getString("inventoriesName.admin"))){
-                    // player.openInventory(inventoryBuilder.createAdminInventory());
                     new AdminInventory(player).openMenu();
                 }else if (openInventoryTitle.equals(config.getString("inventoriesName.manage"))){
-                    // player.openInventory(inventoryBuilder.createManageInventory(player.getName(), this));
                     new ManageInventory(player).openMenu(this);
                 }else if (openInventoryTitle.equals(config.getString("inventoriesName.member"))){
-                    // player.openInventory(inventoryBuilder.createMemberInventory(player.getName(), this));
                     new MemberInventory(player).openMenu(this);
                 }else if (openInventoryTitle.equals(config.getString("inventoriesName.upgradeTotalMembers"))){
-                    // player.openInventory(inventoryBuilder.createUpgradeTotalMembersInventory(this));
                     new UpgradeMembersInventory(player).openMenu(this);
                 }else if (openInventoryTitle.equals(config.getString("inventoriesName.editMembers"))){
-                    // player.openInventory(inventoryBuilder.createEditMembersInventory(player.getName(), this));
                     new EditMembersInventory(player).openMenu(this);
                 }else if (openInventoryTitle.equals(config.getString("inventoriesName.teamMembers"))){
-                    // player.openInventory(inventoryBuilder.createMembersInventory(this));
                     new MembersInventory(player).openMenu(this);
                 }else if (openInventoryTitle.equals(config.getString("inventoriesName.permissions"))){
-                    // player.openInventory(inventoryBuilder.createPermissionsInventory(this));
                     new PermissionsInventory(player).openMenu(this);
                 }else if (openInventoryTitle.equals(config.getString("inventoriesName.storageDirectory"))){
-                    // player.openInventory(inventoryBuilder.createStorageDirectoryInventory(this));
                     new StorageDirectoryInventory(player).openMenu(this);
                 }
             }

@@ -95,21 +95,15 @@ public class ManageInventory extends TeamMenu {
         
         // Liaisin des items avec leur fonction
         if (itemName.equals(config.getString("inventories.manage.editMembers.itemName"))){
-            // Inventory inventory = inventoryBuilder.createEditMembersInventory(playerName, team);
-            // player.openInventory(inventory);
             new EditMembersInventory(player).openMenu(team);
 
 
         }else if (itemName.equals(config.getString("inventories.manage.editAlliances.itemName"))){
-            // Inventory inventory = inventoryBuilder.createEditAlliancesInventory(playerName, team);
-            // player.openInventory(inventory);
             new EditAlliancesInventory(player).openMenu(team);
 
 
         }else if (itemName.equals(config.getString("inventories.manage.setTeamHome.itemName"))){
             cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.CREATE_HOME, team));
-            // Inventory inventory = inventoryBuilder.createConfirmInventory();
-            // player.openInventory(inventory);
             new ConfirmInventory(player).openMenu();
 
 
@@ -118,8 +112,6 @@ public class ManageInventory extends TeamMenu {
                 player.sendMessage(messageManager.getMessage("manage_team.team_home.not_set"));
             }else{
                 cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.DELETE_HOME, team));
-                // Inventory inventory = inventoryBuilder.createConfirmInventory();
-                // player.openInventory(inventory);
                 new ConfirmInventory(player).openMenu();
             }
 
@@ -129,8 +121,6 @@ public class ManageInventory extends TeamMenu {
                 if (economyManager.checkMoneyPlayer(player, config.getDouble("prices.buyTeamBank"))){
                     cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.BUY_TEAM_BANK, team));
 
-                    // Inventory inventory = inventoryBuilder.createConfirmInventory();
-                    // player.openInventory(inventory);
                     new ConfirmInventory(player).openMenu();
                 }else{
                     player.sendMessage(messageManager.getMessage("common.not_enough_money"));
@@ -141,22 +131,16 @@ public class ManageInventory extends TeamMenu {
 
 
         }else if (itemName.equals(config.getString("inventories.manage.upgradeTotalMembers.itemName"))){
-            // Inventory inventory = inventoryBuilder.createUpgradeTotalMembersInventory(team);
-            // player.openInventory(inventory);
             new UpgradeMembersInventory(player).openMenu(team);
 
 
         }else if (itemName.equals(config.getString("inventories.manage.upgradeStorageAmount.itemName"))){
-            // Inventory inventory = inventoryBuilder.createUpgradeStorageInventory(team);
-            // player.openInventory(inventory);
             new UpgradeStorageInventory(player).openMenu(team);
 
 
         }else if (itemName.equals(config.getString("inventories.manage.editName.itemName"))){
             if (economyManager.checkMoneyPlayer(player, config.getDouble("prices.editTeamId"))){
                 cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.EDIT_NAME, team));
-                // Inventory inventory = inventoryBuilder.createConfirmInventory();
-                // player.openInventory(inventory);
                 new ConfirmInventory(player).openMenu();
             }else{
                 player.sendMessage(messageManager.getMessage("common.not_enough_money"));
@@ -166,11 +150,8 @@ public class ManageInventory extends TeamMenu {
         }else if (itemName.equals(config.getString("inventories.manage.editPrefix.itemName"))){
             if (economyManager.checkMoneyPlayer(player, config.getDouble("prices.editTeamPrefix"))){
                 cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.EDIT_PREFIX, team));
-                // Inventory inventory = inventoryBuilder.createConfirmInventory();
-                // player.openInventory(inventory);
                 new ConfirmInventory(player).openMenu();
             }else{
-                // player.sendMessage("Vous n'avez pas assez d'argent");
                 player.sendMessage(messageManager.getMessage("common.not_enough_money"));
             }
 
@@ -178,32 +159,23 @@ public class ManageInventory extends TeamMenu {
         }else if (itemName.equals(config.getString("inventories.manage.editDescription.itemName"))){
             if (economyManager.checkMoneyPlayer(player, config.getDouble("prices.editTeamDescription"))){
                 cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.EDIT_DESCRIPTION, team));
-                // Inventory inventory = inventoryBuilder.createConfirmInventory();
-                // player.openInventory(inventory);
                 new ConfirmInventory(player).openMenu();
             }else{
-                // player.sendMessage("Vous n'avez pas assez d'argent");
                 player.sendMessage(messageManager.getMessage("common.not_enough_money"));
             }
 
 
         }else if (itemName.equals(config.getString("inventories.manage.removeTeam.itemName"))){
             cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.DELETE_TEAM, team));
-            // Inventory inventory = inventoryBuilder.createConfirmInventory();
-            // player.openInventory(inventory);
             new ConfirmInventory(player).openMenu();
 
 
         }else if (itemName.equals(config.getString("inventories.manage.editPermissions.itemName"))){
-            // Inventory inventory = inventoryBuilder.createPermissionsInventory(team);
-            // player.openInventory(inventory);
             new PermissionsInventory(player).openMenu(team);
 
 
         // Fermeture ou retour en arrière de l'inventaire
         }else if (itemName.equals(config.getString("inventories.manage.close.itemName"))){
-            // Inventory inventory = inventoryBuilder.createAdminInventory();
-            // player.openInventory(inventory);
             new AdminInventory(player).openMenu();
         }
     }

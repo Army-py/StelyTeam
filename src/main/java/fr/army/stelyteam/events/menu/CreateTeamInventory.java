@@ -54,9 +54,6 @@ public class CreateTeamInventory extends TeamMenu {
 
         if (itemName.equals(config.getString("inventories.createTeam.itemName"))){
             if (plugin.getEconomyManager().checkMoneyPlayer(player, config.getDouble("prices.createTeam"))){
-                // Inventory confirmInventory = inventoryBuilder.createConfirmInventory();
-                // Inventory inventory = new ConfirmInventory(plugin).createInventory(null);
-                // player.openInventory(inventory);
                 new ConfirmInventory(viewer).openMenu();
                 plugin.getCacheManager().addTempAction(
                     new TemporaryAction(
@@ -64,7 +61,6 @@ public class CreateTeamInventory extends TeamMenu {
                         TemporaryActionNames.CREATE_TEAM,
                         plugin.getDatabaseManager().getTeamFromPlayerName(playerName)));
             }else{
-                // player.sendMessage("Vous n'avez pas assez d'argent");
                 player.sendMessage(plugin.getMessageManager().getMessage("common.not_enough_money"));
             }
         }

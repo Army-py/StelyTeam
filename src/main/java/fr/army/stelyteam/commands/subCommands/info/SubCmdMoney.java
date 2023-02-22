@@ -28,15 +28,12 @@ public class SubCmdMoney extends SubCommand {
         args[0] = "";
 
         if (args.length == 1){
-            // player.sendMessage("Utilisation : /stelyteam money <nom de team>");
             player.sendMessage(messageManager.getMessage("commands.stelyteam_money.usage"));
         }else{
             String teamID = String.join("", args);
             if (sqlManager.teamNameExists(teamID)){
-                // player.sendMessage(sqlManager.getTeamMoney(teamID).toString());
                 player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_money.output", DoubleToString(sqlManager.getTeamMoney(teamID))));
             }else{
-                // player.sendMessage("Cette team n'existe pas");
                 player.sendMessage(messageManager.getMessage("common.team_not_exist"));
             }
         }

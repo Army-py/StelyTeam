@@ -74,9 +74,6 @@ public class UpgradeStorageInventory extends TeamMenu {
         
         // Gestion des items
         if (itemName.equals(config.getString("inventories.upgradeStorageAmount.close.itemName"))){
-            // Retour en arrière de l'inventaire
-            // Inventory inventory = inventoryBuilder.createManageInventory(playerName, team);
-            // player.openInventory(inventory);
             new ManageInventory(player).openMenu(team);
         }else if (!material.name().equals(config.getString("emptyCase"))){
             for(String str : config.getConfigurationSection("inventories.upgradeStorageAmount").getKeys(false)){
@@ -85,22 +82,17 @@ public class UpgradeStorageInventory extends TeamMenu {
                 if (itemName.equals(name) && level+1 == config.getInt("inventories.upgradeStorageAmount."+str+".level")){
                     if (plugin.getEconomyManager().checkMoneyPlayer(player, config.getDouble("prices.upgrade.teamStorages.level"+(level+1)))){
                         plugin.getCacheManager().addTempAction(new TemporaryAction(playerName, TemporaryActionNames.IMPROV_LVL_STORAGE, team));
-                        // Inventory inventory = inventoryBuilder.createConfirmInventory();
-                        // player.openInventory(inventory);
                         new ConfirmInventory(player).openMenu();
                         return;
                     }else{
-                        // player.sendMessage("Vous n'avez pas assez d'argent");
                         player.sendMessage(messageManager.getMessage("common.not_enough_money"));
                         return;
                     }
                 }else if (itemName.equals(name) && level >= config.getInt("inventories.upgradeStorageAmount."+str+".level")){
-                    // player.sendMessage("Vous avez déjà débloqué cette amélioration");
                     player.sendMessage(messageManager.getMessage("common.already_unlocked"));
                     return;
                 }
             }
-            // player.sendMessage("Vous devez débloquer le niveau précédent pour pouvoir acheter cette amélioration"); 
             player.sendMessage(messageManager.getMessage("manage_team.upgrade_storages.must_unlock_previous_level"));
         }
     }

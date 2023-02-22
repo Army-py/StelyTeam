@@ -29,7 +29,6 @@ public class PermissionsInventory extends TeamMenu {
 
         for(String str : config.getConfigurationSection("inventories.permissions").getKeys(false)){
             Integer slot = config.getInt("inventories.permissions."+str+".slot");
-            // Material material = Material.getMaterial(config.getString("inventories.permissions."+str+".itemType"));
             String name = config.getString("inventories.permissions."+str+".itemName");
             List<String> lore = config.getStringList("inventories.permissions."+str+".lore");
             String headTexture;
@@ -81,8 +80,6 @@ public class PermissionsInventory extends TeamMenu {
 
         // Fermeture ou retour en arrière de l'inventaire
         if (itemName.equals(config.getString("inventories.permissions.close.itemName"))){
-            // Inventory inventory = inventoryBuilder.createManageInventory(playerName, team);
-            // player.openInventory(inventory);
             new ManageInventory(player).openMenu(team);
             return;
         }
@@ -123,8 +120,6 @@ public class PermissionsInventory extends TeamMenu {
                     team.insertAssignement(permission, defaultRankId);
                 }
             }else return;
-            // Inventory inventory = inventoryBuilder.createPermissionsInventory(team);
-            // player.openInventory(inventory);
             new PermissionsInventory(player).openMenu(team);
             team.refreshTeamMembersInventory(playerName);
         }

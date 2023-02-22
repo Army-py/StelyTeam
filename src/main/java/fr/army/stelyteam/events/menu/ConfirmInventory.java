@@ -76,7 +76,6 @@ public class ConfirmInventory extends TeamMenu {
         if (itemName.equals(config.getString("inventories.confirmInventory.confirm.itemName"))){
             String receiverName;
             Player receiver;
-            Inventory inventory;
             Integer level;
             Integer newLevel;
             switch (cacheManager.getPlayerActionName(playerName)) {
@@ -145,9 +144,6 @@ public class ConfirmInventory extends TeamMenu {
                     team.unlockedTeamBank();
                     player.sendMessage(messageManager.getMessage("manage_team.team_bank.unlock"));
 
-                    // inventory = inventoryBuilder.createManageInventory(playerName, team);
-                    // inventory = new ManageInventory(plugin).createInventory(new TeamInteraction(playerName, team));
-                    // player.openInventory(inventory);
                     new ManageInventory(player).openMenu(team);
                     team.refreshTeamMembersInventory(playerName);
                     team.teamBroadcast(playerName, messageManager.replaceAuthor("broadcasts.team_bank_unlocked", playerName));
@@ -181,9 +177,6 @@ public class ConfirmInventory extends TeamMenu {
                     economyManager.removeMoneyPlayer(player, config.getDouble("prices.upgrade.teamPlaces.level"+newLevel));
                     player.sendMessage(messageManager.getReplaceMessage("manage_team.upgrade_member_amount.new_upgrade", newLevel.toString()));
 
-                    // inventory = inventoryBuilder.createUpgradeTotalMembersInventory(team);
-                    // inventory = new UpgradeMembersInventory(plugin).createInventory(new TeamInteraction(team));
-                    // player.openInventory(inventory);
                     new UpgradeMembersInventory(player).openMenu(team);
                     team.refreshTeamMembersInventory(playerName);
                     team.teamBroadcast(playerName, messageManager.replaceTeamId("broadcasts.new_member_amount_upgrade", team.getTeamName()));
@@ -195,9 +188,6 @@ public class ConfirmInventory extends TeamMenu {
                     economyManager.removeMoneyPlayer(player, config.getDouble("prices.upgrade.teamStorages.level"+newLevel));
                     player.sendMessage(messageManager.getReplaceMessage("manage_team.upgrade_storages.new_upgrade", newLevel.toString()));
 
-                    // inventory = inventoryBuilder.createUpgradeStorageInventory(team);
-                    // inventory = new UpgradeStorageInventory(plugin).createInventory(new TeamInteraction(team));
-                    // player.openInventory(inventory);
                     new UpgradeStorageInventory(player).openMenu(team);
                     team.refreshTeamMembersInventory(playerName);
                     team.teamBroadcast(playerName, messageManager.replaceTeamId("broadcasts.new_storage_upgrade", team.getTeamName()));
@@ -215,7 +205,6 @@ public class ConfirmInventory extends TeamMenu {
         }
 
         else if (itemName.equals(config.getString("inventories.confirmInventory.cancel.itemName"))){
-            Inventory inventory;
             switch (cacheManager.getPlayerActionName(playerName)) {
                 case REMOVE_MEMBER:
                     player.closeInventory();
@@ -227,69 +216,36 @@ public class ConfirmInventory extends TeamMenu {
                     player.closeInventory();
                     break;
                 case CREATE_HOME:
-                    // inventory = inventoryBuilder.createManageInventory(playerName, team);
-                    // inventory = new ManageInventory(plugin).createInventory(new TeamInteraction(playerName, team));
-                    // player.openInventory(inventory);
                     new ManageInventory(player).openMenu(team);
                     break;
                 case DELETE_HOME:
-                    // inventory = inventoryBuilder.createManageInventory(playerName, team);
-                    // inventory = new ManageInventory(plugin).createInventory(new TeamInteraction(playerName, team));
-                    // player.openInventory(inventory);
                     new ManageInventory(player).openMenu(team);
                     break;
                 case CREATE_TEAM:
-                    // inventory = inventoryBuilder.createTeamInventory();
-                    // inventory = new CreateTeamInventory(plugin).createInventory(null);
-                    // player.openInventory(inventory);
                     new CreateTeamInventory(player).openMenu();
                     break;
                 case BUY_TEAM_BANK:
-                    // inventory = inventoryBuilder.createManageInventory(playerName, team);
-                    // inventory = new ManageInventory(plugin).createInventory(new TeamInteraction(playerName, team));
-                    // player.openInventory(inventory);
                     new ManageInventory(player).openMenu(team);
                     break;
                 case EDIT_NAME:
-                    // inventory = inventoryBuilder.createManageInventory(playerName, team);
-                    // inventory = new ManageInventory(plugin).createInventory(new TeamInteraction(playerName, team));
-                    // player.openInventory(inventory);
                     new ManageInventory(player).openMenu(team);
                     break;
                 case EDIT_PREFIX:
-                    // inventory = inventoryBuilder.createManageInventory(playerName, team);
-                    // inventory = new ManageInventory(plugin).createInventory(new TeamInteraction(playerName, team));
-                    // player.openInventory(inventory);
                     new ManageInventory(player).openMenu(team);
                     break;
                 case EDIT_DESCRIPTION:
-                    // inventory = inventoryBuilder.createManageInventory(playerName, team);
-                    // inventory = new ManageInventory(plugin).createInventory(new TeamInteraction(playerName, team));
-                    // player.openInventory(inventory);
                     new ManageInventory(player).openMenu(team);
                     break;
                 case DELETE_TEAM:
-                    // inventory = inventoryBuilder.createManageInventory(playerName, team);
-                    // inventory = new ManageInventory(plugin).createInventory(new TeamInteraction(playerName, team));
-                    // player.openInventory(inventory);
                     new ManageInventory(player).openMenu(team);
                     break;
                 case IMPROV_LVL_MEMBERS:
-                    // inventory = inventoryBuilder.createUpgradeTotalMembersInventory(team);
-                    // inventory = new UpgradeMembersInventory(plugin).createInventory(new TeamInteraction(team));
-                    // player.openInventory(inventory);
                     new UpgradeMembersInventory(player).openMenu(team);
                     break;
                 case IMPROV_LVL_STORAGE:
-                    // inventory = inventoryBuilder.createUpgradeStorageInventory(team);
-                    // inventory = new UpgradeStorageInventory(plugin).createInventory(new TeamInteraction(team));
-                    // player.openInventory(inventory);
                     new UpgradeStorageInventory(player).openMenu(team);
                     break;
                 case LEAVE_TEAM:
-                    // inventory = inventoryBuilder.createMemberInventory(playerName, team);
-                    // inventory = new MemberInventory(plugin).createInventory(new TeamInteraction(playerName, team));
-                    // player.openInventory(inventory);
                     new MemberInventory(player).openMenu(team);
                     break;
                 default:

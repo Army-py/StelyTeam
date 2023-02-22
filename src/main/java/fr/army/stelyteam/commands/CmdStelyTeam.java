@@ -43,7 +43,6 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
     private SQLiteDataManager sqliteManager;
     private MessageManager messageManager;
     private Map<String, Object> subCommands;
-    // private Map<String, Object> subCommandsOp;
 
 
     public CmdStelyTeam(StelyTeamPlugin plugin) {

@@ -112,8 +112,6 @@ public class AlliancesInventory extends TeamMenu {
 
         // Fermeture ou retour en arrière de l'inventaire
         if (itemName.equals(config.getString("inventories.teamAlliances.close.itemName"))){
-            // Inventory inventory = new MemberInventory(plugin).createInventory(new TeamInteraction(playerName, mySqlManager.getTeamFromPlayerName(playerName)));
-            // player.openInventory(inventory);
             new MemberInventory(player).openMenu(mySqlManager.getTeamFromPlayerName(playerName));
         }
     }

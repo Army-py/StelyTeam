@@ -21,7 +21,6 @@ public class ItemStackSerializer {
             final BukkitObjectOutputStream objectOutputStream = new BukkitObjectOutputStream(arrayOutputStream);
             objectOutputStream.writeObject(itemStack);
             return Base64Coder.encodeLines(arrayOutputStream.toByteArray());
-            // return new BigInteger(1, arrayOutputStream.toByteArray()).toString(64);
         } catch (final Exception exception) {
             throw new RuntimeException("Error turning ItemStack into base64", exception);
         }
@@ -31,7 +30,6 @@ public class ItemStackSerializer {
     public ItemStack[] deserializeFromBase64(String base64) {
         try {
             final ByteArrayInputStream arrayInputStream = new ByteArrayInputStream(Base64Coder.decodeLines(base64));
-            // final ByteArrayInputStream arrayInputStream = new ByteArrayInputStream(new BigInteger(base64, 64).toByteArray());
             final BukkitObjectInputStream objectInputStream = new BukkitObjectInputStream(arrayInputStream);
             return (ItemStack[]) objectInputStream.readObject();
         } catch (final Exception exception) {
@@ -44,14 +42,10 @@ public class ItemStackSerializer {
         try {
             final ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
 
-            System.out.println(arrayOutputStream.size());
-
             final BukkitObjectOutputStream objectOutputStream = new BukkitObjectOutputStream(arrayOutputStream);
-            // objectOutputStream.writeObject(removeEmptySlots(itemStack));
             objectOutputStream.writeObject(removeUnsedSlots(itemStack));
             objectOutputStream.flush();
 
-            System.out.println(arrayOutputStream.size());
 
             return arrayOutputStream.toByteArray();
         } catch (final Exception exception) {
@@ -63,7 +57,6 @@ public class ItemStackSerializer {
     public ItemStack[] deserializeFromByte(byte[] bytes) {
         try {
             final ByteArrayInputStream arrayInputStream = new ByteArrayInputStream(bytes);
-            // final ByteArrayInputStream arrayInputStream = new ByteArrayInputStream(new BigInteger(base64, 64).toByteArray());
             final BukkitObjectInputStream objectInputStream = new BukkitObjectInputStream(arrayInputStream);
             return (ItemStack[]) objectInputStream.readObject();
         } catch (final Exception exception) {
@@ -91,21 +84,6 @@ public class ItemStackSerializer {
                 items.add(itemStacks[i]);
             }
         }
-
-        // int countNull = 0;
-        // for (ItemStack item : items) {
-        //     if (item == null){
-        //         countNull++;
-        //     }
-        // }
-
-        // if (countNull == items.size()) {
-        // items = removeEmptySlots(items.toArray(new ItemStack[0]));
-        // }
-
-        // System.out.println("countNull: " + countNull);
-        // System.out.println("items.size(): " + items.size());
-
         return items.toArray(new ItemStack[0]);
     }
 }

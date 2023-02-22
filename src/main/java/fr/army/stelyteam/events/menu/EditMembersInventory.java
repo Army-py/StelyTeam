@@ -139,8 +139,6 @@ public class EditMembersInventory extends TeamMenu {
         // Fermeture ou retour en arrière de l'inventaire
         itemName = clickEvent.getCurrentItem().getItemMeta().getDisplayName();
         if (itemName.equals(config.getString("inventories.editMembers.close.itemName"))){
-            // Inventory inventory = inventoryBuilder.createManageInventory(playerName, team);
-            // player.openInventory(inventory);
             new ManageInventory(player).openMenu(team);
             return;
         }else if (itemName.equals(config.getString("inventories.editMembers.addMember.itemName"))){
@@ -148,12 +146,9 @@ public class EditMembersInventory extends TeamMenu {
             conversationBuilder.getNameInput(player, new ConvAddMember(plugin));
             return;
         }else if (itemName.equals(config.getString("inventories.editMembers.removeMember.itemName"))){
-            // player.closeInventory();
-            // conversationBuilder.getNameInput(player, new ConvRemoveMember(plugin));
             cacheManager.addTempAction(
                 new TemporaryAction(playerName, TemporaryActionNames.CLICK_REMOVE_MEMBER, team)
             );
-            // player.openInventory(inventoryBuilder.createMembersInventory(team));
             new MembersInventory(player).openMenu(team);
             return;
         }else if (itemName.equals(config.getString("inventories.editMembers.editOwner.itemName"))){
@@ -179,7 +174,6 @@ public class EditMembersInventory extends TeamMenu {
                         String newRank = plugin.getRankFromId(memberRank+1);
                         String newRankName = config.getString("ranks." + newRank + ".name");
                         String newRankColor = config.getString("ranks." + newRank + ".color");
-                        // member.sendMessage("Vous avez été rétrogradé " + newRankColor + newRank);
                         member.sendMessage(messageManager.getReplaceMessage("receiver.demote", newRankColor + newRankName));
                     }
                 }
@@ -194,13 +188,11 @@ public class EditMembersInventory extends TeamMenu {
                         String newRank = plugin.getRankFromId(memberRank-1);
                         String newRankName = config.getString("ranks." + newRank + ".name");
                         String newRankColor = config.getString("ranks." + newRank + ".color");
-                        // member.sendMessage("Vous avez été promu " + newRankColor + newRank);
                         member.sendMessage(messageManager.getReplaceMessage("receiver.promote", newRankColor + newRankName));
                     }
                 }
             }else return;
-            // Inventory inventory = inventoryBuilder.createEditMembersInventory(playerName, team);
-            // player.openInventory(inventory);
+
             new EditMembersInventory(player).openMenu(team);
             team.refreshTeamMembersInventory(playerName);
         }

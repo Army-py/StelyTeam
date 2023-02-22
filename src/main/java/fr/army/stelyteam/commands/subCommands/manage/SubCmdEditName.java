@@ -30,24 +30,19 @@ public class SubCmdEditName extends SubCommand {
         args[0] = "";
 
         if (args.length < 3){
-            // player.sendMessage("Utilisation : /stelyteam editname <nom de team> <nouveau nom>");
             player.sendMessage(messageManager.getMessage("commands.stelyteam_editname.usage"));
         }else{
             Team team = sqlManager.getTeamFromTeamName(args[1]);
             if (team != null){
                 if (sqlManager.teamNameExists(args[2])){
-                    // player.sendMessage("Ce nom de team existe déjà");
                     player.sendMessage(messageManager.getMessage("common.name_already_exists"));
                 }else if (args[2].contains(" ")){
-                    // player.sendMessage("Le nom de team ne doit pas contenir d'espace");
                     player.sendMessage(messageManager.getMessage("common.name_cannot_contain_space"));
                 }else{
                     team.updateTeamName(args[2]);
-                    // player.sendMessage("Nom de team modifié en " + args[2]);
                     player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_editname.output", args[2]));
                 }
             }else{
-                // player.sendMessage("Cette team n'existe pas");
                 player.sendMessage(messageManager.getMessage("common.team_not_exist"));
             }
         }

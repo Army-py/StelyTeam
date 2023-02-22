@@ -55,12 +55,8 @@ public class AdminInventory extends TeamMenu {
 
         // Ouverture des inventaires
         if (itemName.equals(config.getString("inventories.admin.manage.itemName"))){
-            // Inventory inventory = new ManageInventory(plugin).createInventory(new TeamInteraction(playerName, mySqlManager.getTeamFromPlayerName(playerName)));
-            // player.openInventory(inventory);
             new ManageInventory(viewer).openMenu(mySqlManager.getTeamFromPlayerName(playerName));
         }else if (itemName.equals(config.getString("inventories.admin.member.itemName"))){
-            // Inventory inventory = new MemberInventory(plugin).createInventory(new TeamInteraction(playerName, mySqlManager.getTeamFromPlayerName(playerName)));
-            // player.openInventory(inventory);
             new MemberInventory(viewer).openMenu(mySqlManager.getTeamFromPlayerName(playerName));
             
         // Fermeture ou retour en arrière de l'inventaire

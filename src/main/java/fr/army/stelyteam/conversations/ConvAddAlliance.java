@@ -78,7 +78,6 @@ public class ConvAddAlliance extends StringPrompt {
 
     @Override
     public String getPromptText(ConversationContext arg0) {
-        // return "Envoie le pseudo du joueur à ajouter";
         return messageManager.getMessage("manage_alliances.add_alliance.send_team_name");
     }
 }

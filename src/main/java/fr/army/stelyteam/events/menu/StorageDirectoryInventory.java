@@ -75,8 +75,6 @@ public class StorageDirectoryInventory extends TeamMenu {
 
         // Fermeture ou retour en arrière de l'inventaire
         if (itemName.equals(config.getString("inventories.storageDirectory.close.itemName"))){
-            // Inventory inventory = inventoryBuilder.createMemberInventory(playerName, team);
-            // player.openInventory(inventory);
             new MemberInventory(player).openMenu(team);
         }else{
             for(String str : config.getConfigurationSection("inventories.storageDirectory").getKeys(false)){
@@ -85,9 +83,6 @@ public class StorageDirectoryInventory extends TeamMenu {
                 Integer storageId = config.getInt("inventories.storageDirectory."+str+".storageId");
 
                 if (itemName.equals(name) && itemType.equals(type)){
-                    // Inventory inventory = inventoryBuilder.createStorageInventory(teamId, storageId, name);
-                    // Inventory inventory = inventoryBuilder.createStorageInventory(team, storageId);
-                    // player.openInventory(inventory);
                     new StorageInventory(player).openMenu(team, storageId);
                     return;
                 }

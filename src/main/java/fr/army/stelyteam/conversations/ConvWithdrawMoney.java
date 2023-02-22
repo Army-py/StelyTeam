@@ -38,24 +38,20 @@ public class ConvWithdrawMoney extends StringPrompt {
             try {
                 money = Double.parseDouble(answer);
             } catch (NumberFormatException e) {
-                // author.sendRawMessage("Veuillez entrer un nombre");
                 author.sendRawMessage(messageManager.getMessage("manage_team.withdraw_money.send_money_amount"));
                 return null;
             }
         }
 
         if (teamReachedMinMoney(teamName, money, teamMoney)) {
-            // author.sendRawMessage("Vous ne pouvez pas retirer plus de " + teamMoney + "€");
             author.sendRawMessage(messageManager.getReplaceMessage("manage_team.withdraw_money.team_reached_min_money", teamMoney.toString()));
             return null;
         }else if (money < 0) {
-            // author.sendRawMessage("Vous ne pouvez pas ajouter un montant négatif");
             author.sendRawMessage(messageManager.getMessage("manage_team.withdraw_money.cant_send_negative_money"));
             return null;
         }
 
         economyManager.addMoneyPlayer(author, money);
-        // author.sendRawMessage("Le montant a été retiré");
         author.sendRawMessage(messageManager.getMessage("manage_team.withdraw_money.money_withdrawn"));
         team.decrementTeamMoney(money);
         return null;
@@ -63,7 +59,6 @@ public class ConvWithdrawMoney extends StringPrompt {
 
     @Override
     public String getPromptText(ConversationContext arg0) {
-        // return "Envoie le montant à retirer";
         return messageManager.getMessage("manage_team.withdraw_money.send_money_amount");
     }
 

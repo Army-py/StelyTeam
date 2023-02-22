@@ -134,12 +134,8 @@ public class EditAlliancesInventory extends TeamMenu {
         Team team = mySqlManager.getTeamFromPlayerName(playerName);
 
 
-        // Fermeture ou retour en arrière de l'inventaire
         itemName = clickEvent.getCurrentItem().getItemMeta().getDisplayName();
         if (itemName.equals(config.getString("inventories.editAlliances.close.itemName"))){
-            // Inventory inventory = inventoryBuilder.createManageInventory(playerName, team);
-            // Inventory inventory = new ManageInventory(plugin).createInventory(new TeamInteraction(playerName, team));
-            // player.openInventory(inventory);
             new ManageInventory(player).openMenu(team);
             return;
         }else if (itemName.equals(config.getString("inventories.editAlliances.addAlliance.itemName"))){

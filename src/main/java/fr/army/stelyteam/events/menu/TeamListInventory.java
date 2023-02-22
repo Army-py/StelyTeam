@@ -76,7 +76,6 @@ public class TeamListInventory extends TeamMenu {
             lore = replaceInLore(lore, "%DESCRIPTION%", colorsBuilder.replaceColor(team.getTeamDescription()));
             
             item = ItemBuilder.getPlayerHead(teamOwner, itemName, lore);
-            // item = ItemBuilder.getItem(Material.DIRT, teamOwnerName, lore, null, false);
 
             inventory.setItem(headSlots.get(slotIndex), item);
             slotIndex ++;
@@ -121,13 +120,11 @@ public class TeamListInventory extends TeamMenu {
                 Page page = cacheManager.getPage(playerName);
                 page.setCurrentPage(page.getCurrentPage()-1);
                 cacheManager.replacePage(page);
-                // player.openInventory(inventoryBuilder.createTeamListInventory(playerName));
                 new TeamListInventory(player).openMenu();
             }else if (itemName.equals(config.getString("inventories.teamList.next.itemName"))){
                 Page page = cacheManager.getPage(playerName);
                 page.setCurrentPage(page.getCurrentPage()+1);
                 cacheManager.replacePage(page);
-                // player.openInventory(inventoryBuilder.createTeamListInventory(playerName));
                 new TeamListInventory(player).openMenu();
             }else if (itemName.equals(config.getString("inventories.teamList.close.itemName"))){
                 cacheManager.removePage(cacheManager.getPage(playerName));

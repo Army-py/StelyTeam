@@ -38,11 +38,9 @@ public class ConvGetTeamPrefix extends StringPrompt {
         String authorName = author.getName();
         
         if (colorBuilder.prefixTeamIsTooLong(answer)) {
-            // con.getForWhom().sendRawMessage("Le préfixe est trop long");
             con.getForWhom().sendRawMessage(messageManager.getMessage("common.prefix_is_too_long"));
             return this;
         }else if (colorBuilder.containsBlockedColors(answer)) {
-            // con.getForWhom().sendRawMessage("Le préfixe contient des couleurs interdites");
             con.getForWhom().sendRawMessage(messageManager.getMessage("common.prefix_contains_blocked_colors"));
             return this;
         }
@@ -64,7 +62,6 @@ public class ConvGetTeamPrefix extends StringPrompt {
 
     @Override
     public String getPromptText(ConversationContext arg0) {
-        // return "Envoie le préfixe de team";
         return messageManager.getMessage("manage_team.creation.send_team_prefix");
     }
 }

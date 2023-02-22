@@ -31,16 +31,13 @@ public class SubCmdEditPrefix extends SubCommand {
         args[0] = "";
 
         if (args.length < 3){
-            // player.sendMessage("Utilisation : /stelyteam editprefix <nom de team> <nouveau prefix>");
             player.sendMessage(messageManager.getMessage("commands.stelyteam_editprefix.usage"));
         }else{
             Team team = sqlManager.getTeamFromTeamName(args[1]);
             if (team != null){
                 team.updateTeamPrefix(args[2]);
-                // player.sendMessage("Préfixe de team modifié en " + new ColorsBuilder().replaceColor(args[2]));
                 player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_editprefix.output", colorsBuilder.replaceColor(args[2])));
             }else{
-                // player.sendMessage("Cette team n'existe pas");
                 player.sendMessage(messageManager.getMessage("common.team_not_exist"));
             }
         }

@@ -130,8 +130,6 @@ public class MemberInventory extends TeamMenu {
         // Fermeture ou retour en arrière de l'inventaire
         if (team.isTeamOwner(playerName) || team.getMemberRank(playerName) <= 3){
             if (itemName.equals(config.getString("inventories.member.close.itemName"))){
-                // Inventory inventory = inventoryBuilder.createAdminInventory();
-                // player.openInventory(inventory);
                 new AdminInventory(player).openMenu();
             }
         }else{
@@ -141,18 +139,13 @@ public class MemberInventory extends TeamMenu {
         }
         
         if (itemName.equals(config.getString("inventories.member.seeTeamMembers.itemName"))){
-            // Inventory inventory = inventoryBuilder.createMembersInventory(team);
-            // player.openInventory(inventory);
             new MembersInventory(player).openMenu(team);
         
         }else if (itemName.equals(config.getString("inventories.member.seeTeamAlliances.itemName"))){
-            // Inventory inventory = inventoryBuilder.createAlliancesInventory(playerName, team);
-            // player.openInventory(inventory);
             new AlliancesInventory(player).openMenu(team);
         
         }else if (itemName.equals(config.getString("inventories.member.addTeamMoney.itemName"))){
             if (!team.isUnlockedTeamBank()) {
-                // player.sendMessage("Le compte de la team n'a pas encore été débloqué");
                 player.sendMessage(messageManager.getMessage("common.team_bank_not_unlock"));
             }else{
                 player.closeInventory();
@@ -160,7 +153,6 @@ public class MemberInventory extends TeamMenu {
             }
         }else if (itemName.equals(config.getString("inventories.member.withdrawTeamMoney.itemName"))){
             if (!team.isUnlockedTeamBank()) {
-                // player.sendMessage("Le compte de la team n'a pas encore été débloqué");
                 player.sendMessage(messageManager.getMessage("common.team_bank_not_unlock"));
             }else{
                 player.closeInventory();
@@ -170,16 +162,11 @@ public class MemberInventory extends TeamMenu {
             player.closeInventory();
             if (!team.isTeamOwner(playerName)){
                 cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.EDIT_NAME, team));
-                // Inventory inventory = inventoryBuilder.createConfirmInventory();
-                // player.openInventory(inventory);
                 new ConfirmInventory(player).openMenu();
             }else {
-                // player.sendMessage("Tu ne peux pas quitter la team car tu es le créateur");
                 player.sendMessage(messageManager.getMessage("other.owner_cant_leave_team"));
             }
         }else if (itemName.equals(config.getString("inventories.member.storageDirectory.itemName"))){
-            // Inventory inventory = inventoryBuilder.createStorageDirectoryInventory(team);
-            // player.openInventory(inventory);
             new StorageDirectoryInventory(player).openMenu(team);
         }
     }

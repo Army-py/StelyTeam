@@ -26,9 +26,6 @@ public class SubCmdList extends SubCommand {
         String playerName = player.getName();
 
         cacheManager.removePage(cacheManager.getPage(playerName));
-        
-        // Inventory inventory = inventoryBuilder.createTeamListInventory(playerName);
-        // player.openInventory(inventory);
         new CreateTeamInventory(player).openMenu();
 
         return true;
