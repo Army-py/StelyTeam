@@ -369,21 +369,45 @@ public class Team {
         return teamOwnerName;
     }
 
-    public ArrayList<Member> getTeamMembers() {
-        return teamMembers;
-    }
-
-    public ArrayList<Permission> getTeamPermissions() {
-        return teamPermissions;
-    }
-
-    public ArrayList<Alliance> getTeamAlliances() {
-        return teamAlliances;
-    }
-
 
     public void setTeamPrefix(String teamPrefix) {
         this.teamPrefix = teamPrefix;
+    }
+
+    public void setTeamDescription(String teamDescription) {
+        this.teamDescription = teamDescription;
+    }
+
+    public void setCreationDate(String creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public void setImprovLvlMembers(Integer improvLvlMembers) {
+        this.improvLvlMembers = improvLvlMembers;
+    }
+
+    public void setTeamStorageLvl(Integer teamStorageLvl) {
+        this.teamStorageLvl = teamStorageLvl;
+    }
+
+    public void setUnlockedTeamBank(boolean unlockedTeamBank) {
+        this.unlockedTeamBank = unlockedTeamBank;
+    }
+
+    public void setTeamOwnerName(String teamOwnerName) {
+        this.teamOwnerName = teamOwnerName;
+    }
+
+    public void setTeamMembers(ArrayList<Member> teamMembers) {
+        this.teamMembers = teamMembers;
+    }
+
+    public void setTeamPermissions(ArrayList<Permission> teamPermissions) {
+        this.teamPermissions = teamPermissions;
+    }
+
+    public void setTeamAlliances(ArrayList<Alliance> teamAlliances) {
+        this.teamAlliances = teamAlliances;
     }
 
     private String getCurrentDate(){

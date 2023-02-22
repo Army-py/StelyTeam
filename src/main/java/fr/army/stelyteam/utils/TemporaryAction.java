@@ -1,9 +1,9 @@
 package fr.army.stelyteam.utils;
 
 public class TemporaryAction {
-    private String senderName;
-    private String receiverName;
-    private TemporaryActionNames actionName;
+    private String senderName = "";
+    private String receiverName = "";
+    private TemporaryActionNames actionName = TemporaryActionNames.NULL;
     private Team team;
 
     public TemporaryAction(String senderName, TemporaryActionNames actionName, Team team){
