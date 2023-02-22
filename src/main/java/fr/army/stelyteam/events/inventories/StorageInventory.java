@@ -13,7 +13,8 @@ import fr.army.stelyteam.utils.Storage;
 import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.builder.InventoryBuilder;
 import fr.army.stelyteam.utils.manager.CacheManager;
-import fr.army.stelyteam.utils.manager.MySQLManager;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 import fr.army.stelyteam.utils.manager.serializer.ItemStackSerializer;
 
 public class StorageInventory {
@@ -24,7 +25,7 @@ public class StorageInventory {
     private CacheManager cacheManager;
     private YamlConfiguration config;
     private InventoryBuilder inventoryBuilder;
-    private MySQLManager sqlManager;
+    private DatabaseManager sqlManager;
     private ItemStackSerializer serializeManager;
 
 
@@ -33,7 +34,7 @@ public class StorageInventory {
         this.cacheManager = plugin.getCacheManager();
         this.clickEvent = clickEvent;
         this.config = plugin.getConfig();
-        this.sqlManager = plugin.getSQLManager();
+        this.sqlManager = plugin.getDatabaseManager();
         this.inventoryBuilder = plugin.getInventoryBuilder();
         this.serializeManager = plugin.getSerializeManager();
     }
@@ -43,7 +44,7 @@ public class StorageInventory {
         this.cacheManager = plugin.getCacheManager();
         this.closeEvent = closeEvent;
         this.config = plugin.getConfig();
-        this.sqlManager = plugin.getSQLManager();
+        this.sqlManager = plugin.getDatabaseManager();
         this.serializeManager = plugin.getSerializeManager();
     }
 
@@ -54,7 +55,6 @@ public class StorageInventory {
         Team team = sqlManager.getTeamFromPlayerName(playerName);
         Integer storageId = getStorageId(clickEvent.getView().getTitle());
         String itemName;
-        String storageName;
         
         if (clickEvent.getCurrentItem() != null){
             Material material = clickEvent.getCurrentItem().getType();
@@ -64,19 +64,16 @@ public class StorageInventory {
                 return;
             }else if (itemName.equals(config.getString("inventories.storage.previous.itemName"))){
                 clickEvent.setCancelled(true);
-                storageName = config.getString(config.getString("inventories.storageDirectory."+plugin.getStorageFromId(storageId-1)+".itemName"));
-                player.openInventory(inventoryBuilder.createStorageInventory(team, storageId-1, storageName));
+                player.openInventory(inventoryBuilder.createStorageInventory(team, storageId-1));
                 return;
             }else if (itemName.equals(config.getString("inventories.storage.next.itemName"))){
                 clickEvent.setCancelled(true);
-                storageName = config.getString(config.getString("inventories.storageDirectory."+plugin.getStorageFromId(storageId+1)+".itemName"));
-                player.openInventory(inventoryBuilder.createStorageInventory(team, storageId+1, storageName));
-                return;
+                player.openInventory(inventoryBuilder.createStorageInventory(team, storageId+1));
             }else{
                 if (itemName.equals(config.getString("inventories.storage.close.itemName"))){
                     clickEvent.setCancelled(true);
                     if (clickEvent.getCursor().getType().equals(Material.AIR)){
-                        player.openInventory(inventoryBuilder.createStorageDirectoryInventory(playerName));
+                        player.openInventory(inventoryBuilder.createStorageDirectoryInventory(playerName, team));
                         return;
                     }else return;
                 }
@@ -95,8 +92,8 @@ public class StorageInventory {
         ItemStack[] inventoryContent = closeEvent.getInventory().getContents();
         Storage storage;
 
-        if (cacheManager.containsStorage(team, storageId)){
-            storage = cacheManager.getStorage(team, storageId);
+        if (cacheManager.containsStorage(team.getTeamName(), storageId)){
+            storage = cacheManager.replaceStorageContent(team.getTeamName(), storageId, serializeManager.serializeToByte(inventoryContent));
         }else{
             storage = new Storage(team, storageId, storageInventory, serializeManager.serializeToByte(inventoryContent));
         }

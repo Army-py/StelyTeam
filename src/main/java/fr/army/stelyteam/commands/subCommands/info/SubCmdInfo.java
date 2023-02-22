@@ -11,12 +11,14 @@ import org.bukkit.entity.Player;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.commands.SubCommand;
+import fr.army.stelyteam.utils.Member;
+import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
 import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.MySQLManager;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 public class SubCmdInfo extends SubCommand {
-    private MySQLManager sqlManager;
+    private DatabaseManager sqlManager;
     private YamlConfiguration config;
     private YamlConfiguration messages;
     private MessageManager messageManager;
@@ -25,7 +27,7 @@ public class SubCmdInfo extends SubCommand {
 
     public SubCmdInfo(StelyTeamPlugin plugin) {
         super(plugin);
-        this.sqlManager = plugin.getSQLManager();
+        this.sqlManager = plugin.getDatabaseManager();
         this.config = plugin.getConfig();
         this.messages = plugin.getMessages();
         this.messageManager = plugin.getMessageManager();
@@ -42,30 +44,31 @@ public class SubCmdInfo extends SubCommand {
             player.sendMessage(messageManager.getMessage("commands.stelyteam_info.usage"));
         }else{
             String memberName = String.join("", args);
-            String teamID = sqlManager.getTeamNameFromPlayerName(memberName) == null ? String.join("", args) : sqlManager.getTeamNameFromPlayerName(memberName);
-            if (sqlManager.teamNameExists(teamID)){
+            // String teamID = sqlManager.getTeamNameFromPlayerName(memberName) == null ? String.join("", args) : sqlManager.getTeamNameFromPlayerName(memberName);
+            Team team = sqlManager.getTeamFromPlayerName(memberName) == null ? sqlManager.getTeamFromTeamName(String.join("", args)) : sqlManager.getTeamFromPlayerName(memberName);
+            if (team != null){
                 String yesMessage = messages.getString("commands.stelyteam_info.true");
                 String noMessage = messages.getString("commands.stelyteam_info.false");
-
-                String teamPrefix = sqlManager.getTeamPrefix(teamID);
-                String teamOwner = sqlManager.getTeamOwnerName(teamID);
-                String creationDate = sqlManager.getTeamCreationDate(teamID);
-                String teamDescription = sqlManager.getTeamDescription(teamID);
-                Integer teamMembersLelvel = sqlManager.getImprovLvlMembers(teamID);
-                Integer teamMembers = sqlManager.getTeamMembers(teamID).size();
                 Integer maxMembers = config.getInt("teamMaxMembers");
-                String hasUnlockBank = (sqlManager.hasUnlockedTeamBank(teamID) ? yesMessage : noMessage);
-                List<String> members = sqlManager.getTeamMembers(teamID);
+
+                String teamName = team.getTeamName();
+                String teamPrefix = team.getTeamPrefix();
+                String teamOwner = team.getTeamOwnerName();
+                String creationDate = team.getCreationDate();
+                String teamDescription = team.getTeamDescription();
+                Integer teamMembersLelvel = team.getImprovLvlMembers();
+                String hasUnlockBank = (team.isUnlockedTeamBank() ? yesMessage : noMessage);
+                List<Member> teamMembers = team.getTeamMembers();
                 List<String> lore = messages.getStringList("commands.stelyteam_info.output");
 
-                lore = replaceInLore(lore, "%NAME%", teamID);
+                lore = replaceInLore(lore, "%NAME%", teamName);
                 lore = replaceInLore(lore, "%PREFIX%", colorsBuilder.replaceColor(teamPrefix));
                 lore = replaceInLore(lore, "%OWNER%", teamOwner);
                 lore = replaceInLore(lore, "%DATE%", creationDate);
                 lore = replaceInLore(lore, "%UNLOCK_BANK%", hasUnlockBank);
-                lore = replaceInLore(lore, "%MEMBER_COUNT%", IntegerToString(teamMembers));
+                lore = replaceInLore(lore, "%MEMBER_COUNT%", IntegerToString(teamMembers.size()));
                 lore = replaceInLore(lore, "%MAX_MEMBERS%", IntegerToString(maxMembers+teamMembersLelvel));
-                lore = replaceInLore(lore, "%MEMBERS%", String.join(", ", members));
+                lore = replaceInLore(lore, "%MEMBERS%", String.join(", ",  team.getMembersName()));
                 lore = replaceInLore(lore, "%DESCRIPTION%", colorsBuilder.replaceColor(teamDescription));
 
                 player.sendMessage(String.join("\n", lore));

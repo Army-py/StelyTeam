@@ -8,13 +8,13 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.events.inventories.*;
-import fr.army.stelyteam.utils.manager.SQLiteManager;
+import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
 
 
 public class InventoryClickManager implements Listener{    
 
     private StelyTeamPlugin plugin;
-    private SQLiteManager sqliteManager;
+    private SQLiteDataManager sqliteManager;
     private YamlConfiguration config;
 
     public InventoryClickManager(StelyTeamPlugin plugin) {
@@ -37,7 +37,7 @@ public class InventoryClickManager implements Listener{
         
         if (event.getCurrentItem() != null){
             if (event.getView().getTitle().equals(config.getString("inventoriesName.admin"))){
-                new AdminInventory(event, plugin).onInventoryClick();
+                new AdminInventory(plugin, event).onInventoryClick();
             }else if (event.getView().getTitle().equals(config.getString("inventoriesName.confirmInventory"))){
                 new ConfirmInventory(event, plugin).onInventoryClick();
             }else if (event.getView().getTitle().equals(config.getString("inventoriesName.createTeam"))){

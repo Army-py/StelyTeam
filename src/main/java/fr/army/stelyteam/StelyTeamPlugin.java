@@ -7,22 +7,24 @@ import java.sql.SQLException;
 import java.util.Objects;
 
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import fr.army.stelyteam.commands.CommandManager;
 import fr.army.stelyteam.events.InventoryClickManager;
 import fr.army.stelyteam.events.InventoryCloseManager;
 import fr.army.stelyteam.events.PlayerQuit;
-import fr.army.stelyteam.utils.Page;
-import fr.army.stelyteam.utils.TeamMembersUtils;
+import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
 import fr.army.stelyteam.utils.builder.InventoryBuilder;
 import fr.army.stelyteam.utils.builder.conversation.ConversationBuilder;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.EconomyManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.MySQLManager;
-import fr.army.stelyteam.utils.manager.SQLiteManager;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
+import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 import fr.army.stelyteam.utils.manager.serializer.ItemStackSerializer;
 
 public class StelyTeamPlugin extends JavaPlugin {
@@ -31,16 +33,15 @@ public class StelyTeamPlugin extends JavaPlugin {
     private YamlConfiguration config;
     private YamlConfiguration messages;
     private CacheManager cacheManager;
-    private MySQLManager sqlManager;
-    private SQLiteManager sqliteManager;
+    private SQLiteDataManager sqliteManager;
     private EconomyManager economyManager;
     private CommandManager commandManager;
     private MessageManager messageManager;
     private ColorsBuilder colorsBuilder;
     private ConversationBuilder conversationBuilder;
     private InventoryBuilder inventoryBuilder;
-    private TeamMembersUtils teamMembersUtils;
     private ItemStackSerializer serializeManager;
+    private DatabaseManager databaseManager;
 
 
     @Override
@@ -51,12 +52,14 @@ public class StelyTeamPlugin extends JavaPlugin {
         this.config = initFile(this.getDataFolder(), "config.yml");
         this.messages = initFile(this.getDataFolder(), "messages.yml");
 
-        this.sqlManager = new MySQLManager(this);
-        this.sqliteManager = new SQLiteManager(this);
+        // this.sqlManager = new DatabaseManager(this);
+        this.sqliteManager = new SQLiteDataManager(this);
 
         try {
-            this.sqlManager.connect();
-            this.sqliteManager.connect();
+            // this.sqlManager.connect();
+            // this.sqliteManager.connect();
+            this.databaseManager = DatabaseManager.connect(this);
+            this.databaseManager.createTables();
             this.getLogger().info("SQL connectée au plugin !");
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
@@ -64,15 +67,14 @@ public class StelyTeamPlugin extends JavaPlugin {
         }
         
         this.cacheManager = new CacheManager();
-        this.sqlManager.createTables();
-        this.sqliteManager.createTables();
+        // this.sqlManager.createTables();
+        // this.sqliteManager.createTables();
         this.economyManager = new EconomyManager(this);
         this.messageManager = new MessageManager(this);
         this.commandManager = new CommandManager(this);
         this.colorsBuilder = new ColorsBuilder(this);
         this.conversationBuilder = new ConversationBuilder(this);
         this.inventoryBuilder = new InventoryBuilder(this);
-        this.teamMembersUtils = new TeamMembersUtils(this);
         this.serializeManager = new ItemStackSerializer();
         
         getServer().getPluginManager().registerEvents(new InventoryClickManager(this), this);
@@ -85,8 +87,9 @@ public class StelyTeamPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        sqlManager.disconnect();
-        sqliteManager.disconnect();
+        // sqlManager.disconnect();
+        // sqliteManager.disconnect();
+        this.databaseManager.disconnect();
         getLogger().info("StelyTeam OFF");
     }
 
@@ -105,6 +108,21 @@ public class StelyTeamPlugin extends JavaPlugin {
             }
         }
         return YamlConfiguration.loadConfiguration(file);
+    }
+
+
+    public void openMainInventory(Player player, Team team){
+        String playerName = player.getName();
+        Inventory inventory;
+
+        if (team == null){
+            inventory = inventoryBuilder.createTeamInventory();
+        }else if(team.isTeamOwner(playerName)){
+            inventory = inventoryBuilder.createAdminInventory();
+        }else if (plugin.playerHasPermissionInSection(playerName, team, "manage")){
+            inventory = inventoryBuilder.createAdminInventory();
+        }else inventory = inventoryBuilder.createMemberInventory(playerName, team);
+        player.openInventory(inventory);
     }
 
 
@@ -151,27 +169,27 @@ public class StelyTeamPlugin extends JavaPlugin {
     }
 
 
-    public boolean playerHasPermission(String playerName, String teamId, String permission){
-        Integer permissionRank = sqlManager.getRankAssignement(teamId, permission);
+    public boolean playerHasPermission(String playerName, Team team, String permissionName){
+        Integer permissionRank = team.getPermissionRank(permissionName);
         if (permissionRank != null){
-            return permissionRank >= sqlManager.getMemberRank(playerName);
+            return permissionRank >= team.getMemberRank(playerName);
         }
 
-        String rankPath = config.getString("inventories.permissions."+permission+".rankPath");
-        if (sqlManager.isOwner(playerName) || config.getInt("inventories."+rankPath+".rank") == -1){
+        String rankPath = config.getString("inventories.permissions."+permissionName+".rankPath");
+        if (team.isTeamOwner(playerName) || config.getInt("inventories."+rankPath+".rank") == -1){
             return true;
-        }else if (config.getInt("inventories."+rankPath+".rank") >= sqlManager.getMemberRank(playerName)){
+        }else if (config.getInt("inventories."+rankPath+".rank") >= team.getMemberRank(playerName)){
             return true;
-        }else if (permission.equals("close") || permission.equals("leaveTeam") || permission.equals("teamInfos")){
+        }else if (permissionName.equals("close") || permissionName.equals("leaveTeam") || permissionName.equals("teamInfos")){
             return true;
         }
         return false;
     }
 
 
-    public boolean playerHasPermissionInSection(String playerName, String teamName, String sectionName){
+    public boolean playerHasPermissionInSection(String playerName, Team team, String sectionName){
         for (String section : config.getConfigurationSection("inventories." + sectionName).getKeys(false)){
-            if (playerHasPermission(playerName, teamName, section) && !section.equals("close")){
+            if (playerHasPermission(playerName, team, section) && !section.equals("close")){
                 return true;
             }
         }
@@ -191,12 +209,16 @@ public class StelyTeamPlugin extends JavaPlugin {
         return cacheManager;
     }
 
-    public MySQLManager getSQLManager() {
-        return sqlManager;
+    // public DatabaseManager getSQLManager() {
+    //     return sqlManager;
+    // }
+
+    public SQLiteDataManager getSQLiteManager() {
+        return sqliteManager;
     }
 
-    public SQLiteManager getSQLiteManager() {
-        return sqliteManager;
+    public DatabaseManager getDatabaseManager() {
+        return databaseManager;
     }
 
     public EconomyManager getEconomyManager() {
@@ -219,11 +241,15 @@ public class StelyTeamPlugin extends JavaPlugin {
         return inventoryBuilder;
     }
 
-    public TeamMembersUtils getTeamMembersUtils() {
-        return teamMembersUtils;
-    }
-
     public ItemStackSerializer getSerializeManager() {
         return serializeManager;
     }
 }
+
+
+
+/*
+ * 
+ * Problème à regler :
+ *  - si il y a un changement de nom de team alors qu'un stockage est dans le cache
+ */

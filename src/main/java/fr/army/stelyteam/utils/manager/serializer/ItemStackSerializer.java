@@ -44,14 +44,10 @@ public class ItemStackSerializer {
         try {
             final ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
 
-            System.out.println(arrayOutputStream.size());
-
             final BukkitObjectOutputStream objectOutputStream = new BukkitObjectOutputStream(arrayOutputStream);
             // objectOutputStream.writeObject(removeEmptySlots(itemStack));
             objectOutputStream.writeObject(removeUnsedSlots(itemStack));
             objectOutputStream.flush();
-
-            System.out.println(arrayOutputStream.size());
 
             return arrayOutputStream.toByteArray();
         } catch (final Exception exception) {

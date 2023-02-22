@@ -9,20 +9,17 @@ import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.TemporaryActionNames;
 
 public class CacheManager {
-    // {senderName, receiverName, actionName, teamName, teamPrefix}
+    // {senderName, receiverName, actionName, Team}
     private ArrayList<TemporaryAction> cachedTempAction = new ArrayList<TemporaryAction>();
 
-    // {teamName, storageId, storageInstance, storageContent}
+    // {Team, storageId, storageInstance, storageContent}
     private ArrayList<Storage> cachedStorage = new ArrayList<Storage>();
 
     // {playerName}
-    private ArrayList<String> cachedInConversation = new ArrayList<String>();
+    private ArrayList<String> cachedPlayerInConversation = new ArrayList<String>();
 
     // {authorName, currentPage, maxElementsPerPage, teams}
     private ArrayList<Page> cachedPages = new ArrayList<Page>();
-    
-    // {teamName, teamPrefix, teamDescription, teamMoney, creationDate, improvLvlMembers, teamStorageLvl, unlockedTeamBank, teamOwnerName}
-    // private ArrayList<Team> cachedTeam = new ArrayList<Team>();
 
 
 
@@ -114,9 +111,9 @@ public class CacheManager {
         cachedStorage.remove(storage);
     }
 
-    public Storage getStorage(Team team, int storageId){
+    public Storage getStorage(String teamName, int storageId){
         for(Storage storage : cachedStorage){
-            if(storage.getTeam().getTeamName().equals(team.getTeamName()) && storage.getStorageId() == storageId){
+            if(storage.getTeam().getTeamName().equals(teamName) && storage.getStorageId() == storageId){
                 return storage;
             }
         }
@@ -131,9 +128,30 @@ public class CacheManager {
         }
     }
 
-    public boolean containsStorage(Team team, int storageId){
+    public Storage replaceStorageContent(String teamName, int storageId, byte[] content){
+        if (!containsStorage(teamName, storageId)) return null;
+        for(Storage cachedStorage : cachedStorage){
+            if(cachedStorage.getTeam().getTeamName().equals(teamName) && cachedStorage.getStorageId() == storageId){
+                cachedStorage.setStorageContent(content);
+                return cachedStorage;
+            }
+        }
+        return null;
+    }
+
+    public void replaceStorageTeam(String teamName, Team team){
+        if (cachedStorage.isEmpty()) return;
+        for(Storage cachedStorage : cachedStorage){
+            if(cachedStorage.getTeam().getTeamName().equals(teamName)){
+                cachedStorage.setTeam(team);
+            }
+        }
+    }
+
+    public boolean containsStorage(String teamName, int storageId){
+        if (cachedStorage.isEmpty()) return false;
         for(Storage storage : cachedStorage){
-            if(storage.getTeam().getTeamName().equals(team.getTeamName()) && storage.getStorageId() == storageId){
+            if(storage.getTeam().getTeamName().equals(teamName) && storage.getStorageId() == storageId){
                 return true;
             }
         }
@@ -141,7 +159,7 @@ public class CacheManager {
     }
 
     public void saveStorage(Storage storage){
-        if(containsStorage(storage.getTeam(), storage.getStorageId())){
+        if(containsStorage(storage.getTeam().getTeamName(), storage.getStorageId())){
             replaceStorage(storage);
         } else {
             addStorage(storage);
@@ -150,15 +168,15 @@ public class CacheManager {
 
 
     public void addInConversation(String playerName){
-        cachedInConversation.add(playerName);
+        cachedPlayerInConversation.add(playerName);
     }
 
     public void removeInConversation(String playerName){
-        cachedInConversation.remove(playerName);
+        cachedPlayerInConversation.remove(playerName);
     }
 
     public boolean isInConversation(String playerName){
-        return cachedInConversation.contains(playerName);
+        return cachedPlayerInConversation.contains(playerName);
     }
 
 

@@ -7,22 +7,23 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.TemporaryActionNames;
 import fr.army.stelyteam.utils.builder.InventoryBuilder;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.EconomyManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.MySQLManager;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 
 public class UpgradeStorageInventory {
 
     private InventoryClickEvent event;
-    private StelyTeamPlugin plugin;
     private CacheManager cacheManager;
     private YamlConfiguration config;
-    private MySQLManager sqlManager;
+    private DatabaseManager sqlManager;
     private MessageManager messageManager;
     private EconomyManager economyManager;
     private InventoryBuilder inventoryBuilder;
@@ -30,10 +31,9 @@ public class UpgradeStorageInventory {
 
     public UpgradeStorageInventory(InventoryClickEvent event, StelyTeamPlugin plugin) {
         this.event = event;
-        this.plugin = plugin;
         this.cacheManager = plugin.getCacheManager();
         this.config = plugin.getConfig();
-        this.sqlManager = plugin.getSQLManager();
+        this.sqlManager = plugin.getDatabaseManager();
         this.messageManager = plugin.getMessageManager();
         this.economyManager = plugin.getEconomyManager();
         this.inventoryBuilder = plugin.getInventoryBuilder();
@@ -46,13 +46,13 @@ public class UpgradeStorageInventory {
         String itemName = event.getCurrentItem().getItemMeta().getDisplayName();
         Material material = event.getCurrentItem().getType();
 
-        String teamID = sqlManager.getTeamNameFromPlayerName(playerName);
-        Integer level = sqlManager.getTeamStorageLvl(teamID);
+        Team team = sqlManager.getTeamFromPlayerName(playerName);
+        Integer level = team.getTeamStorageLvl();
         
         // Gestion des items
         if (itemName.equals(config.getString("inventories.upgradeStorageAmount.close.itemName"))){
             // Retour en arrière de l'inventaire
-            Inventory inventory = inventoryBuilder.createManageInventory(playerName);
+            Inventory inventory = inventoryBuilder.createManageInventory(playerName, team);
             player.openInventory(inventory);
         }else if (!material.name().equals(config.getString("emptyCase"))){
             for(String str : config.getConfigurationSection("inventories.upgradeStorageAmount").getKeys(false)){
@@ -60,7 +60,7 @@ public class UpgradeStorageInventory {
                 
                 if (itemName.equals(name) && level+1 == config.getInt("inventories.upgradeStorageAmount."+str+".level")){
                     if (economyManager.checkMoneyPlayer(player, config.getDouble("prices.upgrade.teamStorages.level"+(level+1)))){
-                        cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.IMPROV_LVL_STORAGE));
+                        cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.IMPROV_LVL_STORAGE, team));
                         Inventory inventory = inventoryBuilder.createConfirmInventory();
                         player.openInventory(inventory);
                         return;

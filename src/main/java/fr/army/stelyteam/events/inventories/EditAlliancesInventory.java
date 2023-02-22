@@ -8,14 +8,17 @@ import org.bukkit.inventory.Inventory;
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.conversations.ConvAddAlliance;
 import fr.army.stelyteam.conversations.ConvRemoveAlliance;
+import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.builder.InventoryBuilder;
 import fr.army.stelyteam.utils.builder.conversation.ConversationBuilder;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 
 public class EditAlliancesInventory {
     private InventoryClickEvent event;
     private StelyTeamPlugin plugin;
     private YamlConfiguration config;
+    private DatabaseManager mysqlManager;
     private ConversationBuilder conversationBuilder;
     private InventoryBuilder inventoryBuilder;
 
@@ -24,6 +27,7 @@ public class EditAlliancesInventory {
         this.event = event;
         this.plugin = plugin;
         this.config = plugin.getConfig();
+        this.mysqlManager = plugin.getDatabaseManager();
         this.conversationBuilder = plugin.getConversationBuilder();
         this.inventoryBuilder = plugin.getInventoryBuilder();
     }
@@ -33,12 +37,13 @@ public class EditAlliancesInventory {
         String itemName;
         Player player = (Player) event.getWhoClicked();
         String playerName = player.getName();
+        Team team = mysqlManager.getTeamFromPlayerName(playerName);
 
 
         // Fermeture ou retour en arrière de l'inventaire
         itemName = event.getCurrentItem().getItemMeta().getDisplayName();
         if (itemName.equals(config.getString("inventories.editAlliances.close.itemName"))){
-            Inventory inventory = inventoryBuilder.createManageInventory(playerName);
+            Inventory inventory = inventoryBuilder.createManageInventory(playerName, team);
             player.openInventory(inventory);
             return;
         }else if (itemName.equals(config.getString("inventories.editAlliances.addAlliance.itemName"))){

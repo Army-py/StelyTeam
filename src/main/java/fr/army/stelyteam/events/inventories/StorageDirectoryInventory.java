@@ -12,7 +12,7 @@ import org.bukkit.inventory.Inventory;
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.builder.InventoryBuilder;
-import fr.army.stelyteam.utils.manager.MySQLManager;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 
 public class StorageDirectoryInventory {
@@ -20,7 +20,7 @@ public class StorageDirectoryInventory {
     private InventoryClickEvent event;
     private StelyTeamPlugin plugin;
     private YamlConfiguration config;
-    private MySQLManager sqlManager;
+    private DatabaseManager sqlManager;
     private InventoryBuilder inventoryBuilder;
 
 
@@ -28,7 +28,7 @@ public class StorageDirectoryInventory {
         this.event = event;
         this.plugin = plugin;
         this.config = plugin.getConfig();
-        this.sqlManager = plugin.getSQLManager();
+        this.sqlManager = plugin.getDatabaseManager();
         this.inventoryBuilder = plugin.getInventoryBuilder();
     }
 
@@ -36,14 +36,13 @@ public class StorageDirectoryInventory {
     public void onInventoryClick(){
         Player player = (Player) event.getWhoClicked();
         String playerName = player.getName();
-        String teamId = sqlManager.getTeamNameFromPlayerName(playerName);
         Team team = sqlManager.getTeamFromPlayerName(playerName);
         String itemName = event.getCurrentItem().getItemMeta().getDisplayName();
         Material itemType = event.getCurrentItem().getType();
 
         // Fermeture ou retour en arrière de l'inventaire
         if (itemName.equals(config.getString("inventories.storageDirectory.close.itemName"))){
-            Inventory inventory = inventoryBuilder.createMemberInventory(playerName);
+            Inventory inventory = inventoryBuilder.createMemberInventory(playerName, team);
             player.openInventory(inventory);
         }else{
             for(String str : config.getConfigurationSection("inventories.storageDirectory").getKeys(false)){
@@ -53,7 +52,7 @@ public class StorageDirectoryInventory {
 
                 if (itemName.equals(name) && itemType.equals(type)){
                     // Inventory inventory = inventoryBuilder.createStorageInventory(teamId, storageId, name);
-                    Inventory inventory = inventoryBuilder.createStorageInventory(team, storageId, name);
+                    Inventory inventory = inventoryBuilder.createStorageInventory(team, storageId);
                     player.openInventory(inventory);
                     return;
                 }

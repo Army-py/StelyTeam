@@ -17,7 +17,7 @@ import fr.army.stelyteam.utils.TemporaryActionNames;
 import fr.army.stelyteam.utils.builder.InventoryBuilder;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.MySQLManager;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 
 public class MembersInventory {
@@ -28,7 +28,7 @@ public class MembersInventory {
     private CacheManager cacheManager;
     private MessageManager messageManager;
     private InventoryBuilder inventoryBuilder;
-    private MySQLManager sqlManager;
+    private DatabaseManager sqlManager;
 
     public MembersInventory(InventoryClickEvent clickEvent, StelyTeamPlugin plugin) {
         this.clickEvent = clickEvent;
@@ -36,7 +36,7 @@ public class MembersInventory {
         this.cacheManager = plugin.getCacheManager();
         this.messageManager = plugin.getMessageManager();
         this.inventoryBuilder = plugin.getInventoryBuilder();
-        this.sqlManager = plugin.getSQLManager();
+        this.sqlManager = plugin.getDatabaseManager();
     }
 
     public MembersInventory(InventoryCloseEvent closeEvent, StelyTeamPlugin plugin){
@@ -57,13 +57,13 @@ public class MembersInventory {
         if (clickEvent.getView().getTitle().equals(config.getString("inventoriesName.removeMembers"))){
             if (material.equals(Material.getMaterial("PLAYER_HEAD"))){
                 if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.CLICK_REMOVE_MEMBER)){
-                    if (!sqlManager.isMemberInTeam(memberName, team.getTeamName())){
+                    if (!team.isTeamMember(playerName)){
                         player.sendRawMessage(messageManager.getMessage("common.player_not_in_your_team"));
                         return;
                     }else if (playerName.equals(memberName)){
                         player.sendRawMessage(messageManager.getMessage("manage_members.remove_member.cant_exclude_yourself"));
                         return;
-                    }else if (sqlManager.getMemberRank(memberName) <= sqlManager.getMemberRank(playerName)){
+                    }else if (team.getMemberRank(memberName) <= team.getMemberRank(playerName)){
                         player.sendRawMessage(messageManager.getMessage("manage_members.remove_member.cant_exclude_higher_rank"));
                         return;
                     }
@@ -81,12 +81,12 @@ public class MembersInventory {
                     player.openInventory(inventory);
                 }
             }else if (itemName.equals(config.getString("inventories.teamMembers.close.itemName"))){
-                Inventory inventory = inventoryBuilder.createEditMembersInventory(playerName);
+                Inventory inventory = inventoryBuilder.createEditMembersInventory(playerName, team);
                 player.openInventory(inventory);
             }
         }else{
             if (itemName.equals(config.getString("inventories.teamMembers.close.itemName"))){
-                Inventory inventory = inventoryBuilder.createMemberInventory(playerName);
+                Inventory inventory = inventoryBuilder.createMemberInventory(playerName, team);
                 player.openInventory(inventory);
             }
         }

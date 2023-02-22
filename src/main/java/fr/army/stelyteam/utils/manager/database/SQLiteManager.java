@@ -1,4 +1,4 @@
-package fr.army.stelyteam.utils.manager;
+package fr.army.stelyteam.utils.manager.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,47 +12,39 @@ import java.util.Calendar;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.utils.Alliance;
+import fr.army.stelyteam.utils.Member;
+import fr.army.stelyteam.utils.Permission;
 import fr.army.stelyteam.utils.Storage;
 import fr.army.stelyteam.utils.Team;
 
-public class MySQLManager {
-    
-    private String host;
-    private String database;
-    private String user;
-    private String password;
-    private int port;
-
+public class SQLiteManager extends DatabaseManager {
     private Connection connection;
     private StelyTeamPlugin plugin;
     private YamlConfiguration config;
+    private String filename;
 
-    public MySQLManager(StelyTeamPlugin plugin) {
-        // this.host = App.config.getString("sql.host");
-        // this.database = App.config.getString("sql.database");
-        // this.user = App.config.getString("sql.user");
-        // this.password = App.config.getString("sql.password");
-        // this.port = App.config.getInt("sql.port");
-
-        this.database = "bungeecord_StelyTeam.db";
-
-        this.plugin = plugin;
+    public SQLiteManager(StelyTeamPlugin plugin) {
+        super(plugin);
         this.config = plugin.getConfig();
+        this.plugin = plugin;
+        
+        this.filename = this.config.getString("sqlite.file");
     }
 
-
+    @Override
     public boolean isConnected() {
         return this.connection == null ? false : true;
     }
 
-
-    public void connect() throws ClassNotFoundException, SQLException{
+    @Override
+    public void init() throws ClassNotFoundException, SQLException{
         if(!isConnected()){
-            this.connection = DriverManager.getConnection("jdbc:sqlite:"+ plugin.getDataFolder().getAbsolutePath()+"/"+this.database);
+            this.connection = DriverManager.getConnection("jdbc:sqlite:"+plugin.getDataFolder().getAbsolutePath()+"/"+this.filename);
         }
     }
 
-
+    @Override
     public void disconnect() {
         if(isConnected()){
             try {
@@ -63,23 +55,25 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public Connection getConnection() {
         return connection;
     }
 
 
-    public void disconnect(Connection connection) {
-        if(connection != null){
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+    // public void createDatabase(){
+    //     if (isConnected()){
+    //         try {
+    //             PreparedStatement query = connection.prepareStatement("CREATE DATABASE IF NOT EXISTS "+this.database+";");
+    //             query.executeUpdate();
+    //             query.close();
+    //         } catch (Exception e){
+    //             e.printStackTrace();
+    //         }
+    //     }
+    // }
 
-
+        @Override
     public void createTables(){
         if (isConnected()){
             try {
@@ -109,7 +103,7 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public boolean isOwner(String playerName){
         if (isConnected()){
             try {
@@ -126,7 +120,7 @@ public class MySQLManager {
         return false;
     }
 
-
+    @Override
     public boolean isMember(String playerName){
         if (isConnected()){
             try {
@@ -143,42 +137,7 @@ public class MySQLManager {
         return false;
     }
 
-
-    public boolean isMemberInTeam(String playerName, String teamName){
-        if (isConnected()){
-            try {
-                PreparedStatement query = connection.prepareStatement("SELECT * FROM player WHERE playerName = ? AND teamId = (SELECT teamId FROM team WHERE teamName = ?)");
-                query.setString(1, playerName);
-                query.setString(2, teamName);
-                ResultSet result = query.executeQuery();
-                boolean isMember = result.next();
-                query.close();
-                return isMember;
-            } catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-        return false;
-    }
-
-
-    public boolean hasUnlockedTeamBank(String teamName){
-        if (isConnected()){
-            try {
-                PreparedStatement query = connection.prepareStatement("SELECT * FROM team WHERE teamName = ? AND unlockedTeamBank = 1");
-                query.setString(1, teamName);
-                ResultSet result = query.executeQuery();
-                boolean hasUnlockedTeamBank = result.next();
-                query.close();
-                return hasUnlockedTeamBank;
-            } catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-        return false;
-    }
-
-
+    @Override
     public boolean teamNameExists(String teamName){
         if (isConnected()){
             try {
@@ -195,24 +154,7 @@ public class MySQLManager {
         return false;
     }
 
-
-    public boolean teamPrefixExists(String teamPrefix){
-        if (isConnected()){
-            try {
-                PreparedStatement query = connection.prepareStatement("SELECT * FROM team WHERE teamPrefix = ?");
-                query.setString(1, teamPrefix);
-                ResultSet result = query.executeQuery();
-                boolean teamPrefixExists = result.next();
-                query.close();
-                return teamPrefixExists;
-            } catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-        return false;
-    }
-
-
+    @Override
     public void insertTeam(String teamName, String teamPrefix, String ownerName){
         if(isConnected()){
             try {
@@ -248,7 +190,7 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public void insertMember(String playerName, String teamName){
         if(isConnected()){
             try {
@@ -265,7 +207,7 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public void removeTeam(String teamName){
         if(isConnected()){
             try {
@@ -302,7 +244,7 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public void removeMember(String playerName, String teamName){
         if(isConnected()){
             try {
@@ -317,7 +259,7 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public void updateTeamName(String teamName, String newTeamName){
         if(isConnected()){
             try {
@@ -332,7 +274,7 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public void updateTeamPrefix(String teamName, String newTeamPrefix){
         if(isConnected()){
             try {
@@ -347,7 +289,7 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public void updateTeamDescription(String teamName, String newTeamDescription){
         if(isConnected()){
             try {
@@ -362,7 +304,7 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public void updateTeamOwner(String teamName, String teamOwner, String newTeamOwner){
         if(isConnected()){
             try {
@@ -392,7 +334,7 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public void updateUnlockedTeamBank(String teamName){
         if(isConnected()){
             try {
@@ -407,7 +349,7 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public void incrementImprovLvlMembers(String teamName){
         if(isConnected()){
             try {
@@ -421,7 +363,7 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public void incrementTeamStorageLvl(String teamName){
         if(isConnected()){
             try {
@@ -435,7 +377,7 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public void incrementTeamMoney(String teamName, double money){
         if(isConnected()){
             try {
@@ -450,7 +392,7 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public void decrementImprovLvlMembers(String teamName){
         if(isConnected()){
             try {
@@ -464,7 +406,7 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public void decrementTeamMoney(String teamName, double money){
         if(isConnected()){
             try {
@@ -479,13 +421,12 @@ public class MySQLManager {
         }
     }
 
-
-    public void promoteMember(String teamName, String playerName){
+    @Override
+    public void promoteMember(String playerName){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("UPDATE player SET teamRank = teamRank - 1 WHERE teamId = ? AND playerName = ?");
-                query.setInt(1, getTeamId(teamName));
-                query.setString(2, playerName);
+                PreparedStatement query = connection.prepareStatement("UPDATE player SET teamRank = teamRank - 1 WHERE playerName = ?");
+                query.setString(1, playerName);
                 query.executeUpdate();
                 query.close();
             } catch (SQLException e) {
@@ -494,13 +435,12 @@ public class MySQLManager {
         }
     }
 
-
-    public void demoteMember(String teamName, String playerName){
+    @Override
+    public void demoteMember(String playerName){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("UPDATE player SET teamRank = teamRank + 1 WHERE teamId = ? AND playerName = ?");
-                query.setInt(1, getTeamId(teamName));
-                query.setString(2, playerName);
+                PreparedStatement query = connection.prepareStatement("UPDATE player SET teamRank = teamRank + 1 WHERE playerName = ?");
+                query.setString(1, playerName);
                 query.executeUpdate();
                 query.close();
             } catch (SQLException e) {
@@ -509,7 +449,7 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public String getTeamNameFromPlayerName(String playerName){
         if(isConnected()){
             try {
@@ -527,108 +467,7 @@ public class MySQLManager {
         return null;
     }
 
-
-    public Team getTeamFromPlayerName(String playerName){
-        if(isConnected()){
-            try {
-                PreparedStatement query = connection.prepareStatement("SELECT t.teamName, t.teamPrefix, t.teamDescription, t.teamMoney, t.creationDate, t.improvLvlMembers, t.teamStorageLvl, t.unlockedTeamBank, o.playerName AS 'ownerName' FROM team AS t INNER JOIN player p ON t.teamId = p.teamId INNER JOIN player o ON t.teamOwnerPlayerId = o.playerId WHERE p.playerName = ?");
-                query.setString(1, playerName);
-                ResultSet result = query.executeQuery();
-                if(result.next()){
-                    return new Team(
-                        result.getString("teamName"),
-                        result.getString("teamPrefix"),
-                        result.getString("teamDescription"),
-                        result.getInt("teamMoney"),
-                        result.getString("creationDate"),
-                        getTeamMembers(result.getString("teamName")).size(),
-                        result.getInt("improvLvlMembers"),
-                        result.getInt("teamStorageLvl"),
-                        (1 == result.getInt("unlockedTeamBank")),
-                        result.getString("ownerName")
-                    );
-                }
-                query.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
-
-
-    public String getTeamPrefix(String teamName){
-        if(isConnected()){
-            try {
-                PreparedStatement query = connection.prepareStatement("SELECT teamPrefix FROM team WHERE teamName = ?");
-                query.setString(1, teamName);
-                ResultSet result = query.executeQuery();
-                if(result.next()){
-                    return result.getString("teamPrefix");
-                }
-                query.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
-
-
-    public String getTeamOwnerName(String teamName){
-        if(isConnected()){
-            try {
-                PreparedStatement query = connection.prepareStatement("SELECT p.playerName FROM player AS p INNER JOIN team AS t ON p.playerId = t.teamOwnerPlayerId WHERE t.teamName = ?");
-                query.setString(1, teamName);
-                ResultSet result = query.executeQuery();
-                if(result.next()){
-                    return result.getString("playerName");
-                }
-                query.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
-
-
-    public Integer getImprovLvlMembers(String teamName){
-        if(isConnected()){
-            try {
-                PreparedStatement query = connection.prepareStatement("SELECT improvLvlMembers FROM team WHERE teamName = ?");
-                query.setString(1, teamName);
-                ResultSet result = query.executeQuery();
-                if(result.next()){
-                    return result.getInt("improvLvlMembers");
-                }
-                query.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
-
-
-    public Integer getTeamStorageLvl(String teamName){
-        if(isConnected()){
-            try {
-                PreparedStatement query = connection.prepareStatement("SELECT teamStorageLvl FROM team WHERE teamName = ?");
-                query.setString(1, teamName);
-                ResultSet result = query.executeQuery();
-                if(result.next()){
-                    return result.getInt("teamStorageLvl");
-                }
-                query.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
-
-
+    @Override
     public Double getTeamMoney(String teamName){
         if(isConnected()){
             try {
@@ -647,26 +486,26 @@ public class MySQLManager {
     }
 
 
-    public ArrayList<String> getTeamMembers(String teamName){
-        if(isConnected()){
-            try {
-                PreparedStatement query = connection.prepareStatement("SELECT p.playerName FROM player AS p INNER JOIN team AS t ON p.teamId = t.teamId WHERE t.teamName = ?");
-                query.setString(1, teamName);
-                ResultSet result = query.executeQuery();
-                ArrayList<String> teamMembers = new ArrayList<>();
-                while(result.next()){
-                    teamMembers.add(result.getString("playerName"));
-                }
-                query.close();
-                return teamMembers;
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
+    // public ArrayList<String> getTeamMembers(String teamName){
+    //     if(isConnected()){
+    //         try {
+    //             PreparedStatement query = connection.prepareStatement("SELECT p.playerName FROM player AS p INNER JOIN team AS t ON p.teamId = t.teamId WHERE t.teamName = ?");
+    //             query.setString(1, teamName);
+    //             ResultSet result = query.executeQuery();
+    //             ArrayList<String> teamMembers = new ArrayList<>();
+    //             while(result.next()){
+    //                 teamMembers.add(result.getString("playerName"));
+    //             }
+    //             query.close();
+    //             return teamMembers;
+    //         } catch (SQLException e) {
+    //             e.printStackTrace();
+    //         }
+    //     }
+    //     return null;
+    // }
 
-
+        @Override
     public ArrayList<String> getTeamMembersWithRank(String teamName, int rank){
         if(isConnected()){
             try {
@@ -687,7 +526,7 @@ public class MySQLManager {
         return null;
     }
 
-
+    @Override
     public ArrayList<String> getTeamsName(){
         if(isConnected()){
             try {
@@ -706,7 +545,7 @@ public class MySQLManager {
         return null;
     }
 
-
+    @Override
     public ArrayList<Team> getTeams(){
         if(isConnected()){
             try {
@@ -720,7 +559,6 @@ public class MySQLManager {
                         result.getString("teamDescription"),
                         result.getInt("teamMoney"),
                         result.getString("creationDate"),
-                        getTeamMembers(result.getString("teamName")).size(),
                         result.getInt("improvLvlMembers"),
                         result.getInt("teamStorageLvl"),
                         (1 == result.getInt("unlockedTeamBank")),
@@ -736,80 +574,7 @@ public class MySQLManager {
         return null;
     }
 
-
-    public Integer getMemberRank(String playerName){
-        if(isConnected()){
-            try {
-                PreparedStatement query = connection.prepareStatement("SELECT teamRank FROM player WHERE playerName = ?");
-                query.setString(1, playerName);
-                ResultSet result = query.executeQuery();
-                if(result.next()){
-                    return result.getInt("teamRank");
-                }
-                query.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
-
-
-    public Integer getRankAssignement(String teamName, String permLabel){
-        if(isConnected()){
-            try {
-                PreparedStatement query = connection.prepareStatement("SELECT a.teamRank FROM assignement AS a INNER JOIN team AS t ON a.teamId = t.teamId WHERE t.teamName = ? AND a.permLabel = ?");
-                query.setString(1, teamName);
-                query.setString(2, permLabel);
-                ResultSet result = query.executeQuery();
-                if(result.next()){
-                    return result.getInt("teamRank");
-                }
-                query.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
-
-
-    public String getTeamCreationDate(String teamName){
-        if(isConnected()){
-            try {
-                PreparedStatement query = connection.prepareStatement("SELECT creationDate FROM team WHERE teamName = ?");
-                query.setString(1, teamName);
-                ResultSet result = query.executeQuery();
-                if(result.next()){
-                    return result.getString("creationDate");
-                }
-                query.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
-
-
-    public String getTeamDescription(String teamName){
-        if(isConnected()){
-            try {
-                PreparedStatement query = connection.prepareStatement("SELECT teamDescription FROM team WHERE teamName = ?");
-                query.setString(1, teamName);
-                ResultSet result = query.executeQuery();
-                if(result.next()){
-                    return result.getString("teamDescription");
-                }
-                query.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
-
-
+    @Override
     public void insertAssignement(String teamName, String permLabel, Integer teamRank){
         if(isConnected()){
             try {
@@ -840,7 +605,7 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public void decrementAssignement(String teamName, String permLabel){
         if(isConnected()){
             try {
@@ -855,25 +620,7 @@ public class MySQLManager {
         }
     }
 
-
-    public String getJoinDate(String playerName){
-        if(isConnected()){
-            try {
-                PreparedStatement query = connection.prepareStatement("SELECT joinDate FROM player WHERE playerName = ?");
-                query.setString(1, playerName);
-                ResultSet result = query.executeQuery();
-                if(result.next()){
-                    return result.getString("joinDate");
-                }
-                query.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
-
-
+    @Override
     public void insertStorageId(int storageId){
         if(isConnected()){
             try {
@@ -887,7 +634,7 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public boolean storageIdExist(int storageId){
         if(isConnected()){
             try {
@@ -905,7 +652,7 @@ public class MySQLManager {
         return false;
     }
 
-
+    @Override
     public boolean teamHasStorage(String teamName, Integer storageId){
         if(isConnected()){
             try {
@@ -923,7 +670,7 @@ public class MySQLManager {
         return false;
     }
 
-
+    @Override
     public byte[] getStorageContent(String teamName, Integer storageId){
         if(isConnected()){
             try {
@@ -942,7 +689,7 @@ public class MySQLManager {
         return null;
     }
 
-
+    @Override
     public void insertStorageContent(String teamName, Integer storageId, byte[] storageContent){
         if(isConnected()){
             try {
@@ -959,7 +706,7 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public void updateStorageContent(String teamName, Integer storageId, byte[] storageContent){
         if(isConnected()){
             try {
@@ -976,7 +723,7 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public void saveStorage(Storage storage){
         String teamName = storage.getTeam().getTeamName();
         int storageId = storage.getStorageId();
@@ -991,56 +738,7 @@ public class MySQLManager {
         }
     }
 
-
-    public ArrayList<String> getAlliances(String teamName){
-        if(isConnected()){
-            try {
-                ArrayList<String> alliances = new ArrayList<>();
-                PreparedStatement queryTeam = connection.prepareStatement("SELECT t.teamName FROM team AS t INNER JOIN alliance AS a ON t.teamId = a.teamAllianceId WHERE a.teamId = ?");
-                queryTeam.setInt(1, getTeamId(teamName));
-                ResultSet resultTeam = queryTeam.executeQuery();
-                while(resultTeam.next()){
-                    alliances.add(resultTeam.getString("teamName"));
-                }
-                queryTeam.close();
-                
-                PreparedStatement queryAlliance = connection.prepareStatement("SELECT t.teamName FROM team AS t INNER JOIN alliance AS a ON t.teamId = a.teamId WHERE a.teamAllianceId = ?");
-                queryAlliance.setInt(1, getTeamId(teamName));
-                ResultSet resultAlliance = queryAlliance.executeQuery();
-                while(resultAlliance.next()){
-                    alliances.add(resultAlliance.getString("teamName"));
-                }
-                queryAlliance.close();
-                return alliances;
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
-
-
-    public String getAllianceDate(String teamName, String allianceName){
-        if(isConnected()){
-            try {
-                PreparedStatement query = connection.prepareStatement("SELECT a.allianceDate FROM alliance AS a INNER JOIN team AS t ON a.teamId = t.teamId WHERE (t.teamName = ? OR t.teamName = ?) AND (a.teamAllianceId = ? OR a.teamId = ?)");
-                query.setString(1, teamName);
-                query.setString(2, allianceName);
-                query.setInt(3, getTeamId(allianceName));
-                query.setInt(4, getTeamId(allianceName));
-                ResultSet result = query.executeQuery();
-                if(result.next()){
-                    return result.getString("allianceDate");
-                }
-                query.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
-
-
+    @Override
     public void insertAlliance(String teamName, String allianceName){
         if(isConnected()){
             try {
@@ -1056,7 +754,7 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public void removeAlliance(String teamName, String allianceName){
         if(isConnected()){
             try {
@@ -1073,7 +771,7 @@ public class MySQLManager {
         }
     }
 
-
+    @Override
     public boolean isAlliance(String teamName, String allianceName){
         if(isConnected()){
             try {
@@ -1094,7 +792,7 @@ public class MySQLManager {
         return false;
     }
 
-
+    @Override
     public ArrayList<String> getMembers(){
         if(isConnected()){
             try {
@@ -1113,8 +811,155 @@ public class MySQLManager {
         return null;
     }
 
+    @Override
+    public Team getTeamFromPlayerName(String playerName){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT t.teamName, t.teamPrefix, t.teamDescription, t.teamMoney, t.creationDate, t.improvLvlMembers, t.teamStorageLvl, t.unlockedTeamBank, o.playerName AS 'ownerName' FROM team AS t INNER JOIN player p ON t.teamId = p.teamId INNER JOIN player o ON t.teamOwnerPlayerId = o.playerId WHERE p.playerName = ?");
+                query.setString(1, playerName);
+                ResultSet result = query.executeQuery();
+                if(result.next()){
+                    return new Team(
+                        result.getString("teamName"),
+                        result.getString("teamPrefix"),
+                        result.getString("teamDescription"),
+                        result.getInt("teamMoney"),
+                        result.getString("creationDate"),
+                        result.getInt("improvLvlMembers"),
+                        result.getInt("teamStorageLvl"),
+                        (1 == result.getInt("unlockedTeamBank")),
+                        result.getString("ownerName")
+                    );
+                }
+                query.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
 
-    private int getPlayerId(String playerName){
+    @Override
+    public Team getTeamFromTeamName(String teamName){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT t.teamName, t.teamPrefix, t.teamDescription, t.teamMoney, t.creationDate, t.improvLvlMembers, t.teamStorageLvl, t.unlockedTeamBank, o.playerName AS 'ownerName' FROM team AS t INNER JOIN player o ON t.teamOwnerPlayerId = o.playerId WHERE t.teamName = ?");
+                query.setString(1, teamName);
+                ResultSet result = query.executeQuery();
+                if(result.next()){
+                    return new Team(
+                        result.getString("teamName"),
+                        result.getString("teamPrefix"),
+                        result.getString("teamDescription"),
+                        result.getInt("teamMoney"),
+                        result.getString("creationDate"),
+                        result.getInt("improvLvlMembers"),
+                        result.getInt("teamStorageLvl"),
+                        (1 == result.getInt("unlockedTeamBank")),
+                        result.getString("ownerName")
+                    );
+                }
+                query.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public ArrayList<Member> getTeamMembers(String teamName){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT p.playerName, p.teamRank, p.joinDate FROM player AS p INNER JOIN team AS t ON p.teamId = t.teamId WHERE t.teamName = ?;");
+                query.setString(1, teamName);
+                ResultSet result = query.executeQuery();
+                ArrayList<Member> teamMembers = new ArrayList<>();
+                while(result.next()){
+                    teamMembers.add(
+                        new Member(
+                            result.getString("playerName"),
+                            result.getInt("teamRank"),
+                            result.getString("joinDate")
+                        )
+                    );
+                }
+                query.close();
+                return teamMembers;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public ArrayList<Permission> getTeamAssignement(String teamName){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT a.permLabel, a.teamRank FROM assignement AS a INNER JOIN team AS t ON a.teamId = t.teamId WHERE t.teamName = ?;");
+                query.setString(1, teamName);
+                ResultSet result = query.executeQuery();
+                ArrayList<Permission> teamAssignement = new ArrayList<>();
+                while(result.next()){
+                    teamAssignement.add(
+                        new Permission(
+                            result.getString("permLabel"),
+                            result.getInt("teamRank")
+                        )
+                    );
+                }
+                query.close();
+                return teamAssignement;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public ArrayList<Alliance> getTeamAlliances(String teamName){
+        if(isConnected()){
+            try {
+                ArrayList<Alliance> alliances = new ArrayList<>();
+                PreparedStatement queryTeam = connection.prepareStatement("SELECT t.teamName, a.allianceDate FROM team AS t INNER JOIN alliance AS a ON t.teamId = a.teamAllianceId WHERE a.teamId = ?");
+                queryTeam.setInt(1, getTeamId(teamName));
+                ResultSet resultTeam = queryTeam.executeQuery();
+                while(resultTeam.next()){
+                    // alliances.add(resultTeam.getString("teamName"));
+                    alliances.add(
+                        new Alliance(
+                            resultTeam.getString("teamName"),
+                            resultTeam.getString("allianceDate")
+                        )
+                    );
+                }
+                queryTeam.close();
+                
+                PreparedStatement queryAlliance = connection.prepareStatement("SELECT t.teamName, a.allianceDate FROM team AS t INNER JOIN alliance AS a ON t.teamId = a.teamId WHERE a.teamAllianceId = ?");
+                queryAlliance.setInt(1, getTeamId(teamName));
+                ResultSet resultAlliance = queryAlliance.executeQuery();
+                while(resultAlliance.next()){
+                    // alliances.add(resultAlliance.getString("teamName"));
+                    alliances.add(
+                        new Alliance(
+                            resultTeam.getString("teamName"),
+                            resultTeam.getString("allianceDate")
+                        )
+                    );
+                }
+                queryAlliance.close();
+                return alliances;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public int getPlayerId(String playerName){
         if (isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("SELECT playerId FROM player WHERE playerName = ?");
@@ -1130,8 +975,8 @@ public class MySQLManager {
         return 0;
     }
 
-
-    private int getTeamId(String teamName){
+    @Override
+    public int getTeamId(String teamName){
         if (isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("SELECT teamId FROM team WHERE teamName = ?");
@@ -1150,8 +995,8 @@ public class MySQLManager {
         return 0;
     }
 
-
-    private String getCurrentDate(){
+    @Override
+    public String getCurrentDate(){
         return new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime());
     }
 }

@@ -1,9 +1,10 @@
 package fr.army.stelyteam.conversations;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.manager.EconomyManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.MySQLManager;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.conversations.ConversationContext;
@@ -13,14 +14,14 @@ import org.bukkit.entity.Player;
 
 public class ConvAddMoney extends StringPrompt {
 
-    private MySQLManager sqlManager;
+    private DatabaseManager sqlManager;
     private YamlConfiguration config;
     private MessageManager messageManager;
     private EconomyManager economy;
 
 
     public ConvAddMoney(StelyTeamPlugin plugin) {
-        this.sqlManager = plugin.getSQLManager();
+        this.sqlManager = plugin.getDatabaseManager();
         this.config = plugin.getConfig();
         this.messageManager = plugin.getMessageManager();
         this.economy = plugin.getEconomyManager();
@@ -29,14 +30,14 @@ public class ConvAddMoney extends StringPrompt {
     @Override
     public Prompt acceptInput(ConversationContext con, String answer) {
         Player author = (Player) con.getForWhom();
-        String teamID = sqlManager.getTeamNameFromPlayerName(author.getName());
+        Team team = sqlManager.getTeamFromPlayerName(author.getName());
         Double money = Double.parseDouble(answer);
 
         if (!economy.checkMoneyPlayer(author, money)) {
             // con.getForWhom().sendRawMessage("Vous n'avez pas assez d'argent");
             con.getForWhom().sendRawMessage(messageManager.getMessage("common.not_enough_money"));
             return null;
-        }else if (teamReachedMaxMoney(teamID, money)) {
+        }else if (teamReachedMaxMoney(team, money)) {
             // con.getForWhom().sendRawMessage("La team a déjà atteint le maximum de money");
             con.getForWhom().sendRawMessage(messageManager.getMessage("manage_team.add_money.team_reached_max_money"));
             return null;
@@ -49,7 +50,7 @@ public class ConvAddMoney extends StringPrompt {
         economy.removeMoneyPlayer(author, money);
         // con.getForWhom().sendRawMessage("Le montant a été ajouté");
         con.getForWhom().sendRawMessage(messageManager.getMessage("manage_team.add_money.money_added"));
-        sqlManager.incrementTeamMoney(teamID, money);
+        team.incrementTeamMoney(money);
         return null;
     }
 
@@ -60,8 +61,8 @@ public class ConvAddMoney extends StringPrompt {
     }
 
 
-    private boolean teamReachedMaxMoney(String teamID, double money) {
-        Double teamMoney = sqlManager.getTeamMoney(teamID);
+    private boolean teamReachedMaxMoney(Team team, double money) {
+        Double teamMoney = team.getTeamMoney();
         return teamMoney + money > config.getDouble("teamMaxMoney");
     }
 }

@@ -6,19 +6,29 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.utils.Team;
+import fr.army.stelyteam.utils.TeamInventory;
 import fr.army.stelyteam.utils.builder.InventoryBuilder;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 
 public class AdminInventory {
 
     private InventoryClickEvent event;
     private YamlConfiguration config;
+    private DatabaseManager sqlManager;
     private InventoryBuilder inventoryBuilder;
 
+    public AdminInventory(StelyTeamPlugin plugin) {
+        this.config = plugin.getConfig();
+        this.sqlManager = plugin.getDatabaseManager();
+        this.inventoryBuilder = plugin.getInventoryBuilder();
+    }
 
-    public AdminInventory(InventoryClickEvent event, StelyTeamPlugin plugin) {
+    public AdminInventory(StelyTeamPlugin plugin, InventoryClickEvent event) {
         this.event = event;
         this.config = plugin.getConfig();
+        this.sqlManager = plugin.getDatabaseManager();
         this.inventoryBuilder = plugin.getInventoryBuilder();
     }
 
@@ -30,10 +40,10 @@ public class AdminInventory {
 
         // Ouverture des inventaires
         if (itemName.equals(config.getString("inventories.admin.manage.itemName"))){
-            Inventory inventory = inventoryBuilder.createManageInventory(playerName);
+            Inventory inventory = inventoryBuilder.createManageInventory(playerName, sqlManager.getTeamFromPlayerName(playerName));
             player.openInventory(inventory);
         }else if (itemName.equals(config.getString("inventories.admin.member.itemName"))){
-            Inventory inventory = inventoryBuilder.createMemberInventory(playerName);
+            Inventory inventory = inventoryBuilder.createMemberInventory(playerName, sqlManager.getTeamFromPlayerName(playerName));
             player.openInventory(inventory);
             
         // Fermeture ou retour en arrière de l'inventaire

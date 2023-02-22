@@ -6,9 +6,10 @@ public class TemporaryAction {
     private TemporaryActionNames actionName = TemporaryActionNames.NULL;
     private Team team;
 
-    public TemporaryAction(String senderName, TemporaryActionNames actionName){
+    public TemporaryAction(String senderName, TemporaryActionNames actionName, Team team){
         this.senderName = senderName;
         this.actionName = actionName;
+        this.team = team;
     }
 
     public TemporaryAction(String senderName, String receiverName, TemporaryActionNames actionName, Team team){

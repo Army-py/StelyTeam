@@ -7,20 +7,18 @@ import org.bukkit.entity.Player;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.commands.SubCommand;
+import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.MySQLManager;
-import fr.army.stelyteam.utils.manager.SQLiteManager;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 public class SubCmdDelete extends SubCommand {
-    private MySQLManager sqlManager;
-    private SQLiteManager sqliteManager;
+    private DatabaseManager sqlManager;
     private MessageManager messageManager;
 
 
     public SubCmdDelete(StelyTeamPlugin plugin) {
         super(plugin);
-        this.sqlManager = plugin.getSQLManager();
-        this.sqliteManager = plugin.getSQLiteManager();
+        this.sqlManager = plugin.getDatabaseManager();
         this.messageManager = plugin.getMessageManager();
     }
 
@@ -35,9 +33,9 @@ public class SubCmdDelete extends SubCommand {
             player.sendMessage(messageManager.getMessage("commands.stelyteam_delete.usage"));
         }else{
             String teamID = String.join("", args);
-            if (sqlManager.teamNameExists(teamID)){
-                sqlManager.removeTeam(teamID);
-                sqliteManager.removeHome(teamID);
+            Team team = sqlManager.getTeamFromTeamName(teamID);
+            if (team != null){
+                team.removeTeam();
                 // player.sendMessage("Team supprimée");
                 player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_delete.output", teamID));
             }else{

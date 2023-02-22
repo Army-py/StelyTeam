@@ -1,11 +1,10 @@
 package fr.army.stelyteam.conversations;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.utils.TeamMembersUtils;
+import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.manager.EconomyManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.MySQLManager;
-import fr.army.stelyteam.utils.manager.SQLiteManager;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.conversations.ConversationContext;
@@ -15,28 +14,24 @@ import org.bukkit.entity.Player;
 
 public class ConvEditTeamName extends StringPrompt {
 
-    private MySQLManager sqlManager;
-    private SQLiteManager sqliteManager;
+    private DatabaseManager sqlManager;
     private YamlConfiguration config;
     private MessageManager messageManager;
     private EconomyManager economyManager;
-    private TeamMembersUtils teamMembersUtils;
 
 
     public ConvEditTeamName(StelyTeamPlugin plugin){
-        this.sqlManager = plugin.getSQLManager();
-        this.sqliteManager = plugin.getSQLiteManager();
+        this.sqlManager = plugin.getDatabaseManager();
         this.config = plugin.getConfig();
         this.messageManager = plugin.getMessageManager();
         this.economyManager = plugin.getEconomyManager();
-        this.teamMembersUtils = plugin.getTeamMembersUtils();
     }
 
     @Override
     public Prompt acceptInput(ConversationContext con, String answer) {
         Player author = (Player) con.getForWhom();
         String authorName = author.getName();
-        String teamID = sqlManager.getTeamNameFromPlayerName(authorName);
+        Team team = sqlManager.getTeamFromPlayerName(authorName);
 
         if (nameTeamIsTooLong(answer)) {
             // con.getForWhom().sendRawMessage("Le nom est trop long");
@@ -55,9 +50,8 @@ public class ConvEditTeamName extends StringPrompt {
         economyManager.removeMoneyPlayer(author, config.getDouble("prices.editTeamId"));
         // con.getForWhom().sendRawMessage("Le nom a été changé par " + answer);
         con.getForWhom().sendRawMessage(messageManager.getReplaceMessage("manage_team.edit_team_id.team_name_edited", answer));
-        sqlManager.updateTeamName(teamID, answer);
-        sqliteManager.updateTeamID(teamID, answer);
-        teamMembersUtils.refreshTeamMembersInventory(teamID, authorName);
+        team.updateTeamName(answer);
+        team.refreshTeamMembersInventory(authorName);
         return null;
     }
 

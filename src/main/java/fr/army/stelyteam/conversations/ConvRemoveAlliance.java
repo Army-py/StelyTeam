@@ -13,21 +13,19 @@ import fr.army.stelyteam.utils.TemporaryActionNames;
 import fr.army.stelyteam.utils.builder.InventoryBuilder;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.MySQLManager;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 public class ConvRemoveAlliance extends StringPrompt {
 
-    private StelyTeamPlugin plugin;
     private CacheManager cacheManager;
-    private MySQLManager sqlManager;
+    private DatabaseManager sqlManager;
     private MessageManager messageManager;
     private InventoryBuilder inventoryBuilder;
 
 
     public ConvRemoveAlliance(StelyTeamPlugin plugin) {
-        this.plugin = plugin;
         this.cacheManager = plugin.getCacheManager();
-        this.sqlManager = plugin.getSQLManager();
+        this.sqlManager = plugin.getDatabaseManager();
         this.messageManager = plugin.getMessageManager();
         this.inventoryBuilder = plugin.getInventoryBuilder();
     }
@@ -37,10 +35,9 @@ public class ConvRemoveAlliance extends StringPrompt {
     public Prompt acceptInput(ConversationContext con, String answer) {
         Player author = (Player) con.getForWhom();
         String authorName = author.getName();
-        String teamName = sqlManager.getTeamNameFromPlayerName(authorName);
         Team team = sqlManager.getTeamFromPlayerName(authorName);
 
-        if (!sqlManager.isAlliance(answer, teamName)){
+        if (!team.isTeamAlliance(answer)){
             con.getForWhom().sendRawMessage(messageManager.getMessage("common.not_in_alliance"));
             return null;
         }

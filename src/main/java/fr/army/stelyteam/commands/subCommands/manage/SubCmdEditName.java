@@ -7,18 +7,19 @@ import org.bukkit.entity.Player;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.commands.SubCommand;
+import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.MySQLManager;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 public class SubCmdEditName extends SubCommand {
 
-    private MySQLManager sqlManager;
+    private DatabaseManager sqlManager;
     private MessageManager messageManager;
 
 
     public SubCmdEditName(StelyTeamPlugin plugin) {
         super(plugin);
-        this.sqlManager = plugin.getSQLManager();
+        this.sqlManager = plugin.getDatabaseManager();
         this.messageManager = plugin.getMessageManager();
     }
 
@@ -32,7 +33,8 @@ public class SubCmdEditName extends SubCommand {
             // player.sendMessage("Utilisation : /stelyteam editname <nom de team> <nouveau nom>");
             player.sendMessage(messageManager.getMessage("commands.stelyteam_editname.usage"));
         }else{
-            if (sqlManager.teamNameExists(args[1])){
+            Team team = sqlManager.getTeamFromTeamName(args[1]);
+            if (team != null){
                 if (sqlManager.teamNameExists(args[2])){
                     // player.sendMessage("Ce nom de team existe déjà");
                     player.sendMessage(messageManager.getMessage("common.name_already_exists"));
@@ -40,7 +42,7 @@ public class SubCmdEditName extends SubCommand {
                     // player.sendMessage("Le nom de team ne doit pas contenir d'espace");
                     player.sendMessage(messageManager.getMessage("common.name_cannot_contain_space"));
                 }else{
-                    sqlManager.updateTeamName(args[1], args[2]);
+                    team.updateTeamName(args[2]);
                     // player.sendMessage("Nom de team modifié en " + args[2]);
                     player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_editname.output", args[2]));
                 }

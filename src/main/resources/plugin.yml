@@ -5,6 +5,8 @@ main: fr.army.stelyteam.StelyTeamPlugin
 api-version: "1.16"
 depend:
   - "Vault"
+softdepend:
+  - "Jobs"
 commands:
   stelyteam:
     description: "Ouvre l'inventaire de team"

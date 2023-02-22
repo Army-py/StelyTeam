@@ -1,9 +1,10 @@
 package fr.army.stelyteam.conversations;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.manager.EconomyManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.MySQLManager;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
@@ -12,13 +13,13 @@ import org.bukkit.entity.Player;
 
 public class ConvWithdrawMoney extends StringPrompt {
 
-    private MySQLManager sqlManager;
+    private DatabaseManager sqlManager;
     private MessageManager messageManager;
     private EconomyManager economyManager;
 
 
     public ConvWithdrawMoney(StelyTeamPlugin plugin) {
-        this.sqlManager = plugin.getSQLManager();
+        this.sqlManager = plugin.getDatabaseManager();
         this.messageManager = plugin.getMessageManager();
         this.economyManager = plugin.getEconomyManager();
     }
@@ -26,8 +27,9 @@ public class ConvWithdrawMoney extends StringPrompt {
     @Override
     public Prompt acceptInput(ConversationContext con, String answer) {
         Player author = (Player) con.getForWhom();
-        String teamID = sqlManager.getTeamNameFromPlayerName(author.getName());
-        Double teamMoney = sqlManager.getTeamMoney(teamID);
+        Team team = sqlManager.getTeamFromPlayerName(author.getName());
+        String teamName = team.getTeamName();
+        Double teamMoney = team.getTeamMoney();
         Double money;
 
         if (answer.equals("all")){
@@ -42,7 +44,7 @@ public class ConvWithdrawMoney extends StringPrompt {
             }
         }
 
-        if (teamReachedMinMoney(teamID, money, teamMoney)) {
+        if (teamReachedMinMoney(teamName, money, teamMoney)) {
             // author.sendRawMessage("Vous ne pouvez pas retirer plus de " + teamMoney + "€");
             author.sendRawMessage(messageManager.getReplaceMessage("manage_team.withdraw_money.team_reached_min_money", teamMoney.toString()));
             return null;
@@ -55,7 +57,7 @@ public class ConvWithdrawMoney extends StringPrompt {
         economyManager.addMoneyPlayer(author, money);
         // author.sendRawMessage("Le montant a été retiré");
         author.sendRawMessage(messageManager.getMessage("manage_team.withdraw_money.money_withdrawn"));
-        sqlManager.decrementTeamMoney(teamID, money);
+        team.decrementTeamMoney(money);
         return null;
     }
 

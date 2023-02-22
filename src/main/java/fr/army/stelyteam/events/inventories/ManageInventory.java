@@ -1,14 +1,15 @@
 package fr.army.stelyteam.events.inventories;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.TemporaryActionNames;
 import fr.army.stelyteam.utils.builder.InventoryBuilder;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.EconomyManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.MySQLManager;
-import fr.army.stelyteam.utils.manager.SQLiteManager;
+import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 import java.util.List;
 
@@ -21,11 +22,10 @@ import org.bukkit.inventory.Inventory;
 
 public class ManageInventory {
     private InventoryClickEvent event;
-    private StelyTeamPlugin plugin;
     private CacheManager cacheManager;
     private YamlConfiguration config;
-    private MySQLManager sqlManager;
-    private SQLiteManager sqliteManager;
+    private DatabaseManager sqlManager;
+    private SQLiteDataManager sqliteManager;
     private MessageManager messageManager;
     private EconomyManager economyManager;
     private InventoryBuilder inventoryBuilder;
@@ -33,10 +33,9 @@ public class ManageInventory {
 
     public ManageInventory(InventoryClickEvent event, StelyTeamPlugin plugin) {
         this.event = event;
-        this.plugin = plugin;
         this.cacheManager = plugin.getCacheManager();
         this.config = plugin.getConfig();
-        this.sqlManager = plugin.getSQLManager();
+        this.sqlManager = plugin.getDatabaseManager();
         this.sqliteManager = plugin.getSQLiteManager();
         this.messageManager = plugin.getMessageManager();
         this.economyManager = plugin.getEconomyManager();
@@ -50,46 +49,46 @@ public class ManageInventory {
         String itemName = event.getCurrentItem().getItemMeta().getDisplayName();
         Material itemType = event.getCurrentItem().getType();
         List<String> lore = event.getCurrentItem().getItemMeta().getLore();
+        Team team;
 
 
         if (itemType.equals(Material.getMaterial(config.getString("noPermission.itemType"))) && lore.equals(config.getStringList("noPermission.lore"))){
             return;
         }
+
+        team = sqlManager.getTeamFromPlayerName(playerName);
         
         // Liaisin des items avec leur fonction
         if (itemName.equals(config.getString("inventories.manage.editMembers.itemName"))){
-            Inventory inventory = inventoryBuilder.createEditMembersInventory(playerName);
+            Inventory inventory = inventoryBuilder.createEditMembersInventory(playerName, team);
             player.openInventory(inventory);
 
 
         }else if (itemName.equals(config.getString("inventories.manage.editAlliances.itemName"))){
-            Inventory inventory = inventoryBuilder.createEditAlliancesInventory(playerName);
+            Inventory inventory = inventoryBuilder.createEditAlliancesInventory(playerName, team);
             player.openInventory(inventory);
 
 
         }else if (itemName.equals(config.getString("inventories.manage.setTeamHome.itemName"))){
-            cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.CREATE_HOME));
+            cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.CREATE_HOME, team));
             Inventory inventory = inventoryBuilder.createConfirmInventory();
             player.openInventory(inventory);
 
 
         }else if (itemName.equals(config.getString("inventories.manage.removeTeamHome.itemName"))){
-            String teamName = sqlManager.getTeamNameFromPlayerName(playerName);
-            if (!sqliteManager.isSet(teamName)){
+            if (!sqliteManager.isSet(team.getTeamName())){
                 player.sendMessage(messageManager.getMessage("manage_team.team_home.not_set"));
             }else{
-                cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.DELETE_HOME));
+                cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.DELETE_HOME, team));
                 Inventory inventory = inventoryBuilder.createConfirmInventory();
                 player.openInventory(inventory);
             }
 
 
-        }else if (itemName.equals(config.getString("inventories.manage.buyTeamBank.itemName"))){
-            String teamID = sqlManager.getTeamNameFromPlayerName(playerName);
-            
-            if (!sqlManager.hasUnlockedTeamBank(teamID)){
+        }else if (itemName.equals(config.getString("inventories.manage.buyTeamBank.itemName"))){            
+            if (!team.isUnlockedTeamBank()){
                 if (economyManager.checkMoneyPlayer(player, config.getDouble("prices.buyTeamBank"))){
-                    cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.BUY_TEAM_BANK));
+                    cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.BUY_TEAM_BANK, team));
 
                     Inventory inventory = inventoryBuilder.createConfirmInventory();
                     player.openInventory(inventory);
@@ -102,18 +101,18 @@ public class ManageInventory {
 
 
         }else if (itemName.equals(config.getString("inventories.manage.upgradeTotalMembers.itemName"))){
-            Inventory inventory = inventoryBuilder.createUpgradeTotalMembersInventory(playerName);
+            Inventory inventory = inventoryBuilder.createUpgradeTotalMembersInventory(playerName, team);
             player.openInventory(inventory);
 
 
         }else if (itemName.equals(config.getString("inventories.manage.upgradeStorageAmount.itemName"))){
-            Inventory inventory = inventoryBuilder.createUpgradeStorageInventory(playerName);
+            Inventory inventory = inventoryBuilder.createUpgradeStorageInventory(playerName, team);
             player.openInventory(inventory);
 
 
         }else if (itemName.equals(config.getString("inventories.manage.editName.itemName"))){
             if (economyManager.checkMoneyPlayer(player, config.getDouble("prices.editTeamId"))){
-                cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.EDIT_NAME));
+                cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.EDIT_NAME, team));
                 Inventory inventory = inventoryBuilder.createConfirmInventory();
                 player.openInventory(inventory);
             }else{
@@ -123,7 +122,7 @@ public class ManageInventory {
 
         }else if (itemName.equals(config.getString("inventories.manage.editPrefix.itemName"))){
             if (economyManager.checkMoneyPlayer(player, config.getDouble("prices.editTeamPrefix"))){
-                cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.EDIT_PREFIX));
+                cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.EDIT_PREFIX, team));
                 Inventory inventory = inventoryBuilder.createConfirmInventory();
                 player.openInventory(inventory);
             }else{
@@ -134,7 +133,7 @@ public class ManageInventory {
 
         }else if (itemName.equals(config.getString("inventories.manage.editDescription.itemName"))){
             if (economyManager.checkMoneyPlayer(player, config.getDouble("prices.editTeamDescription"))){
-                cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.EDIT_DESCRIPTION));
+                cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.EDIT_DESCRIPTION, team));
                 Inventory inventory = inventoryBuilder.createConfirmInventory();
                 player.openInventory(inventory);
             }else{
@@ -144,13 +143,13 @@ public class ManageInventory {
 
 
         }else if (itemName.equals(config.getString("inventories.manage.removeTeam.itemName"))){
-            cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.DELETE_TEAM));
+            cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.DELETE_TEAM, team));
             Inventory inventory = inventoryBuilder.createConfirmInventory();
             player.openInventory(inventory);
 
 
         }else if (itemName.equals(config.getString("inventories.manage.editPermissions.itemName"))){
-            Inventory inventory = inventoryBuilder.createPermissionsInventory(playerName);
+            Inventory inventory = inventoryBuilder.createPermissionsInventory(playerName, team);
             player.openInventory(inventory);
 
 

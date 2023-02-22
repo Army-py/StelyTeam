@@ -8,28 +8,24 @@ import org.bukkit.entity.Player;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.commands.SubCommand;
-import fr.army.stelyteam.utils.TeamMembersUtils;
+import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.TemporaryActionNames;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.MySQLManager;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 public class SubCmdAccept extends SubCommand {
 
-    private StelyTeamPlugin plugin;
     private CacheManager cacheManager;
-    private MySQLManager sqlManager;
+    private DatabaseManager sqlManager;
     private MessageManager messageManager;
-    private TeamMembersUtils teamMembersUtils;
 
     public SubCmdAccept(StelyTeamPlugin plugin) {
         super(plugin);
-        this.plugin = plugin;
         this.cacheManager = plugin.getCacheManager();
-        this.sqlManager = plugin.getSQLManager();
+        this.sqlManager = plugin.getDatabaseManager();
         this.messageManager = plugin.getMessageManager();
-        this.teamMembersUtils = new TeamMembersUtils(plugin);
     }
 
     @Override
@@ -39,7 +35,8 @@ public class SubCmdAccept extends SubCommand {
 
         if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.ADD_MEMBER)){
             TemporaryAction tempAction = cacheManager.getTempAction(playerName);
-            String teamName = tempAction.getTeam().getTeamName();
+            Team team = tempAction.getTeam();
+            String teamName = team.getTeamName();
             String senderName = tempAction.getSenderName();
             Player invitationSender = Bukkit.getPlayer(senderName);
             cacheManager.removePlayerAction(playerName);
@@ -47,14 +44,15 @@ public class SubCmdAccept extends SubCommand {
             if (invitationSender != null){
                 invitationSender.sendMessage(messageManager.getReplaceMessage("sender.accepted_invitation", playerName));
             }
-            teamMembersUtils.teamBroadcast(teamName, senderName, messageManager.replaceAuthorAndReceiver("broadcasts.player_add_new_member", senderName, playerName));
-            sqlManager.insertMember(playerName, teamName);
-            teamMembersUtils.refreshTeamMembersInventory(teamName, playerName);
+            team.teamBroadcast(senderName, messageManager.replaceAuthorAndReceiver("broadcasts.player_add_new_member", senderName, playerName));
+            team.insertMember(playerName);
+            team.refreshTeamMembersInventory(playerName);
         }else if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.ADD_ALLIANCE)){
             TemporaryAction tempAction = cacheManager.getTempAction(playerName);
             String senderName = tempAction.getSenderName();
             String receiverName = tempAction.getReceiverName();
-            String teamName = tempAction.getTeam().getTeamName();
+            Team team = tempAction.getTeam();
+            String teamName = team.getTeamName();
             Player invitationSender = Bukkit.getPlayer(senderName);
             String allianceName = sqlManager.getTeamNameFromPlayerName(receiverName);
             cacheManager.removePlayerAction(playerName);
@@ -62,9 +60,9 @@ public class SubCmdAccept extends SubCommand {
             if (invitationSender != null){
                 invitationSender.sendMessage(messageManager.getReplaceMessage("sender.accepted_invitation", receiverName));
             }
-            teamMembersUtils.teamBroadcast(teamName, senderName, messageManager.replaceAuthorAndTeamName("broadcasts.player_add_new_alliance", senderName, allianceName));
-            sqlManager.insertAlliance(teamName, allianceName);
-            teamMembersUtils.refreshTeamMembersInventory(teamName, playerName);
+            team.teamBroadcast(senderName, messageManager.replaceAuthorAndTeamName("broadcasts.player_add_new_alliance", senderName, allianceName));
+            team.insertAlliance(allianceName);
+            team.refreshTeamMembersInventory(playerName);
         }else{
             player.sendMessage(messageManager.getMessage("common.no_invitation"));
         }
