@@ -127,7 +127,6 @@ public class InventoryBuilder {
         String teamPrefix = team.getTeamPrefix();
         String teamOwner = team.getTeamOwnerName();
         Integer teamMembersLelvel = team.getImprovLvlMembers();
-        Integer teamMembers = team.getTeamMembers().size();
         String membershipDate = team.getMembershipDate(playername);
         Double teamMoney = team.getTeamMoney();
         String teamDescription = team.getTeamDescription();

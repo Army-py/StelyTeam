@@ -351,16 +351,8 @@ public class Team {
         this.teamDescription = teamDescription;
     }
 
-    public void setTeamMoney(Integer teamMoney) {
-        this.teamMoney = teamMoney;
-    }
-
     public void setCreationDate(String creationDate) {
         this.creationDate = creationDate;
-    }
-
-    public void setTeamMembersCount(int teamMembersCount) {
-        this.teamMembersCount = teamMembersCount;
     }
 
     public void setImprovLvlMembers(Integer improvLvlMembers) {
