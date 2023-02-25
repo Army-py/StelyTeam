@@ -15,30 +15,37 @@ commands:
     home:
       description: "Se téléporter au home de team"
       usage: "/stelyteam home"
+      aliases: ["h"]
     visual:
       description: "Renvoie une représentation du texte en couleur"
       usage: "/stelyteam visual <text>"
+      aliases: ["v"]
     info:
       description: "Affiche les informations de la team"
       usage: "/stelyteam info <team>"
+      aliases: ["i"]
     delete:
       description: "Supprime la team"
       usage: "/stelyteam delete <team>"
+      aliases: ["del", "remove", "rm"]
       permissions:
         default: "op"
     money:
       description: "Affiche le solde de la team"
       usage: "/stelyteam money <team>"
+      aliases: ["balance", "bal"]
       permissions:
         default: "op"
     upgrade:
       description: "Améliore le nombre de membre max dans une team"
       usage: "/stelyteam upgrade <team>"
+      aliases: ["up"]
       permissions:
         default: "op"
     downgrade:
       description: "Diminue le nombre de membre max dans une team"
       usage: "/stelyteam downgrade <team>"
+      aliases: ["down"]
       permissions:
         default: "op"
     editname:
