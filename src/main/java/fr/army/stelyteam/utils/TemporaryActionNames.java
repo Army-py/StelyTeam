@@ -18,5 +18,6 @@ public enum TemporaryActionNames {
     CREATE_HOME,
     DELETE_HOME,
     CLICK_REMOVE_MEMBER,
+    CLICK_REMOVE_ALLIANCE,
     EDIT_DESCRIPTION
 }

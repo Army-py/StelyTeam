@@ -71,6 +71,14 @@ public class Team {
         this.plugin.getDatabaseManager().insertTeam(teamName, teamPrefix, teamOwnerName);
     }
 
+    public static Team init(String teamName){
+        return StelyTeamPlugin.getPlugin().getDatabaseManager().getTeamFromTeamName(teamName);
+    }
+
+    public static Team init(Player player){
+        return StelyTeamPlugin.getPlugin().getDatabaseManager().getTeamFromPlayerName(player.getName());
+    }
+
 
     public boolean isTeamMember(String playerName){
         for (Member member : this.teamMembers) {

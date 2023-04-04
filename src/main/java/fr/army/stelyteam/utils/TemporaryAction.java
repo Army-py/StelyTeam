@@ -2,7 +2,7 @@ package fr.army.stelyteam.utils;
 
 public class TemporaryAction {
     private String senderName = "";
-    private String receiverName = "";
+    private String targetName = "";
     private TemporaryActionNames actionName = TemporaryActionNames.NULL;
     private Team team;
 
@@ -12,9 +12,9 @@ public class TemporaryAction {
         this.team = team;
     }
 
-    public TemporaryAction(String senderName, String receiverName, TemporaryActionNames actionName, Team team){
+    public TemporaryAction(String senderName, String targetName, TemporaryActionNames actionName, Team team){
         this.senderName = senderName;
-        this.receiverName = receiverName;
+        this.targetName = targetName;
         this.actionName = actionName;
         this.team = team;
     }
@@ -25,27 +25,27 @@ public class TemporaryAction {
     }
 
     public String getSenderName() {
-        return senderName;
+        return this.senderName;
     }
 
-    public String getReceiverName() {
-        return receiverName;
+    public String getTargetName() {
+        return this.targetName;
     }
 
     public TemporaryActionNames getActionName() {
-        return actionName;
+        return this.actionName;
     }
 
     public Team getTeam() {
-        return team;
+        return this.team;
     }
 
     public void setSenderName(String senderName) {
         this.senderName = senderName;
     }
 
-    public void setReceiverName(String receiverName) {
-        this.receiverName = receiverName;
+    public void setTargetName(String targetName) {
+        this.targetName = targetName;
     }
 
     public void setActionName(TemporaryActionNames actionName) {
