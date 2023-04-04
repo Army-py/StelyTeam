@@ -112,7 +112,8 @@ public class MembersMenu extends TeamMenu {
                     new ConfirmMenu(player).openMenu();
                 }
             }else if (itemName.equals(config.getString("inventories.teamMembers.close.itemName"))){
-                new EditMembersMenu(player).openMenu(team);
+                // new EditMembersMenu(player).openMenu(team);
+                new ManageMenu(player).openMenu(team);
             }
         }else{
             if (itemName.equals(config.getString("inventories.teamMembers.close.itemName"))){
