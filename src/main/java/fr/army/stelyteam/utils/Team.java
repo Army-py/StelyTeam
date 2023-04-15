@@ -95,10 +95,11 @@ public class Team {
 
 
     public void updateTeamName(String newTeamName){
+        this.plugin.getDatabaseManager().updateTeamName(this.teamName, newTeamName);
+        this.plugin.getSQLiteManager().updateTeamID(this.teamName, newTeamName);
+
         this.teamName = newTeamName;
         this.plugin.getCacheManager().replaceStorageTeam(this.teamName, this);
-        this.plugin.getDatabaseManager().updateTeamName(teamName, newTeamName);
-        this.plugin.getSQLiteManager().updateTeamID(teamName, newTeamName);
     }
 
 

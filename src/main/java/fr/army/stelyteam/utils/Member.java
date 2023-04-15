@@ -23,12 +23,12 @@ public class Member {
 
 
     public void promoteMember(){
-        this.teamRank++;
+        this.teamRank--;
         StelyTeamPlugin.getPlugin().getDatabaseManager().promoteMember(memberName);
     }
 
     public void demoteMember(){
-        this.teamRank--;
+        this.teamRank++;
         StelyTeamPlugin.getPlugin().getDatabaseManager().demoteMember(memberName);
     }
 

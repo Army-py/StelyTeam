@@ -161,7 +161,7 @@ public class MemberMenu extends TeamMenu {
         }else if (itemName.equals(config.getString("inventories.member.leaveTeam.itemName"))){
             player.closeInventory();
             if (!team.isTeamOwner(playerName)){
-                cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.EDIT_NAME, team));
+                cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.LEAVE_TEAM, team));
                 new ConfirmMenu(player).openMenu();
             }else {
                 player.sendMessage(messageManager.getMessage("other.owner_cant_leave_team"));

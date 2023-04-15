@@ -56,6 +56,7 @@ public class StelyTeamPlugin extends JavaPlugin {
 
         try {
             this.databaseManager = DatabaseManager.connect(this);
+            this.sqliteManager.connect();
             this.databaseManager.createTables();
             this.getLogger().info("SQL connectée au plugin !");
         } catch (ClassNotFoundException | SQLException e) {

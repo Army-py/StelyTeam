@@ -168,7 +168,7 @@ public class EditMembersMenu extends TeamMenu {
                     return;
                 }
                 if (!team.isTeamOwner(itemName) && memberRank < plugin.getLastRank()){
-                    team.getMember(playerName).demoteMember();
+                    team.getMember(itemName).demoteMember();
 
                     if (member != null && removeFirstColors(itemName).equals(member.getName())){
                         String newRank = plugin.getRankFromId(memberRank+1);
@@ -182,7 +182,7 @@ public class EditMembersMenu extends TeamMenu {
                     return;
                 }
                 if (!mySqlManager.isOwner(itemName) && memberRank != 1){
-                    team.getMember(playerName).promoteMember();
+                    team.getMember(itemName).promoteMember();
 
                     if (member != null && removeFirstColors(itemName).equals(member.getName())){
                         String newRank = plugin.getRankFromId(memberRank-1);

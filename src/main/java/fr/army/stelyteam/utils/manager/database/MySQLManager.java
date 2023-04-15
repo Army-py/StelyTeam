@@ -232,6 +232,10 @@ public class MySQLManager extends DatabaseManager {
     public void removeTeam(String teamName){
         if(isConnected()){
             try {
+                PreparedStatement queryFKCheck0 = connection.prepareStatement("SET FOREIGN_KEY_CHECKS = 0");
+                queryFKCheck0.executeUpdate();
+                queryFKCheck0.close();
+
                 PreparedStatement queryMembers = connection.prepareStatement("DELETE FROM player WHERE teamId = ?");
                 queryMembers.setInt(1, getTeamId(teamName));
                 queryMembers.executeUpdate();
@@ -258,6 +262,9 @@ public class MySQLManager extends DatabaseManager {
                 queryTeams.executeUpdate();
                 queryTeams.close();
 
+                PreparedStatement queryFKCheck1 = connection.prepareStatement("SET FOREIGN_KEY_CHECKS = 1");
+                queryFKCheck1.executeUpdate();
+                queryFKCheck1.close();
 
             } catch (SQLException e) {
                 e.printStackTrace();
