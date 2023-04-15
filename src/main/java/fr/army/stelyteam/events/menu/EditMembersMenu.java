@@ -153,7 +153,7 @@ public class EditMembersMenu extends TeamMenu {
             cacheManager.addTempAction(
                 new TemporaryAction(playerName, TemporaryActionNames.CLICK_REMOVE_MEMBER, team)
             );
-            new MembersMenu(player).openMenu(team);
+            new MembersMenu(player, Menus.REMOVE_MEMBERS_MENU.getName()).openMenu(team);
             return;
         }else if (itemName.equals(config.getString("inventories.editMembers.editOwner.itemName"))){
             player.closeInventory();

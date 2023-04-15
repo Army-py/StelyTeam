@@ -37,6 +37,14 @@ public class MembersMenu extends TeamMenu {
         );
     }
 
+    public MembersMenu(Player viewer, String menuName){
+        super(
+            viewer,
+            menuName,
+            Menus.TEAM_MEMBERS_MENU.getSlots()
+        );
+    }
+
 
     public Inventory createInventory(Team team) {
         Inventory inventory = Bukkit.createInventory(this, this.menuSlots, this.menuName);
@@ -115,7 +123,7 @@ public class MembersMenu extends TeamMenu {
                 }
             }else if (itemName.equals(config.getString("inventories.teamMembers.close.itemName"))){
                 // new EditMembersMenu(player).openMenu(team);
-                new ManageMenu(player).openMenu(team);
+                new EditMembersMenu(player).openMenu(team);
             }
         }else{
             if (itemName.equals(config.getString("inventories.teamMembers.close.itemName"))){

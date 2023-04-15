@@ -44,6 +44,14 @@ public class AlliancesMenu extends TeamMenu {
         );
     }
 
+    public AlliancesMenu(Player viewer, String menuName){
+        super(
+            viewer,
+            menuName,
+            Menus.TEAM_ALLIANCES_MENU.getSlots()
+        );
+    }
+
 
     public Inventory createInventory(Team team, String playerName) {
         Inventory inventory = Bukkit.createInventory(this, this.menuSlots, this.menuName);
@@ -143,7 +151,7 @@ public class AlliancesMenu extends TeamMenu {
                 }
             }else if (itemName.equals(config.getString("inventories.teamMembers.close.itemName"))){
                 // new EditMembersMenu(player).openMenu(team);
-                new ManageMenu(player).openMenu(team);
+                new EditAlliancesMenu(player).openMenu(team);
             }
 
         }else{

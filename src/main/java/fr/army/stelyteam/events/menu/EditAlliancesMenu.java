@@ -153,7 +153,7 @@ public class EditAlliancesMenu extends TeamMenu {
             cacheManager.addTempAction(
                 new TemporaryAction(playerName, TemporaryActionNames.CLICK_REMOVE_ALLIANCE, team)
             );
-            new AlliancesMenu(player).openMenu(team);
+            new AlliancesMenu(player, Menus.REMOVE_ALLIANCES_MENU.getName()).openMenu(team);
             return;
         }
     }
