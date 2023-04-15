@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -16,6 +14,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 
 import fr.army.stelyteam.utils.Member;
+import fr.army.stelyteam.utils.Menus;
 import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.TeamMenu;
 import fr.army.stelyteam.utils.TemporaryAction;
@@ -31,15 +30,18 @@ public class MembersMenu extends TeamMenu {
     final MessageManager messageManager = plugin.getMessageManager();
 
     public MembersMenu(Player viewer) {
-        super(viewer);
+        super(
+            viewer,
+            Menus.TEAM_MEMBERS_MENU.getName(),
+            Menus.TEAM_MEMBERS_MENU.getSlots()
+        );
     }
 
 
     public Inventory createInventory(Team team) {
-        Integer slots = config.getInt("inventoriesSlots.teamMembers");
-        Inventory inventory = Bukkit.createInventory(this, slots, config.getString("inventoriesName.teamMembers"));
+        Inventory inventory = Bukkit.createInventory(this, this.menuSlots, this.menuName);
 
-        emptyCases(inventory, slots, 0);
+        emptyCases(inventory, this.menuSlots, 0);
         Integer headSlot = 0;
         for(Member member : team.getTeamMembers()){
             String memberName = member.getMemberName();

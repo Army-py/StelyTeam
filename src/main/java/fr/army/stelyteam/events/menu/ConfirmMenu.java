@@ -13,6 +13,7 @@ import fr.army.stelyteam.conversations.ConvEditTeamDesc;
 import fr.army.stelyteam.conversations.ConvEditTeamName;
 import fr.army.stelyteam.conversations.ConvEditTeamPrefix;
 import fr.army.stelyteam.conversations.ConvGetTeamName;
+import fr.army.stelyteam.utils.Menus;
 import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.TeamMenu;
 import fr.army.stelyteam.utils.TemporaryAction;
@@ -35,15 +36,18 @@ public class ConfirmMenu extends TeamMenu {
     final ConversationBuilder conversationBuilder = plugin.getConversationBuilder();
 
     public ConfirmMenu(Player viewer){
-        super(viewer);
+        super(
+            viewer,
+            Menus.CONFIRM_MENU.getName(),
+            Menus.CONFIRM_MENU.getSlots()
+        );
     }
 
 
     public Inventory createInventory() {
-        Integer slots = config.getInt("inventoriesSlots.confirmInventory");
-        Inventory inventory = Bukkit.createInventory(this, slots, config.getString("inventoriesName.confirmInventory"));
+        Inventory inventory = Bukkit.createInventory(this, this.menuSlots, this.menuName);
 
-        emptyCases(inventory, slots, 0);
+        emptyCases(inventory, this.menuSlots, 0);
 
         for(String str : config.getConfigurationSection("inventories.confirmInventory").getKeys(false)){
             Material material = Material.getMaterial(config.getString("inventories.confirmInventory."+str+".itemType"));

@@ -25,14 +25,27 @@ public abstract class TeamMenu implements TeamMenuInterface {
     protected final StelyTeamPlugin plugin = StelyTeamPlugin.getPlugin();
     protected final YamlConfiguration config;
 
-    protected final Player viewer;
     protected InventoryHolder menu;
 
+    protected final Player viewer;
+    protected final String menuName;
+    protected final int menuSlots;
 
-    public TeamMenu(Player viewer) {
+
+    public TeamMenu(Player viewer, String menuName, int menuSlots) {
         this.config = plugin.getConfig();
         
         this.viewer = viewer;
+        this.menuName = menuName;
+        this.menuSlots = menuSlots;
+    }
+
+    public TeamMenu(Player viewer, int menuSlots) {
+        this.config = plugin.getConfig();
+        
+        this.viewer = viewer;
+        this.menuName = null;
+        this.menuSlots = menuSlots;
     }
 
 

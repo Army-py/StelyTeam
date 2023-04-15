@@ -75,7 +75,7 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
             if (args.length == 0){
                 StelyTeamPlugin.getPlugin().openMainInventory(player, team);
             }else{
-                if (subCommands.containsKey(args[0])){
+                if (subCommands.containsKey(args[0]) && !((SubCommand) subCommands.get(args[0])).isOpCommand()){
                     SubCommand subCmd = (SubCommand) subCommands.get(args[0]);
                     if (subCmd.execute(player, args)){
                         return true;
@@ -101,7 +101,7 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
         if (args.length == 1){
             List<String> result = new ArrayList<>();
             for (String subcommand : subCommands.keySet()) {
-                if (subcommand.toLowerCase().toLowerCase().startsWith(args[0])){
+                if (subcommand.toLowerCase().toLowerCase().startsWith(args[0]) && !((SubCommand) subCommands.get(subcommand)).isOpCommand()){
                     result.add(subcommand);
                 }
             }

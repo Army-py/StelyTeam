@@ -9,6 +9,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 
+import fr.army.stelyteam.utils.Menus;
 import fr.army.stelyteam.utils.TeamMenu;
 import fr.army.stelyteam.utils.builder.ItemBuilder;
 import fr.army.stelyteam.utils.manager.database.DatabaseManager;
@@ -19,15 +20,18 @@ public class AdminMenu extends TeamMenu {
     DatabaseManager mySqlManager = plugin.getDatabaseManager();
 
     public AdminMenu(Player viewer) {
-        super(viewer);
+        super(
+            viewer,
+            Menus.ADMIN_MENU.getName(),
+            Menus.ADMIN_MENU.getSlots()
+        );
     }
 
 
     public Inventory createInventory() {
-        Integer slots = config.getInt("inventoriesSlots.admin");
-        Inventory inventory = Bukkit.createInventory(this, slots, config.getString("inventoriesName.admin"));
+        Inventory inventory = Bukkit.createInventory(this, this.menuSlots, this.menuName);
 
-        emptyCases(inventory, slots, 0);
+        emptyCases(inventory, this.menuSlots, 0);
 
         for(String str : config.getConfigurationSection("inventories.admin").getKeys(false)){
             Integer slot = config.getInt("inventories.admin."+str+".slot");
@@ -37,7 +41,6 @@ public class AdminMenu extends TeamMenu {
             String headTexture = config.getString("inventories.admin."+str+".headTexture");
             inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, false));
         }
-        this.menu = this;
         return inventory;
     }
 

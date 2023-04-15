@@ -15,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 
 import fr.army.stelyteam.conversations.ConvAddAlliance;
 import fr.army.stelyteam.utils.Alliance;
+import fr.army.stelyteam.utils.Menus;
 import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.TeamMenu;
 import fr.army.stelyteam.utils.TemporaryAction;
@@ -37,16 +38,19 @@ public class EditAlliancesMenu extends TeamMenu {
 
 
     public EditAlliancesMenu(Player viewer){
-        super(viewer);
+        super(
+            viewer,
+            Menus.EDIT_ALLIANCES_MENU.getName(),
+            Menus.EDIT_ALLIANCES_MENU.getSlots()
+        );
     }
 
 
     public Inventory createInventory(Team team, String playerName) {
-        Integer slots = config.getInt("inventoriesSlots.editAlliances");
-        Inventory inventory = Bukkit.createInventory(this, slots, config.getString("inventoriesName.editAlliances"));
+        Inventory inventory = Bukkit.createInventory(this, this.menuSlots, this.menuName);
         Integer maxMembers = config.getInt("teamMaxMembers");
 
-        emptyCases(inventory, slots, 0);
+        emptyCases(inventory, this.menuSlots, 0);
         Integer headSlot = 0;
         for(Alliance alliance : team.getTeamAlliances()){
             Team teamAlliance = mySqlManager.getTeamFromTeamName(alliance.getTeamName());

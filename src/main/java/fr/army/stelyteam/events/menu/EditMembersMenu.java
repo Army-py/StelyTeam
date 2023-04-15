@@ -17,6 +17,7 @@ import org.bukkit.inventory.ItemStack;
 
 import fr.army.stelyteam.conversations.ConvAddMember;
 import fr.army.stelyteam.conversations.ConvEditOwner;
+import fr.army.stelyteam.utils.Menus;
 import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.TeamMenu;
 import fr.army.stelyteam.utils.TemporaryAction;
@@ -38,15 +39,18 @@ public class EditMembersMenu extends TeamMenu {
     final ConversationBuilder conversationBuilder = plugin.getConversationBuilder();
 
     public EditMembersMenu(Player viewer){
-        super(viewer);
+        super(
+            viewer,
+            Menus.EDIT_MEMBERS_MENU.getName(),
+            Menus.EDIT_MEMBERS_MENU.getSlots()
+        );
     }
 
 
     public Inventory createInventory(Team team, String playerName) {
-        Integer slots = config.getInt("inventoriesSlots.editMembers");
-        Inventory inventory = Bukkit.createInventory(this, slots, config.getString("inventoriesName.editMembers"));
+        Inventory inventory = Bukkit.createInventory(this, this.menuSlots, this.menuName);
 
-        emptyCases(inventory, slots, 0);
+        emptyCases(inventory, this.menuSlots, 0);
         Integer headSlot = 0;
         for(String memberName : team.getMembersName()){
             UUID playerUUID = sqliteManager.getUUID(memberName);

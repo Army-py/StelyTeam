@@ -9,6 +9,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 
+import fr.army.stelyteam.utils.Menus;
 import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.TeamMenu;
 import fr.army.stelyteam.utils.TemporaryAction;
@@ -23,18 +24,21 @@ public class UpgradeMembersMenu extends TeamMenu {
     final MessageManager messageManager = plugin.getMessageManager();
 
     public UpgradeMembersMenu(Player viewer){
-        super(viewer);
+        super(
+            viewer,
+            Menus.UPGRADE_LVL_MEMBERS_MENU.getName(),
+            Menus.UPGRADE_LVL_STORAGE_MENU.getSlots()
+        );
     }
 
 
     public Inventory createInventory(Team team) {
-        Integer slots = config.getInt("inventoriesSlots.upgradeTotalMembers");
         Integer level = team.getImprovLvlMembers();
-        Inventory inventory = Bukkit.createInventory(this, slots, config.getString("inventoriesName.upgradeTotalMembers"));
+        Inventory inventory = Bukkit.createInventory(this, this.menuSlots, this.menuName);
         Material material;
         String headTexture;
 
-        emptyCases(inventory, slots, 0);
+        emptyCases(inventory, this.menuSlots, 0);
 
         for(String str : config.getConfigurationSection("inventories.upgradeTotalMembers").getKeys(false)){
             Integer slot = config.getInt("inventories.upgradeTotalMembers."+str+".slot");

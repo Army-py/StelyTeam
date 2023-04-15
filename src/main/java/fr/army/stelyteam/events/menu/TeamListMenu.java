@@ -13,6 +13,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import fr.army.stelyteam.utils.Menus;
 import fr.army.stelyteam.utils.Page;
 import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.TeamMenu;
@@ -29,15 +30,18 @@ public class TeamListMenu extends TeamMenu {
     final ColorsBuilder colorsBuilder = plugin.getColorsBuilder();
 
     public TeamListMenu(Player viewer) {
-        super(viewer);
+        super(
+            viewer,
+            Menus.TEAM_LIST_MENU.getName(),
+            Menus.TEAM_LIST_MENU.getSlots()
+        );
     }
 
 
     public Inventory createInventory(String playerName) {
         ArrayList<Team> teams = plugin.getDatabaseManager().getTeams();
-        Integer slots = config.getInt("inventoriesSlots.teamList");
         List<Integer> headSlots = config.getIntegerList("inventories.teamList.teamOwnerHead.slots");
-        Inventory inventory = Bukkit.createInventory(this, slots, config.getString("inventoriesName.teamList"));
+        Inventory inventory = Bukkit.createInventory(this, this.menuSlots, this.menuName);
         Integer maxMembers = config.getInt("teamMaxMembers");
         Page page;
 
@@ -49,7 +53,7 @@ public class TeamListMenu extends TeamMenu {
         }
         ArrayList<List<Team>> pages = page.getPages();
         
-        emptyCases(inventory, slots, 0);
+        emptyCases(inventory, this.menuSlots, 0);
         Integer slotIndex = 0;
         for(Team team : pages.get(page.getCurrentPage())){
             String teamOwnerName = team.getTeamOwnerName();

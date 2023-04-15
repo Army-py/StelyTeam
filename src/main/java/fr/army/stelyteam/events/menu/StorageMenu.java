@@ -10,6 +10,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import fr.army.stelyteam.utils.Menus;
 import fr.army.stelyteam.utils.Storage;
 import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.TeamMenu;
@@ -24,20 +25,23 @@ public class StorageMenu extends TeamMenu {
     final ItemStackSerializer serializeManager = plugin.getSerializeManager();
 
     public StorageMenu(Player viewer){
-        super(viewer);
+        super(
+            viewer,
+            Menus.STORAGE_MENU.getSlots()
+        );
     }
 
 
-    public Inventory createInventory(Team team, Integer storageId) {
-        Integer slots = config.getInt("inventoriesSlots.storage");
-        String inventoryName = config.getString(config.getString("inventories.storageDirectory."+plugin.getStorageFromId(storageId)+".itemName"));
+    public Inventory createInventory(Team team, int storageId) {
+        // String inventoryName = config.getString(config.getString("inventories.storageDirectory."+plugin.getStorageFromId(storageId)+".itemName"));
+        String inventoryName = Menus.getStorageMenuName(storageId);
         String teamName = team.getTeamName();
         Inventory inventory;
 
         if (cacheManager.containsStorage(teamName, storageId)){
             inventory = cacheManager.getStorage(teamName, storageId).getInventoryInstance();
         }else{
-            inventory = Bukkit.createInventory(this, slots, inventoryName);
+            inventory = Bukkit.createInventory(this, this.menuSlots, inventoryName);
 
             if (team.hasStorage(storageId)){
                 byte[] contentBytes = team.getStorage(storageId).getStorageContent();

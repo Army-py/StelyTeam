@@ -9,6 +9,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 
+import fr.army.stelyteam.utils.Menus;
 import fr.army.stelyteam.utils.TeamMenu;
 import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.TemporaryActionNames;
@@ -19,15 +20,18 @@ public class CreateTeamMenu extends TeamMenu {
 
 
     public CreateTeamMenu(Player viewer){
-        super(viewer);
+        super(
+            viewer,
+            Menus.CREATE_TEAM_MENU.getName(),
+            Menus.CREATE_TEAM_MENU.getSlots()
+        );
     }
 
 
     public Inventory createInventory() {
-        Integer slots = config.getInt("inventoriesSlots.createTeam");
-		Inventory inventory = Bukkit.createInventory(this, slots, config.getString("inventoriesName.createTeam"));
+		Inventory inventory = Bukkit.createInventory(this, this.menuSlots, this.menuName);
 		
-        emptyCases(inventory, slots, 0);
+        emptyCases(inventory, this.menuSlots, 0);
 		
         Integer slot = config.getInt("inventories.createTeam.slot");
         Material material = Material.getMaterial(config.getString("inventories.createTeam.itemType"));

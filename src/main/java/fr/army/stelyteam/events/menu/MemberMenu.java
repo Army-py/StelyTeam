@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 
 import fr.army.stelyteam.conversations.ConvAddMoney;
 import fr.army.stelyteam.conversations.ConvWithdrawMoney;
+import fr.army.stelyteam.utils.Menus;
 import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.TeamMenu;
 import fr.army.stelyteam.utils.TemporaryAction;
@@ -35,12 +36,15 @@ public class MemberMenu extends TeamMenu {
     final ColorsBuilder colorsBuilder = plugin.getColorsBuilder();
 
     public MemberMenu(Player viewer){
-        super(viewer);
+        super(
+            viewer,
+            Menus.MEMBER_MENU.getName(),
+            Menus.MEMBER_MENU.getSlots()
+        );
     }
 
 
     public Inventory createInventory(Team team, String playerName) {
-        Integer slots = config.getInt("inventoriesSlots.member");
         String teamName = team.getTeamName();
         String teamPrefix = team.getTeamPrefix();
         String teamOwner = team.getTeamOwnerName();
@@ -53,9 +57,9 @@ public class MemberMenu extends TeamMenu {
         String memberRank = plugin.getRankFromId(team.getMemberRank(playerName));
         String memberRankName = config.getString("ranks." + memberRank + ".name");
         String rankColor = config.getString("ranks." + memberRank + ".color");
-        Inventory inventory = Bukkit.createInventory(this, slots, config.getString("inventoriesName.member"));
+        Inventory inventory = Bukkit.createInventory(this, this.menuSlots, this.menuName);
 
-        emptyCases(inventory, slots, 0);
+        emptyCases(inventory, this.menuSlots, 0);
 
         for(String str : config.getConfigurationSection("inventories.member").getKeys(false)){
             Integer slot = config.getInt("inventories.member."+str+".slot");

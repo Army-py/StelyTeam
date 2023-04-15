@@ -9,6 +9,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 
+import fr.army.stelyteam.utils.Menus;
 import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.TeamMenu;
 import fr.army.stelyteam.utils.builder.ItemBuilder;
@@ -18,16 +19,19 @@ public class StorageDirectoryMenu extends TeamMenu {
 
 
     public StorageDirectoryMenu(Player viewer){
-        super(viewer);
+        super(
+            viewer,
+            Menus.STORAGE_DIRECTORY_MENU.getName(),
+            Menus.STORAGE_DIRECTORY_MENU.getSlots()
+        );
     }
 
 
     public Inventory createInventory(Team team) {
-        Integer slots = config.getInt("inventoriesSlots.storageDirectory");
-        Inventory inventory = Bukkit.createInventory(this, slots, config.getString("inventoriesName.storageDirectory"));
+        Inventory inventory = Bukkit.createInventory(this, this.menuSlots, this.menuName);
         Integer level = team.getTeamStorageLvl();
 
-        emptyCases(inventory, slots, 0);
+        emptyCases(inventory, this.menuSlots, 0);
 
         for(String str : config.getConfigurationSection("inventories.storageDirectory").getKeys(false)){
             Integer slot = config.getInt("inventories.storageDirectory."+str+".slot");

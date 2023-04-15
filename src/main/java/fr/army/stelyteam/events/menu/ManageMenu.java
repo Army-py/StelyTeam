@@ -1,5 +1,6 @@
 package fr.army.stelyteam.events.menu;
 
+import fr.army.stelyteam.utils.Menus;
 import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.TeamMenu;
 import fr.army.stelyteam.utils.TemporaryAction;
@@ -31,15 +32,18 @@ public class ManageMenu extends TeamMenu {
     final EconomyManager economyManager = plugin.getEconomyManager();
 
     public ManageMenu(Player viewer){
-        super(viewer);
+        super(
+            viewer,
+            Menus.MANAGE_MENU.getName(),
+            Menus.MANAGE_MENU.getSlots()
+        );
     }
 
 
     public Inventory createInventory(Team team, String playerName) {
-        Integer slots = config.getInt("inventoriesSlots.manage");
-        Inventory inventory = Bukkit.createInventory(this, slots, config.getString("inventoriesName.manage"));
+        Inventory inventory = Bukkit.createInventory(this, this.menuSlots, this.menuName);
 
-        emptyCases(inventory, slots, 0);
+        emptyCases(inventory, this.menuSlots, 0);
 
         for(String str : config.getConfigurationSection("inventories.manage").getKeys(false)){
             Integer slot = config.getInt("inventories.manage."+str+".slot");
