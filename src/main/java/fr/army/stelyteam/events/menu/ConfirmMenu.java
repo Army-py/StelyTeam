@@ -80,7 +80,7 @@ public class ConfirmMenu extends TeamMenu {
             Integer newLevel;
             switch (cacheManager.getPlayerActionName(playerName)) {
                 case REMOVE_MEMBER:
-                    receiverName = tempAction.getReceiverName();
+                    receiverName = tempAction.getTargetName();
                     receiver = Bukkit.getPlayer(receiverName);
                     team.removeMember(receiverName);
                     player.closeInventory();
@@ -90,7 +90,7 @@ public class ConfirmMenu extends TeamMenu {
                     team.teamBroadcast(playerName, messageManager.replaceAuthorAndReceiver("broadcasts.player_exclude_member", playerName, receiverName));
                     break;
                 case REMOVE_ALLIANCE:
-                    Team alliance = mySqlManager.getTeamFromTeamName(tempAction.getReceiverName());
+                    Team alliance = Team.init(tempAction.getTargetName());
                     String allianceName = alliance.getTeamName();
                     teamName = team.getTeamName();
                     
@@ -103,7 +103,7 @@ public class ConfirmMenu extends TeamMenu {
                     player.sendMessage(messageManager.getReplaceMessage("sender.remove_alliance", allianceName));
                     break;
                 case EDIT_OWNER:
-                    receiverName = tempAction.getReceiverName();
+                    receiverName = tempAction.getTargetName();
                     receiver = Bukkit.getPlayer(receiverName);
                     team.updateTeamOwner(receiverName);
                     player.closeInventory();

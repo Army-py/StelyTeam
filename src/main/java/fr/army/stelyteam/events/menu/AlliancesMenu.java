@@ -17,8 +17,12 @@ import org.bukkit.inventory.ItemStack;
 import fr.army.stelyteam.utils.Alliance;
 import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.TeamMenu;
+import fr.army.stelyteam.utils.TemporaryAction;
+import fr.army.stelyteam.utils.TemporaryActionNames;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
 import fr.army.stelyteam.utils.builder.ItemBuilder;
+import fr.army.stelyteam.utils.manager.CacheManager;
+import fr.army.stelyteam.utils.manager.MessageManager;
 import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
 
@@ -28,6 +32,8 @@ public class AlliancesMenu extends TeamMenu {
     DatabaseManager mySqlManager = plugin.getDatabaseManager();
     SQLiteDataManager sqliteManager = plugin.getSQLiteManager();
     ColorsBuilder colorsBuilder = plugin.getColorsBuilder();
+    CacheManager cacheManager = plugin.getCacheManager();
+    MessageManager messageManager = plugin.getMessageManager();
 
     public AlliancesMenu(Player viewer){
         super(viewer);
@@ -108,11 +114,38 @@ public class AlliancesMenu extends TeamMenu {
         Player player = (Player) clickEvent.getWhoClicked();
         String playerName = player.getName();
         String itemName = clickEvent.getCurrentItem().getItemMeta().getDisplayName();
+        Material material = clickEvent.getCurrentItem().getType();
+        Team team = Team.init(player);
+        String allianceName = removeFirstColors(itemName);
 
+        if (clickEvent.getView().getTitle().equals(config.getString("inventoriesName.removeAlliances"))){
+            if (material.equals(Material.getMaterial("PLAYER_HEAD"))){
+                if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.CLICK_REMOVE_ALLIANCE)){
+                    if (!team.isTeamAlliance(allianceName)){
+                        player.sendRawMessage(messageManager.getMessage("common.not_in_alliance"));
+                        return;
+                    }
 
-        // Fermeture ou retour en arrière de l'inventaire
-        if (itemName.equals(config.getString("inventories.teamAlliances.close.itemName"))){
-            new MemberMenu(player).openMenu(mySqlManager.getTeamFromPlayerName(playerName));
+                    cacheManager.removePlayerAction(playerName);
+                    cacheManager.addTempAction(
+                        new TemporaryAction(
+                                playerName,
+                                allianceName,
+                                TemporaryActionNames.REMOVE_ALLIANCE,
+                                team
+                            )
+                        );
+                    new ConfirmMenu(player).openMenu();
+                }
+            }else if (itemName.equals(config.getString("inventories.teamMembers.close.itemName"))){
+                // new EditMembersMenu(player).openMenu(team);
+                new ManageMenu(player).openMenu(team);
+            }
+
+        }else{
+            if (itemName.equals(config.getString("inventories.teamAlliances.close.itemName"))){
+                new MemberMenu(player).openMenu(mySqlManager.getTeamFromPlayerName(playerName));
+            }
         }
     }
 

@@ -50,7 +50,7 @@ public class SubCmdAccept extends SubCommand {
         }else if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.ADD_ALLIANCE)){
             TemporaryAction tempAction = cacheManager.getTempAction(playerName);
             String senderName = tempAction.getSenderName();
-            String receiverName = tempAction.getReceiverName();
+            String receiverName = tempAction.getTargetName();
             Team team = tempAction.getTeam();
             String teamName = team.getTeamName();
             Player invitationSender = Bukkit.getPlayer(senderName);

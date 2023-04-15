@@ -145,8 +145,8 @@ teamAllianceLore:
 
 
 # Titre des menus et leur nombre de slots
-# Le nombre de slots peut être augmenté en fonction du tombre d'item dans le menu *
-# * Respecter le nombre de slots en fonction de la taille d'une ligne de coffre (9 * nombre de lignes)
+# Le nombre de slots peut être augmenté en fonction du tombre d'item dans le menu (*)
+# (*) Respecter le nombre de slots en fonction de la taille d'une ligne de coffre (9 * nombre de lignes)
 inventoriesName:
   createTeam: "§5§lCréation de Team"
   teamList : "§5§lListe des Teams"
@@ -156,6 +156,7 @@ inventoriesName:
   teamMembers: "§5§lMembres"
   removeMembers: "§5§lRetirer un membre"
   teamAlliances: "§5§lAlliances"
+  removeAlliances: "§5§lRetirer une alliance"
   editMembers: "§5§lGestion des membres"
   editAlliances: "§5§lGestion des alliances"
   upgradeTotalMembers: "§5§lPlaces disponibles"

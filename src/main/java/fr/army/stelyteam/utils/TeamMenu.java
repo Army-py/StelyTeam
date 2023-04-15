@@ -4,6 +4,8 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -88,6 +90,16 @@ public abstract class TeamMenu implements TeamMenuInterface {
             inventory.setItem(i, item);
         }
 	}
+
+    protected String removeFirstColors(String name){
+        Pattern pattern = Pattern.compile("§.");
+        Matcher matcher = pattern.matcher(name);
+        int colors = 0;
+        while (matcher.find()) {
+            colors++;
+        }
+        return name.substring(name.length() - (name.length() - colors * pattern.pattern().length()));
+    }
 
 
     @Override

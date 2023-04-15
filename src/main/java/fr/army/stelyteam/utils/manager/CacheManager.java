@@ -31,7 +31,7 @@ public class CacheManager {
 
     public TemporaryAction getTempAction(String playerName){
         for(TemporaryAction tempAction : cachedTempAction){
-            if(tempAction.getSenderName().equals(playerName) || tempAction.getReceiverName().equals(playerName)){
+            if(tempAction.getSenderName().equals(playerName) || tempAction.getTargetName().equals(playerName)){
                 return tempAction;
             }
         }
@@ -40,7 +40,7 @@ public class CacheManager {
 
     public TemporaryActionNames getPlayerActionName(String playerName){
         for(TemporaryAction tempAction : cachedTempAction){
-            if(tempAction.getSenderName().equals(playerName) || tempAction.getReceiverName().equals(playerName)){
+            if(tempAction.getSenderName().equals(playerName) || tempAction.getTargetName().equals(playerName)){
                 return tempAction.getActionName();
             }
         }
@@ -49,7 +49,7 @@ public class CacheManager {
 
     public void removePlayerAction(String playerName){
         for(TemporaryAction tempAction : cachedTempAction){
-            if(tempAction.getSenderName().equals(playerName) || tempAction.getReceiverName().equals(playerName)){
+            if(tempAction.getSenderName().equals(playerName) || tempAction.getTargetName().equals(playerName)){
                 cachedTempAction.remove(tempAction);
                 return;
             }
@@ -58,7 +58,7 @@ public class CacheManager {
 
     public void removePlayerActionName(String playerName, TemporaryActionNames actionName){
         for(TemporaryAction tempAction : cachedTempAction){
-            if(tempAction.getSenderName().equals(playerName) || tempAction.getReceiverName().equals(playerName)){
+            if(tempAction.getSenderName().equals(playerName) || tempAction.getTargetName().equals(playerName)){
                 if(tempAction.getActionName().equals(actionName)){
                     cachedTempAction.remove(tempAction);
                     return;
@@ -70,7 +70,7 @@ public class CacheManager {
     public boolean playerHasAction(String playerName){
         if (cachedTempAction.isEmpty()) return false;
         for(TemporaryAction tempAction : cachedTempAction){
-            if(tempAction.getSenderName().equals(playerName) || tempAction.getReceiverName().equals(playerName)){
+            if(tempAction.getSenderName().equals(playerName) || tempAction.getTargetName().equals(playerName)){
                 return true;
             }
         }
@@ -80,7 +80,7 @@ public class CacheManager {
     public boolean playerHasActionName(String playerName, TemporaryActionNames actionName){
         if (cachedTempAction.isEmpty()) return false;
         for(TemporaryAction tempAction : cachedTempAction){
-            if((tempAction.getSenderName().equals(playerName) || tempAction.getReceiverName().equals(playerName)) && tempAction.getActionName().equals(actionName)){
+            if((tempAction.getSenderName().equals(playerName) || tempAction.getTargetName().equals(playerName)) && tempAction.getActionName().equals(actionName)){
                 return true;
             }
         }

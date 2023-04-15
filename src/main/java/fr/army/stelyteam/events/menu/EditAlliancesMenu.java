@@ -14,13 +14,15 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import fr.army.stelyteam.conversations.ConvAddAlliance;
-import fr.army.stelyteam.conversations.ConvRemoveAlliance;
 import fr.army.stelyteam.utils.Alliance;
 import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.TeamMenu;
+import fr.army.stelyteam.utils.TemporaryAction;
+import fr.army.stelyteam.utils.TemporaryActionNames;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
 import fr.army.stelyteam.utils.builder.ItemBuilder;
 import fr.army.stelyteam.utils.builder.conversation.ConversationBuilder;
+import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
 
@@ -31,6 +33,7 @@ public class EditAlliancesMenu extends TeamMenu {
     final SQLiteDataManager sqliteManager = plugin.getSQLiteManager();
     final ColorsBuilder colorsBuilder = plugin.getColorsBuilder();
     final ConversationBuilder conversationBuilder = plugin.getConversationBuilder();
+    final CacheManager cacheManager = plugin.getCacheManager();
 
 
     public EditAlliancesMenu(Player viewer){
@@ -143,8 +146,10 @@ public class EditAlliancesMenu extends TeamMenu {
             conversationBuilder.getNameInput(player, new ConvAddAlliance(plugin));
             return;
         }else if (itemName.equals(config.getString("inventories.editAlliances.removeAlliance.itemName"))){
-            player.closeInventory();
-            conversationBuilder.getNameInput(player, new ConvRemoveAlliance(plugin));
+            cacheManager.addTempAction(
+                new TemporaryAction(playerName, TemporaryActionNames.CLICK_REMOVE_ALLIANCE, team)
+            );
+            new AlliancesMenu(player).openMenu(team);
             return;
         }
     }

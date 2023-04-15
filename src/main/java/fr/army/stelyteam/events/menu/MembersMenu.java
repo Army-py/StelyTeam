@@ -83,7 +83,7 @@ public class MembersMenu extends TeamMenu {
         String playerName = player.getName();
         String itemName = clickEvent.getCurrentItem().getItemMeta().getDisplayName();
         Material material = clickEvent.getCurrentItem().getType();
-        Team team = plugin.getDatabaseManager().getTeamFromPlayerName(playerName);
+        Team team = Team.init(player);
         String memberName = removeFirstColors(itemName);
 
         if (clickEvent.getView().getTitle().equals(config.getString("inventoriesName.removeMembers"))){
@@ -112,7 +112,8 @@ public class MembersMenu extends TeamMenu {
                     new ConfirmMenu(player).openMenu();
                 }
             }else if (itemName.equals(config.getString("inventories.teamMembers.close.itemName"))){
-                new EditMembersMenu(player).openMenu(team);
+                // new EditMembersMenu(player).openMenu(team);
+                new ManageMenu(player).openMenu(team);
             }
         }else{
             if (itemName.equals(config.getString("inventories.teamMembers.close.itemName"))){
@@ -132,17 +133,5 @@ public class MembersMenu extends TeamMenu {
                 cacheManager.removePlayerActionName(playerName, TemporaryActionNames.CLICK_REMOVE_MEMBER);;
             }
         }
-    }
-
-
-
-    private String removeFirstColors(String name){
-        Pattern pattern = Pattern.compile("§.");
-        Matcher matcher = pattern.matcher(name);
-        int colors = 0;
-        while (matcher.find()) {
-            colors++;
-        }
-        return name.substring(name.length() - (name.length() - colors * pattern.pattern().length()));
     }
 }

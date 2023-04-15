@@ -201,15 +201,4 @@ public class EditMembersMenu extends TeamMenu {
 
     @Override
     public void onClose(InventoryCloseEvent closeEvent) {}
-
-
-    private String removeFirstColors(String name){
-        Pattern pattern = Pattern.compile("§.");
-        Matcher matcher = pattern.matcher(name);
-        int colors = 0;
-        while (matcher.find()) {
-            colors++;
-        }
-        return name.substring(name.length() - (name.length() - colors * pattern.pattern().length()));
-    }
 }
