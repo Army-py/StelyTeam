@@ -7,6 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.utils.Buttons;
 import fr.army.stelyteam.utils.TeamMenu;
 import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
 
@@ -33,7 +34,7 @@ public class InventoryClickManager implements Listener{
 
         event.setCancelled(true);
 
-        if (event.getCurrentItem() != null && event.getCurrentItem().getType().name().equals(config.getString("emptyCase"))){
+        if (event.getCurrentItem() != null && Buttons.EMPTY_CASE.isEmptyCase(event)){
             return;
         }
 

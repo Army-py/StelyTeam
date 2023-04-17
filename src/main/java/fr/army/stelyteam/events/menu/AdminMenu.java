@@ -8,7 +8,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.material.Button;
 
+import fr.army.stelyteam.utils.Buttons;
 import fr.army.stelyteam.utils.Menus;
 import fr.army.stelyteam.utils.TeamMenu;
 import fr.army.stelyteam.utils.builder.ItemBuilder;
@@ -57,13 +59,13 @@ public class AdminMenu extends TeamMenu {
         String itemName = clickEvent.getCurrentItem().getItemMeta().getDisplayName();
 
         // Ouverture des inventaires
-        if (itemName.equals(config.getString("inventories.admin.manage.itemName"))){
+        if (Buttons.MANAGE_MENU_BUTTON.isClickedButton(clickEvent)){
             new ManageMenu(viewer).openMenu(mySqlManager.getTeamFromPlayerName(playerName));
-        }else if (itemName.equals(config.getString("inventories.admin.member.itemName"))){
+        }else if (Buttons.MEMBER_MENU_BUTTON.isClickedButton(clickEvent)){
             new MemberMenu(viewer).openMenu(mySqlManager.getTeamFromPlayerName(playerName));
             
         // Fermeture ou retour en arrière de l'inventaire
-        }else if (itemName.equals(config.getString("inventories.admin.close.itemName"))){
+        }else if (Buttons.CLOSE_ADMIN_MENU_BUTTON.isClickedButton(clickEvent)){
             player.closeInventory();
         }
     }

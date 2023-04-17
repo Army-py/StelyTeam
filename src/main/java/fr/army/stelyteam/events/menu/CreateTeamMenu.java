@@ -9,6 +9,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 
+import fr.army.stelyteam.utils.Buttons;
 import fr.army.stelyteam.utils.Menus;
 import fr.army.stelyteam.utils.TeamMenu;
 import fr.army.stelyteam.utils.TemporaryAction;
@@ -56,7 +57,7 @@ public class CreateTeamMenu extends TeamMenu {
         String playerName = player.getName();
         String itemName = clickEvent.getCurrentItem().getItemMeta().getDisplayName();
 
-        if (itemName.equals(config.getString("inventories.createTeam.itemName"))){
+        if (Buttons.CREATE_TEAM_BUTTON.isClickedButton(clickEvent)){
             if (plugin.getEconomyManager().checkMoneyPlayer(player, config.getDouble("prices.createTeam"))){
                 new ConfirmMenu(viewer).openMenu();
                 plugin.getCacheManager().addTempAction(

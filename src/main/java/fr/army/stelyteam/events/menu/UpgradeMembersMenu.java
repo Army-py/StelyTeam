@@ -9,6 +9,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 
+import fr.army.stelyteam.utils.Buttons;
 import fr.army.stelyteam.utils.Menus;
 import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.TeamMenu;
@@ -76,7 +77,7 @@ public class UpgradeMembersMenu extends TeamMenu {
         Team team = plugin.getDatabaseManager().getTeamFromPlayerName(playerName);
         Integer level = team.getImprovLvlMembers();
         
-        if (itemName.equals(config.getString("inventories.upgradeTotalMembers.close.itemName"))){
+        if (Buttons.CLOSE_UPGRADE_LVL_MEMBERS_MENU_BUTTON.isClickedButton(clickEvent)){
             new ManageMenu(player).openMenu(team);
         }else if (!material.name().equals(config.getString("emptyCase"))){
             for(String str : config.getConfigurationSection("inventories.upgradeTotalMembers").getKeys(false)){

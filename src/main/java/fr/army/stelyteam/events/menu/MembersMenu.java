@@ -13,6 +13,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 
+import fr.army.stelyteam.utils.Buttons;
 import fr.army.stelyteam.utils.Member;
 import fr.army.stelyteam.utils.Menus;
 import fr.army.stelyteam.utils.Team;
@@ -121,12 +122,12 @@ public class MembersMenu extends TeamMenu {
                         );
                     new ConfirmMenu(player).openMenu();
                 }
-            }else if (itemName.equals(config.getString("inventories.teamMembers.close.itemName"))){
+            }else if (Buttons.CLOSE_TEAM_MEMBERS_MENU_BUTTON.isClickedButton(clickEvent)){
                 // new EditMembersMenu(player).openMenu(team);
                 new EditMembersMenu(player).openMenu(team);
             }
         }else{
-            if (itemName.equals(config.getString("inventories.teamMembers.close.itemName"))){
+            if (Buttons.CLOSE_TEAM_MEMBERS_MENU_BUTTON.isClickedButton(clickEvent)){
                 new MemberMenu(player).openMenu(team);
             }
         }

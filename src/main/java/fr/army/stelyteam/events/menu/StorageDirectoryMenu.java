@@ -9,6 +9,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 
+import fr.army.stelyteam.utils.Buttons;
 import fr.army.stelyteam.utils.Menus;
 import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.TeamMenu;
@@ -78,7 +79,7 @@ public class StorageDirectoryMenu extends TeamMenu {
         Material itemType = clickEvent.getCurrentItem().getType();
 
         // Fermeture ou retour en arrière de l'inventaire
-        if (itemName.equals(config.getString("inventories.storageDirectory.close.itemName"))){
+        if (Buttons.CLOSE_STORAGE_DIRECTORY_MENU_BUTTON.isClickedButton(clickEvent)){
             new MemberMenu(player).openMenu(team);
         }else{
             for(String str : config.getConfigurationSection("inventories.storageDirectory").getKeys(false)){

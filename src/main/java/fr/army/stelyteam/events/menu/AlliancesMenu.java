@@ -15,6 +15,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import fr.army.stelyteam.utils.Alliance;
+import fr.army.stelyteam.utils.Buttons;
 import fr.army.stelyteam.utils.Menus;
 import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.TeamMenu;
@@ -130,7 +131,7 @@ public class AlliancesMenu extends TeamMenu {
         Team team = Team.init(player);
         String allianceName = removeFirstColors(itemName);
 
-        if (clickEvent.getView().getTitle().equals(config.getString("inventoriesName.removeAlliances"))){
+        if (clickEvent.getView().getTitle().equals(Menus.REMOVE_ALLIANCES_MENU.getName())){
             if (material.equals(Material.getMaterial("PLAYER_HEAD"))){
                 if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.CLICK_REMOVE_ALLIANCE)){
                     if (!team.isTeamAlliance(allianceName)){
@@ -149,13 +150,12 @@ public class AlliancesMenu extends TeamMenu {
                         );
                     new ConfirmMenu(player).openMenu();
                 }
-            }else if (itemName.equals(config.getString("inventories.teamMembers.close.itemName"))){
-                // new EditMembersMenu(player).openMenu(team);
+            }else if (Buttons.CLOSE_TEAM_ALLIANCES_MENU_BUTTON.isClickedButton(clickEvent)){
                 new EditAlliancesMenu(player).openMenu(team);
             }
 
         }else{
-            if (itemName.equals(config.getString("inventories.teamAlliances.close.itemName"))){
+            if (Buttons.CLOSE_TEAM_ALLIANCES_MENU_BUTTON.isClickedButton(clickEvent)){
                 new MemberMenu(player).openMenu(mySqlManager.getTeamFromPlayerName(playerName));
             }
         }

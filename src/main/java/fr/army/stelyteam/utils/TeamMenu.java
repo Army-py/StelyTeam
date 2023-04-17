@@ -8,6 +8,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -16,8 +19,10 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import net.md_5.bungee.api.chat.ClickEvent;
 
 
 public abstract class TeamMenu implements TeamMenuInterface {
@@ -86,6 +91,8 @@ public abstract class TeamMenu implements TeamMenuInterface {
 		ItemStack item = new ItemStack(Material.getMaterial(config.getString("emptyCase")), 1);
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName(" ");
+        NamespacedKey key = new NamespacedKey(plugin, "emptyCase");
+        meta.getPersistentDataContainer().set(key, PersistentDataType.INTEGER, 1);
 		item.setItemMeta(meta);
 
         for(int i = start; i < slots; i++) {
@@ -97,6 +104,8 @@ public abstract class TeamMenu implements TeamMenuInterface {
 		ItemStack item = new ItemStack(Material.getMaterial(config.getString("emptyCase")), 1);
 		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName(" ");
+        NamespacedKey key = new NamespacedKey(plugin, "emptyCase");
+        meta.getPersistentDataContainer().set(key, PersistentDataType.INTEGER, 1);
 		item.setItemMeta(meta);
 
         for(int i : list) {
@@ -112,6 +121,24 @@ public abstract class TeamMenu implements TeamMenuInterface {
             colors++;
         }
         return name.substring(name.length() - (name.length() - colors * pattern.pattern().length()));
+    }
+
+
+    protected boolean isMenuItem(InventoryClickEvent event, String inventoryConfigPath){
+        ItemStack itemStack = event.getCurrentItem();
+        if(itemStack == null) return false;
+        if(itemStack.getItemMeta() == null) return false;
+        if(itemStack.getItemMeta().getDisplayName() == null) return false;
+        
+        if (itemStack.getItemMeta().getDisplayName().equals(config.getString("inventories." + inventoryConfigPath + ".itemName"))
+            && itemStack.getType() == Material.getMaterial(config.getString("inventories." + inventoryConfigPath + ".itemType"))
+            && (config.getStringList("inventories." + inventoryConfigPath + ".lore") != null 
+                && itemStack.getItemMeta().getLore().equals(config.getStringList("inventories." + inventoryConfigPath + ".lore")))
+            && event.getSlot() == config.getInt("inventories." + inventoryConfigPath + ".slot")) {
+            return true;
+        }
+
+        return false;
     }
 
 

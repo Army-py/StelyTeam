@@ -9,6 +9,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 
+import fr.army.stelyteam.utils.Buttons;
 import fr.army.stelyteam.utils.Menus;
 import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.TeamMenu;
@@ -83,7 +84,7 @@ public class PermissionsMenu extends TeamMenu {
         Team team = plugin.getDatabaseManager().getTeamFromPlayerName(playerName);
 
         // Fermeture ou retour en arrière de l'inventaire
-        if (itemName.equals(config.getString("inventories.permissions.close.itemName"))){
+        if (Buttons.CLOSE_PERMISSIONS_MENU_BUTTON.isClickedButton(clickEvent)){
             new ManageMenu(player).openMenu(team);
             return;
         }

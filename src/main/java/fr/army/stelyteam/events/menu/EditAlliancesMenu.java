@@ -15,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 
 import fr.army.stelyteam.conversations.ConvAddAlliance;
 import fr.army.stelyteam.utils.Alliance;
+import fr.army.stelyteam.utils.Buttons;
 import fr.army.stelyteam.utils.Menus;
 import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.TeamMenu;
@@ -142,14 +143,14 @@ public class EditAlliancesMenu extends TeamMenu {
 
 
         itemName = clickEvent.getCurrentItem().getItemMeta().getDisplayName();
-        if (itemName.equals(config.getString("inventories.editAlliances.close.itemName"))){
+        if (Buttons.CLOSE_EDIT_ALLIANCES_MENU_BUTTON.isClickedButton(clickEvent)){
             new ManageMenu(player).openMenu(team);
             return;
-        }else if (itemName.equals(config.getString("inventories.editAlliances.addAlliance.itemName"))){
+        }else if (Buttons.ADD_ALLIANCE_BUTTON.isClickedButton(clickEvent)){
             player.closeInventory();
             conversationBuilder.getNameInput(player, new ConvAddAlliance(plugin));
             return;
-        }else if (itemName.equals(config.getString("inventories.editAlliances.removeAlliance.itemName"))){
+        }else if (Buttons.REMOVE_ALLIANCE_BUTTON.isClickedButton(clickEvent)){
             cacheManager.addTempAction(
                 new TemporaryAction(playerName, TemporaryActionNames.CLICK_REMOVE_ALLIANCE, team)
             );

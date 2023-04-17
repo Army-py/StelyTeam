@@ -10,6 +10,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import fr.army.stelyteam.utils.Buttons;
 import fr.army.stelyteam.utils.Menus;
 import fr.army.stelyteam.utils.Storage;
 import fr.army.stelyteam.utils.Team;
@@ -89,19 +90,16 @@ public class StorageMenu extends TeamMenu {
         
         if (clickEvent.getCurrentItem() != null){
             Material material = clickEvent.getCurrentItem().getType();
-            itemName = clickEvent.getCurrentItem().getItemMeta().getDisplayName();
-            if (material.name().equals(config.getString("emptyCase"))){
-                clickEvent.setCancelled(true);
-                return;
-            }else if (itemName.equals(config.getString("inventories.storage.previous.itemName"))){
+            // itemName = clickEvent.getCurrentItem().getItemMeta().getDisplayName();
+            if (Buttons.PREVIOUS_STORAGE_BUTTON.isClickedButton(clickEvent)){
                 clickEvent.setCancelled(true);
                 new StorageMenu(player).openMenu(team, storageId-1);
                 return;
-            }else if (itemName.equals(config.getString("inventories.storage.next.itemName"))){
+            }else if (Buttons.NEXT_STORAGE_BUTTON.isClickedButton(clickEvent)){
                 clickEvent.setCancelled(true);
                 new StorageMenu(player).openMenu(team, storageId+1);
             }else{
-                if (itemName.equals(config.getString("inventories.storage.close.itemName"))){
+                if (Buttons.CLOSE_STORAGE_MENU_BUTTON.isClickedButton(clickEvent)){
                     clickEvent.setCancelled(true);
                     if (clickEvent.getCursor().getType().equals(Material.AIR)){
                         // player.openInventory(inventoryBuilder.createStorageDirectoryInventory(team));

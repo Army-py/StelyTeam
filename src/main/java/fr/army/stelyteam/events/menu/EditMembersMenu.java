@@ -17,6 +17,7 @@ import org.bukkit.inventory.ItemStack;
 
 import fr.army.stelyteam.conversations.ConvAddMember;
 import fr.army.stelyteam.conversations.ConvEditOwner;
+import fr.army.stelyteam.utils.Buttons;
 import fr.army.stelyteam.utils.Menus;
 import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.TeamMenu;
@@ -142,20 +143,20 @@ public class EditMembersMenu extends TeamMenu {
 
         // Fermeture ou retour en arrière de l'inventaire
         itemName = clickEvent.getCurrentItem().getItemMeta().getDisplayName();
-        if (itemName.equals(config.getString("inventories.editMembers.close.itemName"))){
+        if (Buttons.CLOSE_EDIT_MEMBERS_MENU_BUTTON.isClickedButton(clickEvent)){
             new ManageMenu(player).openMenu(team);
             return;
-        }else if (itemName.equals(config.getString("inventories.editMembers.addMember.itemName"))){
+        }else if (Buttons.ADD_MEMBER_BUTTON.isClickedButton(clickEvent)){
             player.closeInventory();
             conversationBuilder.getNameInput(player, new ConvAddMember(plugin));
             return;
-        }else if (itemName.equals(config.getString("inventories.editMembers.removeMember.itemName"))){
+        }else if (Buttons.REMOVE_MEMBER_BUTTON.isClickedButton(clickEvent)){
             cacheManager.addTempAction(
                 new TemporaryAction(playerName, TemporaryActionNames.CLICK_REMOVE_MEMBER, team)
             );
             new MembersMenu(player, Menus.REMOVE_MEMBERS_MENU.getName()).openMenu(team);
             return;
-        }else if (itemName.equals(config.getString("inventories.editMembers.editOwner.itemName"))){
+        }else if (Buttons.EDIT_OWNER_BUTTON.isClickedButton(clickEvent)){
             player.closeInventory();
             conversationBuilder.getNameInput(player, new ConvEditOwner(plugin));
             return;

@@ -9,6 +9,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 
+import fr.army.stelyteam.utils.Buttons;
 import fr.army.stelyteam.utils.Menus;
 import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.TeamMenu;
@@ -77,7 +78,7 @@ public class UpgradeStorageMenu extends TeamMenu {
         Integer level = team.getTeamStorageLvl();
         
         // Gestion des items
-        if (itemName.equals(config.getString("inventories.upgradeStorageAmount.close.itemName"))){
+        if (Buttons.CLOSE_UPGRADE_LVL_STORAGE_MENU_BUTTON.isClickedButton(clickEvent)){
             new ManageMenu(player).openMenu(team);
         }else if (!material.name().equals(config.getString("emptyCase"))){
             for(String str : config.getConfigurationSection("inventories.upgradeStorageAmount").getKeys(false)){

@@ -13,6 +13,7 @@ import fr.army.stelyteam.conversations.ConvEditTeamDesc;
 import fr.army.stelyteam.conversations.ConvEditTeamName;
 import fr.army.stelyteam.conversations.ConvEditTeamPrefix;
 import fr.army.stelyteam.conversations.ConvGetTeamName;
+import fr.army.stelyteam.utils.Buttons;
 import fr.army.stelyteam.utils.Menus;
 import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.TeamMenu;
@@ -77,7 +78,7 @@ public class ConfirmMenu extends TeamMenu {
         Team team = tempAction.getTeam();
         String teamName;
 
-        if (itemName.equals(config.getString("inventories.confirmInventory.confirm.itemName"))){
+        if (Buttons.CONFIRM_BUTTON.isClickedButton(clickEvent)){
             String receiverName;
             Player receiver;
             Integer level;
@@ -208,7 +209,7 @@ public class ConfirmMenu extends TeamMenu {
             cacheManager.removePlayerAction(playerName);
         }
 
-        else if (itemName.equals(config.getString("inventories.confirmInventory.cancel.itemName"))){
+        else if (Buttons.CANCEL_BUTTON.isClickedButton(clickEvent)){
             switch (cacheManager.getPlayerActionName(playerName)) {
                 case REMOVE_MEMBER:
                     player.closeInventory();

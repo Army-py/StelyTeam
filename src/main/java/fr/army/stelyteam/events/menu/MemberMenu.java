@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 
 import fr.army.stelyteam.conversations.ConvAddMoney;
 import fr.army.stelyteam.conversations.ConvWithdrawMoney;
+import fr.army.stelyteam.utils.Buttons;
 import fr.army.stelyteam.utils.Menus;
 import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.TeamMenu;
@@ -131,38 +132,34 @@ public class MemberMenu extends TeamMenu {
             return;
         }
 
-        // Fermeture ou retour en arrière de l'inventaire
-        if (team.isTeamOwner(playerName) || team.getMemberRank(playerName) <= 3){
-            if (itemName.equals(config.getString("inventories.member.close.itemName"))){
+        // Fermeture ou retour en arrière de l'inventaire        
+        if (Buttons.CLOSE_MEMBER_MENU_BUTTON.isClickedButton(clickEvent)){
+            if (team.isTeamOwner(playerName) || team.getMemberRank(playerName) <= 3){
                 new AdminMenu(player).openMenu();
-            }
-        }else{
-            if (itemName.equals(config.getString("inventories.member.close.itemName"))){
+            }else{
                 player.closeInventory();
             }
-        }
-        
-        if (itemName.equals(config.getString("inventories.member.seeTeamMembers.itemName"))){
+        }else if (Buttons.TEAM_MEMBERS_BUTTON.isClickedButton(clickEvent)){
             new MembersMenu(player).openMenu(team);
         
-        }else if (itemName.equals(config.getString("inventories.member.seeTeamAlliances.itemName"))){
+        }else if (Buttons.TEAM_ALLIANCES_BUTTON.isClickedButton(clickEvent)){
             new AlliancesMenu(player).openMenu(team);
         
-        }else if (itemName.equals(config.getString("inventories.member.addTeamMoney.itemName"))){
+        }else if (Buttons.ADD_MONEY_TEAM_BANK_BUTTON.isClickedButton(clickEvent)){
             if (!team.isUnlockedTeamBank()) {
                 player.sendMessage(messageManager.getMessage("common.team_bank_not_unlock"));
             }else{
                 player.closeInventory();
                 conversationBuilder.getNameInput(player, new ConvAddMoney(plugin));
             }
-        }else if (itemName.equals(config.getString("inventories.member.withdrawTeamMoney.itemName"))){
+        }else if (Buttons.WITHDRAW_MONEY_TEAM_BANK_BUTTON.isClickedButton(clickEvent)){
             if (!team.isUnlockedTeamBank()) {
                 player.sendMessage(messageManager.getMessage("common.team_bank_not_unlock"));
             }else{
                 player.closeInventory();
                 conversationBuilder.getNameInput(player, new ConvWithdrawMoney(plugin));
             }
-        }else if (itemName.equals(config.getString("inventories.member.leaveTeam.itemName"))){
+        }else if (Buttons.LEAVE_TEAM_BUTTON.isClickedButton(clickEvent)){
             player.closeInventory();
             if (!team.isTeamOwner(playerName)){
                 cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.LEAVE_TEAM, team));
@@ -170,7 +167,7 @@ public class MemberMenu extends TeamMenu {
             }else {
                 player.sendMessage(messageManager.getMessage("other.owner_cant_leave_team"));
             }
-        }else if (itemName.equals(config.getString("inventories.member.storageDirectory.itemName"))){
+        }else if (Buttons.STORAGE_DIRECTORY_BUTTON.isClickedButton(clickEvent)){
             new StorageDirectoryMenu(player).openMenu(team);
         }
     }

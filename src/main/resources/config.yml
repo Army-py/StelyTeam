@@ -232,12 +232,13 @@ editMembersLores:
 
 inventories:
   createTeam:
-    itemName: "§5§nCréer une team"
-    itemType: LIME_BANNER
-    headTexture: ""
-    slot: 13
-    lore: 
-      - "§aPrix : 20 000€"
+    create:
+      itemName: "§5§nCréer une team"
+      itemType: LIME_BANNER
+      headTexture: ""
+      slot: 13
+      lore: 
+        - "§aPrix : 20 000€"
 
   admin:
     manage:

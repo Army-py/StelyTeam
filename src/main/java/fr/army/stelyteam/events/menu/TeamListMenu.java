@@ -13,6 +13,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import fr.army.stelyteam.utils.Buttons;
 import fr.army.stelyteam.utils.Menus;
 import fr.army.stelyteam.utils.Page;
 import fr.army.stelyteam.utils.Team;
@@ -116,21 +117,19 @@ public class TeamListMenu extends TeamMenu {
     public void onClick(InventoryClickEvent clickEvent) {
         Player player = (Player) clickEvent.getWhoClicked();
         String playerName = player.getName();
-        String itemName;
         
         if (clickEvent.getCurrentItem() != null){
-            itemName = clickEvent.getCurrentItem().getItemMeta().getDisplayName();
-            if (itemName.equals(config.getString("inventories.teamList.previous.itemName"))){
+            if (Buttons.PREVIOUS_TEAM_LIST_BUTTON.isClickedButton(clickEvent)){
                 Page page = cacheManager.getPage(playerName);
                 page.setCurrentPage(page.getCurrentPage()-1);
                 cacheManager.replacePage(page);
                 new TeamListMenu(player).openMenu();
-            }else if (itemName.equals(config.getString("inventories.teamList.next.itemName"))){
+            }else if (Buttons.NEXT_TEAM_LIST_BUTTON.isClickedButton(clickEvent)){
                 Page page = cacheManager.getPage(playerName);
                 page.setCurrentPage(page.getCurrentPage()+1);
                 cacheManager.replacePage(page);
                 new TeamListMenu(player).openMenu();
-            }else if (itemName.equals(config.getString("inventories.teamList.close.itemName"))){
+            }else if (Buttons.CLOSE_TEAM_LIST_MENU_BUTTON.isClickedButton(clickEvent)){
                 cacheManager.removePage(cacheManager.getPage(playerName));
                 player.closeInventory();
             }
