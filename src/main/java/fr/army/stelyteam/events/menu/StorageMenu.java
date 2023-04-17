@@ -86,11 +86,8 @@ public class StorageMenu extends TeamMenu {
         String playerName = player.getName();
         Team team = plugin.getDatabaseManager().getTeamFromPlayerName(playerName);
         Integer storageId = getStorageId(clickEvent.getView().getTitle());
-        String itemName;
         
         if (clickEvent.getCurrentItem() != null){
-            Material material = clickEvent.getCurrentItem().getType();
-            // itemName = clickEvent.getCurrentItem().getItemMeta().getDisplayName();
             if (Buttons.PREVIOUS_STORAGE_BUTTON.isClickedButton(clickEvent)){
                 clickEvent.setCancelled(true);
                 new StorageMenu(player).openMenu(team, storageId-1);

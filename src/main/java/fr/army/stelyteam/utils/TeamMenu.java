@@ -9,8 +9,6 @@ import java.util.regex.Pattern;
 
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -22,7 +20,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import net.md_5.bungee.api.chat.ClickEvent;
 
 
 public abstract class TeamMenu implements TeamMenuInterface {

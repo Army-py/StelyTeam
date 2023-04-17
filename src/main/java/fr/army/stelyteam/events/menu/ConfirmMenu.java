@@ -71,7 +71,6 @@ public class ConfirmMenu extends TeamMenu {
 
     @Override
     public void onClick(InventoryClickEvent clickEvent) {
-        String itemName = clickEvent.getCurrentItem().getItemMeta().getDisplayName();
         Player player = (Player) clickEvent.getWhoClicked();
         String playerName = player.getName();
         TemporaryAction tempAction = cacheManager.getTempAction(playerName);

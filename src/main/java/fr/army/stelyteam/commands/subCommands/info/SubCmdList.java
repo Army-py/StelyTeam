@@ -4,11 +4,9 @@ import java.util.List;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.commands.SubCommand;
-import fr.army.stelyteam.events.menu.CreateTeamMenu;
 import fr.army.stelyteam.events.menu.TeamListMenu;
 import fr.army.stelyteam.utils.manager.CacheManager;
 
@@ -41,5 +39,4 @@ public class SubCmdList extends SubCommand {
     public boolean isOpCommand() {
         return false;
     }
-    
 }

@@ -86,7 +86,6 @@ public class ManageMenu extends TeamMenu {
     public void onClick(InventoryClickEvent clickEvent) {
         Player player = (Player) clickEvent.getWhoClicked();
         String playerName = player.getName();
-        String itemName = clickEvent.getCurrentItem().getItemMeta().getDisplayName();
         Material itemType = clickEvent.getCurrentItem().getType();
         List<String> lore = clickEvent.getCurrentItem().getItemMeta().getLore();
         Team team;

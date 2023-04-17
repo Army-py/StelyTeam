@@ -123,7 +123,6 @@ public class MemberMenu extends TeamMenu {
     public void onClick(InventoryClickEvent clickEvent) {
         Player player = (Player) clickEvent.getWhoClicked();
         String playerName = player.getName();
-        String itemName = clickEvent.getCurrentItem().getItemMeta().getDisplayName();
         Team team = mySqlManager.getTeamFromPlayerName(playerName);
         Material itemType = clickEvent.getCurrentItem().getType();
         List<String> lore = clickEvent.getCurrentItem().getItemMeta().getLore();

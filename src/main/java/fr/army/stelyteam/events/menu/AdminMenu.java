@@ -8,7 +8,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.material.Button;
 
 import fr.army.stelyteam.utils.Buttons;
 import fr.army.stelyteam.utils.Menus;
@@ -56,7 +55,6 @@ public class AdminMenu extends TeamMenu {
     public void onClick(InventoryClickEvent clickEvent) {
         Player player = (Player) clickEvent.getWhoClicked();
         String playerName = player.getName();
-        String itemName = clickEvent.getCurrentItem().getItemMeta().getDisplayName();
 
         // Ouverture des inventaires
         if (Buttons.MANAGE_MENU_BUTTON.isClickedButton(clickEvent)){

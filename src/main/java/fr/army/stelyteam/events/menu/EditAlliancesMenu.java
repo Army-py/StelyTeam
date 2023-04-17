@@ -136,13 +136,10 @@ public class EditAlliancesMenu extends TeamMenu {
 
     @Override
     public void onClick(InventoryClickEvent clickEvent) {
-        String itemName;
         Player player = (Player) clickEvent.getWhoClicked();
         String playerName = player.getName();
         Team team = mySqlManager.getTeamFromPlayerName(playerName);
 
-
-        itemName = clickEvent.getCurrentItem().getItemMeta().getDisplayName();
         if (Buttons.CLOSE_EDIT_ALLIANCES_MENU_BUTTON.isClickedButton(clickEvent)){
             new ManageMenu(player).openMenu(team);
             return;

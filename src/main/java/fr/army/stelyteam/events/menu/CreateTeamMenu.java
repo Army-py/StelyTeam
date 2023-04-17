@@ -55,7 +55,6 @@ public class CreateTeamMenu extends TeamMenu {
     public void onClick(InventoryClickEvent clickEvent) {
         Player player = (Player) clickEvent.getWhoClicked();
         String playerName = player.getName();
-        String itemName = clickEvent.getCurrentItem().getItemMeta().getDisplayName();
 
         if (Buttons.CREATE_TEAM_BUTTON.isClickedButton(clickEvent)){
             if (plugin.getEconomyManager().checkMoneyPlayer(player, config.getDouble("prices.createTeam"))){
