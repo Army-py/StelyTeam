@@ -124,8 +124,8 @@ public class Team {
 
 
     public void updateTeamOwner(String newOwnerName){
-        this.teamOwnerName = newOwnerName;
         this.plugin.getDatabaseManager().updateTeamOwner(teamName, teamOwnerName, newOwnerName);
+        this.teamOwnerName = newOwnerName;
     }
 
 

@@ -53,6 +53,7 @@ public class EditAlliancesMenu extends TeamMenu {
 
         emptyCases(inventory, this.menuSlots, 0);
         Integer headSlot = 0;
+        System.out.println(team.getTeamAlliances().size());
         for(Alliance alliance : team.getTeamAlliances()){
             Team teamAlliance = mySqlManager.getTeamFromTeamName(alliance.getTeamName());
             String allianceName = teamAlliance.getTeamName();

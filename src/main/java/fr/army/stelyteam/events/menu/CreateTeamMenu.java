@@ -34,11 +34,11 @@ public class CreateTeamMenu extends TeamMenu {
 		
         emptyCases(inventory, this.menuSlots, 0);
 		
-        Integer slot = config.getInt("inventories.createTeam.slot");
-        Material material = Material.getMaterial(config.getString("inventories.createTeam.itemType"));
-        String name = config.getString("inventories.createTeam.itemName");
-        List<String> lore = config.getStringList("inventories.createTeam.lore");
-        String headTexture = config.getString("inventories.createTeam.headTexture");
+        Integer slot = config.getInt("inventories.createTeam.create.slot");
+        Material material = Material.getMaterial(config.getString("inventories.createTeam.create.itemType"));
+        String name = config.getString("inventories.createTeam.create.itemName");
+        List<String> lore = config.getStringList("inventories.createTeam.create.lore");
+        String headTexture = config.getString("inventories.createTeam.create.headTexture");
 
         inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, false));
 		

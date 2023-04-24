@@ -6,15 +6,19 @@ import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.persistence.PersistentDataType;
 
 import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
+
+import fr.army.stelyteam.StelyTeamPlugin;
 
 
 public class ItemBuilder {
@@ -75,6 +79,11 @@ public class ItemBuilder {
 		if(!lore.isEmpty()) {
 			List<String> loreList = (List<String>) lore;
 			skullMeta.setLore(loreList);
+		}
+
+		if (player != null){
+			NamespacedKey key = new NamespacedKey(StelyTeamPlugin.getPlugin(), "playerName");
+			skullMeta.getPersistentDataContainer().set(key, PersistentDataType.STRING, player.getName());
 		}
 
 		skullMeta.setDisplayName(name);

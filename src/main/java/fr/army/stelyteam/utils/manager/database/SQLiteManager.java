@@ -297,24 +297,23 @@ public class SQLiteManager extends DatabaseManager {
     public void updateTeamOwner(String teamName, String teamOwner, String newTeamOwner){
         if(isConnected()){
             try {
-                PreparedStatement queryOwner = connection.prepareStatement("UPDATE player SET teamRank = ? WHERE teamId = ? AND playerName = ?");
+                PreparedStatement queryOwner = connection.prepareStatement("UPDATE player SET teamRank = ? WHERE teamId = (SELECT teamId FROM team WHERE teamName = ?) AND playerName = ?");
                 queryOwner.setInt(1, 1);
-                queryOwner.setInt(2, getTeamId(teamName));
+                queryOwner.setString(2, teamName);
                 queryOwner.setString(3, teamOwner);
                 queryOwner.executeUpdate();
                 queryOwner.close();
 
-                PreparedStatement queryNewOwner = connection.prepareStatement("UPDATE player SET teamRank = ? WHERE teamId = ? AND playerName = ?");
+                PreparedStatement queryNewOwner = connection.prepareStatement("UPDATE player SET teamRank = ? WHERE teamId = (SELECT teamId FROM team WHERE teamName = ?) AND playerName = ?");
                 queryNewOwner.setInt(1, 0);
-                queryNewOwner.setInt(2, getTeamId(teamName));
+                queryNewOwner.setString(2, teamName);
                 queryNewOwner.setString(3, newTeamOwner);
                 queryNewOwner.executeUpdate();
                 queryNewOwner.close();
 
-                PreparedStatement queryTeam = connection.prepareStatement("UPDATE team SET teamOwnerPlayerId = ? WHERE teamName = ? AND teamOwnerPlayerId = ?");
+                PreparedStatement queryTeam = connection.prepareStatement("UPDATE team SET teamOwnerPlayerId = (SELECT playerId FROM player WHERE playerName = ?) WHERE teamName = ?");
                 queryTeam.setString(1, newTeamOwner);
                 queryTeam.setString(2, teamName);
-                queryTeam.setString(3, teamOwner);
                 queryTeam.executeUpdate();
                 queryTeam.close();
             } catch (SQLException e) {
@@ -322,6 +321,7 @@ public class SQLiteManager extends DatabaseManager {
             }
         }
     }
+
 
     @Override
     public void updateUnlockedTeamBank(String teamName){
@@ -910,8 +910,8 @@ public class SQLiteManager extends DatabaseManager {
                 while(resultAlliance.next()){
                     alliances.add(
                         new Alliance(
-                            resultTeam.getString("teamName"),
-                            resultTeam.getString("allianceDate")
+                            resultAlliance.getString("teamName"),
+                            resultAlliance.getString("allianceDate")
                         )
                     );
                 }

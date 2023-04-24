@@ -67,7 +67,7 @@ public class ConvAddAlliance extends StringPrompt {
                 );
                 player.spigot().sendMessage(components);
                 con.getForWhom().sendRawMessage(messageManager.getMessage("manage_alliances.add_alliance.invitation_sent"));
-                break;
+                return null;
             }
         }
 

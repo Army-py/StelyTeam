@@ -7,13 +7,18 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 
+import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.utils.Alliance;
 import fr.army.stelyteam.utils.Buttons;
 import fr.army.stelyteam.utils.Menus;
@@ -126,14 +131,18 @@ public class AlliancesMenu extends TeamMenu {
     public void onClick(InventoryClickEvent clickEvent) {
         Player player = (Player) clickEvent.getWhoClicked();
         String playerName = player.getName();
-        String itemName = clickEvent.getCurrentItem().getItemMeta().getDisplayName();
         Material material = clickEvent.getCurrentItem().getType();
         Team team = Team.init(player);
-        String allianceName = removeFirstColors(itemName);
 
         if (clickEvent.getView().getTitle().equals(Menus.REMOVE_ALLIANCES_MENU.getName())){
             if (material.equals(Material.getMaterial("PLAYER_HEAD"))){
                 if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.CLICK_REMOVE_ALLIANCE)){
+                    NamespacedKey key = new NamespacedKey(StelyTeamPlugin.getPlugin(), "playerName");
+                    ItemMeta meta = clickEvent.getCurrentItem().getItemMeta();
+                    PersistentDataContainer container = meta.getPersistentDataContainer();
+                    String ownerName = container.get(key, PersistentDataType.STRING);
+                    String allianceName = mySqlManager.getTeamNameFromPlayerName(ownerName);
+
                     if (!team.isTeamAlliance(allianceName)){
                         player.sendRawMessage(messageManager.getMessage("common.not_in_alliance"));
                         return;

@@ -29,10 +29,10 @@ public class SubCmdDeny extends SubCommand {
         Player player = (Player) sender;
         String playerName = player.getName();
         TemporaryAction tempAction = cacheManager.getTempAction(playerName);
-        String senderName = tempAction.getSenderName();
-        Player invitationSender = Bukkit.getPlayer(senderName);
         
         if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.ADD_MEMBER) || cacheManager.playerHasActionName(playerName, TemporaryActionNames.ADD_ALLIANCE)){
+            String senderName = tempAction.getSenderName();
+            Player invitationSender = Bukkit.getPlayer(senderName);
             cacheManager.removePlayerAction(playerName);
             player.sendMessage(messageManager.getMessage("commands.stelyteam_deny.output"));
             if (invitationSender != null){
