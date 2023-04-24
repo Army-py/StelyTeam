@@ -34,12 +34,13 @@ public class PermissionsMenu extends TeamMenu {
 
         for(String str : config.getConfigurationSection("inventories.permissions").getKeys(false)){
             Integer slot = config.getInt("inventories.permissions."+str+".slot");
+            if (slot == -1) continue;
+
             String name = config.getString("inventories.permissions."+str+".itemName");
             List<String> lore = config.getStringList("inventories.permissions."+str+".lore");
             String headTexture;
             
-            String rankPath = config.getString("inventories.permissions."+str+".rankPath");
-            Integer defaultRankId = config.getInt("inventories."+rankPath+".rank");
+            Integer defaultRankId = config.getInt("inventories.permissions."+str+".rank");
             Integer permissionRank = team.getPermissionRank(str);
             String lorePrefix = config.getString("prefixRankLore");
             Material material;
@@ -50,15 +51,16 @@ public class PermissionsMenu extends TeamMenu {
             }else{
                 material = Material.getMaterial(config.getString("ranks."+plugin.getRankFromId(permissionRank != null ? permissionRank : defaultRankId)+".itemType"));
                 headTexture = config.getString("ranks."+plugin.getRankFromId(permissionRank != null ? permissionRank : defaultRankId)+".headTexture");
+                
+                if (permissionRank != null){
+                    String rankColor = config.getString("ranks." + plugin.getRankFromId(permissionRank) + ".color");
+                    lore.add(0, lorePrefix + rankColor + config.getString("ranks." + plugin.getRankFromId(permissionRank) + ".name"));
+                }else{
+                    String rankColor = config.getString("ranks." + plugin.getRankFromId(defaultRankId) + ".color");
+                    lore.add(0, lorePrefix + rankColor + config.getString("ranks." + plugin.getRankFromId(defaultRankId) + ".name"));
+                }
             }
 
-            if (permissionRank != null){
-                String rankColor = config.getString("ranks." + plugin.getRankFromId(permissionRank) + ".color");
-                lore.add(0, lorePrefix + rankColor + config.getString("ranks." + plugin.getRankFromId(permissionRank) + ".name"));
-            }else if (rankPath != null){
-                String rankColor = config.getString("ranks." + plugin.getRankFromId(defaultRankId) + ".color");
-                lore.add(0, lorePrefix + rankColor + config.getString("ranks." + plugin.getRankFromId(defaultRankId) + ".name"));
-            }
 
             boolean isDefault = false;
             if (!str.equals("close") && (permissionRank == null || defaultRankId == permissionRank)){
@@ -101,8 +103,7 @@ public class PermissionsMenu extends TeamMenu {
                     }
                     if (permissionRank < plugin.getLastRank()) team.incrementAssignement(permission);
                 }else{
-                    String rankPath = config.getString("inventories.permissions."+permission+".rankPath");
-                    Integer defaultRankId = config.getInt("inventories."+rankPath+".rank");
+                    Integer defaultRankId = config.getInt("inventories.permissions."+permission+".rank");
                     if (!authorIsOwner && defaultRankId <= authorRank){
                         return;
                     }
@@ -116,8 +117,7 @@ public class PermissionsMenu extends TeamMenu {
                     }
                     if (permissionRank > 0) team.decrementAssignement(permission);
                 }else{
-                    String rankPath = config.getString("inventories.permissions."+permission+".rankPath");
-                    Integer defaultRankId = config.getInt("inventories."+rankPath+".rank");
+                    Integer defaultRankId = config.getInt("inventories.permissions."+permission+".rank");
                     if (!authorIsOwner && defaultRankId-1 <= authorRank){
                         return;
                     }

@@ -111,7 +111,9 @@ public class StelyTeamPlugin extends JavaPlugin {
             new CreateTeamMenu(player).openMenu();
         }else if(team.isTeamOwner(playerName)){
             new AdminMenu(player).openMenu();
-        }else if (plugin.playerHasPermissionInSection(playerName, team, "manage")){
+        }else if (plugin.playerHasPermissionInSection(playerName, team, "manage")
+            || plugin.playerHasPermissionInSection(playerName, team, "editMembers")
+            || plugin.playerHasPermissionInSection(playerName, team, "editAlliances")){
             new AdminMenu(player).openMenu();
         }else{
             new MemberMenu(player).openMenu(team);
@@ -163,17 +165,17 @@ public class StelyTeamPlugin extends JavaPlugin {
 
 
     public boolean playerHasPermission(String playerName, Team team, String permissionName){
+        if (permissionName.equals("close")) return true;
+
         Integer permissionRank = team.getPermissionRank(permissionName);
+
         if (permissionRank != null){
             return permissionRank >= team.getMemberRank(playerName);
         }
 
-        String rankPath = config.getString("inventories.permissions."+permissionName+".rankPath");
-        if (team.isTeamOwner(playerName) || config.getInt("inventories."+rankPath+".rank") == -1){
+        if (team.isTeamOwner(playerName) || config.getInt("inventories.permissions."+permissionName+".rank") == -1){
             return true;
-        }else if (config.getInt("inventories."+rankPath+".rank") >= team.getMemberRank(playerName)){
-            return true;
-        }else if (permissionName.equals("close") || permissionName.equals("leaveTeam") || permissionName.equals("teamInfos")){
+        }else if (config.getInt("inventories.permissions."+permissionName+".rank") >= team.getMemberRank(playerName)){
             return true;
         }
         return false;

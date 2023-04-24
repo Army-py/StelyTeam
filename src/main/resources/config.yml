@@ -1,11 +1,11 @@
 # Connection à la base de donnée
 
-database_type: "sqlite" # mysql ou sqlite
+database_type: "mysql" # mysql ou sqlite
 sql:
-  host: "localhost"
-  database: "bungeecord_StelyTeam"
-  user: "username"
-  password: "password"
+  host: "127.0.0.1:3306"
+  database: "stelyteam_test"
+  user: "admin"
+  password: "@%MerSus"
   port: 3306
 
 sqlite:
@@ -66,15 +66,15 @@ prices:
   createTeam: 20000.0
   editTeamId: 2000.0
   editTeamPrefix: 3000.0
-  editTeamDescription: 5000.0
-  buyTeamBank: 500000.0
+  editTeamDescription: 1000.0
+  buyTeamBank: 40000.0
   upgrade:
     teamPlaces:
       level1: 25000.0
       level2: 50000.0
       level3: 100000.0
-      level4: 150000.0
-      level5: 250000.0
+      level4: 125000.0
+      level5: 150000.0
     teamStorages:
       level1: 10000.0
       level2: 25000.0
@@ -129,24 +129,23 @@ teamListLore:
   - "§aChef de la team : §e%OWNER%"
   - "§aNom : §e%NAME%"
   - "§aPréfixe : §r%PREFIX%"
+  - "§aDescription : §e%DESCRIPTION%"  
   - "§aNombre de membre : §e%MEMBER_COUNT% sur %MAX_MEMBERS%"
-  - "§aAllié depuis le §e%DATE%"
-  - "§aDescription : §e%DESCRIPTION%"
+  - "§aCréé depuis le §e%DATE%"
 
 # Description des teams dans la liste des alliances
 teamAllianceLore:
   - "§aChef de la team : §e%OWNER%"
   - "§aNom : §e%NAME%"
   - "§aPréfixe : §r%PREFIX%"
+  - "§aDescription : §e%DESCRIPTION%"  
   - "§aNombre de membre : §e%MEMBER_COUNT% sur %MAX_MEMBERS%"
   - "§aMembre(s) : §e%MEMBERS%"
   - "§aAllié depuis le §e%DATE%"
-  - "§aDescription : §e%DESCRIPTION%"
-
 
 # Titre des menus et leur nombre de slots
-# Le nombre de slots peut être augmenté en fonction du tombre d'item dans le menu (*)
-# (*) Respecter le nombre de slots en fonction de la taille d'une ligne de coffre (9 * nombre de lignes)
+# Le nombre de slots peut être augmenté en fonction du tombre d'item dans le menu *
+# * Respecter le nombre de slots en fonction de la taille d'une ligne de coffre (9 * nombre de lignes)
 inventoriesName:
   createTeam: "§5§lCréation de Team"
   teamList : "§5§lListe des Teams"
@@ -270,7 +269,6 @@ inventories:
       itemType: TOTEM_OF_UNDYING
       headTexture: ""
       slot: 9
-      rank: 1
       lore:
         - "§aGérer les membres"
         - "§ade la team"
@@ -279,7 +277,6 @@ inventories:
       itemType: FEATHER
       headTexture: ""
       slot: 18
-      rank: 1
       lore:
         - "§aGérer les alliances"
         - "§ade la team"
@@ -288,7 +285,6 @@ inventories:
       itemType: GREEN_BED
       headTexture: ""
       slot: 11
-      rank: 1
       lore:
         - "§aCréer le home de team"
     removeTeamHome:
@@ -296,7 +292,6 @@ inventories:
       itemType: RED_BED
       headTexture: ""
       slot: 20
-      rank: 1
       lore:
         - "§aRetirer le home de team"
     buyTeamBank:
@@ -304,17 +299,15 @@ inventories:
       itemType: EMERALD
       headTexture: ""
       slot: 13
-      rank: 1
       lore:
         - "§aCréer le compte banquaire"
         - "§ade la team"
-        - "§b§oPrix : 1 000 000€"
+        - "§b§oPrix : 40 000€"
     upgradeTotalMembers:
       itemName: "§5§nAjouter des places"
       itemType: TOTEM_OF_UNDYING
       headTexture: ""
       slot: 15
-      rank: 1
       lore:
         - "§aAméliorer le nombre de"
         - "§amembres maximum dans la team"
@@ -323,7 +316,6 @@ inventories:
       itemType: CHEST
       headTexture: ""
       slot: 24
-      rank: 1
       lore:
         - "§aAméliorer le nombre de"
         - "§astockage maximum dans la team"
@@ -332,7 +324,6 @@ inventories:
       itemType: PAPER
       headTexture: ""
       slot: 17
-      rank: 0
       lore:
         - "§aModifier le nom de la team"
         - "§b§oPrix : 2 000€"
@@ -341,7 +332,6 @@ inventories:
       itemType: NAME_TAG
       headTexture: ""
       slot: 26
-      rank: 0
       lore:
         - "§aModifier le préfixe de la team"
         - "§aqui s'affiche dans le tchat"
@@ -355,16 +345,18 @@ inventories:
       itemType: WRITABLE_BOOK
       headTexture: ""
       slot: 31
-      rank: 0
       lore:
         - "§aModifier la description de la team"
-        - "§b§oPrix : 5 000€"
+        - "§b§oPrix : 1 000€"
+        - ""
+        - "§7§oVous pouvez prévisualiser"
+        - "§7§ole préfixe avec la commande :"
+        - "§7§o/stelyteam visual <texte>"        
     editPermissions:
       itemName: "§5§nPermissions"
       itemType: RED_BANNER
       headTexture: ""
       slot: 22
-      rank: 0
       lore:
         - "§aGérer les permissions"
         - "§ade la team"
@@ -373,7 +365,6 @@ inventories:
       itemType: COMPOSTER
       headTexture: ""
       slot: 40
-      rank: 0
     close:
       itemName: "§c§oFermer"
       itemType: ARROW
@@ -387,14 +378,13 @@ inventories:
       itemType: BOOK
       headTexture: ""
       slot: 11
-      rank: -1
       lore:
         - "§aChef de la team : §e%OWNER%"
         - "§aNom : §e%NAME%"
         - "§aPréfixe : §r%PREFIX%"
+        - "§aDescription : §e%DESCRIPTION%"
         - "§aNombre de membre : §e%MEMBER_COUNT% sur %MAX_MEMBERS%"
         - "§aDate de la création : §e%DATE%"
-        - "§aDescription : §e%DESCRIPTION%"
         - ""
         - "§aTon grade : §r%RANK%"
     seeTeamMembers:
@@ -402,7 +392,6 @@ inventories:
       itemType: TOTEM_OF_UNDYING
       headTexture: ""
       slot: 20
-      rank: 3
       lore:
         - "§aClique pour voir les"  
         - "§amembres de la team"      
@@ -411,7 +400,6 @@ inventories:
       itemType: FEATHER
       headTexture: ""
       slot: 29
-      rank: 3
       lore:
         - "§aClique pour voir les"  
         - "§aalliances de la team"        
@@ -420,7 +408,6 @@ inventories:
       itemType: EMERALD
       headTexture: ""
       slot: 13
-      rank: 3
       lore:
         - "§aCompte : §6%TEAM_MONEY%€"
         - "§aPlafond du compte : §6%MAX_MONEY%€"
@@ -429,7 +416,6 @@ inventories:
       itemType: GOLD_NUGGET
       headTexture: ""
       slot: 22
-      rank: 3
       lore:
         - "§aAjouter de l'argent dans"
         - "§ale compte de la team"
@@ -438,7 +424,6 @@ inventories:
       itemType: PAPER
       headTexture: ""
       slot: 31
-      rank: 2
       lore:
         - "§aRetirer de l'argent dans"
         - "§ale compte de la team"
@@ -447,7 +432,6 @@ inventories:
       itemType: CHEST
       headTexture: ""
       slot: 15
-      rank: 2
       lore:
         - "§aClique pour voir le"
         - "§astockage de la team"
@@ -456,7 +440,6 @@ inventories:
       itemType: DARK_OAK_DOOR
       headTexture: ""
       slot: 33
-      rank: -1
     close:
       itemName: "§c§oFermer"
       itemType: ARROW
@@ -512,7 +495,7 @@ inventories:
       slot: 14
       level: 4
       lore:
-        - "§b§oPrix : 150 000€"
+        - "§b§oPrix : 125 000€"
     levelFive:
       itemName: "§5§n15 places"
       lock:
@@ -524,7 +507,7 @@ inventories:
       slot: 15
       level: 5
       lore:
-        - "§b§oPrix : 250 000€"
+        - "§b§oPrix : 150 000€"
     close:
       itemName: "§c§oRetour"
       itemType: ARROW
@@ -635,7 +618,6 @@ inventories:
       itemType: PLAYER_HEAD
       headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNWZmMzE0MzFkNjQ1ODdmZjZlZjk4YzA2NzU4MTA2ODFmOGMxM2JmOTZmNTFkOWNiMDdlZDc4NTJiMmZmZDEifX19"
       slot: 27
-      rank: 2
       lore:
         - "§aAjouter un membre à la team"
     removeMember:
@@ -643,7 +625,6 @@ inventories:
       itemType: PLAYER_HEAD
       headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNGU0YjhiOGQyMzYyYzg2NGUwNjIzMDE0ODdkOTRkMzI3MmE2YjU3MGFmYmY4MGMyYzViMTQ4Yzk1NDU3OWQ0NiJ9fX0="
       slot: 28
-      rank: 2
       lore:
         - "§aRetirer un membre de la team"
     editOwner:
@@ -651,7 +632,6 @@ inventories:
       itemType: LECTERN
       headTexture: ""
       slot: 31
-      rank: 0
       lore:
         - "§aModifier le créateur"
         - "§ade la team"
@@ -668,7 +648,6 @@ inventories:
       itemType: PLAYER_HEAD
       headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNWZmMzE0MzFkNjQ1ODdmZjZlZjk4YzA2NzU4MTA2ODFmOGMxM2JmOTZmNTFkOWNiMDdlZDc4NTJiMmZmZDEifX19"
       slot: 27
-      rank: 1
       lore:
         - "§aAjouter une alliance à la team"
     removeAlliance:
@@ -676,7 +655,6 @@ inventories:
       itemType: PLAYER_HEAD
       headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNGU0YjhiOGQyMzYyYzg2NGUwNjIzMDE0ODdkOTRkMzI3MmE2YjU3MGFmYmY4MGMyYzViMTQ4Yzk1NDU3OWQ0NiJ9fX0="
       slot: 28
-      rank: 1
       lore:
         - "§aRetirer une alliance de la team"
     close:
@@ -689,159 +667,143 @@ inventories:
   permissions:
     addTeamMoney:
       itemName: "§5§nAjouter de l'argent"
-      itemType: PLAYER_HEAD
-      headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvY2QzMTliOTM0M2YxN2EzNTYzNmJjYmMyNmI4MTk2MjVhOTMzM2RlMzczNjExMWYyZTkzMjgyN2M4ZTc0OSJ9fX0="
       slot: 20
-      rankPath: member.addTeamMoney
+      rank: 3
       lore:
         - "§aAjouter de l'argent dans la team"
     withdrawTeamMoney:
       itemName: "§5§nRetirer de l'argent"
-      itemType: PLAYER_HEAD
-      headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDE5OGQ1NjIxNjE1NjExNDI2NTk3M2MyNThmNTdmYzc5ZDI0NmJiNjVlM2M3N2JiZTgzMTJlZTM1ZGI2In19fQ=="
       slot: 29
-      rankPath: member.withdrawTeamMoney
+      rank: 2
       lore:
         - "§aRetirer de l'argent de la team"
     seeTeamBank:
       itemName: "§5§nVoir l'argent"
-      itemType: PLAYER_HEAD
-      headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTZmYWI5OTFkMDgzOTkzY2I4M2U0YmNmNDRhMGI2Y2VmYWM2NDdkNDE4OWVlOWNiODIzZTljYzE1NzFlMzgifX19"
       slot: 11
-      rankPath: member.seeTeamBank
+      rank: 3
       lore:
         - "§aVoir l'argent de la team"
     buyTeamBank:
       itemName: "§5§nAchat du compte"
-      itemType: PLAYER_HEAD
-      headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDJhNmYwZTg0ZGFlZmM4YjIxYWE5OTQxNWIxNmVkNWZkYWE2ZDhkYzBjM2NkNTkxZjQ5Y2E4MzJiNTc1In19fQ=="
       slot: 2
-      rankPath: manage.buyTeamBank
+      rank: 1
       lore:
         - "§aAchat du compte de team"
     addMember:
       itemName: "§5§nAjouter un membre"
-      itemType: PLAYER_HEAD
-      headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDE5OGQ1NjIxNjE1NjExNDI2NTk3M2MyNThmNTdmYzc5ZDI0NmJiNjVlM2M3N2JiZTgzMTJlZTM1ZGI2In19fQ=="
       slot: 18
-      rankPath: editMembers.addMember
+      rank: 2
       lore:
         - "§aAjouter un membre à la team"
     removeMember:
       itemName: "§5§nRetirer un membre"
-      itemType: PLAYER_HEAD
-      headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvN2ZiOTFiYjk3NzQ5ZDZhNmVlZDQ0NDlkMjNhZWEyODRkYzRkZTZjMzgxOGVlYTVjN2UxNDlkZGRhNmY3YzkifX19"
       slot: 27
-      rankPath: editMembers.removeMember
+      rank: 2
       lore:
         - "§aRetirer un membre de la team"
     seeTeamMembers:
       itemName: "§5§nVoir les membres"
-      itemType: PLAYER_HEAD
-      headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvY2QzMTliOTM0M2YxN2EzNTYzNmJjYmMyNmI4MTk2MjVhOTMzM2RlMzczNjExMWYyZTkzMjgyN2M4ZTc0OSJ9fX0="
       slot: 36
-      rankPath: member.seeTeamMembers
+      rank: 3
       lore:
         - "§aVoir les membres de la team"
     upgradeTotalMembers:
       itemName: "§5§nAugmenter les places disponibles"
-      itemType: PLAYER_HEAD
-      headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTZmYWI5OTFkMDgzOTkzY2I4M2U0YmNmNDRhMGI2Y2VmYWM2NDdkNDE4OWVlOWNiODIzZTljYzE1NzFlMzgifX19"
       slot: 9
-      rankPath: manage.upgradeTotalMembers
+      rank: 1
       lore:
         - "§aAugmenter le nombre de places"
         - "§adisponible dans la team"
-    editMembers:
+    manageMembers:
       itemName: "§5§nGestion des membres"
-      itemType: PLAYER_HEAD
-      headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDJhNmYwZTg0ZGFlZmM4YjIxYWE5OTQxNWIxNmVkNWZkYWE2ZDhkYzBjM2NkNTkxZjQ5Y2E4MzJiNTc1In19fQ=="
       slot: 0
-      rankPath: manage.editMembers
+      rank: 1
       lore:
         - "§aGérer les membres de la team"
     editName:
       itemName: "§5§nModifier le nom"
-      itemType: PAPER
-      headTexture: ""
       slot: 17
-      rankPath: manage.editName
+      rank: 0
       lore:
         - "§aModifier le nom de la team"
     editPrefix:
       itemName: "§5§nModifier le préfixe"
-      itemType: NAME_TAG
-      headTexture: ""
       slot: 26
-      rankPath: manage.editPrefix
+      rank: 0
       lore:
         - "§aModifier le préfixe de la team"
+    editDescription:
+      itemName: "§5§nModifier la description"
+      slot: 35
+      rank: 0
+      lore:
+        - "§aModifier la description de la team"
     setTeamHome:
       itemName: "§5§nCréer le home"
-      itemType: PLAYER_HEAD
-      headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDJhNmYwZTg0ZGFlZmM4YjIxYWE5OTQxNWIxNmVkNWZkYWE2ZDhkYzBjM2NkNTkxZjQ5Y2E4MzJiNTc1In19fQ=="
       slot: 31
-      rankPath: manage.setTeamHome
+      rank: 1
       lore:
         - "§aDéfinir le home de la team"
     removeTeamHome:
       itemName: "§5§nSupprimer le home"
-      itemType: PLAYER_HEAD
-      headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTZmYWI5OTFkMDgzOTkzY2I4M2U0YmNmNDRhMGI2Y2VmYWM2NDdkNDE4OWVlOWNiODIzZTljYzE1NzFlMzgifX19"
       slot: 40
-      rankPath: manage.removeTeamHome
+      rank: 1
       lore:
         - "§aRetirer le home de la team"
     editPermissions:
       itemName: "§5§nModifier les permissions"
-      itemType: REDSTONE
-      headTexture: ""
       slot: 8
-      rankPath: manage.editPermissions
+      rank: 0
       lore:
         - "§aModifier les permissions de la team"
     storageDirectory:
       itemName: "§5§nAccès aux stockages"
-      itemType: PLAYER_HEAD
-      headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTZmYWI5OTFkMDgzOTkzY2I4M2U0YmNmNDRhMGI2Y2VmYWM2NDdkNDE4OWVlOWNiODIzZTljYzE1NzFlMzgifX19"
       slot: 13
-      rankPath: member.storageDirectory
+      rank: 2
       lore:
         - "§aPermet d'avoir accès aux"
         - "§astockages de la team"
     upgradeStorageAmount:
       itemName: "§5§nAugmenter les stockages disponibles"
-      itemType: PLAYER_HEAD
-      headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZDJhNmYwZTg0ZGFlZmM4YjIxYWE5OTQxNWIxNmVkNWZkYWE2ZDhkYzBjM2NkNTkxZjQ5Y2E4MzJiNTc1In19fQ=="
       slot: 4
-      rankPath: manage.upgradeStorageAmount
+      rank: 1
       lore:
         - "§aAugmenter le nombre de stockages"
         - "§adisponible dans la team"
     addAlliance:
       itemName: "§5§nAjouter une alliance"
-      itemType: PRISMARINE_SHARD
-      headTexture: ""
       slot: 6
-      rankPath: editAlliances.addAlliance
+      rank: 1
       lore:
         - "§aAjouter une alliance à la team"
     removeAlliance:
       itemName: "§5§nRetirer une alliance"
-      itemType: PRISMARINE_CRYSTALS
-      headTexture: ""
       slot: 15
-      rankPath: editAlliances.removeAlliance
+      rank: 1
       lore:
         - "§aRetirer une alliance de la team"
     seeTeamAlliances:
       itemName: "§5§nVoir les alliances"
-      itemType: ENDER_EYE
-      headTexture: ""
       slot: 24
-      rankPath: member.seeTeamAlliances
+      rank: 3
       lore:
         - "§aVoir les alliances de la team"
+    removeTeam:
+      itemName: "§5§nSupprimer la team"
+      slot: -1
+      rank: 0
+    editOwner:
+      itemName: "§5§nChanger de créateur"
+      slot: -1
+      rank: 0
+    teamInfos:
+      itemName: "§5§nVoir les infos"
+      slot: -1
+      rank: -1
+    leaveTeam:
+      itemName: "§5§nQuitter la team"
+      slot: -1
+      rank: -1
     close:
       itemName: "§c§oRetour"
       itemType: ARROW

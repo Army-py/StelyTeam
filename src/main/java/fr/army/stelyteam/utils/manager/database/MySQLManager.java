@@ -876,7 +876,7 @@ public class MySQLManager extends DatabaseManager {
     public ArrayList<Member> getTeamMembers(String teamName){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("SELECT p.playerName, p.teamRank, p.joinDate FROM player AS p INNER JOIN team AS t ON p.teamId = t.teamId WHERE t.teamName = ?;");
+                PreparedStatement query = connection.prepareStatement("SELECT p.playerName, p.teamRank, p.joinDate FROM player AS p INNER JOIN team AS t ON p.teamId = t.teamId WHERE t.teamName = ? ORDER BY p.teamRank ASC, p.playerName ASC;");
                 query.setString(1, teamName);
                 ResultSet result = query.executeQuery();
                 ArrayList<Member> teamMembers = new ArrayList<>();

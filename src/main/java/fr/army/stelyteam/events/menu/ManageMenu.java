@@ -55,7 +55,14 @@ public class ManageMenu extends TeamMenu {
             
             ItemStack item;
             
-            if (plugin.playerHasPermission(playerName, team, str)){ 
+            
+            if (str.equals("editAlliances") 
+                    && plugin.playerHasPermissionInSection(playerName, team, "editAlliances")) {
+                item = ItemBuilder.getItem(material, name, lore, headTexture, false);
+            }else if (str.equals("editMembers") 
+                    && plugin.playerHasPermissionInSection(playerName, team, "editMembers")) {
+                item = ItemBuilder.getItem(material, name, lore, headTexture, false);
+            }else if (plugin.playerHasPermission(playerName, team, str)){ 
                 if (str.equals("buyTeamBank")){
                     item = ItemBuilder.getItem(material, name, lore, headTexture, team.isUnlockedTeamBank());
                 }else {

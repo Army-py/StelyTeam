@@ -65,7 +65,8 @@ public class EditAlliancesMenu extends TeamMenu {
             Integer teamMembers = teamAlliance.getTeamMembers().size();
             ArrayList<String> allianceMembers = teamAlliance.getMembersName();
             UUID playerUUID = sqliteManager.getUUID(allianceOwnerName);
-            String itemName = colorsBuilder.replaceColor(alliancePrefix);
+            // String itemName = colorsBuilder.replaceColor(alliancePrefix);
+            String itemName = " ";
             List<String> lore = config.getStringList("teamAllianceLore");
             OfflinePlayer allianceOwner;
             ItemStack item;

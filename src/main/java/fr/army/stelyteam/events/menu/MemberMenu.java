@@ -133,7 +133,10 @@ public class MemberMenu extends TeamMenu {
 
         // Fermeture ou retour en arrière de l'inventaire        
         if (Buttons.CLOSE_MEMBER_MENU_BUTTON.isClickedButton(clickEvent)){
-            if (team.isTeamOwner(playerName) || team.getMemberRank(playerName) <= 3){
+            if (team.isTeamOwner(playerName) 
+                    || plugin.playerHasPermissionInSection(playerName, team, "manage")
+                    || plugin.playerHasPermissionInSection(playerName, team, "editMembers")
+                    || plugin.playerHasPermissionInSection(playerName, team, "editAlliances")){
                 new AdminMenu(player).openMenu();
             }else{
                 player.closeInventory();

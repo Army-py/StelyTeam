@@ -60,7 +60,8 @@ public class TeamListMenu extends TeamMenu {
             String teamOwnerName = team.getTeamOwnerName();
             String teamPrefix = team.getTeamPrefix();
             UUID playerUUID = sqliteManager.getUUID(teamOwnerName);
-            String itemName = colorsBuilder.replaceColor(teamPrefix);
+            // String itemName = colorsBuilder.replaceColor(teamPrefix);
+            String itemName = " ";
             List<String> lore = config.getStringList("teamListLore");
             OfflinePlayer teamOwner;
             ItemStack item;
