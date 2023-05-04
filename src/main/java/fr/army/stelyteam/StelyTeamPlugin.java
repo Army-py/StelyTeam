@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.sql.SQLException;
 import java.util.Objects;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -19,6 +20,7 @@ import fr.army.stelyteam.events.menu.AdminMenu;
 import fr.army.stelyteam.events.menu.CreateTeamMenu;
 import fr.army.stelyteam.events.menu.MemberMenu;
 import fr.army.stelyteam.utils.Team;
+import fr.army.stelyteam.utils.TeamMenu;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
 import fr.army.stelyteam.utils.builder.conversation.ConversationBuilder;
 import fr.army.stelyteam.utils.manager.CacheManager;
@@ -82,7 +84,9 @@ public class StelyTeamPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        closeAllPlayerInventories();
         this.databaseManager.disconnect();
+        this.sqliteManager.disconnect();
         getLogger().info("StelyTeam OFF");
     }
 
@@ -101,6 +105,15 @@ public class StelyTeamPlugin extends JavaPlugin {
             }
         }
         return YamlConfiguration.loadConfiguration(file);
+    }
+
+
+    private void closeAllPlayerInventories(){
+        for (Player player : Bukkit.getOnlinePlayers()){
+            if (player.getOpenInventory().getTopInventory().getHolder() instanceof TeamMenu){
+                player.closeInventory();
+            }
+        }
     }
 
 
