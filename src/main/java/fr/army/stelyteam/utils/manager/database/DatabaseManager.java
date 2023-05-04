@@ -55,7 +55,7 @@ public abstract class DatabaseManager {
 
     public abstract boolean teamNameExists(String teamName);
 
-    public abstract void insertTeam(String teamName, String teamPrefix, String ownerName);
+    public abstract void insertTeam(Team team);
 
     public abstract void insertMember(String playerName, String teamName);
 

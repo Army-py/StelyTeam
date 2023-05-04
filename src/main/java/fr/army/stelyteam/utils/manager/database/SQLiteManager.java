@@ -146,32 +146,33 @@ public class SQLiteManager extends DatabaseManager {
     }
 
     @Override
-    public void insertTeam(String teamName, String teamPrefix, String ownerName){
+    public void insertTeam(Team team){
         if(isConnected()){
             try {
                 PreparedStatement queryMember = connection.prepareStatement("INSERT INTO player (playerName, teamRank, joinDate) VALUES (?, ?, ?)");
-                queryMember.setString(1, ownerName);
+                queryMember.setString(1, team.getTeamOwnerName());
                 queryMember.setInt(2, 0);
                 queryMember.setString(3, getCurrentDate());
                 queryMember.executeUpdate();
                 queryMember.close();
                 
-                PreparedStatement queryTeam = connection.prepareStatement("INSERT INTO team (teamName, teamPrefix, teamDescription, teamMoney, creationDate, improvLvlMembers, teamStorageLvl, unlockedTeamBank, teamOwnerPlayerId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-                queryTeam.setString(1, teamName);
-                queryTeam.setString(2, teamPrefix);
-                queryTeam.setString(3, config.getString("teamDefaultDescription"));
-                queryTeam.setInt(4, 0);
-                queryTeam.setString(5, getCurrentDate());
-                queryTeam.setInt(6, 0);
+                PreparedStatement queryTeam = connection.prepareStatement("INSERT INTO team (teamUuid, teamName, teamPrefix, teamDescription, teamMoney, creationDate, improvLvlMembers, teamStorageLvl, unlockedTeamBank, teamOwnerPlayerId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                queryTeam.setString(1, team.getTeamUuid().toString());
+                queryTeam.setString(2, team.getTeamName());
+                queryTeam.setString(3, team.getTeamPrefix());
+                queryTeam.setString(4, config.getString("teamDefaultDescription"));
+                queryTeam.setInt(5, 0);
+                queryTeam.setString(6, getCurrentDate());
                 queryTeam.setInt(7, 0);
                 queryTeam.setInt(8, 0);
-                queryTeam.setInt(9, getPlayerId(ownerName));
+                queryTeam.setInt(9, 0);
+                queryTeam.setInt(10, getPlayerId(team.getTeamOwnerName()));
                 queryTeam.executeUpdate();
                 queryTeam.close();
 
                 PreparedStatement queryUpdateMember = connection.prepareStatement("UPDATE player SET teamId = (SELECT teamId FROM team WHERE teamName = ?) WHERE playerName = ?");
-                queryUpdateMember.setString(1, teamName);
-                queryUpdateMember.setString(2, ownerName);
+                queryUpdateMember.setString(1, team.getTeamName());
+                queryUpdateMember.setString(2, team.getTeamOwnerName());
                 queryUpdateMember.executeUpdate();
                 queryUpdateMember.close();
             } catch (SQLException e) {
