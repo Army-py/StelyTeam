@@ -112,6 +112,7 @@ broadcasts:
   player_exclude_member: "§e%AUTHOR% §aa exclu §e%RECEIVER% §ade la team."
   player_add_new_alliance: "§e%AUTHOR% §aa ajouté §e%TEAM% §aà l'alliance de la team."
   player_remove_alliance: "§e%AUTHOR% §aa supprimé §e%TEAM% §ade l'alliance de la team."
+  player_leave_team: "§e%AUTHOR% §aa quitté la team."
   team_bank_unlocked: "§e%AUTHOR% a débloqué la banque de la team."
   team_deleted: "§aLa team §e%TEAM_ID% §aa été supprimée."
   new_member_amount_upgrade: "§aUne nouvelle place dans la team §e%TEAM_ID% §aa été débloquée."

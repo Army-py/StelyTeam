@@ -18,6 +18,7 @@ import fr.army.stelyteam.utils.Menus;
 import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.TeamMenu;
 import fr.army.stelyteam.utils.TemporaryAction;
+import fr.army.stelyteam.utils.TemporaryActionNames;
 import fr.army.stelyteam.utils.builder.ItemBuilder;
 import fr.army.stelyteam.utils.builder.conversation.ConversationBuilder;
 import fr.army.stelyteam.utils.manager.CacheManager;
@@ -78,11 +79,12 @@ public class ConfirmMenu extends TeamMenu {
         String teamName;
 
         if (Buttons.CONFIRM_BUTTON.isClickedButton(clickEvent)){
+            TemporaryActionNames actionName = cacheManager.getPlayerActionName(playerName);
             String receiverName;
             Player receiver;
             Integer level;
             Integer newLevel;
-            switch (cacheManager.getPlayerActionName(playerName)) {
+            switch (actionName) {
                 case REMOVE_MEMBER:
                     receiverName = tempAction.getTargetName();
                     receiver = Bukkit.getPlayer(receiverName);
@@ -100,7 +102,7 @@ public class ConfirmMenu extends TeamMenu {
                     
                     team.removeAlliance(allianceName);
                     team.refreshTeamMembersInventory(playerName);
-                    team.teamBroadcast(playerName, messageManager.replaceAuthorAndReceiver("broadcasts.player_remove_alliance", playerName, allianceName));
+                    team.teamBroadcast(playerName, messageManager.replaceAuthorAndTeamName("broadcasts.player_remove_alliance", playerName, allianceName));
                     alliance.refreshTeamMembersInventory(playerName);
                     alliance.teamBroadcast(playerName, messageManager.getReplaceMessage("receiver.remove_alliance", teamName));
                     player.closeInventory();
@@ -199,13 +201,14 @@ public class ConfirmMenu extends TeamMenu {
                 case LEAVE_TEAM:
                     team.removeMember(playerName);
                     player.closeInventory();
-                    player.sendMessage(messageManager.getReplaceMessage("other.leave_team", team.getTeamName()));
                     team.refreshTeamMembersInventory(playerName);
+                    team.teamBroadcast(playerName, messageManager.replaceAuthor("broadcasts.player_leave_team", playerName));
+                    player.sendMessage(messageManager.getReplaceMessage("other.leave_team", team.getTeamName()));
                     break;
                 default:
                     break;
             }
-            cacheManager.removePlayerAction(playerName);
+            cacheManager.removePlayerActionName(playerName, actionName);
         }
 
         else if (Buttons.CANCEL_BUTTON.isClickedButton(clickEvent)){

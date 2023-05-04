@@ -86,7 +86,7 @@ public class EditAlliancesMenu extends TeamMenu {
             lore = replaceInLore(lore, "%DESCRIPTION%", colorsBuilder.replaceColor(allianceDescription));
             
             
-            if (plugin.playerHasPermission(playerName, team, "seeAllliances")){ 
+            if (plugin.playerHasPermission(playerName, team, "seeTeamAlliances")){ 
                 item = ItemBuilder.getPlayerHead(allianceOwner, itemName, lore);
             }else{
                 item = ItemBuilder.getItem(
