@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.events.menu.AdminMenu;
+import fr.army.stelyteam.events.menu.EditAlliancesMenu;
 import fr.army.stelyteam.events.menu.EditMembersMenu;
 import fr.army.stelyteam.events.menu.ManageMenu;
 import fr.army.stelyteam.events.menu.MemberMenu;
@@ -257,6 +258,8 @@ public class Team {
                     new PermissionsMenu(player).openMenu(this);
                 }else if (openInventoryTitle.equals(config.getString("inventoriesName.storageDirectory"))){
                     new StorageDirectoryMenu(player).openMenu(this);
+                }else if (openInventoryTitle.equals(config.getString("inventoriesName.editAlliances"))){
+                    new EditAlliancesMenu(player).openMenu(this);
                 }
             }
         }

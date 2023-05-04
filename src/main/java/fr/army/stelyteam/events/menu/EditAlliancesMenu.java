@@ -86,17 +86,18 @@ public class EditAlliancesMenu extends TeamMenu {
             lore = replaceInLore(lore, "%DESCRIPTION%", colorsBuilder.replaceColor(allianceDescription));
             
             
-            if (plugin.playerHasPermission(playerName, team, "seeTeamAlliances")){ 
-                item = ItemBuilder.getPlayerHead(allianceOwner, itemName, lore);
-            }else{
-                item = ItemBuilder.getItem(
-                    Material.getMaterial(config.getString("noPermission.itemType")), 
-                    itemName, 
-                    config.getStringList("noPermission.lore"), 
-                    config.getString("noPermission.headTexture"),
-                    false
-                );
-            }
+            item = ItemBuilder.getPlayerHead(allianceOwner, itemName, lore);
+            // if (plugin.playerHasPermission(playerName, team, "seeTeamAlliances")){ 
+            //     item = ItemBuilder.getPlayerHead(allianceOwner, itemName, lore);
+            // }else{
+            //     item = ItemBuilder.getItem(
+            //         Material.getMaterial(config.getString("noPermission.itemType")), 
+            //         itemName, 
+            //         config.getStringList("noPermission.lore"), 
+            //         config.getString("noPermission.headTexture"),
+            //         false
+            //     );
+            // }
 
             inventory.setItem(headSlot, item);
             headSlot ++;
