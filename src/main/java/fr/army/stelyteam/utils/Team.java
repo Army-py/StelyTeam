@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Map;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -25,6 +26,7 @@ public class Team {
     private StelyTeamPlugin plugin = StelyTeamPlugin.getPlugin();
     private YamlConfiguration config = plugin.getConfig();
 
+    private final UUID teamUuid;
     private String teamName;
     private String teamPrefix = null;
     private String teamDescription = config.getString("team.defaultDescription");
@@ -39,7 +41,8 @@ public class Team {
     private ArrayList<Alliance> teamAlliances;
     private Map<Integer, Storage> teamStorages;
 
-    public Team(String teamName, String teamPrefix, String teamDescription, double teamMoney, String creationDate, int improvLvlMembers, int teamStorageLvl, boolean unlockedTeamBank, String teamOwnerName){
+    public Team(UUID teamUuid, String teamName, String teamPrefix, String teamDescription, double teamMoney, String creationDate, int improvLvlMembers, int teamStorageLvl, boolean unlockedTeamBank, String teamOwnerName){
+        this.teamUuid = teamUuid;
         this.teamName = teamName;
         this.teamPrefix = teamPrefix;
         this.teamDescription = teamDescription;
@@ -56,13 +59,15 @@ public class Team {
         this.teamStorages = this.plugin.getDatabaseManager().getTeamStorages(this);
     }
 
-    public Team(String teamName, String teamPrefix, String creationDate, String teamOwnerName){
+    public Team(UUID teamUuid, String teamName, String teamPrefix, String creationDate, String teamOwnerName){
+        this.teamUuid = teamUuid;
         this.teamName = teamName;
         this.teamPrefix = teamPrefix;
         this.teamOwnerName = teamOwnerName;
     }
 
     public Team(String teamName, String teamOwnerName){
+        this.teamUuid = UUID.randomUUID();
         this.teamName = teamName;
         this.teamOwnerName = teamOwnerName;
     }
@@ -78,6 +83,10 @@ public class Team {
 
     public static Team init(Player player){
         return StelyTeamPlugin.getPlugin().getDatabaseManager().getTeamFromPlayerName(player.getName());
+    }
+
+    public static Team init(UUID teamUuid){
+        return StelyTeamPlugin.getPlugin().getDatabaseManager().getTeamFromTeamUuid(teamUuid);
     }
 
 
@@ -344,6 +353,10 @@ public class Team {
         return this.teamStorages.get(storageId);
     }
 
+
+    public UUID getTeamUuid() {
+        return teamUuid;
+    }
 
     public String getTeamName() {
         return teamName;

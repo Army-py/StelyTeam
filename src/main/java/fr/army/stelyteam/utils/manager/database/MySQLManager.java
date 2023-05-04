@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -75,7 +76,7 @@ public class MySQLManager extends DatabaseManager {
         if (isConnected()){
             try {
                 PreparedStatement queryCreatePlayers = connection.prepareStatement("CREATE TABLE IF NOT EXISTS player (playerId INTEGER AUTO_INCREMENT, playerName VARCHAR(255), teamRank INTEGER, joinDate VARCHAR(255), teamId INTEGER, PRIMARY KEY (playerId));");
-                PreparedStatement queryCreateTeams = connection.prepareStatement("CREATE TABLE IF NOT EXISTS team (teamId INTEGER AUTO_INCREMENT, teamName VARCHAR(255) UNIQUE, teamPrefix VARCHAR(255), teamDescription VARCHAR(255), teamMoney INTEGER, creationDate VARCHAR(255), improvLvlMembers INTEGER, teamStorageLvl INTEGER, unlockedTeamBank INTEGER, teamOwnerPlayerId INTEGER UNIQUE, PRIMARY KEY(teamId));");
+                PreparedStatement queryCreateTeams = connection.prepareStatement("CREATE TABLE IF NOT EXISTS team (teamId INTEGER AUTO_INCREMENT, teamUuid VARCHAR(255) UNIQUE, teamName VARCHAR(255) UNIQUE, teamPrefix VARCHAR(255), teamDescription VARCHAR(255), teamMoney INTEGER, creationDate VARCHAR(255), improvLvlMembers INTEGER, teamStorageLvl INTEGER, unlockedTeamBank INTEGER, teamOwnerPlayerId INTEGER UNIQUE, PRIMARY KEY(teamId));");
                 PreparedStatement queryCreateTeamStorages = connection.prepareStatement("CREATE TABLE IF NOT EXISTS teamStorage (storageId INTEGER, teamId INTEGER, storageContent BLOB, PRIMARY KEY (storageId,teamId));");
                 PreparedStatement queryCreateAlliances = connection.prepareStatement("CREATE TABLE IF NOT EXISTS alliance (teamId INTEGER, teamAllianceId INTEGER, allianceDate VARCHAR(255), PRIMARY KEY(teamId,teamAllianceId));");
                 PreparedStatement queryCreateAssignements = connection.prepareStatement("CREATE TABLE IF NOT EXISTS assignement (teamId INTEGER, permLabel VARCHAR(255), teamRank INTEGER, PRIMARY KEY (permLabel,teamId));");
@@ -103,7 +104,7 @@ public class MySQLManager extends DatabaseManager {
                 PreparedStatement queryAlterAlliances = connection.prepareStatement("ALTER TABLE alliance ADD FOREIGN KEY (teamId) REFERENCES team(teamId);");
                 PreparedStatement queryAlterAlliances2 = connection.prepareStatement("ALTER TABLE alliance ADD FOREIGN KEY (teamAllianceId) REFERENCES team(teamId);");
                 PreparedStatement queryAlterAssignements = connection.prepareStatement("ALTER TABLE assignement ADD FOREIGN KEY (teamId) REFERENCES team(teamId);");
-
+                
                 queryAlterPlayers.executeUpdate();
                 queryAlterTeams.executeUpdate();
                 queryAlterTeamStorages.executeUpdate();
@@ -119,6 +120,14 @@ public class MySQLManager extends DatabaseManager {
                 queryAlterAlliances.close();
                 queryAlterAlliances2.close();
                 queryAlterAssignements.close();
+
+                PreparedStatement queryIfColumnExists = connection.prepareStatement("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'team' AND COLUMN_NAME = 'teamUuid'");
+                ResultSet result = queryIfColumnExists.executeQuery();
+                if(!result.next()){
+                    PreparedStatement queryAlterTeams2 = connection.prepareStatement("ALTER TABLE team ADD teamUuid VARCHAR(255) UNIQUE AFTER teamId");
+                    queryAlterTeams2.executeUpdate();
+                    queryAlterTeams2.close();
+                }
             } catch (Exception e){
                 e.printStackTrace();
             }
@@ -791,11 +800,12 @@ public class MySQLManager extends DatabaseManager {
     public Team getTeamFromPlayerName(String playerName){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("SELECT t.teamName, t.teamPrefix, t.teamDescription, t.teamMoney, t.creationDate, t.improvLvlMembers, t.teamStorageLvl, t.unlockedTeamBank, o.playerName AS 'ownerName' FROM team AS t INNER JOIN player p ON t.teamId = p.teamId INNER JOIN player o ON t.teamOwnerPlayerId = o.playerId WHERE p.playerName = ?");
+                PreparedStatement query = connection.prepareStatement("SELECT t.teamUuid, t.teamName, t.teamPrefix, t.teamDescription, t.teamMoney, t.creationDate, t.improvLvlMembers, t.teamStorageLvl, t.unlockedTeamBank, o.playerName AS 'ownerName' FROM team AS t INNER JOIN player p ON t.teamId = p.teamId INNER JOIN player o ON t.teamOwnerPlayerId = o.playerId WHERE p.playerName = ?");
                 query.setString(1, playerName);
                 ResultSet result = query.executeQuery();
                 if(result.next()){
                     return new Team(
+                        UUID.fromString(result.getString("teamUuid")),
                         result.getString("teamName"),
                         result.getString("teamPrefix"),
                         result.getString("teamDescription"),
@@ -819,11 +829,12 @@ public class MySQLManager extends DatabaseManager {
     public Team getTeamFromTeamName(String teamName){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("SELECT t.teamName, t.teamPrefix, t.teamDescription, t.teamMoney, t.creationDate, t.improvLvlMembers, t.teamStorageLvl, t.unlockedTeamBank, o.playerName AS 'ownerName' FROM team AS t INNER JOIN player o ON t.teamOwnerPlayerId = o.playerId WHERE t.teamName = ?");
+                PreparedStatement query = connection.prepareStatement("SELECT t.teamUuid, t.teamName, t.teamPrefix, t.teamDescription, t.teamMoney, t.creationDate, t.improvLvlMembers, t.teamStorageLvl, t.unlockedTeamBank, o.playerName AS 'ownerName' FROM team AS t INNER JOIN player o ON t.teamOwnerPlayerId = o.playerId WHERE t.teamName = ?");
                 query.setString(1, teamName);
                 ResultSet result = query.executeQuery();
                 if(result.next()){
                     return new Team(
+                        UUID.fromString(result.getString("teamUuid")),
                         result.getString("teamName"),
                         result.getString("teamPrefix"),
                         result.getString("teamDescription"),
@@ -852,6 +863,7 @@ public class MySQLManager extends DatabaseManager {
                 ArrayList<Team> teams = new ArrayList<>();
                 while(result.next()){
                     teams.add(new Team(
+                        UUID.fromString(result.getString("teamUuid")),
                         result.getString("teamName"),
                         result.getString("teamPrefix"),
                         result.getString("teamDescription"),
@@ -1030,6 +1042,36 @@ public class MySQLManager extends DatabaseManager {
         return 0;
     }
 
+    @Override
+    public Team getTeamFromTeamUuid(UUID teamUuid) {
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT t.teamUuid, t.teamName, t.teamPrefix, t.teamDescription, t.teamMoney, t.creationDate, t.improvLvlMembers, t.teamStorageLvl, t.unlockedTeamBank, o.playerName AS 'ownerName' FROM team AS t INNER JOIN player o ON t.teamOwnerPlayerId = o.playerId WHERE t.teamUuid = ?");
+                query.setString(1, teamUuid.toString());
+                ResultSet result = query.executeQuery();
+                if(result.next()){
+                    return new Team(
+                        UUID.fromString(result.getString("teamUuid")),
+                        result.getString("teamName"),
+                        result.getString("teamPrefix"),
+                        result.getString("teamDescription"),
+                        result.getInt("teamMoney"),
+                        result.getString("creationDate"),
+                        result.getInt("improvLvlMembers"),
+                        result.getInt("teamStorageLvl"),
+                        (1 == result.getInt("unlockedTeamBank")),
+                        result.getString("ownerName")
+                    );
+                }
+                query.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    
     @Override
     public String getCurrentDate(){
         return new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime());

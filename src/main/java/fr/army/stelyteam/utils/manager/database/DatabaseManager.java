@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.UUID;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -121,6 +122,8 @@ public abstract class DatabaseManager {
     public abstract boolean isAlliance(String teamName, String allianceName);
 
     public abstract ArrayList<String> getMembers();
+
+    public abstract Team getTeamFromTeamUuid(UUID teamUuid);
 
     public abstract Team getTeamFromPlayerName(String playerName);
 
