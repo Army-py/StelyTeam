@@ -7,6 +7,9 @@ depend:
   - "Vault"
 softdepend:
   - "Jobs"
+  - "StelyClaim"
+  - "WorldEdit"
+  - "WorldGuard"
 commands:
   stelyteam:
     description: "Ouvre l'inventaire de team"

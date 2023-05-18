@@ -74,7 +74,7 @@ public class Team {
 
 
     public void createTeam(){
-        this.plugin.getDatabaseManager().insertTeam(teamName, teamPrefix, teamOwnerName);
+        this.plugin.getDatabaseManager().insertTeam(this);
     }
 
     public static Team init(String teamName){

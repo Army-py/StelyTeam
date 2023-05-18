@@ -9,16 +9,16 @@ import java.util.Objects;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import fr.army.stelyteam.commands.CommandManager;
+import fr.army.stelyteam.command.CommandManager;
 import fr.army.stelyteam.events.InventoryClickManager;
 import fr.army.stelyteam.events.InventoryCloseManager;
 import fr.army.stelyteam.events.PlayerQuit;
 import fr.army.stelyteam.events.menu.AdminMenu;
 import fr.army.stelyteam.events.menu.CreateTeamMenu;
 import fr.army.stelyteam.events.menu.MemberMenu;
+import fr.army.stelyteam.external.ExternalManager;
 import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.TeamMenu;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
@@ -44,6 +44,7 @@ public class StelyTeamPlugin extends JavaPlugin {
     private ConversationBuilder conversationBuilder;
     private ItemStackSerializer serializeManager;
     private DatabaseManager databaseManager;
+    private ExternalManager externalManager;
 
 
     @Override
@@ -78,6 +79,9 @@ public class StelyTeamPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new InventoryCloseManager(this), this);
         getServer().getPluginManager().registerEvents(new PlayerQuit(this), this);
 
+        this.externalManager = new ExternalManager();
+        this.externalManager.load();
+
         getLogger().info("StelyTeam ON");
     }
 
@@ -85,6 +89,9 @@ public class StelyTeamPlugin extends JavaPlugin {
     @Override
     public void onDisable() {
         closeAllPlayerInventories();
+
+        this.externalManager.unload();
+
         this.databaseManager.disconnect();
         this.sqliteManager.disconnect();
         getLogger().info("StelyTeam OFF");
@@ -245,11 +252,3 @@ public class StelyTeamPlugin extends JavaPlugin {
         return serializeManager;
     }
 }
-
-
-
-/*
- * 
- * Problème à regler :
- *  - si il y a un changement de nom de team alors qu'un stockage est dans le cache
- */
