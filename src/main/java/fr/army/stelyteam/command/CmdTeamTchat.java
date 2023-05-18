@@ -18,14 +18,12 @@ import fr.army.stelyteam.external.ExternalManager;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
 
 public class CmdTeamTchat implements CommandExecutor, TabCompleter {
     
     private StelyTeamPlugin plugin;
     private CacheManager cacheManager;
-    private DatabaseManager sqlManager;
     private SQLiteDataManager sqliteManager;
     private MessageManager messageManager;
     private ExternalManager externalManager;
@@ -35,7 +33,6 @@ public class CmdTeamTchat implements CommandExecutor, TabCompleter {
     public CmdTeamTchat(StelyTeamPlugin plugin) {
         this.plugin = plugin;
         this.cacheManager = plugin.getCacheManager();
-        this.sqlManager = plugin.getDatabaseManager();
         this.sqliteManager = plugin.getSQLiteManager();
         this.messageManager = plugin.getMessageManager();
         this.externalManager = plugin.getExternalManager();

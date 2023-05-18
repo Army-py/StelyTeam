@@ -1,7 +1,5 @@
 package fr.army.stelyteam.listener;
 
-import java.util.UUID;
-
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;

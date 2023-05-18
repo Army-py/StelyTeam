@@ -39,7 +39,6 @@ public class ConvAddAlliance extends StringPrompt {
         Player author = (Player) con.getForWhom();
         String authorName = author.getName();
         Team team = Team.initFromPlayerName(authorName);
-        UUID teamUuid = team.getTeamUuid();
         
         Team teamAnswer = Team.init(answer);
         if (teamAnswer == null) {

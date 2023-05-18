@@ -9,16 +9,13 @@ import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.command.SubCommand;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 public class SubCmdDelete extends SubCommand {
-    private DatabaseManager sqlManager;
     private MessageManager messageManager;
 
 
     public SubCmdDelete(StelyTeamPlugin plugin) {
         super(plugin);
-        this.sqlManager = plugin.getDatabaseManager();
         this.messageManager = plugin.getMessageManager();
     }
 

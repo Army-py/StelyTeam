@@ -13,18 +13,15 @@ import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.TemporaryActionNames;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 public class SubCmdAccept extends SubCommand {
 
     private CacheManager cacheManager;
-    private DatabaseManager sqlManager;
     private MessageManager messageManager;
 
     public SubCmdAccept(StelyTeamPlugin plugin) {
         super(plugin);
         this.cacheManager = plugin.getCacheManager();
-        this.sqlManager = plugin.getDatabaseManager();
         this.messageManager = plugin.getMessageManager();
     }
 

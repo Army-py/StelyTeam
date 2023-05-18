@@ -9,16 +9,13 @@ import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.command.SubCommand;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 public class SubCmdDowngrade extends SubCommand {
-    private DatabaseManager sqlManager;
     private MessageManager messageManager;
 
 
     public SubCmdDowngrade(StelyTeamPlugin plugin) {
         super(plugin);
-        this.sqlManager = plugin.getDatabaseManager();
         this.messageManager = plugin.getMessageManager();
     }
 

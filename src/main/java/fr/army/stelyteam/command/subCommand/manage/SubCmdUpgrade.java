@@ -10,17 +10,14 @@ import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.command.SubCommand;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 public class SubCmdUpgrade extends SubCommand {
 
-    private DatabaseManager sqlManager;
     private YamlConfiguration config;
     private MessageManager messageManager;
 
     public SubCmdUpgrade(StelyTeamPlugin plugin) {
         super(plugin);
-        this.sqlManager = plugin.getDatabaseManager();
         this.config = plugin.getConfig();
         this.messageManager = plugin.getMessageManager();
     }
