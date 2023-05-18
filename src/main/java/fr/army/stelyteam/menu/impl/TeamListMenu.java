@@ -1,7 +1,9 @@
 package fr.army.stelyteam.menu.impl;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -40,7 +42,7 @@ public class TeamListMenu extends TeamMenu {
 
 
     public Inventory createInventory(String playerName) {
-        ArrayList<Team> teams = plugin.getDatabaseManager().getTeams();
+        Collection<Team> teams = plugin.getDatabaseManager().getTeams();
         List<Integer> headSlots = config.getIntegerList("inventories.teamList.teamOwnerHead.slots");
         Inventory inventory = Bukkit.createInventory(this, this.menuSlots, this.menuName);
         Integer maxMembers = config.getInt("teamMaxMembers");

@@ -3,7 +3,11 @@ package fr.army.stelyteam.team;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -36,9 +40,9 @@ public class Team {
     private Integer teamStorageLvl = 0;
     private Boolean unlockedTeamBank = false;
     private String teamOwnerName;
-    private ArrayList<Member> teamMembers;
-    private ArrayList<Permission> teamPermissions;
-    private ArrayList<Alliance> teamAlliances;
+    private Set<Member> teamMembers;
+    private Set<Permission> teamPermissions;
+    private Set<Alliance> teamAlliances;
     private Map<Integer, Storage> teamStorages;
 
     public Team(UUID teamUuid, String teamName, String teamPrefix, String teamDescription, double teamMoney, String creationDate, int improvLvlMembers, int teamStorageLvl, boolean unlockedTeamBank, String teamOwnerName){
@@ -93,6 +97,14 @@ public class Team {
     public boolean isTeamMember(String playerName){
         for (Member member : this.teamMembers) {
             if (member.getMemberName().equals(playerName)) return true;
+        }
+        return false;
+    }
+
+
+    public boolean isTeamMember(UUID playerUuid){
+        for (Member member : this.teamMembers) {
+            if (member.getUuid().equals(playerUuid)) return true;
         }
         return false;
     }
@@ -343,7 +355,7 @@ public class Team {
         return null;
     }
 
-    
+
     public boolean hasStorage(int storageId){
         return this.teamStorages.containsKey(storageId);
     }
@@ -394,15 +406,15 @@ public class Team {
         return teamOwnerName;
     }
 
-    public ArrayList<Member> getTeamMembers() {
+    public Set<Member> getTeamMembers() {
         return teamMembers;
     }
 
-    public ArrayList<Permission> getTeamPermissions() {
+    public Set<Permission> getTeamPermissions() {
         return teamPermissions;
     }
 
-    public ArrayList<Alliance> getTeamAlliances() {
+    public Set<Alliance> getTeamAlliances() {
         return teamAlliances;
     }
 

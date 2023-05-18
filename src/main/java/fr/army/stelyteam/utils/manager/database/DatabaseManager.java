@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -89,11 +90,11 @@ public abstract class DatabaseManager {
 
     public abstract String getTeamNameFromPlayerName(String playerName);
 
-    public abstract Double getTeamMoney(String teamName);
+    public abstract double getTeamMoney(String teamName);
 
-    public abstract ArrayList<String> getTeamMembersWithRank(String teamName, int rank);
+    public abstract Set<String> getTeamMembersWithRank(String teamName, int rank);
 
-    public abstract ArrayList<String> getTeamsName();
+    public abstract Set<String> getTeamsName();
 
     public abstract void insertAssignement(String teamName, String permLabel, Integer teamRank);
 
@@ -121,7 +122,7 @@ public abstract class DatabaseManager {
 
     public abstract boolean isAlliance(String teamName, String allianceName);
 
-    public abstract ArrayList<String> getMembers();
+    public abstract Set<String> getMembers();
 
     public abstract Team getTeamFromTeamUuid(UUID teamUuid);
 
@@ -129,13 +130,13 @@ public abstract class DatabaseManager {
 
     public abstract Team getTeamFromTeamName(String teamName);
 
-    public abstract ArrayList<Team> getTeams();
+    public abstract Set<Team> getTeams();
 
-    public abstract ArrayList<Member> getTeamMembers(String teamName);
+    public abstract Set<Member> getTeamMembers(String teamName);
 
-    public abstract ArrayList<Permission> getTeamAssignement(String teamName);
+    public abstract Set<Permission> getTeamAssignement(String teamName);
 
-    public abstract ArrayList<Alliance> getTeamAlliances(String teamName);
+    public abstract Set<Alliance> getTeamAlliances(String teamName);
 
     public abstract Map<Integer, Storage> getTeamStorages(Team team);
 

@@ -49,6 +49,10 @@ public class Member {
         return joinDate;
     }
 
+    public UUID getUuid() {
+        return uuid;
+    }
+
     public void setMemberName(String memberName) {
         this.memberName = memberName;
     }

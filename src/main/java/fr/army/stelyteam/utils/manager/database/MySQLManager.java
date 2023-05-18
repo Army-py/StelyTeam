@@ -8,8 +8,11 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -505,7 +508,7 @@ public class MySQLManager extends DatabaseManager {
     }
 
     @Override
-    public Double getTeamMoney(String teamName){
+    public double getTeamMoney(String teamName){
         if(isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("SELECT teamMoney FROM team WHERE teamName = ?");
@@ -519,18 +522,18 @@ public class MySQLManager extends DatabaseManager {
                 e.printStackTrace();
             }
         }
-        return null;
+        return 0;
     }
 
     @Override
-    public ArrayList<String> getTeamMembersWithRank(String teamName, int rank){
+    public Set<String> getTeamMembersWithRank(String teamName, int rank){
         if(isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("SELECT p.playerName FROM player AS p INNER JOIN team AS t ON p.teamId = t.teamId WHERE t.teamName = ? AND p.teamRank <= ? ORDER BY p.teamRank ASC");
                 query.setString(1, teamName);
                 query.setInt(2, rank);
                 ResultSet result = query.executeQuery();
-                ArrayList<String> teamMembers = new ArrayList<>();
+                Set<String> teamMembers = new HashSet<>();
                 while(result.next()){
                     teamMembers.add(result.getString("playerName"));
                 }
@@ -544,12 +547,12 @@ public class MySQLManager extends DatabaseManager {
     }
 
     @Override
-    public ArrayList<String> getTeamsName(){
+    public Set<String> getTeamsName(){
         if(isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("SELECT teamName FROM team");
                 ResultSet result = query.executeQuery();
-                ArrayList<String> teamsName = new ArrayList<>();
+                Set<String> teamsName = new HashSet<>();
                 while(result.next()){
                     teamsName.add(result.getString("teamName"));
                 }
@@ -779,10 +782,10 @@ public class MySQLManager extends DatabaseManager {
     }
 
     @Override
-    public ArrayList<String> getMembers(){
+    public Set<String> getMembers(){
         if(isConnected()){
             try {
-                ArrayList<String> members = new ArrayList<>();
+                Set<String> members = new HashSet<>();
                 PreparedStatement query = connection.prepareStatement("SELECT playerName FROM player");
                 ResultSet result = query.executeQuery();
                 while(result.next()){
@@ -856,12 +859,12 @@ public class MySQLManager extends DatabaseManager {
     }
 
     @Override
-    public ArrayList<Team> getTeams(){
+    public Set<Team> getTeams(){
         if(isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("SELECT * FROM team INNER JOIN player ON team.teamOwnerPlayerId = player.playerId");
                 ResultSet result = query.executeQuery();
-                ArrayList<Team> teams = new ArrayList<>();
+                Set<Team> teams = new HashSet<>();
                 while(result.next()){
                     teams.add(new Team(
                         UUID.fromString(result.getString("teamUuid")),
@@ -886,13 +889,13 @@ public class MySQLManager extends DatabaseManager {
     }
 
     @Override
-    public ArrayList<Member> getTeamMembers(String teamName){
+    public Set<Member> getTeamMembers(String teamName){
         if(isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("SELECT p.playerName, p.teamRank, p.joinDate FROM player AS p INNER JOIN team AS t ON p.teamId = t.teamId WHERE t.teamName = ? ORDER BY p.teamRank ASC, p.playerName ASC;");
                 query.setString(1, teamName);
                 ResultSet result = query.executeQuery();
-                ArrayList<Member> teamMembers = new ArrayList<>();
+                Set<Member> teamMembers = Collections.synchronizedSet(new HashSet<>());
                 while(result.next()){
                     teamMembers.add(
                         new Member(
@@ -913,13 +916,13 @@ public class MySQLManager extends DatabaseManager {
     }
 
     @Override
-    public ArrayList<Permission> getTeamAssignement(String teamName){
+    public Set<Permission> getTeamAssignement(String teamName){
         if(isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("SELECT a.permLabel, a.teamRank FROM assignement AS a INNER JOIN team AS t ON a.teamId = t.teamId WHERE t.teamName = ?;");
                 query.setString(1, teamName);
                 ResultSet result = query.executeQuery();
-                ArrayList<Permission> teamAssignement = new ArrayList<>();
+                Set<Permission> teamAssignement = new HashSet<>();
                 while(result.next()){
                     teamAssignement.add(
                         new Permission(
@@ -938,10 +941,10 @@ public class MySQLManager extends DatabaseManager {
     }
 
     @Override
-    public ArrayList<Alliance> getTeamAlliances(String teamName){
+    public Set<Alliance> getTeamAlliances(String teamName){
         if(isConnected()){
             try {
-                ArrayList<Alliance> alliances = new ArrayList<>();
+                Set<Alliance> alliances = new HashSet<>();
                 PreparedStatement queryTeam = connection.prepareStatement("SELECT t.teamName, a.allianceDate FROM team AS t INNER JOIN alliance AS a ON t.teamId = a.teamAllianceId WHERE a.teamId = ?");
                 queryTeam.setInt(1, getTeamId(teamName));
                 ResultSet resultTeam = queryTeam.executeQuery();
