@@ -83,7 +83,7 @@ public class PermissionsMenu extends TeamMenu {
         Player player = (Player) clickEvent.getWhoClicked();
         String playerName = player.getName();
         String itemName = clickEvent.getCurrentItem().getItemMeta().getDisplayName();
-        Team team = plugin.getDatabaseManager().getTeamFromPlayerName(playerName);
+        Team team = Team.initFromPlayerName(playerName);
 
         // Fermeture ou retour en arrière de l'inventaire
         if (Buttons.CLOSE_PERMISSIONS_MENU_BUTTON.isClickedButton(clickEvent)){

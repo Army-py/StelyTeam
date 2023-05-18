@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.command.SubCommand;
+import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.manager.MessageManager;
 import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
@@ -30,9 +31,10 @@ public class SubCmdMoney extends SubCommand {
         if (args.length == 1){
             player.sendMessage(messageManager.getMessage("commands.stelyteam_money.usage"));
         }else{
-            String teamID = String.join("", args);
-            if (sqlManager.teamNameExists(teamID)){
-                player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_money.output", DoubleToString(sqlManager.getTeamMoney(teamID))));
+            String teamName = String.join("", args);
+            Team team = Team.init(teamName);
+            if (team != null){
+                player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_money.output", DoubleToString(sqlManager.getTeamMoney(team.getTeamUuid()))));
             }else{
                 player.sendMessage(messageManager.getMessage("common.team_not_exist"));
             }

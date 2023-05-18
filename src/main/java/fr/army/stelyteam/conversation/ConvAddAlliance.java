@@ -1,5 +1,7 @@
 package fr.army.stelyteam.conversation;
 
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
@@ -36,17 +38,19 @@ public class ConvAddAlliance extends StringPrompt {
     public Prompt acceptInput(ConversationContext con, String answer) {
         Player author = (Player) con.getForWhom();
         String authorName = author.getName();
-        Team team = sqlManager.getTeamFromPlayerName(authorName);
-        String teamName = team.getTeamName();
-
-        if (!sqlManager.teamNameExists(answer)) {
+        Team team = Team.initFromPlayerName(authorName);
+        UUID teamUuid = team.getTeamUuid();
+        
+        Team teamAnswer = Team.init(answer);
+        if (teamAnswer == null) {
             con.getForWhom().sendRawMessage(messageManager.getMessage("common.team_not_exist"));
             return null;
-        }else if (sqlManager.isAlliance(teamName, answer)) {
+        }else if (team.isTeamAlliance(teamAnswer.getTeamUuid())) {
             con.getForWhom().sendRawMessage(messageManager.getMessage("common.already_alliance"));
             return null;
         }
         
+        UUID teamAllianceUuid = teamAnswer.getTeamUuid();
 
         BaseComponent[] components = new ComponentBuilder(messageManager.replaceAuthor("manage_alliances.add_alliance.invitation_received", authorName))
             .append(messageManager.getMessageWithoutPrefix("manage_alliances.add_alliance.accept_invitation")).event(new ClickEvent(Action.RUN_COMMAND, "/st accept"))
@@ -54,7 +58,7 @@ public class ConvAddAlliance extends StringPrompt {
             .create();
 
             
-        for (String playerName: sqlManager.getTeamMembersWithRank(answer, 1)){
+        for (String playerName: sqlManager.getTeamMembersWithRank(teamAllianceUuid, 1)){
             Player player = Bukkit.getPlayer(playerName);
             if (player != null && !cacheManager.playerHasActionName(playerName, TemporaryActionNames.ADD_ALLIANCE)) {
                 cacheManager.addTempAction(

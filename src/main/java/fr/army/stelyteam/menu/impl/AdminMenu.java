@@ -12,6 +12,7 @@ import org.bukkit.inventory.Inventory;
 import fr.army.stelyteam.menu.Buttons;
 import fr.army.stelyteam.menu.Menus;
 import fr.army.stelyteam.menu.TeamMenu;
+import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.builder.ItemBuilder;
 import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
@@ -58,9 +59,9 @@ public class AdminMenu extends TeamMenu {
 
         // Ouverture des inventaires
         if (Buttons.MANAGE_MENU_BUTTON.isClickedButton(clickEvent)){
-            new ManageMenu(viewer).openMenu(mySqlManager.getTeamFromPlayerName(playerName));
+            new ManageMenu(viewer).openMenu(Team.initFromPlayerName(playerName));
         }else if (Buttons.MEMBER_MENU_BUTTON.isClickedButton(clickEvent)){
-            new MemberMenu(viewer).openMenu(mySqlManager.getTeamFromPlayerName(playerName));
+            new MemberMenu(viewer).openMenu(Team.initFromPlayerName(playerName));
             
         // Fermeture ou retour en arrière de l'inventaire
         }else if (Buttons.CLOSE_ADMIN_MENU_BUTTON.isClickedButton(clickEvent)){

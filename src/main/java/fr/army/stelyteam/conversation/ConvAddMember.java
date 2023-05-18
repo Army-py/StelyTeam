@@ -40,7 +40,7 @@ public class ConvAddMember extends StringPrompt {
         Player author = (Player) con.getForWhom();
         String authorName = author.getName();
         Player player = Bukkit.getPlayer(answer);
-        Team team = sqlManager.getTeamFromPlayerName(author.getName());
+        Team team = Team.initFromPlayerName(authorName);
         
         if (player == null) {
             con.getForWhom().sendRawMessage(messageManager.getMessage("common.player_not_exist"));

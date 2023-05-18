@@ -32,7 +32,7 @@ public class SubCmdChangeOwner extends SubCommand {
         if (args.length < 3){
             player.sendMessage(messageManager.getMessage("commands.stelyteam_changeowner.usage"));
         }else{
-            Team team = sqlManager.getTeamFromTeamName(args[1]);
+            Team team = Team.init(args[1]);
             if (team != null){
                 if (team.isTeamMember(args[2])){
                     Integer memberRank = team.getMemberRank(args[2]);
@@ -57,7 +57,7 @@ public class SubCmdChangeOwner extends SubCommand {
     public List<String> onTabComplete(CommandSender sender, String[] args) {
         if (sender.isOp() && args.length == 3){
             if (args[0].equals("changeowner")){
-                Team team = sqlManager.getTeamFromTeamName(args[1]);
+                Team team = Team.init(args[1]);
                 List<String> result = new ArrayList<>();
                 for (Member member : team.getTeamMembers()) {
                     String memberName = member.getMemberName();

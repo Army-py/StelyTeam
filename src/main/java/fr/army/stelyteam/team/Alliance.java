@@ -1,25 +1,27 @@
 package fr.army.stelyteam.team;
 
+import java.util.UUID;
+
 public class Alliance {
     
-    private String teamName;
+    private UUID teamUuid;
     private String allianceDate;
 
-    public Alliance(String teamName, String allianceDate){
-        this.teamName = teamName;
+    public Alliance(UUID teamUuid, String allianceDate){
+        this.teamUuid = teamUuid;
         this.allianceDate = allianceDate;
     }
 
-    public String getTeamName() {
-        return teamName;
+    public UUID getTeamUuid() {
+        return teamUuid;
     }
 
     public String getAllianceDate() {
         return allianceDate;
     }
 
-    public void setAllianceName(String teamName) {
-        this.teamName = teamName;
+    public void setTeam(UUID teamUuid) {
+        this.teamUuid = teamUuid;
     }
 
     public void setAllianceDate(String allianceDate) {

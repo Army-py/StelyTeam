@@ -13,8 +13,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import fr.army.stelyteam.command.CommandManager;
 import fr.army.stelyteam.external.ExternalManager;
+import fr.army.stelyteam.external.bungeechatconnect.handler.RecipientsHandler;
 import fr.army.stelyteam.listener.InventoryClickManager;
 import fr.army.stelyteam.listener.InventoryCloseManager;
+import fr.army.stelyteam.listener.PlayerJoin;
 import fr.army.stelyteam.listener.PlayerQuit;
 import fr.army.stelyteam.menu.TeamMenu;
 import fr.army.stelyteam.menu.impl.AdminMenu;
@@ -74,13 +76,19 @@ public class StelyTeamPlugin extends JavaPlugin {
         this.colorsBuilder = new ColorsBuilder(this);
         this.conversationBuilder = new ConversationBuilder(this);
         this.serializeManager = new ItemStackSerializer();
+
+
+        RecipientsHandler recipientsHandler = new RecipientsHandler();
+
+        this.externalManager = new ExternalManager();
+        this.externalManager.load(this, recipientsHandler);
+
         
         getServer().getPluginManager().registerEvents(new InventoryClickManager(this), this);
         getServer().getPluginManager().registerEvents(new InventoryCloseManager(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerJoin(this), this);
         getServer().getPluginManager().registerEvents(new PlayerQuit(this), this);
 
-        this.externalManager = new ExternalManager();
-        this.externalManager.load();
 
         getLogger().info("StelyTeam ON");
     }
@@ -250,5 +258,9 @@ public class StelyTeamPlugin extends JavaPlugin {
 
     public ItemStackSerializer getSerializeManager() {
         return serializeManager;
+    }
+
+    public ExternalManager getExternalManager() {
+        return externalManager;
     }
 }

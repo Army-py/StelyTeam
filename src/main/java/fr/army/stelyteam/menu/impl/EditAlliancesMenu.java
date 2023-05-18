@@ -55,7 +55,7 @@ public class EditAlliancesMenu extends TeamMenu {
         Integer headSlot = 0;
         System.out.println(team.getTeamAlliances().size());
         for(Alliance alliance : team.getTeamAlliances()){
-            Team teamAlliance = mySqlManager.getTeamFromTeamName(alliance.getTeamName());
+            Team teamAlliance = Team.init(alliance.getTeamUuid());
             String allianceName = teamAlliance.getTeamName();
             String alliancePrefix = teamAlliance.getTeamPrefix();
             String allianceOwnerName = teamAlliance.getTeamOwnerName();
@@ -141,7 +141,7 @@ public class EditAlliancesMenu extends TeamMenu {
     public void onClick(InventoryClickEvent clickEvent) {
         Player player = (Player) clickEvent.getWhoClicked();
         String playerName = player.getName();
-        Team team = mySqlManager.getTeamFromPlayerName(playerName);
+        Team team = Team.initFromPlayerName(playerName);
 
         if (Buttons.CLOSE_EDIT_ALLIANCES_MENU_BUTTON.isClickedButton(clickEvent)){
             new ManageMenu(player).openMenu(team);

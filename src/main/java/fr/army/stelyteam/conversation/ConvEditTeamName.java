@@ -31,7 +31,7 @@ public class ConvEditTeamName extends StringPrompt {
     public Prompt acceptInput(ConversationContext con, String answer) {
         Player author = (Player) con.getForWhom();
         String authorName = author.getName();
-        Team team = sqlManager.getTeamFromPlayerName(authorName);
+        Team team = Team.initFromPlayerName(authorName);
 
         if (nameTeamIsTooLong(answer)) {
             con.getForWhom().sendRawMessage(messageManager.getMessage("common.name_is_too_long"));

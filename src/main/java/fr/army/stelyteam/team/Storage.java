@@ -1,17 +1,19 @@
 package fr.army.stelyteam.team;
 
+import java.util.UUID;
+
 import org.bukkit.inventory.Inventory;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 
 public class Storage {
-    private Team team;
+    private UUID teamUuid;
     private Integer storageId;
     private Inventory inventoryInstance;
     private byte[] storageContent;
 
-    public Storage(Team team, Integer storageId, Inventory inventoryInstance, byte[] storageContent){
-        this.team = team;
+    public Storage(UUID teamUuid, Integer storageId, Inventory inventoryInstance, byte[] storageContent){
+        this.teamUuid = teamUuid;
         this.storageId = storageId;
         this.inventoryInstance = inventoryInstance;
         this.storageContent = storageContent;
@@ -26,8 +28,8 @@ public class Storage {
         StelyTeamPlugin.getPlugin().getDatabaseManager().saveStorage(this);
     }
 
-    public Team getTeam() {
-        return team;
+    public UUID getTeamUuid() {
+        return teamUuid;
     }
 
     public Integer getStorageId() {
@@ -42,8 +44,8 @@ public class Storage {
         return storageContent;
     }
 
-    public void setTeam(Team team) {
-        this.team = team;
+    public void setTeamUuid(UUID teamUuid) {
+        this.teamUuid = teamUuid;
     }
 
     public void setStorageId(Integer storageId) {

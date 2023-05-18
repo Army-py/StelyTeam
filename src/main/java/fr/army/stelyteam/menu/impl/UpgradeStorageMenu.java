@@ -74,7 +74,7 @@ public class UpgradeStorageMenu extends TeamMenu {
         String itemName = clickEvent.getCurrentItem().getItemMeta().getDisplayName();
         Material material = clickEvent.getCurrentItem().getType();
 
-        Team team = plugin.getDatabaseManager().getTeamFromPlayerName(playerName);
+        Team team = Team.initFromPlayerName(playerName);
         Integer level = team.getTeamStorageLvl();
         
         // Gestion des items

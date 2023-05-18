@@ -32,7 +32,7 @@ public class SubCmdDowngrade extends SubCommand {
             player.sendMessage(messageManager.getMessage("commands.stelyteam_downgrade.usage"));
         }else{
             String teamName = String.join("", args);
-            Team team = sqlManager.getTeamFromTeamName(teamName);
+            Team team = Team.init(teamName);
             if (team != null){
                 Integer teamUpgrades = team.getImprovLvlMembers();
                 if (teamUpgrades == 0){

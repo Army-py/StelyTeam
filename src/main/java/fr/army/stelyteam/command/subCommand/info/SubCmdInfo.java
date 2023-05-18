@@ -2,6 +2,7 @@ package fr.army.stelyteam.command.subcommand.info;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
@@ -42,8 +43,8 @@ public class SubCmdInfo extends SubCommand {
         if (args.length == 1){
             player.sendMessage(messageManager.getMessage("commands.stelyteam_info.usage"));
         }else{
-            String memberName = String.join("", args);
-            Team team = sqlManager.getTeamFromPlayerName(memberName) == null ? sqlManager.getTeamFromTeamName(String.join("", args)) : sqlManager.getTeamFromPlayerName(memberName);
+            String answer = String.join("", args);
+            Team team = Team.initFromPlayerName(answer) == null ? Team.init(answer) : Team.initFromPlayerName(answer);
             if (team != null){
                 String yesMessage = messages.getString("commands.stelyteam_info.true");
                 String noMessage = messages.getString("commands.stelyteam_info.false");
@@ -56,7 +57,7 @@ public class SubCmdInfo extends SubCommand {
                 String teamDescription = team.getTeamDescription();
                 Integer teamMembersLelvel = team.getImprovLvlMembers();
                 String hasUnlockBank = (team.isUnlockedTeamBank() ? yesMessage : noMessage);
-                List<Member> teamMembers = team.getTeamMembers();
+                Collection<Member> teamMembers = team.getTeamMembers();
                 List<String> lore = messages.getStringList("commands.stelyteam_info.output");
 
                 lore = replaceInLore(lore, "%NAME%", teamName);

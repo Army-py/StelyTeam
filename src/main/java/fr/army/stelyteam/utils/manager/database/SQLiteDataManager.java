@@ -76,11 +76,11 @@ public class SQLiteDataManager {
     }
 
 
-    public boolean isSet(String team_id){
+    public boolean isSet(UUID teamUuid){
         if(isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("SELECT team_id FROM homes WHERE team_id = ?");
-                query.setString(1, team_id);
+                query.setString(1, teamUuid.toString());
                 ResultSet result = query.executeQuery();
                 boolean isParticipant = result.next();
                 query.close();
@@ -93,11 +93,11 @@ public class SQLiteDataManager {
     }
 
 
-    public void addHome(String team_id, String world, double x, double y, double z, double yaw){
+    public void addHome(UUID teamUuid, String world, double x, double y, double z, double yaw){
         if(isConnected()){
             try {
                 PreparedStatement queryPlayers = connection.prepareStatement("INSERT INTO homes VALUES (null, ?, ?, ?, ?, ?, ?)");
-                queryPlayers.setString(1, team_id);
+                queryPlayers.setString(1, teamUuid.toString());
                 queryPlayers.setString(2, world);
                 queryPlayers.setDouble(3, x);
                 queryPlayers.setDouble(4, y);
@@ -112,7 +112,7 @@ public class SQLiteDataManager {
     }
 
 
-    public void updateHome(String team_id, String world, double x, double y, double z, double yaw){
+    public void updateHome(UUID teamUuid, String world, double x, double y, double z, double yaw){
         if(isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("UPDATE homes SET world = ?, x = ?, y = ?, z = ?, yaw = ? WHERE team_id = ?");
@@ -121,7 +121,7 @@ public class SQLiteDataManager {
                 query.setDouble(3, y);
                 query.setDouble(4, z);
                 query.setDouble(5, yaw);
-                query.setString(6, team_id);
+                query.setString(6, teamUuid.toString());
                 query.executeUpdate();
                 query.close();
             } catch (SQLException e) {
@@ -131,11 +131,11 @@ public class SQLiteDataManager {
     }
 
 
-    public void removeHome(String team_id){
+    public void removeHome(UUID teamUuid){
         if(isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("DELETE FROM homes WHERE team_id = ?");
-                query.setString(1, team_id);
+                query.setString(1, teamUuid.toString());
                 query.executeUpdate();
                 query.close();
             } catch (SQLException e) {
@@ -145,26 +145,11 @@ public class SQLiteDataManager {
     }
 
 
-    public void updateTeamID(String teamID, String newTeamID){
-        if(isConnected()){
-            try {
-                PreparedStatement queryHomes = connection.prepareStatement("UPDATE homes SET team_id = ? WHERE team_id = ?");
-                queryHomes.setString(1, newTeamID);
-                queryHomes.setString(2, teamID);
-                queryHomes.executeUpdate();
-                queryHomes.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-
-    public String getWorld(String team_id){
+    public String getWorld(UUID teamUuid){
         if(isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("SELECT world FROM homes WHERE team_id = ?");
-                query.setString(1, team_id);
+                query.setString(1, teamUuid.toString());
                 ResultSet result = query.executeQuery();
                 boolean isParticipant = result.next();
                 if(isParticipant){
@@ -180,11 +165,11 @@ public class SQLiteDataManager {
     }
 
 
-    public double getX(String team_id){
+    public double getX(UUID teamUuid){
         if(isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("SELECT x FROM homes WHERE team_id = ?");
-                query.setString(1, team_id);
+                query.setString(1, teamUuid.toString());
                 ResultSet result = query.executeQuery();
                 boolean isParticipant = result.next();
                 if(isParticipant){
@@ -200,11 +185,11 @@ public class SQLiteDataManager {
     }
 
 
-    public double getY(String team_id){
+    public double getY(UUID teamUuid){
         if(isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("SELECT y FROM homes WHERE team_id = ?");
-                query.setString(1, team_id);
+                query.setString(1, teamUuid.toString());
                 ResultSet result = query.executeQuery();
                 boolean isParticipant = result.next();
                 if(isParticipant){
@@ -220,11 +205,11 @@ public class SQLiteDataManager {
     }
 
 
-    public double getZ(String team_id){
+    public double getZ(UUID teamUuid){
         if(isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("SELECT z FROM homes WHERE team_id = ?");
-                query.setString(1, team_id);
+                query.setString(1, teamUuid.toString());
                 ResultSet result = query.executeQuery();
                 boolean isParticipant = result.next();
                 if(isParticipant){
@@ -240,11 +225,11 @@ public class SQLiteDataManager {
     }
 
 
-    public double getYaw(String team_id){
+    public double getYaw(UUID teamUuid){
         if(isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("SELECT yaw FROM homes WHERE team_id = ?");
-                query.setString(1, team_id);
+                query.setString(1, teamUuid.toString());
                 ResultSet result = query.executeQuery();
                 boolean isParticipant = result.next();
                 if(isParticipant){

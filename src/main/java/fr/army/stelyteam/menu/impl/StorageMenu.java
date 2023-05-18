@@ -1,6 +1,7 @@
 package fr.army.stelyteam.menu.impl;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -36,11 +37,11 @@ public class StorageMenu extends TeamMenu {
     public Inventory createInventory(Team team, int storageId) {
         // String inventoryName = config.getString(config.getString("inventories.storageDirectory."+plugin.getStorageFromId(storageId)+".itemName"));
         String inventoryName = Menus.getStorageMenuName(storageId);
-        String teamName = team.getTeamName();
+        UUID teamUuid = team.getTeamUuid();
         Inventory inventory;
 
-        if (cacheManager.containsStorage(teamName, storageId)){
-            inventory = cacheManager.getStorage(teamName, storageId).getInventoryInstance();
+        if (cacheManager.containsStorage(teamUuid, storageId)){
+            inventory = cacheManager.getStorage(teamUuid, storageId).getInventoryInstance();
         }else{
             inventory = Bukkit.createInventory(this, this.menuSlots, inventoryName);
 
@@ -84,7 +85,7 @@ public class StorageMenu extends TeamMenu {
     public void onClick(InventoryClickEvent clickEvent) {
         Player player = (Player) clickEvent.getWhoClicked();
         String playerName = player.getName();
-        Team team = plugin.getDatabaseManager().getTeamFromPlayerName(playerName);
+        Team team = Team.initFromPlayerName(playerName);
         Integer storageId = getStorageId(clickEvent.getView().getTitle());
         
         if (clickEvent.getCurrentItem() != null){
@@ -114,20 +115,20 @@ public class StorageMenu extends TeamMenu {
     public void onClose(InventoryCloseEvent closeEvent) {
         Player player = (org.bukkit.entity.Player) closeEvent.getPlayer();
         Inventory storageInventory = closeEvent.getInventory();
-        String playerName = player.getName();
-        Team team = plugin.getDatabaseManager().getTeamFromPlayerName(playerName);
+        Team team = Team.init(player);
+        UUID teamUuid = team.getTeamUuid();
         Integer storageId = getStorageId(closeEvent.getView().getTitle());
         ItemStack[] inventoryContent = closeEvent.getInventory().getContents();
         Storage storage;
 
-        if (cacheManager.containsStorage(team.getTeamName(), storageId)){
-            storage = cacheManager.replaceStorageContent(team.getTeamName(), storageId, serializeManager.serializeToByte(inventoryContent));
+        if (cacheManager.containsStorage(teamUuid, storageId)){
+            storage = cacheManager.replaceStorageContent(teamUuid, storageId, serializeManager.serializeToByte(inventoryContent));
         }else if (team.hasStorage(storageId)){
             storage = team.getStorage(storageId);
             storage.setStorageInstance(storageInventory);
             storage.setStorageContent(serializeManager.serializeToByte(inventoryContent));
         }else{
-            storage = new Storage(team, storageId, storageInventory, serializeManager.serializeToByte(inventoryContent));
+            storage = new Storage(teamUuid, storageId, storageInventory, serializeManager.serializeToByte(inventoryContent));
         }
         
         storage.saveStorageToCache();

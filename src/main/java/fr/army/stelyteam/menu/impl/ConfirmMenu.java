@@ -1,6 +1,7 @@
 package fr.army.stelyteam.menu.impl;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -76,6 +77,7 @@ public class ConfirmMenu extends TeamMenu {
         String playerName = player.getName();
         TemporaryAction tempAction = cacheManager.getTempAction(playerName);
         Team team = tempAction.getTeam();
+        UUID teamUuid = team.getTeamUuid();
         String teamName;
 
         if (Buttons.CONFIRM_BUTTON.isClickedButton(clickEvent)){
@@ -96,11 +98,12 @@ public class ConfirmMenu extends TeamMenu {
                     team.teamBroadcast(playerName, messageManager.replaceAuthorAndReceiver("broadcasts.player_exclude_member", playerName, receiverName));
                     break;
                 case REMOVE_ALLIANCE:
-                    Team alliance = Team.init(tempAction.getTargetName());
+                    Team alliance = Team.init(UUID.fromString(tempAction.getTargetName()));
+                    UUID allianceUuid = alliance.getTeamUuid();
                     String allianceName = alliance.getTeamName();
                     teamName = team.getTeamName();
                     
-                    team.removeAlliance(allianceName);
+                    team.removeAlliance(allianceUuid);
                     team.refreshTeamMembersInventory(playerName);
                     team.teamBroadcast(playerName, messageManager.replaceAuthorAndTeamName("broadcasts.player_remove_alliance", playerName, allianceName));
                     alliance.refreshTeamMembersInventory(playerName);
@@ -124,20 +127,19 @@ public class ConfirmMenu extends TeamMenu {
                     Double y = player.getLocation().getY();
                     Double z = player.getLocation().getZ();
                     Double yaw = (double) player.getLocation().getYaw();
-                    teamName = team.getTeamName();
 
-                    if (sqliteManager.isSet(teamName)){
-                        sqliteManager.updateHome(teamName, worldName, x, y, z, yaw);
+                    if (sqliteManager.isSet(teamUuid)){
+                        sqliteManager.updateHome(teamUuid, worldName, x, y, z, yaw);
                         player.sendMessage(messageManager.getMessage("manage_team.team_home.redefine"));
                     }else{
-                        sqliteManager.addHome(teamName, worldName, x, y, z, yaw);
+                        sqliteManager.addHome(teamUuid, worldName, x, y, z, yaw);
                         player.sendMessage(messageManager.getMessage("manage_team.team_home.created"));
                     }
                     break;
                 case DELETE_HOME:
                     teamName = team.getTeamName();
                     player.closeInventory();
-                    sqliteManager.removeHome(teamName);
+                    sqliteManager.removeHome(teamUuid);
                     player.sendMessage(messageManager.getMessage("manage_team.team_home.deleted"));
                     break;
                 case CREATE_TEAM:

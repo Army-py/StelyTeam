@@ -32,7 +32,7 @@ public class SubCmdEditName extends SubCommand {
         if (args.length < 3){
             player.sendMessage(messageManager.getMessage("commands.stelyteam_editname.usage"));
         }else{
-            Team team = sqlManager.getTeamFromTeamName(args[1]);
+            Team team = Team.init(args[1]);
             if (team != null){
                 if (sqlManager.teamNameExists(args[2])){
                     player.sendMessage(messageManager.getMessage("common.name_already_exists"));

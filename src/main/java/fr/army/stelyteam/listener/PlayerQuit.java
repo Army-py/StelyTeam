@@ -1,16 +1,20 @@
 package fr.army.stelyteam.listener;
 
+import java.util.UUID;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.team.Member;
+import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.manager.CacheManager;
 
 public class PlayerQuit implements Listener{
 
-    private CacheManager cacheManager;
+    private final CacheManager cacheManager;
 
     public PlayerQuit(StelyTeamPlugin plugin) {
         this.cacheManager = plugin.getCacheManager();
@@ -23,6 +27,17 @@ public class PlayerQuit implements Listener{
 
         if (cacheManager.getTempAction(playerName) != null){
             cacheManager.removePlayerAction(playerName);
+        }
+
+        Team team = cacheManager.getTeamByPlayerName(playerName);
+        int count = 0;
+        for (Member member : team.getTeamMembers()){
+            if (!member.asPlayer().isOnline()){
+                count++;
+            }
+        }
+        if (count == team.getTeamMembers().size()){
+            cacheManager.removeTeam(team);
         }
     }
 }

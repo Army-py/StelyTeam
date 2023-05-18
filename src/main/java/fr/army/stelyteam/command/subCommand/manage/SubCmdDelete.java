@@ -31,11 +31,11 @@ public class SubCmdDelete extends SubCommand {
         if (args.length == 1){
             player.sendMessage(messageManager.getMessage("commands.stelyteam_delete.usage"));
         }else{
-            String teamID = String.join("", args);
-            Team team = sqlManager.getTeamFromTeamName(teamID);
+            String teamName = String.join("", args);
+            Team team = Team.init(teamName);
             if (team != null){
                 team.removeTeam();
-                player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_delete.output", teamID));
+                player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_delete.output", teamName));
             }else{
                 player.sendMessage(messageManager.getMessage("common.team_not_exist"));
             }

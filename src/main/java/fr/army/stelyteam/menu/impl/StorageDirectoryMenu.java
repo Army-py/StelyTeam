@@ -74,7 +74,7 @@ public class StorageDirectoryMenu extends TeamMenu {
     public void onClick(InventoryClickEvent clickEvent) {
         Player player = (Player) clickEvent.getWhoClicked();
         String playerName = player.getName();
-        Team team = plugin.getDatabaseManager().getTeamFromPlayerName(playerName);
+        Team team = Team.initFromPlayerName(playerName);
         String itemName = clickEvent.getCurrentItem().getItemMeta().getDisplayName();
         Material itemType = clickEvent.getCurrentItem().getType();
 

@@ -65,7 +65,7 @@ public class AlliancesMenu extends TeamMenu {
         emptyCases(inventory, this.menuSlots, 0);
         Integer headSlot = 0;
         for(Alliance alliance : team.getTeamAlliances()){
-            Team teamAlliance = mySqlManager.getTeamFromTeamName(alliance.getTeamName());
+            Team teamAlliance = Team.init(alliance.getTeamUuid());
             String allianceName = teamAlliance.getTeamName();
             String alliancePrefix = teamAlliance.getTeamPrefix();
             String allianceOwnerName = teamAlliance.getTeamOwnerName();
@@ -142,9 +142,10 @@ public class AlliancesMenu extends TeamMenu {
                     ItemMeta meta = clickEvent.getCurrentItem().getItemMeta();
                     PersistentDataContainer container = meta.getPersistentDataContainer();
                     String ownerName = container.get(key, PersistentDataType.STRING);
-                    String allianceName = mySqlManager.getTeamNameFromPlayerName(ownerName);
+                    Team alliance = Team.initFromPlayerName(ownerName);
+                    UUID allianceUuid = alliance.getTeamUuid();
 
-                    if (!team.isTeamAlliance(allianceName)){
+                    if (!team.isTeamAlliance(allianceUuid)){
                         player.sendRawMessage(messageManager.getMessage("common.not_in_alliance"));
                         return;
                     }
@@ -153,7 +154,7 @@ public class AlliancesMenu extends TeamMenu {
                     cacheManager.addTempAction(
                         new TemporaryAction(
                                 playerName,
-                                allianceName,
+                                allianceUuid.toString(),
                                 TemporaryActionNames.REMOVE_ALLIANCE,
                                 team
                             )
@@ -166,7 +167,7 @@ public class AlliancesMenu extends TeamMenu {
 
         }else{
             if (Buttons.CLOSE_TEAM_ALLIANCES_MENU_BUTTON.isClickedButton(clickEvent)){
-                new MemberMenu(player).openMenu(mySqlManager.getTeamFromPlayerName(playerName));
+                new MemberMenu(player).openMenu(Team.initFromPlayerName(playerName));
             }
         }
     }

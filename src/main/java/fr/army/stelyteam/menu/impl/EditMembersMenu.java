@@ -131,7 +131,7 @@ public class EditMembersMenu extends TeamMenu {
         List<String> lore = clickEvent.getCurrentItem().getItemMeta().getLore();
         Player player = (Player) clickEvent.getWhoClicked();
         String playerName = player.getName();
-        Team team = mySqlManager.getTeamFromPlayerName(playerName);
+        Team team = Team.initFromPlayerName(playerName);
 
 
         if (itemType.equals(Material.getMaterial(config.getString("noPermission.itemType"))) && lore.equals(config.getStringList("noPermission.lore"))){

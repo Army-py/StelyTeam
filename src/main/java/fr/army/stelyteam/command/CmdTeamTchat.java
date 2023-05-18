@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -12,45 +13,32 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.command.subcommand.help.SubCmdAdmin;
-import fr.army.stelyteam.command.subcommand.help.SubCmdHelp;
-import fr.army.stelyteam.command.subcommand.info.SubCmdInfo;
-import fr.army.stelyteam.command.subcommand.info.SubCmdList;
-import fr.army.stelyteam.command.subcommand.info.SubCmdMoney;
-import fr.army.stelyteam.command.subcommand.manage.SubCmdDelete;
-import fr.army.stelyteam.command.subcommand.manage.SubCmdDowngrade;
-import fr.army.stelyteam.command.subcommand.manage.SubCmdEditName;
-import fr.army.stelyteam.command.subcommand.manage.SubCmdEditPrefix;
-import fr.army.stelyteam.command.subcommand.manage.SubCmdUpgrade;
-import fr.army.stelyteam.command.subcommand.member.SubCmdAddMember;
-import fr.army.stelyteam.command.subcommand.member.SubCmdChangeOwner;
-import fr.army.stelyteam.command.subcommand.member.SubCmdRemoveMember;
-import fr.army.stelyteam.command.subcommand.team.SubCmdAccept;
-import fr.army.stelyteam.command.subcommand.team.SubCmdDeny;
-import fr.army.stelyteam.command.subcommand.utility.SubCmdHome;
-import fr.army.stelyteam.command.subcommand.utility.SubCmdVisual;
+import fr.army.stelyteam.command.subcommand.manage.SubCmdToggle;
+import fr.army.stelyteam.external.ExternalManager;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
 import fr.army.stelyteam.utils.manager.database.DatabaseManager;
+import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
 
-public class CmdStelyTeam implements CommandExecutor, TabCompleter {
-
+public class CmdTeamTchat implements CommandExecutor, TabCompleter {
+    
     private StelyTeamPlugin plugin;
     private CacheManager cacheManager;
     private DatabaseManager sqlManager;
     private SQLiteDataManager sqliteManager;
     private MessageManager messageManager;
-    private Map<String, Object> subCommands;
+    private ExternalManager externalManager;
+    private Map<String, SubCommand> subCommands;
 
 
-    public CmdStelyTeam(StelyTeamPlugin plugin) {
+    public CmdTeamTchat(StelyTeamPlugin plugin) {
         this.plugin = plugin;
         this.cacheManager = plugin.getCacheManager();
         this.sqlManager = plugin.getDatabaseManager();
         this.sqliteManager = plugin.getSQLiteManager();
         this.messageManager = plugin.getMessageManager();
+        this.externalManager = plugin.getExternalManager();
         this.subCommands = new HashMap<>();
         initSubCommands();
     }
@@ -59,6 +47,7 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(sender instanceof Player){
             Player player = (Player) sender;
+            UUID senderId = player.getUniqueId();
             String playerName = player.getName();
             Team team = Team.initFromPlayerName(playerName);
 
@@ -73,7 +62,7 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
 
             
             if (args.length == 0){
-                StelyTeamPlugin.getPlugin().openMainInventory(player, team);
+                player.sendMessage("Usage: /teamtchat <message>");
             }else{
                 if (subCommands.containsKey(args[0]) && !((SubCommand) subCommands.get(args[0])).isOpCommand()){
                     SubCommand subCmd = (SubCommand) subCommands.get(args[0]);
@@ -87,9 +76,9 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
                             return true;
                         }
                     }
+                }else{
+                    externalManager.registerMessage(senderId, true);
                 }
-
-                player.sendMessage(messageManager.getMessage("common.invalid_command"));
             }
         }
     return true;
@@ -113,45 +102,12 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
                 }
             }
             return result;
-        }else if (args.length == 2){
-            if (sender.isOp()){
-                if (subCommands.containsKey(args[0]) && ((SubCommand) subCommands.get(args[0])).isOpCommand()){
-                    List<String> result = new ArrayList<>();
-                    for (String teamID : sqlManager.getTeamsName()) {
-                        if (teamID.toLowerCase().startsWith(args[1].toLowerCase())){
-                            result.add(teamID);
-                        }
-                    }
-                    return result;
-                }
-            }
         }
-        if (args.length > 1 && subCommands.containsKey(args[0].toLowerCase())) {
-            List<String> results = ((SubCommand) subCommands.get(args[0])).onTabComplete(sender, args);
-            return results;
-        } 
         return null;
     }
 
 
     private void initSubCommands(){
-        subCommands.put("home", new SubCmdHome(plugin));
-        subCommands.put("visual", new SubCmdVisual(plugin));
-        subCommands.put("info", new SubCmdInfo(plugin));
-        subCommands.put("help", new SubCmdHelp(plugin));
-        subCommands.put("accept", new SubCmdAccept(plugin));
-        subCommands.put("deny", new SubCmdDeny(plugin));
-        subCommands.put("list", new SubCmdList(plugin));
-
-        subCommands.put("admin", new SubCmdAdmin(plugin));
-        subCommands.put("delete", new SubCmdDelete(plugin));
-        subCommands.put("money", new SubCmdMoney(plugin));
-        subCommands.put("upgrade", new SubCmdUpgrade(plugin));
-        subCommands.put("downgrade", new SubCmdDowngrade(plugin));
-        subCommands.put("editname", new SubCmdEditName(plugin));
-        subCommands.put("editprefix", new SubCmdEditPrefix(plugin));
-        subCommands.put("changeowner", new SubCmdChangeOwner(plugin));
-        subCommands.put("addmember", new SubCmdAddMember(plugin));
-        subCommands.put("removemember", new SubCmdRemoveMember(plugin));
+        subCommands.put("toggle", new SubCmdToggle(plugin));
     }
 }

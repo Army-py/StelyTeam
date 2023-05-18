@@ -102,7 +102,7 @@ public class ManageMenu extends TeamMenu {
             return;
         }
 
-        team = mySqlManager.getTeamFromPlayerName(playerName);
+        team = Team.initFromPlayerName(playerName);
         
         // Liaisin des items avec leur fonction
         if (Buttons.EDIT_MEMBERS_MENU_BUTTON.isClickedButton(clickEvent)){
@@ -119,7 +119,7 @@ public class ManageMenu extends TeamMenu {
 
 
         }else if (Buttons.REMOVE_TEAM_HOME_BUTTON.isClickedButton(clickEvent)){
-            if (!sqliteManager.isSet(team.getTeamName())){
+            if (!sqliteManager.isSet(team.getTeamUuid())){
                 player.sendMessage(messageManager.getMessage("manage_team.team_home.not_set"));
             }else{
                 cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.DELETE_HOME, team));

@@ -35,7 +35,7 @@ public class ConvEditTeamDesc extends StringPrompt {
     public Prompt acceptInput(ConversationContext con, String answer) {
         Player author = (Player) con.getForWhom();
         String authorName = author.getName();
-        Team team = sqlManager.getTeamFromPlayerName(authorName);
+        Team team = Team.initFromPlayerName(authorName);
         
         if (colorBuilder.descriptionTeamIsTooLong(answer)) {
             con.getForWhom().sendRawMessage(messageManager.getMessage("common.description_is_too_long"));

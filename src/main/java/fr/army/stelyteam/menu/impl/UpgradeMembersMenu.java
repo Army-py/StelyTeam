@@ -74,7 +74,7 @@ public class UpgradeMembersMenu extends TeamMenu {
         String itemName = clickEvent.getCurrentItem().getItemMeta().getDisplayName();
         Material material = clickEvent.getCurrentItem().getType();
 
-        Team team = plugin.getDatabaseManager().getTeamFromPlayerName(playerName);
+        Team team = Team.initFromPlayerName(playerName);
         Integer level = team.getImprovLvlMembers();
         
         if (Buttons.CLOSE_UPGRADE_LVL_MEMBERS_MENU_BUTTON.isClickedButton(clickEvent)){

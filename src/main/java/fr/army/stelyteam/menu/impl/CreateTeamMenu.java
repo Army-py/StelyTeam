@@ -12,6 +12,7 @@ import org.bukkit.inventory.Inventory;
 import fr.army.stelyteam.menu.Buttons;
 import fr.army.stelyteam.menu.Menus;
 import fr.army.stelyteam.menu.TeamMenu;
+import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.TemporaryActionNames;
 import fr.army.stelyteam.utils.builder.ItemBuilder;
@@ -63,7 +64,7 @@ public class CreateTeamMenu extends TeamMenu {
                     new TemporaryAction(
                         playerName,
                         TemporaryActionNames.CREATE_TEAM,
-                        plugin.getDatabaseManager().getTeamFromPlayerName(playerName)));
+                        Team.initFromPlayerName(playerName)));
             }else{
                 player.sendMessage(plugin.getMessageManager().getMessage("common.not_enough_money"));
             }

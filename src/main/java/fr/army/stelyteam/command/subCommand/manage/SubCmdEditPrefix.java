@@ -33,7 +33,7 @@ public class SubCmdEditPrefix extends SubCommand {
         if (args.length < 3){
             player.sendMessage(messageManager.getMessage("commands.stelyteam_editprefix.usage"));
         }else{
-            Team team = sqlManager.getTeamFromTeamName(args[1]);
+            Team team = Team.init(args[1]);
             if (team != null){
                 team.updateTeamPrefix(args[2]);
                 player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_editprefix.output", colorsBuilder.replaceColor(args[2])));

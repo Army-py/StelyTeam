@@ -30,7 +30,7 @@ public class SubCmdAddMember extends SubCommand {
         if (args.length < 3){
             player.sendMessage(messageManager.getMessage("commands.stelyteam_addmember.usage"));
         }else{
-            Team team = sqlManager.getTeamFromTeamName(args[1]);
+            Team team = Team.init(args[1]);
             if (team != null){
                 if (sqlManager.isMember(args[2])){
                     player.sendMessage(messageManager.getMessage("common.player_already_in_team"));

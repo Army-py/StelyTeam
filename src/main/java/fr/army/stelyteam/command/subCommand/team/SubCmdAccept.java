@@ -54,14 +54,14 @@ public class SubCmdAccept extends SubCommand {
             Team team = tempAction.getTeam();
             String teamName = team.getTeamName();
             Player invitationSender = Bukkit.getPlayer(senderName);
-            String allianceName = sqlManager.getTeamNameFromPlayerName(receiverName);
+            Team alliance = Team.initFromPlayerName(receiverName);
             cacheManager.removePlayerAction(playerName);
             player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_accept.output", teamName));
             if (invitationSender != null){
                 invitationSender.sendMessage(messageManager.getReplaceMessage("sender.accepted_invitation", receiverName));
             }
-            team.teamBroadcast(senderName, messageManager.replaceAuthorAndTeamName("broadcasts.player_add_new_alliance", senderName, allianceName));
-            team.insertAlliance(allianceName);
+            team.teamBroadcast(senderName, messageManager.replaceAuthorAndTeamName("broadcasts.player_add_new_alliance", senderName, alliance.getTeamName()));
+            team.insertAlliance(alliance.getTeamUuid());
             team.refreshTeamMembersInventory(playerName);
         }else{
             player.sendMessage(messageManager.getMessage("common.no_invitation"));

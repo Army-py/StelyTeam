@@ -2,7 +2,6 @@ package fr.army.stelyteam.utils.manager.database;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -58,31 +57,31 @@ public abstract class DatabaseManager {
 
     public abstract void insertTeam(Team team);
 
-    public abstract void insertMember(String playerName, String teamName);
+    public abstract void insertMember(String playerName, UUID teamUuid);
 
-    public abstract void removeTeam(String teamName);
+    public abstract void removeTeam(UUID teamUuid);
 
-    public abstract void removeMember(String playerName, String teamName);
+    public abstract void removeMember(String playerName, UUID teamUuid);
 
-    public abstract void updateTeamName(String teamName, String newTeamName);
+    public abstract void updateTeamName(UUID teamUuid, String newTeamName);
 
-    public abstract void updateTeamPrefix(String teamName, String newTeamPrefix);
+    public abstract void updateTeamPrefix(UUID teamUuid, String newTeamPrefix);
 
-    public abstract void updateTeamDescription(String teamName, String newTeamDescription);
+    public abstract void updateTeamDescription(UUID teamUuid, String newTeamDescription);
 
-    public abstract void updateTeamOwner(String teamName, String teamOwner, String newTeamOwner);
+    public abstract void updateTeamOwner(UUID teamUuid, String teamOwner, String newTeamOwner);
 
-    public abstract void updateUnlockedTeamBank(String teamName);
+    public abstract void updateUnlockedTeamBank(UUID teamUuid);
 
-    public abstract void incrementImprovLvlMembers(String teamName);
+    public abstract void incrementImprovLvlMembers(UUID teamUuid);
 
-    public abstract void incrementTeamStorageLvl(String teamName);
+    public abstract void incrementTeamStorageLvl(UUID teamUuid);
 
-    public abstract void incrementTeamMoney(String teamName, double money);
+    public abstract void incrementTeamMoney(UUID teamUuid, double money);
 
-    public abstract void decrementImprovLvlMembers(String teamName);
+    public abstract void decrementImprovLvlMembers(UUID teamUuid);
 
-    public abstract void decrementTeamMoney(String teamName, double money);
+    public abstract void decrementTeamMoney(UUID teamUuid, double money);
 
     public abstract void promoteMember(String playerName);
 
@@ -90,37 +89,37 @@ public abstract class DatabaseManager {
 
     public abstract String getTeamNameFromPlayerName(String playerName);
 
-    public abstract double getTeamMoney(String teamName);
+    public abstract double getTeamMoney(UUID teamUuid);
 
-    public abstract Set<String> getTeamMembersWithRank(String teamName, int rank);
+    public abstract Set<String> getTeamMembersWithRank(UUID teamUuid, int rank);
 
     public abstract Set<String> getTeamsName();
 
-    public abstract void insertAssignement(String teamName, String permLabel, Integer teamRank);
+    public abstract void insertAssignement(UUID teamUuid, String permLabel, Integer teamRank);
 
-    public abstract void incrementAssignement(String teamName, String permLabel);
+    public abstract void incrementAssignement(UUID teamUuid, String permLabel);
 
-    public abstract void decrementAssignement(String teamName, String permLabel);
+    public abstract void decrementAssignement(UUID teamUuid, String permLabel);
 
     public abstract void insertStorageId(int storageId);
 
     public abstract boolean storageIdExist(int storageId);
 
-    public abstract boolean teamHasStorage(String teamName, Integer storageId);
+    public abstract boolean teamHasStorage(UUID teamUuid, Integer storageId);
 
-    public abstract byte[] getStorageContent(String teamName, Integer storageId);
+    public abstract byte[] getStorageContent(UUID teamUuid, Integer storageId);
 
-    public abstract void insertStorageContent(String teamName, Integer storageId, byte[] storageContent);
+    public abstract void insertStorageContent(UUID teamUuid, Integer storageId, byte[] storageContent);
 
-    public abstract void updateStorageContent(String teamName, Integer storageId, byte[] storageContent);
+    public abstract void updateStorageContent(UUID teamUuid, Integer storageId, byte[] storageContent);
 
     public abstract void saveStorage(Storage storage);
 
-    public abstract void insertAlliance(String teamName, String allianceName);
+    public abstract void insertAlliance(UUID teamUuid, UUID allianceUuid);
 
-    public abstract void removeAlliance(String teamName, String allianceName);
+    public abstract void removeAlliance(UUID teamUuid, UUID allianceUuid);
 
-    public abstract boolean isAlliance(String teamName, String allianceName);
+    public abstract boolean isAlliance(UUID teamUuid, UUID allianceUuid);
 
     public abstract Set<String> getMembers();
 
@@ -132,17 +131,17 @@ public abstract class DatabaseManager {
 
     public abstract Set<Team> getTeams();
 
-    public abstract Set<Member> getTeamMembers(String teamName);
+    public abstract Set<Member> getTeamMembers(UUID teamUuid);
 
-    public abstract Set<Permission> getTeamAssignement(String teamName);
+    public abstract Set<Permission> getTeamAssignement(UUID teamUuid);
 
-    public abstract Set<Alliance> getTeamAlliances(String teamName);
+    public abstract Set<Alliance> getTeamAlliances(UUID teamUuid);
 
-    public abstract Map<Integer, Storage> getTeamStorages(Team team);
+    public abstract Map<Integer, Storage> getTeamStorages(UUID teamUuid);
 
     public abstract int getPlayerId(String playerName);
 
-    public abstract int getTeamId(String teamName);
+    public abstract int getTeamId(UUID teamUuid);
 
     public abstract String getCurrentDate();
 }
