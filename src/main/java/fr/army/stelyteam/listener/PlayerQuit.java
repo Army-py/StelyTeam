@@ -1,4 +1,4 @@
-package fr.army.stelyteam.events;
+package fr.army.stelyteam.listener;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

@@ -12,10 +12,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import fr.army.stelyteam.command.CommandManager;
-import fr.army.stelyteam.events.InventoryClickManager;
-import fr.army.stelyteam.events.InventoryCloseManager;
-import fr.army.stelyteam.events.PlayerQuit;
 import fr.army.stelyteam.external.ExternalManager;
+import fr.army.stelyteam.listener.InventoryClickManager;
+import fr.army.stelyteam.listener.InventoryCloseManager;
+import fr.army.stelyteam.listener.PlayerQuit;
 import fr.army.stelyteam.menu.AdminMenu;
 import fr.army.stelyteam.menu.CreateTeamMenu;
 import fr.army.stelyteam.menu.MemberMenu;
