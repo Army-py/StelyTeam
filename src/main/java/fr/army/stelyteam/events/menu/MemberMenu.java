@@ -11,8 +11,8 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import fr.army.stelyteam.conversations.ConvAddMoney;
-import fr.army.stelyteam.conversations.ConvWithdrawMoney;
+import fr.army.stelyteam.conversation.ConvAddMoney;
+import fr.army.stelyteam.conversation.ConvWithdrawMoney;
 import fr.army.stelyteam.utils.Buttons;
 import fr.army.stelyteam.utils.Menus;
 import fr.army.stelyteam.utils.Team;

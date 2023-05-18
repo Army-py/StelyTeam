@@ -13,7 +13,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import fr.army.stelyteam.conversations.ConvAddAlliance;
+import fr.army.stelyteam.conversation.ConvAddAlliance;
 import fr.army.stelyteam.utils.Alliance;
 import fr.army.stelyteam.utils.Buttons;
 import fr.army.stelyteam.utils.Menus;

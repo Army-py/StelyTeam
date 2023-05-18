@@ -1,4 +1,4 @@
-package fr.army.stelyteam.conversations;
+package fr.army.stelyteam.conversation;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
