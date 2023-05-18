@@ -10,11 +10,11 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import fr.army.stelyteam.menu.Buttons;
+import fr.army.stelyteam.menu.Menus;
 import fr.army.stelyteam.menu.TeamMenu;
 import fr.army.stelyteam.team.Storage;
 import fr.army.stelyteam.team.Team;
-import fr.army.stelyteam.utils.Buttons;
-import fr.army.stelyteam.utils.Menus;
 import fr.army.stelyteam.utils.builder.ItemBuilder;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.serializer.ItemStackSerializer;

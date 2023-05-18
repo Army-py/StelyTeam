@@ -14,11 +14,11 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import fr.army.stelyteam.conversation.ConvAddAlliance;
+import fr.army.stelyteam.menu.Buttons;
+import fr.army.stelyteam.menu.Menus;
 import fr.army.stelyteam.menu.TeamMenu;
 import fr.army.stelyteam.team.Alliance;
 import fr.army.stelyteam.team.Team;
-import fr.army.stelyteam.utils.Buttons;
-import fr.army.stelyteam.utils.Menus;
 import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.TemporaryActionNames;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;

@@ -6,8 +6,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.menu.Buttons;
 import fr.army.stelyteam.menu.TeamMenu;
-import fr.army.stelyteam.utils.Buttons;
 import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
 
 
