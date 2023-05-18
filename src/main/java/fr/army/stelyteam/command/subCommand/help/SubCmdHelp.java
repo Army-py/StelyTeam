@@ -1,32 +1,29 @@
-package fr.army.stelyteam.command.subCommands.info;
+package fr.army.stelyteam.command.subCommand.help;
 
 import java.util.List;
 
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.command.SubCommand;
-import fr.army.stelyteam.events.menu.TeamListMenu;
-import fr.army.stelyteam.utils.manager.CacheManager;
 
-public class SubCmdList extends SubCommand {
+public class SubCmdHelp extends SubCommand {
+    private YamlConfiguration messages;
 
-    private CacheManager cacheManager;
-
-    public SubCmdList(StelyTeamPlugin plugin) {
+    public SubCmdHelp(StelyTeamPlugin plugin){
         super(plugin);
-        this.cacheManager = plugin.getCacheManager();
+        this.messages = plugin.getMessages();
     }
 
     @Override
     public boolean execute(CommandSender sender, String[] args) {
         Player player = (Player) sender;
-        String playerName = player.getName();
+        List<String> commandsPlayer = messages.getStringList("commands.stelyteam_help.output");
 
-        cacheManager.removePage(cacheManager.getPage(playerName));
-        new TeamListMenu(player).openMenu();
-
+        player.sendMessage(String.join("\n", commandsPlayer));
+        
         return true;
     }
 

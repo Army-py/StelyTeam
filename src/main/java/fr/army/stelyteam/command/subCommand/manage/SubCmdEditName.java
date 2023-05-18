@@ -1,4 +1,4 @@
-package fr.army.stelyteam.command.subCommands.manage;
+package fr.army.stelyteam.command.subCommand.manage;
 
 import java.util.List;
 
@@ -11,12 +11,13 @@ import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.manager.MessageManager;
 import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
-public class SubCmdDowngrade extends SubCommand {
+public class SubCmdEditName extends SubCommand {
+
     private DatabaseManager sqlManager;
     private MessageManager messageManager;
 
 
-    public SubCmdDowngrade(StelyTeamPlugin plugin) {
+    public SubCmdEditName(StelyTeamPlugin plugin) {
         super(plugin);
         this.sqlManager = plugin.getDatabaseManager();
         this.messageManager = plugin.getMessageManager();
@@ -28,18 +29,18 @@ public class SubCmdDowngrade extends SubCommand {
         Player player = (Player) sender;
         args[0] = "";
 
-        if (args.length == 1){
-            player.sendMessage(messageManager.getMessage("commands.stelyteam_downgrade.usage"));
+        if (args.length < 3){
+            player.sendMessage(messageManager.getMessage("commands.stelyteam_editname.usage"));
         }else{
-            String teamName = String.join("", args);
-            Team team = sqlManager.getTeamFromTeamName(teamName);
+            Team team = sqlManager.getTeamFromTeamName(args[1]);
             if (team != null){
-                Integer teamUpgrades = team.getImprovLvlMembers();
-                if (teamUpgrades == 0){
-                    player.sendMessage(messageManager.getMessage("commands.stelyteam_downgrade.min_level"));
+                if (sqlManager.teamNameExists(args[2])){
+                    player.sendMessage(messageManager.getMessage("common.name_already_exists"));
+                }else if (args[2].contains(" ")){
+                    player.sendMessage(messageManager.getMessage("common.name_cannot_contain_space"));
                 }else{
-                    player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_downgrade.output", teamName));
-                    team.decrementImprovLvlMembers();
+                    team.updateTeamName(args[2]);
+                    player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_editname.output", args[2]));
                 }
             }else{
                 player.sendMessage(messageManager.getMessage("common.team_not_exist"));
@@ -59,4 +60,5 @@ public class SubCmdDowngrade extends SubCommand {
     public boolean isOpCommand() {
         return true;
     }
+
 }

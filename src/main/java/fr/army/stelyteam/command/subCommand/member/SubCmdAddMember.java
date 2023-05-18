@@ -1,9 +1,8 @@
-package fr.army.stelyteam.command.subCommands.manage;
+package fr.army.stelyteam.command.subCommand.member;
 
 import java.util.List;
 
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import fr.army.stelyteam.StelyTeamPlugin;
@@ -12,16 +11,14 @@ import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.manager.MessageManager;
 import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
-public class SubCmdUpgrade extends SubCommand {
+public class SubCmdAddMember extends SubCommand {
 
     private DatabaseManager sqlManager;
-    private YamlConfiguration config;
     private MessageManager messageManager;
 
-    public SubCmdUpgrade(StelyTeamPlugin plugin) {
+    public SubCmdAddMember(StelyTeamPlugin plugin) {
         super(plugin);
         this.sqlManager = plugin.getDatabaseManager();
-        this.config = plugin.getConfig();
         this.messageManager = plugin.getMessageManager();
     }
 
@@ -30,19 +27,16 @@ public class SubCmdUpgrade extends SubCommand {
         Player player = (Player) sender;
         args[0] = "";
 
-        if (args.length == 1){
-            player.sendMessage(messageManager.getMessage("commands.stelyteam_upgrade.usage"));
+        if (args.length < 3){
+            player.sendMessage(messageManager.getMessage("commands.stelyteam_addmember.usage"));
         }else{
-            String teamName = String.join("", args);
-            Team team = sqlManager.getTeamFromTeamName(teamName);
+            Team team = sqlManager.getTeamFromTeamName(args[1]);
             if (team != null){
-                Integer maxUpgrades = config.getConfigurationSection("inventories.upgradeTotalMembers").getValues(false).size() - 1;
-                Integer teamUpgrades = team.getImprovLvlMembers();
-                if (maxUpgrades == teamUpgrades){
-                    player.sendMessage(messageManager.getMessage("commands.stelyteam_upgrade.max_level"));
+                if (sqlManager.isMember(args[2])){
+                    player.sendMessage(messageManager.getMessage("common.player_already_in_team"));
                 }else{
-                    team.incrementImprovLvlMembers();
-                    player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_upgrade.output", teamName));
+                    team.insertMember(args[2]);
+                    player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_addmember.output", args[2]));
                 }
             }else{
                 player.sendMessage(messageManager.getMessage("common.team_not_exist"));
