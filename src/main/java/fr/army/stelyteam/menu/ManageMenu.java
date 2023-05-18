@@ -1,4 +1,4 @@
-package fr.army.stelyteam.events.menu;
+package fr.army.stelyteam.menu;
 
 import fr.army.stelyteam.utils.Buttons;
 import fr.army.stelyteam.utils.Menus;
