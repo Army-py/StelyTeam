@@ -1,4 +1,4 @@
-package fr.army.stelyteam.utils;
+package fr.army.stelyteam.team;
 
 public class Permission {
     

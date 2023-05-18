@@ -11,8 +11,8 @@ import org.bukkit.entity.Player;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.command.SubCommand;
-import fr.army.stelyteam.utils.Member;
-import fr.army.stelyteam.utils.Team;
+import fr.army.stelyteam.team.Member;
+import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
 import fr.army.stelyteam.utils.manager.MessageManager;
 import fr.army.stelyteam.utils.manager.database.DatabaseManager;

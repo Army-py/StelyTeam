@@ -1,8 +1,8 @@
-package fr.army.stelyteam.menu;
+package fr.army.stelyteam.menu.impl;
 
+import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.Buttons;
 import fr.army.stelyteam.utils.Menus;
-import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.TeamMenu;
 import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.TemporaryActionNames;

@@ -1,4 +1,4 @@
-package fr.army.stelyteam.utils;
+package fr.army.stelyteam.team;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -12,15 +12,15 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.menu.AdminMenu;
-import fr.army.stelyteam.menu.EditAlliancesMenu;
-import fr.army.stelyteam.menu.EditMembersMenu;
-import fr.army.stelyteam.menu.ManageMenu;
-import fr.army.stelyteam.menu.MemberMenu;
-import fr.army.stelyteam.menu.MembersMenu;
-import fr.army.stelyteam.menu.PermissionsMenu;
-import fr.army.stelyteam.menu.StorageDirectoryMenu;
-import fr.army.stelyteam.menu.UpgradeMembersMenu;
+import fr.army.stelyteam.menu.impl.AdminMenu;
+import fr.army.stelyteam.menu.impl.EditAlliancesMenu;
+import fr.army.stelyteam.menu.impl.EditMembersMenu;
+import fr.army.stelyteam.menu.impl.ManageMenu;
+import fr.army.stelyteam.menu.impl.MemberMenu;
+import fr.army.stelyteam.menu.impl.MembersMenu;
+import fr.army.stelyteam.menu.impl.PermissionsMenu;
+import fr.army.stelyteam.menu.impl.StorageDirectoryMenu;
+import fr.army.stelyteam.menu.impl.UpgradeMembersMenu;
 
 public class Team {
     private StelyTeamPlugin plugin = StelyTeamPlugin.getPlugin();

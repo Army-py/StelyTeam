@@ -2,9 +2,9 @@ package fr.army.stelyteam.utils.manager;
 
 import java.util.ArrayList;
 
-import fr.army.stelyteam.utils.Page;
-import fr.army.stelyteam.utils.Storage;
-import fr.army.stelyteam.utils.Team;
+import fr.army.stelyteam.team.Page;
+import fr.army.stelyteam.team.Storage;
+import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.TemporaryActionNames;
 

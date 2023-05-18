@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.command.SubCommand;
-import fr.army.stelyteam.menu.TeamListMenu;
+import fr.army.stelyteam.menu.impl.TeamListMenu;
 import fr.army.stelyteam.utils.manager.CacheManager;
 
 public class SubCmdList extends SubCommand {

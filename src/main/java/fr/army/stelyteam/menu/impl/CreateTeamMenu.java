@@ -1,4 +1,4 @@
-package fr.army.stelyteam.menu;
+package fr.army.stelyteam.menu.impl;
 
 import java.util.List;
 

@@ -29,7 +29,7 @@ import fr.army.stelyteam.command.subCommand.team.SubCmdAccept;
 import fr.army.stelyteam.command.subCommand.team.SubCmdDeny;
 import fr.army.stelyteam.command.subCommand.utility.SubCmdHome;
 import fr.army.stelyteam.command.subCommand.utility.SubCmdVisual;
-import fr.army.stelyteam.utils.Team;
+import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
 import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;

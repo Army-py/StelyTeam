@@ -1,5 +1,7 @@
 package fr.army.stelyteam.utils;
 
+import fr.army.stelyteam.team.Team;
+
 public class TemporaryAction {
     private String senderName = "";
     private String targetName = "";

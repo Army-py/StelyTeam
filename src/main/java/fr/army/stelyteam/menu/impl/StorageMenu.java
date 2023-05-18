@@ -1,4 +1,4 @@
-package fr.army.stelyteam.menu;
+package fr.army.stelyteam.menu.impl;
 
 import java.util.List;
 
@@ -10,10 +10,10 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import fr.army.stelyteam.team.Storage;
+import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.Buttons;
 import fr.army.stelyteam.utils.Menus;
-import fr.army.stelyteam.utils.Storage;
-import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.TeamMenu;
 import fr.army.stelyteam.utils.builder.ItemBuilder;
 import fr.army.stelyteam.utils.manager.CacheManager;

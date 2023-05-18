@@ -1,4 +1,4 @@
-package fr.army.stelyteam.menu;
+package fr.army.stelyteam.menu.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,9 +15,9 @@ import org.bukkit.inventory.ItemStack;
 
 import fr.army.stelyteam.conversation.ConvAddMember;
 import fr.army.stelyteam.conversation.ConvEditOwner;
+import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.Buttons;
 import fr.army.stelyteam.utils.Menus;
-import fr.army.stelyteam.utils.Team;
 import fr.army.stelyteam.utils.TeamMenu;
 import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.TemporaryActionNames;

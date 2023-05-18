@@ -9,11 +9,11 @@ import java.util.UUID;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.utils.Alliance;
-import fr.army.stelyteam.utils.Member;
-import fr.army.stelyteam.utils.Permission;
-import fr.army.stelyteam.utils.Storage;
-import fr.army.stelyteam.utils.Team;
+import fr.army.stelyteam.team.Alliance;
+import fr.army.stelyteam.team.Member;
+import fr.army.stelyteam.team.Permission;
+import fr.army.stelyteam.team.Storage;
+import fr.army.stelyteam.team.Team;
 
 public abstract class DatabaseManager {
 
