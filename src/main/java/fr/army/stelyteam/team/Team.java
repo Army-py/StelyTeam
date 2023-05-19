@@ -26,7 +26,7 @@ import fr.army.stelyteam.utils.manager.CacheManager;
 
 public class Team {
 
-    private StelyTeamPlugin plugin = StelyTeamPlugin.getPlugin();
+    private static StelyTeamPlugin plugin = StelyTeamPlugin.getPlugin();
     private YamlConfiguration config = plugin.getConfig();
     private static CacheManager cacheManager = StelyTeamPlugin.getPlugin().getCacheManager();
 
@@ -57,10 +57,10 @@ public class Team {
         this.unlockedTeamBank = unlockedTeamBank;
         this.teamOwnerName = teamOwnerName;
 
-        this.teamMembers = this.plugin.getDatabaseManager().getTeamMembers(teamUuid);
-        this.teamPermissions = this.plugin.getDatabaseManager().getTeamAssignement(teamUuid);
-        this.teamAlliances = this.plugin.getDatabaseManager().getTeamAlliances(teamUuid);
-        this.teamStorages = this.plugin.getDatabaseManager().getTeamStorages(teamUuid);
+        this.teamMembers = plugin.getDatabaseManager().getTeamMembers(teamUuid);
+        this.teamPermissions = plugin.getDatabaseManager().getTeamAssignement(teamUuid);
+        this.teamAlliances = plugin.getDatabaseManager().getTeamAlliances(teamUuid);
+        this.teamStorages = plugin.getDatabaseManager().getTeamStorages(teamUuid);
     }
 
     public Team(UUID teamUuid, String teamName, String teamPrefix, String creationDate, String teamOwnerName){
@@ -78,31 +78,37 @@ public class Team {
 
 
     public void createTeam(){
-        this.plugin.getDatabaseManager().insertTeam(this);
+        plugin.getDatabaseManager().insertTeam(this);
     }
 
     public static Team init(String teamName){
-        // return StelyTeamPlugin.getPlugin().getDatabaseManager().getTeamFromTeamName(teamName);
         return cacheManager.getTeamByName(teamName) == null 
-            ? StelyTeamPlugin.getPlugin().getDatabaseManager().getTeamFromTeamName(teamName) : cacheManager.getTeamByName(teamName);
+            ? plugin.getDatabaseManager().getTeamFromTeamName(teamName) 
+            : cacheManager.getTeamByName(teamName);
     }
 
     public static Team init(Player player){
-        // return StelyTeamPlugin.getPlugin().getDatabaseManager().getTeamFromPlayerName(player.getName());
         return cacheManager.getTeamByPlayerName(player.getName()) == null 
-            ? StelyTeamPlugin.getPlugin().getDatabaseManager().getTeamFromPlayerName(player.getName()) : cacheManager.getTeamByPlayerName(player.getName());
+            ? plugin.getDatabaseManager().getTeamFromPlayerName(player.getName()) 
+            : cacheManager.getTeamByPlayerName(player.getName());
     }
 
     public static Team initFromPlayerName(String playerName){
-        // return StelyTeamPlugin.getPlugin().getDatabaseManager().getTeamFromPlayerName(playerName);
         return cacheManager.getTeamByPlayerName(playerName) == null 
-            ? StelyTeamPlugin.getPlugin().getDatabaseManager().getTeamFromPlayerName(playerName) : cacheManager.getTeamByPlayerName(playerName);
+            ? plugin.getDatabaseManager().getTeamFromPlayerName(playerName) 
+            : cacheManager.getTeamByPlayerName(playerName);
+    }
+
+    public static Team initFromPlayerUuid(UUID playerUuid){
+        return cacheManager.getTeamByPlayerUuid(playerUuid) == null 
+            ? plugin.getDatabaseManager().getTeamFromPlayerName(plugin.getSQLiteManager().getPlayerName(playerUuid)) 
+            : cacheManager.getTeamByPlayerUuid(playerUuid);
     }
 
     public static Team init(UUID teamUuid){
-        // return StelyTeamPlugin.getPlugin().getDatabaseManager().getTeamFromTeamUuid(teamUuid);
         return cacheManager.getTeamByUuid(teamUuid) == null 
-            ? StelyTeamPlugin.getPlugin().getDatabaseManager().getTeamFromTeamUuid(teamUuid) : cacheManager.getTeamByUuid(teamUuid);
+            ? plugin.getDatabaseManager().getTeamFromTeamUuid(teamUuid) 
+            : cacheManager.getTeamByUuid(teamUuid);
     }
 
 
@@ -137,7 +143,7 @@ public class Team {
 
 
     public void updateTeamName(String newTeamName){
-        this.plugin.getDatabaseManager().updateTeamName(this.teamUuid, newTeamName);
+        plugin.getDatabaseManager().updateTeamName(this.teamUuid, newTeamName);
 
         this.teamName = newTeamName;
     }
@@ -145,25 +151,25 @@ public class Team {
 
     public void updateTeamPrefix(String newPrefix){
         this.teamPrefix = newPrefix;
-        this.plugin.getDatabaseManager().updateTeamPrefix(teamUuid, newPrefix);
+        plugin.getDatabaseManager().updateTeamPrefix(teamUuid, newPrefix);
     }
 
 
     public void updateTeamDescription(String newDescription){
         this.teamDescription = newDescription;
-        this.plugin.getDatabaseManager().updateTeamDescription(teamUuid, newDescription);
+        plugin.getDatabaseManager().updateTeamDescription(teamUuid, newDescription);
     }
 
 
     public void updateTeamOwner(String newOwnerName){
-        this.plugin.getDatabaseManager().updateTeamOwner(teamUuid, teamOwnerName, newOwnerName);
+        plugin.getDatabaseManager().updateTeamOwner(teamUuid, teamOwnerName, newOwnerName);
         this.teamOwnerName = newOwnerName;
     }
 
 
     public void unlockedTeamBank(){
         this.unlockedTeamBank = true;
-        this.plugin.getDatabaseManager().updateUnlockedTeamBank(teamUuid);
+        plugin.getDatabaseManager().updateUnlockedTeamBank(teamUuid);
     }
 
 
@@ -171,48 +177,48 @@ public class Team {
         this.teamMembers.add(
             new Member(
                 playerName,
-                this.plugin.getLastRank(),
+                plugin.getLastRank(),
                 getCurrentDate(),
                 StelyTeamPlugin.getPlugin().getSQLiteManager().getUUID(playerName)
             )
         );
-        this.plugin.getDatabaseManager().insertMember(playerName, teamUuid);
+        plugin.getDatabaseManager().insertMember(playerName, teamUuid);
     }
 
 
     public void insertAlliance(UUID allianceUuid){
         this.teamAlliances.add(new Alliance(allianceUuid, getCurrentDate()));
-        this.plugin.getDatabaseManager().insertAlliance(teamUuid, allianceUuid);
+        plugin.getDatabaseManager().insertAlliance(teamUuid, allianceUuid);
     }
 
 
     public void removeMember(String playerName){
         this.teamMembers.removeIf(member -> member.getMemberName().equals(playerName));
-        this.plugin.getDatabaseManager().removeMember(playerName, teamUuid);
+        plugin.getDatabaseManager().removeMember(playerName, teamUuid);
     }
 
 
     public void removeAlliance(UUID allianceUuid){
         this.teamAlliances.removeIf(alliance -> alliance.getTeamUuid().equals(allianceUuid));
-        this.plugin.getDatabaseManager().removeAlliance(teamUuid, allianceUuid);
+        plugin.getDatabaseManager().removeAlliance(teamUuid, allianceUuid);
     }
 
 
     public void removeTeam(){
-        this.plugin.getDatabaseManager().removeTeam(teamUuid);
-        this.plugin.getSQLiteManager().removeHome(teamUuid);
+        plugin.getDatabaseManager().removeTeam(teamUuid);
+        plugin.getSQLiteManager().removeHome(teamUuid);
     }
 
 
     public void incrementTeamStorageLvl(){
         this.teamStorageLvl++;
-        this.plugin.getDatabaseManager().incrementTeamStorageLvl(teamUuid);
+        plugin.getDatabaseManager().incrementTeamStorageLvl(teamUuid);
     }
 
 
     public void incrementImprovLvlMembers(){
         this.improvLvlMembers++;
-        this.plugin.getDatabaseManager().incrementImprovLvlMembers(teamUuid);
+        plugin.getDatabaseManager().incrementImprovLvlMembers(teamUuid);
     }
 
 
@@ -220,7 +226,7 @@ public class Team {
         for (Permission permission : this.teamPermissions) {
             if (permission.getPermissionName().equals(permissionName)){
                 permission.incrementTeamRank();
-                this.plugin.getDatabaseManager().incrementAssignement(teamUuid, permissionName);
+                plugin.getDatabaseManager().incrementAssignement(teamUuid, permissionName);
                 return;
             }
         }
@@ -229,7 +235,7 @@ public class Team {
 
     public void decrementImprovLvlMembers(){
         this.improvLvlMembers--;
-        this.plugin.getDatabaseManager().decrementImprovLvlMembers(teamUuid);
+        plugin.getDatabaseManager().decrementImprovLvlMembers(teamUuid);
     }
 
 
@@ -237,7 +243,7 @@ public class Team {
         for (Permission permission : this.teamPermissions) {
             if (permission.getPermissionName().equals(permissionName)){
                 permission.decrementTeamRank();
-                this.plugin.getDatabaseManager().decrementAssignement(teamUuid, permissionName);
+                plugin.getDatabaseManager().decrementAssignement(teamUuid, permissionName);
                 return;
             }
         }
@@ -246,19 +252,19 @@ public class Team {
 
     public void insertAssignement(String permissionName, Integer teamRank){
         this.teamPermissions.add(new Permission(permissionName, teamRank));
-        this.plugin.getDatabaseManager().insertAssignement(teamUuid, permissionName, teamRank);
+        plugin.getDatabaseManager().insertAssignement(teamUuid, permissionName, teamRank);
     }
 
 
     public void incrementTeamMoney(Double amount){
         this.teamMoney += amount;
-        this.plugin.getDatabaseManager().incrementTeamMoney(teamUuid, amount);
+        plugin.getDatabaseManager().incrementTeamMoney(teamUuid, amount);
     }
 
 
     public void decrementTeamMoney(Double amount){
         this.teamMoney -= amount;
-        this.plugin.getDatabaseManager().decrementTeamMoney(teamUuid, amount);
+        plugin.getDatabaseManager().decrementTeamMoney(teamUuid, amount);
     }
 
 

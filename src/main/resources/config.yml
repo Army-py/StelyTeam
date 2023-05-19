@@ -83,6 +83,18 @@ prices:
       level5: 100000.0
 
 
+# The format of the message
+# Leave it blank or comment the line to use the defined chat format
+# Placeholders
+# {DISPLAYNAME} : The sender displayname
+# {MESSAGE} : The message sent
+# {FORMAT} : The defined chat format
+# {USERNAME} : The sender name
+# {TEAM} : The team prefix
+format: "&b[Team]{TEAM}&8{USERNAME}&7>{MESSAGE}"
+
+
+
 # Pour pouvoir mettre une tête custom il faudra juste la texture de la tête entre les guillemets de headTexture
 # et mettre comme type d'item PLAYER_HEAD
 # Exemples
@@ -244,15 +256,23 @@ inventories:
       itemName: "§5§nMenu de gestion"
       itemType: WRITABLE_BOOK
       headTexture: ""
-      slot: 12
+      slot: 11
       lore:
         - "§aGére les différents"
         - "§aparamètres de la team"
+    teamList:
+      itemName: "§5§nListe des teams"
+      itemType: BOOK
+      headTexture: ""
+      slot: 13
+      lore:
+        - "§aVisualise les teams"
+        - "§aet leurs informations"
     member:
       itemName: "§5§nMenu de la team"
       itemType: PLAYER_HEAD
       headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYWQzYzdjYjdlOGU5MDhiNzVjNWYzNWYzOTdlMDEwNGJjNzhjNDNiZmI1M2ZlYTVkZWY3YjFjM2M5ZGZlNjg2In19fQ=="
-      slot: 14
+      slot: 15
       lore:
         - "§aVisualise les options"
         - "§ade la team"

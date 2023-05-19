@@ -311,4 +311,24 @@ public class SQLiteDataManager {
         }
         return null;
     }
+
+    public String getPlayerName(UUID uuid){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT playername FROM players WHERE uuid = ?");
+                query.setString(1, uuid.toString());
+                ResultSet result = query.executeQuery();
+                boolean isParticipant = result.next();
+                String playername = null;
+                if(isParticipant){
+                    playername = result.getString("playername");
+                }
+                query.close();
+                return playername;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
 }

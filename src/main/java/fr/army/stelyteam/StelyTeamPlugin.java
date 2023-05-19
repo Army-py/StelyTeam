@@ -14,10 +14,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import fr.army.stelyteam.command.CommandManager;
 import fr.army.stelyteam.external.ExternalManager;
 import fr.army.stelyteam.external.bungeechatconnect.handler.RecipientsHandler;
-import fr.army.stelyteam.listener.InventoryClickManager;
-import fr.army.stelyteam.listener.InventoryCloseManager;
-import fr.army.stelyteam.listener.PlayerJoin;
-import fr.army.stelyteam.listener.PlayerQuit;
+import fr.army.stelyteam.listener.InventoryClickListener;
+import fr.army.stelyteam.listener.InventoryCloseListener;
+import fr.army.stelyteam.listener.PlayerJoinListener;
+import fr.army.stelyteam.listener.PlayerQuitListener;
 import fr.army.stelyteam.menu.TeamMenu;
 import fr.army.stelyteam.menu.impl.AdminMenu;
 import fr.army.stelyteam.menu.impl.CreateTeamMenu;
@@ -47,6 +47,7 @@ public class StelyTeamPlugin extends JavaPlugin {
     private ItemStackSerializer serializeManager;
     private DatabaseManager databaseManager;
     private ExternalManager externalManager;
+    private RecipientsHandler recipientsHandler;
 
 
     @Override
@@ -62,6 +63,7 @@ public class StelyTeamPlugin extends JavaPlugin {
         try {
             this.databaseManager = DatabaseManager.connect(this);
             this.sqliteManager.connect();
+            this.sqliteManager.createTables();
             this.databaseManager.createTables();
             this.getLogger().info("SQL connectée au plugin !");
         } catch (ClassNotFoundException | SQLException e) {
@@ -78,16 +80,16 @@ public class StelyTeamPlugin extends JavaPlugin {
         this.serializeManager = new ItemStackSerializer();
 
 
-        RecipientsHandler recipientsHandler = new RecipientsHandler();
+        this.recipientsHandler = new RecipientsHandler();
 
         this.externalManager = new ExternalManager();
         this.externalManager.load(this, recipientsHandler);
 
         
-        getServer().getPluginManager().registerEvents(new InventoryClickManager(this), this);
-        getServer().getPluginManager().registerEvents(new InventoryCloseManager(this), this);
-        getServer().getPluginManager().registerEvents(new PlayerJoin(this), this);
-        getServer().getPluginManager().registerEvents(new PlayerQuit(this), this);
+        getServer().getPluginManager().registerEvents(new InventoryClickListener(this), this);
+        getServer().getPluginManager().registerEvents(new InventoryCloseListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerQuitListener(this), this);
 
 
         getLogger().info("StelyTeam ON");
@@ -96,9 +98,9 @@ public class StelyTeamPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        closeAllPlayerInventories();
-
         this.externalManager.unload();
+        
+        closeAllPlayerInventories();
 
         this.databaseManager.disconnect();
         this.sqliteManager.disconnect();
@@ -262,5 +264,9 @@ public class StelyTeamPlugin extends JavaPlugin {
 
     public ExternalManager getExternalManager() {
         return externalManager;
+    }
+
+    public RecipientsHandler getRecipientsHandler() {
+        return recipientsHandler;
     }
 }

@@ -10,10 +10,10 @@ import fr.army.stelyteam.team.Team;
 
 public class RecipientsHandler {
     
-    public void handle(UUID senderId, Set<Player> recipients, Team team) {
+    public void handle(UUID senderId, Set<Player> recipients) {
         recipients.clear();
         for (Player p : Bukkit.getOnlinePlayers()) {
-            if (p.getUniqueId().equals(senderId) || team.isTeamMember(senderId)) {
+            if (p.getUniqueId().equals(senderId) || Team.initFromPlayerUuid(senderId).isTeamMember(p.getName())) {
                 recipients.add(p);
             }
         }

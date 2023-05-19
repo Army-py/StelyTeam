@@ -9,11 +9,11 @@ import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.manager.CacheManager;
 
-public class PlayerJoin implements Listener {
+public class PlayerJoinListener implements Listener {
     
     private final CacheManager cacheManager;
 
-    public PlayerJoin(StelyTeamPlugin plugin) {
+    public PlayerJoinListener(StelyTeamPlugin plugin) {
         this.cacheManager = plugin.getCacheManager();
     }
 

@@ -60,6 +60,8 @@ public class AdminMenu extends TeamMenu {
         // Ouverture des inventaires
         if (Buttons.MANAGE_MENU_BUTTON.isClickedButton(clickEvent)){
             new ManageMenu(viewer).openMenu(Team.initFromPlayerName(playerName));
+        }else if (Buttons.TEAM_LIST_MENU_BUTTON.isClickedButton(clickEvent)){
+            new TeamListMenu(viewer).openMenu();
         }else if (Buttons.MEMBER_MENU_BUTTON.isClickedButton(clickEvent)){
             new MemberMenu(viewer).openMenu(Team.initFromPlayerName(playerName));
             

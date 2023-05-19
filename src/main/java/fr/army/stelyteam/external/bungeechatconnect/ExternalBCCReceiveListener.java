@@ -24,7 +24,7 @@ public class ExternalBCCReceiveListener implements Listener {
         if (prefixedData == null) {
             return;
         }
-        recipientsHandler.handle(null, event.getRecipients(), null);
+        recipientsHandler.handle(null, event.getRecipients());
     }
 
 }

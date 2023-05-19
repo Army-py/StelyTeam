@@ -13,7 +13,6 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.command.subcommand.manage.SubCmdToggle;
 import fr.army.stelyteam.external.ExternalManager;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.manager.CacheManager;
@@ -47,6 +46,13 @@ public class CmdTeamTchat implements CommandExecutor, TabCompleter {
             UUID senderId = player.getUniqueId();
             String playerName = player.getName();
             Team team = Team.initFromPlayerName(playerName);
+            String argsString = String.join(" ", args);
+
+            int messageStart = 0;
+            while (argsString.charAt(messageStart) == ' ') {
+                messageStart++;
+            }
+            argsString = argsString.substring(messageStart);
 
             if (cacheManager.isInConversation(playerName)){
                 player.sendRawMessage(messageManager.getMessage("common.no_command_in_conv"));
@@ -75,6 +81,7 @@ public class CmdTeamTchat implements CommandExecutor, TabCompleter {
                     }
                 }else{
                     externalManager.registerMessage(senderId, true);
+                    cacheManager.addTeamPlayer(player.getUniqueId());
                 }
             }
         }
@@ -105,6 +112,5 @@ public class CmdTeamTchat implements CommandExecutor, TabCompleter {
 
 
     private void initSubCommands(){
-        subCommands.put("toggle", new SubCmdToggle(plugin));
     }
 }

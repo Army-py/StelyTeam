@@ -141,7 +141,7 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
         subCommands.put("help", new SubCmdHelp(plugin));
         subCommands.put("accept", new SubCmdAccept(plugin));
         subCommands.put("deny", new SubCmdDeny(plugin));
-        subCommands.put("list", new SubCmdList(plugin));
+        // subCommands.put("list", new SubCmdList(plugin));
 
         subCommands.put("admin", new SubCmdAdmin(plugin));
         subCommands.put("delete", new SubCmdDelete(plugin));

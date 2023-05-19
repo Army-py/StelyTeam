@@ -16,10 +16,6 @@ commands:
     description: "Envoie un message dans le tchat de team"
     usage: "/teamtchat <message>"
     aliases: ["tt", "teamchat"]
-    toggle:
-      description: "Active ou désactive le tchat de team"
-      usage: "/teamtchat toggle"
-      aliases: ["t"]
   stelyteam:
     description: "Ouvre l'inventaire de team"
     usage: "/stelyteam"

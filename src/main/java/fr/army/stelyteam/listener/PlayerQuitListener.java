@@ -10,11 +10,11 @@ import fr.army.stelyteam.team.Member;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.manager.CacheManager;
 
-public class PlayerQuit implements Listener{
+public class PlayerQuitListener implements Listener{
 
     private final CacheManager cacheManager;
 
-    public PlayerQuit(StelyTeamPlugin plugin) {
+    public PlayerQuitListener(StelyTeamPlugin plugin) {
         this.cacheManager = plugin.getCacheManager();
     }
 

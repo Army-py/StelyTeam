@@ -198,7 +198,7 @@ public class MySQLManager extends DatabaseManager {
                 queryMember.executeUpdate();
                 queryMember.close();
                 
-                PreparedStatement queryTeam = connection.prepareStatement("INSERT INTO team (teamUuid, teamName, teamPrefix, teamDescription, teamMoney, creationDate, improvLvlMembers, teamStorageLvl, unlockedTeamBank, teamOwnerPlayerId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                PreparedStatement queryTeam = connection.prepareStatement("INSERT INTO team (teamUuid, teamName, teamPrefix, teamDescription, teamMoney, creationDate, improvLvlMembers, teamStorageLvl, unlockedTeamBank, teamOwnerPlayerId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                 queryTeam.setString(1, team.getTeamUuid().toString());
                 queryTeam.setString(2, team.getTeamName());
                 queryTeam.setString(3, team.getTeamPrefix());
@@ -1079,4 +1079,5 @@ public class MySQLManager extends DatabaseManager {
     public String getCurrentDate(){
         return new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime());
     }
+
 }

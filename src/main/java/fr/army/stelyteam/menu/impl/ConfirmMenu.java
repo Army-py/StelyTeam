@@ -77,7 +77,7 @@ public class ConfirmMenu extends TeamMenu {
         String playerName = player.getName();
         TemporaryAction tempAction = cacheManager.getTempAction(playerName);
         Team team = tempAction.getTeam();
-        UUID teamUuid = team.getTeamUuid();
+        UUID teamUuid;
         String teamName;
 
         if (Buttons.CONFIRM_BUTTON.isClickedButton(clickEvent)){
@@ -122,6 +122,7 @@ public class ConfirmMenu extends TeamMenu {
                     break;
                 case CREATE_HOME:
                     player.closeInventory();
+                    teamUuid = team.getTeamUuid();
                     String worldName = player.getWorld().getName();
                     Double x = player.getLocation().getX();
                     Double y = player.getLocation().getY();
@@ -137,7 +138,7 @@ public class ConfirmMenu extends TeamMenu {
                     }
                     break;
                 case DELETE_HOME:
-                    teamName = team.getTeamName();
+                    teamUuid = team.getTeamUuid();
                     player.closeInventory();
                     sqliteManager.removeHome(teamUuid);
                     player.sendMessage(messageManager.getMessage("manage_team.team_home.deleted"));

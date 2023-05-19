@@ -26,6 +26,8 @@ public class CacheManager {
 
     private Set<Team> cachedTeams = Collections.synchronizedSet(new HashSet<Team>());
 
+    private Set<UUID> cachedTeamPlayers = Collections.synchronizedSet(new HashSet<UUID>());
+
 
 
     public void addTempAction(TemporaryAction tempAction){
@@ -241,6 +243,15 @@ public class CacheManager {
         return null;
     }
 
+    public Team getTeamByPlayerUuid(UUID playerUuid){
+        for(Team team : cachedTeams){
+            if (team.isTeamMember(playerUuid)){
+                return team;
+            }
+        }
+        return null;
+    }
+
     public Team getTeamByName(String teamName){
         for(Team team : cachedTeams){
             if(team.getTeamName().equals(teamName)){
@@ -248,5 +259,18 @@ public class CacheManager {
             }
         }
         return null;
+    }
+
+
+    public void addTeamPlayer(UUID playerUuid){
+        cachedTeamPlayers.add(playerUuid);
+    }
+
+    public boolean removeTeamPlayer(UUID playerUuid){
+        return cachedTeamPlayers.remove(playerUuid);
+    }
+
+    public boolean containsTeamPlayer(UUID playerUuid){
+        return cachedTeamPlayers.contains(playerUuid);
     }
 }

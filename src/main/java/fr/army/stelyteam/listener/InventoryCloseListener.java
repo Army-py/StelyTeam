@@ -8,9 +8,9 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.menu.TeamMenu;
 
-public class InventoryCloseManager implements Listener {
+public class InventoryCloseListener implements Listener {
 
-    public InventoryCloseManager(StelyTeamPlugin plugin) {
+    public InventoryCloseListener(StelyTeamPlugin plugin) {
     }
 
 

@@ -1,7 +1,6 @@
 package fr.army.stelyteam.listener;
 
 import org.bukkit.conversations.ConversationAbandonedEvent;
-import org.bukkit.conversations.ConversationAbandonedListener;
 import org.bukkit.conversations.ConversationCanceller;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.InactivityConversationCanceller;
@@ -12,12 +11,12 @@ import fr.army.stelyteam.utils.builder.conversation.ConversationSetCanceller;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
 
-public class ConversationAbandoned implements ConversationAbandonedListener {
+public class ConversationAbandonedListener implements org.bukkit.conversations.ConversationAbandonedListener {
 
     private CacheManager cacheManager;
     private MessageManager messageManager;
 
-    public ConversationAbandoned(StelyTeamPlugin plugin){
+    public ConversationAbandonedListener(StelyTeamPlugin plugin){
         this.cacheManager = plugin.getCacheManager();
         this.messageManager = new MessageManager(plugin);
     }

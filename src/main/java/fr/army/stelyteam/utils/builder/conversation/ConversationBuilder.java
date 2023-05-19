@@ -7,7 +7,7 @@ import org.bukkit.conversations.Prompt;
 import org.bukkit.entity.Player;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.listener.ConversationAbandoned;
+import fr.army.stelyteam.listener.ConversationAbandonedListener;
 import fr.army.stelyteam.utils.manager.CacheManager;
 
 public class ConversationBuilder {
@@ -27,7 +27,7 @@ public class ConversationBuilder {
 
         cf.withFirstPrompt(prompt);
         cf.withLocalEcho(false);
-        cf.addConversationAbandonedListener(new ConversationAbandoned(plugin));
+        cf.addConversationAbandonedListener(new ConversationAbandonedListener(plugin));
         cf.withConversationCanceller(new ConversationSetCanceller(plugin));
         cf.withTimeout(config.getInt("conversationTimeout"));
         // cf.withEscapeSequence("cancel");

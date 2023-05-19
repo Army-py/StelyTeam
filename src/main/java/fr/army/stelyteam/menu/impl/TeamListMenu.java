@@ -42,8 +42,8 @@ public class TeamListMenu extends TeamMenu {
 
     public Inventory createInventory(String playerName) {
         Collection<Team> teams = plugin.getDatabaseManager().getTeams();
-        List<Integer> headSlots = config.getIntegerList("inventories.teamList.teamOwnerHead.slots");
         Inventory inventory = Bukkit.createInventory(this, this.menuSlots, this.menuName);
+        List<Integer> headSlots = config.getIntegerList("inventories.teamList.teamOwnerHead.slots");
         Integer maxMembers = config.getInt("teamMaxMembers");
         Page page;
 
@@ -133,7 +133,7 @@ public class TeamListMenu extends TeamMenu {
                 new TeamListMenu(player).openMenu();
             }else if (Buttons.CLOSE_TEAM_LIST_MENU_BUTTON.isClickedButton(clickEvent)){
                 cacheManager.removePage(cacheManager.getPage(playerName));
-                player.closeInventory();
+                new AdminMenu(player).openMenu();
             }
         }
         clickEvent.setCancelled(true);

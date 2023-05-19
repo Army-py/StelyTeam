@@ -11,11 +11,11 @@ import fr.army.stelyteam.menu.TeamMenu;
 import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
 
 
-public class InventoryClickManager implements Listener{    
+public class InventoryClickListener implements Listener{    
 
     private SQLiteDataManager sqliteManager;
 
-    public InventoryClickManager(StelyTeamPlugin plugin) {
+    public InventoryClickListener(StelyTeamPlugin plugin) {
         this.sqliteManager = plugin.getSQLiteManager();
     }
 

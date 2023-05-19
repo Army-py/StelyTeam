@@ -17,6 +17,7 @@ public enum Buttons {
 
     CREATE_TEAM_BUTTON("create", "createTeam"),
     MANAGE_MENU_BUTTON("manage", "admin"),
+    TEAM_LIST_MENU_BUTTON("teamList", "admin"), 
     MEMBER_MENU_BUTTON("member", "admin"),
     CLOSE_ADMIN_MENU_BUTTON("close", "admin"),
     EDIT_MEMBERS_MENU_BUTTON("editMembers", "manage"),
