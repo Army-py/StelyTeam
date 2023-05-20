@@ -6,7 +6,7 @@ import fr.army.stelyteam.StelyTeamPlugin;
 
 public class CommandManager {
     private CmdStelyTeam stelyTeamCommand;
-    private CmdTeamTchat teamTchatCommand;
+    private TeamChatCommand teamTchatCommand;
 
     public CommandManager(StelyTeamPlugin plugin) {
         PluginCommand stelyTeamCmd = plugin.getCommand("stelyteam");
@@ -17,7 +17,7 @@ public class CommandManager {
 
         PluginCommand teamTchatCmd = plugin.getCommand("teamtchat");
 
-        teamTchatCommand = new CmdTeamTchat(plugin);
+        teamTchatCommand = new TeamChatCommand(plugin.getTeamChatManager(), plugin.getCacheManager(), plugin.getMessageManager());
         teamTchatCmd.setExecutor(teamTchatCommand);
         teamTchatCmd.setTabCompleter(teamTchatCommand);
     }

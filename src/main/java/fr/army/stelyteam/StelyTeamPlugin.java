@@ -1,20 +1,10 @@
 package fr.army.stelyteam;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.sql.SQLException;
-import java.util.Objects;
-
-import fr.army.stelyteam.listener.*;
-import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
-
+import fr.army.stelyteam.chat.TeamChatLoader;
+import fr.army.stelyteam.chat.TeamChatManager;
 import fr.army.stelyteam.command.CommandManager;
 import fr.army.stelyteam.external.ExternalManager;
-import fr.army.stelyteam.external.bungeechatconnect.handler.RecipientsHandler;
+import fr.army.stelyteam.listener.ListenerLoader;
 import fr.army.stelyteam.menu.TeamMenu;
 import fr.army.stelyteam.menu.impl.AdminMenu;
 import fr.army.stelyteam.menu.impl.CreateTeamMenu;
@@ -28,6 +18,16 @@ import fr.army.stelyteam.utils.manager.MessageManager;
 import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
 import fr.army.stelyteam.utils.manager.serializer.ItemStackSerializer;
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.sql.SQLException;
+import java.util.Objects;
 
 public class StelyTeamPlugin extends JavaPlugin {
 
@@ -37,6 +37,7 @@ public class StelyTeamPlugin extends JavaPlugin {
     private CacheManager cacheManager;
     private SQLiteDataManager sqliteManager;
     private EconomyManager economyManager;
+    private TeamChatManager teamChatManager;
     private CommandManager commandManager;
     private MessageManager messageManager;
     private ColorsBuilder colorsBuilder;
@@ -44,13 +45,11 @@ public class StelyTeamPlugin extends JavaPlugin {
     private ItemStackSerializer serializeManager;
     private DatabaseManager databaseManager;
     private ExternalManager externalManager;
-    private RecipientsHandler recipientsHandler;
 
 
     @Override
     public void onEnable() {
         plugin = this;
-        this.saveDefaultConfig();
 
         this.config = initFile(this.getDataFolder(), "config.yml");
         this.messages = initFile(this.getDataFolder(), "messages.yml");
@@ -71,16 +70,16 @@ public class StelyTeamPlugin extends JavaPlugin {
         this.cacheManager = new CacheManager();
         this.economyManager = new EconomyManager(this);
         this.messageManager = new MessageManager(this);
+        final TeamChatLoader teamChatLoader = new TeamChatLoader();
+        this.teamChatManager = teamChatLoader.load();
         this.commandManager = new CommandManager(this);
         this.colorsBuilder = new ColorsBuilder(this);
         this.conversationBuilder = new ConversationBuilder(this);
         this.serializeManager = new ItemStackSerializer();
 
 
-        this.recipientsHandler = new RecipientsHandler();
-
         this.externalManager = new ExternalManager();
-        this.externalManager.load(this, recipientsHandler);
+        this.externalManager.load();
 
         final ListenerLoader listenerLoader = new ListenerLoader();
         listenerLoader.registerListeners(this);
@@ -255,11 +254,8 @@ public class StelyTeamPlugin extends JavaPlugin {
         return serializeManager;
     }
 
-    public ExternalManager getExternalManager() {
-        return externalManager;
+    public TeamChatManager getTeamChatManager() {
+        return teamChatManager;
     }
 
-    public RecipientsHandler getRecipientsHandler() {
-        return recipientsHandler;
-    }
 }

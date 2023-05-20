@@ -1,12 +1,11 @@
 package fr.army.stelyteam.external.stelyclaim.handler;
 
-import java.util.Collections;
-import java.util.Set;
-
+import fr.flowsqy.stelyclaim.api.ClaimOwner;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
-import fr.flowsqy.stelyclaim.api.ClaimOwner;
+import java.util.Collections;
+import java.util.Set;
 
 public class TeamOwner implements ClaimOwner {
 
@@ -34,4 +33,5 @@ public class TeamOwner implements ClaimOwner {
     public boolean own(Player player) {
         return this.player.equals(player);
     }
+
 }

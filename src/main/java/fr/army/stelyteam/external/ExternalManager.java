@@ -1,45 +1,21 @@
 package fr.army.stelyteam.external;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.UUID;
-
-import org.bukkit.plugin.Plugin;
-
-import fr.army.stelyteam.external.bungeechatconnect.ExternalBCCLoader;
-import fr.army.stelyteam.external.bungeechatconnect.handler.RecipientsHandler;
-import fr.army.stelyteam.external.stelyclaim.StelyClaimLoader;
+import fr.army.stelyteam.external.stelyclaim.ExternalStelyClaimLoader;
 
 public class ExternalManager {
 
-    private final List<MessageHandler> messageHandlers;
+    private final ExternalStelyClaimLoader stelyClaimLoader;
 
     public ExternalManager() {
-        messageHandlers = new LinkedList<>();
-    }
-    
-    public void load(Plugin plugin, RecipientsHandler recipientsHandler){
-        StelyClaimLoader stelyClaimLoader = new StelyClaimLoader();
-        // stelyClaimLoader.load();
-
-        ExternalBCCLoader essentialsBBCLoader = new ExternalBCCLoader();
-        registerHandler(essentialsBBCLoader.load(plugin, recipientsHandler));
+        stelyClaimLoader = new ExternalStelyClaimLoader();
     }
 
-    public void unload(){
-        StelyClaimLoader stelyClaimLoader = new StelyClaimLoader();
-        // stelyClaimLoader.unload();
+    public void load() {
+        stelyClaimLoader.load();
     }
 
-    private void registerHandler(MessageHandler messageHandler) {
-        if (messageHandler != null) {
-            messageHandlers.add(messageHandler);
-        }
+    public void unload() {
+        stelyClaimLoader.unload();
     }
 
-    public void registerMessage(UUID senderId, boolean isPrefixed) {
-        for (MessageHandler messageHandler : messageHandlers) {
-            messageHandler.handleMessage(senderId, isPrefixed);
-        }
-    }
 }

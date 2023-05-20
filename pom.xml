@@ -10,8 +10,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>16</maven.compiler.source>
-        <maven.compiler.target>16</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
     </properties>
 
     <dependencies>
@@ -45,30 +45,30 @@
 			<scope>provided</scope>
 		</dependency>
 
+        <!-- StelyClaim integration -->
         <dependency>
             <groupId>com.github.Flowsqy</groupId>
             <artifactId>StelyClaim</artifactId>
             <version>2ca3c5ed05</version>
         </dependency>
-
-        <dependency>
-            <groupId>com.github.Flowsqy</groupId>
-            <artifactId>BungeeChatConnect</artifactId>
-            <version>2867f3f</version>
-        </dependency>
-
         <dependency>
             <groupId>com.sk89q.worldedit</groupId>
             <artifactId>worldedit-bukkit</artifactId>
             <version>7.3.0-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
-
         <dependency>
             <groupId>com.sk89q.worldguard</groupId>
             <artifactId>worldguard-bukkit</artifactId>
             <version>7.0.5-SNAPSHOT</version>
             <scope>provided</scope>
+        </dependency>
+
+        <!-- Jetbrains annotation -->
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>24.0.1</version>
         </dependency>
     </dependencies>
 
