@@ -3,23 +3,22 @@ package fr.army.stelyteam.external.stelyclaim;
 import fr.army.stelyteam.external.stelyclaim.handler.TeamHandler;
 import fr.flowsqy.stelyclaim.StelyClaimPlugin;
 
-public class StelyClaimSession {
-    
-    private StelyClaimPlugin stelyclaimPlugin;
+public class ExternalStelyClaimSession {
+
+    private final StelyClaimPlugin stelyclaimPlugin;
     private TeamHandler teamHandler;
 
-    public StelyClaimSession(StelyClaimPlugin stelyclaimPlugin){
+    public ExternalStelyClaimSession(StelyClaimPlugin stelyclaimPlugin) {
         this.stelyclaimPlugin = stelyclaimPlugin;
-        this.teamHandler = null;
+        teamHandler = null;
     }
 
-
-    public void enable(){
-        this.teamHandler = new TeamHandler(stelyclaimPlugin);
+    public void enable() {
+        teamHandler = new TeamHandler(stelyclaimPlugin);
         stelyclaimPlugin.getProtocolManager().registerHandler(teamHandler);
     }
 
-    public void disable(){
+    public void disable() {
         stelyclaimPlugin.getProtocolManager().unregisterHandler(teamHandler);
     }
 }

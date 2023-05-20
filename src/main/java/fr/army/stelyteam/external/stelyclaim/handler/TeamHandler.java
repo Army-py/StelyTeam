@@ -1,16 +1,14 @@
 package fr.army.stelyteam.external.stelyclaim.handler;
 
-import java.util.UUID;
-
-import org.bukkit.Bukkit;
-
 import fr.flowsqy.stelyclaim.StelyClaimPlugin;
 import fr.flowsqy.stelyclaim.api.ClaimHandler;
 import fr.flowsqy.stelyclaim.api.FormattedMessages;
 import fr.flowsqy.stelyclaim.api.RegionModifier;
 import fr.flowsqy.stelyclaim.common.ConfigRegionModifier;
 import fr.flowsqy.stelyclaim.common.ConfigurationFormattedMessages;
+import org.bukkit.Bukkit;
 
+import java.util.UUID;
 
 public class TeamHandler implements ClaimHandler<TeamOwner> {
 
@@ -56,4 +54,5 @@ public class TeamHandler implements ClaimHandler<TeamOwner> {
     public FormattedMessages getMessages() {
         return messages;
     }
+
 }

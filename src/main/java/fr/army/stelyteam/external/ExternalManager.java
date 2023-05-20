@@ -1,13 +1,13 @@
 package fr.army.stelyteam.external;
 
-import fr.army.stelyteam.external.stelyclaim.StelyClaimLoader;
+import fr.army.stelyteam.external.stelyclaim.ExternalStelyClaimLoader;
 
 public class ExternalManager {
 
-    private final StelyClaimLoader stelyClaimLoader;
+    private final ExternalStelyClaimLoader stelyClaimLoader;
 
     public ExternalManager() {
-        stelyClaimLoader = new StelyClaimLoader();
+        stelyClaimLoader = new ExternalStelyClaimLoader();
     }
     
     public void load(){
