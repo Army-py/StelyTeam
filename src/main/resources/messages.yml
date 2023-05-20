@@ -20,6 +20,7 @@ common:
   player_not_exist: "§cCe joueur n'existe pas ou n'est pas connecté."
   player_not_in_your_team: "§cLe joueur n'est pas dans ta team."
   prefix_is_too_long: "§cLe préfixe est trop long. §7§o(12 caractères maximum)"
+  prefix_is_too_short: "§cLe préfixe est trop court."
   prefix_contains_blocked_colors: "§cLe préfixe contient des couleurs interdites. §7§o(toutes les couleurs rouge)"
   team_not_exist: "§cLa team n'existe pas."
   team_bank_not_unlock: "§cVous n'avez pas débloqué le compte de team."

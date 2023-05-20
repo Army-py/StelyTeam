@@ -37,6 +37,9 @@ public class ConvEditTeamPrefix extends StringPrompt {
         if (colorBuilder.prefixTeamIsTooLong(answer)) {
             con.getForWhom().sendRawMessage(messageManager.getMessage("common.prefix_is_too_long"));
             return this;
+        }else if (colorBuilder.prefixTeamIsTooShort(answer)) {
+            con.getForWhom().sendRawMessage(messageManager.getMessage("common.prefix_is_too_short"));
+            return this;
         }else if (colorBuilder.containsBlockedColors(answer)) {
             con.getForWhom().sendRawMessage(messageManager.getMessage("common.prefix_contains_blocked_colors"));
             return this;

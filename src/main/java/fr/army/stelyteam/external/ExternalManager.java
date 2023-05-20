@@ -17,7 +17,7 @@ public class ExternalManager {
         nqpmLoader.load();
     }
 
-    public void unload(){
+    public void unload() {
         stelyClaimLoader.unload();
     }
 

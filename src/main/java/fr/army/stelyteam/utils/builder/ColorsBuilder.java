@@ -59,6 +59,13 @@ public class ColorsBuilder {
         return prefixTeam.length() - (colors * 2 + hexColors * 8) > config.getInt("teamPrefixMaxLength");
     }
 
+    public boolean prefixTeamIsTooShort(String prefixTeam){
+        int colors = getPrefixColors(prefixTeam).size();
+        int hexColors = getPrefixHexColors(prefixTeam).size();
+
+        return prefixTeam.length() - (colors * 2 + hexColors * 8) <= config.getInt("teamPrefixMinLength");
+    }
+
 
     public boolean descriptionTeamIsTooLong(String prefixTeam){
         int colors = getPrefixColors(prefixTeam).size();

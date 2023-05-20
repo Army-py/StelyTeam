@@ -3,6 +3,7 @@ package fr.army.stelyteam.team;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -40,11 +41,12 @@ public class Team {
     private Integer teamStorageLvl = 0;
     private Boolean unlockedTeamBank = false;
     private String teamOwnerName;
-    private Set<Member> teamMembers;
-    private Set<Permission> teamPermissions;
-    private Set<Alliance> teamAlliances;
+    private Set<Member> teamMembers = new HashSet<>();
+    private Set<Permission> teamPermissions = new HashSet<>();
+    private Set<Alliance> teamAlliances = new HashSet<>();
     private Map<Integer, Storage> teamStorages;
 
+    // Existing team
     public Team(UUID teamUuid, String teamName, String teamPrefix, String teamDescription, double teamMoney, String creationDate, int improvLvlMembers, int teamStorageLvl, boolean unlockedTeamBank, String teamOwnerName){
         this.teamUuid = teamUuid;
         this.teamName = teamName;
@@ -63,13 +65,7 @@ public class Team {
         this.teamStorages = plugin.getDatabaseManager().getTeamStorages(teamUuid);
     }
 
-    public Team(UUID teamUuid, String teamName, String teamPrefix, String creationDate, String teamOwnerName){
-        this.teamUuid = teamUuid;
-        this.teamName = teamName;
-        this.teamPrefix = teamPrefix;
-        this.teamOwnerName = teamOwnerName;
-    }
-
+    // New team
     public Team(String teamName, String teamOwnerName){
         this.teamUuid = UUID.randomUUID();
         this.teamName = teamName;
@@ -79,6 +75,7 @@ public class Team {
 
     public void createTeam(){
         plugin.getDatabaseManager().insertTeam(this);
+        cacheManager.addTeam(Team.init(teamUuid));
     }
 
     public static Team init(String teamName){
@@ -109,6 +106,10 @@ public class Team {
         return cacheManager.getTeamByUuid(teamUuid) == null 
             ? plugin.getDatabaseManager().getTeamFromTeamUuid(teamUuid) 
             : cacheManager.getTeamByUuid(teamUuid);
+    }
+
+    public static Team getFromCache(Player player){
+        return cacheManager.getTeamByPlayerName(player.getName());
     }
 
 
