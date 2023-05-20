@@ -1,5 +1,6 @@
 package fr.army.stelyteam.external;
 
+import fr.army.stelyteam.external.nqpm.ExternalNQPMLoader;
 import fr.army.stelyteam.external.stelyclaim.ExternalStelyClaimLoader;
 
 public class ExternalManager {
@@ -9,9 +10,11 @@ public class ExternalManager {
     public ExternalManager() {
         stelyClaimLoader = new ExternalStelyClaimLoader();
     }
-    
-    public void load(){
+
+    public void load() {
         stelyClaimLoader.load();
+        final ExternalNQPMLoader nqpmLoader = new ExternalNQPMLoader();
+        nqpmLoader.load();
     }
 
     public void unload(){

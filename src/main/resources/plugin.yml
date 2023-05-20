@@ -10,7 +10,7 @@ softdepend:
   - "StelyClaim"
   - "WorldEdit"
   - "WorldGuard"
-  - "BungeeChatConnect"
+  - "NoQueuePluginMessage"
 commands:
   teamtchat:
     description: "Envoie un message dans le tchat de team"
