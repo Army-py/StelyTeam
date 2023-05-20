@@ -6,6 +6,8 @@ import java.nio.file.Files;
 import java.sql.SQLException;
 import java.util.Objects;
 
+import fr.army.stelyteam.chat.TeamChatLoader;
+import fr.army.stelyteam.chat.TeamChatManager;
 import fr.army.stelyteam.listener.*;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -37,6 +39,7 @@ public class StelyTeamPlugin extends JavaPlugin {
     private CacheManager cacheManager;
     private SQLiteDataManager sqliteManager;
     private EconomyManager economyManager;
+    private TeamChatManager teamChatManager;
     private CommandManager commandManager;
     private MessageManager messageManager;
     private ColorsBuilder colorsBuilder;
@@ -71,6 +74,8 @@ public class StelyTeamPlugin extends JavaPlugin {
         this.cacheManager = new CacheManager();
         this.economyManager = new EconomyManager(this);
         this.messageManager = new MessageManager(this);
+        final TeamChatLoader teamChatLoader = new TeamChatLoader();
+        this.teamChatManager = teamChatLoader.load();
         this.commandManager = new CommandManager(this);
         this.colorsBuilder = new ColorsBuilder(this);
         this.conversationBuilder = new ConversationBuilder(this);
@@ -255,11 +260,8 @@ public class StelyTeamPlugin extends JavaPlugin {
         return serializeManager;
     }
 
-    public ExternalManager getExternalManager() {
-        return externalManager;
+    public TeamChatManager getTeamChatManager() {
+        return teamChatManager;
     }
 
-    public RecipientsHandler getRecipientsHandler() {
-        return recipientsHandler;
-    }
 }

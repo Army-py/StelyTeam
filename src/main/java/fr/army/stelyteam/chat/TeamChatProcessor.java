@@ -10,7 +10,7 @@ import java.util.Set;
 
 public class TeamChatProcessor {
 
-    private final static String MESSAGE_PLACEHOLDER = "{MESSAGE}";
+
 
     private final String format;
 
@@ -23,7 +23,8 @@ public class TeamChatProcessor {
         if (event.isCancelled()) {
             return;
         }
-        final String toSendMessage = event.getFormat().replace(MESSAGE_PLACEHOLDER, event.getMessage());
+        final TeamChatFormatHandler formatHandler = new TeamChatFormatHandler();
+        final String toSendMessage = formatHandler.handle(sender, event.getFormat(), event.getMessage());
         // TODO Get all receivers (here probably team members)
         final Set<Player> recipients = new HashSet<>();
         for (Player receiver : recipients) {
