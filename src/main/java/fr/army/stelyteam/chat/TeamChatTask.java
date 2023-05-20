@@ -10,11 +10,13 @@ import java.util.concurrent.locks.Lock;
 public class TeamChatTask implements Runnable {
 
     private final Lock lock;
+    private final TeamChatProcessor processor;
     private final Queue<Message> messageQueue;
     private boolean finished;
 
-    public TeamChatTask(final Lock lock) {
+    public TeamChatTask(@NotNull Lock lock, @NotNull TeamChatProcessor processor) {
         this.lock = lock;
+        this.processor = processor;
         this.messageQueue = new LinkedList<>();
     }
 
@@ -32,7 +34,7 @@ public class TeamChatTask implements Runnable {
             } finally {
                 lock.unlock();
             }
-
+            processor.process(message.sender(), message.message());
         }
     }
 

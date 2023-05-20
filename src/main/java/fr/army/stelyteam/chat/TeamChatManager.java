@@ -9,10 +9,12 @@ import java.util.concurrent.locks.ReentrantLock;
 public class TeamChatManager {
 
     private final Lock lock;
+    private final TeamChatProcessor teamChatProcessor;
     private TeamChatTask teamChatTask;
 
-    public TeamChatManager() {
+    public TeamChatManager(@NotNull TeamChatProcessor teamChatProcessor) {
         lock = new ReentrantLock();
+        this.teamChatProcessor = teamChatProcessor;
         teamChatTask = null;
     }
 
@@ -21,7 +23,7 @@ public class TeamChatManager {
             lock.lock();
             final boolean isNew = teamChatTask == null || teamChatTask.isFinished();
             if (isNew) {
-                teamChatTask = new TeamChatTask(lock);
+                teamChatTask = new TeamChatTask(lock, teamChatProcessor);
             }
             teamChatTask.subscribe(player, message);
             if(isNew) {
