@@ -1,6 +1,6 @@
 # Connection à la base de donnée
 
-database_type: "mysql" # mysql ou sqlite
+database_type: "sqlite" # mysql ou sqlite
 sql:
   host: "127.0.0.1:3306"
   database: "stelyteam_test"
@@ -48,6 +48,7 @@ openTeamAfterCreate: true
 # Nombre maximum de caracteres dans les noms de team (les couleurs ne sont pas prises en compte dans la limite)
 teamNameMaxLength: 12
 teamPrefixMaxLength: 10
+teamPrefixMinLength: 0
 
 # Longueur max de la description d'une team (sans compter les couleurs)
 teamDescriptionMaxLength: 30

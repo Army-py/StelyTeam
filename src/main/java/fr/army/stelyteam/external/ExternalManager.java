@@ -20,7 +20,7 @@ public class ExternalManager {
     
     public void load(Plugin plugin, RecipientsHandler recipientsHandler){
         StelyClaimLoader stelyClaimLoader = new StelyClaimLoader();
-        stelyClaimLoader.load();
+        // stelyClaimLoader.load();
 
         ExternalBCCLoader essentialsBBCLoader = new ExternalBCCLoader();
         registerHandler(essentialsBBCLoader.load(plugin, recipientsHandler));
@@ -28,7 +28,7 @@ public class ExternalManager {
 
     public void unload(){
         StelyClaimLoader stelyClaimLoader = new StelyClaimLoader();
-        stelyClaimLoader.unload();
+        // stelyClaimLoader.unload();
     }
 
     private void registerHandler(MessageHandler messageHandler) {

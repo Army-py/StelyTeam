@@ -157,7 +157,7 @@ public class SQLiteManager extends DatabaseManager {
                 queryMember.executeUpdate();
                 queryMember.close();
                 
-                PreparedStatement queryTeam = connection.prepareStatement("INSERT INTO team (teamUuid, teamName, teamPrefix, teamDescription, teamMoney, creationDate, improvLvlMembers, teamStorageLvl, unlockedTeamBank, teamOwnerPlayerId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                PreparedStatement queryTeam = connection.prepareStatement("INSERT INTO team (teamUuid, teamName, teamPrefix, teamDescription, teamMoney, creationDate, improvLvlMembers, teamStorageLvl, unlockedTeamBank, teamOwnerPlayerId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                 queryTeam.setString(1, team.getTeamUuid().toString());
                 queryTeam.setString(2, team.getTeamName());
                 queryTeam.setString(3, team.getTeamPrefix());
@@ -479,51 +479,49 @@ public class SQLiteManager extends DatabaseManager {
 
     @Override
     public Set<String> getTeamMembersWithRank(UUID teamUuid, int rank){
+        Set<String> teamMembers = new HashSet<>();
         if(isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("SELECT p.playerName FROM player AS p INNER JOIN team AS t ON p.teamId = t.teamId WHERE t.teamUuid = ? AND p.teamRank <= ? ORDER BY p.teamRank ASC");
                 query.setString(1, teamUuid.toString());
                 query.setInt(2, rank);
                 ResultSet result = query.executeQuery();
-                Set<String> teamMembers = new HashSet<>();
                 while(result.next()){
                     teamMembers.add(result.getString("playerName"));
                 }
                 query.close();
-                return teamMembers;
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
-        return null;
+        return teamMembers;
     }
 
     @Override
     public Set<String> getTeamsName(){
+        Set<String> teamsName = new HashSet<>();
         if(isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("SELECT teamName FROM team");
                 ResultSet result = query.executeQuery();
-                Set<String> teamsName = new HashSet<>();
                 while(result.next()){
                     teamsName.add(result.getString("teamName"));
                 }
                 query.close();
-                return teamsName;
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
-        return null;
+        return teamsName;
     }
 
     @Override
     public Set<Team> getTeams(){
+        Set<Team> teams = new HashSet<>();
         if(isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("SELECT * FROM team INNER JOIN player ON team.teamOwnerPlayerId = player.playerId");
                 ResultSet result = query.executeQuery();
-                Set<Team> teams = new HashSet<>();
                 while(result.next()){
                     teams.add(new Team(
                         UUID.fromString(result.getString("teamUuid")),
@@ -539,12 +537,11 @@ public class SQLiteManager extends DatabaseManager {
                     ));
                 }
                 query.close();
-                return teams;
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
-        return null;
+        return teams;
     }
 
     @Override
@@ -765,21 +762,20 @@ public class SQLiteManager extends DatabaseManager {
 
     @Override
     public Set<String> getMembers(){
+        Set<String> members = new HashSet<>();
         if(isConnected()){
             try {
-                Set<String> members = new HashSet<>();
                 PreparedStatement query = connection.prepareStatement("SELECT playerName FROM player");
                 ResultSet result = query.executeQuery();
                 while(result.next()){
                     members.add(result.getString("playerName"));
                 }
                 query.close();
-                return members;
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
-        return null;
+        return members;
     }
 
     @Override
@@ -842,12 +838,12 @@ public class SQLiteManager extends DatabaseManager {
 
     @Override
     public Set<Member> getTeamMembers(UUID teamUuid){
+        Set<Member> teamMembers = new HashSet<>();
         if(isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("SELECT p.playerName, p.teamRank, p.joinDate FROM player AS p INNER JOIN team AS t ON p.teamId = t.teamId WHERE t.teamUuid = ? ORDER BY p.teamRank ASC, p.playerName ASC;");
                 query.setString(1, teamUuid.toString());
                 ResultSet result = query.executeQuery();
-                Set<Member> teamMembers = new HashSet<>();
                 while(result.next()){
                     teamMembers.add(
                         new Member(
@@ -859,22 +855,21 @@ public class SQLiteManager extends DatabaseManager {
                     );
                 }
                 query.close();
-                return teamMembers;
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
-        return null;
+        return teamMembers;
     }
 
     @Override
     public Set<Permission> getTeamAssignement(UUID teamUuid){
+        Set<Permission> teamAssignement = new HashSet<>();
         if(isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("SELECT a.permLabel, a.teamRank FROM assignement AS a INNER JOIN team AS t ON a.teamId = t.teamId WHERE t.teamUuid = ?;");
                 query.setString(1, teamUuid.toString());
                 ResultSet result = query.executeQuery();
-                Set<Permission> teamAssignement = new HashSet<>();
                 while(result.next()){
                     teamAssignement.add(
                         new Permission(
@@ -884,19 +879,18 @@ public class SQLiteManager extends DatabaseManager {
                     );
                 }
                 query.close();
-                return teamAssignement;
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
-        return null;
+        return teamAssignement;
     }
 
     @Override
     public Set<Alliance> getTeamAlliances(UUID teamUuid){
+        Set<Alliance> alliances = new HashSet<>();
         if(isConnected()){
             try {
-                Set<Alliance> alliances = new HashSet<>();
                 PreparedStatement queryTeam = connection.prepareStatement("SELECT t.teamUuid, a.allianceDate FROM team AS t INNER JOIN alliance AS a ON t.teamId = a.teamAllianceId WHERE a.teamId = ?");
                 queryTeam.setInt(1, getTeamId(teamUuid));
                 ResultSet resultTeam = queryTeam.executeQuery();
@@ -922,12 +916,11 @@ public class SQLiteManager extends DatabaseManager {
                     );
                 }
                 queryAlliance.close();
-                return alliances;
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
-        return null;
+        return alliances;
     }
 
     @Override
