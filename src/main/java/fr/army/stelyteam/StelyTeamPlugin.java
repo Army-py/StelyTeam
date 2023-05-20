@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.sql.SQLException;
 import java.util.Objects;
 
+import fr.army.stelyteam.listener.*;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -14,10 +15,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import fr.army.stelyteam.command.CommandManager;
 import fr.army.stelyteam.external.ExternalManager;
 import fr.army.stelyteam.external.bungeechatconnect.handler.RecipientsHandler;
-import fr.army.stelyteam.listener.InventoryClickListener;
-import fr.army.stelyteam.listener.InventoryCloseListener;
-import fr.army.stelyteam.listener.PlayerJoinListener;
-import fr.army.stelyteam.listener.PlayerQuitListener;
 import fr.army.stelyteam.menu.TeamMenu;
 import fr.army.stelyteam.menu.impl.AdminMenu;
 import fr.army.stelyteam.menu.impl.CreateTeamMenu;
@@ -85,12 +82,8 @@ public class StelyTeamPlugin extends JavaPlugin {
         this.externalManager = new ExternalManager();
         this.externalManager.load(this, recipientsHandler);
 
-        
-        getServer().getPluginManager().registerEvents(new InventoryClickListener(this), this);
-        getServer().getPluginManager().registerEvents(new InventoryCloseListener(this), this);
-        getServer().getPluginManager().registerEvents(new PlayerJoinListener(this), this);
-        getServer().getPluginManager().registerEvents(new PlayerQuitListener(this), this);
-
+        final ListenerLoader listenerLoader = new ListenerLoader();
+        listenerLoader.registerListeners(this);
 
         getLogger().info("StelyTeam ON");
     }
