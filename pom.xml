@@ -70,6 +70,13 @@
             <version>7.0.5-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+
+        <!-- Jetbrains annotation -->
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>24.0.1</version>
+        </dependency>
     </dependencies>
 
     <repositories>
