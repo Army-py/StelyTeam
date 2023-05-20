@@ -12,34 +12,18 @@ import fr.army.stelyteam.external.stelyclaim.StelyClaimLoader;
 
 public class ExternalManager {
 
-    private final List<MessageHandler> messageHandlers;
+    private final StelyClaimLoader stelyClaimLoader;
 
     public ExternalManager() {
-        messageHandlers = new LinkedList<>();
+        stelyClaimLoader = new StelyClaimLoader();
     }
     
-    public void load(Plugin plugin, RecipientsHandler recipientsHandler){
-        StelyClaimLoader stelyClaimLoader = new StelyClaimLoader();
+    public void load(){
         stelyClaimLoader.load();
-
-        ExternalBCCLoader essentialsBBCLoader = new ExternalBCCLoader();
-        registerHandler(essentialsBBCLoader.load(plugin, recipientsHandler));
     }
 
     public void unload(){
-        StelyClaimLoader stelyClaimLoader = new StelyClaimLoader();
         stelyClaimLoader.unload();
     }
 
-    private void registerHandler(MessageHandler messageHandler) {
-        if (messageHandler != null) {
-            messageHandlers.add(messageHandler);
-        }
-    }
-
-    public void registerMessage(UUID senderId, boolean isPrefixed) {
-        for (MessageHandler messageHandler : messageHandlers) {
-            messageHandler.handleMessage(senderId, isPrefixed);
-        }
-    }
 }
