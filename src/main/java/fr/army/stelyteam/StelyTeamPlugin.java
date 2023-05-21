@@ -1,6 +1,5 @@
 package fr.army.stelyteam;
 
-import fr.army.stelyteam.cache.Storage;
 import fr.army.stelyteam.cache.StorageManager;
 import fr.army.stelyteam.cache.TeamCache;
 import fr.army.stelyteam.chat.TeamChatLoader;
@@ -76,7 +75,7 @@ public class StelyTeamPlugin extends JavaPlugin {
         this.economyManager = new EconomyManager(this);
         this.messageManager = new MessageManager(this);
         storageManager = new StorageManager();
-        teamCache = new TeamCache();
+        teamCache = new TeamCache(storageManager);
         final TeamChatLoader teamChatLoader = new TeamChatLoader();
         this.teamChatManager = teamChatLoader.load();
         this.commandManager = new CommandManager(this);
