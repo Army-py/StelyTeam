@@ -2,6 +2,7 @@ package fr.army.stelyteam.command.subcommand.manage;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.cache.StorageManager;
+import fr.army.stelyteam.cache.TeamCache;
 import fr.army.stelyteam.command.SubCommand;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.manager.MessageManager;
@@ -15,6 +16,7 @@ import java.util.List;
 public class SubCmdEditName extends SubCommand {
 
     private final StorageManager storageManager;
+    private final TeamCache teamCache;
     //private DatabaseManager sqlManager;
     private final MessageManager messageManager;
 
@@ -22,6 +24,7 @@ public class SubCmdEditName extends SubCommand {
     public SubCmdEditName(@NotNull StelyTeamPlugin plugin) {
         super(plugin);
         this.storageManager = plugin.getStorageManager();
+        this.teamCache = plugin.getTeamCache();
         //this.sqlManager = plugin.getDatabaseManager();
         this.messageManager = plugin.getMessageManager();
     }
@@ -34,11 +37,14 @@ public class SubCmdEditName extends SubCommand {
             return true;
         }
         //args[0] = "";
-        // TODO Work with cache
-        final Team team = storageManager.retreiveTeam(args[1]);
+        Team team = storageManager.retreiveTeam(args[1]);
         if (team == null) {
             player.sendMessage(messageManager.getMessage("common.team_not_exist"));
             return true;
+        }
+        final Team cachedTeam = teamCache.getTeam(team.getId());
+        if (cachedTeam != null) {
+            team = cachedTeam;
         }
         final String newName = args[2];
         if (newName.contains(" ")) {
@@ -51,7 +57,7 @@ public class SubCmdEditName extends SubCommand {
             return true;
         }
         team.getName().set(newName);
-        team.getName().save();
+        team.getName().save(team.getId(), storageManager);
         player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_editname.output", newName));
         return true;
     }

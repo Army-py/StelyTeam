@@ -3,6 +3,7 @@ package fr.army.stelyteam.command.subcommand.manage;
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.cache.Property;
 import fr.army.stelyteam.cache.StorageManager;
+import fr.army.stelyteam.cache.TeamCache;
 import fr.army.stelyteam.cache.TeamField;
 import fr.army.stelyteam.command.SubCommand;
 import fr.army.stelyteam.team.Team;
@@ -17,12 +18,14 @@ import java.util.List;
 public class SubCmdDowngrade extends SubCommand {
 
     private final StorageManager storageManager;
+    private final TeamCache teamCache;
     private final MessageManager messageManager;
 
 
     public SubCmdDowngrade(@NotNull StelyTeamPlugin plugin) {
         super(plugin);
         storageManager = plugin.getStorageManager();
+        teamCache = plugin.getTeamCache();
         this.messageManager = plugin.getMessageManager();
     }
 
@@ -35,12 +38,15 @@ public class SubCmdDowngrade extends SubCommand {
         }
         args[0] = "";
 
-        // TODO Work with cache
         final String teamName = String.join("", args);
-        final Team team = storageManager.retreiveTeam(teamName, TeamField.UPGRADES_MEMBERS);
+        Team team = storageManager.retreiveTeam(teamName, TeamField.UPGRADES_MEMBERS);
         if (team == null) {
             player.sendMessage(messageManager.getMessage("common.team_not_exist"));
             return true;
+        }
+        final Team cachedTeam = teamCache.getTeam(team.getId());
+        if (cachedTeam != null) {
+            team = cachedTeam;
         }
         final Property<Integer> membersLevel = team.getUpgrades().getMembers();
         final Integer rawMemberLevel = membersLevel.get();
@@ -49,7 +55,7 @@ public class SubCmdDowngrade extends SubCommand {
             return true;
         }
         membersLevel.set(rawMemberLevel - 1);
-        membersLevel.save();
+        membersLevel.save(team.getId(), storageManager);
         player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_downgrade.output", teamName));
         return true;
     }

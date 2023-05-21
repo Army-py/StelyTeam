@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Predicate;
 
 public class TeamCache {
 
@@ -25,11 +26,7 @@ public class TeamCache {
     public Team getTeam(@NotNull UUID teamId) {
         try {
             lock.lock();
-            final Team cachedTeam = cachedTeams.get(teamId);
-            if (cachedTeam == null) {
-                throw new IllegalStateException("Team '" + teamId + "' is not loaded");
-            }
-            return cachedTeam;
+            return cachedTeams.get(teamId);
         } finally {
             lock.unlock();
         }
@@ -86,21 +83,22 @@ public class TeamCache {
             if (team == null) {
                 return;
             }
-            final LinkedList<UUID> toRemovePlayer = new LinkedList<>();
-            for (Map.Entry<UUID, Optional<Team>> playerTeamEntry : playersTeam.entrySet()) {
-                if (playerTeamEntry.getValue().isEmpty()) {
-                    continue;
-                }
-                if (!playerTeamEntry.getValue().get().getId().equals(teamId)) {
-                    continue;
-                }
-                toRemovePlayer.add(playerTeamEntry.getKey());
-            }
-            for (UUID playerId : toRemovePlayer) {
-                playersTeam.remove(playerId);
-            }
+            removeInMap(playersTeam, value -> value.isPresent() && value.get().getId().equals(teamId));
         } finally {
             lock.unlock();
+        }
+    }
+
+    private <K, V> void removeInMap(Map<K, V> map, Predicate<V> equalityCheck) {
+        final LinkedList<K> toRemovePlayer = new LinkedList<>();
+        for (Map.Entry<K, V> entry : map.entrySet()) {
+            if (equalityCheck.test(entry.getValue())) {
+                toRemovePlayer.add(entry.getKey());
+            }
+            toRemovePlayer.add(entry.getKey());
+        }
+        for (K playerId : toRemovePlayer) {
+            map.remove(playerId);
         }
     }
 

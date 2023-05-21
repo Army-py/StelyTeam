@@ -89,6 +89,8 @@ public class Property<T> {
                 return false;
             }
             storageManager.save(teamId, this);
+            dirty = false;
+            loaded = true;
             return true;
         } finally {
             lock.unlock();
