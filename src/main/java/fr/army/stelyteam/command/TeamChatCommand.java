@@ -28,7 +28,7 @@ public class TeamChatCommand implements TabExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!(sender instanceof Player player)) {
-            // Maybe send a message to the sender to express that he can't do the command as non-player
+            // TODO Maybe send a message to the sender to express that he can't do the command as non-player
             return true;
         }
 

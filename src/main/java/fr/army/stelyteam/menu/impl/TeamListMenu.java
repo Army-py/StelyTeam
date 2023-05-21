@@ -59,7 +59,7 @@ public class TeamListMenu extends TeamMenu {
         Integer slotIndex = 0;
         for(Team team : pages.get(page.getCurrentPage())){
             String teamOwnerName = team.getTeamOwnerName();
-            String teamPrefix = team.getTeamPrefix();
+            String teamPrefix = team.getPrefix();
             UUID playerUUID = sqliteManager.getUUID(teamOwnerName);
             // String itemName = colorsBuilder.replaceColor(teamPrefix);
             String itemName = " ";
@@ -75,12 +75,12 @@ public class TeamListMenu extends TeamMenu {
             else teamOwner = Bukkit.getOfflinePlayer(playerUUID);
             
             lore = replaceInLore(lore, "%OWNER%", teamOwnerName);
-            lore = replaceInLore(lore, "%NAME%", team.getTeamName());
+            lore = replaceInLore(lore, "%NAME%", team.getName());
             lore = replaceInLore(lore, "%PREFIX%", colorsBuilder.replaceColor(teamPrefix));
             lore = replaceInLore(lore, "%DATE%", team.getCreationDate());
             lore = replaceInLore(lore, "%MEMBER_COUNT%", IntegerToString(team.getTeamMembers().size()));
             lore = replaceInLore(lore, "%MAX_MEMBERS%", IntegerToString(maxMembers+team.getImprovLvlMembers()));
-            lore = replaceInLore(lore, "%DESCRIPTION%", colorsBuilder.replaceColor(team.getTeamDescription()));
+            lore = replaceInLore(lore, "%DESCRIPTION%", colorsBuilder.replaceColor(team.getDescription()));
             
             item = ItemBuilder.getPlayerHead(teamOwner, itemName, lore);
 

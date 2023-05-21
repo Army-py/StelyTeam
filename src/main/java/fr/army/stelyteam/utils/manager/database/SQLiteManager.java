@@ -158,9 +158,9 @@ public class SQLiteManager extends DatabaseManager {
                 queryMember.close();
                 
                 PreparedStatement queryTeam = connection.prepareStatement("INSERT INTO team (teamUuid, teamName, teamPrefix, teamDescription, teamMoney, creationDate, improvLvlMembers, teamStorageLvl, unlockedTeamBank, teamOwnerPlayerId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-                queryTeam.setString(1, team.getTeamUuid().toString());
-                queryTeam.setString(2, team.getTeamName());
-                queryTeam.setString(3, team.getTeamPrefix());
+                queryTeam.setString(1, team.getId().toString());
+                queryTeam.setString(2, team.getName());
+                queryTeam.setString(3, team.getPrefix());
                 queryTeam.setString(4, config.getString("teamDefaultDescription"));
                 queryTeam.setInt(5, 0);
                 queryTeam.setString(6, getCurrentDate());
@@ -172,7 +172,7 @@ public class SQLiteManager extends DatabaseManager {
                 queryTeam.close();
 
                 PreparedStatement queryUpdateMember = connection.prepareStatement("UPDATE player SET teamId = (SELECT teamId FROM team WHERE teamName = ?) WHERE playerName = ?");
-                queryUpdateMember.setString(1, team.getTeamName());
+                queryUpdateMember.setString(1, team.getName());
                 queryUpdateMember.setString(2, team.getTeamOwnerName());
                 queryUpdateMember.executeUpdate();
                 queryUpdateMember.close();

@@ -66,14 +66,14 @@ public class AlliancesMenu extends TeamMenu {
         Integer headSlot = 0;
         for(Alliance alliance : team.getTeamAlliances()){
             Team teamAlliance = Team.init(alliance.getTeamUuid());
-            String allianceName = teamAlliance.getTeamName();
-            String alliancePrefix = teamAlliance.getTeamPrefix();
+            String allianceName = teamAlliance.getName();
+            String alliancePrefix = teamAlliance.getPrefix();
             String allianceOwnerName = teamAlliance.getTeamOwnerName();
             String allianceDate = alliance.getAllianceDate();
             Integer teamMembersLelvel = teamAlliance.getImprovLvlMembers();
             Integer teamMembers = teamAlliance.getTeamMembers().size();
             Integer maxMembers = config.getInt("teamMaxMembers");
-            String allianceDescription = teamAlliance.getTeamDescription();
+            String allianceDescription = teamAlliance.getDescription();
             ArrayList<String> allianceMembers = teamAlliance.getMembersName();
             UUID playerUUID = sqliteManager.getUUID(allianceOwnerName);
             // String itemName = colorsBuilder.replaceColor(alliancePrefix);
@@ -143,7 +143,7 @@ public class AlliancesMenu extends TeamMenu {
                     PersistentDataContainer container = meta.getPersistentDataContainer();
                     String ownerName = container.get(key, PersistentDataType.STRING);
                     Team alliance = Team.initFromPlayerName(ownerName);
-                    UUID allianceUuid = alliance.getTeamUuid();
+                    UUID allianceUuid = alliance.getId();
 
                     if (!team.isTeamAlliance(allianceUuid)){
                         player.sendRawMessage(messageManager.getMessage("common.not_in_alliance"));

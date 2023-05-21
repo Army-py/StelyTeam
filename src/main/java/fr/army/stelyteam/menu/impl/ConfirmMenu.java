@@ -93,15 +93,15 @@ public class ConfirmMenu extends TeamMenu {
                     team.removeMember(receiverName);
                     player.closeInventory();
                     player.sendMessage(messageManager.getReplaceMessage("sender.exclude_member", receiverName));
-                    if (receiver != null && receiver.getName().equals(receiverName)) receiver.sendMessage(messageManager.getReplaceMessage("receiver.exclude_from_team", team.getTeamName()));
+                    if (receiver != null && receiver.getName().equals(receiverName)) receiver.sendMessage(messageManager.getReplaceMessage("receiver.exclude_from_team", team.getName()));
                     team.refreshTeamMembersInventory(playerName);
                     team.teamBroadcast(playerName, messageManager.replaceAuthorAndReceiver("broadcasts.player_exclude_member", playerName, receiverName));
                     break;
                 case REMOVE_ALLIANCE:
                     Team alliance = Team.init(UUID.fromString(tempAction.getTargetName()));
-                    UUID allianceUuid = alliance.getTeamUuid();
-                    String allianceName = alliance.getTeamName();
-                    teamName = team.getTeamName();
+                    UUID allianceUuid = alliance.getId();
+                    String allianceName = alliance.getName();
+                    teamName = team.getName();
                     
                     team.removeAlliance(allianceUuid);
                     team.refreshTeamMembersInventory(playerName);
@@ -117,12 +117,12 @@ public class ConfirmMenu extends TeamMenu {
                     team.updateTeamOwner(receiverName);
                     player.closeInventory();
                     player.sendMessage(messageManager.getReplaceMessage("sender.promote_owner", receiverName));
-                    if (receiver != null && receiver.getName().equals(receiverName)) receiver.sendMessage(messageManager.getReplaceMessage("receiver.promote_owner", team.getTeamName()));
+                    if (receiver != null && receiver.getName().equals(receiverName)) receiver.sendMessage(messageManager.getReplaceMessage("receiver.promote_owner", team.getName()));
                     team.refreshTeamMembersInventory(playerName);
                     break;
                 case CREATE_HOME:
                     player.closeInventory();
-                    teamUuid = team.getTeamUuid();
+                    teamUuid = team.getId();
                     String worldName = player.getWorld().getName();
                     Double x = player.getLocation().getX();
                     Double y = player.getLocation().getY();
@@ -138,7 +138,7 @@ public class ConfirmMenu extends TeamMenu {
                     }
                     break;
                 case DELETE_HOME:
-                    teamUuid = team.getTeamUuid();
+                    teamUuid = team.getId();
                     player.closeInventory();
                     sqliteManager.removeHome(teamUuid);
                     player.sendMessage(messageManager.getMessage("manage_team.team_home.deleted"));
@@ -173,7 +173,7 @@ public class ConfirmMenu extends TeamMenu {
                     team.refreshTeamMembersInventory(playerName);
                     break;
                 case DELETE_TEAM:
-                    team.teamBroadcast(playerName, messageManager.replaceTeamId("broadcasts.team_deleted", team.getTeamName()));
+                    team.teamBroadcast(playerName, messageManager.replaceTeamId("broadcasts.team_deleted", team.getName()));
                     team.removeTeam();
                     player.closeInventory();
                     player.sendMessage(messageManager.getMessage("manage_team.team_delete.deleted"));
@@ -188,7 +188,7 @@ public class ConfirmMenu extends TeamMenu {
 
                     new UpgradeMembersMenu(player).openMenu(team);
                     team.refreshTeamMembersInventory(playerName);
-                    team.teamBroadcast(playerName, messageManager.replaceTeamId("broadcasts.new_member_amount_upgrade", team.getTeamName()));
+                    team.teamBroadcast(playerName, messageManager.replaceTeamId("broadcasts.new_member_amount_upgrade", team.getName()));
                     break;
                 case IMPROV_LVL_STORAGE:
                     level = team.getTeamStorageLvl();
@@ -199,14 +199,14 @@ public class ConfirmMenu extends TeamMenu {
 
                     new UpgradeStorageMenu(player).openMenu(team);
                     team.refreshTeamMembersInventory(playerName);
-                    team.teamBroadcast(playerName, messageManager.replaceTeamId("broadcasts.new_storage_upgrade", team.getTeamName()));
+                    team.teamBroadcast(playerName, messageManager.replaceTeamId("broadcasts.new_storage_upgrade", team.getName()));
                     break;
                 case LEAVE_TEAM:
                     team.removeMember(playerName);
                     player.closeInventory();
                     team.refreshTeamMembersInventory(playerName);
                     team.teamBroadcast(playerName, messageManager.replaceAuthor("broadcasts.player_leave_team", playerName));
-                    player.sendMessage(messageManager.getReplaceMessage("other.leave_team", team.getTeamName()));
+                    player.sendMessage(messageManager.getReplaceMessage("other.leave_team", team.getName()));
                     break;
                 default:
                     break;

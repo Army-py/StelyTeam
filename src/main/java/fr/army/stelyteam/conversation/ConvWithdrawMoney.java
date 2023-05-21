@@ -25,7 +25,7 @@ public class ConvWithdrawMoney extends StringPrompt {
     public Prompt acceptInput(ConversationContext con, String answer) {
         Player author = (Player) con.getForWhom();
         Team team = Team.initFromPlayerName(author.getName());
-        String teamName = team.getTeamName();
+        String teamName = team.getName();
         Double teamMoney = team.getTeamMoney();
         Double money;
 

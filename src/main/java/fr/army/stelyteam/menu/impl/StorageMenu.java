@@ -37,7 +37,7 @@ public class StorageMenu extends TeamMenu {
     public Inventory createInventory(Team team, int storageId) {
         // String inventoryName = config.getString(config.getString("inventories.storageDirectory."+plugin.getStorageFromId(storageId)+".itemName"));
         String inventoryName = Menus.getStorageMenuName(storageId);
-        UUID teamUuid = team.getTeamUuid();
+        UUID teamUuid = team.getId();
         Inventory inventory;
 
         if (cacheManager.containsStorage(teamUuid, storageId)){
@@ -116,7 +116,7 @@ public class StorageMenu extends TeamMenu {
         Player player = (org.bukkit.entity.Player) closeEvent.getPlayer();
         Inventory storageInventory = closeEvent.getInventory();
         Team team = Team.init(player);
-        UUID teamUuid = team.getTeamUuid();
+        UUID teamUuid = team.getId();
         Integer storageId = getStorageId(closeEvent.getView().getTitle());
         ItemStack[] inventoryContent = closeEvent.getInventory().getContents();
         Storage storage;

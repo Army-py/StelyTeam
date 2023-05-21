@@ -1,13 +1,12 @@
 package fr.army.stelyteam.team;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
+import fr.army.stelyteam.cache.Property;
+import fr.army.stelyteam.cache.SetProperty;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.HumanEntity;
@@ -24,6 +23,7 @@ import fr.army.stelyteam.menu.impl.PermissionsMenu;
 import fr.army.stelyteam.menu.impl.StorageDirectoryMenu;
 import fr.army.stelyteam.menu.impl.UpgradeMembersMenu;
 import fr.army.stelyteam.utils.manager.CacheManager;
+import org.jetbrains.annotations.NotNull;
 
 public class Team {
 
@@ -31,51 +31,75 @@ public class Team {
     private YamlConfiguration config = plugin.getConfig();
     private static CacheManager cacheManager = StelyTeamPlugin.getPlugin().getCacheManager();
 
-    private final UUID teamUuid;
-    private String teamName;
-    private String teamPrefix = null;
-    private String teamDescription = config.getString("team.defaultDescription");
-    private Double teamMoney = 0.0;
-    private String creationDate = getCurrentDate();
-    private Integer improvLvlMembers = 0;
-    private Integer teamStorageLvl = 0;
-    private Boolean unlockedTeamBank = false;
-    private String teamOwnerName;
-    private Set<Member> teamMembers = new HashSet<>();
-    private Set<Permission> teamPermissions = new HashSet<>();
-    private Set<Alliance> teamAlliances = new HashSet<>();
+    private final UUID uuid;
+    private final Property<String> name;
+    private final Property<String> prefix;
+    private final Property<String> description;
+    private final Property<Date> creationDate;
+
+    private final BankAccount bankAccount;
+
+    // TODO Maybe use an UUID
+    private final Property<String> owner;
+
+    private final Upgrades upgrades;
+
+
+    private final SetProperty<Member> members;
+    private final SetProperty<Permission> permissions;
+    private final SetProperty<Alliance> alliances;
+
     private Map<Integer, Storage> teamStorages;
 
     // Existing team
-    public Team(UUID teamUuid, String teamName, String teamPrefix, String teamDescription, double teamMoney, String creationDate, int improvLvlMembers, int teamStorageLvl, boolean unlockedTeamBank, String teamOwnerName){
-        this.teamUuid = teamUuid;
-        this.teamName = teamName;
-        this.teamPrefix = teamPrefix;
-        this.teamDescription = teamDescription;
-        this.teamMoney = teamMoney;
-        this.creationDate = creationDate;
-        this.improvLvlMembers = improvLvlMembers;
-        this.teamStorageLvl = teamStorageLvl;
-        this.unlockedTeamBank = unlockedTeamBank;
-        this.teamOwnerName = teamOwnerName;
+    public Team(UUID uuid, String teamName, String teamPrefix, String teamDescription, double teamMoney, String creationDate, int improvLvlMembers, int teamStorageLvl, boolean unlockedTeamBank, String teamOwnerName){
+        this.uuid = uuid;
+        final Lock lock = new ReentrantLock();
+        final fr.army.stelyteam.cache.Storage storage;
+        name = new Property<>(lock, storage);
+        prefix = new Property<>(lock, storage); // null
+        description = new Property<>(lock, storage); // config.getString("team.defaultDescription")
+        this.creationDate = new Property<>(lock, storage); // getCurrentDate()
 
-        this.teamMembers = plugin.getDatabaseManager().getTeamMembers(teamUuid);
-        this.teamPermissions = plugin.getDatabaseManager().getTeamAssignement(teamUuid);
-        this.teamAlliances = plugin.getDatabaseManager().getTeamAlliances(teamUuid);
-        this.teamStorages = plugin.getDatabaseManager().getTeamStorages(teamUuid);
+        bankAccount = new BankAccount();
+        upgrades = new Upgrades();
+
+        this.teamMembers = plugin.getDatabaseManager().getTeamMembers(uuid);
+        this.teamPermissions = plugin.getDatabaseManager().getTeamAssignement(uuid);
+        this.teamAlliances = plugin.getDatabaseManager().getTeamAlliances(uuid);
+        this.teamStorages = plugin.getDatabaseManager().getTeamStorages(uuid);
     }
+
+    public Team(@NotNull UUID uuid){
+        this.uuid = uuid;
+        final Lock lock = new ReentrantLock();
+        name = new Property<>(lock);
+        prefix = new Property<>(lock); // null
+        description = new Property<>(lock); // config.getString("team.defaultDescription")
+        this.creationDate = new Property<>(lock); // getCurrentDate()
+
+        bankAccount = new BankAccount();
+        upgrades = new Upgrades();
+
+        this.teamMembers = plugin.getDatabaseManager().getTeamMembers(uuid);
+        this.teamPermissions = plugin.getDatabaseManager().getTeamAssignement(uuid);
+        this.teamAlliances = plugin.getDatabaseManager().getTeamAlliances(uuid);
+        this.teamStorages = plugin.getDatabaseManager().getTeamStorages(uuid);
+    }
+
+    /*
 
     // New team
     public Team(String teamName, String teamOwnerName){
-        this.teamUuid = UUID.randomUUID();
-        this.teamName = teamName;
+        this.uuid = UUID.randomUUID();
+        this.name = teamName;
         this.teamOwnerName = teamOwnerName;
     }
 
 
     public void createTeam(){
         plugin.getDatabaseManager().insertTeam(this);
-        cacheManager.addTeam(Team.init(teamUuid));
+        cacheManager.addTeam(Team.init(uuid));
     }
 
     public static Team init(String teamName){
@@ -144,33 +168,33 @@ public class Team {
 
 
     public void updateTeamName(String newTeamName){
-        plugin.getDatabaseManager().updateTeamName(this.teamUuid, newTeamName);
+        plugin.getDatabaseManager().updateTeamName(this.uuid, newTeamName);
 
-        this.teamName = newTeamName;
+        this.name = newTeamName;
     }
 
 
     public void updateTeamPrefix(String newPrefix){
         this.teamPrefix = newPrefix;
-        plugin.getDatabaseManager().updateTeamPrefix(teamUuid, newPrefix);
+        plugin.getDatabaseManager().updateTeamPrefix(uuid, newPrefix);
     }
 
 
     public void updateTeamDescription(String newDescription){
         this.teamDescription = newDescription;
-        plugin.getDatabaseManager().updateTeamDescription(teamUuid, newDescription);
+        plugin.getDatabaseManager().updateTeamDescription(uuid, newDescription);
     }
 
 
     public void updateTeamOwner(String newOwnerName){
-        plugin.getDatabaseManager().updateTeamOwner(teamUuid, teamOwnerName, newOwnerName);
+        plugin.getDatabaseManager().updateTeamOwner(uuid, teamOwnerName, newOwnerName);
         this.teamOwnerName = newOwnerName;
     }
 
 
     public void unlockedTeamBank(){
         this.unlockedTeamBank = true;
-        plugin.getDatabaseManager().updateUnlockedTeamBank(teamUuid);
+        plugin.getDatabaseManager().updateUnlockedTeamBank(uuid);
     }
 
 
@@ -183,43 +207,43 @@ public class Team {
                 StelyTeamPlugin.getPlugin().getSQLiteManager().getUUID(playerName)
             )
         );
-        plugin.getDatabaseManager().insertMember(playerName, teamUuid);
+        plugin.getDatabaseManager().insertMember(playerName, uuid);
     }
 
 
     public void insertAlliance(UUID allianceUuid){
         this.teamAlliances.add(new Alliance(allianceUuid, getCurrentDate()));
-        plugin.getDatabaseManager().insertAlliance(teamUuid, allianceUuid);
+        plugin.getDatabaseManager().insertAlliance(uuid, allianceUuid);
     }
 
 
     public void removeMember(String playerName){
         this.teamMembers.removeIf(member -> member.getMemberName().equals(playerName));
-        plugin.getDatabaseManager().removeMember(playerName, teamUuid);
+        plugin.getDatabaseManager().removeMember(playerName, uuid);
     }
 
 
     public void removeAlliance(UUID allianceUuid){
         this.teamAlliances.removeIf(alliance -> alliance.getTeamUuid().equals(allianceUuid));
-        plugin.getDatabaseManager().removeAlliance(teamUuid, allianceUuid);
+        plugin.getDatabaseManager().removeAlliance(uuid, allianceUuid);
     }
 
 
     public void removeTeam(){
-        plugin.getDatabaseManager().removeTeam(teamUuid);
-        plugin.getSQLiteManager().removeHome(teamUuid);
+        plugin.getDatabaseManager().removeTeam(uuid);
+        plugin.getSQLiteManager().removeHome(uuid);
     }
 
 
     public void incrementTeamStorageLvl(){
         this.teamStorageLvl++;
-        plugin.getDatabaseManager().incrementTeamStorageLvl(teamUuid);
+        plugin.getDatabaseManager().incrementTeamStorageLvl(uuid);
     }
 
 
     public void incrementImprovLvlMembers(){
         this.improvLvlMembers++;
-        plugin.getDatabaseManager().incrementImprovLvlMembers(teamUuid);
+        plugin.getDatabaseManager().incrementImprovLvlMembers(uuid);
     }
 
 
@@ -227,7 +251,7 @@ public class Team {
         for (Permission permission : this.teamPermissions) {
             if (permission.getPermissionName().equals(permissionName)){
                 permission.incrementTeamRank();
-                plugin.getDatabaseManager().incrementAssignement(teamUuid, permissionName);
+                plugin.getDatabaseManager().incrementAssignement(uuid, permissionName);
                 return;
             }
         }
@@ -236,7 +260,7 @@ public class Team {
 
     public void decrementImprovLvlMembers(){
         this.improvLvlMembers--;
-        plugin.getDatabaseManager().decrementImprovLvlMembers(teamUuid);
+        plugin.getDatabaseManager().decrementImprovLvlMembers(uuid);
     }
 
 
@@ -244,7 +268,7 @@ public class Team {
         for (Permission permission : this.teamPermissions) {
             if (permission.getPermissionName().equals(permissionName)){
                 permission.decrementTeamRank();
-                plugin.getDatabaseManager().decrementAssignement(teamUuid, permissionName);
+                plugin.getDatabaseManager().decrementAssignement(uuid, permissionName);
                 return;
             }
         }
@@ -253,19 +277,19 @@ public class Team {
 
     public void insertAssignement(String permissionName, Integer teamRank){
         this.teamPermissions.add(new Permission(permissionName, teamRank));
-        plugin.getDatabaseManager().insertAssignement(teamUuid, permissionName, teamRank);
+        plugin.getDatabaseManager().insertAssignement(uuid, permissionName, teamRank);
     }
 
 
     public void incrementTeamMoney(Double amount){
         this.teamMoney += amount;
-        plugin.getDatabaseManager().incrementTeamMoney(teamUuid, amount);
+        plugin.getDatabaseManager().incrementTeamMoney(uuid, amount);
     }
 
 
     public void decrementTeamMoney(Double amount){
         this.teamMoney -= amount;
-        plugin.getDatabaseManager().decrementTeamMoney(teamUuid, amount);
+        plugin.getDatabaseManager().decrementTeamMoney(uuid, amount);
     }
 
 
@@ -382,21 +406,20 @@ public class Team {
         return this.teamStorages.get(storageId);
     }
 
-
-    public UUID getTeamUuid() {
-        return teamUuid;
+    public UUID getId() {
+        return uuid;
     }
 
-    public String getTeamName() {
-        return teamName;
+    public Property<String> getName() {
+        return name;
     }
 
-    public String getTeamPrefix() {
-        return teamPrefix;
+    public Property<String> getPrefix() {
+        return prefix;
     }
 
-    public String getTeamDescription() {
-        return teamDescription;
+    public Property<String> getDescription() {
+        return description;
     }
 
     public Double getTeamMoney() {
@@ -442,5 +465,61 @@ public class Team {
 
     private String getCurrentDate(){
         return new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime());
+    }*/
+
+    @NotNull
+    public UUID getId() {
+        return uuid;
     }
+
+    @NotNull
+    public Property<String> getName() {
+        return name;
+    }
+
+    @NotNull
+    public Property<String> getPrefix() {
+        return prefix;
+    }
+
+    @NotNull
+    public Property<String> getDescription() {
+        return description;
+    }
+
+    @NotNull
+    public Property<Date> getCreationDate() {
+        return creationDate;
+    }
+
+    @NotNull
+    public BankAccount getBankAccount() {
+        return bankAccount;
+    }
+
+    @NotNull
+    public Property<String> getOwner() {
+        return owner;
+    }
+
+    @NotNull
+    public Upgrades getUpgrades() {
+        return upgrades;
+    }
+
+    @NotNull
+    public SetProperty<Member> getMembers() {
+        return members;
+    }
+
+    @NotNull
+    public SetProperty<Permission> getPermissions() {
+        return permissions;
+    }
+
+    @NotNull
+    public SetProperty<Alliance> getAlliances() {
+        return alliances;
+    }
+
 }

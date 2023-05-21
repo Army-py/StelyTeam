@@ -1,14 +1,14 @@
 package fr.army.stelyteam.command.subcommand.info;
 
-import java.util.List;
-
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.command.SubCommand;
 import fr.army.stelyteam.menu.impl.TeamListMenu;
 import fr.army.stelyteam.utils.manager.CacheManager;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public class SubCmdList extends SubCommand {
 
@@ -20,8 +20,7 @@ public class SubCmdList extends SubCommand {
     }
 
     @Override
-    public boolean execute(CommandSender sender, String[] args) {
-        Player player = (Player) sender;
+    public boolean execute(@NotNull Player player, @NotNull String @NotNull [] args) {
         String playerName = player.getName();
 
         cacheManager.removePage(cacheManager.getPage(playerName));
@@ -39,4 +38,5 @@ public class SubCmdList extends SubCommand {
     public boolean isOpCommand() {
         return false;
     }
+
 }

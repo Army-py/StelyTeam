@@ -10,9 +10,9 @@ public class ListenerLoader {
         final PluginManager pluginManager = Bukkit.getPluginManager();
         pluginManager.registerEvents(new InventoryClickListener(plugin), plugin);
         pluginManager.registerEvents(new InventoryCloseListener(plugin), plugin);
-        pluginManager.registerEvents(new PlayerJoinListener(plugin), plugin);
-        pluginManager.registerEvents(new PlayerQuitListener(plugin), plugin);
-        pluginManager.registerEvents(new ChatPrefixListener(), plugin);
+        pluginManager.registerEvents(new ConvCacheListener(plugin.getCacheManager()), plugin);
+        pluginManager.registerEvents(new TeamCacheListener(plugin.getTeamCache()), plugin);
+        pluginManager.registerEvents(new ChatPrefixListener(plugin.getTeamCache()), plugin);
     }
 
 }

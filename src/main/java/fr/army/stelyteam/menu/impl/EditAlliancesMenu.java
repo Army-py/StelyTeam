@@ -56,11 +56,11 @@ public class EditAlliancesMenu extends TeamMenu {
         System.out.println(team.getTeamAlliances().size());
         for(Alliance alliance : team.getTeamAlliances()){
             Team teamAlliance = Team.init(alliance.getTeamUuid());
-            String allianceName = teamAlliance.getTeamName();
-            String alliancePrefix = teamAlliance.getTeamPrefix();
+            String allianceName = teamAlliance.getName();
+            String alliancePrefix = teamAlliance.getPrefix();
             String allianceOwnerName = teamAlliance.getTeamOwnerName();
             String allianceDate = alliance.getAllianceDate();
-            String allianceDescription = teamAlliance.getTeamDescription();
+            String allianceDescription = teamAlliance.getDescription();
             Integer teamMembersLelvel = teamAlliance.getImprovLvlMembers();
             Integer teamMembers = teamAlliance.getTeamMembers().size();
             ArrayList<String> allianceMembers = teamAlliance.getMembersName();

@@ -46,14 +46,14 @@ public class MemberMenu extends TeamMenu {
 
 
     public Inventory createInventory(Team team, String playerName) {
-        String teamName = team.getTeamName();
-        String teamPrefix = team.getTeamPrefix();
+        String teamName = team.getName();
+        String teamPrefix = team.getPrefix();
         String teamOwner = team.getTeamOwnerName();
         Integer teamMembersLelvel = team.getImprovLvlMembers();
         Integer teamMembers = team.getTeamMembers().size();
         String membershipDate = team.getMembershipDate(playerName);
         Double teamMoney = team.getTeamMoney();
-        String teamDescription = team.getTeamDescription();
+        String teamDescription = team.getDescription();
         Integer maxMembers = config.getInt("teamMaxMembers");
         String memberRank = plugin.getRankFromId(team.getMemberRank(playerName));
         String memberRankName = config.getString("ranks." + memberRank + ".name");

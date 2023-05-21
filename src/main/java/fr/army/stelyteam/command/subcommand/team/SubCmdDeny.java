@@ -12,6 +12,7 @@ import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.TemporaryActionNames;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
+import org.jetbrains.annotations.NotNull;
 
 public class SubCmdDeny extends SubCommand {
 
@@ -25,8 +26,7 @@ public class SubCmdDeny extends SubCommand {
     }
 
     @Override
-    public boolean execute(CommandSender sender, String[] args) {
-        Player player = (Player) sender;
+    public boolean execute(@NotNull Player player, @NotNull String @NotNull [] args) {
         String playerName = player.getName();
         TemporaryAction tempAction = cacheManager.getTempAction(playerName);
         
