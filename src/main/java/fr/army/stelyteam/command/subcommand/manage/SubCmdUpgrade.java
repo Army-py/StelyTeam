@@ -4,6 +4,7 @@ import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.cache.Property;
 import fr.army.stelyteam.cache.StorageManager;
 import fr.army.stelyteam.cache.TeamCache;
+import fr.army.stelyteam.cache.TeamField;
 import fr.army.stelyteam.command.SubCommand;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.manager.MessageManager;
@@ -39,7 +40,7 @@ public class SubCmdUpgrade extends SubCommand {
         }
         args[0] = "";
         final String teamName = String.join("", args);
-        Team team = storageManager.retreiveTeam(teamName);
+        Team team = storageManager.retreiveTeam(teamName, TeamField.UPGRADES_MEMBERS);
         if (team == null) {
             player.sendMessage(messageManager.getMessage("common.team_not_exist"));
             return true;

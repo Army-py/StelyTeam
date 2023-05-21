@@ -3,6 +3,7 @@ package fr.army.stelyteam.command.subcommand.manage;
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.cache.StorageManager;
 import fr.army.stelyteam.cache.TeamCache;
+import fr.army.stelyteam.cache.TeamField;
 import fr.army.stelyteam.command.SubCommand;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.manager.MessageManager;
@@ -37,13 +38,14 @@ public class SubCmdEditName extends SubCommand {
             return true;
         }
         //args[0] = "";
-        Team team = storageManager.retreiveTeam(args[1]);
+        Team team = storageManager.retreiveTeam(args[1], TeamField.NAME);
         if (team == null) {
             player.sendMessage(messageManager.getMessage("common.team_not_exist"));
             return true;
         }
         final Team cachedTeam = teamCache.getTeam(team.getId());
         if (cachedTeam != null) {
+            cachedTeam.getName().retrieve(team.getId(), storageManager);
             team = cachedTeam;
         }
         final String newName = args[2];

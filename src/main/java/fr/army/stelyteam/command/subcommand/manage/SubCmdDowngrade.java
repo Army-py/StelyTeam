@@ -46,6 +46,7 @@ public class SubCmdDowngrade extends SubCommand {
         }
         final Team cachedTeam = teamCache.getTeam(team.getId());
         if (cachedTeam != null) {
+            cachedTeam.getMembers().retrieve(team.getId(), storageManager);
             team = cachedTeam;
         }
         final Property<Integer> membersLevel = team.getUpgrades().getMembers();

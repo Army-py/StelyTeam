@@ -3,6 +3,7 @@ package fr.army.stelyteam.command.subcommand.manage;
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.cache.StorageManager;
 import fr.army.stelyteam.cache.TeamCache;
+import fr.army.stelyteam.cache.TeamField;
 import fr.army.stelyteam.command.SubCommand;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
@@ -37,13 +38,14 @@ public class SubCmdEditPrefix extends SubCommand {
             player.sendMessage(messageManager.getMessage("commands.stelyteam_editprefix.usage"));
             return true;
         }
-        Team team = storageManager.retreiveTeam(args[1]);
+        Team team = storageManager.retreiveTeam(args[1], TeamField.PREFIX);
         if (team == null) {
             player.sendMessage(messageManager.getMessage("common.team_not_exist"));
             return true;
         }
         final Team cachedTeam = teamCache.getTeam(team.getId());
         if (cachedTeam != null) {
+            cachedTeam.getPrefix().retrieve(team.getId(), storageManager);
             team = cachedTeam;
         }
         final String newPrefix = args[2];
