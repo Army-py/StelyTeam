@@ -36,21 +36,20 @@ public class SubCmdMoney extends SubCommand {
             return true;
         }
         final String teamName = String.join("", args);
-        final Team team = storageManager.retreiveTeam(teamName, TeamField.BALANCE);
+        final Team team = storageManager.retreiveTeam(teamName, TeamField.BANK_BALANCE);
         if (team == null) {
             player.sendMessage(messageManager.getMessage("common.team_not_exist"));
             return true;
         }
-        final Double balance = team.getBankAccount().getBalance().retrieve();
-        final String balanceReadableValue = balance == null ? "0" : balance.toString();
-        player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_money.output", balanceReadableValue));
+        final Double balance = team.getBankAccount().getBalance().get();
+        final double balanceValue = balance == null ? 0 : balance;
+        player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_money.output", DoubleToString(balanceValue)));
         return true;
     }
 
-    /* TODO Check if we really need this
     private String DoubleToString(double value){
         return NumberFormat.getNumberInstance(Locale.US).format(value);
-    }*/
+    }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, String[] args) {

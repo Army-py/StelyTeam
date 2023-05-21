@@ -1,17 +1,76 @@
 package fr.army.stelyteam.cache;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class SetProperty<T> implements Set<T> {
 
+    private final TeamField teamField;
     private final Lock lock;
     private final Set<T> set;
+    private boolean loaded;
     private boolean dirty;
+
+    public SetProperty(@NotNull TeamField teamField) {
+        this.teamField = teamField;
+        this.lock = new ReentrantLock();
+        this.set = new HashSet<>();
+    }
+
+    public TeamField getTeamField() {
+        return teamField;
+    }
+
+    /**
+     * Load a value in this property
+     * It should only be used internally
+     *
+     * @param values The value of the property
+     */
+    public void loadUnsafe(@Nullable Collection<T> values) {
+        setUnsafe(() -> {
+            set.clear();
+            if (values != null) {
+                set.addAll(values);
+            }
+        });
+    }
+
+    public void addUnsafe(@NotNull Collection<T> values) {
+        setUnsafe(() -> set.addAll(values));
+    }
+
+    public void removeUnsafe(@NotNull Collection<T> values) {
+        setUnsafe(() -> set.removeAll(values));
+    }
+
+    private void setUnsafe(@NotNull Runnable action) {
+        try {
+            lock.lock();
+            action.run();
+            dirty = false;
+            loaded = true;
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public SetProperty<T> retrieve(@NotNull UUID teamId, @NotNull StorageManager storageManager) {
+        try {
+            lock.lock();
+            if (loaded) {
+                return this;
+            }
+            storageManager.retrieve(teamId, this);
+            return this;
+        } finally {
+            lock.unlock();
+        }
+    }
 
     @Override
     public int size() {
@@ -62,7 +121,7 @@ public class SetProperty<T> implements Set<T> {
 
     @NotNull
     @Override
-    public <T1> T1 @NotNull [] toArray(@NotNull T1[] a) {
+    public <T1> T1 @NotNull [] toArray(T1 @NotNull [] a) {
         try {
             lock.lock();
             return set.toArray(a);

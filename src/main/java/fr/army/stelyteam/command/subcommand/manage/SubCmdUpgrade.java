@@ -43,7 +43,7 @@ public class SubCmdUpgrade extends SubCommand {
         }
         final int maxLevel = Objects.requireNonNull(config.getConfigurationSection("inventories.upgradeTotalMembers")).getValues(false).size() - 1;
         final Property<Integer> membersLevel = team.getUpgrades().getMembers();
-        final Integer rawMemberLevel = membersLevel.retrieve();
+        final Integer rawMemberLevel = membersLevel.get();
         final int membersLevelValue = rawMemberLevel == null ? 0 : rawMemberLevel;
         if (maxLevel == membersLevelValue) {
             player.sendMessage(messageManager.getMessage("commands.stelyteam_upgrade.max_level"));

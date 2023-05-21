@@ -2,6 +2,7 @@ package fr.army.stelyteam.command.subcommand.info;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.cache.StorageManager;
+import fr.army.stelyteam.cache.TeamField;
 import fr.army.stelyteam.command.SubCommand;
 import fr.army.stelyteam.team.Member;
 import fr.army.stelyteam.team.Team;
@@ -16,18 +17,18 @@ import org.jetbrains.annotations.NotNull;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 public class SubCmdInfo extends SubCommand {
 
     private final StorageManager storageManager;
-    private DatabaseManager sqlManager;
-    private YamlConfiguration config;
-    private YamlConfiguration messages;
-    private MessageManager messageManager;
-    private ColorsBuilder colorsBuilder;
+    private final DatabaseManager sqlManager;
+    private final YamlConfiguration config;
+    private final YamlConfiguration messages;
+    private final MessageManager messageManager;
+    private final ColorsBuilder colorsBuilder;
 
 
     public SubCmdInfo(@NotNull StelyTeamPlugin plugin) {
@@ -51,7 +52,7 @@ public class SubCmdInfo extends SubCommand {
         args[0] = "";
         final String combinedArgs = String.join("", args);
 
-        Team team = storageManager.retreiveTeam(combinedArgs/*, TeamField.NAME, TeamField.PREFIX, TeamField.OWNER, TeamField.CREATION_DATE, TeamField.DESCRIPTION, */);
+        Team team = storageManager.retreiveTeam(combinedArgs, TeamField.NAME, TeamField.PREFIX, TeamField.OWNER, TeamField.CREATION_DATE, TeamField.DESCRIPTION, TeamField.UPGRADES_MEMBERS, TeamField.BANK_UNLOCKED, TeamField.MEMBERS);
         if (team == null) {
             team = storageManager.retreivePlayerTeam(combinedArgs);
         }
@@ -63,18 +64,20 @@ public class SubCmdInfo extends SubCommand {
 
         String yesMessage = messages.getString("commands.stelyteam_info.true");
         String noMessage = messages.getString("commands.stelyteam_info.false");
-        Integer maxMembers = config.getInt("teamMaxMembers");
+        int maxMembers = config.getInt("teamMaxMembers");
 
-        final String name = team.getName().retrieve();
-        final String prefix = team.getPrefix().retrieve();
-        final String owner = team.getOwner().retrieve();
-        final String creationDate = new SimpleDateFormat("dd/MM/yyyy").format(team.getCreationDate().retrieve());
-        final String description = team.getDescription().retrieve();
-        final Integer rawMembersLevel = team.getUpgrades().getMembers().retrieve();
+        final String name = team.getName().get();
+        final String prefix = team.getPrefix().get();
+        final String owner = team.getOwner().get();
+        final String creationDate = new SimpleDateFormat("dd/MM/yyyy").format(team.getCreationDate().get());
+        final String description = team.getDescription().get();
+        final Integer rawMembersLevel = team.getUpgrades().getMembers().get();
         final int memberLevel = rawMembersLevel == null ? 0 : rawMembersLevel;
-        final Boolean unlockedBankAccount = team.getBankAccount().getUnlocked().retrieve();
+        final Boolean unlockedBankAccount = team.getBankAccount().getUnlocked().get();
         final String readableUnlockedBankAccount = unlockedBankAccount == null || !unlockedBankAccount ? noMessage : yesMessage;
-        Collection<Member> teamMembers = team.getTeamMembers();
+        final Set<Member> members = team.getMembers();
+        final String[] memberNames = getMemberNames(members.toArray(new Member[0]));
+
         List<String> lore = messages.getStringList("commands.stelyteam_info.output");
 
         lore = replaceInLore(lore, "%NAME%", name);
@@ -82,9 +85,9 @@ public class SubCmdInfo extends SubCommand {
         lore = replaceInLore(lore, "%OWNER%", owner);
         lore = replaceInLore(lore, "%DATE%", creationDate);
         lore = replaceInLore(lore, "%UNLOCK_BANK%", readableUnlockedBankAccount);
-        lore = replaceInLore(lore, "%MEMBER_COUNT%", IntegerToString(teamMembers.size()));
+        lore = replaceInLore(lore, "%MEMBER_COUNT%", IntegerToString(members.size()));
         lore = replaceInLore(lore, "%MAX_MEMBERS%", IntegerToString(maxMembers + memberLevel));
-        lore = replaceInLore(lore, "%MEMBERS%", String.join(", ", team.getMembersName()));
+        lore = replaceInLore(lore, "%MEMBERS%", String.join(", ", memberNames));
         lore = replaceInLore(lore, "%DESCRIPTION%", colorsBuilder.replaceColor(description));
 
         player.sendMessage(String.join("\n", lore));
@@ -92,19 +95,26 @@ public class SubCmdInfo extends SubCommand {
         return true;
     }
 
+    private String[] getMemberNames(Member[] members) {
+        final String[] names = new String[members.length];
+        for (int i = 0; i < names.length; i++) {
+            names[i] = members[i].getMemberName();
+        }
+        return names;
+    }
 
     @Override
     public List<String> onTabComplete(CommandSender sender, String[] args) {
-        if (args.length == 2){
-            if (args[0].equals("info")){
+        if (args.length == 2) {
+            if (args[0].equals("info")) {
                 List<String> result = new ArrayList<>();
                 for (String teamID : sqlManager.getTeamsName()) {
-                    if (teamID.toLowerCase().startsWith(args[1].toLowerCase())){
+                    if (teamID.toLowerCase().startsWith(args[1].toLowerCase())) {
                         result.add(teamID);
                     }
                 }
                 for (String playerName : sqlManager.getMembers()) {
-                    if (playerName.toLowerCase().startsWith(args[1].toLowerCase())){
+                    if (playerName.toLowerCase().startsWith(args[1].toLowerCase())) {
                         result.add(playerName);
                     }
                 }

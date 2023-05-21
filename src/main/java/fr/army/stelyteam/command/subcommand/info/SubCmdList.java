@@ -12,7 +12,7 @@ import java.util.List;
 
 public class SubCmdList extends SubCommand {
 
-    private CacheManager cacheManager;
+    private final CacheManager cacheManager;
 
     public SubCmdList(StelyTeamPlugin plugin) {
         super(plugin);

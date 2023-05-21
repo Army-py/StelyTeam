@@ -34,6 +34,7 @@ public class SubCmdEditName extends SubCommand {
             return true;
         }
         //args[0] = "";
+        // TODO Work with cache
         final Team team = storageManager.retreiveTeam(args[1]);
         if (team == null) {
             player.sendMessage(messageManager.getMessage("common.team_not_exist"));

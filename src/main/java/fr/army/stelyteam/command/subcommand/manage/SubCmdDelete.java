@@ -2,6 +2,7 @@ package fr.army.stelyteam.command.subcommand.manage;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.cache.StorageManager;
+import fr.army.stelyteam.cache.TeamCache;
 import fr.army.stelyteam.command.SubCommand;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.manager.MessageManager;
@@ -11,16 +12,19 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 public class SubCmdDelete extends SubCommand {
 
     private final StorageManager storageManager;
+    private final TeamCache teamCache;
     private final MessageManager messageManager;
 
 
     public SubCmdDelete(@NotNull StelyTeamPlugin plugin) {
         super(plugin);
         storageManager = plugin.getStorageManager();
+        teamCache = plugin.getTeamCache();
         this.messageManager = plugin.getMessageManager();
     }
 
@@ -39,8 +43,9 @@ public class SubCmdDelete extends SubCommand {
             player.sendMessage(messageManager.getMessage("common.team_not_exist"));
             return true;
         }
-        // TODO Remove the team from the storage and from the cache
-        //team.removeTeam();
+        final UUID teamId = team.getId();
+        teamCache.remove(teamId);
+        storageManager.remove(teamId);
         player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_delete.output", teamName));
         return true;
     }

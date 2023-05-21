@@ -4,10 +4,7 @@ import fr.army.stelyteam.team.Team;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -77,6 +74,31 @@ public class TeamCache {
                 return;
             }
             cachedTeams.remove(team.get().getId());
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public void remove(@NotNull UUID teamId) {
+        try {
+            lock.lock();
+            final Team team = cachedTeams.remove(teamId);
+            if (team == null) {
+                return;
+            }
+            final LinkedList<UUID> toRemovePlayer = new LinkedList<>();
+            for (Map.Entry<UUID, Optional<Team>> playerTeamEntry : playersTeam.entrySet()) {
+                if (playerTeamEntry.getValue().isEmpty()) {
+                    continue;
+                }
+                if (!playerTeamEntry.getValue().get().getId().equals(teamId)) {
+                    continue;
+                }
+                toRemovePlayer.add(playerTeamEntry.getKey());
+            }
+            for (UUID playerId : toRemovePlayer) {
+                playersTeam.remove(playerId);
+            }
         } finally {
             lock.unlock();
         }

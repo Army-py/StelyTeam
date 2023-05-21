@@ -7,6 +7,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 import fr.army.stelyteam.cache.Property;
 import fr.army.stelyteam.cache.SetProperty;
+import fr.army.stelyteam.cache.TeamField;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.HumanEntity;
@@ -27,9 +28,10 @@ import org.jetbrains.annotations.NotNull;
 
 public class Team {
 
+    /*
     private static StelyTeamPlugin plugin = StelyTeamPlugin.getPlugin();
     private YamlConfiguration config = plugin.getConfig();
-    private static CacheManager cacheManager = StelyTeamPlugin.getPlugin().getCacheManager();
+    private static CacheManager cacheManager = StelyTeamPlugin.getPlugin().getCacheManager();*/
 
     private final UUID uuid;
     private final Property<String> name;
@@ -51,36 +53,18 @@ public class Team {
 
     private Map<Integer, Storage> teamStorages;
 
-    // Existing team
-    public Team(UUID uuid, String teamName, String teamPrefix, String teamDescription, double teamMoney, String creationDate, int improvLvlMembers, int teamStorageLvl, boolean unlockedTeamBank, String teamOwnerName){
-        this.uuid = uuid;
-        final Lock lock = new ReentrantLock();
-        final fr.army.stelyteam.cache.Storage storage;
-        name = new Property<>(lock, storage);
-        prefix = new Property<>(lock, storage); // null
-        description = new Property<>(lock, storage); // config.getString("team.defaultDescription")
-        this.creationDate = new Property<>(lock, storage); // getCurrentDate()
-
-        bankAccount = new BankAccount();
-        upgrades = new Upgrades();
-
-        this.teamMembers = plugin.getDatabaseManager().getTeamMembers(uuid);
-        this.teamPermissions = plugin.getDatabaseManager().getTeamAssignement(uuid);
-        this.teamAlliances = plugin.getDatabaseManager().getTeamAlliances(uuid);
-        this.teamStorages = plugin.getDatabaseManager().getTeamStorages(uuid);
-    }
-
     public Team(@NotNull UUID uuid){
         this.uuid = uuid;
-        final Lock lock = new ReentrantLock();
-        name = new Property<>(lock);
-        prefix = new Property<>(lock); // null
-        description = new Property<>(lock); // config.getString("team.defaultDescription")
-        this.creationDate = new Property<>(lock); // getCurrentDate()
+        name = new Property<>(TeamField.NAME);
+        prefix = new Property<>(TeamField.PREFIX); // null
+        description = new Property<>(TeamField.DESCRIPTION); // config.getString("team.defaultDescription")
+        creationDate = new Property<>(TeamField.CREATION_DATE); // getCurrentDate()
+        owner = new Property<>(TeamField.OWNER);
 
         bankAccount = new BankAccount();
         upgrades = new Upgrades();
 
+        members = new SetProperty<>(TeamField.MEMBERS);
         this.teamMembers = plugin.getDatabaseManager().getTeamMembers(uuid);
         this.teamPermissions = plugin.getDatabaseManager().getTeamAssignement(uuid);
         this.teamAlliances = plugin.getDatabaseManager().getTeamAlliances(uuid);

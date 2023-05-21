@@ -3,6 +3,7 @@ package fr.army.stelyteam.command.subcommand.manage;
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.cache.Property;
 import fr.army.stelyteam.cache.StorageManager;
+import fr.army.stelyteam.cache.TeamField;
 import fr.army.stelyteam.command.SubCommand;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.manager.MessageManager;
@@ -34,14 +35,15 @@ public class SubCmdDowngrade extends SubCommand {
         }
         args[0] = "";
 
+        // TODO Work with cache
         final String teamName = String.join("", args);
-        final Team team = storageManager.retreiveTeam(teamName);
+        final Team team = storageManager.retreiveTeam(teamName, TeamField.UPGRADES_MEMBERS);
         if (team == null) {
             player.sendMessage(messageManager.getMessage("common.team_not_exist"));
             return true;
         }
         final Property<Integer> membersLevel = team.getUpgrades().getMembers();
-        final Integer rawMemberLevel = membersLevel.retrieve();
+        final Integer rawMemberLevel = membersLevel.get();
         if (rawMemberLevel == null || rawMemberLevel == 0) {
             player.sendMessage(messageManager.getMessage("commands.stelyteam_downgrade.min_level"));
             return true;

@@ -4,21 +4,37 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
+import java.util.UUID;
 import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Property<T> {
 
+    private final TeamField teamField;
     private final Lock lock;
-    private final Storage storage;
     private T value;
     private boolean dirty;
     private boolean loaded;
 
-    public Property(@NotNull Lock lock, @NotNull Storage storage) {
-        this.lock = lock;
-        this.storage = storage;
+    public Property(@NotNull TeamField teamField) {
+        this.teamField = teamField;
+        this.lock = new ReentrantLock();
         dirty = false;
         loaded = false;
+    }
+
+    public TeamField getTeamField() {
+        return teamField;
+    }
+
+    @Nullable
+    public T get() {
+        try {
+            lock.lock();
+            return value;
+        } finally {
+            lock.unlock();
+        }
     }
 
     public boolean set(@Nullable T value) {
@@ -53,26 +69,26 @@ public class Property<T> {
     }
 
     @Nullable
-    public T retrieve() {
+    public Property<T> retrieve(@NotNull UUID teamId, @NotNull StorageManager storageManager) {
         try {
             lock.lock();
-            if(loaded) {
-                return value;
+            if (loaded) {
+                return this;
             }
-            loadUnsafe(storage.retrieve(this));
-            return value;
+            storageManager.retrieve(teamId, this);
+            return this;
         } finally {
             lock.unlock();
         }
     }
 
-    public boolean save() {
+    public boolean save(@NotNull UUID teamId, @NotNull StorageManager storageManager) {
         try {
             lock.lock();
             if(!dirty) {
                 return false;
             }
-            // TODO Save
+            storageManager.save(teamId, this);
             return true;
         } finally {
             lock.unlock();

@@ -2,12 +2,14 @@ package fr.army.stelyteam.cache;
 
 public enum TeamField {
 
-    ID,
     NAME,
     PREFIX,
-    OWNER,
-    CREATION_DATE,
     DESCRIPTION,
-    BALANCE
+    CREATION_DATE,
+    OWNER,
+    MEMBERS,
+    UPGRADES_MEMBERS,
+    BANK_UNLOCKED,
+    BANK_BALANCE
 
 }
