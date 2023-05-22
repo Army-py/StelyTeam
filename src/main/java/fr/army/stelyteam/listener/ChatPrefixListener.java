@@ -26,6 +26,7 @@ public class ChatPrefixListener implements Listener {
         if (team != null) {
             prefix = colorBuilder.replaceColor(team.getTeamPrefix());
         }
+
         event.setFormat(event.getFormat().replace(PREFIX_PLACEHOLDER, prefix));
     }
 

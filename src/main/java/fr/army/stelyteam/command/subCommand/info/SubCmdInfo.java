@@ -1,4 +1,4 @@
-package fr.army.stelyteam.command.subcommand.info;
+package fr.army.stelyteam.command.subCommand.info;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;

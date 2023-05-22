@@ -30,11 +30,11 @@ public class PlayerQuitListener implements Listener{
         Team team = cacheManager.getTeamByPlayerName(playerName);
         int count = 0;
         for (Member member : team.getTeamMembers()){
-            if (!member.asPlayer().isOnline()){
+            if (member.asPlayer() != null || member.asPlayer().isOnline()){
                 count++;
             }
         }
-        if (count == team.getTeamMembers().size()){
+        if (count == 0){
             cacheManager.removeTeam(team);
         }
     }

@@ -11,11 +11,11 @@ public class ExternalManager {
     }
 
     public void load() {
-        stelyClaimLoader.load();
+        // stelyClaimLoader.load();
     }
 
     public void unload() {
-        stelyClaimLoader.unload();
+        // stelyClaimLoader.unload();
     }
 
 }

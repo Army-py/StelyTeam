@@ -1,4 +1,4 @@
-package fr.army.stelyteam.command.subcommand.utility;
+package fr.army.stelyteam.command.subCommand.utility;
 
 import java.util.List;
 import java.util.UUID;

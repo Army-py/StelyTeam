@@ -20,9 +20,8 @@ public class PlayerJoinListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event){
         final Player player = event.getPlayer();
-        final String playerName = player.getName();
 
-        final Team team = Team.initFromPlayerName(playerName);
+        final Team team = Team.init(player);
         if (team == null) return;
         
         cacheManager.addTeam(team);

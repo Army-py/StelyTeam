@@ -208,6 +208,7 @@ public class Team {
     public void removeTeam(){
         plugin.getDatabaseManager().removeTeam(teamUuid);
         plugin.getSQLiteManager().removeHome(teamUuid);
+        cacheManager.removeTeam(this);
     }
 
 
