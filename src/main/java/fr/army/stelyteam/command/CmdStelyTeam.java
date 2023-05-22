@@ -15,7 +15,6 @@ import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.command.subCommand.help.SubCmdAdmin;
 import fr.army.stelyteam.command.subCommand.help.SubCmdHelp;
 import fr.army.stelyteam.command.subCommand.info.SubCmdInfo;
-import fr.army.stelyteam.command.subCommand.info.SubCmdList;
 import fr.army.stelyteam.command.subCommand.info.SubCmdMoney;
 import fr.army.stelyteam.command.subCommand.manage.SubCmdDelete;
 import fr.army.stelyteam.command.subCommand.manage.SubCmdDowngrade;
@@ -32,8 +31,8 @@ import fr.army.stelyteam.command.subCommand.utility.SubCmdVisual;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
 import fr.army.stelyteam.utils.manager.database.DatabaseManager;
+import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
 
 public class CmdStelyTeam implements CommandExecutor, TabCompleter {
 
