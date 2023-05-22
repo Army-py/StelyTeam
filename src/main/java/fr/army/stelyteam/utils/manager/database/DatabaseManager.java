@@ -2,8 +2,11 @@ package fr.army.stelyteam.utils.manager.database;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.UUID;
 
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -131,7 +134,7 @@ public abstract class DatabaseManager {
 
     public abstract Set<Team> getTeams();
 
-    public abstract Set<Member> getTeamMembers(UUID teamUuid);
+    public abstract List<Member> getTeamMembers(UUID teamUuid);
 
     public abstract Set<Permission> getTeamAssignement(UUID teamUuid);
 

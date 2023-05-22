@@ -3,9 +3,11 @@ package fr.army.stelyteam.team;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -41,7 +43,7 @@ public class Team {
     private Integer teamStorageLvl = 0;
     private Boolean unlockedTeamBank = false;
     private String teamOwnerName;
-    private Set<Member> teamMembers = new HashSet<>();
+    private Collection<Member> teamMembers = new ArrayList<>();
     private Set<Permission> teamPermissions = new HashSet<>();
     private Set<Alliance> teamAlliances = new HashSet<>();
     private Map<Integer, Storage> teamStorages;
@@ -424,7 +426,7 @@ public class Team {
         return teamOwnerName;
     }
 
-    public Set<Member> getTeamMembers() {
+    public Collection<Member> getTeamMembers() {
         return teamMembers;
     }
 
