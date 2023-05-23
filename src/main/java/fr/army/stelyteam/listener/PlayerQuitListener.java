@@ -34,7 +34,7 @@ public class PlayerQuitListener implements Listener{
 
         int count = 0;
         for (Member member : team.getTeamMembers()){
-            if (member.asPlayer() != null || member.asPlayer().isOnline()){
+            if (member.asPlayer() != null && member.asPlayer().isOnline()){
                 count++;
             }
         }
