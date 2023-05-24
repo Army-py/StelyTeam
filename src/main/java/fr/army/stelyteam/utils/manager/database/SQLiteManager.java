@@ -6,9 +6,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -837,8 +840,8 @@ public class SQLiteManager extends DatabaseManager {
     }
 
     @Override
-    public Set<Member> getTeamMembers(UUID teamUuid){
-        Set<Member> teamMembers = new HashSet<>();
+    public List<Member> getTeamMembers(UUID teamUuid){
+        List<Member> teamMembers = Collections.synchronizedList(new ArrayList<>());
         if(isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("SELECT p.playerName, p.teamRank, p.joinDate FROM player AS p INNER JOIN team AS t ON p.teamId = t.teamId WHERE t.teamUuid = ? ORDER BY p.teamRank ASC, p.playerName ASC;");

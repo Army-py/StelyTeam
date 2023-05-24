@@ -110,8 +110,8 @@ public class CmdStelyTeam implements TabExecutor {
                 }
             }
             return result;
-        }else if (args.length == 2){
-            if (sender.isOp()){
+        } else if (args.length == 2) {
+            if (sender.isOp()) {
                 if (subCommands.containsKey(args[0]) && ((SubCommand) subCommands.get(args[0])).isOpCommand()) {
                     List<String> result = new ArrayList<>();
                     for (String teamID : /* TODO WOW !!!!! */databaseManager.getTeamsName()) {

@@ -50,7 +50,6 @@ public class Team {
     private final SetProperty<Member> members;
     private final SetProperty<Permission> permissions;
     private final SetProperty<Alliance> alliances;
-
     private Map<Integer, Storage> teamStorages;
 
     public Team(@NotNull UUID uuid){
@@ -216,6 +215,7 @@ public class Team {
     public void removeTeam(){
         plugin.getDatabaseManager().removeTeam(uuid);
         plugin.getSQLiteManager().removeHome(uuid);
+        cacheManager.removeTeam(this);
     }
 
 
@@ -430,7 +430,7 @@ public class Team {
         return teamOwnerName;
     }
 
-    public Set<Member> getTeamMembers() {
+    public Collection<Member> getTeamMembers() {
         return teamMembers;
     }
 
