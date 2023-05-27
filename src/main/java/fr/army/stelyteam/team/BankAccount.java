@@ -1,6 +1,7 @@
 package fr.army.stelyteam.team;
 
 import fr.army.stelyteam.cache.Property;
+import org.jetbrains.annotations.NotNull;
 
 public class BankAccount {
 
@@ -20,4 +21,8 @@ public class BankAccount {
         return balance;
     }
 
+    public void loadUnsafe(@NotNull BankAccountSnapShot snapshot) {
+        snapshot.unlocked().ifPresent(unlocked::loadUnsafe);
+        snapshot.balance().ifPresent(balance::loadUnsafe);
+    }
 }

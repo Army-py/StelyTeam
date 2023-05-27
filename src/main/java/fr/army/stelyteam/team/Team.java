@@ -506,4 +506,13 @@ public class Team {
         return alliances;
     }
 
+    public void loadUnsafe(@NotNull TeamSnapshot snapshot) {
+        snapshot.name().ifPresent(name::loadUnsafe);
+        snapshot.prefix().ifPresent(prefix::loadUnsafe);
+        snapshot.description().ifPresent(description::loadUnsafe);
+        snapshot.creationDate().ifPresent(creationDate::loadUnsafe);
+        snapshot.bankAccount().ifPresent(bankAccount::loadUnsafe);
+        snapshot.owner().ifPresent(owner::loadUnsafe);
+    }
+
 }
