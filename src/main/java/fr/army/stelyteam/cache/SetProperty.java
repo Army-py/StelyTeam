@@ -7,7 +7,7 @@ import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class SetProperty<T> implements Set<T> {
+public class SetProperty<T> implements IProperty, Set<T> {
 
     private final TeamField teamField;
     private final Lock lock;
@@ -21,8 +21,19 @@ public class SetProperty<T> implements Set<T> {
         this.set = new HashSet<>();
     }
 
-    public TeamField getTeamField() {
+    @Override
+    public @NotNull TeamField getField() {
         return teamField;
+    }
+
+    @Override
+    public boolean isLoaded() {
+        try {
+            lock.lock();
+            return loaded;
+        } finally {
+            lock.unlock();
+        }
     }
 
     /**

@@ -5,6 +5,7 @@ import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import fr.army.stelyteam.cache.IProperty;
 import fr.army.stelyteam.cache.Property;
 import fr.army.stelyteam.cache.SetProperty;
 import fr.army.stelyteam.cache.TeamField;
@@ -52,7 +53,7 @@ public class Team {
     private final SetProperty<Alliance> alliances;
     private Map<Integer, Storage> teamStorages;
 
-    public Team(@NotNull UUID uuid){
+    public Team(@NotNull UUID uuid) {
         this.uuid = uuid;
         name = new Property<>(TeamField.NAME);
         prefix = new Property<>(TeamField.PREFIX); // null
@@ -514,5 +515,26 @@ public class Team {
         snapshot.bankAccount().ifPresent(bankAccount::loadUnsafe);
         snapshot.owner().ifPresent(owner::loadUnsafe);
     }
+
+    public void getProperties(final IProperty[] properties) {
+        for (IProperty property : new IProperty[]{name, prefix, description, creationDate, owner}) {
+            properties[property.getField().ordinal()] = property;
+        }
+        bankAccount.getProperties(properties);
+    }
+
+    @NotNull
+    public List<TeamField> getNeedLoad(@NotNull TeamField... fields) {
+        final List<TeamField> needLoad = new LinkedList<>();
+        final IProperty[] properties = new IProperty[TeamField.values().length];
+        getProperties(properties);
+        for (TeamField field : fields) {
+            if (!properties[field.ordinal()].isLoaded()) {
+                needLoad.add(field);
+            }
+        }
+        return needLoad;
+    }
+
 
 }

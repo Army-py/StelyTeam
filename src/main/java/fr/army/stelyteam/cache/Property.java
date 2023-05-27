@@ -8,7 +8,7 @@ import java.util.UUID;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class Property<T> {
+public class Property<T> implements IProperty {
 
     private final TeamField teamField;
     private final Lock lock;
@@ -23,7 +23,9 @@ public class Property<T> {
         loaded = false;
     }
 
-    public TeamField getTeamField() {
+    @NotNull
+    @Override
+    public TeamField getField() {
         return teamField;
     }
 
@@ -32,6 +34,16 @@ public class Property<T> {
         try {
             lock.lock();
             return value;
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    @Override
+    public boolean isLoaded() {
+        try {
+            lock.lock();
+            return loaded;
         } finally {
             lock.unlock();
         }
