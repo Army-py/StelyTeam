@@ -1,6 +1,7 @@
 package fr.army.stelyteam.cache;
 
 import fr.army.stelyteam.team.Team;
+import fr.army.stelyteam.team.TeamSnapshot;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,18 +12,18 @@ public class StorageManager {
     private final Storage storage;
 
     @Nullable
-    public Team retreiveTeam(@NotNull String teamName, TeamField... fields) {
+    public TeamSnapshot retrieveTeam(@NotNull String teamName, @NotNull TeamField... fields) {
         // TODO Fetch the team from the current storage
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
     @Nullable
-    public Team retreivePlayerTeam(@NotNull String playerName, TeamField... fields) {
+    public Team retrievePlayerTeam(@NotNull String playerName, @NotNull TeamField... fields) {
         // TODO Fetch the team from the current storage
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
-    public void retrieve(@NotNull UUID teamId, @NotNull Property<?>... properties) {
+    public TeamSnapshot retrieveTeam(@NotNull UUID teamId, @NotNull TeamField... fields) {
         // TODO Fetch team information based on the specified properties from the current storage
         throw new UnsupportedOperationException("Not implemented yet");
     }
