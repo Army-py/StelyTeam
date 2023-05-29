@@ -17,6 +17,11 @@ public class TeamManager {
     private final StorageManager storageManager;
     private final TeamCache teamCache;
 
+    public TeamManager(StorageManager storageManager, TeamCache teamCache) {
+        this.storageManager = storageManager;
+        this.teamCache = teamCache;
+    }
+
     @Nullable
     public Team getTeam(@NotNull UUID teamId, @NotNull TeamField... fields) {
         final Team cachedTeam = teamCache.getTeam(teamId);
