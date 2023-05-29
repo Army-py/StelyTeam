@@ -1,11 +1,11 @@
 package fr.army.stelyteam.command.subcommand.info;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.cache.StorageManager;
 import fr.army.stelyteam.cache.TeamField;
 import fr.army.stelyteam.command.SubCommand;
 import fr.army.stelyteam.team.Member;
 import fr.army.stelyteam.team.Team;
+import fr.army.stelyteam.team.TeamManager;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
 import fr.army.stelyteam.utils.manager.MessageManager;
 import fr.army.stelyteam.utils.manager.database.DatabaseManager;
@@ -23,7 +23,7 @@ import java.util.Set;
 
 public class SubCmdInfo extends SubCommand {
 
-    private final StorageManager storageManager;
+    private final TeamManager teamManager;
     private final DatabaseManager sqlManager;
     private final YamlConfiguration config;
     private final YamlConfiguration messages;
@@ -33,7 +33,7 @@ public class SubCmdInfo extends SubCommand {
 
     public SubCmdInfo(@NotNull StelyTeamPlugin plugin) {
         super(plugin);
-        this.storageManager = plugin.getStorageManager();
+        this.teamManager = plugin.getTeamManager();
         this.sqlManager = plugin.getDatabaseManager();
         this.config = plugin.getConfig();
         this.messages = plugin.getMessages();
@@ -52,11 +52,16 @@ public class SubCmdInfo extends SubCommand {
         args[0] = "";
         final String combinedArgs = String.join("", args);
 
-        Team team = storageManager.retreiveTeam(combinedArgs, TeamField.NAME, TeamField.PREFIX, TeamField.OWNER, TeamField.CREATION_DATE, TeamField.DESCRIPTION, TeamField.UPGRADES_MEMBERS, TeamField.BANK_UNLOCKED, TeamField.MEMBERS);
-        if (team == null) {
-            team = storageManager.retreivePlayerTeam(combinedArgs);
-        }
-
+        final Team team = teamManager.getTeam(combinedArgs,
+                TeamField.NAME,
+                TeamField.PREFIX,
+                TeamField.OWNER,
+                TeamField.CREATION_DATE,
+                TeamField.DESCRIPTION,
+                TeamField.UPGRADES_MEMBERS,
+                TeamField.BANK_UNLOCKED,
+                TeamField.MEMBERS
+        );
         if (team == null) {
             player.sendMessage(messageManager.getMessage("common.team_not_exist"));
             return true;
@@ -70,7 +75,8 @@ public class SubCmdInfo extends SubCommand {
         final String prefix = team.getPrefix().get();
         final String owner = team.getOwner().get();
         final String creationDate = new SimpleDateFormat("dd/MM/yyyy").format(team.getCreationDate().get());
-        final String description = team.getDescription().get();
+        final String rawDescription = team.getDescription().get();
+        final String description = rawDescription == null ? config.getString("team.defaultDescription") : rawDescription;
         final Integer rawMembersLevel = team.getUpgrades().getMembers().get();
         final int memberLevel = rawMembersLevel == null ? 0 : rawMembersLevel;
         final Boolean unlockedBankAccount = team.getBankAccount().getUnlocked().get();
@@ -131,16 +137,16 @@ public class SubCmdInfo extends SubCommand {
     }
 
 
-    private List<String> replaceInLore(List<String> lore, String value, String replace){
+    private List<String> replaceInLore(List<String> lore, String value, String replace) {
         List<String> newLore = new ArrayList<>();
-        for(String str : lore){
+        for (String str : lore) {
             newLore.add(str.replace(value, replace));
         }
         return newLore;
     }
 
 
-    private String IntegerToString(Integer value){
+    private String IntegerToString(Integer value) {
         return NumberFormat.getNumberInstance(Locale.US).format(value);
     }
 
