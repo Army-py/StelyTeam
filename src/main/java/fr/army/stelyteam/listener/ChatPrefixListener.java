@@ -1,5 +1,6 @@
 package fr.army.stelyteam.listener;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -27,6 +28,7 @@ public class ChatPrefixListener implements Listener {
             prefix = colorBuilder.replaceColor(team.getTeamPrefix());
         }
 
+        // ChatColor.translateAlternateColorCodes(0, prefix)
         event.setFormat(event.getFormat().replace(PREFIX_PLACEHOLDER, prefix));
     }
 
