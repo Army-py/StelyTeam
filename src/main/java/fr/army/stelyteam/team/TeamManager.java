@@ -61,4 +61,6 @@ public class TeamManager {
         // TODO Implement saving
     }
 
+    public void removeTeam(UUID teamId) {
+    }
 }
