@@ -2,11 +2,10 @@ package fr.army.stelyteam.command.subcommand.manage;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.cache.Property;
-import fr.army.stelyteam.cache.StorageManager;
-import fr.army.stelyteam.cache.TeamCache;
 import fr.army.stelyteam.cache.TeamField;
 import fr.army.stelyteam.command.SubCommand;
 import fr.army.stelyteam.team.Team;
+import fr.army.stelyteam.team.TeamManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -19,15 +18,13 @@ import java.util.Objects;
 
 public class SubCmdUpgrade extends SubCommand {
 
-    private final StorageManager storageManager;
-    private final TeamCache teamCache;
+    private final TeamManager teamManager;
     private final YamlConfiguration config;
     private final MessageManager messageManager;
 
     public SubCmdUpgrade(@NotNull StelyTeamPlugin plugin) {
         super(plugin);
-        storageManager = plugin.getStorageManager();
-        teamCache = plugin.getTeamCache();
+        teamManager = plugin.getTeamManager();
         this.config = plugin.getConfig();
         this.messageManager = plugin.getMessageManager();
     }
@@ -40,14 +37,10 @@ public class SubCmdUpgrade extends SubCommand {
         }
         args[0] = "";
         final String teamName = String.join("", args);
-        Team team = storageManager.retreiveTeam(teamName, TeamField.UPGRADES_MEMBERS);
+        final Team team = teamManager.getTeam(teamName, TeamField.UPGRADES_MEMBERS);
         if (team == null) {
             player.sendMessage(messageManager.getMessage("common.team_not_exist"));
             return true;
-        }
-        final Team cachedTeam = teamCache.getTeam(team.getId());
-        if (cachedTeam != null) {
-            team = cachedTeam;
         }
         final int maxLevel = Objects.requireNonNull(config.getConfigurationSection("inventories.upgradeTotalMembers")).getValues(false).size() - 1;
         final Property<Integer> membersLevel = team.getUpgrades().getMembers();
@@ -58,7 +51,7 @@ public class SubCmdUpgrade extends SubCommand {
             return true;
         }
         membersLevel.set(membersLevelValue + 1);
-        membersLevel.save(team.getId(), storageManager);
+        teamManager.saveTeam(team);
         player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_upgrade.output", teamName));
         return true;
     }
