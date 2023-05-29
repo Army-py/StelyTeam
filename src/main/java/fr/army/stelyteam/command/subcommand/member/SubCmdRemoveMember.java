@@ -1,9 +1,10 @@
 package fr.army.stelyteam.command.subcommand.member;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.cache.StorageManager;
+import fr.army.stelyteam.cache.TeamField;
 import fr.army.stelyteam.command.SubCommand;
 import fr.army.stelyteam.team.Team;
+import fr.army.stelyteam.team.TeamManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -14,12 +15,12 @@ import java.util.List;
 
 public class SubCmdRemoveMember extends SubCommand {
 
-    private final StorageManager storageManager;
+    private final TeamManager teamManager;
     private final MessageManager messageManager;
 
     public SubCmdRemoveMember(@NotNull StelyTeamPlugin plugin) {
         super(plugin);
-        storageManager = plugin.getStorageManager();
+        teamManager = plugin.getTeamManager();
         this.messageManager = plugin.getMessageManager();
     }
 
@@ -31,17 +32,19 @@ public class SubCmdRemoveMember extends SubCommand {
             return true;
         }
 
-        final Team team = storageManager.retreiveTeam(args[1]);
+        final Team team = teamManager.getTeam(args[1], TeamField.MEMBERS);
         if (team == null) {
             player.sendMessage(messageManager.getMessage("common.team_not_exist"));
+            return true;
         }
         // TODO Member work
-        if (team.isTeamMember(args[2])) {
-            team.removeMember(args[2]);
-            player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_removemember.output", args[2]));
-        } else {
+        if (!team.isTeamMember(args[2])) {
             player.sendMessage(messageManager.getMessage("commands.stelyteam_removemember.not_in_team"));
+            return true;
         }
+        team.removeMember(args[2]);
+        teamManager.saveTeam(team);
+        player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_removemember.output", args[2]));
         return true;
     }
 
