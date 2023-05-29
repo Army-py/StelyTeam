@@ -1,7 +1,7 @@
 package fr.army.stelyteam.command.subcommand.utility;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.cache.StorageManager;
+import fr.army.stelyteam.cache.TeamCache;
 import fr.army.stelyteam.command.SubCommand;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.manager.MessageManager;
@@ -15,18 +15,19 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class SubCmdHome extends SubCommand {
 
     //private DatabaseManager sqlManager;
-    private final StorageManager storageManager;
+    private final TeamCache teamCache;
     private final SQLiteDataManager sqliteManager;
     private final MessageManager messageManager;
 
     public SubCmdHome(@NotNull StelyTeamPlugin plugin) {
         super(plugin);
-        storageManager = plugin.getStorageManager();
+        teamCache = plugin.getTeamCache();
         //this.sqlManager = plugin.getDatabaseManager();
         this.sqliteManager = plugin.getSQLiteManager();
         this.messageManager = plugin.getMessageManager();
@@ -34,13 +35,14 @@ public class SubCmdHome extends SubCommand {
 
     @Override
     public boolean execute(@NotNull Player player, @NotNull String @NotNull [] args) {
-        final Team team = storageManager.retreivePlayerTeam(player.getName());
-        if (team == null) {
+        final Optional<Team> team = teamCache.getPlayerTeam(player.getUniqueId());
+        if (team.isEmpty()) {
+            // TODO Maybe use a more specific message like "You have no team"
             player.sendMessage(messageManager.getMessage("common.team_not_exist"));
             return true;
         }
 
-        final UUID teamId = team.getId();
+        final UUID teamId = team.get().getId();
 
         if (!sqliteManager.isSet(teamId)) {
             player.sendMessage(messageManager.getMessage("commands.stelyteam_home.not_set"));
