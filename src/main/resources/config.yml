@@ -206,30 +206,35 @@ inventoriesSlots:
 ranks:
   owner:
     id: 0
+    priority: 4
     name: "Chef"
     color: "§c"
     itemType: RED_DYE
     headTexture: ""
   co_owner:
     id: 1
+    priority: 3
     name: "Chef adjoint"
     color: "§6"
     itemType: ORANGE_DYE
     headTexture: ""
   moderator:
     id: 2
+    priority: 2
     name: "Ainé"
     color: "§e"
     itemType: YELLOW_DYE
     headTexture: ""
   member:
     id: 3
+    priority: 1
     name: "Membre"
     color: "§d"
     itemType: PINK_DYE
     headTexture: ""
   new_member:
     id: 4
+    priority: 0
     name: "Nouveau Membre"
     color: "§7"
     itemType: GRAY_DYE
