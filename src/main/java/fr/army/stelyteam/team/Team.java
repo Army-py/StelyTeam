@@ -5,10 +5,7 @@ import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-import fr.army.stelyteam.cache.IProperty;
-import fr.army.stelyteam.cache.Property;
-import fr.army.stelyteam.cache.SetProperty;
-import fr.army.stelyteam.cache.TeamField;
+import fr.army.stelyteam.cache.*;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.HumanEntity;
@@ -514,6 +511,15 @@ public class Team {
         snapshot.creationDate().ifPresent(creationDate::loadUnsafe);
         snapshot.bankAccount().ifPresent(bankAccount::loadUnsafe);
         snapshot.owner().ifPresent(owner::loadUnsafe);
+    }
+
+    public void save(@NotNull List<SaveValue<?>> values) {
+        name.save(values);
+        prefix.save(values);
+        description.save(values);
+        creationDate.save(values);
+        bankAccount.save(values);
+        owner.save(values);
     }
 
     public void getProperties(final IProperty[] properties) {

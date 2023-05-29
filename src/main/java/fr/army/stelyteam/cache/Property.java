@@ -3,8 +3,8 @@ package fr.army.stelyteam.cache;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Objects;
-import java.util.UUID;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -80,27 +80,13 @@ public class Property<T> implements IProperty {
         }
     }
 
-    @Nullable
-    public Property<T> retrieve(@NotNull UUID teamId, @NotNull StorageManager storageManager) {
+    public boolean save(@NotNull List<SaveValue<?>> saveValues) {
         try {
             lock.lock();
-            if (loaded) {
-                return this;
-            }
-            storageManager.retrieve(teamId, this);
-            return this;
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    public boolean save(@NotNull UUID teamId, @NotNull StorageManager storageManager) {
-        try {
-            lock.lock();
-            if(!dirty) {
+            if (!dirty) {
                 return false;
             }
-            storageManager.save(teamId, this);
+            saveValues.add(new SaveValue<>(teamField, value));
             dirty = false;
             loaded = true;
             return true;
