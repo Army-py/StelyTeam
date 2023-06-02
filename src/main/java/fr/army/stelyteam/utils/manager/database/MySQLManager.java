@@ -17,6 +17,8 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.team.Alliance;
@@ -24,6 +26,7 @@ import fr.army.stelyteam.team.Member;
 import fr.army.stelyteam.team.Permission;
 import fr.army.stelyteam.team.Storage;
 import fr.army.stelyteam.team.Team;
+import fr.army.stelyteam.utils.manager.database.builder.fundamental.SelectOperator;
 
 public class MySQLManager extends DatabaseManager {
     
@@ -1081,7 +1084,34 @@ public class MySQLManager extends DatabaseManager {
 
 
 
+    public List<Member> get(@NotNull String table, @NotNull String[] columns, @Nullable String[] conditions, @Nullable String[] orders){
+        List<Member> teamMembers = Collections.synchronizedList(new ArrayList<>());
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT p.playerName, p.teamRank, p.joinDate FROM player AS p INNER JOIN team AS t ON p.teamId = t.teamId WHERE t.teamUuid = ? ORDER BY p.teamRank ASC, p.playerName ASC;");
+                // query.setString(1, teamUuid.toString());
+                ResultSet result = query.executeQuery();
+                while(result.next()){
+                    teamMembers.add(
+                        new Member(
+                            result.getString("playerName"),
+                            result.getInt("teamRank"),
+                            result.getString("joinDate"),
+                            StelyTeamPlugin.getPlugin().getSQLiteManager().getUUID(result.getString("playerName"))
+                        )
+                    );
+                }
+                query.close();
 
+
+                SelectOperator select = new SelectOperator(table, columns, conditions, orders);
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return teamMembers;
+    }
 
 
 
