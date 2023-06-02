@@ -75,6 +75,7 @@ public class AlliancesMenu extends TeamMenu {
             Integer maxMembers = config.getInt("teamMaxMembers");
             String allianceDescription = teamAlliance.getTeamDescription();
             ArrayList<String> allianceMembers = teamAlliance.getMembersName();
+            allianceMembers.remove(allianceOwnerName);
             UUID playerUUID = sqliteManager.getUUID(allianceOwnerName);
             // String itemName = colorsBuilder.replaceColor(alliancePrefix);
             String itemName = " ";
@@ -91,7 +92,7 @@ public class AlliancesMenu extends TeamMenu {
             lore = replaceInLore(lore, "%DATE%", allianceDate);
             lore = replaceInLore(lore, "%MEMBER_COUNT%", IntegerToString(teamMembers));
             lore = replaceInLore(lore, "%MAX_MEMBERS%", IntegerToString(maxMembers+teamMembersLelvel));
-            lore = replaceInLore(lore, "%MEMBERS%", String.join(", ", allianceMembers));
+            lore = replaceInLore(lore, "%MEMBERS%", allianceMembers.isEmpty() ? messageManager.getMessageWithoutPrefix("common.no_members") : String.join(", ", allianceMembers));
             lore = replaceInLore(lore, "%DESCRIPTION%", colorsBuilder.replaceColor(allianceDescription));
             
             

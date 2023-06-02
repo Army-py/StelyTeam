@@ -25,6 +25,7 @@ import fr.army.stelyteam.utils.builder.ColorsBuilder;
 import fr.army.stelyteam.utils.builder.ItemBuilder;
 import fr.army.stelyteam.utils.builder.conversation.ConversationBuilder;
 import fr.army.stelyteam.utils.manager.CacheManager;
+import fr.army.stelyteam.utils.manager.MessageManager;
 import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
 
@@ -36,6 +37,7 @@ public class EditAlliancesMenu extends TeamMenu {
     final ColorsBuilder colorsBuilder = plugin.getColorsBuilder();
     final ConversationBuilder conversationBuilder = plugin.getConversationBuilder();
     final CacheManager cacheManager = plugin.getCacheManager();
+    final MessageManager messageManager = plugin.getMessageManager();
 
 
     public EditAlliancesMenu(Player viewer){
@@ -82,7 +84,7 @@ public class EditAlliancesMenu extends TeamMenu {
             lore = replaceInLore(lore, "%DATE%", allianceDate);
             lore = replaceInLore(lore, "%MEMBER_COUNT%", IntegerToString(teamMembers));
             lore = replaceInLore(lore, "%MAX_MEMBERS%", IntegerToString(maxMembers+teamMembersLelvel));
-            lore = replaceInLore(lore, "%MEMBERS%", String.join(", ", allianceMembers));
+            lore = replaceInLore(lore, "%MEMBERS%", allianceMembers.isEmpty() ? messageManager.getMessageWithoutPrefix("common.no_members") : String.join(", ", allianceMembers));
             lore = replaceInLore(lore, "%DESCRIPTION%", colorsBuilder.replaceColor(allianceDescription));
             
             

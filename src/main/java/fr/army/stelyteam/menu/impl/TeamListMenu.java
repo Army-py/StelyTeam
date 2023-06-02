@@ -22,6 +22,7 @@ import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
 import fr.army.stelyteam.utils.builder.ItemBuilder;
 import fr.army.stelyteam.utils.manager.CacheManager;
+import fr.army.stelyteam.utils.manager.MessageManager;
 import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
 
 
@@ -30,6 +31,7 @@ public class TeamListMenu extends TeamMenu {
     final SQLiteDataManager sqliteManager = plugin.getSQLiteManager();
     final CacheManager cacheManager = plugin.getCacheManager();
     final ColorsBuilder colorsBuilder = plugin.getColorsBuilder();
+    final MessageManager messageManager = plugin.getMessageManager();
 
     public TeamListMenu(Player viewer) {
         super(
@@ -60,6 +62,8 @@ public class TeamListMenu extends TeamMenu {
         for(Team team : pages.get(page.getCurrentPage())){
             String teamOwnerName = team.getTeamOwnerName();
             String teamPrefix = team.getTeamPrefix();
+            List<String> teamMembers = team.getMembersName();
+            teamMembers.remove(teamOwnerName);
             UUID playerUUID = sqliteManager.getUUID(teamOwnerName);
             // String itemName = colorsBuilder.replaceColor(teamPrefix);
             String itemName = " ";
@@ -80,6 +84,7 @@ public class TeamListMenu extends TeamMenu {
             lore = replaceInLore(lore, "%DATE%", team.getCreationDate());
             lore = replaceInLore(lore, "%MEMBER_COUNT%", IntegerToString(team.getTeamMembers().size()));
             lore = replaceInLore(lore, "%MAX_MEMBERS%", IntegerToString(maxMembers+team.getImprovLvlMembers()));
+            lore = replaceInLore(lore, "%MEMBERS%", teamMembers.isEmpty() ? messageManager.getMessageWithoutPrefix("common.no_members") : String.join(", ", teamMembers));
             lore = replaceInLore(lore, "%DESCRIPTION%", colorsBuilder.replaceColor(team.getTeamDescription()));
             
             item = ItemBuilder.getPlayerHead(teamOwner, itemName, lore);

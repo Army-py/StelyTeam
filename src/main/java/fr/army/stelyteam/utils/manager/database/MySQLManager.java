@@ -1075,4 +1075,19 @@ public class MySQLManager extends DatabaseManager {
         return new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime());
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

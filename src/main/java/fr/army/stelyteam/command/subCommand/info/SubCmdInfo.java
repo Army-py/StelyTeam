@@ -57,7 +57,8 @@ public class SubCmdInfo extends SubCommand {
                 String teamDescription = team.getTeamDescription();
                 Integer teamMembersLelvel = team.getImprovLvlMembers();
                 String hasUnlockBank = (team.isUnlockedTeamBank() ? yesMessage : noMessage);
-                Collection<Member> teamMembers = team.getTeamMembers();
+                List<String> teamMembers = team.getMembersName();
+                teamMembers.remove(teamOwner);
                 List<String> lore = messages.getStringList("commands.stelyteam_info.output");
 
                 lore = replaceInLore(lore, "%NAME%", teamName);
@@ -65,9 +66,9 @@ public class SubCmdInfo extends SubCommand {
                 lore = replaceInLore(lore, "%OWNER%", teamOwner);
                 lore = replaceInLore(lore, "%DATE%", creationDate);
                 lore = replaceInLore(lore, "%UNLOCK_BANK%", hasUnlockBank);
-                lore = replaceInLore(lore, "%MEMBER_COUNT%", IntegerToString(teamMembers.size()));
+                lore = replaceInLore(lore, "%MEMBER_COUNT%", IntegerToString(teamMembers.size()+1));
                 lore = replaceInLore(lore, "%MAX_MEMBERS%", IntegerToString(maxMembers+teamMembersLelvel));
-                lore = replaceInLore(lore, "%MEMBERS%", String.join(", ",  team.getMembersName()));
+                lore = replaceInLore(lore, "%MEMBERS%", teamMembers.isEmpty() ? messageManager.getMessageWithoutPrefix("common.no_members") : String.join(", ", teamMembers));
                 lore = replaceInLore(lore, "%DESCRIPTION%", colorsBuilder.replaceColor(teamDescription));
 
                 player.sendMessage(String.join("\n", lore));
