@@ -34,7 +34,6 @@ public class Team implements PropertiesHolder {
         prefix = new Property<>(SaveField.PREFIX); // null
         description = new Property<>(SaveField.DESCRIPTION); // config.getString("team.defaultDescription")
         creationDate = new Property<>(SaveField.CREATION_DATE); // getCurrentDate()
-        owner = new Property<>(SaveField.OWNER);
 
         bankAccount = new BankAccount();
         upgrades = new Upgrades();

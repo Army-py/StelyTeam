@@ -8,7 +8,6 @@ public enum SaveField {
     PREFIX(SaveFieldHolder.TEAM),
     DESCRIPTION(SaveFieldHolder.TEAM),
     CREATION_DATE(SaveFieldHolder.TEAM),
-    OWNER(SaveFieldHolder.TEAM),
     MEMBERS(SaveFieldHolder.TEAM),
     MEMBER_RANK(SaveFieldHolder.MEMBER),
     MEMBER_JOINING_DATE(SaveFieldHolder.MEMBER),

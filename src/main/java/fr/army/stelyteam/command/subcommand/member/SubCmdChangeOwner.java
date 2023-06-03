@@ -32,7 +32,7 @@ public class SubCmdChangeOwner extends SubCommand {
             player.sendMessage(messageManager.getMessage("commands.stelyteam_changeowner.usage"));
             return true;
         }
-        final Team team = teamManager.getTeam(args[1], SaveField.OWNER, SaveField.MEMBERS);
+        final Team team = teamManager.getTeam(args[1], SaveField.MEMBERS);
         if (team == null) {
             player.sendMessage(messageManager.getMessage("common.team_not_exist"));
             return true;
