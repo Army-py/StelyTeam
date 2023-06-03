@@ -8,7 +8,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Function;
 
-public class SetProperty<T, I> implements IProperty {
+public class SetProperty<I, T> implements IProperty {
 
     private final SaveField saveField;
     private final Lock lock;
@@ -49,17 +49,18 @@ public class SetProperty<T, I> implements IProperty {
      *
      * @param values The value of the property
      */
-    public void loadUnsafe(@Nullable Collection<T> values) {
+    public <O> void loadUnsafe(@Nullable Collection<O> values, @NotNull Function<O, T> constructor) {
         setUnsafe(() -> {
             this.values.clear();
             if (values == null) {
                 return;
             }
-            for (T value : values) {
+            for (O value : values) {
                 if (value == null) {
                     continue;
                 }
-                this.values.put(identifierMapper.apply(value), value);
+                final T typedValue = constructor.apply(value);
+                this.values.put(identifierMapper.apply(typedValue), typedValue);
             }
         });
     }

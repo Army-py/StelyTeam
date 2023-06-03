@@ -1,9 +1,6 @@
 package fr.army.stelyteam.team;
 
-import fr.army.stelyteam.cache.IProperty;
-import fr.army.stelyteam.cache.Property;
-import fr.army.stelyteam.cache.SaveValue;
-import fr.army.stelyteam.cache.SaveField;
+import fr.army.stelyteam.cache.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -31,9 +28,9 @@ public class BankAccount {
         snapshot.balance().ifPresent(balance::loadUnsafe);
     }
 
-    public void save(List<SaveValue<?>> values) {
-        unlocked.save(values);
-        balance.save(values);
+    public void save(@NotNull PropertiesHolder holder, @NotNull List<SaveProperty<?>> values) {
+        unlocked.save(holder, values);
+        balance.save(holder, values);
     }
 
     public void getProperties(@NotNull IProperty[] properties) {

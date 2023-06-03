@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-public class Team {
+public class Team implements PropertiesHolder {
 
     /*
     private static StelyTeamPlugin plugin = StelyTeamPlugin.getPlugin();
@@ -26,7 +26,7 @@ public class Team {
     private final Upgrades upgrades;
 
 
-    private final SetProperty<Member> members;
+    private final SetProperty<UUID, Member> members;
     private final SetProperty<Permission> permissions;
     private final SetProperty<Alliance> alliances;
     private Map<Integer, Storage> teamStorages;
@@ -42,7 +42,7 @@ public class Team {
         bankAccount = new BankAccount();
         upgrades = new Upgrades();
 
-        members = new SetProperty<>(SaveField.MEMBERS);
+        members = new SetProperty<>(SaveField.MEMBERS, Member::getId);
         this.teamMembers = plugin.getDatabaseManager().getTeamMembers(uuid);
         this.teamPermissions = plugin.getDatabaseManager().getTeamAssignement(uuid);
         this.teamAlliances = plugin.getDatabaseManager().getTeamAlliances(uuid);
@@ -471,7 +471,7 @@ public class Team {
     }
 
     @NotNull
-    public SetProperty<Member> getMembers() {
+    public SetProperty<UUID, Member> getMembers() {
         return members;
     }
 
@@ -492,15 +492,17 @@ public class Team {
         snapshot.creationDate().ifPresent(creationDate::loadUnsafe);
         snapshot.bankAccount().ifPresent(bankAccount::loadUnsafe);
         snapshot.owner().ifPresent(owner::loadUnsafe);
+        snapshot.members().ifPresent(v -> members.loadUnsafe(v, Member::new));
     }
 
-    public void save(@NotNull List<SaveValue<?>> values) {
-        name.save(values);
-        prefix.save(values);
-        description.save(values);
-        creationDate.save(values);
-        bankAccount.save(values);
-        owner.save(values);
+    public void save(@NotNull List<SaveProperty<?>> values) {
+        name.save(this, values);
+        prefix.save(this, values);
+        description.save(this, values);
+        creationDate.save(this, values);
+        bankAccount.save(this, values);
+        owner.save(this, values);
+        members.save(this, values, new Member[0]);
     }
 
     public void getProperties(final IProperty[] properties) {

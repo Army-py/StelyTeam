@@ -1,7 +1,7 @@
 package fr.army.stelyteam.team;
 
 import fr.army.stelyteam.cache.SaveField;
-import fr.army.stelyteam.cache.SaveValue;
+import fr.army.stelyteam.cache.SaveProperty;
 import fr.army.stelyteam.cache.StorageManager;
 import fr.army.stelyteam.cache.TeamCache;
 import org.jetbrains.annotations.NotNull;
@@ -53,7 +53,7 @@ public class TeamManager {
     }
 
     public void saveTeam(@NotNull Team team) {
-        final List<SaveValue<?>> saveValues = new LinkedList<>();
+        final List<SaveProperty<?>> saveValues = new LinkedList<>();
         team.save(saveValues);
         if (saveValues.isEmpty()) {
             return;
