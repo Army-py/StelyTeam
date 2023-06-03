@@ -80,13 +80,13 @@ public class Property<T> implements IProperty {
         }
     }
 
-    public boolean save(@NotNull List<SaveValue<?>> saveValues) {
+    public boolean save(@NotNull PropertiesHolder holder, @NotNull List<SaveProperty<?>> saveValues) {
         try {
             lock.lock();
             if (!dirty) {
                 return false;
             }
-            saveValues.add(new SaveValue<>(saveField, value));
+            saveValues.add(new SaveValue<>(saveField, holder, value));
             dirty = false;
             loaded = true;
             return true;

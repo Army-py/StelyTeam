@@ -7,7 +7,7 @@ import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class SetProperty<T extends PropertiesHolder> implements IProperty {
+public class SetProperty<T> implements IProperty {
 
     private final SaveField saveField;
     private final Lock lock;
@@ -66,6 +66,30 @@ public class SetProperty<T extends PropertiesHolder> implements IProperty {
             action.run();
             changes = new HashMap<>();
             loaded = true;
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public boolean save(@NotNull PropertiesHolder holder, @NotNull List<SaveProperty<?>> saveValues, @NotNull T[] a) {
+        try {
+            lock.lock();
+            if (changes.isEmpty()) {
+                return false;
+            }
+            final List<T> added = new LinkedList<>();
+            final List<T> removed = new LinkedList<>();
+            for (Map.Entry<T, Boolean> entry : changes.entrySet()) {
+                if (entry.getValue()) {
+                    added.add(entry.getKey());
+                    continue;
+                }
+                removed.add(entry.getKey());
+            }
+            saveValues.add(new SaveSet<>(saveField, holder, added.toArray(a), removed.toArray(a), values.toArray(a)));
+            changes = new HashMap<>();
+            loaded = true;
+            return true;
         } finally {
             lock.unlock();
         }
