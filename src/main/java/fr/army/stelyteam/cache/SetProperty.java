@@ -167,11 +167,6 @@ public class SetProperty<I, T> implements IProperty {
     }
 
     @NotNull
-    public Iterator<T> iterator() {
-        throw new UnsupportedOperationException("Not implemented");
-    }
-
-    @NotNull
     public T @NotNull [] toArray(T @NotNull [] a) {
         try {
             lock.lock();
