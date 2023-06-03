@@ -12,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 public class SubCmdChangeOwner extends SubCommand {
 
@@ -38,6 +37,9 @@ public class SubCmdChangeOwner extends SubCommand {
             player.sendMessage(messageManager.getMessage("common.team_not_exist"));
             return true;
         }
+        player.sendMessage("Please, just upgrade the rank of the desired member, this command is unsupported");
+        //final OfflinePlayer target = OfflinePlayerRetriever.getOfflinePlayer(args[2]);
+        /*
         if (Objects.requireNonNull(team.getOwner().get()).equals(args[2])) {
             player.sendMessage(messageManager.getMessage("commands.stelyteam_changeowner.already_owner"));
             return true;
@@ -53,6 +55,7 @@ public class SubCmdChangeOwner extends SubCommand {
         team.getOwner().set(args[2]);
         teamManager.saveTeam(team);
         player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_changeowner.output", args[2]));
+        */
         return true;
     }
 

@@ -20,9 +20,6 @@ public class Team implements PropertiesHolder {
 
     private final BankAccount bankAccount;
 
-    // TODO Maybe use an UUID
-    private final Property<String> owner;
-
     private final Upgrades upgrades;
 
 
@@ -461,11 +458,6 @@ public class Team implements PropertiesHolder {
     }
 
     @NotNull
-    public Property<String> getOwner() {
-        return owner;
-    }
-
-    @NotNull
     public Upgrades getUpgrades() {
         return upgrades;
     }
@@ -491,7 +483,6 @@ public class Team implements PropertiesHolder {
         snapshot.description().ifPresent(description::loadUnsafe);
         snapshot.creationDate().ifPresent(creationDate::loadUnsafe);
         snapshot.bankAccount().ifPresent(bankAccount::loadUnsafe);
-        snapshot.owner().ifPresent(owner::loadUnsafe);
         snapshot.members().ifPresent(v -> members.loadUnsafe(v, Member::new));
     }
 
@@ -502,7 +493,6 @@ public class Team implements PropertiesHolder {
         description.save(this, values);
         creationDate.save(this, values);
         bankAccount.save(this, values);
-        owner.save(this, values);
         members.save(this, values, new Member[0]);
     }
 
