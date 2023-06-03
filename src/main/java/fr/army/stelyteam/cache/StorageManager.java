@@ -12,18 +12,18 @@ public class StorageManager {
     private final Storage storage;
 
     @Nullable
-    public TeamSnapshot retrieveTeam(@NotNull String teamName, @NotNull TeamField... fields) {
+    public TeamSnapshot retrieveTeam(@NotNull String teamName, @NotNull SaveField... fields) {
         // TODO Fetch the team from the current storage
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
     @Nullable
-    public Team retrievePlayerTeam(@NotNull String playerName, @NotNull TeamField... fields) {
+    public Team retrievePlayerTeam(@NotNull String playerName, @NotNull SaveField... fields) {
         // TODO Fetch the team from the current storage
         throw new UnsupportedOperationException("Not implemented yet");
     }
 
-    public TeamSnapshot retrieveTeam(@NotNull UUID teamId, @NotNull TeamField... fields) {
+    public TeamSnapshot retrieveTeam(@NotNull UUID teamId, @NotNull SaveField... fields) {
         // TODO Fetch team information based on the specified properties from the current storage
         throw new UnsupportedOperationException("Not implemented yet");
     }

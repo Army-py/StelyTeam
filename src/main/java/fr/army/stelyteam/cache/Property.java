@@ -10,14 +10,14 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class Property<T> implements IProperty {
 
-    private final TeamField teamField;
+    private final SaveField saveField;
     private final Lock lock;
     private T value;
     private boolean dirty;
     private boolean loaded;
 
-    public Property(@NotNull TeamField teamField) {
-        this.teamField = teamField;
+    public Property(@NotNull SaveField saveField) {
+        this.saveField = saveField;
         this.lock = new ReentrantLock();
         dirty = false;
         loaded = false;
@@ -25,8 +25,8 @@ public class Property<T> implements IProperty {
 
     @NotNull
     @Override
-    public TeamField getField() {
-        return teamField;
+    public SaveField getField() {
+        return saveField;
     }
 
     @Nullable
@@ -80,13 +80,13 @@ public class Property<T> implements IProperty {
         }
     }
 
-    public boolean save(@NotNull List<SaveValue<?>> saveValues) {
+    public boolean save(@NotNull PropertiesHolder holder, @NotNull List<SaveProperty<?>> saveValues) {
         try {
             lock.lock();
             if (!dirty) {
                 return false;
             }
-            saveValues.add(new SaveValue<>(teamField, value));
+            saveValues.add(new SaveValue<>(saveField, holder, value));
             dirty = false;
             loaded = true;
             return true;

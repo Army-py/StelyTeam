@@ -1,30 +1,11 @@
 package fr.army.stelyteam.team;
 
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
 import fr.army.stelyteam.cache.*;
-import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.Player;
-
-import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.menu.impl.AdminMenu;
-import fr.army.stelyteam.menu.impl.EditAlliancesMenu;
-import fr.army.stelyteam.menu.impl.EditMembersMenu;
-import fr.army.stelyteam.menu.impl.ManageMenu;
-import fr.army.stelyteam.menu.impl.MemberMenu;
-import fr.army.stelyteam.menu.impl.MembersMenu;
-import fr.army.stelyteam.menu.impl.PermissionsMenu;
-import fr.army.stelyteam.menu.impl.StorageDirectoryMenu;
-import fr.army.stelyteam.menu.impl.UpgradeMembersMenu;
-import fr.army.stelyteam.utils.manager.CacheManager;
 import org.jetbrains.annotations.NotNull;
 
-public class Team {
+import java.util.*;
+
+public class Team implements PropertiesHolder {
 
     /*
     private static StelyTeamPlugin plugin = StelyTeamPlugin.getPlugin();
@@ -39,29 +20,25 @@ public class Team {
 
     private final BankAccount bankAccount;
 
-    // TODO Maybe use an UUID
-    private final Property<String> owner;
-
     private final Upgrades upgrades;
 
 
-    private final SetProperty<Member> members;
+    private final SetProperty<UUID, Member> members;
     private final SetProperty<Permission> permissions;
     private final SetProperty<Alliance> alliances;
     private Map<Integer, Storage> teamStorages;
 
     public Team(@NotNull UUID uuid) {
         this.uuid = uuid;
-        name = new Property<>(TeamField.NAME);
-        prefix = new Property<>(TeamField.PREFIX); // null
-        description = new Property<>(TeamField.DESCRIPTION); // config.getString("team.defaultDescription")
-        creationDate = new Property<>(TeamField.CREATION_DATE); // getCurrentDate()
-        owner = new Property<>(TeamField.OWNER);
+        name = new Property<>(SaveField.NAME);
+        prefix = new Property<>(SaveField.PREFIX); // null
+        description = new Property<>(SaveField.DESCRIPTION); // config.getString("team.defaultDescription")
+        creationDate = new Property<>(SaveField.CREATION_DATE); // getCurrentDate()
 
         bankAccount = new BankAccount();
         upgrades = new Upgrades();
 
-        members = new SetProperty<>(TeamField.MEMBERS);
+        members = new SetProperty<>(SaveField.MEMBERS, Member::getId);
         this.teamMembers = plugin.getDatabaseManager().getTeamMembers(uuid);
         this.teamPermissions = plugin.getDatabaseManager().getTeamAssignement(uuid);
         this.teamAlliances = plugin.getDatabaseManager().getTeamAlliances(uuid);
@@ -480,17 +457,12 @@ public class Team {
     }
 
     @NotNull
-    public Property<String> getOwner() {
-        return owner;
-    }
-
-    @NotNull
     public Upgrades getUpgrades() {
         return upgrades;
     }
 
     @NotNull
-    public SetProperty<Member> getMembers() {
+    public SetProperty<UUID, Member> getMembers() {
         return members;
     }
 
@@ -510,16 +482,17 @@ public class Team {
         snapshot.description().ifPresent(description::loadUnsafe);
         snapshot.creationDate().ifPresent(creationDate::loadUnsafe);
         snapshot.bankAccount().ifPresent(bankAccount::loadUnsafe);
-        snapshot.owner().ifPresent(owner::loadUnsafe);
+        snapshot.members().ifPresent(v -> members.loadUnsafe(v, Member::new));
     }
 
-    public void save(@NotNull List<SaveValue<?>> values) {
-        name.save(values);
-        prefix.save(values);
-        description.save(values);
-        creationDate.save(values);
-        bankAccount.save(values);
-        owner.save(values);
+    @Override
+    public void save(@NotNull List<SaveProperty<?>> values) {
+        name.save(this, values);
+        prefix.save(this, values);
+        description.save(this, values);
+        creationDate.save(this, values);
+        bankAccount.save(this, values);
+        members.save(this, values, new Member[0]);
     }
 
     public void getProperties(final IProperty[] properties) {
@@ -530,11 +503,11 @@ public class Team {
     }
 
     @NotNull
-    public List<TeamField> getNeedLoad(@NotNull TeamField... fields) {
-        final List<TeamField> needLoad = new LinkedList<>();
-        final IProperty[] properties = new IProperty[TeamField.values().length];
+    public List<SaveField> getNeedLoad(@NotNull SaveField... fields) {
+        final List<SaveField> needLoad = new LinkedList<>();
+        final IProperty[] properties = new IProperty[SaveField.values().length];
         getProperties(properties);
-        for (TeamField field : fields) {
+        for (SaveField field : fields) {
             if (!properties[field.ordinal()].isLoaded()) {
                 needLoad.add(field);
             }

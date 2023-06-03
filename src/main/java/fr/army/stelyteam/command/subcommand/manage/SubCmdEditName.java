@@ -1,7 +1,7 @@
 package fr.army.stelyteam.command.subcommand.manage;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.cache.TeamField;
+import fr.army.stelyteam.cache.SaveField;
 import fr.army.stelyteam.command.SubCommand;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.team.TeamManager;
@@ -41,7 +41,7 @@ public class SubCmdEditName extends SubCommand {
             return true;
         }
         //args[0] = "";
-        final Team team = teamManager.getTeam(args[1], TeamField.NAME);
+        final Team team = teamManager.getTeam(args[1], SaveField.NAME);
         if (team == null) {
             player.sendMessage(messageManager.getMessage("common.team_not_exist"));
             return true;

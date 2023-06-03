@@ -6,7 +6,6 @@ public interface IProperty {
 
     boolean isLoaded();
 
-    @NotNull
-    TeamField getField();
+    @NotNull SaveField getField();
 
 }
