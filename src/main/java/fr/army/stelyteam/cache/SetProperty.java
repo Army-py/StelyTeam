@@ -7,18 +7,19 @@ import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class SetProperty<T> implements IProperty, Set<T> {
+public class SetProperty<T extends PropertiesHolder> implements IProperty {
 
     private final TeamField teamField;
     private final Lock lock;
-    private final Set<T> set;
+    private final Set<T> values;
+    private Map<T, Boolean> changes;
     private boolean loaded;
-    private boolean dirty;
 
     public SetProperty(@NotNull TeamField teamField) {
         this.teamField = teamField;
         this.lock = new ReentrantLock();
-        this.set = new HashSet<>();
+        this.values = new HashSet<>();
+        this.changes = new HashMap<>();
     }
 
     @Override
@@ -44,110 +45,94 @@ public class SetProperty<T> implements IProperty, Set<T> {
      */
     public void loadUnsafe(@Nullable Collection<T> values) {
         setUnsafe(() -> {
-            set.clear();
+            this.values.clear();
             if (values != null) {
-                set.addAll(values);
+                this.values.addAll(values);
             }
         });
     }
 
     public void addUnsafe(@NotNull Collection<T> values) {
-        setUnsafe(() -> set.addAll(values));
+        setUnsafe(() -> this.values.addAll(values));
     }
 
     public void removeUnsafe(@NotNull Collection<T> values) {
-        setUnsafe(() -> set.removeAll(values));
+        setUnsafe(() -> this.values.removeAll(values));
     }
 
     private void setUnsafe(@NotNull Runnable action) {
         try {
             lock.lock();
             action.run();
-            dirty = false;
+            changes = new HashMap<>();
             loaded = true;
         } finally {
             lock.unlock();
         }
     }
 
-    public SetProperty<T> retrieve(@NotNull UUID teamId, @NotNull StorageManager storageManager) {
-        try {
-            lock.lock();
-            if (loaded) {
-                return this;
-            }
-            storageManager.retrieve(teamId, this);
-            return this;
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    @Override
     public int size() {
         try {
             lock.lock();
-            return set.size();
+            return values.size();
         } finally {
             lock.unlock();
         }
     }
 
-    @Override
     public boolean isEmpty() {
         try {
             lock.lock();
-            return set.isEmpty();
+            return values.isEmpty();
         } finally {
             lock.unlock();
         }
     }
 
-    @Override
-    public boolean contains(Object o) {
+    public boolean contains(T value) {
         try {
             lock.lock();
-            return set.contains(o);
+            return values.contains(value);
         } finally {
             lock.unlock();
         }
     }
 
     @NotNull
-    @Override
     public Iterator<T> iterator() {
         throw new UnsupportedOperationException("Not implemented");
     }
 
     @NotNull
-    @Override
     public Object @NotNull [] toArray() {
         try {
             lock.lock();
-            return set.toArray();
+            return values.toArray();
         } finally {
             lock.unlock();
         }
     }
 
     @NotNull
-    @Override
-    public <T1> T1 @NotNull [] toArray(T1 @NotNull [] a) {
+    public T @NotNull [] toArray(T @NotNull [] a) {
         try {
             lock.lock();
-            return set.toArray(a);
+            return values.toArray(a);
         } finally {
             lock.unlock();
         }
     }
 
-    @Override
-    public boolean add(T o) {
+    private void computeChange(@NotNull T value, boolean val) {
+        this.changes.merge(value, val, (k, v) -> null);
+    }
+
+    public boolean add(@NotNull T o) {
         try {
             lock.lock();
-            final boolean changed = set.add(o);
-            if(changed) {
-                dirty = true;
+            final boolean changed = values.add(o);
+            if (changed) {
+                computeChange(o, true);
             }
             return changed;
         } finally {
@@ -155,13 +140,12 @@ public class SetProperty<T> implements IProperty, Set<T> {
         }
     }
 
-    @Override
-    public boolean remove(Object o) {
+    public boolean remove(@NotNull T o) {
         try {
             lock.lock();
-            final boolean changed = set.remove(o);
-            if(changed) {
-                dirty = true;
+            final boolean changed = values.remove(o);
+            if (changed) {
+                computeChange(o, false);
             }
             return changed;
         } finally {
@@ -169,67 +153,14 @@ public class SetProperty<T> implements IProperty, Set<T> {
         }
     }
 
-    @Override
-    public boolean addAll(@NotNull Collection<? extends T> c) {
-        try {
-            lock.lock();
-            final boolean changed = set.addAll(c);
-            if(changed) {
-                dirty = true;
-            }
-            return changed;
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    @Override
     public void clear() {
         try {
             lock.lock();
-            if(set.isEmpty()) {
+            if (values.isEmpty()) {
                 return;
             }
-            set.clear();
-            dirty = true;
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    @Override
-    public boolean removeAll(@NotNull Collection<?> c) {
-        try {
-            lock.lock();
-            final boolean changed = set.removeAll(c);
-            if(changed) {
-                dirty = true;
-            }
-            return changed;
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    @Override
-    public boolean retainAll(@NotNull Collection<?> c) {
-        try {
-            lock.lock();
-            final boolean changed = set.retainAll(c);
-            if(changed) {
-                dirty = true;
-            }
-            return changed;
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    @Override
-    public boolean containsAll(@NotNull Collection<?> c) {
-        try {
-            lock.lock();
-            return set.containsAll(c);
+            values.clear();
+            changes = new HashMap<>();
         } finally {
             lock.unlock();
         }
