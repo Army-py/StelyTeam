@@ -495,6 +495,7 @@ public class Team implements PropertiesHolder {
         snapshot.members().ifPresent(v -> members.loadUnsafe(v, Member::new));
     }
 
+    @Override
     public void save(@NotNull List<SaveProperty<?>> values) {
         name.save(this, values);
         prefix.save(this, values);

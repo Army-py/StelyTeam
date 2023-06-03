@@ -3,9 +3,11 @@ package fr.army.stelyteam.team;
 import fr.army.stelyteam.cache.PropertiesHolder;
 import fr.army.stelyteam.cache.Property;
 import fr.army.stelyteam.cache.SaveField;
+import fr.army.stelyteam.cache.SaveProperty;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 public class Member implements PropertiesHolder {
@@ -23,6 +25,12 @@ public class Member implements PropertiesHolder {
     @Override
     public @NotNull UUID getId() {
         return playerId;
+    }
+
+    @Override
+    public void save(@NotNull List<SaveProperty<?>> saveValues) {
+        rank.save(this, saveValues);
+        joiningDate.save(this, saveValues);
     }
 
     public Property<Integer> getRank() {

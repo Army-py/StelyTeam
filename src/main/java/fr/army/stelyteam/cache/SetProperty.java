@@ -113,6 +113,7 @@ public class SetProperty<I, T> implements IProperty {
             if (changes.isEmpty()) {
                 return false;
             }
+            // Save the set itself
             final List<T> added = new LinkedList<>();
             final List<T> removed = new LinkedList<>();
             for (Map.Entry<I, ChangeValue<T>> entry : changes.entrySet()) {
@@ -122,7 +123,14 @@ public class SetProperty<I, T> implements IProperty {
                 }
                 removed.add(entry.getValue().value());
             }
-            saveValues.add(new SaveSet<>(saveField, holder, added.toArray(a), removed.toArray(a), values.values().toArray(a)));
+            final T[] values = this.values.values().toArray(a);
+            saveValues.add(new SaveSet<>(saveField, holder, added.toArray(a), removed.toArray(a), values));
+            // Save its elements values
+            if (a.getClass().getComponentType().isAssignableFrom(PropertiesHolder.class)) {
+                for (T value : values) {
+                    ((PropertiesHolder) value).save(saveValues);
+                }
+            }
             changes = new HashMap<>();
             loaded = true;
             return true;
