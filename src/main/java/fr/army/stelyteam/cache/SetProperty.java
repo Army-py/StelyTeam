@@ -6,19 +6,25 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Function;
 
-public class SetProperty<T> implements IProperty {
+public class SetProperty<T, I> implements IProperty {
 
     private final SaveField saveField;
     private final Lock lock;
-    private final Set<T> values;
-    private Map<T, Boolean> changes;
+    private final Function<T, I> identifierMapper;
+    private final Map<I, T> values;
+    private Map<I, ChangeValue<T>> changes;
     private boolean loaded;
 
-    public SetProperty(@NotNull SaveField saveField) {
+    private record ChangeValue<T>(@NotNull T value, boolean changeValue) {
+    }
+
+    public SetProperty(@NotNull SaveField saveField, @NotNull Function<T, I> identifierMapper) {
         this.saveField = saveField;
         this.lock = new ReentrantLock();
-        this.values = new HashSet<>();
+        this.identifierMapper = identifierMapper;
+        this.values = new HashMap<>();
         this.changes = new HashMap<>();
     }
 
@@ -46,18 +52,38 @@ public class SetProperty<T> implements IProperty {
     public void loadUnsafe(@Nullable Collection<T> values) {
         setUnsafe(() -> {
             this.values.clear();
-            if (values != null) {
-                this.values.addAll(values);
+            if (values == null) {
+                return;
+            }
+            for (T value : values) {
+                if (value == null) {
+                    continue;
+                }
+                this.values.put(identifierMapper.apply(value), value);
             }
         });
     }
 
     public void addUnsafe(@NotNull Collection<T> values) {
-        setUnsafe(() -> this.values.addAll(values));
+        setUnsafe(() -> {
+            for (T value : values) {
+                if (value == null) {
+                    continue;
+                }
+                this.values.put(identifierMapper.apply(value), value);
+            }
+        });
     }
 
     public void removeUnsafe(@NotNull Collection<T> values) {
-        setUnsafe(() -> this.values.removeAll(values));
+        setUnsafe(() -> {
+            for (T value : values) {
+                if (value == null) {
+                    continue;
+                }
+                this.values.remove(identifierMapper.apply(value));
+            }
+        });
     }
 
     private void setUnsafe(@NotNull Runnable action) {
@@ -71,6 +97,15 @@ public class SetProperty<T> implements IProperty {
         }
     }
 
+    public T getValue(@NotNull I identifier) {
+        try {
+            lock.lock();
+            return values.get(identifier);
+        } finally {
+            lock.unlock();
+        }
+    }
+
     public boolean save(@NotNull PropertiesHolder holder, @NotNull List<SaveProperty<?>> saveValues, @NotNull T[] a) {
         try {
             lock.lock();
@@ -79,14 +114,14 @@ public class SetProperty<T> implements IProperty {
             }
             final List<T> added = new LinkedList<>();
             final List<T> removed = new LinkedList<>();
-            for (Map.Entry<T, Boolean> entry : changes.entrySet()) {
-                if (entry.getValue()) {
-                    added.add(entry.getKey());
+            for (Map.Entry<I, ChangeValue<T>> entry : changes.entrySet()) {
+                if (entry.getValue().changeValue()) {
+                    added.add(entry.getValue().value());
                     continue;
                 }
-                removed.add(entry.getKey());
+                removed.add(entry.getValue().value());
             }
-            saveValues.add(new SaveSet<>(saveField, holder, added.toArray(a), removed.toArray(a), values.toArray(a)));
+            saveValues.add(new SaveSet<>(saveField, holder, added.toArray(a), removed.toArray(a), values.values().toArray(a)));
             changes = new HashMap<>();
             loaded = true;
             return true;
@@ -113,10 +148,10 @@ public class SetProperty<T> implements IProperty {
         }
     }
 
-    public boolean contains(T value) {
+    public boolean contains(I identifier) {
         try {
             lock.lock();
-            return values.contains(value);
+            return values.containsKey(identifier);
         } finally {
             lock.unlock();
         }
@@ -128,35 +163,27 @@ public class SetProperty<T> implements IProperty {
     }
 
     @NotNull
-    public Object @NotNull [] toArray() {
-        try {
-            lock.lock();
-            return values.toArray();
-        } finally {
-            lock.unlock();
-        }
-    }
-
-    @NotNull
     public T @NotNull [] toArray(T @NotNull [] a) {
         try {
             lock.lock();
-            return values.toArray(a);
+            return values.values().toArray(a);
         } finally {
             lock.unlock();
         }
     }
 
-    private void computeChange(@NotNull T value, boolean val) {
-        this.changes.merge(value, val, (k, v) -> null);
+    private void computeChange(@NotNull I id, @NotNull T value, boolean val) {
+        this.changes.merge(id, new ChangeValue<>(value, val), (k, v) -> null);
     }
 
     public boolean add(@NotNull T o) {
         try {
             lock.lock();
-            final boolean changed = values.add(o);
+            final I id = identifierMapper.apply(o);
+            final T previousValue = values.put(id, o);
+            final boolean changed = previousValue != null;
             if (changed) {
-                computeChange(o, true);
+                computeChange(id, o, true);
             }
             return changed;
         } finally {
@@ -167,9 +194,11 @@ public class SetProperty<T> implements IProperty {
     public boolean remove(@NotNull T o) {
         try {
             lock.lock();
-            final boolean changed = values.remove(o);
+            final I id = identifierMapper.apply(o);
+            final T previousValue = values.remove(id);
+            final boolean changed = previousValue != null;
             if (changed) {
-                computeChange(o, false);
+                computeChange(id, o, false);
             }
             return changed;
         } finally {
