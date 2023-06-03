@@ -1,27 +1,39 @@
 package fr.army.stelyteam.team;
 
+import fr.army.stelyteam.cache.PropertiesHolder;
+import fr.army.stelyteam.cache.Property;
+import fr.army.stelyteam.cache.SaveField;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Date;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
+public class Member implements PropertiesHolder {
 
-import fr.army.stelyteam.StelyTeamPlugin;
+    private final UUID playerId;
+    private final Property<Integer> rank;
+    private final Property<Date> joiningDate;
 
-public class Member {
-
-    private String memberName;
-    private int teamRank;
-    private String joinDate;
-    private UUID uuid;
-
-    public Member(String memberName, int teamRank, String joinDate, UUID uuid){
-        this.memberName = memberName;
-        this.teamRank = teamRank;
-        this.joinDate = joinDate;
-        this.uuid = uuid;
+    public Member(@NotNull UUID playerId) {
+        this.playerId = playerId;
+        rank = new Property<>(SaveField.MEMBER_RANK);
+        joiningDate = new Property<>(SaveField.MEMBER_JOINING_DATE);
     }
 
+    @Override
+    public @NotNull UUID getId() {
+        return playerId;
+    }
 
+    public Property<Integer> getRank() {
+        return rank;
+    }
+
+    public Property<Date> getJoiningDate() {
+        return joiningDate;
+    }
+
+    /*
     public void promoteMember(){
         this.teamRank--;
         StelyTeamPlugin.getPlugin().getDatabaseManager().promoteMember(memberName);
@@ -64,4 +76,7 @@ public class Member {
     public void setJoinDate(String joinDate) {
         this.joinDate = joinDate;
     }
+ */
+
+
 }
