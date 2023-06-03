@@ -2,5 +2,5 @@ package fr.army.stelyteam.cache;
 
 import org.jetbrains.annotations.NotNull;
 
-public record SaveValue<T>(@NotNull TeamField field, T value) {
+public record SaveValue<T>(@NotNull SaveField field, T value) {
 }

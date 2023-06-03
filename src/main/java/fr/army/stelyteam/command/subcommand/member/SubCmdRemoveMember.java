@@ -1,7 +1,7 @@
 package fr.army.stelyteam.command.subcommand.member;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.cache.TeamField;
+import fr.army.stelyteam.cache.SaveField;
 import fr.army.stelyteam.command.SubCommand;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.team.TeamManager;
@@ -32,7 +32,7 @@ public class SubCmdRemoveMember extends SubCommand {
             return true;
         }
 
-        final Team team = teamManager.getTeam(args[1], TeamField.MEMBERS);
+        final Team team = teamManager.getTeam(args[1], SaveField.MEMBERS);
         if (team == null) {
             player.sendMessage(messageManager.getMessage("common.team_not_exist"));
             return true;

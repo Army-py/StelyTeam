@@ -3,7 +3,7 @@ package fr.army.stelyteam.team;
 import fr.army.stelyteam.cache.IProperty;
 import fr.army.stelyteam.cache.Property;
 import fr.army.stelyteam.cache.SaveValue;
-import fr.army.stelyteam.cache.TeamField;
+import fr.army.stelyteam.cache.SaveField;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -14,8 +14,8 @@ public class BankAccount {
     private final Property<Double> balance;
 
     public BankAccount() {
-        unlocked = new Property<>(TeamField.BANK_UNLOCKED);
-        balance = new Property<>(TeamField.BANK_BALANCE);
+        unlocked = new Property<>(SaveField.BANK_UNLOCKED);
+        balance = new Property<>(SaveField.BANK_BALANCE);
     }
 
     public Property<Boolean> getUnlocked() {

@@ -1,7 +1,7 @@
 package fr.army.stelyteam.command.subcommand.info;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.cache.TeamField;
+import fr.army.stelyteam.cache.SaveField;
 import fr.army.stelyteam.command.SubCommand;
 import fr.army.stelyteam.team.Member;
 import fr.army.stelyteam.team.Team;
@@ -53,14 +53,14 @@ public class SubCmdInfo extends SubCommand {
         final String combinedArgs = String.join("", args);
 
         final Team team = teamManager.getTeam(combinedArgs,
-                TeamField.NAME,
-                TeamField.PREFIX,
-                TeamField.OWNER,
-                TeamField.CREATION_DATE,
-                TeamField.DESCRIPTION,
-                TeamField.UPGRADES_MEMBERS,
-                TeamField.BANK_UNLOCKED,
-                TeamField.MEMBERS
+                SaveField.NAME,
+                SaveField.PREFIX,
+                SaveField.OWNER,
+                SaveField.CREATION_DATE,
+                SaveField.DESCRIPTION,
+                SaveField.UPGRADES_MEMBERS,
+                SaveField.BANK_UNLOCKED,
+                SaveField.MEMBERS
         );
         if (team == null) {
             player.sendMessage(messageManager.getMessage("common.team_not_exist"));

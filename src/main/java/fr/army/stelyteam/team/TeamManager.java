@@ -1,9 +1,9 @@
 package fr.army.stelyteam.team;
 
+import fr.army.stelyteam.cache.SaveField;
 import fr.army.stelyteam.cache.SaveValue;
 import fr.army.stelyteam.cache.StorageManager;
 import fr.army.stelyteam.cache.TeamCache;
-import fr.army.stelyteam.cache.TeamField;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,9 +23,9 @@ public class TeamManager {
     }
 
     @Nullable
-    public Team getTeam(@NotNull UUID teamId, @NotNull TeamField... fields) {
+    public Team getTeam(@NotNull UUID teamId, @NotNull SaveField... fields) {
         final Team cachedTeam = teamCache.getTeam(teamId);
-        final List<TeamField> needLoadFields = cachedTeam == null ? Arrays.asList(fields) : cachedTeam.getNeedLoad(fields);
+        final List<SaveField> needLoadFields = cachedTeam == null ? Arrays.asList(fields) : cachedTeam.getNeedLoad(fields);
         if (cachedTeam != null && needLoadFields.isEmpty()) {
             return cachedTeam;
         }
@@ -39,7 +39,7 @@ public class TeamManager {
     }
 
     @Nullable
-    public Team getTeam(@NotNull String teamName, @NotNull TeamField... fields) {
+    public Team getTeam(@NotNull String teamName, @NotNull SaveField... fields) {
         // TODO First check from cache then load from storage if needed (need improvement in TeamCache)
         // Then the implementation of this method should be exactly like #getTeam(UUID, TeamField[])
         final TeamSnapshot storedTeam = storageManager.retrieveTeam(teamName, fields);

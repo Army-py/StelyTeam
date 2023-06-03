@@ -9,22 +9,22 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class SetProperty<T extends PropertiesHolder> implements IProperty {
 
-    private final TeamField teamField;
+    private final SaveField saveField;
     private final Lock lock;
     private final Set<T> values;
     private Map<T, Boolean> changes;
     private boolean loaded;
 
-    public SetProperty(@NotNull TeamField teamField) {
-        this.teamField = teamField;
+    public SetProperty(@NotNull SaveField saveField) {
+        this.saveField = saveField;
         this.lock = new ReentrantLock();
         this.values = new HashSet<>();
         this.changes = new HashMap<>();
     }
 
     @Override
-    public @NotNull TeamField getField() {
-        return teamField;
+    public @NotNull SaveField getField() {
+        return saveField;
     }
 
     @Override
