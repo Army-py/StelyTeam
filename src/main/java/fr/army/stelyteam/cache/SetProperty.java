@@ -200,14 +200,13 @@ public class SetProperty<I, T> implements IProperty {
         }
     }
 
-    public boolean remove(@NotNull T o) {
+    public boolean remove(@NotNull I id) {
         try {
             lock.lock();
-            final I id = identifierMapper.apply(o);
             final T previousValue = values.remove(id);
             final boolean changed = previousValue != null;
             if (changed) {
-                computeChange(id, o, false);
+                computeChange(id, previousValue, false);
             }
             return changed;
         } finally {

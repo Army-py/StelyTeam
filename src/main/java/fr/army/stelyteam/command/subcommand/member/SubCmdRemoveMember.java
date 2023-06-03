@@ -37,12 +37,11 @@ public class SubCmdRemoveMember extends SubCommand {
             player.sendMessage(messageManager.getMessage("common.team_not_exist"));
             return true;
         }
-        // TODO Member work
-        if (!team.isTeamMember(args[2])) {
+        if (!team.getMembers().contains(player.getUniqueId())) {
             player.sendMessage(messageManager.getMessage("commands.stelyteam_removemember.not_in_team"));
             return true;
         }
-        team.removeMember(args[2]);
+        team.getMembers().remove(player.getUniqueId());
         teamManager.saveTeam(team);
         player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_removemember.output", args[2]));
         return true;
