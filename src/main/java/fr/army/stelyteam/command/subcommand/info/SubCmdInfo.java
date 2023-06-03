@@ -9,6 +9,7 @@ import fr.army.stelyteam.team.TeamManager;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
 import fr.army.stelyteam.utils.manager.MessageManager;
 import fr.army.stelyteam.utils.manager.database.DatabaseManager;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -19,7 +20,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
 public class SubCmdInfo extends SubCommand {
 
@@ -55,7 +55,6 @@ public class SubCmdInfo extends SubCommand {
         final Team team = teamManager.getTeam(combinedArgs,
                 SaveField.NAME,
                 SaveField.PREFIX,
-                SaveField.OWNER,
                 SaveField.CREATION_DATE,
                 SaveField.DESCRIPTION,
                 SaveField.UPGRADES_MEMBERS,
@@ -73,7 +72,6 @@ public class SubCmdInfo extends SubCommand {
 
         final String name = team.getName().get();
         final String prefix = team.getPrefix().get();
-        final String owner = team.getOwner().get();
         final String creationDate = new SimpleDateFormat("dd/MM/yyyy").format(team.getCreationDate().get());
         final String rawDescription = team.getDescription().get();
         final String description = rawDescription == null ? config.getString("team.defaultDescription") : rawDescription;
@@ -81,17 +79,18 @@ public class SubCmdInfo extends SubCommand {
         final int memberLevel = rawMembersLevel == null ? 0 : rawMembersLevel;
         final Boolean unlockedBankAccount = team.getBankAccount().getUnlocked().get();
         final String readableUnlockedBankAccount = unlockedBankAccount == null || !unlockedBankAccount ? noMessage : yesMessage;
-        final Set<Member> members = team.getMembers();
-        final String[] memberNames = getMemberNames(members.toArray(new Member[0]));
+        final Member[] members = team.getMembers().toArray(new Member[0]);
+        final String[] memberNames = getMemberNames(members);
 
         List<String> lore = messages.getStringList("commands.stelyteam_info.output");
 
         lore = replaceInLore(lore, "%NAME%", name);
         lore = replaceInLore(lore, "%PREFIX%", colorsBuilder.replaceColor(prefix));
-        lore = replaceInLore(lore, "%OWNER%", owner);
+        // TODO Maybe implement this, but it would require breaking abstraction
+        //lore = replaceInLore(lore, "%OWNER%", owner);
         lore = replaceInLore(lore, "%DATE%", creationDate);
         lore = replaceInLore(lore, "%UNLOCK_BANK%", readableUnlockedBankAccount);
-        lore = replaceInLore(lore, "%MEMBER_COUNT%", IntegerToString(members.size()));
+        lore = replaceInLore(lore, "%MEMBER_COUNT%", IntegerToString(members.length));
         lore = replaceInLore(lore, "%MAX_MEMBERS%", IntegerToString(maxMembers + memberLevel));
         lore = replaceInLore(lore, "%MEMBERS%", String.join(", ", memberNames));
         lore = replaceInLore(lore, "%DESCRIPTION%", colorsBuilder.replaceColor(description));
@@ -104,7 +103,7 @@ public class SubCmdInfo extends SubCommand {
     private String[] getMemberNames(Member[] members) {
         final String[] names = new String[members.length];
         for (int i = 0; i < names.length; i++) {
-            names[i] = members[i].getMemberName();
+            names[i] = Bukkit.getOfflinePlayer(members[i].getId()).getName();
         }
         return names;
     }
