@@ -2,7 +2,6 @@ package fr.army.stelyteam.utils.manager.database.builder;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class PreparedSQLRequest {
@@ -12,7 +11,7 @@ public class PreparedSQLRequest {
 
     private PreparedStatement preparedStatement;
 
-    private ResultSet result;
+    private SQLResult result;
 
     public PreparedSQLRequest(Connection conn, FundamentalOperator fundamentalOperator){
         this.conn = conn;
@@ -26,7 +25,15 @@ public class PreparedSQLRequest {
     }
 
     public PreparedSQLRequest execute() throws SQLException{
-        result = preparedStatement.executeQuery();
+        result = new SQLResult(conn, preparedStatement.executeQuery(), fundamentalOperator.getColumns());
         return this;
+    }
+
+    public void close() throws SQLException{
+        preparedStatement.close();
+    }
+
+    public SQLResult getResult(){
+        return result;
     }
 }

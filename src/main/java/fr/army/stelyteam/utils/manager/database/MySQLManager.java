@@ -21,11 +21,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.cache.SaveField;
 import fr.army.stelyteam.team.Alliance;
 import fr.army.stelyteam.team.Member;
 import fr.army.stelyteam.team.Permission;
 import fr.army.stelyteam.team.Storage;
 import fr.army.stelyteam.team.Team;
+import fr.army.stelyteam.utils.manager.database.builder.PreparedSQLRequest;
+import fr.army.stelyteam.utils.manager.database.builder.SQLResult;
 import fr.army.stelyteam.utils.manager.database.builder.fundamental.SelectOperator;
 
 public class MySQLManager extends DatabaseManager {
@@ -1080,34 +1083,23 @@ public class MySQLManager extends DatabaseManager {
 
 
 
-
-    public List<Member> get(@NotNull String table, @NotNull String[] columns, @Nullable String[] conditions, @Nullable String[] orders){
-        List<Member> teamMembers = Collections.synchronizedList(new ArrayList<>());
+    @Override
+    public SQLResult get(@NotNull String[] table, @NotNull SaveField[] columns, @Nullable String[] conditions, @Nullable String[] orders){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("SELECT p.playerName, p.teamRank, p.joinDate FROM player AS p INNER JOIN team AS t ON p.teamId = t.teamId WHERE t.teamUuid = ? ORDER BY p.teamRank ASC, p.playerName ASC;");
-                // query.setString(1, teamUuid.toString());
-                ResultSet result = query.executeQuery();
-                while(result.next()){
-                    teamMembers.add(
-                        new Member(
-                            result.getString("playerName"),
-                            result.getInt("teamRank"),
-                            result.getString("joinDate"),
-                            StelyTeamPlugin.getPlugin().getSQLiteManager().getUUID(result.getString("playerName"))
-                        )
-                    );
-                }
-                query.close();
-
-
-                SelectOperator select = new SelectOperator(table, columns, conditions, orders);
+                SelectOperator select = new SelectOperator(orders);
+                select.setTables(table);
+                select.setColumns(columns);
+                select.setConditions(conditions);
+                PreparedSQLRequest request = new PreparedSQLRequest(connection, select)
+                    .execute();
+                return request.getResult();
 
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
-        return teamMembers;
+        return null;
     }
 
 

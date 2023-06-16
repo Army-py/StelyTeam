@@ -8,13 +8,17 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.cache.SaveField;
 import fr.army.stelyteam.team.Alliance;
 import fr.army.stelyteam.team.Member;
 import fr.army.stelyteam.team.Permission;
 import fr.army.stelyteam.team.Storage;
 import fr.army.stelyteam.team.Team;
+import fr.army.stelyteam.utils.manager.database.builder.SQLResult;
 
 public abstract class DatabaseManager {
 
@@ -143,6 +147,10 @@ public abstract class DatabaseManager {
     public abstract int getPlayerId(String playerName);
 
     public abstract int getTeamId(UUID teamUuid);
+
+
+    public abstract SQLResult get(@NotNull String[] table, @NotNull SaveField[] columns, @Nullable String[] conditions, @Nullable String[] orders);
+
 
     public abstract String getCurrentDate();
 }
