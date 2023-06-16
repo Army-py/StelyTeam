@@ -890,12 +890,13 @@ public class SQLiteManager extends DatabaseManager {
     }
 
     @Override
-    public Set<Alliance> getTeamAlliances(UUID teamUuid){
-        Set<Alliance> alliances = new HashSet<>();
+    public List<Alliance> getTeamAlliances(UUID teamUuid){
+        List<Alliance> alliances = Collections.synchronizedList(new ArrayList<>());
         if(isConnected()){
             try {
-                PreparedStatement queryTeam = connection.prepareStatement("SELECT t.teamUuid, a.allianceDate FROM team AS t INNER JOIN alliance AS a ON t.teamId = a.teamAllianceId WHERE a.teamId = ?");
+                PreparedStatement queryTeam = connection.prepareStatement("SELECT t.teamUuid, a.allianceDate FROM team AS t INNER JOIN alliance AS a ON t.teamId = a.teamAllianceId WHERE a.teamId = ? UNION SELECT t.teamUuid, a.allianceDate FROM team AS t INNER JOIN alliance AS a ON t.teamId = a.teamId WHERE a.teamAllianceId = ?");
                 queryTeam.setInt(1, getTeamId(teamUuid));
+                queryTeam.setInt(2, getTeamId(teamUuid));
                 ResultSet resultTeam = queryTeam.executeQuery();
                 while(resultTeam.next()){
                     alliances.add(
@@ -906,19 +907,6 @@ public class SQLiteManager extends DatabaseManager {
                     );
                 }
                 queryTeam.close();
-                
-                PreparedStatement queryAlliance = connection.prepareStatement("SELECT t.teamUuid, a.allianceDate FROM team AS t INNER JOIN alliance AS a ON t.teamId = a.teamId WHERE a.teamAllianceId = ?");
-                queryAlliance.setInt(1, getTeamId(teamUuid));
-                ResultSet resultAlliance = queryAlliance.executeQuery();
-                while(resultAlliance.next()){
-                    alliances.add(
-                        new Alliance(
-                            UUID.fromString(resultAlliance.getString("teamUuid")),
-                            resultAlliance.getString("allianceDate")
-                        )
-                    );
-                }
-                queryAlliance.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }

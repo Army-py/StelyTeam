@@ -136,7 +136,7 @@ public abstract class DatabaseManager {
 
     public abstract Set<Permission> getTeamAssignement(UUID teamUuid);
 
-    public abstract Set<Alliance> getTeamAlliances(UUID teamUuid);
+    public abstract List<Alliance> getTeamAlliances(UUID teamUuid);
 
     public abstract Map<Integer, Storage> getTeamStorages(UUID teamUuid);
 

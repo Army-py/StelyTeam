@@ -7,7 +7,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -45,7 +44,7 @@ public class Team {
     private String teamOwnerName;
     private Collection<Member> teamMembers = new ArrayList<>();
     private Set<Permission> teamPermissions = new HashSet<>();
-    private Set<Alliance> teamAlliances = new HashSet<>();
+    private Collection<Alliance> teamAlliances = new ArrayList<>();
     private Map<Integer, Storage> teamStorages;
 
     // Existing team
@@ -189,9 +188,11 @@ public class Team {
     }
 
 
-    public void insertAlliance(UUID allianceUuid){
-        this.teamAlliances.add(new Alliance(allianceUuid, getCurrentDate()));
-        plugin.getDatabaseManager().insertAlliance(teamUuid, allianceUuid);
+    public void insertAlliance(Team teamAlliance){
+        Alliance alliance = new Alliance(teamAlliance.getTeamUuid(), getCurrentDate());
+        this.teamAlliances.add(alliance);
+        teamAlliance.getTeamAlliances().add(alliance);
+        plugin.getDatabaseManager().insertAlliance(teamUuid, teamAlliance.getTeamUuid());
     }
 
 
@@ -201,9 +202,10 @@ public class Team {
     }
 
 
-    public void removeAlliance(UUID allianceUuid){
-        this.teamAlliances.removeIf(alliance -> alliance.getTeamUuid().equals(allianceUuid));
-        plugin.getDatabaseManager().removeAlliance(teamUuid, allianceUuid);
+    public void removeAlliance(Team teamAlliance){
+        this.teamAlliances.removeIf(alliance -> alliance.getTeamUuid().equals(teamAlliance.getTeamUuid()));
+        teamAlliance.getTeamAlliances().removeIf(alliance -> alliance.getTeamUuid().equals(teamUuid));
+        plugin.getDatabaseManager().removeAlliance(teamUuid, teamAlliance.getTeamUuid());
     }
 
 
@@ -434,7 +436,7 @@ public class Team {
         return teamPermissions;
     }
 
-    public Set<Alliance> getTeamAlliances() {
+    public Collection<Alliance> getTeamAlliances() {
         return teamAlliances;
     }
 

@@ -55,7 +55,6 @@ public class EditAlliancesMenu extends TeamMenu {
 
         emptyCases(inventory, this.menuSlots, 0);
         Integer headSlot = 0;
-        System.out.println(team.getTeamAlliances().size());
         for(Alliance alliance : team.getTeamAlliances()){
             Team teamAlliance = Team.init(alliance.getTeamUuid());
             String allianceName = teamAlliance.getTeamName();

@@ -58,7 +58,7 @@ public class SubCmdAccept extends SubCommand {
                 invitationSender.sendMessage(messageManager.getReplaceMessage("sender.accepted_invitation", receiverName));
             }
             team.teamBroadcast(senderName, messageManager.replaceAuthorAndTeamName("broadcasts.player_add_new_alliance", senderName, alliance.getTeamName()));
-            team.insertAlliance(alliance.getTeamUuid());
+            team.insertAlliance(alliance);
             team.refreshTeamMembersInventory(playerName);
         }else{
             player.sendMessage(messageManager.getMessage("common.no_invitation"));

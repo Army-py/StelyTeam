@@ -99,11 +99,10 @@ public class ConfirmMenu extends TeamMenu {
                     break;
                 case REMOVE_ALLIANCE:
                     Team alliance = Team.init(UUID.fromString(tempAction.getTargetName()));
-                    UUID allianceUuid = alliance.getTeamUuid();
                     String allianceName = alliance.getTeamName();
                     teamName = team.getTeamName();
                     
-                    team.removeAlliance(allianceUuid);
+                    team.removeAlliance(alliance);
                     team.refreshTeamMembersInventory(playerName);
                     team.teamBroadcast(playerName, messageManager.replaceAuthorAndTeamName("broadcasts.player_remove_alliance", playerName, allianceName));
                     alliance.refreshTeamMembersInventory(playerName);
