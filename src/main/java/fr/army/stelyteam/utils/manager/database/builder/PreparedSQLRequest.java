@@ -4,9 +4,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import fr.army.stelyteam.utils.manager.database.builder.impl.IInsertQuery;
 import fr.army.stelyteam.utils.manager.database.builder.impl.ISelectQuery;
 import fr.army.stelyteam.utils.manager.database.builder.impl.Query;
+import fr.army.stelyteam.utils.manager.database.builder.impl.holder.ValueHolder;
 
 public class PreparedSQLRequest {
     
@@ -38,8 +38,8 @@ public class PreparedSQLRequest {
     }
 
     public PreparedSQLRequest setValues() throws SQLException{
-        if (!(query instanceof IInsertQuery)) return this;
-        Object[] values = ((IInsertQuery) query).getValues().toArray();
+        if (!(query instanceof ValueHolder)) return this;
+        Object[] values = ((ValueHolder) query).getValues().toArray();
         for(int i = 0; i < values.length; i++){
             preparedStatement.setObject(i + 1, values[i]);
         }

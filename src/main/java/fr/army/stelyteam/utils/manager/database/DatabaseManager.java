@@ -153,6 +153,7 @@ public abstract class DatabaseManager {
 
     public abstract void insert(@NotNull String table, @NotNull SaveField[] columns, @NotNull Object[] values);
 
+    public abstract void update(@NotNull String table, @NotNull SaveField[] columns, @NotNull Object[] values, @Nullable String[] conditions);
 
     public abstract String getCurrentDate();
 }
