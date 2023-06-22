@@ -151,6 +151,8 @@ public abstract class DatabaseManager {
 
     public abstract SQLResult get(@NotNull String[] table, @NotNull SaveField[] columns, @Nullable String[] conditions, @Nullable String[] orders);
 
+    public abstract void insert(@NotNull String table, @NotNull SaveField[] columns, @NotNull Object[] values);
+
 
     public abstract String getCurrentDate();
 }

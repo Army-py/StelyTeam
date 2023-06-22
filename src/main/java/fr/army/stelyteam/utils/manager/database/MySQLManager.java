@@ -29,7 +29,8 @@ import fr.army.stelyteam.team.Storage;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.manager.database.builder.PreparedSQLRequest;
 import fr.army.stelyteam.utils.manager.database.builder.SQLResult;
-import fr.army.stelyteam.utils.manager.database.builder.fundamental.SelectOperator;
+import fr.army.stelyteam.utils.manager.database.builder.impl.fundamental.InsertQuery;
+import fr.army.stelyteam.utils.manager.database.builder.impl.fundamental.SelectQuery;
 
 public class MySQLManager extends DatabaseManager {
     
@@ -953,7 +954,7 @@ public class MySQLManager extends DatabaseManager {
                     alliances.add(
                         new Alliance(
                             UUID.fromString(resultTeam.getString("teamUuid")),
-                            resultTeam.getString("allianceDate")
+                            resultTeam.getStringg("allianceDate")
                         )
                     );
                 }
@@ -1087,9 +1088,9 @@ public class MySQLManager extends DatabaseManager {
     public SQLResult get(@NotNull String[] table, @NotNull SaveField[] columns, @Nullable String[] conditions, @Nullable String[] orders){
         if(isConnected()){
             try {
-                SelectOperator select = new SelectOperator(orders);
+                SelectQuery select = new SelectQuery();
                 select.setTables(table);
-                select.setColumns(columns);
+                select.setFields(columns);
                 select.setConditions(conditions);
                 PreparedSQLRequest request = new PreparedSQLRequest(connection, select)
                     .execute();
@@ -1103,7 +1104,21 @@ public class MySQLManager extends DatabaseManager {
     }
 
 
-
+    @Override
+    public void insert(@NotNull String table, @NotNull SaveField[] columns, @NotNull Object[] values){
+        if(isConnected()){
+            try {
+                InsertQuery insert = new InsertQuery();
+                insert.setTable(table);
+                insert.setFields(columns);
+                PreparedSQLRequest request = new PreparedSQLRequest(connection, insert)
+                    .setValues()
+                    .execute();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 
 }

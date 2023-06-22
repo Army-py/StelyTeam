@@ -16,7 +16,7 @@ import org.bukkit.Bukkit;
 import fr.army.stelyteam.cache.SaveField;
 import fr.army.stelyteam.team.BankAccountSnapShot;
 import fr.army.stelyteam.team.TeamSnapshot;
-import fr.army.stelyteam.utils.manager.database.builder.fundamental.SelectOperator;
+import fr.army.stelyteam.utils.manager.database.builder.impl.fundamental.SelectQuery;
 
 public class SQLResult {
     
@@ -84,9 +84,9 @@ public class SQLResult {
                 Optional.of(result.getDouble(SaveField.BANK_BALANCE.getColumnName()))
             );
 
-            SelectOperator selectMembers = new SelectOperator();
+            SelectQuery selectMembers = new SelectQuery();
             selectMembers.setTables("player", "team");
-            selectMembers.setColumns(SaveField.MEMBER_UUID);
+            selectMembers.setFields(SaveField.MEMBER_UUID);
             selectMembers.setConditions("player.team_id = team.team_id", "team.team_uuid = '" + teamUuid.toString() + "'");
             PreparedSQLRequest request = new PreparedSQLRequest(conn, selectMembers);
             request.build().execute();

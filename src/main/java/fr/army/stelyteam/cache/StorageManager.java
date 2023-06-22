@@ -6,7 +6,7 @@ import fr.army.stelyteam.team.TeamSnapshot;
 import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 import fr.army.stelyteam.utils.manager.database.builder.PreparedSQLRequest;
 import fr.army.stelyteam.utils.manager.database.builder.SQLResult;
-import fr.army.stelyteam.utils.manager.database.builder.fundamental.SelectOperator;
+import fr.army.stelyteam.utils.manager.database.builder.impl.fundamental.SelectQuery;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
