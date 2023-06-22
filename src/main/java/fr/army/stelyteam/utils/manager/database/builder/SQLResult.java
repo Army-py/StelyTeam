@@ -16,7 +16,7 @@ import org.bukkit.Bukkit;
 import fr.army.stelyteam.cache.SaveField;
 import fr.army.stelyteam.team.BankAccountSnapShot;
 import fr.army.stelyteam.team.TeamSnapshot;
-import fr.army.stelyteam.utils.manager.database.builder.impl.fundamental.SelectQuery;
+import fr.army.stelyteam.utils.manager.database.builder.impl.query.SelectQuery;
 
 public class SQLResult {
     

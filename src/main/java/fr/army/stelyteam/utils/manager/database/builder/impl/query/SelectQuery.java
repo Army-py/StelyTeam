@@ -1,4 +1,4 @@
-package fr.army.stelyteam.utils.manager.database.builder.impl.fundamental;
+package fr.army.stelyteam.utils.manager.database.builder.impl.query;
 
 
 import java.util.ArrayList;

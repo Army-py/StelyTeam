@@ -29,8 +29,8 @@ import fr.army.stelyteam.team.Storage;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.manager.database.builder.PreparedSQLRequest;
 import fr.army.stelyteam.utils.manager.database.builder.SQLResult;
-import fr.army.stelyteam.utils.manager.database.builder.impl.fundamental.InsertQuery;
-import fr.army.stelyteam.utils.manager.database.builder.impl.fundamental.SelectQuery;
+import fr.army.stelyteam.utils.manager.database.builder.impl.query.InsertQuery;
+import fr.army.stelyteam.utils.manager.database.builder.impl.query.SelectQuery;
 
 public class MySQLManager extends DatabaseManager {
     
