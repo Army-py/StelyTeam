@@ -155,5 +155,7 @@ public abstract class DatabaseManager {
 
     public abstract void update(@NotNull String table, @NotNull SaveField[] columns, @NotNull Object[] values, @Nullable String[] conditions);
 
+    public abstract void delete(@NotNull String table, @Nullable String[] conditions);
+
     public abstract String getCurrentDate();
 }

@@ -29,6 +29,7 @@ import fr.army.stelyteam.team.Storage;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.manager.database.builder.PreparedSQLRequest;
 import fr.army.stelyteam.utils.manager.database.builder.SQLResult;
+import fr.army.stelyteam.utils.manager.database.builder.impl.query.DeleteQuery;
 import fr.army.stelyteam.utils.manager.database.builder.impl.query.InsertQuery;
 import fr.army.stelyteam.utils.manager.database.builder.impl.query.SelectQuery;
 import fr.army.stelyteam.utils.manager.database.builder.impl.query.UpdateQuery;
@@ -1139,4 +1140,19 @@ public class MySQLManager extends DatabaseManager {
         }
     }
 
+
+    @Override
+    public void delete(@NotNull String table, @Nullable String[] conditions){
+        if(isConnected()){
+            try {
+                DeleteQuery delete = new DeleteQuery();
+                delete.setTable(table);
+                delete.setConditions(conditions);
+                PreparedSQLRequest request = new PreparedSQLRequest(connection, delete)
+                    .execute();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
