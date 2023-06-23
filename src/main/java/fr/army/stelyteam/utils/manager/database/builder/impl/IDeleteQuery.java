@@ -8,5 +8,6 @@ public interface IDeleteQuery extends ConditionHolder, Query {
     
     public void setTable(@NotNull String table);
 
+    @NotNull
     public String getTable();
 }

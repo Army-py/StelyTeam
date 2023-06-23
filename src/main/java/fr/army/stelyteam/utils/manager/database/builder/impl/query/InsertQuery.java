@@ -48,12 +48,12 @@ public class InsertQuery implements IInsertQuery {
     }
 
     @Override
-    public String getTable() {
+    public @NotNull String getTable() {
         return table;
     }
 
     @Override
-    public SaveField[] getFields() {
+    public @NotNull SaveField[] getFields() {
         return fields;
     }
 
@@ -67,7 +67,7 @@ public class InsertQuery implements IInsertQuery {
     }
 
     @Override
-    public void setFields(SaveField... fields) {
+    public void setFields(@NotNull SaveField... fields) {
         this.fields = fields;
     }
 

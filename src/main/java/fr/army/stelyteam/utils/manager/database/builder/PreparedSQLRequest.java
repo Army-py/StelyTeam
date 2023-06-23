@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import org.jetbrains.annotations.Nullable;
+
 import fr.army.stelyteam.utils.manager.database.builder.impl.ISelectQuery;
 import fr.army.stelyteam.utils.manager.database.builder.impl.Query;
 import fr.army.stelyteam.utils.manager.database.builder.impl.holder.ValueHolder;
@@ -50,7 +52,7 @@ public class PreparedSQLRequest {
         preparedStatement.close();
     }
 
-
+    @Nullable
     public SQLResult getResult(){
         return result;
     }

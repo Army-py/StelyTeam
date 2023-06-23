@@ -1087,12 +1087,12 @@ public class MySQLManager extends DatabaseManager {
 
 
     @Override
-    public SQLResult get(@NotNull String[] table, @NotNull SaveField[] columns, @Nullable String[] conditions, @Nullable String[] orders){
+    public SQLResult get(@NotNull String[] table, @NotNull SaveField[] fields, @Nullable String[] conditions, @Nullable String[] orders){
         if(isConnected()){
             try {
                 SelectQuery select = new SelectQuery();
                 select.setTables(table);
-                select.setFields(columns);
+                select.setFields(fields);
                 select.setConditions(conditions);
                 PreparedSQLRequest request = new PreparedSQLRequest(connection, select)
                     .execute();
@@ -1107,12 +1107,12 @@ public class MySQLManager extends DatabaseManager {
 
 
     @Override
-    public void insert(@NotNull String table, @NotNull SaveField[] columns, @NotNull Object[] values){
+    public void insert(@NotNull String table, @NotNull SaveField[] fields, @NotNull Object[] values){
         if(isConnected()){
             try {
                 InsertQuery insert = new InsertQuery();
                 insert.setTable(table);
-                insert.setFields(columns);
+                insert.setFields(fields);
                 PreparedSQLRequest request = new PreparedSQLRequest(connection, insert)
                     .setValues()
                     .execute();
@@ -1124,12 +1124,12 @@ public class MySQLManager extends DatabaseManager {
 
 
     @Override
-    public void update(@NotNull String table, @NotNull SaveField[] columns, @NotNull Object[] values, @Nullable String[] conditions){
+    public void update(@NotNull String table, @NotNull SaveField[] fields, @NotNull Object[] values, @Nullable String[] conditions){
         if(isConnected()){
             try {
                 UpdateQuery update = new UpdateQuery();
                 update.setTable(table);
-                update.setFields(columns);
+                update.setFields(fields);
                 update.setConditions(conditions);
                 PreparedSQLRequest request = new PreparedSQLRequest(connection, update)
                     .setValues()

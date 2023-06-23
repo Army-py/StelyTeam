@@ -10,7 +10,9 @@ public interface ValueHolder {
     
     public void setValues(@NotNull Property<?>... values);
 
+    @NotNull
     public List<Object> getValues();
 
+    @NotNull
     public List<String> getValuesTag();
 }

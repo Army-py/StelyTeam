@@ -9,5 +9,6 @@ public interface IInsertQuery extends FieldHolder, ValueHolder, Query {
     
     public void setTable(@NotNull String table);
 
+    @NotNull
     public String getTable();
 }

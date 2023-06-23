@@ -77,7 +77,7 @@ public class UpdateQuery implements IUpdateQuery {
     }
 
     @Override
-    public void setTable(String table) {
+    public void setTable(@NotNull String table) {
         this.table = table;
     }
 

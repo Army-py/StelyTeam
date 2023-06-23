@@ -1,6 +1,7 @@
 package fr.army.stelyteam.utils.manager.database.builder.impl.query;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import fr.army.stelyteam.utils.manager.database.builder.impl.IDeleteQuery;
 
@@ -24,12 +25,12 @@ public class DeleteQuery implements IDeleteQuery {
     }
 
     @Override
-    public String getTable() {
+    public @NotNull String getTable() {
         return table;
     }
 
     @Override
-    public String[] getConditions() {
+    public @Nullable String[] getConditions() {
         return conditions;
     }
 
@@ -39,7 +40,7 @@ public class DeleteQuery implements IDeleteQuery {
     }
 
     @Override
-    public void setConditions(String... conditions) {
+    public void setConditions(@Nullable String... conditions) {
         this.conditions = conditions;
     }
 
