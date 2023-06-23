@@ -43,7 +43,7 @@ public class SelectQuery implements ISelectQuery {
     public List<String> getFieldsName() {
         List<String> list = new ArrayList<>();
         for(SaveField field : fields){
-            list.add(field.getColumnName());
+            list.add(field.getHolder().getTableName() + "." + field.getColumnName());
         }
         return list;
     }
