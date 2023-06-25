@@ -89,7 +89,7 @@ public class MySQLManager extends DatabaseManager {
         if (isConnected()){
             try {
                 PreparedStatement queryCreatePlayers = connection.prepareStatement("CREATE TABLE IF NOT EXISTS player (playerId INTEGER AUTO_INCREMENT, playerName VARCHAR(255), teamRank INTEGER, joinDate VARCHAR(255), teamId INTEGER, PRIMARY KEY (playerId));");
-                PreparedStatement queryCreateTeams = connection.prepareStatement("CREATE TABLE IF NOT EXISTS team (teamId INTEGER AUTO_INCREMENT, teamUuid VARCHAR(255) UNIQUE, teamName VARCHAR(255) UNIQUE, teamPrefix VARCHAR(255), teamDescription VARCHAR(255), teamMoney INTEGER, creationDate VARCHAR(255), improvLvlMembers INTEGER, teamStorageLvl INTEGER, unlockedTeamBank INTEGER, teamOwnerPlayerId INTEGER UNIQUE, PRIMARY KEY(teamId));");
+                PreparedStatement queryCreateTeams = connection.prepareStatement("CREATE TABLE IF NOT EXISTS team (teamId INTEGER AUTO_INCREMENT, teamUuid VARCHAR(255) UNIQUE, teamName VARCHAR(255) UNIQUE, teamPrefix VARCHAR(255), teamDescription VARCHAR(255), teamMoney INTEGER, creationDate VARCHAR(255), improvLvlMembers INTEGER, teamStorageLvl INTEGER, unlockedTeamBank INTEGER, PRIMARY KEY(teamId));");
                 PreparedStatement queryCreateTeamStorages = connection.prepareStatement("CREATE TABLE IF NOT EXISTS teamStorage (storageId INTEGER, teamId INTEGER, storageContent BLOB, PRIMARY KEY (storageId,teamId));");
                 PreparedStatement queryCreateAlliances = connection.prepareStatement("CREATE TABLE IF NOT EXISTS alliance (teamId INTEGER, teamAllianceId INTEGER, allianceDate VARCHAR(255), PRIMARY KEY(teamId,teamAllianceId));");
                 PreparedStatement queryCreateAssignements = connection.prepareStatement("CREATE TABLE IF NOT EXISTS assignement (teamId INTEGER, permLabel VARCHAR(255), teamRank INTEGER, PRIMARY KEY (permLabel,teamId));");
@@ -111,7 +111,6 @@ public class MySQLManager extends DatabaseManager {
 
 
                 PreparedStatement queryAlterPlayers = connection.prepareStatement("ALTER TABLE player ADD FOREIGN KEY (teamId) REFERENCES team(teamId);");
-                PreparedStatement queryAlterTeams = connection.prepareStatement("ALTER TABLE team ADD FOREIGN KEY (teamOwnerPlayerId) REFERENCES player(playerId);");
                 PreparedStatement queryAlterTeamStorages = connection.prepareStatement("ALTER TABLE teamStorage ADD FOREIGN KEY (teamId) REFERENCES team (teamId);");
                 PreparedStatement queryAlterTeamStorages2 = connection.prepareStatement("ALTER TABLE teamStorage ADD FOREIGN KEY (storageId) REFERENCES storage(storageId);");
                 PreparedStatement queryAlterAlliances = connection.prepareStatement("ALTER TABLE alliance ADD FOREIGN KEY (teamId) REFERENCES team(teamId);");
@@ -119,7 +118,6 @@ public class MySQLManager extends DatabaseManager {
                 PreparedStatement queryAlterAssignements = connection.prepareStatement("ALTER TABLE assignement ADD FOREIGN KEY (teamId) REFERENCES team(teamId);");
                 
                 queryAlterPlayers.executeUpdate();
-                queryAlterTeams.executeUpdate();
                 queryAlterTeamStorages.executeUpdate();
                 queryAlterTeamStorages2.executeUpdate();
                 queryAlterAlliances.executeUpdate();
@@ -127,7 +125,6 @@ public class MySQLManager extends DatabaseManager {
                 queryAlterAssignements.executeUpdate();
 
                 queryAlterPlayers.close();
-                queryAlterTeams.close();
                 queryAlterTeamStorages.close();
                 queryAlterTeamStorages2.close();
                 queryAlterAlliances.close();
