@@ -54,14 +54,14 @@ public class ConfirmMenu extends FixedMenu {
 
         emptyCases(inventory, this.menuSlots, 0);
 
-        for(String str : config.getConfigurationSection("inventories.confirmInventory").getKeys(false)){
-            Material material = Material.getMaterial(config.getString("inventories.confirmInventory."+str+".itemType"));
-            String name = config.getString("inventories.confirmInventory."+str+".itemName");
-            List<String> lore = config.getStringList("inventories.confirmInventory."+str+".lore");
-            String headTexture = config.getString("inventories.confirmInventory."+str+".headTexture");
+        for(String buttonName : config.getConfigurationSection("inventories.confirmInventory").getKeys(false)){
+            Material material = Material.getMaterial(config.getString("inventories.confirmInventory."+buttonName+".itemType"));
+            String displayName = config.getString("inventories.confirmInventory."+buttonName+".itemName");
+            List<String> lore = config.getStringList("inventories.confirmInventory."+buttonName+".lore");
+            String headTexture = config.getString("inventories.confirmInventory."+buttonName+".headTexture");
 
-            for(Integer slot : config.getIntegerList("inventories.confirmInventory."+str+".slots")){
-                inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, false));
+            for(Integer slot : config.getIntegerList("inventories.confirmInventory."+buttonName+".slots")){
+                inventory.setItem(slot, ItemBuilder.getItem(material, buttonName, displayName, lore, headTexture, false));
             }
         }
         return inventory;

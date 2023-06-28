@@ -64,18 +64,18 @@ public class MemberMenu extends FixedMenu {
 
         emptyCases(inventory, this.menuSlots, 0);
 
-        for(String str : config.getConfigurationSection("inventories.member").getKeys(false)){
-            Integer slot = config.getInt("inventories.member."+str+".slot");
-            Material material = Material.getMaterial(config.getString("inventories.member."+str+".itemType"));
-            String name = config.getString("inventories.member."+str+".itemName");
-            List<String> lore = config.getStringList("inventories.member."+str+".lore");
-            String headTexture = config.getString("inventories.member."+str+".headTexture");
+        for(String buttonName : config.getConfigurationSection("inventories.member").getKeys(false)){
+            Integer slot = config.getInt("inventories.member."+buttonName+".slot");
+            Material material = Material.getMaterial(config.getString("inventories.member."+buttonName+".itemType"));
+            String displayName = config.getString("inventories.member."+buttonName+".itemName");
+            List<String> lore = config.getStringList("inventories.member."+buttonName+".lore");
+            String headTexture = config.getString("inventories.member."+buttonName+".headTexture");
             ItemStack item;
 
-            if (name.equals(config.getString("inventories.member.seeTeamBank.itemName"))){
+            if (displayName.equals(config.getString("inventories.member.seeTeamBank.itemName"))){
                 lore = replaceInLore(lore, "%TEAM_MONEY%", DoubleToString(teamMoney));
                 lore = replaceInLore(lore, "%MAX_MONEY%", DoubleToString(config.getDouble("teamMaxMoney")));
-            }else if (name.equals(config.getString("inventories.member.teamInfos.itemName"))){
+            }else if (displayName.equals(config.getString("inventories.member.teamInfos.itemName"))){
                 lore = replaceInLore(lore, "%NAME%", teamName);
                 lore = replaceInLore(lore, "%PREFIX%", colorsBuilder.replaceColor(teamPrefix));
                 lore = replaceInLore(lore, "%OWNER%", teamOwner);
@@ -86,22 +86,24 @@ public class MemberMenu extends FixedMenu {
                 lore = replaceInLore(lore, "%DESCRIPTION%", colorsBuilder.replaceColor(teamDescription));
             }
 
-            if (plugin.playerHasPermission(playerName, team, str)){ 
-                item = ItemBuilder.getItem(material, name, lore, headTexture, false);
+            if (plugin.playerHasPermission(playerName, team, buttonName)){ 
+                item = ItemBuilder.getItem(material, buttonName, displayName, lore, headTexture, false);
             }else{
                 item = ItemBuilder.getItem(
-                    Material.getMaterial(config.getString("noPermission.itemType")), 
-                    name, 
+                    Material.getMaterial(config.getString("noPermission.itemType")),
+                    buttonName,
+                    displayName, 
                     config.getStringList("noPermission.lore"),
                     config.getString("noPermission.headTexture"),
                     false
                 );
             }
 
-            if (name.equals(config.getString("inventories.member.seeTeamBank.itemName"))){
+            if (buttonName.equals("seeTeamBank")){
                 if (!team.isUnlockedTeamBank()){
                     item = ItemBuilder.getItem(
                         Material.getMaterial(config.getString("teamBankNotUnlock.itemType")),
+                        "teamBankNotUnlock",
                         config.getString("teamBankNotUnlock.itemName"),
                         Collections.emptyList(),
                         config.getString("teamBankNotUnlock.headTexture"),

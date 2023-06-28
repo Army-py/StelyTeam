@@ -34,22 +34,22 @@ public class PermissionsMenu extends FixedMenu {
 
         emptyCases(inventory, this.menuSlots, 0);
 
-        for(String str : config.getConfigurationSection("inventories.permissions").getKeys(false)){
-            Integer slot = config.getInt("inventories.permissions."+str+".slot");
+        for(String buttonName : config.getConfigurationSection("inventories.permissions").getKeys(false)){
+            Integer slot = config.getInt("inventories.permissions."+buttonName+".slot");
             if (slot == -1) continue;
 
-            String name = config.getString("inventories.permissions."+str+".itemName");
-            List<String> lore = config.getStringList("inventories.permissions."+str+".lore");
+            String displayName = config.getString("inventories.permissions."+buttonName+".itemName");
+            List<String> lore = config.getStringList("inventories.permissions."+buttonName+".lore");
             String headTexture;
             
-            Integer defaultRankId = config.getInt("inventories.permissions."+str+".rank");
-            Integer permissionRank = team.getPermissionRank(str);
+            Integer defaultRankId = config.getInt("inventories.permissions."+buttonName+".rank");
+            Integer permissionRank = team.getPermissionRank(buttonName);
             String lorePrefix = config.getString("prefixRankLore");
             Material material;
 
-            if (str.equals("close")){
-                material = Material.getMaterial(config.getString("inventories.permissions."+str+".itemType"));
-                headTexture = config.getString("inventories.permissions."+str+".headTexture");
+            if (buttonName.equals("close")){
+                material = Material.getMaterial(config.getString("inventories.permissions."+buttonName+".itemType"));
+                headTexture = config.getString("inventories.permissions."+buttonName+".headTexture");
             }else{
                 material = Material.getMaterial(config.getString("ranks."+plugin.getRankFromId(permissionRank != null ? permissionRank : defaultRankId)+".itemType"));
                 headTexture = config.getString("ranks."+plugin.getRankFromId(permissionRank != null ? permissionRank : defaultRankId)+".headTexture");
@@ -65,11 +65,11 @@ public class PermissionsMenu extends FixedMenu {
 
 
             boolean isDefault = false;
-            if (!str.equals("close") && (permissionRank == null || defaultRankId == permissionRank)){
+            if (!buttonName.equals("close") && (permissionRank == null || defaultRankId == permissionRank)){
                 isDefault = true;
             }
 
-            inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, isDefault));
+            inventory.setItem(slot, ItemBuilder.getItem(material, buttonName, displayName, lore, headTexture, isDefault));
         }
         return inventory;
     }

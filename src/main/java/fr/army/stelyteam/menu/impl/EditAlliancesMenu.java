@@ -106,24 +106,26 @@ public class EditAlliancesMenu extends FixedMenu {
             headSlot ++;
         }
 
-        for(String str : config.getConfigurationSection("inventories.editAlliances").getKeys(false)){
-            Integer slot = config.getInt("inventories.editAlliances."+str+".slot");
-            Material material = Material.getMaterial(config.getString("inventories.editAlliances."+str+".itemType"));
-            String name = config.getString("inventories.editAlliances."+str+".itemName");
-            String headTexture = config.getString("inventories.editAlliances."+str+".headTexture");
+        for(String buttonName : config.getConfigurationSection("inventories.editAlliances").getKeys(false)){
+            Integer slot = config.getInt("inventories.editAlliances."+buttonName+".slot");
+            Material material = Material.getMaterial(config.getString("inventories.editAlliances."+buttonName+".itemType"));
+            String displayName = config.getString("inventories.editAlliances."+buttonName+".itemName");
+            String headTexture = config.getString("inventories.editAlliances."+buttonName+".headTexture");
             ItemStack item;
 
-            if (plugin.playerHasPermission(playerName, team, str)){ 
+            if (plugin.playerHasPermission(playerName, team, buttonName)){ 
                 item = ItemBuilder.getItem(
                     material,
-                    name,
-                    config.getStringList("inventories.editAlliances."+str+".lore"),
+                    buttonName,
+                    displayName,
+                    config.getStringList("inventories.editAlliances."+buttonName+".lore"),
                     headTexture,
                     false);
             }else{
                 item = ItemBuilder.getItem(
-                    Material.getMaterial(config.getString("noPermission.itemType")), 
-                    name, 
+                    Material.getMaterial(config.getString("noPermission.itemType")),
+                    "noPermission",
+                    displayName, 
                     config.getStringList("noPermission.lore"),
                     config.getString("noPermission.headTexture"),
                     false

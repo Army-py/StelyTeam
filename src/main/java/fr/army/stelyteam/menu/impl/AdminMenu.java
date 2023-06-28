@@ -36,13 +36,13 @@ public class AdminMenu extends FixedMenu {
 
         emptyCases(inventory, this.menuSlots, 0);
 
-        for(String str : config.getConfigurationSection("inventories.admin").getKeys(false)){
-            Integer slot = config.getInt("inventories.admin."+str+".slot");
-            Material material = Material.getMaterial(config.getString("inventories.admin."+str+".itemType"));
-            String name = config.getString("inventories.admin."+str+".itemName");
-            List<String> lore = config.getStringList("inventories.admin."+str+".lore");
-            String headTexture = config.getString("inventories.admin."+str+".headTexture");
-            inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, false));
+        for(String buttonName : config.getConfigurationSection("inventories.admin").getKeys(false)){
+            Integer slot = config.getInt("inventories.admin."+buttonName+".slot");
+            Material material = Material.getMaterial(config.getString("inventories.admin."+buttonName+".itemType"));
+            String displayName = config.getString("inventories.admin."+buttonName+".itemName");
+            List<String> lore = config.getStringList("inventories.admin."+buttonName+".lore");
+            String headTexture = config.getString("inventories.admin."+buttonName+".headTexture");
+            inventory.setItem(slot, ItemBuilder.getItem(material, buttonName, displayName, lore, headTexture, false));
         }
         return inventory;
     }

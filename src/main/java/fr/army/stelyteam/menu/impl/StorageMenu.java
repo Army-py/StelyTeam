@@ -56,22 +56,22 @@ public class StorageMenu extends PagedMenu {
 
         emptyCases(inventory, config.getIntegerList("inventories.storage.emptyCase.slots"));
 
-        for(String str : config.getConfigurationSection("inventories.storage").getKeys(false)){
-            Integer slot = config.getInt("inventories.storage."+str+".slot");
-            Material material = Material.getMaterial(config.getString("inventories.storage."+str+".itemType"));
-            String name = config.getString("inventories.storage."+str+".itemName");
-            List<String> lore = config.getStringList("inventories.storage."+str+".lore");
-            String headTexture = config.getString("inventories.storage."+str+".headTexture");
+        for(String buttonName : config.getConfigurationSection("inventories.storage").getKeys(false)){
+            Integer slot = config.getInt("inventories.storage."+buttonName+".slot");
+            Material material = Material.getMaterial(config.getString("inventories.storage."+buttonName+".itemType"));
+            String displayName = config.getString("inventories.storage."+buttonName+".itemName");
+            List<String> lore = config.getStringList("inventories.storage."+buttonName+".lore");
+            String headTexture = config.getString("inventories.storage."+buttonName+".headTexture");
 
-            if (str.equals("previous")){
+            if (buttonName.equals("previous")){
                 if (storageId == plugin.getMinStorageId()) continue;
-            }else if (str.equals("next")){
+            }else if (buttonName.equals("next")){
                 if (storageId == team.getTeamStorageLvl()) continue;
-            }else if (str.equals("emptyCase")){
+            }else if (buttonName.equals("emptyCase")){
                 continue;
             }
 
-            inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, false));
+            inventory.setItem(slot, ItemBuilder.getItem(material, buttonName, displayName, lore, headTexture, false));
         }
 
         return inventory;

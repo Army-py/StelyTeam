@@ -94,22 +94,22 @@ public class TeamListMenu extends PagedMenu {
             slotIndex ++;
         }
 
-        for(String str : config.getConfigurationSection("inventories.teamList").getKeys(false)){
-            if (str.equals("teamOwnerHead")) continue;
+        for(String buttonName : config.getConfigurationSection("inventories.teamList").getKeys(false)){
+            if (buttonName.equals("teamOwnerHead")) continue;
 
-            Integer slot = config.getInt("inventories.teamList."+str+".slot");
-            Material material = Material.getMaterial(config.getString("inventories.teamList."+str+".itemType"));
-            String name = config.getString("inventories.teamList."+str+".itemName");
-            List<String> lore = config.getStringList("inventories.teamList."+str+".lore");
-            String headTexture = config.getString("inventories.teamList."+str+".headTexture");
+            Integer slot = config.getInt("inventories.teamList."+buttonName+".slot");
+            Material material = Material.getMaterial(config.getString("inventories.teamList."+buttonName+".itemType"));
+            String displayName = config.getString("inventories.teamList."+buttonName+".itemName");
+            List<String> lore = config.getStringList("inventories.teamList."+buttonName+".lore");
+            String headTexture = config.getString("inventories.teamList."+buttonName+".headTexture");
 
-            if (str.equals("previous")){
+            if (buttonName.equals("previous")){
                 if (page.getCurrentPage() == 0) continue;
-            }else if (str.equals("next")){
+            }else if (buttonName.equals("next")){
                 if (page.getCurrentPage() == pages.size()-1) continue;
             }
 
-            inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, false));
+            inventory.setItem(slot, ItemBuilder.getItem(material, buttonName, displayName, lore, headTexture, false));
         }
 
         return inventory;

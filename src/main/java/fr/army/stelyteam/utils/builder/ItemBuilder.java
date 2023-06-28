@@ -22,8 +22,8 @@ import fr.army.stelyteam.StelyTeamPlugin;
 
 
 public class ItemBuilder {
-	public static ItemStack getItem(Material material, String name, List<String> lore, String headTexture, boolean isEnchanted) {
-		if (material.equals(Material.PLAYER_HEAD) && !headTexture.isBlank()) return getCustomHead(headTexture, name, lore, null);
+	public static ItemStack getItem(Material material, String buttonName, String displayName, List<String> lore, String headTexture, boolean isEnchanted) {
+		if (material.equals(Material.PLAYER_HEAD) && !headTexture.isBlank()) return getCustomHead(headTexture, buttonName, displayName, lore, null);
 
 		ItemStack item = new ItemStack(material, 1);
 		ItemMeta meta = item.getItemMeta();
@@ -41,25 +41,29 @@ public class ItemBuilder {
 		if (isEnchanted) {
 			meta.addEnchant(Enchantment.ARROW_INFINITE, 1, true);
 		}
-		meta.setDisplayName(name);
+
+		NamespacedKey key = new NamespacedKey(StelyTeamPlugin.getPlugin(), "buttonName");
+		meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, buttonName);
+
+		meta.setDisplayName(displayName);
 		item.setItemMeta(meta);
 		return item;
 	}
 
 
 	public static ItemStack getPlayerHead(OfflinePlayer player, String name, List<String> lore) {
-		return getCustomHead(null, name, lore, player);
+		return getCustomHead(null, null, name, lore, player);
 	}
 
 
-	private static ItemStack getCustomHead(String texture, String name, List<String> lore, OfflinePlayer player) {
+	private static ItemStack getCustomHead(String texture, String buttonName, String name, List<String> lore, OfflinePlayer player) {
 		ItemStack item = new ItemStack(Material.PLAYER_HEAD);
 
         SkullMeta skullMeta = (SkullMeta) item.getItemMeta();
         GameProfile profile = new GameProfile(player == null ? UUID.randomUUID() : player.getUniqueId(), player == null ? null : player.getName());
 
 		if (texture != null) {
-        	profile.getProperties().put("textures", new Property("textures", texture));
+			profile.getProperties().put("textures", new Property("textures", texture));
 		}
 
         try {
@@ -84,6 +88,11 @@ public class ItemBuilder {
 		if (player != null){
 			NamespacedKey key = new NamespacedKey(StelyTeamPlugin.getPlugin(), "playerName");
 			skullMeta.getPersistentDataContainer().set(key, PersistentDataType.STRING, player.getName());
+		}
+
+		if (buttonName != null){
+			NamespacedKey key = new NamespacedKey(StelyTeamPlugin.getPlugin(), "buttonName");
+			skullMeta.getPersistentDataContainer().set(key, PersistentDataType.STRING, buttonName);
 		}
 
 		skullMeta.setDisplayName(name);

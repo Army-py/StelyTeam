@@ -42,23 +42,23 @@ public class UpgradeStorageMenu extends FixedMenu {
 
         emptyCases(inventory, this.menuSlots, 0);
 
-        for(String str : config.getConfigurationSection("inventories.upgradeStorageAmount").getKeys(false)){
-            Integer slot = config.getInt("inventories.upgradeStorageAmount."+str+".slot");
-            String name = config.getString("inventories.upgradeStorageAmount."+str+".itemName");
-            List<String> lore = config.getStringList("inventories.upgradeStorageAmount."+str+".lore");
+        for(String buttonName : config.getConfigurationSection("inventories.upgradeStorageAmount").getKeys(false)){
+            Integer slot = config.getInt("inventories.upgradeStorageAmount."+buttonName+".slot");
+            String displayName = config.getString("inventories.upgradeStorageAmount."+buttonName+".itemName");
+            List<String> lore = config.getStringList("inventories.upgradeStorageAmount."+buttonName+".lore");
             
-            if (str.equals("close")){
-                material = Material.getMaterial(config.getString("inventories.upgradeStorageAmount."+str+".itemType"));
-                headTexture = config.getString("inventories.upgradeStorageAmount."+str+".headTexture");
-            }else if (level >= config.getInt("inventories.upgradeStorageAmount."+str+".level")){
-                material = Material.getMaterial(config.getString("inventories.upgradeStorageAmount."+str+".unlock.itemType"));
-                headTexture = config.getString("inventories.upgradeStorageAmount."+str+".unlock.headTexture");
+            if (buttonName.equals("close")){
+                material = Material.getMaterial(config.getString("inventories.upgradeStorageAmount."+buttonName+".itemType"));
+                headTexture = config.getString("inventories.upgradeStorageAmount."+buttonName+".headTexture");
+            }else if (level >= config.getInt("inventories.upgradeStorageAmount."+buttonName+".level")){
+                material = Material.getMaterial(config.getString("inventories.upgradeStorageAmount."+buttonName+".unlock.itemType"));
+                headTexture = config.getString("inventories.upgradeStorageAmount."+buttonName+".unlock.headTexture");
             }else{
-                material = Material.getMaterial(config.getString("inventories.upgradeStorageAmount."+str+".lock.itemType"));
-                headTexture = config.getString("inventories.upgradeStorageAmount."+str+".lock.headTexture");
+                material = Material.getMaterial(config.getString("inventories.upgradeStorageAmount."+buttonName+".lock.itemType"));
+                headTexture = config.getString("inventories.upgradeStorageAmount."+buttonName+".lock.headTexture");
             }
 
-            inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, false));
+            inventory.setItem(slot, ItemBuilder.getItem(material, buttonName, displayName, lore, headTexture, false));
         }
         return inventory;
     }

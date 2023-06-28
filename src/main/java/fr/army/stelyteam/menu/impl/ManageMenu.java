@@ -48,32 +48,33 @@ public class ManageMenu extends FixedMenu {
 
         emptyCases(inventory, this.menuSlots, 0);
 
-        for(String str : config.getConfigurationSection("inventories.manage").getKeys(false)){
-            Integer slot = config.getInt("inventories.manage."+str+".slot");
-            Material material = Material.getMaterial(config.getString("inventories.manage."+str+".itemType"));
-            String name = config.getString("inventories.manage."+str+".itemName");
-            List<String> lore = config.getStringList("inventories.manage."+str+".lore");
-            String headTexture = config.getString("inventories.manage."+str+".headTexture");
+        for(String buttonName : config.getConfigurationSection("inventories.manage").getKeys(false)){
+            Integer slot = config.getInt("inventories.manage."+buttonName+".slot");
+            Material material = Material.getMaterial(config.getString("inventories.manage."+buttonName+".itemType"));
+            String displayName = config.getString("inventories.manage."+buttonName+".itemName");
+            List<String> lore = config.getStringList("inventories.manage."+buttonName+".lore");
+            String headTexture = config.getString("inventories.manage."+buttonName+".headTexture");
             
             ItemStack item;
             
             
-            if (str.equals("editAlliances") 
+            if (buttonName.equals("editAlliances") 
                     && plugin.playerHasPermissionInSection(playerName, team, "editAlliances")) {
-                item = ItemBuilder.getItem(material, name, lore, headTexture, false);
-            }else if (str.equals("editMembers") 
+                item = ItemBuilder.getItem(material, buttonName, displayName, lore, headTexture, false);
+            }else if (buttonName.equals("editMembers") 
                     && plugin.playerHasPermissionInSection(playerName, team, "editMembers")) {
-                item = ItemBuilder.getItem(material, name, lore, headTexture, false);
-            }else if (plugin.playerHasPermission(playerName, team, str)){ 
-                if (str.equals("buyTeamBank")){
-                    item = ItemBuilder.getItem(material, name, lore, headTexture, team.isUnlockedTeamBank());
+                item = ItemBuilder.getItem(material, buttonName, displayName, lore, headTexture, false);
+            }else if (plugin.playerHasPermission(playerName, team, buttonName)){ 
+                if (buttonName.equals("buyTeamBank")){
+                    item = ItemBuilder.getItem(material, buttonName, displayName, lore, headTexture, team.isUnlockedTeamBank());
                 }else {
-                    item = ItemBuilder.getItem(material, name, lore, headTexture, false);
+                    item = ItemBuilder.getItem(material, buttonName, displayName, lore, headTexture, false);
                 }
             }else{
                 item = ItemBuilder.getItem(
-                    Material.getMaterial(config.getString("noPermission.itemType")), 
-                    name, 
+                    Material.getMaterial(config.getString("noPermission.itemType")),
+                    "noPermission",
+                    displayName, 
                     config.getStringList("noPermission.lore"),
                     config.getString("noPermission.headTexture"),
                     false

@@ -3,9 +3,9 @@
 database_type: "sqlite" # mysql ou sqlite
 sql:
   host: "127.0.0.1:3306"
-  database: "stelyteam_test"
-  user: "admin"
-  password: "@%MerSus"
+  database: "stelyteam"
+  user: "user"
+  password: "password"
   port: 3306
 
 sqlite:
@@ -248,9 +248,17 @@ inventories:
       itemName: "§5§nCréer une team"
       itemType: LIME_BANNER
       headTexture: ""
-      slot: 13
+      slot: 12
       lore: 
         - "§aPrix : 20 000€"
+    teamList:
+      itemName: "§5§nListe des teams"
+      itemType: BOOK
+      headTexture: ""
+      slot: 14
+      lore:
+        - "§aVisualise les teams"
+        - "§aet leurs informations"
 
   admin:
     manage:

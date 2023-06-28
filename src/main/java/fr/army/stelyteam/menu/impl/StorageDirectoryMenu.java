@@ -35,31 +35,31 @@ public class StorageDirectoryMenu extends FixedMenu {
 
         emptyCases(inventory, this.menuSlots, 0);
 
-        for(String str : config.getConfigurationSection("inventories.storageDirectory").getKeys(false)){
-            Integer slot = config.getInt("inventories.storageDirectory."+str+".slot");
+        for(String buttonName : config.getConfigurationSection("inventories.storageDirectory").getKeys(false)){
+            Integer slot = config.getInt("inventories.storageDirectory."+buttonName+".slot");
             String headTexture;
             Material material;
-            String name;
+            String displayName;
             List<String> lore;
 
-            if (level >= config.getInt("inventories.storageDirectory."+str+".level") || str.equals("close")){
-                material = Material.getMaterial(config.getString("inventories.storageDirectory."+str+".itemType"));
-                headTexture = config.getString("inventories.storageDirectory."+str+".headTexture");
-                if (str.equals("close")){
-                    name = config.getString("inventories.storageDirectory."+str+".itemName");
+            if (level >= config.getInt("inventories.storageDirectory."+buttonName+".level") || buttonName.equals("close")){
+                material = Material.getMaterial(config.getString("inventories.storageDirectory."+buttonName+".itemType"));
+                headTexture = config.getString("inventories.storageDirectory."+buttonName+".headTexture");
+                if (buttonName.equals("close")){
+                    displayName = config.getString("inventories.storageDirectory."+buttonName+".itemName");
                 }else{
-                    name = config.getString(config.getString("inventories.storageDirectory."+str+".itemName"));
+                    displayName = config.getString(config.getString("inventories.storageDirectory."+buttonName+".itemName"));
                 }
-                lore = config.getStringList("inventories.storageDirectory."+str+".lore");
+                lore = config.getStringList("inventories.storageDirectory."+buttonName+".lore");
 
-                inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, false));
+                inventory.setItem(slot, ItemBuilder.getItem(material, buttonName, displayName, lore, headTexture, false));
             }else{
                 material = Material.getMaterial(config.getString("storageNotUnlock.itemType"));
-                name = config.getString("storageNotUnlock.itemName");
+                displayName = config.getString("storageNotUnlock.itemName");
                 lore = config.getStringList("storageNotUnlock.lore");
                 headTexture = config.getString("storageNotUnlock.headTexture");
 
-                inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, false));
+                inventory.setItem(slot, ItemBuilder.getItem(material, buttonName, displayName, lore, headTexture, false));
             }
         }
         return inventory;

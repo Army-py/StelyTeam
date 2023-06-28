@@ -81,7 +81,7 @@ public class AlliancesMenu extends FixedMenu {
             allianceMembers.remove(allianceOwnerName);
             UUID playerUUID = sqliteManager.getUUID(allianceOwnerName);
             // String itemName = colorsBuilder.replaceColor(alliancePrefix);
-            String itemName = " ";
+            String displayName = " ";
             List<String> lore = config.getStringList("teamAllianceLore");
             OfflinePlayer allianceOwner;
             ItemStack item;
@@ -100,11 +100,12 @@ public class AlliancesMenu extends FixedMenu {
             
             
             if (plugin.playerHasPermission(playerName, team, "seeTeamAlliances")){ 
-                item = ItemBuilder.getPlayerHead(allianceOwner, itemName, lore);
+                item = ItemBuilder.getPlayerHead(allianceOwner, displayName, lore);
             }else{
                 item = ItemBuilder.getItem(
-                    Material.getMaterial(config.getString("noPermission.itemType")), 
-                    itemName, 
+                    Material.getMaterial(config.getString("noPermission.itemType")),
+                    "noPermission",
+                    displayName, 
                     config.getStringList("noPermission.lore"),
                     config.getString("noPermission.headTexture"),
                     false
@@ -115,13 +116,13 @@ public class AlliancesMenu extends FixedMenu {
             headSlot ++;
         }
 
-        for(String str : config.getConfigurationSection("inventories.teamAlliances").getKeys(false)){
-            Integer slot = config.getInt("inventories.teamAlliances."+str+".slot");
-            Material material = Material.getMaterial(config.getString("inventories.teamAlliances."+str+".itemType"));
-            String name = config.getString("inventories.teamAlliances."+str+".itemName");
-            String headTexture = config.getString("inventories.teamAlliances."+str+".headTexture");
+        for(String buttonName : config.getConfigurationSection("inventories.teamAlliances").getKeys(false)){
+            Integer slot = config.getInt("inventories.teamAlliances."+buttonName+".slot");
+            Material material = Material.getMaterial(config.getString("inventories.teamAlliances."+buttonName+".itemType"));
+            String displayName = config.getString("inventories.teamAlliances."+buttonName+".itemName");
+            String headTexture = config.getString("inventories.teamAlliances."+buttonName+".headTexture");
             
-            inventory.setItem(slot, ItemBuilder.getItem(material, name, Collections.emptyList(), headTexture, false));
+            inventory.setItem(slot, ItemBuilder.getItem(material, buttonName, displayName, Collections.emptyList(), headTexture, false));
         }
         return inventory;
     }

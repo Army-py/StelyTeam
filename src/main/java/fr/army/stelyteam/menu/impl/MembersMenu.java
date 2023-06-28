@@ -74,13 +74,13 @@ public class MembersMenu extends FixedMenu {
             headSlot ++;
         }
 
-        for(String str : config.getConfigurationSection("inventories.teamMembers").getKeys(false)){
-            Integer slot = config.getInt("inventories.teamMembers."+str+".slot");
-            Material material = Material.getMaterial(config.getString("inventories.teamMembers."+str+".itemType"));
-            String name = config.getString("inventories.teamMembers."+str+".itemName");
-            String headTexture = config.getString("inventories.teamMembers."+str+".headTexture");
+        for(String buttonName : config.getConfigurationSection("inventories.teamMembers").getKeys(false)){
+            Integer slot = config.getInt("inventories.teamMembers."+buttonName+".slot");
+            Material material = Material.getMaterial(config.getString("inventories.teamMembers."+buttonName+".itemType"));
+            String displayName = config.getString("inventories.teamMembers."+buttonName+".itemName");
+            String headTexture = config.getString("inventories.teamMembers."+buttonName+".headTexture");
             
-            inventory.setItem(slot, ItemBuilder.getItem(material, name, Collections.emptyList(), headTexture, false));
+            inventory.setItem(slot, ItemBuilder.getItem(material, buttonName, displayName, Collections.emptyList(), headTexture, false));
         }
         return inventory;
     }

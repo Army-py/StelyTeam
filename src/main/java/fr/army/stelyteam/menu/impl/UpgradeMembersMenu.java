@@ -43,22 +43,22 @@ public class UpgradeMembersMenu extends FixedMenu {
 
         emptyCases(inventory, this.menuSlots, 0);
 
-        for(String str : config.getConfigurationSection("inventories.upgradeTotalMembers").getKeys(false)){
-            Integer slot = config.getInt("inventories.upgradeTotalMembers."+str+".slot");
-            String name = config.getString("inventories.upgradeTotalMembers."+str+".itemName");
-            List<String> lore = config.getStringList("inventories.upgradeTotalMembers."+str+".lore");
+        for(String buttonName : config.getConfigurationSection("inventories.upgradeTotalMembers").getKeys(false)){
+            Integer slot = config.getInt("inventories.upgradeTotalMembers."+buttonName+".slot");
+            String displayName = config.getString("inventories.upgradeTotalMembers."+buttonName+".itemName");
+            List<String> lore = config.getStringList("inventories.upgradeTotalMembers."+buttonName+".lore");
 
-            if (str.equals("close")){
-                material = Material.getMaterial(config.getString("inventories.upgradeTotalMembers."+str+".itemType"));
-                headTexture = config.getString("inventories.upgradeTotalMembers."+str+".headTexture");
-            }else if (level >= config.getInt("inventories.upgradeTotalMembers."+str+".level")){
-                material = Material.getMaterial(config.getString("inventories.upgradeTotalMembers."+str+".unlock.itemType"));
-                headTexture = config.getString("inventories.upgradeTotalMembers."+str+".unlock.headTexture");
+            if (buttonName.equals("close")){
+                material = Material.getMaterial(config.getString("inventories.upgradeTotalMembers."+buttonName+".itemType"));
+                headTexture = config.getString("inventories.upgradeTotalMembers."+buttonName+".headTexture");
+            }else if (level >= config.getInt("inventories.upgradeTotalMembers."+buttonName+".level")){
+                material = Material.getMaterial(config.getString("inventories.upgradeTotalMembers."+buttonName+".unlock.itemType"));
+                headTexture = config.getString("inventories.upgradeTotalMembers."+buttonName+".unlock.headTexture");
             }else{
-                material = Material.getMaterial(config.getString("inventories.upgradeTotalMembers."+str+".lock.itemType"));
-                headTexture = config.getString("inventories.upgradeTotalMembers."+str+".lock.headTexture");
+                material = Material.getMaterial(config.getString("inventories.upgradeTotalMembers."+buttonName+".lock.itemType"));
+                headTexture = config.getString("inventories.upgradeTotalMembers."+buttonName+".lock.headTexture");
             }
-            inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, false));
+            inventory.setItem(slot, ItemBuilder.getItem(material, buttonName, displayName, lore, headTexture, false));
         }
         return inventory;
     }

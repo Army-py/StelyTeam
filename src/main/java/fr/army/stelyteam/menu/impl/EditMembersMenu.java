@@ -80,6 +80,7 @@ public class EditMembersMenu extends FixedMenu {
             }else{
                 item = ItemBuilder.getItem(
                     Material.getMaterial(config.getString("noPermission.itemType")), 
+                    "noPermission",
                     itemName, 
                     config.getStringList("noPermission.lore"),
                     config.getString("noPermission.headTexture"),
@@ -91,24 +92,26 @@ public class EditMembersMenu extends FixedMenu {
             headSlot ++;
         }
 
-        for(String str : config.getConfigurationSection("inventories.editMembers").getKeys(false)){
-            Integer slot = config.getInt("inventories.editMembers."+str+".slot");
-            Material material = Material.getMaterial(config.getString("inventories.editMembers."+str+".itemType"));
-            String name = config.getString("inventories.editMembers."+str+".itemName");
-            String headTexture = config.getString("inventories.editMembers."+str+".headTexture");
+        for(String buttonName : config.getConfigurationSection("inventories.editMembers").getKeys(false)){
+            Integer slot = config.getInt("inventories.editMembers."+buttonName+".slot");
+            Material material = Material.getMaterial(config.getString("inventories.editMembers."+buttonName+".itemType"));
+            String displayName = config.getString("inventories.editMembers."+buttonName+".itemName");
+            String headTexture = config.getString("inventories.editMembers."+buttonName+".headTexture");
             ItemStack item;
 
-            if (plugin.playerHasPermission(playerName, team, str)){ 
+            if (plugin.playerHasPermission(playerName, team, buttonName)){ 
                 item = ItemBuilder.getItem(
                     material,
-                    name,
-                    config.getStringList("inventories.editMembers."+str+".lore"),
+                    buttonName,
+                    displayName,
+                    config.getStringList("inventories.editMembers."+buttonName+".lore"),
                     headTexture,
                     false);
             }else{
                 item = ItemBuilder.getItem(
                     Material.getMaterial(config.getString("noPermission.itemType")), 
-                    name, 
+                    "noPermission",
+                    displayName, 
                     config.getStringList("noPermission.lore"),
                     config.getString("noPermission.headTexture"),
                     false

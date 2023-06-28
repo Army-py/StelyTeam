@@ -36,14 +36,15 @@ public class CreateTeamMenu extends FixedMenu {
 		Inventory inventory = Bukkit.createInventory(this, this.menuSlots, this.menuName);
 		
         emptyCases(inventory, this.menuSlots, 0);
-		
-        Integer slot = config.getInt("inventories.createTeam.create.slot");
-        Material material = Material.getMaterial(config.getString("inventories.createTeam.create.itemType"));
-        String name = config.getString("inventories.createTeam.create.itemName");
-        List<String> lore = config.getStringList("inventories.createTeam.create.lore");
-        String headTexture = config.getString("inventories.createTeam.create.headTexture");
 
-        inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, false));
+        for(String buttonName : config.getConfigurationSection("inventories.createTeam").getKeys(false)){
+            Integer slot = config.getInt("inventories.createTeam."+buttonName+".slot");
+            Material material = Material.getMaterial(config.getString("inventories.createTeam."+buttonName+".itemType"));
+            String displayName = config.getString("inventories.createTeam."+buttonName+".itemName");
+            List<String> lore = config.getStringList("inventories.createTeam."+buttonName+".lore");
+            String headTexture = config.getString("inventories.createTeam."+buttonName+".headTexture");
+            inventory.setItem(slot, ItemBuilder.getItem(material, buttonName, displayName, lore, headTexture, false));
+        }
 		
 		return inventory;
     }
@@ -71,6 +72,8 @@ public class CreateTeamMenu extends FixedMenu {
             }else{
                 player.sendMessage(plugin.getMessageManager().getMessage("common.not_enough_money"));
             }
+        }else if (Buttons.TEAM_LIST_MENU_BUTTON.isClickedButton(clickEvent)){
+            new TeamListMenu(viewer, this).openMenu(0);
         }
     }
 
