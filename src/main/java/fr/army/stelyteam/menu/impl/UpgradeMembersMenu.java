@@ -10,6 +10,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 
 import fr.army.stelyteam.menu.Buttons;
+import fr.army.stelyteam.menu.FixedMenu;
 import fr.army.stelyteam.menu.Menus;
 import fr.army.stelyteam.menu.TeamMenu;
 import fr.army.stelyteam.team.Team;
@@ -20,20 +21,21 @@ import fr.army.stelyteam.utils.manager.MessageManager;
 
 
 
-public class UpgradeMembersMenu extends TeamMenu {
+public class UpgradeMembersMenu extends FixedMenu {
 
     final MessageManager messageManager = plugin.getMessageManager();
 
-    public UpgradeMembersMenu(Player viewer){
+    public UpgradeMembersMenu(Player viewer, TeamMenu previousMenu) {
         super(
             viewer,
             Menus.UPGRADE_LVL_MEMBERS_MENU.getName(),
-            Menus.UPGRADE_LVL_STORAGE_MENU.getSlots()
+            Menus.UPGRADE_LVL_STORAGE_MENU.getSlots(),
+            previousMenu
         );
     }
 
 
-    public Inventory createInventory(Team team) {
+    public Inventory createInventory() {
         Integer level = team.getImprovLvlMembers();
         Inventory inventory = Bukkit.createInventory(this, this.menuSlots, this.menuName);
         Material material;
@@ -62,8 +64,9 @@ public class UpgradeMembersMenu extends TeamMenu {
     }
 
 
-    public void openMenu(Team team){
-        this.open(createInventory(team));
+    @Override
+    public void openMenu(){
+        this.open(createInventory());
     }
 
 
@@ -78,7 +81,8 @@ public class UpgradeMembersMenu extends TeamMenu {
         Integer level = team.getImprovLvlMembers();
         
         if (Buttons.CLOSE_UPGRADE_LVL_MEMBERS_MENU_BUTTON.isClickedButton(clickEvent)){
-            new ManageMenu(player).openMenu(team);
+            // new ManageMenu(player, this).openMenu();
+            previousMenu.openMenu();
         }else if (!material.name().equals(config.getString("emptyCase"))){
             for(String str : config.getConfigurationSection("inventories.upgradeTotalMembers").getKeys(false)){
                 String name = config.getString("inventories.upgradeTotalMembers."+str+".itemName");
@@ -86,7 +90,7 @@ public class UpgradeMembersMenu extends TeamMenu {
                 if (itemName.equals(name) && level+1 == config.getInt("inventories.upgradeTotalMembers."+str+".level")){
                     if (plugin.getEconomyManager().checkMoneyPlayer(player, config.getDouble("prices.upgrade.teamPlaces.level"+(level+1)))){
                         plugin.getCacheManager().addTempAction(new TemporaryAction(playerName, TemporaryActionNames.IMPROV_LVL_MEMBERS, team));
-                        new ConfirmMenu(player).openMenu();
+                        new ConfirmMenu(player, previousMenu).openMenu();
                         return;
                     }else{
                         player.sendMessage(messageManager.getMessage("common.not_enough_money"));

@@ -14,6 +14,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 
 import fr.army.stelyteam.menu.Buttons;
+import fr.army.stelyteam.menu.FixedMenu;
 import fr.army.stelyteam.menu.Menus;
 import fr.army.stelyteam.menu.TeamMenu;
 import fr.army.stelyteam.team.Member;
@@ -25,29 +26,31 @@ import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
 
 
-public class MembersMenu extends TeamMenu {
+public class MembersMenu extends FixedMenu {
 
     final CacheManager cacheManager = plugin.getCacheManager();
     final MessageManager messageManager = plugin.getMessageManager();
 
-    public MembersMenu(Player viewer) {
+    public MembersMenu(Player viewer, TeamMenu previousMenu) {
         super(
             viewer,
             Menus.TEAM_MEMBERS_MENU.getName(),
-            Menus.TEAM_MEMBERS_MENU.getSlots()
+            Menus.TEAM_MEMBERS_MENU.getSlots(),
+            previousMenu
         );
     }
 
-    public MembersMenu(Player viewer, String menuName){
+    public MembersMenu(Player viewer, String menuName, TeamMenu previousMenu){
         super(
             viewer,
             menuName,
-            Menus.TEAM_MEMBERS_MENU.getSlots()
+            Menus.TEAM_MEMBERS_MENU.getSlots(),
+            previousMenu
         );
     }
 
 
-    public Inventory createInventory(Team team) {
+    public Inventory createInventory() {
         Inventory inventory = Bukkit.createInventory(this, this.menuSlots, this.menuName);
 
         emptyCases(inventory, this.menuSlots, 0);
@@ -83,8 +86,9 @@ public class MembersMenu extends TeamMenu {
     }
 
 
-    public void openMenu(Team team) {
-        this.open(createInventory(team));
+    @Override
+    public void openMenu() {
+        this.open(createInventory());
     }
 
 
@@ -120,15 +124,16 @@ public class MembersMenu extends TeamMenu {
                                 team
                             )
                         );
-                    new ConfirmMenu(player).openMenu();
+                    new ConfirmMenu(player, this).openMenu();
                 }
             }else if (Buttons.CLOSE_TEAM_MEMBERS_MENU_BUTTON.isClickedButton(clickEvent)){
                 // new EditMembersMenu(player).openMenu(team);
-                new EditMembersMenu(player).openMenu(team);
+                new EditMembersMenu(player, this).openMenu();
             }
         }else{
             if (Buttons.CLOSE_TEAM_MEMBERS_MENU_BUTTON.isClickedButton(clickEvent)){
-                new MemberMenu(player).openMenu(team);
+                // new MemberMenu(player, this).openMenu();
+                previousMenu.openMenu();
             }
         }
     }

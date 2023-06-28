@@ -1,6 +1,17 @@
 package fr.army.stelyteam.menu.impl;
 
+import java.util.List;
+
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+
 import fr.army.stelyteam.menu.Buttons;
+import fr.army.stelyteam.menu.FixedMenu;
 import fr.army.stelyteam.menu.Menus;
 import fr.army.stelyteam.menu.TeamMenu;
 import fr.army.stelyteam.team.Team;
@@ -13,18 +24,8 @@ import fr.army.stelyteam.utils.manager.MessageManager;
 import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
 
-import java.util.List;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-
-
-public class ManageMenu extends TeamMenu {
+public class ManageMenu extends FixedMenu {
 
     final DatabaseManager mySqlManager = plugin.getDatabaseManager();
     final SQLiteDataManager sqliteManager = plugin.getSQLiteManager();
@@ -32,16 +33,17 @@ public class ManageMenu extends TeamMenu {
     final MessageManager messageManager = plugin.getMessageManager();
     final EconomyManager economyManager = plugin.getEconomyManager();
 
-    public ManageMenu(Player viewer){
+    public ManageMenu(Player viewer, TeamMenu previousMenu){
         super(
             viewer,
             Menus.MANAGE_MENU.getName(),
-            Menus.MANAGE_MENU.getSlots()
+            Menus.MANAGE_MENU.getSlots(),
+            previousMenu
         );
     }
 
 
-    public Inventory createInventory(Team team, String playerName) {
+    public Inventory createInventory(String playerName) {
         Inventory inventory = Bukkit.createInventory(this, this.menuSlots, this.menuName);
 
         emptyCases(inventory, this.menuSlots, 0);
@@ -84,8 +86,9 @@ public class ManageMenu extends TeamMenu {
     }
 
 
-    public void openMenu(Team team){
-        this.open(createInventory(team, viewer.getName()));
+    @Override
+    public void openMenu(){
+        this.open(createInventory(viewer.getName()));
     }
 
 
@@ -106,16 +109,16 @@ public class ManageMenu extends TeamMenu {
         
         // Liaisin des items avec leur fonction
         if (Buttons.EDIT_MEMBERS_MENU_BUTTON.isClickedButton(clickEvent)){
-            new EditMembersMenu(player).openMenu(team);
+            new EditMembersMenu(player, this).openMenu();
 
 
         }else if (Buttons.EDIT_ALLIANCES_MENU_BUTTON.isClickedButton(clickEvent)){
-            new EditAlliancesMenu(player).openMenu(team);
+            new EditAlliancesMenu(player, this).openMenu();
 
 
         }else if (Buttons.SET_TEAM_HOME_BUTTON.isClickedButton(clickEvent)){
             cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.CREATE_HOME, team));
-            new ConfirmMenu(player).openMenu();
+            new ConfirmMenu(player, this).openMenu();
 
 
         }else if (Buttons.REMOVE_TEAM_HOME_BUTTON.isClickedButton(clickEvent)){
@@ -123,7 +126,7 @@ public class ManageMenu extends TeamMenu {
                 player.sendMessage(messageManager.getMessage("manage_team.team_home.not_set"));
             }else{
                 cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.DELETE_HOME, team));
-                new ConfirmMenu(player).openMenu();
+                new ConfirmMenu(player, this).openMenu();
             }
 
 
@@ -132,7 +135,7 @@ public class ManageMenu extends TeamMenu {
                 if (economyManager.checkMoneyPlayer(player, config.getDouble("prices.buyTeamBank"))){
                     cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.BUY_TEAM_BANK, team));
 
-                    new ConfirmMenu(player).openMenu();
+                    new ConfirmMenu(player, this).openMenu();
                 }else{
                     player.sendMessage(messageManager.getMessage("common.not_enough_money"));
                 }
@@ -142,17 +145,17 @@ public class ManageMenu extends TeamMenu {
 
 
         }else if (Buttons.UPGRADE_LVL_MEMBERS_MENU_BUTTON.isClickedButton(clickEvent)){
-            new UpgradeMembersMenu(player).openMenu(team);
+            new UpgradeMembersMenu(player, this).openMenu();
 
 
         }else if (Buttons.UPGRADE_LVL_STORAGE_MENU_BUTTON.isClickedButton(clickEvent)){
-            new UpgradeStorageMenu(player).openMenu(team);
+            new UpgradeStorageMenu(player, this).openMenu();
 
 
         }else if (Buttons.EDIT_TEAM_NAME_BUTTON.isClickedButton(clickEvent)){
             if (economyManager.checkMoneyPlayer(player, config.getDouble("prices.editTeamId"))){
                 cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.EDIT_NAME, team));
-                new ConfirmMenu(player).openMenu();
+                new ConfirmMenu(player, this).openMenu();
             }else{
                 player.sendMessage(messageManager.getMessage("common.not_enough_money"));
             }
@@ -161,7 +164,7 @@ public class ManageMenu extends TeamMenu {
         }else if (Buttons.EDIT_TEAM_PREFIX_BUTTON.isClickedButton(clickEvent)){
             if (economyManager.checkMoneyPlayer(player, config.getDouble("prices.editTeamPrefix"))){
                 cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.EDIT_PREFIX, team));
-                new ConfirmMenu(player).openMenu();
+                new ConfirmMenu(player, this).openMenu();
             }else{
                 player.sendMessage(messageManager.getMessage("common.not_enough_money"));
             }
@@ -170,7 +173,7 @@ public class ManageMenu extends TeamMenu {
         }else if (Buttons.EDIT_TEAM_DESCRIPTION_BUTTON.isClickedButton(clickEvent)){
             if (economyManager.checkMoneyPlayer(player, config.getDouble("prices.editTeamDescription"))){
                 cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.EDIT_DESCRIPTION, team));
-                new ConfirmMenu(player).openMenu();
+                new ConfirmMenu(player, this).openMenu();
             }else{
                 player.sendMessage(messageManager.getMessage("common.not_enough_money"));
             }
@@ -178,16 +181,17 @@ public class ManageMenu extends TeamMenu {
 
         }else if (Buttons.REMOVE_TEAM_BUTTON.isClickedButton(clickEvent)){
             cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.DELETE_TEAM, team));
-            new ConfirmMenu(player).openMenu();
+            new ConfirmMenu(player, this).openMenu();
 
 
         }else if (Buttons.EDIT_TEAM_PERMISSIONS_MENU_BUTTON.isClickedButton(clickEvent)){
-            new PermissionsMenu(player).openMenu(team);
+            new PermissionsMenu(player, this).openMenu();
 
 
         // Fermeture ou retour en arrière de l'inventaire
         }else if (Buttons.CLOSE_MANAGE_MENU_BUTTON.isClickedButton(clickEvent)){
-            new AdminMenu(player).openMenu();
+            // new AdminMenu(player, this).openMenu();
+            previousMenu.openMenu();
         }
     }
 

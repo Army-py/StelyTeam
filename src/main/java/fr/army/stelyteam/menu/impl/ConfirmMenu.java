@@ -15,6 +15,7 @@ import fr.army.stelyteam.conversation.ConvEditTeamName;
 import fr.army.stelyteam.conversation.ConvEditTeamPrefix;
 import fr.army.stelyteam.conversation.ConvGetTeamName;
 import fr.army.stelyteam.menu.Buttons;
+import fr.army.stelyteam.menu.FixedMenu;
 import fr.army.stelyteam.menu.Menus;
 import fr.army.stelyteam.menu.TeamMenu;
 import fr.army.stelyteam.team.Team;
@@ -29,7 +30,7 @@ import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
 
 
-public class ConfirmMenu extends TeamMenu {
+public class ConfirmMenu extends FixedMenu {
 
     final DatabaseManager mySqlManager = plugin.getDatabaseManager();
     final SQLiteDataManager sqliteManager = plugin.getSQLiteManager();
@@ -38,11 +39,12 @@ public class ConfirmMenu extends TeamMenu {
     final EconomyManager economyManager = plugin.getEconomyManager();
     final ConversationBuilder conversationBuilder = plugin.getConversationBuilder();
 
-    public ConfirmMenu(Player viewer){
+    public ConfirmMenu(Player viewer, TeamMenu previousMenu){
         super(
             viewer,
             Menus.CONFIRM_MENU.getName(),
-            Menus.CONFIRM_MENU.getSlots()
+            Menus.CONFIRM_MENU.getSlots(),
+            previousMenu
         );
     }
 
@@ -66,6 +68,7 @@ public class ConfirmMenu extends TeamMenu {
     }
 
 
+    @Override
     public void openMenu(){
         this.open(createInventory());
     }
@@ -152,7 +155,7 @@ public class ConfirmMenu extends TeamMenu {
                     team.unlockedTeamBank();
                     player.sendMessage(messageManager.getMessage("manage_team.team_bank.unlock"));
 
-                    new ManageMenu(player).openMenu(team);
+                    new ManageMenu(player, previousMenu).openMenu();
                     team.refreshTeamMembersInventory(playerName);
                     team.teamBroadcast(playerName, messageManager.replaceAuthor("broadcasts.team_bank_unlocked", playerName));
                     break;
@@ -185,7 +188,7 @@ public class ConfirmMenu extends TeamMenu {
                     economyManager.removeMoneyPlayer(player, config.getDouble("prices.upgrade.teamPlaces.level"+newLevel));
                     player.sendMessage(messageManager.getReplaceMessage("manage_team.upgrade_member_amount.new_upgrade", newLevel.toString()));
 
-                    new UpgradeMembersMenu(player).openMenu(team);
+                    new UpgradeMembersMenu(player, previousMenu).openMenu();
                     team.refreshTeamMembersInventory(playerName);
                     team.teamBroadcast(playerName, messageManager.replaceTeamId("broadcasts.new_member_amount_upgrade", team.getTeamName()));
                     break;
@@ -196,7 +199,7 @@ public class ConfirmMenu extends TeamMenu {
                     economyManager.removeMoneyPlayer(player, config.getDouble("prices.upgrade.teamStorages.level"+newLevel));
                     player.sendMessage(messageManager.getReplaceMessage("manage_team.upgrade_storages.new_upgrade", newLevel.toString()));
 
-                    new UpgradeStorageMenu(player).openMenu(team);
+                    new UpgradeStorageMenu(player, previousMenu).openMenu();
                     team.refreshTeamMembersInventory(playerName);
                     team.teamBroadcast(playerName, messageManager.replaceTeamId("broadcasts.new_storage_upgrade", team.getTeamName()));
                     break;
@@ -225,37 +228,48 @@ public class ConfirmMenu extends TeamMenu {
                     player.closeInventory();
                     break;
                 case CREATE_HOME:
-                    new ManageMenu(player).openMenu(team);
+                    // new ManageMenu(player, this).openMenu();
+                    previousMenu.openMenu();
                     break;
                 case DELETE_HOME:
-                    new ManageMenu(player).openMenu(team);
+                    // new ManageMenu(player, this).openMenu();
+                    previousMenu.openMenu();
                     break;
                 case CREATE_TEAM:
-                    new CreateTeamMenu(player).openMenu();
+                    // new CreateTeamMenu(player, this).openMenu();
+                    previousMenu.openMenu();
                     break;
                 case BUY_TEAM_BANK:
-                    new ManageMenu(player).openMenu(team);
+                    // new ManageMenu(player, this).openMenu();
+                    previousMenu.openMenu();
                     break;
                 case EDIT_NAME:
-                    new ManageMenu(player).openMenu(team);
+                    // new ManageMenu(player, this).openMenu();
+                    previousMenu.openMenu();
                     break;
                 case EDIT_PREFIX:
-                    new ManageMenu(player).openMenu(team);
+                    // new ManageMenu(player, this).openMenu();
+                    previousMenu.openMenu();
                     break;
                 case EDIT_DESCRIPTION:
-                    new ManageMenu(player).openMenu(team);
+                    // new ManageMenu(player, this).openMenu();
+                    previousMenu.openMenu();
                     break;
                 case DELETE_TEAM:
-                    new ManageMenu(player).openMenu(team);
+                    // new ManageMenu(player, this).openMenu();
+                    previousMenu.openMenu();
                     break;
                 case IMPROV_LVL_MEMBERS:
-                    new UpgradeMembersMenu(player).openMenu(team);
+                    // new UpgradeMembersMenu(player, this).openMenu();
+                    previousMenu.openMenu();
                     break;
                 case IMPROV_LVL_STORAGE:
-                    new UpgradeStorageMenu(player).openMenu(team);
+                    // new UpgradeStorageMenu(player, this).openMenu();
+                    previousMenu.openMenu();
                     break;
                 case LEAVE_TEAM:
-                    new MemberMenu(player).openMenu(team);
+                    // new MemberMenu(player, this).openMenu();
+                    previousMenu.openMenu();
                     break;
                 default:
                     break;

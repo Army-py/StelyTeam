@@ -49,7 +49,7 @@ public class ConvEditOwner extends StringPrompt {
                 TemporaryActionNames.EDIT_OWNER, 
                 team)
         );
-        new ConfirmMenu(author).openMenu();
+        new ConfirmMenu(author, null).openMenu();
         return null;
     }
 

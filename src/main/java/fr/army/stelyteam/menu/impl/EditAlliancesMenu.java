@@ -15,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 
 import fr.army.stelyteam.conversation.ConvAddAlliance;
 import fr.army.stelyteam.menu.Buttons;
+import fr.army.stelyteam.menu.FixedMenu;
 import fr.army.stelyteam.menu.Menus;
 import fr.army.stelyteam.menu.TeamMenu;
 import fr.army.stelyteam.team.Alliance;
@@ -30,7 +31,7 @@ import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
 
 
-public class EditAlliancesMenu extends TeamMenu {
+public class EditAlliancesMenu extends FixedMenu {
 
     final DatabaseManager mySqlManager = plugin.getDatabaseManager();
     final SQLiteDataManager sqliteManager = plugin.getSQLiteManager();
@@ -40,16 +41,17 @@ public class EditAlliancesMenu extends TeamMenu {
     final MessageManager messageManager = plugin.getMessageManager();
 
 
-    public EditAlliancesMenu(Player viewer){
+    public EditAlliancesMenu(Player viewer, TeamMenu previousMenu) {
         super(
             viewer,
             Menus.EDIT_ALLIANCES_MENU.getName(),
-            Menus.EDIT_ALLIANCES_MENU.getSlots()
+            Menus.EDIT_ALLIANCES_MENU.getSlots(),
+            previousMenu
         );
     }
 
 
-    public Inventory createInventory(Team team, String playerName) {
+    public Inventory createInventory(String playerName) {
         Inventory inventory = Bukkit.createInventory(this, this.menuSlots, this.menuName);
         Integer maxMembers = config.getInt("teamMaxMembers");
 
@@ -133,8 +135,9 @@ public class EditAlliancesMenu extends TeamMenu {
     }
 
 
-    public void openMenu(Team team){
-        this.open(createInventory(team, viewer.getName()));
+    @Override
+    public void openMenu(){
+        this.open(createInventory(viewer.getName()));
     }
 
 
@@ -145,7 +148,8 @@ public class EditAlliancesMenu extends TeamMenu {
         Team team = Team.initFromPlayerName(playerName);
 
         if (Buttons.CLOSE_EDIT_ALLIANCES_MENU_BUTTON.isClickedButton(clickEvent)){
-            new ManageMenu(player).openMenu(team);
+            // new ManageMenu(player, this).openMenu();
+            previousMenu.openMenu();
             return;
         }else if (Buttons.ADD_ALLIANCE_BUTTON.isClickedButton(clickEvent)){
             player.closeInventory();
@@ -155,7 +159,7 @@ public class EditAlliancesMenu extends TeamMenu {
             cacheManager.addTempAction(
                 new TemporaryAction(playerName, TemporaryActionNames.CLICK_REMOVE_ALLIANCE, team)
             );
-            new AlliancesMenu(player, Menus.REMOVE_ALLIANCES_MENU.getName()).openMenu(team);
+            new AlliancesMenu(player, Menus.REMOVE_ALLIANCES_MENU.getName(), this).openMenu();
             return;
         }
     }

@@ -10,22 +10,23 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 
 import fr.army.stelyteam.menu.Buttons;
+import fr.army.stelyteam.menu.FixedMenu;
 import fr.army.stelyteam.menu.Menus;
 import fr.army.stelyteam.menu.TeamMenu;
-import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.builder.ItemBuilder;
 import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 
-public class AdminMenu extends TeamMenu {
+public class AdminMenu extends FixedMenu {
 
     DatabaseManager mySqlManager = plugin.getDatabaseManager();
 
-    public AdminMenu(Player viewer) {
+    public AdminMenu(Player viewer, TeamMenu previousMenu) {
         super(
             viewer,
             Menus.ADMIN_MENU.getName(),
-            Menus.ADMIN_MENU.getSlots()
+            Menus.ADMIN_MENU.getSlots(),
+            previousMenu
         );
     }
 
@@ -47,6 +48,7 @@ public class AdminMenu extends TeamMenu {
     }
 
 
+    @Override
     public void openMenu(){
         this.open(createInventory());
     }
@@ -55,15 +57,14 @@ public class AdminMenu extends TeamMenu {
     @Override
     public void onClick(InventoryClickEvent clickEvent) {
         Player player = (Player) clickEvent.getWhoClicked();
-        String playerName = player.getName();
 
         // Ouverture des inventaires
         if (Buttons.MANAGE_MENU_BUTTON.isClickedButton(clickEvent)){
-            new ManageMenu(viewer).openMenu(Team.initFromPlayerName(playerName));
+            new ManageMenu(viewer, this).openMenu();
         }else if (Buttons.TEAM_LIST_MENU_BUTTON.isClickedButton(clickEvent)){
-            new TeamListMenu(viewer).openMenu();
+            new TeamListMenu(viewer, this).openMenu(0);
         }else if (Buttons.MEMBER_MENU_BUTTON.isClickedButton(clickEvent)){
-            new MemberMenu(viewer).openMenu(Team.initFromPlayerName(playerName));
+            new MemberMenu(viewer, this).openMenu();
             
         // Fermeture ou retour en arrière de l'inventaire
         }else if (Buttons.CLOSE_ADMIN_MENU_BUTTON.isClickedButton(clickEvent)){

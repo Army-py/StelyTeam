@@ -25,7 +25,7 @@ public class SubCmdList extends SubCommand {
         String playerName = player.getName();
 
         cacheManager.removePage(cacheManager.getPage(playerName));
-        new TeamListMenu(player).openMenu();
+        new TeamListMenu(player, null).openMenu(0);
 
         return true;
     }

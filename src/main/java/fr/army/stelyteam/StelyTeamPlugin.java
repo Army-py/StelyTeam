@@ -130,15 +130,15 @@ public class StelyTeamPlugin extends JavaPlugin {
         String playerName = player.getName();
 
         if (team == null){
-            new CreateTeamMenu(player).openMenu();
+            new CreateTeamMenu(player, null).openMenu();
         }else if(team.isTeamOwner(playerName)){
-            new AdminMenu(player).openMenu();
-        }else if (plugin.playerHasPermissionInSection(playerName, team, "manage")
-            || plugin.playerHasPermissionInSection(playerName, team, "editMembers")
-            || plugin.playerHasPermissionInSection(playerName, team, "editAlliances")){
-            new AdminMenu(player).openMenu();
+            new AdminMenu(player, null).openMenu();
+        }else if (playerHasPermissionInSection(playerName, team, "manage")
+            || playerHasPermissionInSection(playerName, team, "editMembers")
+            || playerHasPermissionInSection(playerName, team, "editAlliances")){
+            new AdminMenu(player, null).openMenu();
         }else{
-            new MemberMenu(player).openMenu(team);
+            new MemberMenu(player, null).openMenu();
         }
     }
 

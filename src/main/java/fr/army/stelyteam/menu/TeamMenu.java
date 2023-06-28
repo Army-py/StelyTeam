@@ -20,34 +20,45 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.team.Team;
 
 
-public abstract class TeamMenu implements TeamMenuInterface {
+public abstract class TeamMenu implements ITeamMenu {
 
     protected final StelyTeamPlugin plugin = StelyTeamPlugin.getPlugin();
     protected final YamlConfiguration config;
 
     protected InventoryHolder menu;
 
+    protected final TeamMenu previousMenu;
+    
     protected final Player viewer;
     protected final String menuName;
     protected final int menuSlots;
+    
+    protected final Team team;
 
 
-    public TeamMenu(Player viewer, String menuName, int menuSlots) {
+    public TeamMenu(Player viewer, String menuName, int menuSlots, TeamMenu previousMenu) {
         this.config = plugin.getConfig();
         
         this.viewer = viewer;
         this.menuName = menuName;
         this.menuSlots = menuSlots;
+        this.previousMenu = previousMenu;
+
+        this.team = Team.init(viewer);
     }
 
-    public TeamMenu(Player viewer, int menuSlots) {
+    public TeamMenu(Player viewer, int menuSlots, TeamMenu previousMenu) {
         this.config = plugin.getConfig();
         
         this.viewer = viewer;
         this.menuName = null;
         this.menuSlots = menuSlots;
+        this.previousMenu = previousMenu;
+
+        this.team = Team.init(viewer);
     }
 
 
@@ -55,13 +66,11 @@ public abstract class TeamMenu implements TeamMenuInterface {
 
     public abstract void onClose(InventoryCloseEvent closeEvent);
 
+    public abstract void openMenu();
+
 
     protected void open(Inventory inventory){
         this.viewer.openInventory(inventory);
-    }
-
-    protected void open(InventoryHolder inventory){
-        this.viewer.openInventory(inventory.getInventory());
     }
 
 
@@ -138,6 +147,9 @@ public abstract class TeamMenu implements TeamMenuInterface {
         return false;
     }
 
+    public TeamMenu getPreviousMenu(){
+        return this.previousMenu;
+    }
 
     @Override
     public Inventory getInventory() {

@@ -10,25 +10,26 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 
 import fr.army.stelyteam.menu.Buttons;
+import fr.army.stelyteam.menu.FixedMenu;
 import fr.army.stelyteam.menu.Menus;
 import fr.army.stelyteam.menu.TeamMenu;
-import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.builder.ItemBuilder;
 
 
-public class StorageDirectoryMenu extends TeamMenu {
+public class StorageDirectoryMenu extends FixedMenu {
 
 
-    public StorageDirectoryMenu(Player viewer){
+    public StorageDirectoryMenu(Player viewer, TeamMenu previousMenu) {
         super(
             viewer,
             Menus.STORAGE_DIRECTORY_MENU.getName(),
-            Menus.STORAGE_DIRECTORY_MENU.getSlots()
+            Menus.STORAGE_DIRECTORY_MENU.getSlots(),
+            previousMenu
         );
     }
 
 
-    public Inventory createInventory(Team team) {
+    public Inventory createInventory() {
         Inventory inventory = Bukkit.createInventory(this, this.menuSlots, this.menuName);
         Integer level = team.getTeamStorageLvl();
 
@@ -65,22 +66,22 @@ public class StorageDirectoryMenu extends TeamMenu {
     }
 
 
-    public void openMenu(Team team){
-        this.open(createInventory(team));
+    @Override
+    public void openMenu(){
+        this.open(createInventory());
     }
 
 
     @Override
     public void onClick(InventoryClickEvent clickEvent) {
         Player player = (Player) clickEvent.getWhoClicked();
-        String playerName = player.getName();
-        Team team = Team.initFromPlayerName(playerName);
         String itemName = clickEvent.getCurrentItem().getItemMeta().getDisplayName();
         Material itemType = clickEvent.getCurrentItem().getType();
 
         // Fermeture ou retour en arrière de l'inventaire
         if (Buttons.CLOSE_STORAGE_DIRECTORY_MENU_BUTTON.isClickedButton(clickEvent)){
-            new MemberMenu(player).openMenu(team);
+            // new MemberMenu(player, this).openMenu();
+            previousMenu.openMenu();
         }else{
             for(String str : config.getConfigurationSection("inventories.storageDirectory").getKeys(false)){
                 String name = config.getString(config.getString("inventories.storageDirectory."+str+".itemName"));
@@ -88,7 +89,7 @@ public class StorageDirectoryMenu extends TeamMenu {
                 Integer storageId = config.getInt("inventories.storageDirectory."+str+".storageId");
 
                 if (itemName.equals(name) && itemType.equals(type)){
-                    new StorageMenu(player).openMenu(team, storageId);
+                    new StorageMenu(player, this).openMenu(storageId);
                     return;
                 }
             }

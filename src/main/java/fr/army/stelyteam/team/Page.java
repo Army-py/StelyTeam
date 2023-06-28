@@ -17,20 +17,24 @@ public class Page {
         this.teams = teams;
     }
 
-    public void setAuthorName(String authorName){
+    public Page setAuthorName(String authorName){
         this.authorName = authorName;
+        return this;
     }
 
-    public void setCurrentPage(int currentPage){
+    public Page setCurrentPage(int currentPage){
         this.currentPage = currentPage;
+        return this;
     }
 
-    public void setMaxElementsPerPage(int maxElementsPerPage) {
+    public Page setMaxElementsPerPage(int maxElementsPerPage) {
         this.maxElementsPerPage = maxElementsPerPage;
+        return this;
     }
 
-    public void setTeams(ArrayList<Team> teams) {
+    public Page setTeams(ArrayList<Team> teams) {
         this.teams = teams;
+        return this;
     }
 
     public String getAuthorName(){
@@ -49,9 +53,23 @@ public class Page {
         return this.teams;
     }
 
-    public ArrayList<List<Team>> getPages() {
-        ArrayList<List<Team>> pages = new ArrayList<List<Team>>();
-        ArrayList<Team> teams = new ArrayList<Team>(this.teams);
+    public Page nextPage() {
+        if (this.currentPage < this.getPages().size() - 1) {
+            this.currentPage++;
+        }
+        return this;
+    }
+
+    public Page previousPage() {
+        if (this.currentPage > 0) {
+            this.currentPage--;
+        }
+        return this;
+    }
+
+    public List<List<Team>> getPages() {
+        List<List<Team>> pages = new ArrayList<List<Team>>();
+        List<Team> teams = new ArrayList<Team>(this.teams);
         int pagesCount = (int) Math.ceil((double) this.teams.size() / (double) this.maxElementsPerPage);
         for (int i = 0; i < pagesCount; i++) {
             pages.add(new ArrayList<Team>());

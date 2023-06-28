@@ -1,6 +1,5 @@
 package fr.army.stelyteam.menu.impl;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -16,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 
 import fr.army.stelyteam.menu.Buttons;
 import fr.army.stelyteam.menu.Menus;
+import fr.army.stelyteam.menu.PagedMenu;
 import fr.army.stelyteam.menu.TeamMenu;
 import fr.army.stelyteam.team.Page;
 import fr.army.stelyteam.team.Team;
@@ -26,23 +26,24 @@ import fr.army.stelyteam.utils.manager.MessageManager;
 import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
 
 
-public class TeamListMenu extends TeamMenu {
+public class TeamListMenu extends PagedMenu {
 
     final SQLiteDataManager sqliteManager = plugin.getSQLiteManager();
     final CacheManager cacheManager = plugin.getCacheManager();
     final ColorsBuilder colorsBuilder = plugin.getColorsBuilder();
     final MessageManager messageManager = plugin.getMessageManager();
 
-    public TeamListMenu(Player viewer) {
+    public TeamListMenu(Player viewer, TeamMenu previousMenu) {
         super(
             viewer,
             Menus.TEAM_LIST_MENU.getName(),
-            Menus.TEAM_LIST_MENU.getSlots()
+            Menus.TEAM_LIST_MENU.getSlots(),
+            previousMenu
         );
     }
 
 
-    public Inventory createInventory(String playerName) {
+    public Inventory createInventory(String playerName, int pageId) {
         Collection<Team> teams = plugin.getDatabaseManager().getTeams();
         Inventory inventory = Bukkit.createInventory(this, this.menuSlots, this.menuName);
         List<Integer> headSlots = config.getIntegerList("inventories.teamList.teamOwnerHead.slots");
@@ -55,11 +56,11 @@ public class TeamListMenu extends TeamMenu {
             page = new Page(playerName, headSlots.size(), teams);
             cacheManager.addPage(page);
         }
-        ArrayList<List<Team>> pages = page.getPages();
+        List<List<Team>> pages = page.getPages();
         
         emptyCases(inventory, this.menuSlots, 0);
         Integer slotIndex = 0;
-        for(Team team : pages.get(page.getCurrentPage())){
+        for(Team team : pages.get(pageId)){
             String teamOwnerName = team.getTeamOwnerName();
             String teamPrefix = team.getTeamPrefix();
             List<String> teamMembers = team.getMembersName();
@@ -115,8 +116,9 @@ public class TeamListMenu extends TeamMenu {
     }
 
 
-    public void openMenu(){
-        this.open(createInventory(viewer.getName()));
+    @Override
+    public void openMenu(int pageId){
+        this.open(createInventory(viewer.getName(), pageId));
     }
 
 
@@ -127,18 +129,18 @@ public class TeamListMenu extends TeamMenu {
         
         if (clickEvent.getCurrentItem() != null){
             if (Buttons.PREVIOUS_TEAM_LIST_BUTTON.isClickedButton(clickEvent)){
-                Page page = cacheManager.getPage(playerName);
-                page.setCurrentPage(page.getCurrentPage()-1);
+                Page page = cacheManager.getPage(playerName)
+                    .previousPage();
                 cacheManager.replacePage(page);
-                new TeamListMenu(player).openMenu();
+                new TeamListMenu(player, previousMenu).openMenu(page.getCurrentPage());
             }else if (Buttons.NEXT_TEAM_LIST_BUTTON.isClickedButton(clickEvent)){
-                Page page = cacheManager.getPage(playerName);
-                page.setCurrentPage(page.getCurrentPage()+1);
+                Page page = cacheManager.getPage(playerName)
+                    .nextPage();
                 cacheManager.replacePage(page);
-                new TeamListMenu(player).openMenu();
+                new TeamListMenu(player, previousMenu).openMenu(page.getCurrentPage());
             }else if (Buttons.CLOSE_TEAM_LIST_MENU_BUTTON.isClickedButton(clickEvent)){
                 cacheManager.removePage(cacheManager.getPage(playerName));
-                new AdminMenu(player).openMenu();
+                previousMenu.openMenu();
             }
         }
         clickEvent.setCancelled(true);
@@ -146,5 +148,16 @@ public class TeamListMenu extends TeamMenu {
 
 
     @Override
-    public void onClose(InventoryCloseEvent closeEvent) {}
+    public void onClose(InventoryCloseEvent closeEvent) {
+        Player player = (Player) closeEvent.getPlayer();
+        String playerName = player.getName();
+
+        if (cacheManager.containsPage(playerName)){
+            cacheManager.removePage(cacheManager.getPage(playerName));
+        }
+    }
+
+
+    @Override
+    public void openMenu() {}
 }

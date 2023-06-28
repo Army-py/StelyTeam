@@ -10,6 +10,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 
 import fr.army.stelyteam.menu.Buttons;
+import fr.army.stelyteam.menu.FixedMenu;
 import fr.army.stelyteam.menu.Menus;
 import fr.army.stelyteam.menu.TeamMenu;
 import fr.army.stelyteam.team.Team;
@@ -18,14 +19,15 @@ import fr.army.stelyteam.utils.TemporaryActionNames;
 import fr.army.stelyteam.utils.builder.ItemBuilder;
 
 
-public class CreateTeamMenu extends TeamMenu {
+public class CreateTeamMenu extends FixedMenu {
 
 
-    public CreateTeamMenu(Player viewer){
+    public CreateTeamMenu(Player viewer, TeamMenu previousMenu) {
         super(
             viewer,
             Menus.CREATE_TEAM_MENU.getName(),
-            Menus.CREATE_TEAM_MENU.getSlots()
+            Menus.CREATE_TEAM_MENU.getSlots(),
+            previousMenu
         );
     }
 
@@ -47,6 +49,7 @@ public class CreateTeamMenu extends TeamMenu {
     }
 
 
+    @Override
     public void openMenu(){
         this.open(createInventory());
     }
@@ -59,7 +62,7 @@ public class CreateTeamMenu extends TeamMenu {
 
         if (Buttons.CREATE_TEAM_BUTTON.isClickedButton(clickEvent)){
             if (plugin.getEconomyManager().checkMoneyPlayer(player, config.getDouble("prices.createTeam"))){
-                new ConfirmMenu(viewer).openMenu();
+                new ConfirmMenu(viewer, this).openMenu();
                 plugin.getCacheManager().addTempAction(
                     new TemporaryAction(
                         playerName,

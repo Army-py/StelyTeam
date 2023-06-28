@@ -10,24 +10,26 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 
 import fr.army.stelyteam.menu.Buttons;
+import fr.army.stelyteam.menu.FixedMenu;
 import fr.army.stelyteam.menu.Menus;
 import fr.army.stelyteam.menu.TeamMenu;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.builder.ItemBuilder;
 
 
-public class PermissionsMenu extends TeamMenu {
+public class PermissionsMenu extends FixedMenu {
 
-    public PermissionsMenu(Player viewer) {
+    public PermissionsMenu(Player viewer, TeamMenu previousMenu) {
         super(
             viewer,
             Menus.PERMISSIONS_MENU.getName(),
-            Menus.PERMISSIONS_MENU.getSlots()
+            Menus.PERMISSIONS_MENU.getSlots(),
+            previousMenu
         );
     }
 
 
-    public Inventory createInventory(Team team) {
+    public Inventory createInventory() {
         Inventory inventory = Bukkit.createInventory(this, this.menuSlots, this.menuName);
 
         emptyCases(inventory, this.menuSlots, 0);
@@ -73,8 +75,9 @@ public class PermissionsMenu extends TeamMenu {
     }
 
 
-    public void openMenu(Team team) {
-        this.open(createInventory(team));
+    @Override
+    public void openMenu() {
+        this.open(createInventory());
     }
 
 
@@ -87,7 +90,8 @@ public class PermissionsMenu extends TeamMenu {
 
         // Fermeture ou retour en arrière de l'inventaire
         if (Buttons.CLOSE_PERMISSIONS_MENU_BUTTON.isClickedButton(clickEvent)){
-            new ManageMenu(player).openMenu(team);
+            // new ManageMenu(player, previousMenu).openMenu();
+            previousMenu.openMenu();
             return;
         }
 
@@ -125,7 +129,7 @@ public class PermissionsMenu extends TeamMenu {
                     team.insertAssignement(permission, defaultRankId);
                 }
             }else return;
-            new PermissionsMenu(player).openMenu(team);
+            new PermissionsMenu(player, previousMenu).openMenu();
             team.refreshTeamMembersInventory(playerName);
         }
     }

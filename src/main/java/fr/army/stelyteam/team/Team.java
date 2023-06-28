@@ -13,8 +13,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.InventoryView;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.menu.TeamMenu;
 import fr.army.stelyteam.menu.impl.AdminMenu;
 import fr.army.stelyteam.menu.impl.EditAlliancesMenu;
 import fr.army.stelyteam.menu.impl.EditMembersMenu;
@@ -278,32 +280,35 @@ public class Team {
         for (Member member : this.teamMembers) {
             if (member.getMemberName().equals(authorName)) continue;
 
-            Player player = Bukkit.getPlayer(member.getMemberName());
+            Player player = Bukkit.getPlayer(member.getUuid());
             if (player != null) {
                 if (!config.getConfigurationSection("inventoriesName").getValues(true).containsValue(player.getOpenInventory().getTitle())){
                     continue;
                 }
                 
-                String openInventoryTitle = player.getOpenInventory().getTitle();
-                if (openInventoryTitle.equals(config.getString("inventoriesName.admin"))){
-                    new AdminMenu(player).openMenu();
-                }else if (openInventoryTitle.equals(config.getString("inventoriesName.manage"))){
-                    new ManageMenu(player).openMenu(this);
-                }else if (openInventoryTitle.equals(config.getString("inventoriesName.member"))){
-                    new MemberMenu(player).openMenu(this);
-                }else if (openInventoryTitle.equals(config.getString("inventoriesName.upgradeTotalMembers"))){
-                    new UpgradeMembersMenu(player).openMenu(this);
-                }else if (openInventoryTitle.equals(config.getString("inventoriesName.editMembers"))){
-                    new EditMembersMenu(player).openMenu(this);
-                }else if (openInventoryTitle.equals(config.getString("inventoriesName.teamMembers"))){
-                    new MembersMenu(player).openMenu(this);
-                }else if (openInventoryTitle.equals(config.getString("inventoriesName.permissions"))){
-                    new PermissionsMenu(player).openMenu(this);
-                }else if (openInventoryTitle.equals(config.getString("inventoriesName.storageDirectory"))){
-                    new StorageDirectoryMenu(player).openMenu(this);
-                }else if (openInventoryTitle.equals(config.getString("inventoriesName.editAlliances"))){
-                    new EditAlliancesMenu(player).openMenu(this);
+                InventoryView inventoryView = player.getOpenInventory();
+                if (inventoryView.getTopInventory().getHolder() instanceof TeamMenu){
+                    ((TeamMenu) inventoryView.getTopInventory().getHolder()).openMenu();
                 }
+                // if (openInventoryTitle.equals(config.getString("inventoriesName.admin"))){
+                //     new AdminMenu(player).openMenu(null);
+                // }else if (openInventoryTitle.equals(config.getString("inventoriesName.manage"))){
+                //     new ManageMenu(player).openMenu(this);
+                // }else if (openInventoryTitle.equals(config.getString("inventoriesName.member"))){
+                //     new MemberMenu(player).openMenu(this);
+                // }else if (openInventoryTitle.equals(config.getString("inventoriesName.upgradeTotalMembers"))){
+                //     new UpgradeMembersMenu(player).openMenu(this);
+                // }else if (openInventoryTitle.equals(config.getString("inventoriesName.editMembers"))){
+                //     new EditMembersMenu(player).openMenu(this);
+                // }else if (openInventoryTitle.equals(config.getString("inventoriesName.teamMembers"))){
+                //     new MembersMenu(player).openMenu(this);
+                // }else if (openInventoryTitle.equals(config.getString("inventoriesName.permissions"))){
+                //     new PermissionsMenu(player).openMenu(this);
+                // }else if (openInventoryTitle.equals(config.getString("inventoriesName.storageDirectory"))){
+                //     new StorageDirectoryMenu(player).openMenu(this);
+                // }else if (openInventoryTitle.equals(config.getString("inventoriesName.editAlliances"))){
+                //     new EditAlliancesMenu(player).openMenu(this);
+                // }
             }
         }
     }

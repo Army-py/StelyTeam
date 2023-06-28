@@ -14,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import fr.army.stelyteam.conversation.ConvAddMoney;
 import fr.army.stelyteam.conversation.ConvWithdrawMoney;
 import fr.army.stelyteam.menu.Buttons;
+import fr.army.stelyteam.menu.FixedMenu;
 import fr.army.stelyteam.menu.Menus;
 import fr.army.stelyteam.menu.TeamMenu;
 import fr.army.stelyteam.team.Team;
@@ -28,7 +29,7 @@ import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 
 
-public class MemberMenu extends TeamMenu {
+public class MemberMenu extends FixedMenu {
 
     final DatabaseManager mySqlManager = plugin.getDatabaseManager();
     final CacheManager cacheManager = plugin.getCacheManager();
@@ -36,16 +37,17 @@ public class MemberMenu extends TeamMenu {
     final ConversationBuilder conversationBuilder = plugin.getConversationBuilder();
     final ColorsBuilder colorsBuilder = plugin.getColorsBuilder();
 
-    public MemberMenu(Player viewer){
+    public MemberMenu(Player viewer, TeamMenu previousMenu) {
         super(
             viewer,
             Menus.MEMBER_MENU.getName(),
-            Menus.MEMBER_MENU.getSlots()
+            Menus.MEMBER_MENU.getSlots(),
+            previousMenu
         );
     }
 
 
-    public Inventory createInventory(Team team, String playerName) {
+    public Inventory createInventory(String playerName) {
         String teamName = team.getTeamName();
         String teamPrefix = team.getTeamPrefix();
         String teamOwner = team.getTeamOwnerName();
@@ -114,8 +116,9 @@ public class MemberMenu extends TeamMenu {
     }
 
 
-    public void openMenu(Team team){
-        this.open(createInventory(team, viewer.getName()));
+    @Override
+    public void openMenu(){
+        this.open(createInventory(viewer.getName()));
     }
 
 
@@ -137,15 +140,15 @@ public class MemberMenu extends TeamMenu {
                     || plugin.playerHasPermissionInSection(playerName, team, "manage")
                     || plugin.playerHasPermissionInSection(playerName, team, "editMembers")
                     || plugin.playerHasPermissionInSection(playerName, team, "editAlliances")){
-                new AdminMenu(player).openMenu();
+                new AdminMenu(player, this).openMenu();
             }else{
                 player.closeInventory();
             }
         }else if (Buttons.TEAM_MEMBERS_BUTTON.isClickedButton(clickEvent)){
-            new MembersMenu(player).openMenu(team);
+            new MembersMenu(player, this).openMenu();
         
         }else if (Buttons.TEAM_ALLIANCES_BUTTON.isClickedButton(clickEvent)){
-            new AlliancesMenu(player).openMenu(team);
+            new AlliancesMenu(player, this).openMenu();
         
         }else if (Buttons.ADD_MONEY_TEAM_BANK_BUTTON.isClickedButton(clickEvent)){
             if (!team.isUnlockedTeamBank()) {
@@ -165,12 +168,12 @@ public class MemberMenu extends TeamMenu {
             player.closeInventory();
             if (!team.isTeamOwner(playerName)){
                 cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.LEAVE_TEAM, team));
-                new ConfirmMenu(player).openMenu();
+                new ConfirmMenu(player, this).openMenu();
             }else {
                 player.sendMessage(messageManager.getMessage("other.owner_cant_leave_team"));
             }
         }else if (Buttons.STORAGE_DIRECTORY_BUTTON.isClickedButton(clickEvent)){
-            new StorageDirectoryMenu(player).openMenu(team);
+            new StorageDirectoryMenu(player, this).openMenu();
         }
     }
 

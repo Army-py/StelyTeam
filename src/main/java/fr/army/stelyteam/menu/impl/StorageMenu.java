@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 
 import fr.army.stelyteam.menu.Buttons;
 import fr.army.stelyteam.menu.Menus;
+import fr.army.stelyteam.menu.PagedMenu;
 import fr.army.stelyteam.menu.TeamMenu;
 import fr.army.stelyteam.team.Storage;
 import fr.army.stelyteam.team.Team;
@@ -21,20 +22,21 @@ import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.serializer.ItemStackSerializer;
 
 
-public class StorageMenu extends TeamMenu {
+public class StorageMenu extends PagedMenu {
 
     final CacheManager cacheManager = plugin.getCacheManager();
     final ItemStackSerializer serializeManager = plugin.getSerializeManager();
 
-    public StorageMenu(Player viewer){
+    public StorageMenu(Player viewer, TeamMenu previousMenu) {
         super(
             viewer,
-            Menus.STORAGE_MENU.getSlots()
+            Menus.STORAGE_MENU.getSlots(),
+            previousMenu
         );
     }
 
 
-    public Inventory createInventory(Team team, int storageId) {
+    public Inventory createInventory(int storageId) {
         // String inventoryName = config.getString(config.getString("inventories.storageDirectory."+plugin.getStorageFromId(storageId)+".itemName"));
         String inventoryName = Menus.getStorageMenuName(storageId);
         UUID teamUuid = team.getTeamUuid();
@@ -76,8 +78,9 @@ public class StorageMenu extends TeamMenu {
     }
 
 
-    public void openMenu(Team team, Integer storageId){
-        this.open(createInventory(team, storageId));
+    @Override
+    public void openMenu(int storageId){
+        this.open(createInventory(storageId));
     }
 
 
@@ -91,17 +94,18 @@ public class StorageMenu extends TeamMenu {
         if (clickEvent.getCurrentItem() != null){
             if (Buttons.PREVIOUS_STORAGE_BUTTON.isClickedButton(clickEvent)){
                 clickEvent.setCancelled(true);
-                new StorageMenu(player).openMenu(team, storageId-1);
+                new StorageMenu(player, previousMenu).openMenu(storageId-1);
                 return;
             }else if (Buttons.NEXT_STORAGE_BUTTON.isClickedButton(clickEvent)){
                 clickEvent.setCancelled(true);
-                new StorageMenu(player).openMenu(team, storageId+1);
+                new StorageMenu(player, previousMenu).openMenu(storageId+1);
             }else{
                 if (Buttons.CLOSE_STORAGE_MENU_BUTTON.isClickedButton(clickEvent)){
                     clickEvent.setCancelled(true);
                     if (clickEvent.getCursor().getType().equals(Material.AIR)){
                         // player.openInventory(inventoryBuilder.createStorageDirectoryInventory(team));
-                        new StorageDirectoryMenu(player).openMenu(team);
+                        // new StorageDirectoryMenu(player, this).openMenu();
+                        previousMenu.openMenu();
                         return;
                     }else return;
                 }
@@ -145,4 +149,8 @@ public class StorageMenu extends TeamMenu {
         }
         return null;
     }
+
+
+    @Override
+    public void openMenu() {}
 }

@@ -20,6 +20,7 @@ import org.bukkit.persistence.PersistentDataType;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.menu.Buttons;
+import fr.army.stelyteam.menu.FixedMenu;
 import fr.army.stelyteam.menu.Menus;
 import fr.army.stelyteam.menu.TeamMenu;
 import fr.army.stelyteam.team.Alliance;
@@ -34,7 +35,7 @@ import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
 
 
-public class AlliancesMenu extends TeamMenu {
+public class AlliancesMenu extends FixedMenu {
 
     DatabaseManager mySqlManager = plugin.getDatabaseManager();
     SQLiteDataManager sqliteManager = plugin.getSQLiteManager();
@@ -42,24 +43,26 @@ public class AlliancesMenu extends TeamMenu {
     CacheManager cacheManager = plugin.getCacheManager();
     MessageManager messageManager = plugin.getMessageManager();
 
-    public AlliancesMenu(Player viewer){
+    public AlliancesMenu(Player viewer, TeamMenu previousMenu){
         super(
             viewer,
             Menus.TEAM_ALLIANCES_MENU.getName(),
-            Menus.TEAM_ALLIANCES_MENU.getSlots()
+            Menus.TEAM_ALLIANCES_MENU.getSlots(),
+            previousMenu
         );
     }
 
-    public AlliancesMenu(Player viewer, String menuName){
+    public AlliancesMenu(Player viewer, String menuName, TeamMenu previousMenu){
         super(
             viewer,
             menuName,
-            Menus.TEAM_ALLIANCES_MENU.getSlots()
+            Menus.TEAM_ALLIANCES_MENU.getSlots(),
+            previousMenu
         );
     }
 
 
-    public Inventory createInventory(Team team, String playerName) {
+    public Inventory createInventory(String playerName) {
         Inventory inventory = Bukkit.createInventory(this, this.menuSlots, this.menuName);
 
         emptyCases(inventory, this.menuSlots, 0);
@@ -124,8 +127,9 @@ public class AlliancesMenu extends TeamMenu {
     }
 
 
-    public void openMenu(Team team){
-        this.open(createInventory(team, viewer.getName()));
+    @Override
+    public void openMenu(){
+        this.open(createInventory(viewer.getName()));
     }
 
 
@@ -134,7 +138,6 @@ public class AlliancesMenu extends TeamMenu {
         Player player = (Player) clickEvent.getWhoClicked();
         String playerName = player.getName();
         Material material = clickEvent.getCurrentItem().getType();
-        Team team = Team.init(player);
 
         if (clickEvent.getView().getTitle().equals(Menus.REMOVE_ALLIANCES_MENU.getName())){
             if (material.equals(Material.getMaterial("PLAYER_HEAD"))){
@@ -160,15 +163,16 @@ public class AlliancesMenu extends TeamMenu {
                                 team
                             )
                         );
-                    new ConfirmMenu(player).openMenu();
+                    new ConfirmMenu(player, this).openMenu();
                 }
             }else if (Buttons.CLOSE_TEAM_ALLIANCES_MENU_BUTTON.isClickedButton(clickEvent)){
-                new EditAlliancesMenu(player).openMenu(team);
+                new EditAlliancesMenu(player, this).openMenu();
             }
 
         }else{
             if (Buttons.CLOSE_TEAM_ALLIANCES_MENU_BUTTON.isClickedButton(clickEvent)){
-                new MemberMenu(player).openMenu(Team.initFromPlayerName(playerName));
+                // new MemberMenu(player, this).openMenu();
+                previousMenu.openMenu();
             }
         }
     }
