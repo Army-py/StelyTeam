@@ -127,12 +127,10 @@ public class MembersMenu extends FixedMenu {
                     new ConfirmMenu(player, this).openMenu();
                 }
             }else if (Buttons.CLOSE_TEAM_MEMBERS_MENU_BUTTON.isClickedButton(clickEvent)){
-                // new EditMembersMenu(player).openMenu(team);
-                new EditMembersMenu(player, this).openMenu();
+                previousMenu.openMenu();
             }
         }else{
             if (Buttons.CLOSE_TEAM_MEMBERS_MENU_BUTTON.isClickedButton(clickEvent)){
-                // new MemberMenu(player, this).openMenu();
                 previousMenu.openMenu();
             }
         }

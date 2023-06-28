@@ -17,15 +17,6 @@ import org.bukkit.inventory.InventoryView;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.menu.TeamMenu;
-import fr.army.stelyteam.menu.impl.AdminMenu;
-import fr.army.stelyteam.menu.impl.EditAlliancesMenu;
-import fr.army.stelyteam.menu.impl.EditMembersMenu;
-import fr.army.stelyteam.menu.impl.ManageMenu;
-import fr.army.stelyteam.menu.impl.MemberMenu;
-import fr.army.stelyteam.menu.impl.MembersMenu;
-import fr.army.stelyteam.menu.impl.PermissionsMenu;
-import fr.army.stelyteam.menu.impl.StorageDirectoryMenu;
-import fr.army.stelyteam.menu.impl.UpgradeMembersMenu;
 import fr.army.stelyteam.utils.manager.CacheManager;
 
 public class Team {
@@ -191,9 +182,8 @@ public class Team {
 
 
     public void insertAlliance(Team teamAlliance){
-        Alliance alliance = new Alliance(teamAlliance.getTeamUuid(), getCurrentDate());
-        this.teamAlliances.add(alliance);
-        teamAlliance.getTeamAlliances().add(alliance);
+        this.teamAlliances.add(new Alliance(teamAlliance.getTeamUuid(), getCurrentDate()));
+        teamAlliance.getTeamAlliances().add(new Alliance(getTeamUuid(), getCurrentDate()));
         plugin.getDatabaseManager().insertAlliance(teamUuid, teamAlliance.getTeamUuid());
     }
 
@@ -278,7 +268,7 @@ public class Team {
 
     public void refreshTeamMembersInventory(String authorName) {
         for (Member member : this.teamMembers) {
-            if (member.getMemberName().equals(authorName)) continue;
+            // if (member.getMemberName().equals(authorName)) continue;
 
             Player player = Bukkit.getPlayer(member.getUuid());
             if (player != null) {
@@ -289,6 +279,7 @@ public class Team {
                 InventoryView inventoryView = player.getOpenInventory();
                 if (inventoryView.getTopInventory().getHolder() instanceof TeamMenu){
                     ((TeamMenu) inventoryView.getTopInventory().getHolder()).openMenu();
+                    System.out.println("refreshed");
                 }
                 // if (openInventoryTitle.equals(config.getString("inventoriesName.admin"))){
                 //     new AdminMenu(player).openMenu(null);

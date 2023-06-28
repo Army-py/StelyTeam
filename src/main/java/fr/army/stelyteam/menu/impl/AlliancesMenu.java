@@ -167,7 +167,8 @@ public class AlliancesMenu extends FixedMenu {
                     new ConfirmMenu(player, this).openMenu();
                 }
             }else if (Buttons.CLOSE_TEAM_ALLIANCES_MENU_BUTTON.isClickedButton(clickEvent)){
-                new EditAlliancesMenu(player, this).openMenu();
+                // new EditAlliancesMenu(player, previousMenu).openMenu();
+                previousMenu.openMenu();
             }
 
         }else{
