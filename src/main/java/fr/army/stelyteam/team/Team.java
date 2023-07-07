@@ -73,33 +73,38 @@ public class Team {
     }
 
     public static Team init(String teamName){
-        return cacheManager.getTeamByName(teamName) == null 
-            ? plugin.getDatabaseManager().getTeamFromTeamName(teamName) 
-            : cacheManager.getTeamByName(teamName);
+        // return cacheManager.getTeamByName(teamName) == null 
+        //     ? plugin.getDatabaseManager().getTeamFromTeamName(teamName) 
+        //     : cacheManager.getTeamByName(teamName);
+        return plugin.getDatabaseManager().getTeamFromTeamName(teamName);
     }
 
     public static Team init(Player player){
-        return cacheManager.getTeamByPlayerName(player.getName()) == null 
-            ? plugin.getDatabaseManager().getTeamFromPlayerName(player.getName()) 
-            : cacheManager.getTeamByPlayerName(player.getName());
+        // return cacheManager.getTeamByPlayerName(player.getName()) == null 
+        //     ? plugin.getDatabaseManager().getTeamFromPlayerName(player.getName()) 
+        //     : cacheManager.getTeamByPlayerName(player.getName());
+        return plugin.getDatabaseManager().getTeamFromPlayerName(player.getName());
     }
 
     public static Team initFromPlayerName(String playerName){
-        return cacheManager.getTeamByPlayerName(playerName) == null 
-            ? plugin.getDatabaseManager().getTeamFromPlayerName(playerName) 
-            : cacheManager.getTeamByPlayerName(playerName);
+        // return cacheManager.getTeamByPlayerName(playerName) == null 
+        //     ? plugin.getDatabaseManager().getTeamFromPlayerName(playerName) 
+        //     : cacheManager.getTeamByPlayerName(playerName);
+        return plugin.getDatabaseManager().getTeamFromPlayerName(playerName);
     }
 
     public static Team initFromPlayerUuid(UUID playerUuid){
-        return cacheManager.getTeamByPlayerUuid(playerUuid) == null 
-            ? plugin.getDatabaseManager().getTeamFromPlayerName(plugin.getSQLiteManager().getPlayerName(playerUuid)) 
-            : cacheManager.getTeamByPlayerUuid(playerUuid);
+        // return cacheManager.getTeamByPlayerUuid(playerUuid) == null 
+        //     ? plugin.getDatabaseManager().getTeamFromPlayerName(plugin.getSQLiteManager().getPlayerName(playerUuid)) 
+        //     : cacheManager.getTeamByPlayerUuid(playerUuid);
+        return plugin.getDatabaseManager().getTeamFromPlayerName(plugin.getSQLiteManager().getPlayerName(playerUuid));
     }
 
     public static Team init(UUID teamUuid){
-        return cacheManager.getTeamByUuid(teamUuid) == null 
-            ? plugin.getDatabaseManager().getTeamFromTeamUuid(teamUuid) 
-            : cacheManager.getTeamByUuid(teamUuid);
+        // return cacheManager.getTeamByUuid(teamUuid) == null 
+        //     ? plugin.getDatabaseManager().getTeamFromTeamUuid(teamUuid) 
+        //     : cacheManager.getTeamByUuid(teamUuid);
+        return plugin.getDatabaseManager().getTeamFromTeamUuid(teamUuid);
     }
 
     public static Team getFromCache(Player player){
