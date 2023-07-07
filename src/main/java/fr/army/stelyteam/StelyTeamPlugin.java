@@ -84,6 +84,8 @@ public class StelyTeamPlugin extends JavaPlugin {
         final ListenerLoader listenerLoader = new ListenerLoader();
         listenerLoader.registerListeners(this);
 
+        cacheAllTeams();
+
         getLogger().info("StelyTeam ON");
     }
 
@@ -126,6 +128,15 @@ public class StelyTeamPlugin extends JavaPlugin {
     }
 
 
+    private void cacheAllTeams(){
+        for (Player player : Bukkit.getOnlinePlayers()){
+            final Team team = Team.init(player);
+            if (team == null) return;
+            cacheManager.addTeam(team);
+        }
+    }
+
+
     public void openMainInventory(Player player, Team team){
         String playerName = player.getName();
 
@@ -135,7 +146,8 @@ public class StelyTeamPlugin extends JavaPlugin {
             new AdminMenu(player, null).openMenu();
         }else if (playerHasPermissionInSection(playerName, team, "manage")
             || playerHasPermissionInSection(playerName, team, "editMembers")
-            || playerHasPermissionInSection(playerName, team, "editAlliances")){
+            || playerHasPermissionInSection(playerName, team, "editAlliances")
+            || playerHasPermission(playerName, team, "teamList")){
             new AdminMenu(player, null).openMenu();
         }else{
             new MemberMenu(player, null).openMenu();
@@ -205,6 +217,7 @@ public class StelyTeamPlugin extends JavaPlugin {
 
 
     public boolean playerHasPermissionInSection(String playerName, Team team, String sectionName){
+        if (sectionName.equals("close")) return true;
         for (String section : config.getConfigurationSection("inventories." + sectionName).getKeys(false)){
             if (playerHasPermission(playerName, team, section) && !section.equals("close")){
                 return true;
