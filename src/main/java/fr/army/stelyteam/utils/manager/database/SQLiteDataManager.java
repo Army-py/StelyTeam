@@ -11,6 +11,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import org.jetbrains.annotations.NotNull;
 
 public class SQLiteDataManager {
 
@@ -292,28 +293,32 @@ public class SQLiteDataManager {
     }
 
 
-    public UUID getUUID(String playername){
-        if(isConnected()){
-            try {
-                PreparedStatement query = connection.prepareStatement("SELECT uuid FROM players WHERE playername = ?");
-                query.setString(1, playername);
-                ResultSet result = query.executeQuery();
-                boolean isParticipant = result.next();
-                UUID uuid = null;
-                if(isParticipant){
-                    uuid = UUID.fromString(result.getString("uuid"));
-                }
-                query.close();
-                // if (uuid != null)
-                //     System.out.println(uuid.toString());
-                // else
-                //     System.out.println("null");
-                return uuid;
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+    // Should be not null
+    @NotNull
+    public UUID getUUID(String playername) {
+        if (!isConnected()) {
+            throw new IllegalStateException("Can not use the this database while the connection is not established");
         }
-        return null;
+        try {
+            PreparedStatement query = connection.prepareStatement("SELECT uuid FROM players WHERE playername = ?");
+            query.setString(1, playername);
+            ResultSet result = query.executeQuery();
+            boolean isParticipant = result.next();
+            if (!isParticipant) {
+                throw new RuntimeException("The uuid of '" + playername + "' is not stored in the database");
+            }
+            final UUID uuid = UUID.fromString(result.getString("uuid"));
+            query.close();
+
+            // if (uuid != null)
+            //     System.out.println(uuid.toString());
+            // else
+            //     System.out.println("null");
+
+            return uuid;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public String getPlayerName(UUID uuid){
