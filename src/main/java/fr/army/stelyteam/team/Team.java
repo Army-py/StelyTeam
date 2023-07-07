@@ -1,23 +1,16 @@
 package fr.army.stelyteam.team;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-
+import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.menu.TeamMenu;
+import fr.army.stelyteam.utils.manager.CacheManager;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryView;
 
-import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.menu.TeamMenu;
-import fr.army.stelyteam.utils.manager.CacheManager;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class Team {
 
@@ -447,7 +440,21 @@ public class Team {
         this.teamPrefix = teamPrefix;
     }
 
-    private String getCurrentDate(){
+    private String getCurrentDate() {
         return new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime());
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Team team)) {
+            return false;
+        }
+        return this.teamUuid.equals(team.teamUuid);
+    }
+
+    @Override
+    public int hashCode() {
+        return teamUuid.hashCode();
+    }
+
 }
