@@ -87,8 +87,6 @@ public class StorageMenu extends PagedMenu {
     @Override
     public void onClick(InventoryClickEvent clickEvent) {
         Player player = (Player) clickEvent.getWhoClicked();
-        String playerName = player.getName();
-        Team team = Team.initFromPlayerName(playerName);
         Integer storageId = getStorageId(clickEvent.getView().getTitle());
         
         if (clickEvent.getCurrentItem() != null){
@@ -105,6 +103,7 @@ public class StorageMenu extends PagedMenu {
                     if (clickEvent.getCursor().getType().equals(Material.AIR)){
                         // player.openInventory(inventoryBuilder.createStorageDirectoryInventory(team));
                         // new StorageDirectoryMenu(player, this).openMenu();
+                        previousMenu.setViewer(player);
                         previousMenu.openMenu();
                         return;
                     }else return;

@@ -144,20 +144,21 @@ public class Team {
 
     public void updateTeamName(String newTeamName){
         plugin.getDatabaseManager().updateTeamName(this.teamUuid, newTeamName);
+        cacheManager.addTeam(null);
 
         this.teamName = newTeamName;
     }
 
 
     public void updateTeamPrefix(String newPrefix){
-        this.teamPrefix = newPrefix;
         plugin.getDatabaseManager().updateTeamPrefix(teamUuid, newPrefix);
+        this.teamPrefix = newPrefix;
     }
 
 
     public void updateTeamDescription(String newDescription){
-        this.teamDescription = newDescription;
         plugin.getDatabaseManager().updateTeamDescription(teamUuid, newDescription);
+        this.teamDescription = newDescription;
     }
 
 
@@ -168,8 +169,8 @@ public class Team {
 
 
     public void unlockedTeamBank(){
-        this.unlockedTeamBank = true;
         plugin.getDatabaseManager().updateUnlockedTeamBank(teamUuid);
+        this.unlockedTeamBank = true;
     }
 
 
@@ -284,7 +285,7 @@ public class Team {
                 InventoryView inventoryView = player.getOpenInventory();
                 if (inventoryView.getTopInventory().getHolder() instanceof TeamMenu){
                     ((TeamMenu) inventoryView.getTopInventory().getHolder()).openMenu();
-                    System.out.println("refreshed");
+                    // System.out.println("refreshed");
                 }
                 // if (openInventoryTitle.equals(config.getString("inventoriesName.admin"))){
                 //     new AdminMenu(player).openMenu(null);

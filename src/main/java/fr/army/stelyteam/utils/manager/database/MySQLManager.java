@@ -890,7 +890,8 @@ public class MySQLManager extends DatabaseManager {
 
     @Override
     public List<Member> getTeamMembers(UUID teamUuid){
-        List<Member> teamMembers = Collections.synchronizedList(new ArrayList<>());
+        // List<Member> teamMembers = Collections.synchronizedList(new ArrayList<>());
+        List<Member> teamMembers = new ArrayList<>();
         if(isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("SELECT p.playerName, p.teamRank, p.joinDate FROM player AS p INNER JOIN team AS t ON p.teamId = t.teamId WHERE t.teamUuid = ? ORDER BY p.teamRank ASC, p.playerName ASC;");
@@ -1072,34 +1073,34 @@ public class MySQLManager extends DatabaseManager {
 
 
 
-    public List<Member> get(@NotNull String table, @NotNull String[] columns, @Nullable String[] conditions, @Nullable String[] orders){
-        List<Member> teamMembers = Collections.synchronizedList(new ArrayList<>());
-        if(isConnected()){
-            try {
-                PreparedStatement query = connection.prepareStatement("SELECT p.playerName, p.teamRank, p.joinDate FROM player AS p INNER JOIN team AS t ON p.teamId = t.teamId WHERE t.teamUuid = ? ORDER BY p.teamRank ASC, p.playerName ASC;");
-                // query.setString(1, teamUuid.toString());
-                ResultSet result = query.executeQuery();
-                while(result.next()){
-                    teamMembers.add(
-                        new Member(
-                            result.getString("playerName"),
-                            result.getInt("teamRank"),
-                            result.getString("joinDate"),
-                            StelyTeamPlugin.getPlugin().getSQLiteManager().getUUID(result.getString("playerName"))
-                        )
-                    );
-                }
-                query.close();
+    // public List<Member> get(@NotNull String table, @NotNull String[] columns, @Nullable String[] conditions, @Nullable String[] orders){
+    //     List<Member> teamMembers = Collections.synchronizedList(new ArrayList<>());
+    //     if(isConnected()){
+    //         try {
+    //             PreparedStatement query = connection.prepareStatement("SELECT p.playerName, p.teamRank, p.joinDate FROM player AS p INNER JOIN team AS t ON p.teamId = t.teamId WHERE t.teamUuid = ? ORDER BY p.teamRank ASC, p.playerName ASC;");
+    //             // query.setString(1, teamUuid.toString());
+    //             ResultSet result = query.executeQuery();
+    //             while(result.next()){
+    //                 teamMembers.add(
+    //                     new Member(
+    //                         result.getString("playerName"),
+    //                         result.getInt("teamRank"),
+    //                         result.getString("joinDate"),
+    //                         StelyTeamPlugin.getPlugin().getSQLiteManager().getUUID(result.getString("playerName"))
+    //                     )
+    //                 );
+    //             }
+    //             query.close();
 
 
-                SelectOperator select = new SelectOperator(table, columns, conditions, orders);
+    //             SelectOperator select = new SelectOperator(table, columns, conditions, orders);
 
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return teamMembers;
-    }
+    //         } catch (SQLException e) {
+    //             e.printStackTrace();
+    //         }
+    //     }
+    //     return teamMembers;
+    // }
 
 
 

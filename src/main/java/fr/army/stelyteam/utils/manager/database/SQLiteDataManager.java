@@ -304,6 +304,10 @@ public class SQLiteDataManager {
                     uuid = UUID.fromString(result.getString("uuid"));
                 }
                 query.close();
+                // if (uuid != null)
+                //     System.out.println(uuid.toString());
+                // else
+                //     System.out.println("null");
                 return uuid;
             } catch (SQLException e) {
                 e.printStackTrace();

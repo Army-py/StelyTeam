@@ -28,9 +28,7 @@ public class PlayerQuitListener implements Listener{
         }
 
         Team team = Team.getFromCache(player);
-        if (team == null){
-            return;
-        }
+        if (team == null) return;
 
         int count = 0;
         for (Member member : team.getTeamMembers()){

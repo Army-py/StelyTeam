@@ -203,7 +203,7 @@ public class EditMembersMenu extends FixedMenu {
                 }
             }else return;
 
-            new EditMembersMenu(player, this).openMenu();
+            new EditMembersMenu(player, previousMenu).openMenu();
             team.refreshTeamMembersInventory(playerName);
         }
     }

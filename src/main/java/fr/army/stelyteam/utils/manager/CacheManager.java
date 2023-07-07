@@ -24,9 +24,11 @@ public class CacheManager {
     // {authorName, currentPage, maxElementsPerPage, teams}
     private Set<Page> cachedPages = new HashSet<Page>();
 
-    private Set<Team> cachedTeams = Collections.synchronizedSet(new HashSet<Team>());
+    // private Set<Team> cachedTeams = Collections.synchronizedSet(new HashSet<Team>());
+    private Set<Team> cachedTeams = new HashSet<Team>();
 
-    private Set<UUID> cachedTeamPlayers = Collections.synchronizedSet(new HashSet<UUID>());
+    // private Set<UUID> cachedTeamPlayers = Collections.synchronizedSet(new HashSet<UUID>());
+    private Set<UUID> cachedTeamPlayers = new HashSet<UUID>();
 
 
 

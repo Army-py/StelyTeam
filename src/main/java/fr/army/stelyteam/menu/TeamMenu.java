@@ -32,7 +32,7 @@ public abstract class TeamMenu implements ITeamMenu {
 
     protected final TeamMenu previousMenu;
     
-    protected final Player viewer;
+    protected Player viewer;
     protected final String menuName;
     protected final int menuSlots;
     
@@ -149,6 +149,10 @@ public abstract class TeamMenu implements ITeamMenu {
 
     public TeamMenu getPreviousMenu(){
         return this.previousMenu;
+    }
+
+    public void setViewer(Player viewer){
+        this.viewer = viewer;
     }
 
     @Override
