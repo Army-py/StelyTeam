@@ -141,7 +141,8 @@ public class MemberMenu extends FixedMenu {
             if (team.isTeamOwner(playerName) 
                     || plugin.playerHasPermissionInSection(playerName, team, "manage")
                     || plugin.playerHasPermissionInSection(playerName, team, "editMembers")
-                    || plugin.playerHasPermissionInSection(playerName, team, "editAlliances")){
+                    || plugin.playerHasPermissionInSection(playerName, team, "editAlliances")
+                    || plugin.playerHasPermission(playerName, team, "teamList")){
                 new AdminMenu(player, this).openMenu();
             }else{
                 player.closeInventory();

@@ -57,20 +57,20 @@ public class MembersMenu extends FixedMenu {
         Integer headSlot = 0;
         for(Member member : team.getTeamMembers()){
             String memberName = member.getMemberName();
-            UUID playerUUID = plugin.getSQLiteManager().getUUID(member.getMemberName());
+            UUID playerUUID = plugin.getDatabaseManager().getUUID(member.getMemberName());
             String itemName;
             List<String> lore = new ArrayList<>();
-            OfflinePlayer offlinePlayer;
+            // OfflinePlayer offlinePlayer;
 
-            if (playerUUID == null) offlinePlayer = Bukkit.getOfflinePlayer(memberName);
-            else offlinePlayer = Bukkit.getOfflinePlayer(playerUUID);
+            // if (playerUUID == null) offlinePlayer = Bukkit.getOfflinePlayer(memberName);
+            // else offlinePlayer = Bukkit.getOfflinePlayer(playerUUID);
 
             String memberRank = plugin.getRankFromId(team.getMemberRank(memberName));
             String rankColor = config.getString("ranks." + memberRank + ".color");
             itemName = rankColor + memberName;
             
             lore.add(config.getString("prefixRankLore") + rankColor + config.getString("ranks." + memberRank + ".name"));
-            inventory.setItem(headSlot, ItemBuilder.getPlayerHead(offlinePlayer, itemName, lore));
+            inventory.setItem(headSlot, ItemBuilder.getPlayerHead(playerUUID, itemName, lore));
             headSlot ++;
         }
 
@@ -98,7 +98,7 @@ public class MembersMenu extends FixedMenu {
         String playerName = player.getName();
         String itemName = clickEvent.getCurrentItem().getItemMeta().getDisplayName();
         Material material = clickEvent.getCurrentItem().getType();
-        Team team = Team.init(player);
+        // Team team = Team.init(player);
         String memberName = removeFirstColors(itemName);
 
         if (clickEvent.getView().getTitle().equals(config.getString("inventoriesName.removeMembers"))){

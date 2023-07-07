@@ -24,11 +24,13 @@ import fr.army.stelyteam.utils.builder.ColorsBuilder;
 import fr.army.stelyteam.utils.builder.ItemBuilder;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
 
 
 public class TeamListMenu extends PagedMenu {
 
+    final DatabaseManager databaseManager = plugin.getDatabaseManager();
     final SQLiteDataManager sqliteManager = plugin.getSQLiteManager();
     final CacheManager cacheManager = plugin.getCacheManager();
     final ColorsBuilder colorsBuilder = plugin.getColorsBuilder();
@@ -70,19 +72,19 @@ public class TeamListMenu extends PagedMenu {
             String teamPrefix = team.getTeamPrefix();
             List<String> teamMembers = team.getMembersName();
             teamMembers.remove(teamOwnerName);
-            UUID playerUUID = sqliteManager.getUUID(teamOwnerName);
+            UUID playerUUID = databaseManager.getUUID(teamOwnerName);
             // String itemName = colorsBuilder.replaceColor(teamPrefix);
             String itemName = " ";
             List<String> lore = config.getStringList("teamListLore");
-            OfflinePlayer teamOwner;
+            // OfflinePlayer teamOwner;
             ItemStack item;
 
-            if (!sqliteManager.isRegistered(teamOwnerName)){
-                sqliteManager.registerPlayer(Bukkit.getOfflinePlayer(teamOwnerName));
-            }
+            // if (!sqliteManager.isRegistered(teamOwnerName)){
+            //     sqliteManager.registerPlayer(Bukkit.getOfflinePlayer(teamOwnerName));
+            // }
 
-            if (playerUUID == null) teamOwner = Bukkit.getOfflinePlayer(teamOwnerName);
-            else teamOwner = Bukkit.getOfflinePlayer(playerUUID);
+            // if (playerUUID == null) teamOwner = Bukkit.getOfflinePlayer(teamOwnerName);
+            // else teamOwner = Bukkit.getOfflinePlayer(playerUUID);
             
             lore = replaceInLore(lore, "%OWNER%", teamOwnerName);
             lore = replaceInLore(lore, "%NAME%", team.getTeamName());
@@ -93,7 +95,7 @@ public class TeamListMenu extends PagedMenu {
             lore = replaceInLore(lore, "%MEMBERS%", teamMembers.isEmpty() ? messageManager.getMessageWithoutPrefix("common.no_members") : String.join(", ", teamMembers));
             lore = replaceInLore(lore, "%DESCRIPTION%", colorsBuilder.replaceColor(team.getTeamDescription()));
             
-            item = ItemBuilder.getPlayerHead(teamOwner, itemName, lore);
+            item = ItemBuilder.getPlayerHead(playerUUID, itemName, lore);
 
             inventory.setItem(headSlots.get(slotIndex), item);
             slotIndex ++;

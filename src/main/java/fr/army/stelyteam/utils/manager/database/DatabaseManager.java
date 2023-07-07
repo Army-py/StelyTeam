@@ -7,7 +7,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.team.Alliance;
@@ -145,4 +147,16 @@ public abstract class DatabaseManager {
     public abstract int getTeamId(UUID teamUuid);
 
     public abstract String getCurrentDate();
+
+
+
+    public abstract void registerPlayer(Player player);
+
+    public abstract void registerPlayer(OfflinePlayer player);
+
+    public abstract boolean isRegistered(String playerName);
+
+    public abstract UUID getUUID(String playerName);
+
+    public abstract String getPlayerName(UUID uuid);
 }

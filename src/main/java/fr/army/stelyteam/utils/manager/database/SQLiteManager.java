@@ -16,7 +16,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.team.Alliance;
@@ -853,7 +856,7 @@ public class SQLiteManager extends DatabaseManager {
                             result.getString("playerName"),
                             result.getInt("teamRank"),
                             result.getString("joinDate"),
-                            StelyTeamPlugin.getPlugin().getSQLiteManager().getUUID(result.getString("playerName"))
+                            getUUID(result.getString("playerName"))
                         )
                     );
                 }
@@ -1011,5 +1014,109 @@ public class SQLiteManager extends DatabaseManager {
     @Override
     public String getCurrentDate(){
         return new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime());
+    }
+
+
+
+
+
+    @Override
+    public void registerPlayer(Player player){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("INSERT INTO players VALUES (?, ?)");
+                query.setString(1, player.getUniqueId().toString());
+                query.setString(2, player.getName());
+                query.executeUpdate();
+                query.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    @Override
+    public void registerPlayer(OfflinePlayer player){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("INSERT INTO players VALUES (?, ?)");
+                query.setString(1, player.getUniqueId().toString());
+                query.setString(2, player.getName());
+                query.executeUpdate();
+                query.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    @Override
+    public boolean isRegistered(String playerName){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT playerName FROM players WHERE playerName = ?");
+                query.setString(1, playerName);
+                ResultSet result = query.executeQuery();
+                boolean isParticipant = result.next();
+                query.close();
+                return isParticipant;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+
+    // Should be not null
+    @NotNull
+    @Override
+    public UUID getUUID(String playerName) {
+        if (!isConnected()) {
+            throw new IllegalStateException("Can not use the this database while the connection is not established");
+        }
+        try {
+            PreparedStatement query = connection.prepareStatement("SELECT uuid FROM players WHERE playerName = ?");
+            query.setString(1, playerName);
+            ResultSet result = query.executeQuery();
+            boolean isParticipant = result.next();
+            if (!isParticipant) {
+                throw new RuntimeException("The uuid of '" + playerName + "' is not stored in the database");
+            }
+            final UUID uuid = UUID.fromString(result.getString("uuid"));
+            query.close();
+
+            // if (uuid != null)
+            //     System.out.println(uuid.toString());
+            // else
+            //     System.out.println("null");
+
+            return uuid;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public String getPlayerName(UUID uuid){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT playerName FROM players WHERE uuid = ?");
+                query.setString(1, uuid.toString());
+                ResultSet result = query.executeQuery();
+                boolean isParticipant = result.next();
+                String playerName = null;
+                if(isParticipant){
+                    playerName = result.getString("playerName");
+                }
+                query.close();
+                return playerName;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 }

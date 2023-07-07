@@ -67,16 +67,16 @@ public class EditAlliancesMenu extends FixedMenu {
             Integer teamMembersLelvel = teamAlliance.getImprovLvlMembers();
             Integer teamMembers = teamAlliance.getTeamMembers().size();
             ArrayList<String> allianceMembers = teamAlliance.getMembersName();
-            UUID playerUUID = sqliteManager.getUUID(allianceOwnerName);
+            UUID playerUUID = mySqlManager.getUUID(allianceOwnerName);
             // String itemName = colorsBuilder.replaceColor(alliancePrefix);
             String itemName = " ";
             List<String> lore = config.getStringList("teamAllianceLore");
-            OfflinePlayer allianceOwner;
+            // OfflinePlayer allianceOwner;
             ItemStack item;
 
 
-            if (playerUUID == null) allianceOwner = Bukkit.getOfflinePlayer(allianceOwnerName);
-            else allianceOwner = Bukkit.getOfflinePlayer(playerUUID);
+            // if (playerUUID == null) allianceOwner = Bukkit.getOfflinePlayer(allianceOwnerName);
+            // else allianceOwner = Bukkit.getOfflinePlayer(playerUUID);
 
             
             lore = replaceInLore(lore, "%OWNER%", allianceOwnerName);
@@ -89,7 +89,7 @@ public class EditAlliancesMenu extends FixedMenu {
             lore = replaceInLore(lore, "%DESCRIPTION%", colorsBuilder.replaceColor(allianceDescription));
             
             
-            item = ItemBuilder.getPlayerHead(allianceOwner, itemName, lore);
+            item = ItemBuilder.getPlayerHead(playerUUID, itemName, lore);
             // if (plugin.playerHasPermission(playerName, team, "seeTeamAlliances")){ 
             //     item = ItemBuilder.getPlayerHead(allianceOwner, itemName, lore);
             // }else{

@@ -54,14 +54,14 @@ public class EditMembersMenu extends FixedMenu {
         emptyCases(inventory, this.menuSlots, 0);
         Integer headSlot = 0;
         for(String memberName : team.getMembersName()){
-            UUID playerUUID = sqliteManager.getUUID(memberName);
+            UUID playerUUID = mySqlManager.getUUID(memberName);
             String itemName;
             List<String> lore = new ArrayList<>();
-            OfflinePlayer member;
+            // OfflinePlayer member;
             ItemStack item;
 
-            if (playerUUID == null) member = Bukkit.getOfflinePlayer(memberName);
-            else member = Bukkit.getOfflinePlayer(playerUUID);
+            // if (playerUUID == null) member = Bukkit.getOfflinePlayer(memberName);
+            // else member = Bukkit.getOfflinePlayer(playerUUID);
 
             Integer memberRank = team.getMemberRank(memberName);
             String memberRankName = plugin.getRankFromId(memberRank);
@@ -76,7 +76,7 @@ public class EditMembersMenu extends FixedMenu {
             lore.add(0, config.getString("prefixRankLore") + rankColor + config.getString("ranks." + memberRankName + ".name"));
             
             if (plugin.playerHasPermission(playerName, team, "manageMembers")){ 
-                item = ItemBuilder.getPlayerHead(member, itemName, lore);
+                item = ItemBuilder.getPlayerHead(playerUUID, itemName, lore);
             }else{
                 item = ItemBuilder.getItem(
                     Material.getMaterial(config.getString("noPermission.itemType")), 

@@ -833,6 +833,10 @@ inventories:
       itemName: "§5§nQuitter la team"
       slot: -1
       rank: -1
+    teamList:
+      itemName: "§5§nListe des teams"
+      slot: -1
+      rank: -1
     close:
       itemName: "§c§oRetour"
       itemType: ARROW

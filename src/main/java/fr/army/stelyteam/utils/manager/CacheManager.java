@@ -1,6 +1,5 @@
 package fr.army.stelyteam.utils.manager;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -216,6 +215,12 @@ public class CacheManager {
 
 
     public void addTeam(Team team){
+        for (Team cachedTeam : cachedTeams){
+            if (cachedTeam.equals(team)){
+                cachedTeam = team;
+                return;
+            }
+        }
         cachedTeams.add(team);
     }
 
@@ -223,6 +228,14 @@ public class CacheManager {
         for(Team cachedTeam : cachedTeams){
             if(cachedTeam.getTeamUuid().equals(team.getTeamUuid())){
                 cachedTeams.remove(cachedTeam);
+            }
+        }
+    }
+
+    public void replaceTeam(Team team){
+        for(Team cachedTeam : cachedTeams){
+            if(cachedTeam.equals(team)){
+                cachedTeam = team;
             }
         }
     }

@@ -59,6 +59,9 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
         if(sender instanceof Player){
             Player player = (Player) sender;
             String playerName = player.getName();
+
+            if (!sqlManager.isRegistered(player.getName())) sqlManager.registerPlayer(player);
+
             Team team = Team.initFromPlayerName(playerName);
 
             if (cacheManager.isInConversation(playerName)){
@@ -66,9 +69,9 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
                 return true;
             }
 
-            if (!sqliteManager.isRegistered(player.getName())) {
-                sqliteManager.registerPlayer(player);
-            }
+            // if (!sqliteManager.isRegistered(player.getName())) {
+            //     sqliteManager.registerPlayer(player);
+            // }
 
             
             if (args.length == 0){

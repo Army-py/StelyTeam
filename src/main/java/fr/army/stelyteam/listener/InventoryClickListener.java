@@ -8,14 +8,17 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.menu.Buttons;
 import fr.army.stelyteam.menu.TeamMenu;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
 
 
 public class InventoryClickListener implements Listener{    
 
+    private DatabaseManager databaseManager;
     private SQLiteDataManager sqliteManager;
 
     public InventoryClickListener(StelyTeamPlugin plugin) {
+        this.databaseManager = plugin.getDatabaseManager();
         this.sqliteManager = plugin.getSQLiteManager();
     }
 
@@ -36,7 +39,8 @@ public class InventoryClickListener implements Listener{
         }
 
         Player player = (Player) event.getWhoClicked();
-        if (!sqliteManager.isRegistered(player.getName())) sqliteManager.registerPlayer(player);
+        // if (!sqliteManager.isRegistered(player.getName())) sqliteManager.registerPlayer(player);
+        if (!databaseManager.isRegistered(player.getName())) databaseManager.registerPlayer(player);
 
         ((TeamMenu) event.getView().getTopInventory().getHolder()).onClick(event);
         return;

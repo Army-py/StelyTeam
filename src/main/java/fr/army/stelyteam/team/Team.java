@@ -90,7 +90,7 @@ public class Team {
         // return cacheManager.getTeamByPlayerUuid(playerUuid) == null 
         //     ? plugin.getDatabaseManager().getTeamFromPlayerName(plugin.getSQLiteManager().getPlayerName(playerUuid)) 
         //     : cacheManager.getTeamByPlayerUuid(playerUuid);
-        return plugin.getDatabaseManager().getTeamFromPlayerName(plugin.getSQLiteManager().getPlayerName(playerUuid));
+        return plugin.getDatabaseManager().getTeamFromPlayerName(plugin.getDatabaseManager().getPlayerName(playerUuid));
     }
 
     public static Team init(UUID teamUuid){
@@ -137,7 +137,7 @@ public class Team {
 
     public void updateTeamName(String newTeamName){
         plugin.getDatabaseManager().updateTeamName(this.teamUuid, newTeamName);
-        cacheManager.addTeam(null);
+        // cacheManager.replaceTeam(this);
 
         this.teamName = newTeamName;
     }
@@ -145,18 +145,24 @@ public class Team {
 
     public void updateTeamPrefix(String newPrefix){
         plugin.getDatabaseManager().updateTeamPrefix(teamUuid, newPrefix);
+        cacheManager.replaceTeam(this);
+        
         this.teamPrefix = newPrefix;
     }
 
 
     public void updateTeamDescription(String newDescription){
         plugin.getDatabaseManager().updateTeamDescription(teamUuid, newDescription);
+        // cacheManager.replaceTeam(this);
+
         this.teamDescription = newDescription;
     }
 
 
     public void updateTeamOwner(String newOwnerName){
         plugin.getDatabaseManager().updateTeamOwner(teamUuid, teamOwnerName, newOwnerName);
+        cacheManager.replaceTeam(this);
+
         this.teamOwnerName = newOwnerName;
     }
 
@@ -173,7 +179,7 @@ public class Team {
                 playerName,
                 plugin.getLastRank(),
                 getCurrentDate(),
-                StelyTeamPlugin.getPlugin().getSQLiteManager().getUUID(playerName)
+                plugin.getDatabaseManager().getUUID(playerName)
             )
         );
         plugin.getDatabaseManager().insertMember(playerName, teamUuid);
