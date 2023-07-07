@@ -1,5 +1,6 @@
 package fr.army.stelyteam.menu.impl;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -58,9 +59,13 @@ public class TeamListMenu extends PagedMenu {
         }
         List<List<Team>> pages = page.getPages();
         
+        List<Team> currentPage;
+        if (!pages.isEmpty()) currentPage = pages.get(pageId);
+        else currentPage = new ArrayList<>();
+        
         emptyCases(inventory, this.menuSlots, 0);
         Integer slotIndex = 0;
-        for(Team team : pages.get(pageId)){
+        for(Team team : currentPage){
             String teamOwnerName = team.getTeamOwnerName();
             String teamPrefix = team.getTeamPrefix();
             List<String> teamMembers = team.getMembersName();
@@ -106,7 +111,7 @@ public class TeamListMenu extends PagedMenu {
             if (buttonName.equals("previous")){
                 if (page.getCurrentPage() == 0) continue;
             }else if (buttonName.equals("next")){
-                if (page.getCurrentPage() == pages.size()-1) continue;
+                if (page.getCurrentPage() >= pages.size()-1) continue;
             }
 
             inventory.setItem(slot, ItemBuilder.getItem(material, buttonName, displayName, lore, headTexture, false));
