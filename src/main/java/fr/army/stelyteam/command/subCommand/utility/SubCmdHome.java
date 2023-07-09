@@ -33,6 +33,12 @@ public class SubCmdHome extends SubCommand {
     public boolean execute(CommandSender sender, String[] args) {
         Player player = (Player) sender;
         Team team = Team.init(player);
+
+        if (team == null){
+            player.sendMessage(messageManager.getMessage("commands.stelyteam_home.not_set"));
+            return true;
+        }
+
         UUID teamUuid = team.getTeamUuid();
         
         if (!sqliteManager.isSet(teamUuid)){

@@ -2,6 +2,8 @@ package fr.army.stelyteam.menu;
 
 import org.bukkit.entity.Player;
 
+import fr.army.stelyteam.team.Storage;
+
 public abstract class PagedMenu extends TeamMenu {
 
     public PagedMenu(Player viewer, int menuSlots, TeamMenu previousMenu) {

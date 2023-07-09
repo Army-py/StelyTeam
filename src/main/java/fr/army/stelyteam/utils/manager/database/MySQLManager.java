@@ -20,7 +20,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.team.Alliance;
@@ -28,7 +27,6 @@ import fr.army.stelyteam.team.Member;
 import fr.army.stelyteam.team.Permission;
 import fr.army.stelyteam.team.Storage;
 import fr.army.stelyteam.team.Team;
-import fr.army.stelyteam.utils.manager.database.builder.fundamental.SelectOperator;
 
 public class MySQLManager extends DatabaseManager {
     
@@ -86,7 +84,7 @@ public class MySQLManager extends DatabaseManager {
             try {
                 PreparedStatement queryCreatePlayers = connection.prepareStatement("CREATE TABLE IF NOT EXISTS player (playerId INTEGER AUTO_INCREMENT, playerName VARCHAR(255), teamRank INTEGER, joinDate VARCHAR(255), teamId INTEGER, PRIMARY KEY (playerId));");
                 PreparedStatement queryCreateTeams = connection.prepareStatement("CREATE TABLE IF NOT EXISTS team (teamId INTEGER AUTO_INCREMENT, teamUuid VARCHAR(255) UNIQUE, teamName VARCHAR(255) UNIQUE, teamPrefix VARCHAR(255), teamDescription VARCHAR(255), teamMoney INTEGER, creationDate VARCHAR(255), improvLvlMembers INTEGER, teamStorageLvl INTEGER, unlockedTeamBank INTEGER, teamOwnerPlayerId INTEGER UNIQUE, PRIMARY KEY(teamId));");
-                PreparedStatement queryCreateTeamStorages = connection.prepareStatement("CREATE TABLE IF NOT EXISTS teamStorage (storageId INTEGER, teamId INTEGER, storageContent BLOB, PRIMARY KEY (storageId,teamId));");
+                PreparedStatement queryCreateTeamStorages = connection.prepareStatement("CREATE TABLE IF NOT EXISTS teamStorage (storageId INTEGER, teamId INTEGER, storageContent BLOB, openedServer VARCHAR(255) DEFAULT NULL, PRIMARY KEY (storageId,teamId));");
                 PreparedStatement queryCreateAlliances = connection.prepareStatement("CREATE TABLE IF NOT EXISTS alliance (teamId INTEGER, teamAllianceId INTEGER, allianceDate VARCHAR(255), PRIMARY KEY(teamId,teamAllianceId));");
                 PreparedStatement queryCreateAssignements = connection.prepareStatement("CREATE TABLE IF NOT EXISTS assignement (teamId INTEGER, permLabel VARCHAR(255), teamRank INTEGER, PRIMARY KEY (permLabel,teamId));");
                 PreparedStatement queryCreateStorages = connection.prepareStatement("CREATE TABLE IF NOT EXISTS storage (storageId INTEGER, PRIMARY KEY (storageId));");
@@ -149,15 +147,22 @@ public class MySQLManager extends DatabaseManager {
                 //     queryAlterTeams2.close();
                 // }
 
-                PreparedStatement queryIfColumnExists = connection.prepareStatement("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'players' AND COLUMN_NAME = 'playerId'");
+                // PreparedStatement queryIfColumnExists = connection.prepareStatement("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'players' AND COLUMN_NAME = 'playerId'");
+                // ResultSet result = queryIfColumnExists.executeQuery();
+                // if(!result.next()){
+                //     PreparedStatement dropPrimaryKey = connection.prepareStatement("ALTER TABLE players DROP PRIMARY KEY");
+                //     dropPrimaryKey.executeUpdate();
+                //     dropPrimaryKey.close();
+                //     PreparedStatement queryAlterTeams2 = connection.prepareStatement("ALTER TABLE players ADD playerId INTEGER AUTO_INCREMENT PRIMARY KEY FIRST");
+                //     queryAlterTeams2.executeUpdate();
+                //     queryAlterTeams2.close();
+                // }
+                PreparedStatement queryIfColumnExists = connection.prepareStatement("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'teamStorage' AND COLUMN_NAME = 'openedServer'");
                 ResultSet result = queryIfColumnExists.executeQuery();
                 if(!result.next()){
-                    PreparedStatement dropPrimaryKey = connection.prepareStatement("ALTER TABLE players DROP PRIMARY KEY");
-                    dropPrimaryKey.executeUpdate();
-                    dropPrimaryKey.close();
-                    PreparedStatement queryAlterTeams2 = connection.prepareStatement("ALTER TABLE players ADD playerId INTEGER AUTO_INCREMENT PRIMARY KEY FIRST");
-                    queryAlterTeams2.executeUpdate();
-                    queryAlterTeams2.close();
+                    PreparedStatement queryAlterStorage = connection.prepareStatement("ALTER TABLE teamStorage ADD openedServer VARCHAR(255) DEFAULT NULL AFTER storageContent");
+                    queryAlterStorage.executeUpdate();
+                    queryAlterStorage.close();
                 }
             } catch (Exception e){
                 e.printStackTrace();
@@ -707,13 +712,14 @@ public class MySQLManager extends DatabaseManager {
     }
 
     @Override
-    public void insertStorageContent(UUID teamUuid, Integer storageId, byte[] storageContent){
+    public void insertStorageContent(UUID teamUuid, Integer storageId, byte[] storageContent, String openedServer){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("INSERT INTO teamStorage VALUES (?, ?, ?)");
+                PreparedStatement query = connection.prepareStatement("INSERT INTO teamStorage VALUES (?, ?, ?, ?)");
                 query.setInt(1, storageId);
                 query.setInt(2, getTeamId(teamUuid));
                 query.setBytes(3, storageContent);
+                query.setString(4, openedServer);
                 query.executeUpdate();
                 query.close();
             } catch (SQLException e) {
@@ -723,13 +729,14 @@ public class MySQLManager extends DatabaseManager {
     }
 
     @Override
-    public void updateStorageContent(UUID teamUuid, Integer storageId, byte[] storageContent){
+    public void updateStorageContent(UUID teamUuid, Integer storageId, byte[] storageContent, String openedServer){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("UPDATE teamStorage SET storageContent = ? WHERE teamId = ? AND storageId = ?");
+                PreparedStatement query = connection.prepareStatement("UPDATE teamStorage SET storageContent = ?, openedServer = ? WHERE teamId = ? AND storageId = ?");
                 query.setBytes(1, storageContent);
-                query.setInt(2, getTeamId(teamUuid));
-                query.setInt(3, storageId);
+                query.setString(2, openedServer);
+                query.setInt(3, getTeamId(teamUuid));
+                query.setInt(4, storageId);
                 query.executeUpdate();
                 query.close();
             } catch (SQLException e) {
@@ -743,13 +750,14 @@ public class MySQLManager extends DatabaseManager {
         UUID teamUuid = storage.getTeamUuid();
         int storageId = storage.getStorageId();
         byte[] storageContent = storage.getStorageContent();
+        String openedServer = storage.getOpenedServer();
         if (!teamHasStorage(teamUuid, storageId)){
             if (!storageIdExist(storageId)){
                 insertStorageId(storageId);
             }
-            insertStorageContent(teamUuid, storageId, storageContent);
+            insertStorageContent(teamUuid, storageId, storageContent, openedServer);
         }else{
-            updateStorageContent(teamUuid, storageId, storageContent);
+            updateStorageContent(teamUuid, storageId, storageContent, openedServer);
         }
     }
 
@@ -1003,7 +1011,7 @@ public class MySQLManager extends DatabaseManager {
     public Map<Integer, Storage> getTeamStorages(UUID teamUuid){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("SELECT ts.storageId, ts.storageContent FROM teamStorage AS ts INNER JOIN team AS t ON ts.teamId = t.teamId WHERE t.teamUuid = ?;");
+                PreparedStatement query = connection.prepareStatement("SELECT ts.storageId, ts.storageContent, ts.openedServer FROM teamStorage AS ts INNER JOIN team AS t ON ts.teamId = t.teamId WHERE t.teamUuid = ?;");
                 query.setString(1, teamUuid.toString());
                 ResultSet result = query.executeQuery();
                 Map<Integer, Storage> teamStorage = new HashMap<>();
@@ -1014,7 +1022,8 @@ public class MySQLManager extends DatabaseManager {
                             teamUuid,
                             result.getInt("storageId"),
                             null,
-                            result.getBytes("storageContent")
+                            result.getBytes("storageContent"),
+                            result.getString("openedServer")
                         )
                     );
                 }
@@ -1112,7 +1121,7 @@ public class MySQLManager extends DatabaseManager {
     public void registerPlayer(Player player){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("INSERT INTO players VALUES (?, ?)");
+                PreparedStatement query = connection.prepareStatement("INSERT INTO players (uuid, playerName) VALUES (?, ?)");
                 query.setString(1, player.getUniqueId().toString());
                 query.setString(2, player.getName());
                 query.executeUpdate();
@@ -1128,7 +1137,7 @@ public class MySQLManager extends DatabaseManager {
     public void registerPlayer(OfflinePlayer player){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("INSERT INTO players VALUES (?, ?)");
+                PreparedStatement query = connection.prepareStatement("INSERT INTO players (uuid, playerName) VALUES (?, ?)");
                 query.setString(1, player.getUniqueId().toString());
                 query.setString(2, player.getName());
                 query.executeUpdate();

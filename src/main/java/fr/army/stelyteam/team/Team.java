@@ -101,7 +101,7 @@ public class Team {
     }
 
     public static Team getFromCache(Player player){
-        return cacheManager.getTeamByPlayerName(player.getName());
+        return cacheManager.getTeamByPlayerUuid(player.getUniqueId());
     }
 
 
@@ -444,6 +444,10 @@ public class Team {
 
     public void setTeamPrefix(String teamPrefix) {
         this.teamPrefix = teamPrefix;
+    }
+
+    public void refreshTeamStorage(){
+        this.teamStorages = plugin.getDatabaseManager().getTeamStorages(teamUuid);
     }
 
     private String getCurrentDate() {

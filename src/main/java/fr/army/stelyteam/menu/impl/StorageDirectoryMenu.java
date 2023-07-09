@@ -89,7 +89,8 @@ public class StorageDirectoryMenu extends FixedMenu {
                 Integer storageId = config.getInt("inventories.storageDirectory."+str+".storageId");
 
                 if (itemName.equals(name) && itemType.equals(type)){
-                    new StorageMenu(player, this).openMenu(storageId);
+                    // new StorageMenu(player, this).openMenu(storageId);
+                    player.sendMessage("§cCette fonctionnalité est temporairement désactivée.");
                     return;
                 }
             }

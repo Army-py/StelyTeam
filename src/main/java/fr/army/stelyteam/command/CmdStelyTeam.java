@@ -64,6 +64,10 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
 
             Team team = Team.initFromPlayerName(playerName);
 
+            if (team != null){
+                cacheManager.addTeam(team);
+            }
+
             if (cacheManager.isInConversation(playerName)){
                 player.sendRawMessage(messageManager.getMessage("common.no_command_in_conv"));
                 return true;

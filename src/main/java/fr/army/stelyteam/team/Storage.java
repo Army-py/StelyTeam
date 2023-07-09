@@ -3,6 +3,7 @@ package fr.army.stelyteam.team;
 import java.util.UUID;
 
 import org.bukkit.inventory.Inventory;
+import org.jetbrains.annotations.Nullable;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 
@@ -11,12 +12,14 @@ public class Storage {
     private Integer storageId;
     private Inventory inventoryInstance;
     private byte[] storageContent;
+    private String openedServer;
 
-    public Storage(UUID teamUuid, Integer storageId, Inventory inventoryInstance, byte[] storageContent){
+    public Storage(UUID teamUuid, Integer storageId, Inventory inventoryInstance, byte[] storageContent, String openedServer){
         this.teamUuid = teamUuid;
         this.storageId = storageId;
         this.inventoryInstance = inventoryInstance;
         this.storageContent = storageContent;
+        this.openedServer = openedServer;
     }
 
 
@@ -44,6 +47,11 @@ public class Storage {
         return storageContent;
     }
 
+    @Nullable
+    public String getOpenedServer() {
+        return openedServer;
+    }
+
     public void setTeamUuid(UUID teamUuid) {
         this.teamUuid = teamUuid;
     }
@@ -58,5 +66,9 @@ public class Storage {
 
     public void setStorageContent(byte[] storageContent) {
         this.storageContent = storageContent;
+    }
+
+    public void setOpenedServer(String openedServer) {
+        this.openedServer = openedServer;
     }
 }

@@ -84,9 +84,9 @@ public class StelyTeamPlugin extends JavaPlugin {
         final ListenerLoader listenerLoader = new ListenerLoader();
         listenerLoader.registerListeners(this);
 
-        cacheAllTeams();
-
+        
         getLogger().info("StelyTeam ON");
+        cacheAllTeams();
     }
 
 

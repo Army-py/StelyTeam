@@ -44,6 +44,7 @@ public class SubCmdAccept extends SubCommand {
             team.teamBroadcast(senderName, messageManager.replaceAuthorAndReceiver("broadcasts.player_add_new_member", senderName, playerName));
             team.insertMember(playerName);
             team.refreshTeamMembersInventory(playerName);
+            cacheManager.addTeam(team);
         }else if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.ADD_ALLIANCE)){
             TemporaryAction tempAction = cacheManager.getTempAction(playerName);
             String senderName = tempAction.getSenderName();

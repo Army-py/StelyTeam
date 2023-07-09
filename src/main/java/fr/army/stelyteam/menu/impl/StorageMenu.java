@@ -131,7 +131,7 @@ public class StorageMenu extends PagedMenu {
             storage.setStorageInstance(storageInventory);
             storage.setStorageContent(serializeManager.serializeToByte(inventoryContent));
         }else{
-            storage = new Storage(teamUuid, storageId, storageInventory, serializeManager.serializeToByte(inventoryContent));
+            storage = new Storage(teamUuid, storageId, storageInventory, serializeManager.serializeToByte(inventoryContent), null);
         }
         
         storage.saveStorageToCache();

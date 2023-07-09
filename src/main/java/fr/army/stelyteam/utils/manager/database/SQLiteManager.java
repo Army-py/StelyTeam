@@ -666,13 +666,14 @@ public class SQLiteManager extends DatabaseManager {
     }
 
     @Override
-    public void insertStorageContent(UUID teamUuid, Integer storageId, byte[] storageContent){
+    public void insertStorageContent(UUID teamUuid, Integer storageId, byte[] storageContent, String openedServer){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("INSERT INTO teamStorage VALUES (?, ?, ?)");
+                PreparedStatement query = connection.prepareStatement("INSERT INTO teamStorage VALUES (?, ?, ?, ?)");
                 query.setInt(1, storageId);
                 query.setInt(2, getTeamId(teamUuid));
                 query.setBytes(3, storageContent);
+                query.setString(4, openedServer);
                 query.executeUpdate();
                 query.close();
             } catch (SQLException e) {
@@ -682,13 +683,14 @@ public class SQLiteManager extends DatabaseManager {
     }
 
     @Override
-    public void updateStorageContent(UUID teamUuid, Integer storageId, byte[] storageContent){
+    public void updateStorageContent(UUID teamUuid, Integer storageId, byte[] storageContent, String openedServer){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("UPDATE teamStorage SET storageContent = ? WHERE teamId = ? AND storageId = ?");
+                PreparedStatement query = connection.prepareStatement("UPDATE teamStorage SET storageContent = ?, openedServer = ? WHERE teamId = ? AND storageId = ?");
                 query.setBytes(1, storageContent);
-                query.setInt(2, getTeamId(teamUuid));
-                query.setInt(3, storageId);
+                query.setString(2, openedServer);
+                query.setInt(3, getTeamId(teamUuid));
+                query.setInt(4, storageId);
                 query.executeUpdate();
                 query.close();
             } catch (SQLException e) {
@@ -702,13 +704,14 @@ public class SQLiteManager extends DatabaseManager {
         UUID teamUuid = storage.getTeamUuid();
         int storageId = storage.getStorageId();
         byte[] storageContent = storage.getStorageContent();
+        String openedServer = storage.getOpenedServer();
         if (!teamHasStorage(teamUuid, storageId)){
             if (!storageIdExist(storageId)){
                 insertStorageId(storageId);
             }
-            insertStorageContent(teamUuid, storageId, storageContent);
+            insertStorageContent(teamUuid, storageId, storageContent, openedServer);
         }else{
-            updateStorageContent(teamUuid, storageId, storageContent);
+            updateStorageContent(teamUuid, storageId, storageContent, openedServer);
         }
     }
 
@@ -921,7 +924,7 @@ public class SQLiteManager extends DatabaseManager {
     public Map<Integer, Storage> getTeamStorages(UUID teamUuid){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("SELECT ts.storageId, ts.storageContent FROM teamStorage AS ts INNER JOIN team AS t ON ts.teamId = t.teamId WHERE t.teamUuid = ?;");
+                PreparedStatement query = connection.prepareStatement("SELECT ts.storageId, ts.storageContent, ts.openedServer FROM teamStorage AS ts INNER JOIN team AS t ON ts.teamId = t.teamId WHERE t.teamUuid = ?;");
                 query.setString(1, teamUuid.toString());
                 ResultSet result = query.executeQuery();
                 Map<Integer, Storage> teamStorage = new HashMap<>();
@@ -932,7 +935,8 @@ public class SQLiteManager extends DatabaseManager {
                             teamUuid,
                             result.getInt("storageId"),
                             null,
-                            result.getBytes("storageContent")
+                            result.getBytes("storageContent"),
+                            result.getString("openedServer")
                         )
                     );
                 }

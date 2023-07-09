@@ -112,9 +112,9 @@ public abstract class DatabaseManager {
 
     public abstract byte[] getStorageContent(UUID teamUuid, Integer storageId);
 
-    public abstract void insertStorageContent(UUID teamUuid, Integer storageId, byte[] storageContent);
+    public abstract void insertStorageContent(UUID teamUuid, Integer storageId, byte[] storageContent, String openedServer);
 
-    public abstract void updateStorageContent(UUID teamUuid, Integer storageId, byte[] storageContent);
+    public abstract void updateStorageContent(UUID teamUuid, Integer storageId, byte[] storageContent, String openedServer);
 
     public abstract void saveStorage(Storage storage);
 
