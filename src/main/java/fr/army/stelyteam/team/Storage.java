@@ -2,29 +2,37 @@ package fr.army.stelyteam.team;
 
 import java.util.UUID;
 
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.utils.network.task.AsyncStorageSender;
 
 public class Storage {
     private UUID teamUuid;
     private Integer storageId;
     private Inventory inventoryInstance;
     private byte[] storageContent;
-    private String openedServer;
+    private boolean isOpened;
 
-    public Storage(UUID teamUuid, Integer storageId, Inventory inventoryInstance, byte[] storageContent, String openedServer){
+    public Storage(@NotNull UUID teamUuid, @NotNull Integer storageId, @Nullable Inventory inventoryInstance,
+            @NotNull byte[] storageContent, @NotNull boolean isOpened) {
         this.teamUuid = teamUuid;
         this.storageId = storageId;
         this.inventoryInstance = inventoryInstance;
         this.storageContent = storageContent;
-        this.openedServer = openedServer;
+        this.isOpened = isOpened;
     }
 
 
-    public void saveStorageToCache(){
+    public void saveStorageToCache(StelyTeamPlugin plugin, Player player, boolean isOpenHere){
         StelyTeamPlugin.getPlugin().getCacheManager().saveStorage(this);
+
+        final AsyncStorageSender storageSender = new AsyncStorageSender();
+        final String[] serverNames = plugin.getServerNames();
+        storageSender.sendStorage(plugin, player, serverNames, this, isOpenHere);
     }
 
     public void saveStorageToDatabase(){
@@ -48,8 +56,8 @@ public class Storage {
     }
 
     @Nullable
-    public String getOpenedServer() {
-        return openedServer;
+    public boolean isOpen() {
+        return isOpened;
     }
 
     public void setTeamUuid(UUID teamUuid) {
@@ -68,7 +76,7 @@ public class Storage {
         this.storageContent = storageContent;
     }
 
-    public void setOpenedServer(String openedServer) {
-        this.openedServer = openedServer;
+    public void setOpened(boolean isOpened) {
+        this.isOpened = isOpened;
     }
 }

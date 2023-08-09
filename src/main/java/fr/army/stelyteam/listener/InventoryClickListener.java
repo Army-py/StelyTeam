@@ -2,6 +2,7 @@ package fr.army.stelyteam.listener;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
@@ -14,15 +15,17 @@ import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
 
 public class InventoryClickListener implements Listener{    
 
+    private StelyTeamPlugin plugin;
     private DatabaseManager databaseManager;
     private SQLiteDataManager sqliteManager;
 
     public InventoryClickListener(StelyTeamPlugin plugin) {
+        this.plugin = plugin;
         this.databaseManager = plugin.getDatabaseManager();
         this.sqliteManager = plugin.getSQLiteManager();
     }
 
-    @EventHandler()
+    @EventHandler(priority=EventPriority.LOWEST)
     public void onInventoryClick(InventoryClickEvent event){
         if (!(event.getView().getTopInventory().getHolder() instanceof TeamMenu)) {
             return;
@@ -45,4 +48,5 @@ public class InventoryClickListener implements Listener{
         ((TeamMenu) event.getView().getTopInventory().getHolder()).onClick(event);
         return;
     }
+
 }

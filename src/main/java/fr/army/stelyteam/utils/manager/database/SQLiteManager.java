@@ -673,7 +673,7 @@ public class SQLiteManager extends DatabaseManager {
                 query.setInt(1, storageId);
                 query.setInt(2, getTeamId(teamUuid));
                 query.setBytes(3, storageContent);
-                query.setString(4, openedServer);
+                // query.setString(4, openedServer);
                 query.executeUpdate();
                 query.close();
             } catch (SQLException e) {
@@ -704,14 +704,14 @@ public class SQLiteManager extends DatabaseManager {
         UUID teamUuid = storage.getTeamUuid();
         int storageId = storage.getStorageId();
         byte[] storageContent = storage.getStorageContent();
-        String openedServer = storage.getOpenedServer();
+        boolean storageIsOpen = storage.isOpen();
         if (!teamHasStorage(teamUuid, storageId)){
             if (!storageIdExist(storageId)){
                 insertStorageId(storageId);
             }
-            insertStorageContent(teamUuid, storageId, storageContent, openedServer);
+            insertStorageContent(teamUuid, storageId, storageContent, null);
         }else{
-            updateStorageContent(teamUuid, storageId, storageContent, openedServer);
+            updateStorageContent(teamUuid, storageId, storageContent, null);
         }
     }
 
@@ -936,7 +936,7 @@ public class SQLiteManager extends DatabaseManager {
                             result.getInt("storageId"),
                             null,
                             result.getBytes("storageContent"),
-                            result.getString("openedServer")
+                            false
                         )
                     );
                 }

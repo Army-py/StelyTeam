@@ -31,6 +31,10 @@ import java.util.Objects;
 
 public class StelyTeamPlugin extends JavaPlugin {
 
+    private static boolean debug = false;
+
+    private String[] serverNames;
+
     private static StelyTeamPlugin plugin;
     private YamlConfiguration config;
     private YamlConfiguration messages;
@@ -53,6 +57,8 @@ public class StelyTeamPlugin extends JavaPlugin {
 
         this.config = initFile(this.getDataFolder(), "config.yml");
         this.messages = initFile(this.getDataFolder(), "messages.yml");
+
+        this.serverNames = this.config.getStringList("serverNames").toArray(new String[0]);
 
         this.sqliteManager = new SQLiteDataManager(this);
 
@@ -269,6 +275,19 @@ public class StelyTeamPlugin extends JavaPlugin {
 
     public TeamChatManager getTeamChatManager() {
         return teamChatManager;
+    }
+
+    public String[] getServerNames(){
+        return serverNames;
+    }
+
+
+    public void toggleDebug(){
+        debug = !debug;
+    }
+
+    public boolean isDebug() {
+        return debug;
     }
 
 }

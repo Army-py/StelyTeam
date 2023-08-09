@@ -197,11 +197,8 @@ public class CacheManager {
     }
 
     public void replacePage(Page page){
-        for(Page cachedPage : cachedPages){
-            if(cachedPage.getAuthorName().equals(page.getAuthorName())){
-                cachedPage = page;
-            }
-        }
+        cachedPages.removeIf(cachedPage -> cachedPage.getAuthorName().equals(page.getAuthorName()));
+        cachedPages.add(page);
     }
 
     public boolean containsPage(String authorName){
@@ -215,12 +212,8 @@ public class CacheManager {
 
 
     public void addTeam(Team team){
-        for (Team cachedTeam : cachedTeams){
-            if (cachedTeam.equals(team)){
-                cachedTeam = team;
-                return;
-            }
-        }
+        if (team == null) return;
+        cachedTeams.removeIf(cachedTeam -> cachedTeam.getTeamUuid().equals(team.getTeamUuid()));
         cachedTeams.add(team);
     }
 

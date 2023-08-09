@@ -52,6 +52,13 @@
             <version>2ca3c5ed05</version>
         </dependency>
 
+        <!-- NoQueuePluginMessage -->
+        <dependency>
+            <groupId>com.github.Flowsqy</groupId>
+            <artifactId>NoQueuePluginMessage</artifactId>
+            <version>3afd3393e2</version>
+        </dependency>
+
         <dependency>
             <groupId>net.essentialsx</groupId>
             <artifactId>EssentialsX</artifactId>

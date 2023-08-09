@@ -40,19 +40,33 @@ public class StorageMenu extends PagedMenu {
         // String inventoryName = config.getString(config.getString("inventories.storageDirectory."+plugin.getStorageFromId(storageId)+".itemName"));
         String inventoryName = Menus.getStorageMenuName(storageId);
         UUID teamUuid = team.getTeamUuid();
+        Storage storage;
         Inventory inventory;
 
         if (cacheManager.containsStorage(teamUuid, storageId)){
-            inventory = cacheManager.getStorage(teamUuid, storageId).getInventoryInstance();
+            storage = cacheManager.getStorage(teamUuid, storageId);
+            inventory = storage.getInventoryInstance();
+
+            System.out.println("Storage found in cache");
         }else{
             inventory = Bukkit.createInventory(this, this.menuSlots, inventoryName);
 
             if (team.hasStorage(storageId)){
-                byte[] contentBytes = team.getStorage(storageId).getStorageContent();
+                storage = team.getStorage(storageId);
+                byte[] contentBytes = storage.getStorageContent();
                 ItemStack[] content = serializeManager.deserializeFromByte(contentBytes);
                 inventory.setContents(content);
             }
+            storage = new Storage(teamUuid, storageId, inventory,
+                    serializeManager.serializeToByte(inventory.getContents()), false);
         }
+
+        // System.out.println(viewer.getServer().get);
+
+        // storage.setOpenedServer(viewer.getServer().getName());
+        System.out.println(Bukkit.getServer().getMotd());
+        storage.saveStorageToCache(plugin, viewer.getPlayer(), true);
+        storage.saveStorageToDatabase();
 
         emptyCases(inventory, config.getIntegerList("inventories.storage.emptyCase.slots"));
 
@@ -110,6 +124,13 @@ public class StorageMenu extends PagedMenu {
                 }
             }
         }
+        
+        if (cacheManager.containsStorage(team.getTeamUuid(), storageId)){
+            Storage storage = cacheManager.getStorage(team.getTeamUuid(), storageId);
+            if (storage.isOpen()){
+                clickEvent.setCancelled(true);
+            }
+        }
         clickEvent.setCancelled(false);
     }
 
@@ -124,6 +145,13 @@ public class StorageMenu extends PagedMenu {
         ItemStack[] inventoryContent = closeEvent.getInventory().getContents();
         Storage storage;
 
+        final boolean isOpen;
+        if (storageInventory.getViewers().size() > 1){
+            isOpen = true;
+        }else{
+            isOpen = false;
+        }
+
         if (cacheManager.containsStorage(teamUuid, storageId)){
             storage = cacheManager.replaceStorageContent(teamUuid, storageId, serializeManager.serializeToByte(inventoryContent));
         }else if (team.hasStorage(storageId)){
@@ -131,10 +159,14 @@ public class StorageMenu extends PagedMenu {
             storage.setStorageInstance(storageInventory);
             storage.setStorageContent(serializeManager.serializeToByte(inventoryContent));
         }else{
-            storage = new Storage(teamUuid, storageId, storageInventory, serializeManager.serializeToByte(inventoryContent), null);
+            storage = new Storage(teamUuid, storageId, storageInventory,
+                    serializeManager.serializeToByte(inventoryContent), isOpen);
         }
         
-        storage.saveStorageToCache();
+        if (storage.isOpen()){
+            return;
+        }
+        storage.saveStorageToCache(plugin, player, isOpen);
         storage.saveStorageToDatabase();
     }
 

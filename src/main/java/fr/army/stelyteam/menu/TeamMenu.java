@@ -21,12 +21,14 @@ import org.bukkit.persistence.PersistentDataType;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.team.Team;
+import fr.army.stelyteam.utils.builder.ColorsBuilder;
 
 
 public abstract class TeamMenu implements ITeamMenu {
 
     protected final StelyTeamPlugin plugin = StelyTeamPlugin.getPlugin();
-    protected final YamlConfiguration config;
+    protected final ColorsBuilder colorsBuilder = plugin.getColorsBuilder();
+    protected final YamlConfiguration config = plugin.getConfig();
 
     protected InventoryHolder menu;
 
@@ -39,9 +41,7 @@ public abstract class TeamMenu implements ITeamMenu {
     protected final Team team;
 
 
-    public TeamMenu(Player viewer, String menuName, int menuSlots, TeamMenu previousMenu) {
-        this.config = plugin.getConfig();
-        
+    public TeamMenu(Player viewer, String menuName, int menuSlots, TeamMenu previousMenu) {        
         this.viewer = viewer;
         this.menuName = menuName;
         this.menuSlots = menuSlots;
@@ -50,9 +50,7 @@ public abstract class TeamMenu implements ITeamMenu {
         this.team = Team.init(viewer);
     }
 
-    public TeamMenu(Player viewer, int menuSlots, TeamMenu previousMenu) {
-        this.config = plugin.getConfig();
-        
+    public TeamMenu(Player viewer, int menuSlots, TeamMenu previousMenu) { 
         this.viewer = viewer;
         this.menuName = null;
         this.menuSlots = menuSlots;
@@ -77,7 +75,16 @@ public abstract class TeamMenu implements ITeamMenu {
     protected List<String> replaceInLore(List<String> lore, String value, String replace){
         List<String> newLore = new ArrayList<>();
         for(String str : lore){
-            newLore.add(str.replace(value, replace));
+            if (str.contains("%BACKTOLINE%")){
+                String[] colors = colorsBuilder.getPrefixColors(str).toArray(new String[0]);
+                String[] split = str.split("%BACKTOLINE%, ");
+                for(String s : split){
+                    newLore.add(String.join("", colors) + s.replace(value, replace));
+                }
+            }else{
+                newLore.add(str.replace(value, replace));
+            }
+
         }
         return newLore;
     }

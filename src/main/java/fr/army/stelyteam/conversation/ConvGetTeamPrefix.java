@@ -55,6 +55,8 @@ public class ConvGetTeamPrefix extends StringPrompt {
         cacheManager.removePlayerAction(authorName);
         economyManager.removeMoneyPlayer(author, config.getDouble("prices.createTeam"));
         con.getForWhom().sendRawMessage(messageManager.getMessage("manage_team.creation.team_created"));
+
+        cacheManager.addTeam(team);
         
         if (config.getBoolean("openTeamAfterCreate")) StelyTeamPlugin.getPlugin().openMainInventory(author, team);
         return null;

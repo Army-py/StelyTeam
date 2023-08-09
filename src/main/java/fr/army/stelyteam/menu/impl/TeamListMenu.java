@@ -50,11 +50,14 @@ public class TeamListMenu extends PagedMenu {
         Collection<Team> teams = plugin.getDatabaseManager().getTeams();
         Inventory inventory = Bukkit.createInventory(this, this.menuSlots, this.menuName);
         List<Integer> headSlots = config.getIntegerList("inventories.teamList.teamOwnerHead.slots");
-        Integer maxMembers = config.getInt("teamMaxMembers");
+        final int maxMembers = config.getInt("teamMaxMembers");
+        final int maxMembersPerLine = config.getInt("maxMembersInLore");
         Page page;
 
         if (cacheManager.containsPage(playerName)){
             page = cacheManager.getPage(playerName);
+            page.setCurrentPage(pageId);
+            cacheManager.replacePage(page);
         }else{
             page = new Page(playerName, headSlots.size(), teams);
             cacheManager.addPage(page);
@@ -79,12 +82,13 @@ public class TeamListMenu extends PagedMenu {
             // OfflinePlayer teamOwner;
             ItemStack item;
 
-            // if (!sqliteManager.isRegistered(teamOwnerName)){
-            //     sqliteManager.registerPlayer(Bukkit.getOfflinePlayer(teamOwnerName));
-            // }
+            List<String> playerNames = new ArrayList<>();
+            for(int i = 0; i < teamMembers.size(); i++){
+                if (i != 0 && i % maxMembersPerLine == 0) playerNames.add("%BACKTOLINE%");
+                playerNames.add(teamMembers.get(i));
+            }
 
-            // if (playerUUID == null) teamOwner = Bukkit.getOfflinePlayer(teamOwnerName);
-            // else teamOwner = Bukkit.getOfflinePlayer(playerUUID);
+            // System.out.println(String.join(", ", playerNames));
             
             lore = replaceInLore(lore, "%OWNER%", teamOwnerName);
             lore = replaceInLore(lore, "%NAME%", team.getTeamName());
@@ -92,7 +96,7 @@ public class TeamListMenu extends PagedMenu {
             lore = replaceInLore(lore, "%DATE%", team.getCreationDate());
             lore = replaceInLore(lore, "%MEMBER_COUNT%", IntegerToString(team.getTeamMembers().size()));
             lore = replaceInLore(lore, "%MAX_MEMBERS%", IntegerToString(maxMembers+team.getImprovLvlMembers()));
-            lore = replaceInLore(lore, "%MEMBERS%", teamMembers.isEmpty() ? messageManager.getMessageWithoutPrefix("common.no_members") : String.join(", ", teamMembers));
+            lore = replaceInLore(lore, "%MEMBERS%", teamMembers.isEmpty() ? messageManager.getMessageWithoutPrefix("common.no_members") : String.join(", ", playerNames));
             lore = replaceInLore(lore, "%DESCRIPTION%", colorsBuilder.replaceColor(team.getTeamDescription()));
             
             item = ItemBuilder.getPlayerHead(playerUUID, itemName, lore);
@@ -156,12 +160,12 @@ public class TeamListMenu extends PagedMenu {
 
     @Override
     public void onClose(InventoryCloseEvent closeEvent) {
-        Player player = (Player) closeEvent.getPlayer();
-        String playerName = player.getName();
+        // Player player = (Player) closeEvent.getPlayer();
+        // String playerName = player.getName();
 
-        if (cacheManager.containsPage(playerName)){
-            cacheManager.removePage(cacheManager.getPage(playerName));
-        }
+        // if (cacheManager.containsPage(playerName)){
+        //     cacheManager.removePage(cacheManager.getPage(playerName));
+        // }
     }
 
 

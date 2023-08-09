@@ -214,6 +214,7 @@ public class ConfirmMenu extends FixedMenu {
                     break;
             }
             cacheManager.removePlayerActionName(playerName, actionName);
+            cacheManager.addTeam(team);
         }
 
         else if (Buttons.CANCEL_BUTTON.isClickedButton(clickEvent)){

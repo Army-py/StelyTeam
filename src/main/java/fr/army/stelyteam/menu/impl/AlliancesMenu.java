@@ -62,6 +62,7 @@ public class AlliancesMenu extends FixedMenu {
 
 
     public Inventory createInventory(String playerName) {
+        final int maxMembersPerLine = config.getInt("maxMembersInLore");
         Inventory inventory = Bukkit.createInventory(this, this.menuSlots, this.menuName);
 
         emptyCases(inventory, this.menuSlots, 0);
@@ -85,8 +86,11 @@ public class AlliancesMenu extends FixedMenu {
             // OfflinePlayer allianceOwner;
             ItemStack item;
 
-            // if (playerUUID == null) allianceOwner = Bukkit.getOfflinePlayer(allianceOwnerName);
-            // else allianceOwner = Bukkit.getOfflinePlayer(playerUUID);
+            List<String> playerNames = new ArrayList<>();
+            for(int i = 0; i < allianceMembers.size(); i++){
+                if (i != 0 && i % maxMembersPerLine == 0) playerNames.add("%BACKTOLINE%");
+                playerNames.add(allianceMembers.get(i));
+            }
             
             lore = replaceInLore(lore, "%OWNER%", allianceOwnerName);
             lore = replaceInLore(lore, "%NAME%", allianceName);
@@ -94,7 +98,7 @@ public class AlliancesMenu extends FixedMenu {
             lore = replaceInLore(lore, "%DATE%", allianceDate);
             lore = replaceInLore(lore, "%MEMBER_COUNT%", IntegerToString(teamMembers));
             lore = replaceInLore(lore, "%MAX_MEMBERS%", IntegerToString(maxMembers+teamMembersLelvel));
-            lore = replaceInLore(lore, "%MEMBERS%", allianceMembers.isEmpty() ? messageManager.getMessageWithoutPrefix("common.no_members") : String.join(", ", allianceMembers));
+            lore = replaceInLore(lore, "%MEMBERS%", allianceMembers.isEmpty() ? messageManager.getMessageWithoutPrefix("common.no_members") : String.join(", ", playerNames));
             lore = replaceInLore(lore, "%DESCRIPTION%", colorsBuilder.replaceColor(allianceDescription));
             
             

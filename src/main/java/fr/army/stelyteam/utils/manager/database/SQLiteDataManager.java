@@ -5,13 +5,10 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.UUID;
 
-import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
-
 import fr.army.stelyteam.StelyTeamPlugin;
-import org.jetbrains.annotations.NotNull;
 
 public class SQLiteDataManager {
 
@@ -67,9 +64,13 @@ public class SQLiteDataManager {
                 queryHomes.executeUpdate();
                 queryHomes.close();
 
-                PreparedStatement queryPlayers = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'players' ('uuid' TEXT, 'playername' TEXT, PRIMARY KEY('uuid'));");
-                queryPlayers.executeUpdate();
-                queryPlayers.close();
+                // PreparedStatement queryPlayers = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'players' ('uuid' TEXT, 'playername' TEXT, PRIMARY KEY('uuid'));");
+                // queryPlayers.executeUpdate();
+                // queryPlayers.close();
+
+                PreparedStatement dropInventoryDebug = connection.prepareStatement("DROP TABLE IF EXISTS 'inventoryDebug';");
+                dropInventoryDebug.executeUpdate();
+                dropInventoryDebug.close();
             } catch (Exception e){
                 e.printStackTrace();
             }
@@ -246,98 +247,98 @@ public class SQLiteDataManager {
     }
 
 
-    public void registerPlayer(Player player){
-        if(isConnected()){
-            try {
-                PreparedStatement query = connection.prepareStatement("INSERT INTO players VALUES (?, ?)");
-                query.setString(1, player.getUniqueId().toString());
-                query.setString(2, player.getName());
-                query.executeUpdate();
-                query.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+    // public void registerPlayer(Player player){
+    //     if(isConnected()){
+    //         try {
+    //             PreparedStatement query = connection.prepareStatement("INSERT INTO players VALUES (?, ?)");
+    //             query.setString(1, player.getUniqueId().toString());
+    //             query.setString(2, player.getName());
+    //             query.executeUpdate();
+    //             query.close();
+    //         } catch (SQLException e) {
+    //             e.printStackTrace();
+    //         }
+    //     }
+    // }
 
 
-    public void registerPlayer(OfflinePlayer player){
-        if(isConnected()){
-            try {
-                PreparedStatement query = connection.prepareStatement("INSERT INTO players VALUES (?, ?)");
-                query.setString(1, player.getUniqueId().toString());
-                query.setString(2, player.getName());
-                query.executeUpdate();
-                query.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+    // public void registerPlayer(OfflinePlayer player){
+    //     if(isConnected()){
+    //         try {
+    //             PreparedStatement query = connection.prepareStatement("INSERT INTO players VALUES (?, ?)");
+    //             query.setString(1, player.getUniqueId().toString());
+    //             query.setString(2, player.getName());
+    //             query.executeUpdate();
+    //             query.close();
+    //         } catch (SQLException e) {
+    //             e.printStackTrace();
+    //         }
+    //     }
+    // }
 
 
-    public boolean isRegistered(String playername){
-        if(isConnected()){
-            try {
-                PreparedStatement query = connection.prepareStatement("SELECT playername FROM players WHERE playername = ?");
-                query.setString(1, playername);
-                ResultSet result = query.executeQuery();
-                boolean isParticipant = result.next();
-                query.close();
-                return isParticipant;
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return false;
-    }
+    // public boolean isRegistered(String playername){
+    //     if(isConnected()){
+    //         try {
+    //             PreparedStatement query = connection.prepareStatement("SELECT playername FROM players WHERE playername = ?");
+    //             query.setString(1, playername);
+    //             ResultSet result = query.executeQuery();
+    //             boolean isParticipant = result.next();
+    //             query.close();
+    //             return isParticipant;
+    //         } catch (SQLException e) {
+    //             e.printStackTrace();
+    //         }
+    //     }
+    //     return false;
+    // }
 
 
-    // Should be not null
-    @NotNull
-    public UUID getUUID(String playername) {
-        if (!isConnected()) {
-            throw new IllegalStateException("Can not use the this database while the connection is not established");
-        }
-        try {
-            PreparedStatement query = connection.prepareStatement("SELECT uuid FROM players WHERE playername = ?");
-            query.setString(1, playername);
-            ResultSet result = query.executeQuery();
-            boolean isParticipant = result.next();
-            if (!isParticipant) {
-                throw new RuntimeException("The uuid of '" + playername + "' is not stored in the database");
-            }
-            final UUID uuid = UUID.fromString(result.getString("uuid"));
-            query.close();
+    // // Should be not null
+    // @NotNull
+    // public UUID getUUID(String playername) {
+    //     if (!isConnected()) {
+    //         throw new IllegalStateException("Can not use the this database while the connection is not established");
+    //     }
+    //     try {
+    //         PreparedStatement query = connection.prepareStatement("SELECT uuid FROM players WHERE playername = ?");
+    //         query.setString(1, playername);
+    //         ResultSet result = query.executeQuery();
+    //         boolean isParticipant = result.next();
+    //         if (!isParticipant) {
+    //             throw new RuntimeException("The uuid of '" + playername + "' is not stored in the database");
+    //         }
+    //         final UUID uuid = UUID.fromString(result.getString("uuid"));
+    //         query.close();
 
-            // if (uuid != null)
-            //     System.out.println(uuid.toString());
-            // else
-            //     System.out.println("null");
+    //         // if (uuid != null)
+    //         //     System.out.println(uuid.toString());
+    //         // else
+    //         //     System.out.println("null");
 
-            return uuid;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    //         return uuid;
+    //     } catch (SQLException e) {
+    //         throw new RuntimeException(e);
+    //     }
+    // }
 
-    public String getPlayerName(UUID uuid){
-        if(isConnected()){
-            try {
-                PreparedStatement query = connection.prepareStatement("SELECT playername FROM players WHERE uuid = ?");
-                query.setString(1, uuid.toString());
-                ResultSet result = query.executeQuery();
-                boolean isParticipant = result.next();
-                String playername = null;
-                if(isParticipant){
-                    playername = result.getString("playername");
-                }
-                query.close();
-                return playername;
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
+    // public String getPlayerName(UUID uuid){
+    //     if(isConnected()){
+    //         try {
+    //             PreparedStatement query = connection.prepareStatement("SELECT playername FROM players WHERE uuid = ?");
+    //             query.setString(1, uuid.toString());
+    //             ResultSet result = query.executeQuery();
+    //             boolean isParticipant = result.next();
+    //             String playername = null;
+    //             if(isParticipant){
+    //                 playername = result.getString("playername");
+    //             }
+    //             query.close();
+    //             return playername;
+    //         } catch (SQLException e) {
+    //             e.printStackTrace();
+    //         }
+    //     }
+    //     return null;
+    // }
 }
