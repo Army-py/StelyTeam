@@ -1,4 +1,4 @@
-package fr.army.stelyteam.listener;
+package fr.army.stelyteam.listener.impl;
 
 import org.bukkit.conversations.ConversationAbandonedEvent;
 import org.bukkit.conversations.ConversationCanceller;

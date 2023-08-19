@@ -1,14 +1,15 @@
-package fr.army.stelyteam.listener;
+package fr.army.stelyteam.listener.impl;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.utils.network.ChannelRegistry;
 import fr.army.stelyteam.utils.network.task.AsyncStorageReceiver;
 import fr.flowsqy.noqueuepluginmessage.api.event.DataReceiveEvent;
 
-public class OrderReceiverListener {
+public class OrderReceiverListener implements Listener {
     
     private final StelyTeamPlugin plugin;
 
@@ -21,9 +22,12 @@ public class OrderReceiverListener {
     @SuppressWarnings("unused")
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     private void onReceive(DataReceiveEvent event) {
-        if (!ChannelRegistry.STORAGE_CHANNEL.toString().equals(event.getChannel())) {
+        // System.out.println("Receive data");
+        // System.out.println(event.getChannel());
+        if (!ChannelRegistry.STORAGE_CHANNEL.getChannel().equals(event.getChannel())) {
             return;
         }
+        // System.out.println("Channel is good");
         AsyncStorageReceiver asyncStorageReceiver = new AsyncStorageReceiver();
         asyncStorageReceiver.receiveStorage(plugin, event.getData());
     }
