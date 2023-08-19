@@ -33,6 +33,7 @@ public class StelyTeamPlugin extends JavaPlugin {
 
     private static boolean debug = false;
 
+    private String currentServerName;
     private String[] serverNames;
 
     private static StelyTeamPlugin plugin;
@@ -58,6 +59,7 @@ public class StelyTeamPlugin extends JavaPlugin {
         this.config = initFile(this.getDataFolder(), "config.yml");
         this.messages = initFile(this.getDataFolder(), "messages.yml");
 
+        this.currentServerName = Bukkit.getServer().getMotd();
         this.serverNames = this.config.getStringList("serverNames").toArray(new String[0]);
 
         this.sqliteManager = new SQLiteDataManager(this);
@@ -73,7 +75,8 @@ public class StelyTeamPlugin extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
         }
         
-        this.cacheManager = new CacheManager();
+        this.serializeManager = new ItemStackSerializer();
+        this.cacheManager = new CacheManager(this);
         this.economyManager = new EconomyManager(this);
         this.messageManager = new MessageManager(this);
         final TeamChatLoader teamChatLoader = new TeamChatLoader();
@@ -81,7 +84,6 @@ public class StelyTeamPlugin extends JavaPlugin {
         this.commandManager = new CommandManager(this);
         this.colorsBuilder = new ColorsBuilder(this);
         this.conversationBuilder = new ConversationBuilder(this);
-        this.serializeManager = new ItemStackSerializer();
 
 
         this.externalManager = new ExternalManager();
@@ -279,6 +281,10 @@ public class StelyTeamPlugin extends JavaPlugin {
 
     public String[] getServerNames(){
         return serverNames;
+    }
+
+    public String getCurrentServerName(){
+        return currentServerName;
     }
 
 
