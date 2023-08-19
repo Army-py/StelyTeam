@@ -22,6 +22,7 @@ import org.bukkit.persistence.PersistentDataType;
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
+import fr.army.stelyteam.utils.manager.MessageManager;
 
 
 public abstract class TeamMenu implements ITeamMenu {
@@ -29,6 +30,7 @@ public abstract class TeamMenu implements ITeamMenu {
     protected final StelyTeamPlugin plugin = StelyTeamPlugin.getPlugin();
     protected final ColorsBuilder colorsBuilder = plugin.getColorsBuilder();
     protected final YamlConfiguration config = plugin.getConfig();
+    protected final MessageManager messageManager = plugin.getMessageManager();
 
     protected InventoryHolder menu;
 
@@ -39,6 +41,7 @@ public abstract class TeamMenu implements ITeamMenu {
     protected final int menuSlots;
     
     protected final Team team;
+    protected final String serverName;
 
 
     public TeamMenu(Player viewer, String menuName, int menuSlots, TeamMenu previousMenu) {        
@@ -48,6 +51,7 @@ public abstract class TeamMenu implements ITeamMenu {
         this.previousMenu = previousMenu;
 
         this.team = Team.init(viewer);
+        this.serverName = plugin.getCurrentServerName();
     }
 
     public TeamMenu(Player viewer, int menuSlots, TeamMenu previousMenu) { 
@@ -57,6 +61,7 @@ public abstract class TeamMenu implements ITeamMenu {
         this.previousMenu = previousMenu;
 
         this.team = Team.init(viewer);
+        this.serverName = plugin.getCurrentServerName();
     }
 
 
