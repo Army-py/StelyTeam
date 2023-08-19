@@ -28,6 +28,7 @@ common:
   owners_not_connected: "§cLes gérants de la team ne sont pas connectés."
   owner_already_action: "§cLe chef de la team a déjà une demande en cours."
   no_members: "§cAucun membre"
+  storage_already_open: "§cCe coffre est déjà ouvert sur un autre serveur."
 
 # Messages concernant la gestions des membres
 manage_members:
