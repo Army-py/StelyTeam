@@ -47,25 +47,29 @@ public class StorageMenu extends PagedMenu {
             storage = cacheManager.getStorage(teamUuid, storageId);
             inventory = storage.getInventoryInstance();
 
-            System.out.println("Storage found in cache");
+            if (inventory == null){
+                inventory = Bukkit.createInventory(this, this.menuSlots, inventoryName);
+                storage.setStorageInstance(inventory);
+            }
+            // System.out.println("Storage found in cache");
         }else{
             inventory = Bukkit.createInventory(this, this.menuSlots, inventoryName);
-
+            
             if (team.hasStorage(storageId)){
                 storage = team.getStorage(storageId);
-                byte[] contentBytes = storage.getStorageContent();
-                ItemStack[] content = serializeManager.deserializeFromByte(contentBytes);
-                inventory.setContents(content);
+            }else{
+                storage = new Storage(teamUuid, storageId, inventory, new byte[0], null);
             }
-            storage = new Storage(teamUuid, storageId, inventory,
-                    serializeManager.serializeToByte(inventory.getContents()), false);
         }
+        
+        byte[] contentBytes = storage.getStorageContent();
+        ItemStack[] content = serializeManager.deserializeFromByte(contentBytes);
+        inventory.setContents(content);
 
-        // System.out.println(viewer.getServer().get);
-
-        // storage.setOpenedServer(viewer.getServer().getName());
-        System.out.println(Bukkit.getServer().getMotd());
-        storage.saveStorageToCache(plugin, viewer.getPlayer(), true);
+        // System.out.println(serverName);
+        // System.out.println(storage.getOpenedServerName());
+        storage.setOpenedServerName(serverName);
+        storage.saveStorageToCache(plugin, viewer.getPlayer());
         storage.saveStorageToDatabase();
 
         emptyCases(inventory, config.getIntegerList("inventories.storage.emptyCase.slots"));
@@ -105,12 +109,27 @@ public class StorageMenu extends PagedMenu {
         
         if (clickEvent.getCurrentItem() != null){
             if (Buttons.PREVIOUS_STORAGE_BUTTON.isClickedButton(clickEvent)){
+                storageId -= 1;
+                if (cacheManager.containsStorage(team.getTeamUuid(), storageId)){
+                    Storage storage = cacheManager.getStorage(team.getTeamUuid(), storageId);
+                    if (storage.getOpenedServerName() != null && !storage.getOpenedServerName().equals(serverName)){
+                        player.sendMessage(messageManager.getMessage("common.storage_already_open"));
+                        return;
+                    }
+                }
                 clickEvent.setCancelled(true);
-                new StorageMenu(player, previousMenu).openMenu(storageId-1);
-                return;
+                new StorageMenu(player, previousMenu).openMenu(storageId);
             }else if (Buttons.NEXT_STORAGE_BUTTON.isClickedButton(clickEvent)){
+                storageId += 1;
+                if (cacheManager.containsStorage(team.getTeamUuid(), storageId)){
+                    Storage storage = cacheManager.getStorage(team.getTeamUuid(), storageId);
+                    if (storage.getOpenedServerName() != null && !storage.getOpenedServerName().equals(serverName)){
+                        player.sendMessage(messageManager.getMessage("common.storage_already_open"));
+                        return;
+                    }
+                }
                 clickEvent.setCancelled(true);
-                new StorageMenu(player, previousMenu).openMenu(storageId+1);
+                new StorageMenu(player, previousMenu).openMenu(storageId);
             }else{
                 if (Buttons.CLOSE_STORAGE_MENU_BUTTON.isClickedButton(clickEvent)){
                     clickEvent.setCancelled(true);
@@ -127,8 +146,10 @@ public class StorageMenu extends PagedMenu {
         
         if (cacheManager.containsStorage(team.getTeamUuid(), storageId)){
             Storage storage = cacheManager.getStorage(team.getTeamUuid(), storageId);
-            if (storage.isOpen()){
+            if (storage.getOpenedServerName() != null && !storage.getOpenedServerName().equals(serverName)){
                 clickEvent.setCancelled(true);
+                viewer.closeInventory();
+                return;
             }
         }
         clickEvent.setCancelled(false);
@@ -145,13 +166,6 @@ public class StorageMenu extends PagedMenu {
         ItemStack[] inventoryContent = closeEvent.getInventory().getContents();
         Storage storage;
 
-        final boolean isOpen;
-        if (storageInventory.getViewers().size() > 1){
-            isOpen = true;
-        }else{
-            isOpen = false;
-        }
-
         if (cacheManager.containsStorage(teamUuid, storageId)){
             storage = cacheManager.replaceStorageContent(teamUuid, storageId, serializeManager.serializeToByte(inventoryContent));
         }else if (team.hasStorage(storageId)){
@@ -160,14 +174,27 @@ public class StorageMenu extends PagedMenu {
             storage.setStorageContent(serializeManager.serializeToByte(inventoryContent));
         }else{
             storage = new Storage(teamUuid, storageId, storageInventory,
-                    serializeManager.serializeToByte(inventoryContent), isOpen);
+                    serializeManager.serializeToByte(inventoryContent), null);
         }
+
+        if (storage.getOpenedServerName() == null || storage.getOpenedServerName().equals(serverName)){
+            final String openedServerName;
+            if (storageInventory.getViewers().size() > 1){
+                openedServerName = serverName;
+            }else{
+                openedServerName = null;
+            }
+
+            // System.out.println("CLOSE : " + storageInventory.getViewers().size());
+            // System.out.println("CLOSE : " + openedServerName);
+            
+            storage.setOpenedServerName(openedServerName);
+            storage.saveStorageToCache(plugin, player);
+            storage.saveStorageToDatabase();
+            // System.out.println("SAVE");
+        }
+
         
-        if (storage.isOpen()){
-            return;
-        }
-        storage.saveStorageToCache(plugin, player, isOpen);
-        storage.saveStorageToDatabase();
     }
 
 

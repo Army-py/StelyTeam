@@ -11,11 +11,11 @@ import fr.flowsqy.noqueuepluginmessage.api.NoQueuePluginMessage;
 
 public class NetworkMessageSender {
     
-    public void sendStorage(@NotNull Player player, @NotNull String[] serverNames, @NotNull Storage storage, boolean isOpenHere) {
+    public void sendStorage(@NotNull Player player, @NotNull String[] serverNames, @NotNull Storage storage, String openedServerName) {
         final OrderWriter writer = new OrderWriter();
         final byte[] storageData;
         try {
-            storage.setOpened(isOpenHere);
+            storage.setOpenedServerName(openedServerName);
             storageData = writer.write(storage);
         } catch (IOException e) {
             throw new RuntimeException(e);

@@ -4,13 +4,18 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.team.Page;
 import fr.army.stelyteam.team.Storage;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.TemporaryActionNames;
+import fr.army.stelyteam.utils.manager.serializer.ItemStackSerializer;
 
 public class CacheManager {
+
+    private final ItemStackSerializer serializeManager;
+
     // {senderName, receiverName, actionName, Team}
     private Set<TemporaryAction> cachedTempAction = new HashSet<TemporaryAction>();
 
@@ -28,6 +33,11 @@ public class CacheManager {
 
     // private Set<UUID> cachedTeamPlayers = Collections.synchronizedSet(new HashSet<UUID>());
     private Set<UUID> cachedTeamPlayers = new HashSet<UUID>();
+
+
+    public CacheManager(StelyTeamPlugin plugin){
+        this.serializeManager = plugin.getSerializeManager();
+    }
 
 
 
@@ -112,7 +122,12 @@ public class CacheManager {
 
 
     public void addStorage(Storage storage){
-        cachedStorage.add(storage);
+        if (storage == null) return;
+        if (containsStorage(storage.getTeamUuid(), storage.getStorageId())){
+            replaceStorage(storage);
+        }else{
+            cachedStorage.add(storage);
+        }
     }
 
     public void removeStorage(Storage storage){
@@ -128,23 +143,40 @@ public class CacheManager {
         return null;
     }
 
+    // TODO : Régler l'erreur
     public void replaceStorage(Storage storage){
-        for(Storage cachedStorage : cachedStorage){
-            if(cachedStorage.getTeamUuid().equals(storage.getTeamUuid()) && cachedStorage.getStorageId() == storage.getStorageId()){
-                cachedStorage = storage;
+        // cachedStorage.removeIf(cStorage -> cStorage.getTeamUuid().equals(storage.getTeamUuid()) && cStorage.getStorageId() == storage.getStorageId());
+        // cachedStorage.add(storage);
+        for (Storage cStorage : cachedStorage){
+            final UUID teamUuid = cStorage.getTeamUuid();
+            final int storageId = cStorage.getStorageId();
+            if (teamUuid.equals(storage.getTeamUuid()) && storageId == storage.getStorageId()){
+                cStorage.setOpenedServerName(storage.getOpenedServerName());
+                replaceStorageContent(cStorage, storage.getStorageContent());
             }
         }
     }
 
     public Storage replaceStorageContent(UUID teamUuid, int storageId, byte[] content){
         if (!containsStorage(teamUuid, storageId)) return null;
-        for(Storage cachedStorage : cachedStorage){
-            if(cachedStorage.getTeamUuid().equals(teamUuid) && cachedStorage.getStorageId() == storageId){
-                cachedStorage.setStorageContent(content);
-                return cachedStorage;
+        for(Storage cStorage : cachedStorage){
+            if(cStorage.getTeamUuid().equals(teamUuid) && cStorage.getStorageId() == storageId){
+                cStorage.setStorageContent(content);
+                if (cStorage.getInventoryInstance() != null){
+                    cStorage.getInventoryInstance().setContents(serializeManager.deserializeFromByte(content));
+                }
+                return cStorage;
             }
         }
         return null;
+    }
+    
+    public Storage replaceStorageContent(Storage storage, byte[] content){
+        storage.setStorageContent(content);
+        if (storage.getInventoryInstance() != null){
+            storage.getInventoryInstance().setContents(serializeManager.deserializeFromByte(content));
+        }
+        return storage;
     }
 
     public boolean containsStorage(UUID teamUuid, int storageId){

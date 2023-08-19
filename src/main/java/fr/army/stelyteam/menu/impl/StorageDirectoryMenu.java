@@ -13,11 +13,14 @@ import fr.army.stelyteam.menu.Buttons;
 import fr.army.stelyteam.menu.FixedMenu;
 import fr.army.stelyteam.menu.Menus;
 import fr.army.stelyteam.menu.TeamMenu;
+import fr.army.stelyteam.team.Storage;
 import fr.army.stelyteam.utils.builder.ItemBuilder;
+import fr.army.stelyteam.utils.manager.CacheManager;
 
 
 public class StorageDirectoryMenu extends FixedMenu {
 
+    final CacheManager cacheManager = plugin.getCacheManager();
 
     public StorageDirectoryMenu(Player viewer, TeamMenu previousMenu) {
         super(
@@ -92,7 +95,16 @@ public class StorageDirectoryMenu extends FixedMenu {
                     if (!player.isOp()){
                         player.sendMessage("§cCette fonctionnalité est temporairement désactivée.");
                     }else{
-                        new StorageMenu(player, this).openMenu(storageId);
+                        if (cacheManager.containsStorage(team.getTeamUuid(), storageId)){
+                            final Storage storage = cacheManager.getStorage(team.getTeamUuid(), storageId);
+                            if (storage.getOpenedServerName() == null || storage.getOpenedServerName().equals(serverName)){
+                                new StorageMenu(player, this).openMenu(storageId);
+                            }else{
+                                player.sendMessage(messageManager.getMessage("common.storage_already_open"));
+                            }
+                        }else{
+                            new StorageMenu(player, this).openMenu(storageId);
+                        }
                     }
                     return;
                 }

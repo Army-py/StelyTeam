@@ -15,24 +15,24 @@ public class Storage {
     private Integer storageId;
     private Inventory inventoryInstance;
     private byte[] storageContent;
-    private boolean isOpened;
+    private String openedServerName;
 
     public Storage(@NotNull UUID teamUuid, @NotNull Integer storageId, @Nullable Inventory inventoryInstance,
-            @NotNull byte[] storageContent, @NotNull boolean isOpened) {
+            @NotNull byte[] storageContent, @Nullable String openedServerName) {
         this.teamUuid = teamUuid;
         this.storageId = storageId;
         this.inventoryInstance = inventoryInstance;
         this.storageContent = storageContent;
-        this.isOpened = isOpened;
+        this.openedServerName = openedServerName;
     }
 
 
-    public void saveStorageToCache(StelyTeamPlugin plugin, Player player, boolean isOpenHere){
+    public void saveStorageToCache(StelyTeamPlugin plugin, Player player){
         StelyTeamPlugin.getPlugin().getCacheManager().saveStorage(this);
 
         final AsyncStorageSender storageSender = new AsyncStorageSender();
         final String[] serverNames = plugin.getServerNames();
-        storageSender.sendStorage(plugin, player, serverNames, this, isOpenHere);
+        storageSender.sendStorage(plugin, player, serverNames, this, openedServerName);
     }
 
     public void saveStorageToDatabase(){
@@ -56,8 +56,8 @@ public class Storage {
     }
 
     @Nullable
-    public boolean isOpen() {
-        return isOpened;
+    public String getOpenedServerName() {
+        return openedServerName;
     }
 
     public void setTeamUuid(UUID teamUuid) {
@@ -76,7 +76,7 @@ public class Storage {
         this.storageContent = storageContent;
     }
 
-    public void setOpened(boolean isOpened) {
-        this.isOpened = isOpened;
+    public void setOpenedServerName(String openedServerName) {
+        this.openedServerName = openedServerName;
     }
 }

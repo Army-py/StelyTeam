@@ -15,8 +15,13 @@ public class OrderWriter {
         final DataOutputStream outDataStream = new DataOutputStream(outByteStream);
         outDataStream.writeUTF(storage.getTeamUuid().toString());
         outDataStream.writeInt(storage.getStorageId());
+        if (storage.getOpenedServerName() == null) {
+            outDataStream.writeUTF("null");
+        }else{
+            outDataStream.writeUTF(storage.getOpenedServerName());
+        }
+        // System.out.println("WRITE : " + storage.getStorageContent().length);
         outDataStream.write(storage.getStorageContent());
-        outDataStream.writeBoolean(storage.isOpen());
         return outByteStream.toByteArray();
     }
 }

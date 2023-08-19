@@ -17,8 +17,12 @@ public class OrderReader {
         final DataInputStream inDataStream = new DataInputStream(new ByteArrayInputStream(storageData));
         final UUID teamUuid = UUID.fromString(inDataStream.readUTF());
         final int storageId = inDataStream.readInt();
-        final byte[] storageContent = new byte[inDataStream.readShort()];
-        final boolean isOpen = inDataStream.readBoolean();
-        return new Storage(teamUuid, storageId, null, storageContent, isOpen);
+        String openedServerName = inDataStream.readUTF();
+        if (openedServerName.equals("null")) {
+            openedServerName = null;
+        }
+        final byte[] storageContent = inDataStream.readAllBytes();
+        // System.out.println("READ : " + storageContent.length);
+        return new Storage(teamUuid, storageId, null, storageContent, openedServerName);
     }
 }

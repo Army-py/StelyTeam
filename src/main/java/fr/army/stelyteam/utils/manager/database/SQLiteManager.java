@@ -82,6 +82,8 @@ public class SQLiteManager extends DatabaseManager {
                 PreparedStatement queryAssignements = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'assignement' ('teamId' INTEGER, 'permLabel' TEXT, 'teamRank' INTEGER, FOREIGN KEY('teamId') REFERENCES 'team'('teamId'), PRIMARY KEY('permLabel','teamId'));");
                 PreparedStatement queryStorages = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'storage' ('storageId' INTEGER, PRIMARY KEY('storageId'));");
 
+                PreparedStatement queryCreatePlayersUuid = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'players' ('playerId' INTEGER, 'uuid' TEXT, 'playerName' TEXT, PRIMARY KEY('playerId' AUTOINCREMENT));");
+
                 queryPlayers.executeUpdate();
                 queryTeams.executeUpdate();
                 queryTeamStorages.executeUpdate();
@@ -89,12 +91,16 @@ public class SQLiteManager extends DatabaseManager {
                 queryAssignements.executeUpdate();
                 queryStorages.executeUpdate();
 
+                queryCreatePlayersUuid.executeUpdate();
+
                 queryPlayers.close();
                 queryTeams.close();
                 queryTeamStorages.close();
                 queryAlliances.close();
                 queryAssignements.close();
                 queryStorages.close();
+
+                queryCreatePlayersUuid.close();
             } catch (Exception e){
                 e.printStackTrace();
             }
@@ -704,7 +710,7 @@ public class SQLiteManager extends DatabaseManager {
         UUID teamUuid = storage.getTeamUuid();
         int storageId = storage.getStorageId();
         byte[] storageContent = storage.getStorageContent();
-        boolean storageIsOpen = storage.isOpen();
+        String openedServerName = storage.getOpenedServerName();
         if (!teamHasStorage(teamUuid, storageId)){
             if (!storageIdExist(storageId)){
                 insertStorageId(storageId);
@@ -847,21 +853,33 @@ public class SQLiteManager extends DatabaseManager {
 
     @Override
     public List<Member> getTeamMembers(UUID teamUuid){
-        List<Member> teamMembers = Collections.synchronizedList(new ArrayList<>());
+        // List<Member> teamMembers = Collections.synchronizedList(new ArrayList<>());
+        List<Member> teamMembers = new ArrayList<>();
         if(isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("SELECT p.playerName, p.teamRank, p.joinDate FROM player AS p INNER JOIN team AS t ON p.teamId = t.teamId WHERE t.teamUuid = ? ORDER BY p.teamRank ASC, p.playerName ASC;");
                 query.setString(1, teamUuid.toString());
                 ResultSet result = query.executeQuery();
                 while(result.next()){
-                    teamMembers.add(
-                        new Member(
-                            result.getString("playerName"),
-                            result.getInt("teamRank"),
-                            result.getString("joinDate"),
-                            getUUID(result.getString("playerName"))
-                        )
-                    );
+                    try{
+                        teamMembers.add(
+                            // new Member(
+                            //     result.getString("playerName"),
+                            //     result.getInt("teamRank"),
+                            //     result.getString("joinDate"),
+                            //     StelyTeamPlugin.getPlugin().getSQLiteManager().getUUID(result.getString("playerName"))
+                            // )
+                            new Member(
+                                result.getString("playerName"),
+                                result.getInt("teamRank"),
+                                result.getString("joinDate"),
+                                getUUID(result.getString("playerName"))
+                            )
+                        );
+                    }catch(Exception e){
+                        e.printStackTrace();
+                        continue;
+                    }
                 }
                 query.close();
             } catch (SQLException e) {
@@ -873,7 +891,7 @@ public class SQLiteManager extends DatabaseManager {
 
     @Override
     public Set<Permission> getTeamAssignement(UUID teamUuid){
-        Set<Permission> teamAssignement = new HashSet<>();
+        Set<Permission> teamAssignement = Collections.synchronizedSet(new HashSet<>());
         if(isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("SELECT a.permLabel, a.teamRank FROM assignement AS a INNER JOIN team AS t ON a.teamId = t.teamId WHERE t.teamUuid = ?;");
@@ -936,7 +954,7 @@ public class SQLiteManager extends DatabaseManager {
                             result.getInt("storageId"),
                             null,
                             result.getBytes("storageContent"),
-                            false
+                            null
                         )
                     );
                 }
@@ -956,7 +974,10 @@ public class SQLiteManager extends DatabaseManager {
                 PreparedStatement query = connection.prepareStatement("SELECT playerId FROM player WHERE playerName = ?");
                 query.setString(1, playerName);
                 ResultSet result = query.executeQuery();
-                int playerId = result.getInt("playerId");
+                int playerId = 0;
+                if(result.next()){
+                    playerId = result.getInt("playerId");
+                }
                 query.close();
                 return playerId;
             } catch (Exception e){
@@ -1015,6 +1036,7 @@ public class SQLiteManager extends DatabaseManager {
         return null;
     }
 
+
     @Override
     public String getCurrentDate(){
         return new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime());
@@ -1024,11 +1046,13 @@ public class SQLiteManager extends DatabaseManager {
 
 
 
+
+
     @Override
     public void registerPlayer(Player player){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("INSERT INTO players VALUES (?, ?)");
+                PreparedStatement query = connection.prepareStatement("INSERT INTO players (uuid, playerName) VALUES (?, ?)");
                 query.setString(1, player.getUniqueId().toString());
                 query.setString(2, player.getName());
                 query.executeUpdate();
@@ -1044,7 +1068,7 @@ public class SQLiteManager extends DatabaseManager {
     public void registerPlayer(OfflinePlayer player){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("INSERT INTO players VALUES (?, ?)");
+                PreparedStatement query = connection.prepareStatement("INSERT INTO players (uuid, playerName) VALUES (?, ?)");
                 query.setString(1, player.getUniqueId().toString());
                 query.setString(2, player.getName());
                 query.executeUpdate();
@@ -1074,10 +1098,20 @@ public class SQLiteManager extends DatabaseManager {
     }
 
 
+    @Override
+    public UUID getUUID(String playerName){
+        try {
+            return queryUUID(playerName);
+        } catch (Exception e) {
+            // System.out.println(e);
+            return UUID.randomUUID();
+        }
+    }
+
+
     // Should be not null
     @NotNull
-    @Override
-    public UUID getUUID(String playerName) {
+    private UUID queryUUID(String playerName) {
         if (!isConnected()) {
             throw new IllegalStateException("Can not use the this database while the connection is not established");
         }

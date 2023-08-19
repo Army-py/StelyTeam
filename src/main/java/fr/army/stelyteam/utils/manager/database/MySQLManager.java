@@ -750,7 +750,7 @@ public class MySQLManager extends DatabaseManager {
         UUID teamUuid = storage.getTeamUuid();
         int storageId = storage.getStorageId();
         byte[] storageContent = storage.getStorageContent();
-        boolean storageIsOpen = storage.isOpen();
+        String openedServerName = storage.getOpenedServerName();
         if (!teamHasStorage(teamUuid, storageId)){
             if (!storageIdExist(storageId)){
                 insertStorageId(storageId);
@@ -1023,7 +1023,7 @@ public class MySQLManager extends DatabaseManager {
                             result.getInt("storageId"),
                             null,
                             result.getBytes("storageContent"),
-                            false
+                            null
                         )
                     );
                 }

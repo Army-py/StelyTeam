@@ -9,8 +9,8 @@ import fr.army.stelyteam.utils.network.NetworkMessageSender;
 
 public class AsyncStorageSender {
     
-    public void sendStorage(StelyTeamPlugin plugin, Player player, String[] serverNames, Storage storage, boolean isOpenHere){
+    public void sendStorage(StelyTeamPlugin plugin, Player player, String[] serverNames, Storage storage, String openedServerName){
         final NetworkMessageSender networkMessageSender = new NetworkMessageSender();
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> networkMessageSender.sendStorage(player, serverNames, storage, isOpenHere));
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> networkMessageSender.sendStorage(player, serverNames, storage, openedServerName));
     }
 }
