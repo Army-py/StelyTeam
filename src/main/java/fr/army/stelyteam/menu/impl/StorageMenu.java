@@ -50,26 +50,33 @@ public class StorageMenu extends PagedMenu {
             if (inventory == null){
                 inventory = Bukkit.createInventory(this, this.menuSlots, inventoryName);
                 storage.setStorageInstance(inventory);
+
+                byte[] contentBytes = storage.getStorageContent();
+                ItemStack[] content = serializeManager.deserializeFromByte(contentBytes);
+                inventory.setContents(content);
+                System.out.println("new content");
             }
-            // System.out.println("Storage found in cache");
+            System.out.println("Storage found in cache");
         }else{
             inventory = Bukkit.createInventory(this, this.menuSlots, inventoryName);
             
             if (team.hasStorage(storageId)){
                 storage = team.getStorage(storageId);
+                storage.setStorageInstance(inventory);
             }else{
                 storage = new Storage(teamUuid, storageId, inventory, new byte[0], null);
             }
+
+            byte[] contentBytes = storage.getStorageContent();
+            ItemStack[] content = serializeManager.deserializeFromByte(contentBytes);
+            inventory.setContents(content);
         }
-        
-        byte[] contentBytes = storage.getStorageContent();
-        ItemStack[] content = serializeManager.deserializeFromByte(contentBytes);
-        inventory.setContents(content);
 
         // System.out.println(serverName);
         // System.out.println(storage.getOpenedServerName());
+        storage.setStorageContent(serializeManager.serializeToByte(inventory.getContents()));
         storage.setOpenedServerName(serverName);
-        storage.saveStorageToCache(plugin, viewer.getPlayer());
+        storage.saveStorageToCache(viewer.getPlayer(), true, true);
         storage.saveStorageToDatabase();
 
         emptyCases(inventory, config.getIntegerList("inventories.storage.emptyCase.slots"));
@@ -102,7 +109,7 @@ public class StorageMenu extends PagedMenu {
     }
 
 
-    @Override
+    @Override()
     public void onClick(InventoryClickEvent clickEvent) {
         Player player = (Player) clickEvent.getWhoClicked();
         Integer storageId = getStorageId(clickEvent.getView().getTitle());
@@ -167,7 +174,11 @@ public class StorageMenu extends PagedMenu {
         Storage storage;
 
         if (cacheManager.containsStorage(teamUuid, storageId)){
-            storage = cacheManager.replaceStorageContent(teamUuid, storageId, serializeManager.serializeToByte(inventoryContent));
+            storage = cacheManager.getStorage(teamUuid, storageId);
+            storage.setStorageContent(serializeManager.serializeToByte(inventoryContent));
+            storage.setStorageInstanceContent(inventoryContent);
+            // storage = cacheManager.replaceStorageContent(teamUuid, storageId, serializeManager.serializeToByte(inventoryContent));
+            storage.saveStorageToCache(player, false, true);
         }else if (team.hasStorage(storageId)){
             storage = team.getStorage(storageId);
             storage.setStorageInstance(storageInventory);
@@ -185,12 +196,18 @@ public class StorageMenu extends PagedMenu {
                 openedServerName = null;
             }
 
+            System.out.println("Viewers : " + storageInventory.getViewers().size());
+
             // System.out.println("CLOSE : " + storageInventory.getViewers().size());
             // System.out.println("CLOSE : " + openedServerName);
             
             storage.setOpenedServerName(openedServerName);
-            storage.saveStorageToCache(plugin, player);
+            storage.sendStorageAcrossServers(plugin, player);
             storage.saveStorageToDatabase();
+            if (openedServerName == null){
+                cacheManager.removeStorage(storage);
+                // System.out.println("REMOVE");
+            }
             // System.out.println("SAVE");
         }
 

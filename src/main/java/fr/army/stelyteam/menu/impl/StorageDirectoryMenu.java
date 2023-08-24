@@ -97,6 +97,7 @@ public class StorageDirectoryMenu extends FixedMenu {
                     }else{
                         if (cacheManager.containsStorage(team.getTeamUuid(), storageId)){
                             final Storage storage = cacheManager.getStorage(team.getTeamUuid(), storageId);
+                            storage.sendStorageAcrossServers(plugin, player);
                             if (storage.getOpenedServerName() == null || storage.getOpenedServerName().equals(serverName)){
                                 new StorageMenu(player, this).openMenu(storageId);
                             }else{

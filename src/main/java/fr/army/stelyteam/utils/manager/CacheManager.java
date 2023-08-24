@@ -123,75 +123,37 @@ public class CacheManager {
 
     public void addStorage(Storage storage){
         if (storage == null) return;
-        if (containsStorage(storage.getTeamUuid(), storage.getStorageId())){
-            replaceStorage(storage);
-        }else{
-            cachedStorage.add(storage);
-        }
+        cachedStorage.add(storage);
     }
 
     public void removeStorage(Storage storage){
-        cachedStorage.remove(storage);
+        cachedStorage.removeIf(cStorage -> cStorage.getTeamUuid().equals(storage.getTeamUuid()) && cStorage.getStorageId() == storage.getStorageId());
     }
 
     public Storage getStorage(UUID teamUuid, int storageId){
-        for(Storage storage : cachedStorage){
-            if(storage.getTeamUuid().equals(teamUuid) && storage.getStorageId() == storageId){
-                return storage;
-            }
-        }
-        return null;
+        return cachedStorage.stream().filter(storage -> storage.getTeamUuid().equals(teamUuid) && storage.getStorageId() == storageId).findFirst().orElse(null);
     }
 
     // TODO : Régler l'erreur
-    public void replaceStorage(Storage storage){
-        // cachedStorage.removeIf(cStorage -> cStorage.getTeamUuid().equals(storage.getTeamUuid()) && cStorage.getStorageId() == storage.getStorageId());
-        // cachedStorage.add(storage);
+    public void replaceStorage(Storage storage, boolean updateInstanceContent){
         for (Storage cStorage : cachedStorage){
             final UUID teamUuid = cStorage.getTeamUuid();
             final int storageId = cStorage.getStorageId();
             if (teamUuid.equals(storage.getTeamUuid()) && storageId == storage.getStorageId()){
                 cStorage.setOpenedServerName(storage.getOpenedServerName());
-                replaceStorageContent(cStorage, storage.getStorageContent());
+                cStorage.setStorageContent(storage.getStorageContent());
+                if (updateInstanceContent) cStorage.setStorageInstanceContent(serializeManager.deserializeFromByte(storage.getStorageContent()));
             }
         }
-    }
-
-    public Storage replaceStorageContent(UUID teamUuid, int storageId, byte[] content){
-        if (!containsStorage(teamUuid, storageId)) return null;
-        for(Storage cStorage : cachedStorage){
-            if(cStorage.getTeamUuid().equals(teamUuid) && cStorage.getStorageId() == storageId){
-                cStorage.setStorageContent(content);
-                if (cStorage.getInventoryInstance() != null){
-                    cStorage.getInventoryInstance().setContents(serializeManager.deserializeFromByte(content));
-                }
-                return cStorage;
-            }
-        }
-        return null;
-    }
-    
-    public Storage replaceStorageContent(Storage storage, byte[] content){
-        storage.setStorageContent(content);
-        if (storage.getInventoryInstance() != null){
-            storage.getInventoryInstance().setContents(serializeManager.deserializeFromByte(content));
-        }
-        return storage;
     }
 
     public boolean containsStorage(UUID teamUuid, int storageId){
-        if (cachedStorage.isEmpty()) return false;
-        for(Storage storage : cachedStorage){
-            if(storage.getTeamUuid().equals(teamUuid) && storage.getStorageId() == storageId){
-                return true;
-            }
-        }
-        return false;
+        return cachedStorage.stream().anyMatch(storage -> storage.getTeamUuid().equals(teamUuid) && storage.getStorageId() == storageId);
     }
 
-    public void saveStorage(Storage storage){
+    public void saveStorage(Storage storage, boolean updateInstanceContent){
         if(containsStorage(storage.getTeamUuid(), storage.getStorageId())){
-            replaceStorage(storage);
+            replaceStorage(storage, updateInstanceContent);
         } else {
             addStorage(storage);
         }
