@@ -1,4 +1,4 @@
-package fr.army.stelyteam.utils.network.message;
+package fr.army.stelyteam.utils.network.storage;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import fr.army.stelyteam.team.Storage;
 
-public class OrderWriter {
+public class StorageWriter {
     
     public byte @NotNull [] write(@NotNull Storage storage) throws IOException {
         final ByteArrayOutputStream outByteStream = new ByteArrayOutputStream();

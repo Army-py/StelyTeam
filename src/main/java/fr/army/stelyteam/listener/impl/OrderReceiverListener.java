@@ -29,6 +29,6 @@ public class OrderReceiverListener implements Listener {
         }
         // System.out.println("Channel is good");
         AsyncStorageReceiver asyncStorageReceiver = new AsyncStorageReceiver();
-        asyncStorageReceiver.receiveStorage(plugin, event.getData());
+        asyncStorageReceiver.receiveOrder(plugin, event.getData());
     }
 }

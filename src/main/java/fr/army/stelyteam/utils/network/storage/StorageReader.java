@@ -1,4 +1,4 @@
-package fr.army.stelyteam.utils.network.message;
+package fr.army.stelyteam.utils.network.storage;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
@@ -9,9 +9,8 @@ import org.jetbrains.annotations.NotNull;
 
 import fr.army.stelyteam.team.Storage;
 
-public class OrderReader {
+public class StorageReader {
     
-
     @NotNull
     public Storage read(byte @NotNull [] storageData) throws IOException {
         final DataInputStream inDataStream = new DataInputStream(new ByteArrayInputStream(storageData));
