@@ -44,6 +44,16 @@ public class Storage {
         storageSender.sendStorage(plugin, player, serverNames, this, plugin.getCurrentServerName());
     }
 
+    public void removeStorageFromCache(){
+        StelyTeamPlugin.getPlugin().getCacheManager().removeStorage(this);
+    }
+
+    @Nullable
+    public static Storage getStorageFromCache(UUID teamUuid, Integer storageId){
+        return StelyTeamPlugin.getPlugin().getCacheManager().getStorage(teamUuid, storageId);
+    }
+
+
     public UUID getTeamUuid() {
         return teamUuid;
     }

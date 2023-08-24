@@ -18,13 +18,11 @@ import fr.army.stelyteam.menu.TeamMenu;
 import fr.army.stelyteam.team.Storage;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.builder.ItemBuilder;
-import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.serializer.ItemStackSerializer;
 
 
 public class StorageMenu extends PagedMenu {
 
-    final CacheManager cacheManager = plugin.getCacheManager();
     final ItemStackSerializer serializeManager = plugin.getSerializeManager();
 
     public StorageMenu(Player viewer, TeamMenu previousMenu) {
@@ -40,11 +38,10 @@ public class StorageMenu extends PagedMenu {
         // String inventoryName = config.getString(config.getString("inventories.storageDirectory."+plugin.getStorageFromId(storageId)+".itemName"));
         String inventoryName = Menus.getStorageMenuName(storageId);
         UUID teamUuid = team.getTeamUuid();
-        Storage storage;
+        Storage storage = Storage.getStorageFromCache(teamUuid, storageId);
         Inventory inventory;
 
-        if (cacheManager.containsStorage(teamUuid, storageId)){
-            storage = cacheManager.getStorage(teamUuid, storageId);
+        if (storage != null){
             inventory = storage.getInventoryInstance();
 
             if (inventory == null){
@@ -112,13 +109,14 @@ public class StorageMenu extends PagedMenu {
     @Override()
     public void onClick(InventoryClickEvent clickEvent) {
         Player player = (Player) clickEvent.getWhoClicked();
+        UUID teamUuid = team.getTeamUuid();
         Integer storageId = getStorageId(clickEvent.getView().getTitle());
         
         if (clickEvent.getCurrentItem() != null){
             if (Buttons.PREVIOUS_STORAGE_BUTTON.isClickedButton(clickEvent)){
                 storageId -= 1;
-                if (cacheManager.containsStorage(team.getTeamUuid(), storageId)){
-                    Storage storage = cacheManager.getStorage(team.getTeamUuid(), storageId);
+                Storage storage = Storage.getStorageFromCache(teamUuid, storageId);
+                if (storage != null){
                     if (storage.getOpenedServerName() != null && !storage.getOpenedServerName().equals(serverName)){
                         player.sendMessage(messageManager.getMessage("common.storage_already_open"));
                         return;
@@ -128,8 +126,8 @@ public class StorageMenu extends PagedMenu {
                 new StorageMenu(player, previousMenu).openMenu(storageId);
             }else if (Buttons.NEXT_STORAGE_BUTTON.isClickedButton(clickEvent)){
                 storageId += 1;
-                if (cacheManager.containsStorage(team.getTeamUuid(), storageId)){
-                    Storage storage = cacheManager.getStorage(team.getTeamUuid(), storageId);
+                Storage storage = Storage.getStorageFromCache(teamUuid, storageId);
+                if (storage != null){
                     if (storage.getOpenedServerName() != null && !storage.getOpenedServerName().equals(serverName)){
                         player.sendMessage(messageManager.getMessage("common.storage_already_open"));
                         return;
@@ -151,8 +149,8 @@ public class StorageMenu extends PagedMenu {
             }
         }
         
-        if (cacheManager.containsStorage(team.getTeamUuid(), storageId)){
-            Storage storage = cacheManager.getStorage(team.getTeamUuid(), storageId);
+        Storage storage = Storage.getStorageFromCache(teamUuid, storageId);
+        if (storage != null){
             if (storage.getOpenedServerName() != null && !storage.getOpenedServerName().equals(serverName)){
                 clickEvent.setCancelled(true);
                 viewer.closeInventory();
@@ -171,13 +169,11 @@ public class StorageMenu extends PagedMenu {
         UUID teamUuid = team.getTeamUuid();
         Integer storageId = getStorageId(closeEvent.getView().getTitle());
         ItemStack[] inventoryContent = closeEvent.getInventory().getContents();
-        Storage storage;
+        Storage storage = Storage.getStorageFromCache(teamUuid, storageId);
 
-        if (cacheManager.containsStorage(teamUuid, storageId)){
-            storage = cacheManager.getStorage(teamUuid, storageId);
+        if (storage != null){
             storage.setStorageContent(serializeManager.serializeToByte(inventoryContent));
             storage.setStorageInstanceContent(inventoryContent);
-            // storage = cacheManager.replaceStorageContent(teamUuid, storageId, serializeManager.serializeToByte(inventoryContent));
             storage.saveStorageToCache(player, false);
         }else if (team.hasStorage(storageId)){
             storage = team.getStorage(storageId);
@@ -205,7 +201,7 @@ public class StorageMenu extends PagedMenu {
             storage.sendStorageAcrossServers(plugin, player);
             storage.saveStorageToDatabase();
             if (openedServerName == null){
-                cacheManager.removeStorage(storage);
+                storage.removeStorageFromCache();
                 // System.out.println("REMOVE");
             }
             // System.out.println("SAVE");
@@ -213,7 +209,6 @@ public class StorageMenu extends PagedMenu {
 
         
     }
-
 
 
     private Integer getStorageId(String inventoryTitle){

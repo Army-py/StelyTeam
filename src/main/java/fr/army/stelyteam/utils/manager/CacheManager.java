@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+import org.jetbrains.annotations.Nullable;
+
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.team.Page;
 import fr.army.stelyteam.team.Storage;
@@ -130,6 +132,7 @@ public class CacheManager {
         cachedStorage.removeIf(cStorage -> cStorage.getTeamUuid().equals(storage.getTeamUuid()) && cStorage.getStorageId() == storage.getStorageId());
     }
 
+    @Nullable
     public Storage getStorage(UUID teamUuid, int storageId){
         return cachedStorage.stream().filter(storage -> storage.getTeamUuid().equals(teamUuid) && storage.getStorageId() == storageId).findFirst().orElse(null);
     }
