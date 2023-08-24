@@ -34,7 +34,7 @@ public class ReceiveStorageRunnable implements Runnable {
                 return;
             }
 
-            cacheManager.saveStorage(storage, true);
+            cacheManager.saveStorage(storage);
             System.out.println("Storage received");
             System.out.println(storage.getStorageId());
             System.out.println(storage.getTeamUuid().toString());

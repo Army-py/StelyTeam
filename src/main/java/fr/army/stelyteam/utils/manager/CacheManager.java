@@ -135,14 +135,14 @@ public class CacheManager {
     }
 
     // TODO : Régler l'erreur
-    public void replaceStorage(Storage storage, boolean updateInstanceContent){
+    public void replaceStorage(Storage storage){
         for (Storage cStorage : cachedStorage){
             final UUID teamUuid = cStorage.getTeamUuid();
             final int storageId = cStorage.getStorageId();
             if (teamUuid.equals(storage.getTeamUuid()) && storageId == storage.getStorageId()){
                 cStorage.setOpenedServerName(storage.getOpenedServerName());
                 cStorage.setStorageContent(storage.getStorageContent());
-                if (updateInstanceContent) cStorage.setStorageInstanceContent(serializeManager.deserializeFromByte(storage.getStorageContent()));
+                cStorage.setStorageInstanceContent(serializeManager.deserializeFromByte(storage.getStorageContent()));
             }
         }
     }
@@ -151,9 +151,9 @@ public class CacheManager {
         return cachedStorage.stream().anyMatch(storage -> storage.getTeamUuid().equals(teamUuid) && storage.getStorageId() == storageId);
     }
 
-    public void saveStorage(Storage storage, boolean updateInstanceContent){
+    public void saveStorage(Storage storage){
         if(containsStorage(storage.getTeamUuid(), storage.getStorageId())){
-            replaceStorage(storage, updateInstanceContent);
+            replaceStorage(storage);
         } else {
             addStorage(storage);
         }

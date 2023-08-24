@@ -28,9 +28,9 @@ public class Storage {
     }
 
 
-    public void saveStorageToCache(Player player, boolean sendStorageAcrossServers, boolean updateInstanceContent){
+    public void saveStorageToCache(Player player, boolean sendStorageAcrossServers){
         StelyTeamPlugin plugin = StelyTeamPlugin.getPlugin();
-        plugin.getCacheManager().saveStorage(this, updateInstanceContent);
+        plugin.getCacheManager().saveStorage(this);
         if (sendStorageAcrossServers) sendStorageAcrossServers(plugin, player);
     }
 

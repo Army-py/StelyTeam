@@ -76,7 +76,7 @@ public class StorageMenu extends PagedMenu {
         // System.out.println(storage.getOpenedServerName());
         storage.setStorageContent(serializeManager.serializeToByte(inventory.getContents()));
         storage.setOpenedServerName(serverName);
-        storage.saveStorageToCache(viewer.getPlayer(), true, true);
+        storage.saveStorageToCache(viewer.getPlayer(), true);
         storage.saveStorageToDatabase();
 
         emptyCases(inventory, config.getIntegerList("inventories.storage.emptyCase.slots"));
@@ -178,7 +178,7 @@ public class StorageMenu extends PagedMenu {
             storage.setStorageContent(serializeManager.serializeToByte(inventoryContent));
             storage.setStorageInstanceContent(inventoryContent);
             // storage = cacheManager.replaceStorageContent(teamUuid, storageId, serializeManager.serializeToByte(inventoryContent));
-            storage.saveStorageToCache(player, false, true);
+            storage.saveStorageToCache(player, false);
         }else if (team.hasStorage(storageId)){
             storage = team.getStorage(storageId);
             storage.setStorageInstance(storageInventory);
