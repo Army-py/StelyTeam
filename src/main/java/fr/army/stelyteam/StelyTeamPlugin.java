@@ -36,6 +36,7 @@ public class StelyTeamPlugin extends JavaPlugin {
 
     private String currentServerName;
     private String[] serverNames;
+    private String teamChatFormat;
 
     private static StelyTeamPlugin plugin;
     private YamlConfiguration config;
@@ -62,6 +63,7 @@ public class StelyTeamPlugin extends JavaPlugin {
 
         this.currentServerName = Bukkit.getServer().getMotd();
         this.serverNames = this.config.getStringList("serverNames").toArray(new String[0]);
+        this.teamChatFormat = this.config.getString("teamChat.format");
 
         this.sqliteManager = new SQLiteDataManager(this);
 
@@ -286,6 +288,10 @@ public class StelyTeamPlugin extends JavaPlugin {
 
     public String getCurrentServerName(){
         return currentServerName;
+    }
+
+    public String getTeamChatFormat(){
+        return teamChatFormat;
     }
 
 
