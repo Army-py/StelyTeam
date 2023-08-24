@@ -17,7 +17,8 @@ public class CommandManager {
 
         PluginCommand teamTchatCmd = plugin.getCommand("teamtchat");
 
-        teamTchatCommand = new TeamChatCommand(plugin.getTeamChatManager(), plugin.getCacheManager(), plugin.getMessageManager());
+        teamTchatCommand = new TeamChatCommand(plugin, plugin.getTeamChatManager(), plugin.getCacheManager(),
+                plugin.getMessageManager(), plugin.getServerNames(), plugin.getTeamChatFormat());
         teamTchatCmd.setExecutor(teamTchatCommand);
         teamTchatCmd.setTabCompleter(teamTchatCommand);
     }

@@ -235,5 +235,6 @@ commands:
     not_in_team: "§7Ce joueur n'est pas dans cette team"
     output: "§e%VALUE% §aest retiré de la team."
   teamChat:
-    usage: "§7/team <message>"
+    usage: "§7/teamchat <message>"
     blank_message: "§cVous ne pouvez pas envoyer de message vide."
+    not_in_team: "§cVous n'avez pas de team."
