@@ -234,3 +234,6 @@ commands:
     usage: "§7/stelyteam removemember <nom de la team> <pseudo du membre>"
     not_in_team: "§7Ce joueur n'est pas dans cette team"
     output: "§e%VALUE% §aest retiré de la team."
+  teamChat:
+    usage: "§7/team <message>"
+    blank_message: "§cVous ne pouvez pas envoyer de message vide."
