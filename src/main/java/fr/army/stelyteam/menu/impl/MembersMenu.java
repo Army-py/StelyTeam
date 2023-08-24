@@ -7,7 +7,6 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -18,7 +17,6 @@ import fr.army.stelyteam.menu.FixedMenu;
 import fr.army.stelyteam.menu.Menus;
 import fr.army.stelyteam.menu.TeamMenu;
 import fr.army.stelyteam.team.Member;
-import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.TemporaryActionNames;
 import fr.army.stelyteam.utils.builder.ItemBuilder;

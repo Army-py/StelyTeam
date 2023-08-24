@@ -1,8 +1,6 @@
 package fr.army.stelyteam.command.subCommand.dev;
 
-import java.text.NumberFormat;
 import java.util.List;
-import java.util.Locale;
 
 import org.bukkit.command.CommandSender;
 

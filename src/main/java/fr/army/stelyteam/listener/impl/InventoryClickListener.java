@@ -10,19 +10,14 @@ import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.menu.Buttons;
 import fr.army.stelyteam.menu.TeamMenu;
 import fr.army.stelyteam.utils.manager.database.DatabaseManager;
-import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
 
 
 public class InventoryClickListener implements Listener{    
 
-    private StelyTeamPlugin plugin;
     private DatabaseManager databaseManager;
-    private SQLiteDataManager sqliteManager;
 
     public InventoryClickListener(StelyTeamPlugin plugin) {
-        this.plugin = plugin;
         this.databaseManager = plugin.getDatabaseManager();
-        this.sqliteManager = plugin.getSQLiteManager();
     }
 
     @EventHandler(priority=EventPriority.LOWEST)
