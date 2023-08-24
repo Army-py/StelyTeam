@@ -13,7 +13,7 @@ sqlite:
 
 
 # Nom des serveurs où les stockages seront envoyés
-serverNames: ["Survie16", "Survie16B"]
+serverNames: ["Survie16", "Survie16B", "SurvieUsine"]
 
 
 # Timeout des conversations (message demandant une information aux joueurs lors de la création de team par exemple)
@@ -91,15 +91,14 @@ prices:
       level5: 100000.0
 
 
-# The format of the message
-# Leave it blank or comment the line to use the defined chat format
+# The format of the message sent in the chat when a player send a message in the team chat
 # Placeholders
 # {DISPLAYNAME} : The sender displayname
 # {MESSAGE} : The message sent
-# {FORMAT} : The defined chat format
 # {USERNAME} : The sender name
-# {TEAM} : The team prefix
-format: "&b[Team]{TEAM}&8{USERNAME}&7>{MESSAGE}"
+# {TEAM_PREFIX} : The team prefix
+teamChat: 
+  format: "&b[Team] {TEAM_PREFIX}&8{USERNAME}&7>{MESSAGE}"
 
 
 

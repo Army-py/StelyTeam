@@ -25,9 +25,13 @@ public class TeamChatProcessor {
         if (event.isCancelled()) {
             return;
         }
+        final Team team = Team.getFromCache(sender);
+        if (team == null) {
+            return;
+        }
         final TeamChatFormatHandler formatHandler = new TeamChatFormatHandler();
-        final String toSendMessage = formatHandler.handle(sender, event.getFormat(), event.getMessage());
-        final Collection<Member> recipients = Team.getFromCache(sender).getTeamMembers();
+        final String toSendMessage = formatHandler.handle(sender, team, event.getFormat(), event.getMessage());
+        final Collection<Member> recipients = team.getTeamMembers();
         for (Member member : recipients) {
             final Player receiver = member.asPlayer();
             if (receiver == null) {
