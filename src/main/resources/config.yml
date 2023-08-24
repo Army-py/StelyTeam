@@ -12,6 +12,10 @@ sqlite:
   file: "bungeecord_StelyTeam.db"
 
 
+# Nom des serveurs où les stockages seront envoyés
+serverNames: ["Survie16", "Survie16B"]
+
+
 # Timeout des conversations (message demandant une information aux joueurs lors de la création de team par exemple)
 conversationTimeout: 60
 
@@ -49,6 +53,9 @@ openTeamAfterCreate: true
 teamNameMaxLength: 12
 teamPrefixMaxLength: 10
 teamPrefixMinLength: 0
+
+# Nombre maximum de membres dans la description d'une team
+maxMembersInLore: 3
 
 # Longueur max de la description d'une team (sans compter les couleurs)
 teamDescriptionMaxLength: 30
@@ -831,6 +838,10 @@ inventories:
       rank: -1
     leaveTeam:
       itemName: "§5§nQuitter la team"
+      slot: -1
+      rank: -1
+    teamList:
+      itemName: "§5§nListe des teams"
       slot: -1
       rank: -1
     close:

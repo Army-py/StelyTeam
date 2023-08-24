@@ -6,7 +6,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.listener.ChatPrefixListener;
+import fr.army.stelyteam.listener.impl.ChatPrefixListener;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
 import net.ess3.api.events.LocalChatSpyEvent;

@@ -5,6 +5,7 @@ main: fr.army.stelyteam.StelyTeamPlugin
 api-version: "1.16"
 depend:
   - "Vault"
+  - "NoQueuePluginMessage"
 softdepend:
   - "Jobs"
   - "StelyClaim"

@@ -8,7 +8,6 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -63,6 +62,7 @@ public class AlliancesMenu extends FixedMenu {
 
 
     public Inventory createInventory(String playerName) {
+        final int maxMembersPerLine = config.getInt("maxMembersInLore");
         Inventory inventory = Bukkit.createInventory(this, this.menuSlots, this.menuName);
 
         emptyCases(inventory, this.menuSlots, 0);
@@ -79,15 +79,18 @@ public class AlliancesMenu extends FixedMenu {
             String allianceDescription = teamAlliance.getTeamDescription();
             ArrayList<String> allianceMembers = teamAlliance.getMembersName();
             allianceMembers.remove(allianceOwnerName);
-            UUID playerUUID = sqliteManager.getUUID(allianceOwnerName);
+            UUID playerUUID = mySqlManager.getUUID(allianceOwnerName);
             // String itemName = colorsBuilder.replaceColor(alliancePrefix);
             String displayName = " ";
             List<String> lore = config.getStringList("teamAllianceLore");
-            OfflinePlayer allianceOwner;
+            // OfflinePlayer allianceOwner;
             ItemStack item;
 
-            if (playerUUID == null) allianceOwner = Bukkit.getOfflinePlayer(allianceOwnerName);
-            else allianceOwner = Bukkit.getOfflinePlayer(playerUUID);
+            List<String> playerNames = new ArrayList<>();
+            for(int i = 0; i < allianceMembers.size(); i++){
+                if (i != 0 && i % maxMembersPerLine == 0) playerNames.add("%BACKTOLINE%");
+                playerNames.add(allianceMembers.get(i));
+            }
             
             lore = replaceInLore(lore, "%OWNER%", allianceOwnerName);
             lore = replaceInLore(lore, "%NAME%", allianceName);
@@ -95,12 +98,12 @@ public class AlliancesMenu extends FixedMenu {
             lore = replaceInLore(lore, "%DATE%", allianceDate);
             lore = replaceInLore(lore, "%MEMBER_COUNT%", IntegerToString(teamMembers));
             lore = replaceInLore(lore, "%MAX_MEMBERS%", IntegerToString(maxMembers+teamMembersLelvel));
-            lore = replaceInLore(lore, "%MEMBERS%", allianceMembers.isEmpty() ? messageManager.getMessageWithoutPrefix("common.no_members") : String.join(", ", allianceMembers));
+            lore = replaceInLore(lore, "%MEMBERS%", allianceMembers.isEmpty() ? messageManager.getMessageWithoutPrefix("common.no_members") : String.join(", ", playerNames));
             lore = replaceInLore(lore, "%DESCRIPTION%", colorsBuilder.replaceColor(allianceDescription));
             
             
             if (plugin.playerHasPermission(playerName, team, "seeTeamAlliances")){ 
-                item = ItemBuilder.getPlayerHead(allianceOwner, displayName, lore);
+                item = ItemBuilder.getPlayerHead(playerUUID, displayName, lore);
             }else{
                 item = ItemBuilder.getItem(
                     Material.getMaterial(config.getString("noPermission.itemType")),
@@ -143,11 +146,14 @@ public class AlliancesMenu extends FixedMenu {
         if (clickEvent.getView().getTitle().equals(Menus.REMOVE_ALLIANCES_MENU.getName())){
             if (material.equals(Material.getMaterial("PLAYER_HEAD"))){
                 if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.CLICK_REMOVE_ALLIANCE)){
-                    NamespacedKey key = new NamespacedKey(StelyTeamPlugin.getPlugin(), "playerName");
+                    NamespacedKey key = new NamespacedKey(StelyTeamPlugin.getPlugin(), "uuid");
                     ItemMeta meta = clickEvent.getCurrentItem().getItemMeta();
                     PersistentDataContainer container = meta.getPersistentDataContainer();
-                    String ownerName = container.get(key, PersistentDataType.STRING);
-                    Team alliance = Team.initFromPlayerName(ownerName);
+                    long[] ownerUuid = container.get(key, PersistentDataType.LONG_ARRAY);
+                    Team alliance = Team.initFromPlayerUuid(new UUID(ownerUuid[0], ownerUuid[1]));
+
+                    if (alliance == null) return;
+
                     UUID allianceUuid = alliance.getTeamUuid();
 
                     if (!team.isTeamAlliance(allianceUuid)){

@@ -89,6 +89,7 @@ public class ColorsBuilder {
             int vMin = config.getInt("blockedHexColors."+str+".v");
 
             for (String hexColor : getPrefixHexColors(prefixTeam)){
+                hexColor = hexColor.substring(2);
                 ArrayList<Integer> rgbColor = getRGBFromHex(hexColor);
                 ArrayList<Double> hslColor = getHSVFromRGB(rgbColor.get(0), rgbColor.get(1), rgbColor.get(2));
                 if (hslColor.get(0) <= hMin || hslColor.get(0) >= hMax) {
@@ -108,19 +109,19 @@ public class ColorsBuilder {
         Matcher hexMatcher = hexPattern.matcher(prefixTeam);
         ArrayList<String> hexColors = new ArrayList<>();
         while (hexMatcher.find()) {
-            String hex = hexMatcher.group().substring(1).substring(1);
+            String hex = hexMatcher.group();
             hexColors.add(hex);
         }
         return hexColors;
     }
 
 
-    private ArrayList<String> getPrefixColors(String prefixTeam){
-        Pattern pattern = Pattern.compile("&.");
+    public ArrayList<String> getPrefixColors(String prefixTeam){
+        Pattern pattern = Pattern.compile("[&§][^#]");
         Matcher matcher = pattern.matcher(prefixTeam);
         ArrayList<String> colors = new ArrayList<>();
         while (matcher.find()) {
-            String hex = matcher.group().substring(1);
+            String hex = matcher.group();
             colors.add(hex);
         }
         return colors;

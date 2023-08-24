@@ -1,5 +1,16 @@
 package fr.army.stelyteam;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.sql.SQLException;
+import java.util.Objects;
+
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
+
 import fr.army.stelyteam.chat.TeamChatLoader;
 import fr.army.stelyteam.chat.TeamChatManager;
 import fr.army.stelyteam.command.CommandManager;
@@ -18,18 +29,13 @@ import fr.army.stelyteam.utils.manager.MessageManager;
 import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
 import fr.army.stelyteam.utils.manager.serializer.ItemStackSerializer;
-import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.sql.SQLException;
-import java.util.Objects;
 
 public class StelyTeamPlugin extends JavaPlugin {
+
+    private static boolean debug = false;
+
+    private String currentServerName;
+    private String[] serverNames;
 
     private static StelyTeamPlugin plugin;
     private YamlConfiguration config;
@@ -54,6 +60,9 @@ public class StelyTeamPlugin extends JavaPlugin {
         this.config = initFile(this.getDataFolder(), "config.yml");
         this.messages = initFile(this.getDataFolder(), "messages.yml");
 
+        this.currentServerName = Bukkit.getServer().getMotd();
+        this.serverNames = this.config.getStringList("serverNames").toArray(new String[0]);
+
         this.sqliteManager = new SQLiteDataManager(this);
 
         try {
@@ -67,7 +76,8 @@ public class StelyTeamPlugin extends JavaPlugin {
             getServer().getPluginManager().disablePlugin(this);
         }
         
-        this.cacheManager = new CacheManager();
+        this.serializeManager = new ItemStackSerializer();
+        this.cacheManager = new CacheManager(this);
         this.economyManager = new EconomyManager(this);
         this.messageManager = new MessageManager(this);
         final TeamChatLoader teamChatLoader = new TeamChatLoader();
@@ -75,7 +85,6 @@ public class StelyTeamPlugin extends JavaPlugin {
         this.commandManager = new CommandManager(this);
         this.colorsBuilder = new ColorsBuilder(this);
         this.conversationBuilder = new ConversationBuilder(this);
-        this.serializeManager = new ItemStackSerializer();
 
 
         this.externalManager = new ExternalManager();
@@ -84,7 +93,9 @@ public class StelyTeamPlugin extends JavaPlugin {
         final ListenerLoader listenerLoader = new ListenerLoader();
         listenerLoader.registerListeners(this);
 
+        
         getLogger().info("StelyTeam ON");
+        cacheAllTeams();
     }
 
 
@@ -126,6 +137,15 @@ public class StelyTeamPlugin extends JavaPlugin {
     }
 
 
+    private void cacheAllTeams(){
+        for (Player player : Bukkit.getOnlinePlayers()){
+            final Team team = Team.init(player);
+            if (team == null) return;
+            cacheManager.addTeam(team);
+        }
+    }
+
+
     public void openMainInventory(Player player, Team team){
         String playerName = player.getName();
 
@@ -135,7 +155,8 @@ public class StelyTeamPlugin extends JavaPlugin {
             new AdminMenu(player, null).openMenu();
         }else if (playerHasPermissionInSection(playerName, team, "manage")
             || playerHasPermissionInSection(playerName, team, "editMembers")
-            || playerHasPermissionInSection(playerName, team, "editAlliances")){
+            || playerHasPermissionInSection(playerName, team, "editAlliances")
+            || playerHasPermission(playerName, team, "teamList")){
             new AdminMenu(player, null).openMenu();
         }else{
             new MemberMenu(player, null).openMenu();
@@ -205,6 +226,7 @@ public class StelyTeamPlugin extends JavaPlugin {
 
 
     public boolean playerHasPermissionInSection(String playerName, Team team, String sectionName){
+        if (sectionName.equals("close")) return true;
         for (String section : config.getConfigurationSection("inventories." + sectionName).getKeys(false)){
             if (playerHasPermission(playerName, team, section) && !section.equals("close")){
                 return true;
@@ -256,6 +278,23 @@ public class StelyTeamPlugin extends JavaPlugin {
 
     public TeamChatManager getTeamChatManager() {
         return teamChatManager;
+    }
+
+    public String[] getServerNames(){
+        return serverNames;
+    }
+
+    public String getCurrentServerName(){
+        return currentServerName;
+    }
+
+
+    public void toggleDebug(){
+        debug = !debug;
+    }
+
+    public boolean isDebug() {
+        return debug;
     }
 
 }

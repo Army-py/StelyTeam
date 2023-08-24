@@ -12,6 +12,7 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.command.subCommand.dev.SubCmdDebug;
 import fr.army.stelyteam.command.subCommand.help.SubCmdAdmin;
 import fr.army.stelyteam.command.subCommand.help.SubCmdHelp;
 import fr.army.stelyteam.command.subCommand.info.SubCmdInfo;
@@ -32,14 +33,12 @@ import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
 import fr.army.stelyteam.utils.manager.database.DatabaseManager;
-import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
 
 public class CmdStelyTeam implements CommandExecutor, TabCompleter {
 
     private StelyTeamPlugin plugin;
     private CacheManager cacheManager;
     private DatabaseManager sqlManager;
-    private SQLiteDataManager sqliteManager;
     private MessageManager messageManager;
     private Map<String, Object> subCommands;
 
@@ -48,7 +47,6 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
         this.plugin = plugin;
         this.cacheManager = plugin.getCacheManager();
         this.sqlManager = plugin.getDatabaseManager();
-        this.sqliteManager = plugin.getSQLiteManager();
         this.messageManager = plugin.getMessageManager();
         this.subCommands = new HashMap<>();
         initSubCommands();
@@ -59,16 +57,23 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
         if(sender instanceof Player){
             Player player = (Player) sender;
             String playerName = player.getName();
+
+            if (!sqlManager.isRegistered(player.getName())) sqlManager.registerPlayer(player);
+
             Team team = Team.initFromPlayerName(playerName);
+
+            if (team != null){
+                cacheManager.addTeam(team);
+            }
 
             if (cacheManager.isInConversation(playerName)){
                 player.sendRawMessage(messageManager.getMessage("common.no_command_in_conv"));
                 return true;
             }
 
-            if (!sqliteManager.isRegistered(player.getName())) {
-                sqliteManager.registerPlayer(player);
-            }
+            // if (!sqliteManager.isRegistered(player.getName())) {
+            //     sqliteManager.registerPlayer(player);
+            // }
 
             
             if (args.length == 0){
@@ -152,5 +157,6 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
         subCommands.put("changeowner", new SubCmdChangeOwner(plugin));
         subCommands.put("addmember", new SubCmdAddMember(plugin));
         subCommands.put("removemember", new SubCmdRemoveMember(plugin));
+        subCommands.put("debug", new SubCmdDebug(plugin));
     }
 }

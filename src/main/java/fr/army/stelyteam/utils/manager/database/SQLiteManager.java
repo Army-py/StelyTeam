@@ -16,7 +16,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.team.Alliance;
@@ -79,6 +82,8 @@ public class SQLiteManager extends DatabaseManager {
                 PreparedStatement queryAssignements = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'assignement' ('teamId' INTEGER, 'permLabel' TEXT, 'teamRank' INTEGER, FOREIGN KEY('teamId') REFERENCES 'team'('teamId'), PRIMARY KEY('permLabel','teamId'));");
                 PreparedStatement queryStorages = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'storage' ('storageId' INTEGER, PRIMARY KEY('storageId'));");
 
+                PreparedStatement queryCreatePlayersUuid = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'players' ('playerId' INTEGER, 'uuid' TEXT, 'playerName' TEXT, PRIMARY KEY('playerId' AUTOINCREMENT));");
+
                 queryPlayers.executeUpdate();
                 queryTeams.executeUpdate();
                 queryTeamStorages.executeUpdate();
@@ -86,12 +91,16 @@ public class SQLiteManager extends DatabaseManager {
                 queryAssignements.executeUpdate();
                 queryStorages.executeUpdate();
 
+                queryCreatePlayersUuid.executeUpdate();
+
                 queryPlayers.close();
                 queryTeams.close();
                 queryTeamStorages.close();
                 queryAlliances.close();
                 queryAssignements.close();
                 queryStorages.close();
+
+                queryCreatePlayersUuid.close();
             } catch (Exception e){
                 e.printStackTrace();
             }
@@ -663,13 +672,14 @@ public class SQLiteManager extends DatabaseManager {
     }
 
     @Override
-    public void insertStorageContent(UUID teamUuid, Integer storageId, byte[] storageContent){
+    public void insertStorageContent(UUID teamUuid, Integer storageId, byte[] storageContent, String openedServer){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("INSERT INTO teamStorage VALUES (?, ?, ?)");
+                PreparedStatement query = connection.prepareStatement("INSERT INTO teamStorage VALUES (?, ?, ?, ?)");
                 query.setInt(1, storageId);
                 query.setInt(2, getTeamId(teamUuid));
                 query.setBytes(3, storageContent);
+                // query.setString(4, openedServer);
                 query.executeUpdate();
                 query.close();
             } catch (SQLException e) {
@@ -679,13 +689,14 @@ public class SQLiteManager extends DatabaseManager {
     }
 
     @Override
-    public void updateStorageContent(UUID teamUuid, Integer storageId, byte[] storageContent){
+    public void updateStorageContent(UUID teamUuid, Integer storageId, byte[] storageContent, String openedServer){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("UPDATE teamStorage SET storageContent = ? WHERE teamId = ? AND storageId = ?");
+                PreparedStatement query = connection.prepareStatement("UPDATE teamStorage SET storageContent = ?, openedServer = ? WHERE teamId = ? AND storageId = ?");
                 query.setBytes(1, storageContent);
-                query.setInt(2, getTeamId(teamUuid));
-                query.setInt(3, storageId);
+                query.setString(2, openedServer);
+                query.setInt(3, getTeamId(teamUuid));
+                query.setInt(4, storageId);
                 query.executeUpdate();
                 query.close();
             } catch (SQLException e) {
@@ -699,13 +710,14 @@ public class SQLiteManager extends DatabaseManager {
         UUID teamUuid = storage.getTeamUuid();
         int storageId = storage.getStorageId();
         byte[] storageContent = storage.getStorageContent();
+        String openedServerName = storage.getOpenedServerName();
         if (!teamHasStorage(teamUuid, storageId)){
             if (!storageIdExist(storageId)){
                 insertStorageId(storageId);
             }
-            insertStorageContent(teamUuid, storageId, storageContent);
+            insertStorageContent(teamUuid, storageId, storageContent, null);
         }else{
-            updateStorageContent(teamUuid, storageId, storageContent);
+            updateStorageContent(teamUuid, storageId, storageContent, null);
         }
     }
 
@@ -841,21 +853,33 @@ public class SQLiteManager extends DatabaseManager {
 
     @Override
     public List<Member> getTeamMembers(UUID teamUuid){
-        List<Member> teamMembers = Collections.synchronizedList(new ArrayList<>());
+        // List<Member> teamMembers = Collections.synchronizedList(new ArrayList<>());
+        List<Member> teamMembers = new ArrayList<>();
         if(isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("SELECT p.playerName, p.teamRank, p.joinDate FROM player AS p INNER JOIN team AS t ON p.teamId = t.teamId WHERE t.teamUuid = ? ORDER BY p.teamRank ASC, p.playerName ASC;");
                 query.setString(1, teamUuid.toString());
                 ResultSet result = query.executeQuery();
                 while(result.next()){
-                    teamMembers.add(
-                        new Member(
-                            result.getString("playerName"),
-                            result.getInt("teamRank"),
-                            result.getString("joinDate"),
-                            StelyTeamPlugin.getPlugin().getSQLiteManager().getUUID(result.getString("playerName"))
-                        )
-                    );
+                    try{
+                        teamMembers.add(
+                            // new Member(
+                            //     result.getString("playerName"),
+                            //     result.getInt("teamRank"),
+                            //     result.getString("joinDate"),
+                            //     StelyTeamPlugin.getPlugin().getSQLiteManager().getUUID(result.getString("playerName"))
+                            // )
+                            new Member(
+                                result.getString("playerName"),
+                                result.getInt("teamRank"),
+                                result.getString("joinDate"),
+                                getUUID(result.getString("playerName"))
+                            )
+                        );
+                    }catch(Exception e){
+                        e.printStackTrace();
+                        continue;
+                    }
                 }
                 query.close();
             } catch (SQLException e) {
@@ -867,7 +891,7 @@ public class SQLiteManager extends DatabaseManager {
 
     @Override
     public Set<Permission> getTeamAssignement(UUID teamUuid){
-        Set<Permission> teamAssignement = new HashSet<>();
+        Set<Permission> teamAssignement = Collections.synchronizedSet(new HashSet<>());
         if(isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("SELECT a.permLabel, a.teamRank FROM assignement AS a INNER JOIN team AS t ON a.teamId = t.teamId WHERE t.teamUuid = ?;");
@@ -918,7 +942,7 @@ public class SQLiteManager extends DatabaseManager {
     public Map<Integer, Storage> getTeamStorages(UUID teamUuid){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("SELECT ts.storageId, ts.storageContent FROM teamStorage AS ts INNER JOIN team AS t ON ts.teamId = t.teamId WHERE t.teamUuid = ?;");
+                PreparedStatement query = connection.prepareStatement("SELECT ts.storageId, ts.storageContent, ts.openedServer FROM teamStorage AS ts INNER JOIN team AS t ON ts.teamId = t.teamId WHERE t.teamUuid = ?;");
                 query.setString(1, teamUuid.toString());
                 ResultSet result = query.executeQuery();
                 Map<Integer, Storage> teamStorage = new HashMap<>();
@@ -929,7 +953,8 @@ public class SQLiteManager extends DatabaseManager {
                             teamUuid,
                             result.getInt("storageId"),
                             null,
-                            result.getBytes("storageContent")
+                            result.getBytes("storageContent"),
+                            null
                         )
                     );
                 }
@@ -949,7 +974,10 @@ public class SQLiteManager extends DatabaseManager {
                 PreparedStatement query = connection.prepareStatement("SELECT playerId FROM player WHERE playerName = ?");
                 query.setString(1, playerName);
                 ResultSet result = query.executeQuery();
-                int playerId = result.getInt("playerId");
+                int playerId = 0;
+                if(result.next()){
+                    playerId = result.getInt("playerId");
+                }
                 query.close();
                 return playerId;
             } catch (Exception e){
@@ -1008,8 +1036,125 @@ public class SQLiteManager extends DatabaseManager {
         return null;
     }
 
+
     @Override
     public String getCurrentDate(){
         return new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime());
+    }
+
+
+
+
+
+
+
+    @Override
+    public void registerPlayer(Player player){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("INSERT INTO players (uuid, playerName) VALUES (?, ?)");
+                query.setString(1, player.getUniqueId().toString());
+                query.setString(2, player.getName());
+                query.executeUpdate();
+                query.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    @Override
+    public void registerPlayer(OfflinePlayer player){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("INSERT INTO players (uuid, playerName) VALUES (?, ?)");
+                query.setString(1, player.getUniqueId().toString());
+                query.setString(2, player.getName());
+                query.executeUpdate();
+                query.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    @Override
+    public boolean isRegistered(String playerName){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT playerName FROM players WHERE playerName = ?");
+                query.setString(1, playerName);
+                ResultSet result = query.executeQuery();
+                boolean isParticipant = result.next();
+                query.close();
+                return isParticipant;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+
+    @Override
+    public UUID getUUID(String playerName){
+        try {
+            return queryUUID(playerName);
+        } catch (Exception e) {
+            // System.out.println(e);
+            return UUID.randomUUID();
+        }
+    }
+
+
+    // Should be not null
+    @NotNull
+    private UUID queryUUID(String playerName) {
+        if (!isConnected()) {
+            throw new IllegalStateException("Can not use the this database while the connection is not established");
+        }
+        try {
+            PreparedStatement query = connection.prepareStatement("SELECT uuid FROM players WHERE playerName = ?");
+            query.setString(1, playerName);
+            ResultSet result = query.executeQuery();
+            boolean isParticipant = result.next();
+            if (!isParticipant) {
+                throw new RuntimeException("The uuid of '" + playerName + "' is not stored in the database");
+            }
+            final UUID uuid = UUID.fromString(result.getString("uuid"));
+            query.close();
+
+            // if (uuid != null)
+            //     System.out.println(uuid.toString());
+            // else
+            //     System.out.println("null");
+
+            return uuid;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public String getPlayerName(UUID uuid){
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT playerName FROM players WHERE uuid = ?");
+                query.setString(1, uuid.toString());
+                ResultSet result = query.executeQuery();
+                boolean isParticipant = result.next();
+                String playerName = null;
+                if(isParticipant){
+                    playerName = result.getString("playerName");
+                }
+                query.close();
+                return playerName;
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 }

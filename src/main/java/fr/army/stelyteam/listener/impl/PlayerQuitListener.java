@@ -1,4 +1,4 @@
-package fr.army.stelyteam.listener;
+package fr.army.stelyteam.listener.impl;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -28,9 +28,7 @@ public class PlayerQuitListener implements Listener{
         }
 
         Team team = Team.getFromCache(player);
-        if (team == null){
-            return;
-        }
+        if (team == null) return;
 
         int count = 0;
         for (Member member : team.getTeamMembers()){

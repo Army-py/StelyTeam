@@ -21,44 +21,47 @@ import org.bukkit.persistence.PersistentDataType;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.team.Team;
+import fr.army.stelyteam.utils.builder.ColorsBuilder;
+import fr.army.stelyteam.utils.manager.MessageManager;
 
 
 public abstract class TeamMenu implements ITeamMenu {
 
     protected final StelyTeamPlugin plugin = StelyTeamPlugin.getPlugin();
-    protected final YamlConfiguration config;
+    protected final ColorsBuilder colorsBuilder = plugin.getColorsBuilder();
+    protected final YamlConfiguration config = plugin.getConfig();
+    protected final MessageManager messageManager = plugin.getMessageManager();
 
     protected InventoryHolder menu;
 
     protected final TeamMenu previousMenu;
     
-    protected final Player viewer;
+    protected Player viewer;
     protected final String menuName;
     protected final int menuSlots;
     
     protected final Team team;
+    protected final String serverName;
 
 
-    public TeamMenu(Player viewer, String menuName, int menuSlots, TeamMenu previousMenu) {
-        this.config = plugin.getConfig();
-        
+    public TeamMenu(Player viewer, String menuName, int menuSlots, TeamMenu previousMenu) {        
         this.viewer = viewer;
         this.menuName = menuName;
         this.menuSlots = menuSlots;
         this.previousMenu = previousMenu;
 
         this.team = Team.init(viewer);
+        this.serverName = plugin.getCurrentServerName();
     }
 
-    public TeamMenu(Player viewer, int menuSlots, TeamMenu previousMenu) {
-        this.config = plugin.getConfig();
-        
+    public TeamMenu(Player viewer, int menuSlots, TeamMenu previousMenu) { 
         this.viewer = viewer;
         this.menuName = null;
         this.menuSlots = menuSlots;
         this.previousMenu = previousMenu;
 
         this.team = Team.init(viewer);
+        this.serverName = plugin.getCurrentServerName();
     }
 
 
@@ -77,7 +80,16 @@ public abstract class TeamMenu implements ITeamMenu {
     protected List<String> replaceInLore(List<String> lore, String value, String replace){
         List<String> newLore = new ArrayList<>();
         for(String str : lore){
-            newLore.add(str.replace(value, replace));
+            if (str.contains("%BACKTOLINE%")){
+                String[] colors = colorsBuilder.getPrefixColors(str).toArray(new String[0]);
+                String[] split = str.split("%BACKTOLINE%, ");
+                for(String s : split){
+                    newLore.add(String.join("", colors) + s.replace(value, replace));
+                }
+            }else{
+                newLore.add(str.replace(value, replace));
+            }
+
         }
         return newLore;
     }
@@ -149,6 +161,10 @@ public abstract class TeamMenu implements ITeamMenu {
 
     public TeamMenu getPreviousMenu(){
         return this.previousMenu;
+    }
+
+    public void setViewer(Player viewer){
+        this.viewer = viewer;
     }
 
     @Override

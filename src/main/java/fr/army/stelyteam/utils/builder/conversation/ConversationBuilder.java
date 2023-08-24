@@ -7,7 +7,7 @@ import org.bukkit.conversations.Prompt;
 import org.bukkit.entity.Player;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.listener.ConversationAbandonedListener;
+import fr.army.stelyteam.listener.impl.ConversationAbandonedListener;
 import fr.army.stelyteam.utils.manager.CacheManager;
 
 public class ConversationBuilder {

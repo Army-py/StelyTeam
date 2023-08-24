@@ -13,11 +13,14 @@ import fr.army.stelyteam.menu.Buttons;
 import fr.army.stelyteam.menu.FixedMenu;
 import fr.army.stelyteam.menu.Menus;
 import fr.army.stelyteam.menu.TeamMenu;
+import fr.army.stelyteam.team.Storage;
 import fr.army.stelyteam.utils.builder.ItemBuilder;
+import fr.army.stelyteam.utils.manager.CacheManager;
 
 
 public class StorageDirectoryMenu extends FixedMenu {
 
+    final CacheManager cacheManager = plugin.getCacheManager();
 
     public StorageDirectoryMenu(Player viewer, TeamMenu previousMenu) {
         super(
@@ -89,7 +92,21 @@ public class StorageDirectoryMenu extends FixedMenu {
                 Integer storageId = config.getInt("inventories.storageDirectory."+str+".storageId");
 
                 if (itemName.equals(name) && itemType.equals(type)){
-                    new StorageMenu(player, this).openMenu(storageId);
+                    if (!player.isOp()){
+                        player.sendMessage("§cCette fonctionnalité est temporairement désactivée.");
+                    }else{
+                        if (cacheManager.containsStorage(team.getTeamUuid(), storageId)){
+                            final Storage storage = cacheManager.getStorage(team.getTeamUuid(), storageId);
+                            storage.sendStorageAcrossServers(plugin, player);
+                            if (storage.getOpenedServerName() == null || storage.getOpenedServerName().equals(serverName)){
+                                new StorageMenu(player, this).openMenu(storageId);
+                            }else{
+                                player.sendMessage(messageManager.getMessage("common.storage_already_open"));
+                            }
+                        }else{
+                            new StorageMenu(player, this).openMenu(storageId);
+                        }
+                    }
                     return;
                 }
             }

@@ -1,23 +1,16 @@
 package fr.army.stelyteam.team;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-
+import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.menu.TeamMenu;
+import fr.army.stelyteam.utils.manager.CacheManager;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryView;
 
-import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.menu.TeamMenu;
-import fr.army.stelyteam.utils.manager.CacheManager;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class Team {
 
@@ -73,37 +66,42 @@ public class Team {
     }
 
     public static Team init(String teamName){
-        return cacheManager.getTeamByName(teamName) == null 
-            ? plugin.getDatabaseManager().getTeamFromTeamName(teamName) 
-            : cacheManager.getTeamByName(teamName);
+        // return cacheManager.getTeamByName(teamName) == null 
+        //     ? plugin.getDatabaseManager().getTeamFromTeamName(teamName) 
+        //     : cacheManager.getTeamByName(teamName);
+        return plugin.getDatabaseManager().getTeamFromTeamName(teamName);
     }
 
     public static Team init(Player player){
-        return cacheManager.getTeamByPlayerName(player.getName()) == null 
-            ? plugin.getDatabaseManager().getTeamFromPlayerName(player.getName()) 
-            : cacheManager.getTeamByPlayerName(player.getName());
+        // return cacheManager.getTeamByPlayerName(player.getName()) == null 
+        //     ? plugin.getDatabaseManager().getTeamFromPlayerName(player.getName()) 
+        //     : cacheManager.getTeamByPlayerName(player.getName());
+        return plugin.getDatabaseManager().getTeamFromPlayerName(player.getName());
     }
 
     public static Team initFromPlayerName(String playerName){
-        return cacheManager.getTeamByPlayerName(playerName) == null 
-            ? plugin.getDatabaseManager().getTeamFromPlayerName(playerName) 
-            : cacheManager.getTeamByPlayerName(playerName);
+        // return cacheManager.getTeamByPlayerName(playerName) == null 
+        //     ? plugin.getDatabaseManager().getTeamFromPlayerName(playerName) 
+        //     : cacheManager.getTeamByPlayerName(playerName);
+        return plugin.getDatabaseManager().getTeamFromPlayerName(playerName);
     }
 
     public static Team initFromPlayerUuid(UUID playerUuid){
-        return cacheManager.getTeamByPlayerUuid(playerUuid) == null 
-            ? plugin.getDatabaseManager().getTeamFromPlayerName(plugin.getSQLiteManager().getPlayerName(playerUuid)) 
-            : cacheManager.getTeamByPlayerUuid(playerUuid);
+        // return cacheManager.getTeamByPlayerUuid(playerUuid) == null 
+        //     ? plugin.getDatabaseManager().getTeamFromPlayerName(plugin.getSQLiteManager().getPlayerName(playerUuid)) 
+        //     : cacheManager.getTeamByPlayerUuid(playerUuid);
+        return plugin.getDatabaseManager().getTeamFromPlayerName(plugin.getDatabaseManager().getPlayerName(playerUuid));
     }
 
     public static Team init(UUID teamUuid){
-        return cacheManager.getTeamByUuid(teamUuid) == null 
-            ? plugin.getDatabaseManager().getTeamFromTeamUuid(teamUuid) 
-            : cacheManager.getTeamByUuid(teamUuid);
+        // return cacheManager.getTeamByUuid(teamUuid) == null 
+        //     ? plugin.getDatabaseManager().getTeamFromTeamUuid(teamUuid) 
+        //     : cacheManager.getTeamByUuid(teamUuid);
+        return plugin.getDatabaseManager().getTeamFromTeamUuid(teamUuid);
     }
 
     public static Team getFromCache(Player player){
-        return cacheManager.getTeamByPlayerName(player.getName());
+        return cacheManager.getTeamByPlayerUuid(player.getUniqueId());
     }
 
 
@@ -139,32 +137,39 @@ public class Team {
 
     public void updateTeamName(String newTeamName){
         plugin.getDatabaseManager().updateTeamName(this.teamUuid, newTeamName);
+        // cacheManager.replaceTeam(this);
 
         this.teamName = newTeamName;
     }
 
 
     public void updateTeamPrefix(String newPrefix){
-        this.teamPrefix = newPrefix;
         plugin.getDatabaseManager().updateTeamPrefix(teamUuid, newPrefix);
+        cacheManager.replaceTeam(this);
+        
+        this.teamPrefix = newPrefix;
     }
 
 
     public void updateTeamDescription(String newDescription){
-        this.teamDescription = newDescription;
         plugin.getDatabaseManager().updateTeamDescription(teamUuid, newDescription);
+        // cacheManager.replaceTeam(this);
+
+        this.teamDescription = newDescription;
     }
 
 
     public void updateTeamOwner(String newOwnerName){
         plugin.getDatabaseManager().updateTeamOwner(teamUuid, teamOwnerName, newOwnerName);
+        cacheManager.replaceTeam(this);
+
         this.teamOwnerName = newOwnerName;
     }
 
 
     public void unlockedTeamBank(){
-        this.unlockedTeamBank = true;
         plugin.getDatabaseManager().updateUnlockedTeamBank(teamUuid);
+        this.unlockedTeamBank = true;
     }
 
 
@@ -174,7 +179,7 @@ public class Team {
                 playerName,
                 plugin.getLastRank(),
                 getCurrentDate(),
-                StelyTeamPlugin.getPlugin().getSQLiteManager().getUUID(playerName)
+                plugin.getDatabaseManager().getUUID(playerName)
             )
         );
         plugin.getDatabaseManager().insertMember(playerName, teamUuid);
@@ -279,7 +284,7 @@ public class Team {
                 InventoryView inventoryView = player.getOpenInventory();
                 if (inventoryView.getTopInventory().getHolder() instanceof TeamMenu){
                     ((TeamMenu) inventoryView.getTopInventory().getHolder()).openMenu();
-                    System.out.println("refreshed");
+                    // System.out.println("refreshed");
                 }
                 // if (openInventoryTitle.equals(config.getString("inventoriesName.admin"))){
                 //     new AdminMenu(player).openMenu(null);
@@ -441,7 +446,25 @@ public class Team {
         this.teamPrefix = teamPrefix;
     }
 
-    private String getCurrentDate(){
+    public void refreshTeamStorage(){
+        this.teamStorages = plugin.getDatabaseManager().getTeamStorages(teamUuid);
+    }
+
+    private String getCurrentDate() {
         return new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime());
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Team team)) {
+            return false;
+        }
+        return this.teamUuid.equals(team.teamUuid);
+    }
+
+    @Override
+    public int hashCode() {
+        return teamUuid.hashCode();
+    }
+
 }

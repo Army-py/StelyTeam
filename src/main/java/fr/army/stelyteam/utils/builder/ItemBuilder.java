@@ -5,9 +5,9 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -51,16 +51,20 @@ public class ItemBuilder {
 	}
 
 
-	public static ItemStack getPlayerHead(OfflinePlayer player, String name, List<String> lore) {
-		return getCustomHead(null, null, name, lore, player);
+	public static ItemStack getPlayerHead(UUID uuid, String name, List<String> lore) {
+		return getCustomHead(null, null, name, lore, uuid);
 	}
 
 
-	private static ItemStack getCustomHead(String texture, String buttonName, String name, List<String> lore, OfflinePlayer player) {
+	private static ItemStack getCustomHead(String texture, String buttonName, String name, List<String> lore, UUID uuid) {
 		ItemStack item = new ItemStack(Material.PLAYER_HEAD);
 
+		// PlayerProfile pprofile = Bukkit.createPlayerProfile(uuid);
+		// pprofile.getTextures().set
+
         SkullMeta skullMeta = (SkullMeta) item.getItemMeta();
-        GameProfile profile = new GameProfile(player == null ? UUID.randomUUID() : player.getUniqueId(), player == null ? null : player.getName());
+		GameProfile profile = new GameProfile(uuid == null ? UUID.randomUUID() : uuid,
+				uuid == null ? null : Bukkit.getOfflinePlayer(uuid).getName());
 
 		if (texture != null) {
 			profile.getProperties().put("textures", new Property("textures", texture));
@@ -85,9 +89,9 @@ public class ItemBuilder {
 			skullMeta.setLore(loreList);
 		}
 
-		if (player != null){
-			NamespacedKey key = new NamespacedKey(StelyTeamPlugin.getPlugin(), "playerName");
-			skullMeta.getPersistentDataContainer().set(key, PersistentDataType.STRING, player.getName());
+		if (uuid != null){
+			NamespacedKey key = new NamespacedKey(StelyTeamPlugin.getPlugin(), "uuid");
+			skullMeta.getPersistentDataContainer().set(key, PersistentDataType.LONG_ARRAY, new long[]{uuid.getMostSignificantBits(), uuid.getLeastSignificantBits()});
 		}
 
 		if (buttonName != null){
