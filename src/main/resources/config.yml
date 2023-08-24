@@ -98,7 +98,7 @@ prices:
 # {USERNAME} : The sender name
 # {TEAM_PREFIX} : The team prefix
 teamChat: 
-  format: "&b[Team] {TEAM_PREFIX}&8{USERNAME}&7>{MESSAGE}"
+  format: "&b[Team] {TEAM_PREFIX} &8{USERNAME} &7> {MESSAGE}"
 
 
 

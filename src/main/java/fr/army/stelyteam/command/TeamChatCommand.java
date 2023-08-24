@@ -38,8 +38,6 @@ public class TeamChatCommand implements TabExecutor {
         }
 
         if (args.length == 0) {
-            // TODO Link to the configuration message
-            // player.sendMessage("You should type a message !");
             player.sendMessage(messageManager.getMessage("teamchat.blank_message"));
             return true;
         }
