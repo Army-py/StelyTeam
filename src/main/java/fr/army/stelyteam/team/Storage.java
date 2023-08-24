@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.utils.network.task.AsyncStorageSender;
+import fr.army.stelyteam.utils.network.task.storage.AsyncStorageSender;
 
 public class Storage {
     private UUID teamUuid;

@@ -1,4 +1,4 @@
-package fr.army.stelyteam.utils.network.task;
+package fr.army.stelyteam.utils.network.task.storage;
 
 import org.bukkit.Bukkit;
 

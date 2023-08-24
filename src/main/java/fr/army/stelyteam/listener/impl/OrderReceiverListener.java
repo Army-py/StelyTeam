@@ -6,7 +6,7 @@ import org.bukkit.event.Listener;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.utils.network.ChannelRegistry;
-import fr.army.stelyteam.utils.network.task.AsyncStorageReceiver;
+import fr.army.stelyteam.utils.network.task.storage.AsyncStorageReceiver;
 import fr.flowsqy.noqueuepluginmessage.api.event.DataReceiveEvent;
 
 public class OrderReceiverListener implements Listener {
