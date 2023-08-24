@@ -77,7 +77,7 @@ public class AlliancesMenu extends FixedMenu {
             Integer teamMembers = teamAlliance.getTeamMembers().size();
             Integer maxMembers = config.getInt("teamMaxMembers");
             String allianceDescription = teamAlliance.getTeamDescription();
-            ArrayList<String> allianceMembers = teamAlliance.getMembersName();
+            List<String> allianceMembers = teamAlliance.getMembersName();
             allianceMembers.remove(allianceOwnerName);
             UUID playerUUID = mySqlManager.getUUID(allianceOwnerName);
             // String itemName = colorsBuilder.replaceColor(alliancePrefix);

@@ -66,7 +66,7 @@ public class EditAlliancesMenu extends FixedMenu {
             String allianceDescription = teamAlliance.getTeamDescription();
             Integer teamMembersLelvel = teamAlliance.getImprovLvlMembers();
             Integer teamMembers = teamAlliance.getTeamMembers().size();
-            ArrayList<String> allianceMembers = teamAlliance.getMembersName();
+            List<String> allianceMembers = teamAlliance.getMembersName();
             UUID playerUUID = mySqlManager.getUUID(allianceOwnerName);
             // String itemName = colorsBuilder.replaceColor(alliancePrefix);
             String itemName = " ";

@@ -51,9 +51,9 @@ public class StorageMenu extends PagedMenu {
                 byte[] contentBytes = storage.getStorageContent();
                 ItemStack[] content = serializeManager.deserializeFromByte(contentBytes);
                 inventory.setContents(content);
-                System.out.println("new content");
+                // System.out.println("new content");
             }
-            System.out.println("Storage found in cache");
+            // System.out.println("Storage found in cache");
         }else{
             inventory = Bukkit.createInventory(this, this.menuSlots, inventoryName);
             
@@ -192,7 +192,7 @@ public class StorageMenu extends PagedMenu {
                 openedServerName = null;
             }
 
-            System.out.println("Viewers : " + storageInventory.getViewers().size());
+            // System.out.println("Viewers : " + storageInventory.getViewers().size());
 
             // System.out.println("CLOSE : " + storageInventory.getViewers().size());
             // System.out.println("CLOSE : " + openedServerName);

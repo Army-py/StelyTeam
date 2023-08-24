@@ -338,12 +338,21 @@ public class Team {
     }
 
 
-    public ArrayList<String> getMembersName(){
+    public List<String> getMembersName(){
         ArrayList<String> membersName = new ArrayList<String>();
         for (Member member : this.teamMembers) {
             membersName.add(member.getMemberName());
         }
         return membersName;
+    }
+
+
+    public Set<UUID> getMembersUuid(){
+        Set<UUID> membersUuid = new HashSet<UUID>();
+        for (Member member : this.teamMembers) {
+            membersUuid.add(member.getUuid());
+        }
+        return membersUuid;
     }
 
 
