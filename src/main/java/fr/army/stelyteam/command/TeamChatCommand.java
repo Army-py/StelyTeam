@@ -43,23 +43,16 @@ public class TeamChatCommand implements TabExecutor {
             return true;
         }
 
-        // TODO Remove this if it's verified as useless
-        /*
-        if (!sqliteManager.isRegistered(player.getName())) {
-            sqliteManager.registerPlayer(player);
-        }*/
-
-
         //Team team = Team.initFromPlayerName(playerName);
-        final String message = String.join(" ", args);
+        String message = String.join(" ", args);
 
-        /*
+        
         int messageStart = 0;
-        while (argsString.charAt(messageStart) == ' ') {
+        while (message.charAt(messageStart) == ' ') {
             messageStart++;
         }
-        argsString = argsString.substring(messageStart);
-        */
+        message = message.substring(messageStart);
+        
 
         teamChatManager.sendMessage(player, message);
 
