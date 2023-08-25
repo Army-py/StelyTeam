@@ -23,7 +23,7 @@ import fr.army.stelyteam.utils.manager.serializer.ItemStackSerializer;
 
 public class StorageMenu extends PagedMenu {
 
-    final ItemStackSerializer serializeManager = plugin.getSerializeManager();
+    private final ItemStackSerializer serializeManager = plugin.getSerializeManager();
 
     public StorageMenu(Player viewer, TeamMenu previousMenu) {
         super(

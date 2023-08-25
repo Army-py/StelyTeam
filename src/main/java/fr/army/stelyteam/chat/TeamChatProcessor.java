@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import fr.army.stelyteam.api.event.PlayerTeamChatEvent;
+import fr.army.stelyteam.utils.builder.ColorsBuilder;
 
 public class TeamChatProcessor {
 
@@ -28,7 +29,7 @@ public class TeamChatProcessor {
             if (receiver == null) {
                 continue;
             }
-            receiver.sendMessage(ChatColor.translateAlternateColorCodes('&', messageFormat));
+            receiver.sendMessage(ColorsBuilder.replaceColor(messageFormat));
         }
     }
 

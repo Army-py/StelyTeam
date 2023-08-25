@@ -15,12 +15,9 @@ import fr.army.stelyteam.menu.FixedMenu;
 import fr.army.stelyteam.menu.Menus;
 import fr.army.stelyteam.menu.TeamMenu;
 import fr.army.stelyteam.utils.builder.ItemBuilder;
-import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 
 public class AdminMenu extends FixedMenu {
-
-    DatabaseManager mySqlManager = plugin.getDatabaseManager();
 
     public AdminMenu(Player viewer, TeamMenu previousMenu) {
         super(

@@ -20,14 +20,10 @@ import fr.army.stelyteam.team.Member;
 import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.TemporaryActionNames;
 import fr.army.stelyteam.utils.builder.ItemBuilder;
-import fr.army.stelyteam.utils.manager.CacheManager;
-import fr.army.stelyteam.utils.manager.MessageManager;
 
 
 public class MembersMenu extends FixedMenu {
 
-    final CacheManager cacheManager = plugin.getCacheManager();
-    final MessageManager messageManager = plugin.getMessageManager();
 
     public MembersMenu(Player viewer, TeamMenu previousMenu) {
         super(

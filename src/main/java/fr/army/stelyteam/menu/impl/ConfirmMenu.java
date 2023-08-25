@@ -23,21 +23,15 @@ import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.TemporaryActionNames;
 import fr.army.stelyteam.utils.builder.ItemBuilder;
 import fr.army.stelyteam.utils.builder.conversation.ConversationBuilder;
-import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.EconomyManager;
-import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
 
 
 public class ConfirmMenu extends FixedMenu {
 
-    final DatabaseManager mySqlManager = plugin.getDatabaseManager();
-    final SQLiteDataManager sqliteManager = plugin.getSQLiteManager();
-    final CacheManager cacheManager = plugin.getCacheManager();
-    final MessageManager messageManager = plugin.getMessageManager();
-    final EconomyManager economyManager = plugin.getEconomyManager();
-    final ConversationBuilder conversationBuilder = plugin.getConversationBuilder();
+    private final SQLiteDataManager sqliteManager = plugin.getSQLiteManager();
+    private final EconomyManager economyManager = plugin.getEconomyManager();
+    private final ConversationBuilder conversationBuilder = plugin.getConversationBuilder();
 
     public ConfirmMenu(Player viewer, TeamMenu previousMenu){
         super(

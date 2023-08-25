@@ -28,19 +28,12 @@ import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.TemporaryActionNames;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
 import fr.army.stelyteam.utils.builder.ItemBuilder;
-import fr.army.stelyteam.utils.manager.CacheManager;
-import fr.army.stelyteam.utils.manager.MessageManager;
 import fr.army.stelyteam.utils.manager.database.DatabaseManager;
-import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
 
 
 public class AlliancesMenu extends FixedMenu {
 
-    DatabaseManager mySqlManager = plugin.getDatabaseManager();
-    SQLiteDataManager sqliteManager = plugin.getSQLiteManager();
-    ColorsBuilder colorsBuilder = plugin.getColorsBuilder();
-    CacheManager cacheManager = plugin.getCacheManager();
-    MessageManager messageManager = plugin.getMessageManager();
+    private final DatabaseManager mySqlManager = plugin.getDatabaseManager();
 
     public AlliancesMenu(Player viewer, TeamMenu previousMenu){
         super(
@@ -94,12 +87,12 @@ public class AlliancesMenu extends FixedMenu {
             
             lore = replaceInLore(lore, "%OWNER%", allianceOwnerName);
             lore = replaceInLore(lore, "%NAME%", allianceName);
-            lore = replaceInLore(lore, "%PREFIX%", colorsBuilder.replaceColor(alliancePrefix));
+            lore = replaceInLore(lore, "%PREFIX%", ColorsBuilder.replaceColor(alliancePrefix));
             lore = replaceInLore(lore, "%DATE%", allianceDate);
             lore = replaceInLore(lore, "%MEMBER_COUNT%", IntegerToString(teamMembers));
             lore = replaceInLore(lore, "%MAX_MEMBERS%", IntegerToString(maxMembers+teamMembersLelvel));
             lore = replaceInLore(lore, "%MEMBERS%", allianceMembers.isEmpty() ? messageManager.getMessageWithoutPrefix("common.no_members") : String.join(", ", playerNames));
-            lore = replaceInLore(lore, "%DESCRIPTION%", colorsBuilder.replaceColor(allianceDescription));
+            lore = replaceInLore(lore, "%DESCRIPTION%", ColorsBuilder.replaceColor(allianceDescription));
             
             
             if (plugin.playerHasPermission(playerName, team, "seeTeamAlliances")){ 

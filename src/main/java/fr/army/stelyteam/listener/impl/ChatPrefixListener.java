@@ -14,8 +14,6 @@ public class ChatPrefixListener implements Listener {
 
     public static final String PREFIX_PLACEHOLDER = "{STELYTEAM_PREFIX}";
     
-    private StelyTeamPlugin plugin = StelyTeamPlugin.getPlugin();
-    private ColorsBuilder colorBuilder = plugin.getColorsBuilder();
 
     @SuppressWarnings("unused")
     @EventHandler(priority = EventPriority.NORMAL)
@@ -25,7 +23,7 @@ public class ChatPrefixListener implements Listener {
         String prefix = "";
 
         if (team != null) {
-            prefix = colorBuilder.replaceColor(team.getTeamPrefix());
+            prefix = ColorsBuilder.replaceColor(team.getTeamPrefix());
         }
 
         // ChatColor.translateAlternateColorCodes(0, prefix)

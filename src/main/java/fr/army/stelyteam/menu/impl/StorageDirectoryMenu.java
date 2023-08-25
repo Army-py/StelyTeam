@@ -15,12 +15,9 @@ import fr.army.stelyteam.menu.Menus;
 import fr.army.stelyteam.menu.TeamMenu;
 import fr.army.stelyteam.team.Storage;
 import fr.army.stelyteam.utils.builder.ItemBuilder;
-import fr.army.stelyteam.utils.manager.CacheManager;
 
 
 public class StorageDirectoryMenu extends FixedMenu {
-
-    final CacheManager cacheManager = plugin.getCacheManager();
 
     public StorageDirectoryMenu(Player viewer, TeamMenu previousMenu) {
         super(

@@ -23,19 +23,13 @@ import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.TemporaryActionNames;
 import fr.army.stelyteam.utils.builder.ItemBuilder;
 import fr.army.stelyteam.utils.builder.conversation.ConversationBuilder;
-import fr.army.stelyteam.utils.manager.CacheManager;
-import fr.army.stelyteam.utils.manager.MessageManager;
 import fr.army.stelyteam.utils.manager.database.DatabaseManager;
-import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
 
 
 public class EditMembersMenu extends FixedMenu {
 
-    final DatabaseManager mySqlManager = plugin.getDatabaseManager();
-    final SQLiteDataManager sqliteManager = plugin.getSQLiteManager();
-    final CacheManager cacheManager = plugin.getCacheManager();
-    final MessageManager messageManager = plugin.getMessageManager();
-    final ConversationBuilder conversationBuilder = plugin.getConversationBuilder();
+    private final DatabaseManager mySqlManager = plugin.getDatabaseManager();
+    private final ConversationBuilder conversationBuilder = plugin.getConversationBuilder();
 
     public EditMembersMenu(Player viewer, TeamMenu previousMenu){
         super(

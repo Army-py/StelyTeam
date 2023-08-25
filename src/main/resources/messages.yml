@@ -164,6 +164,7 @@ commands:
       - "§a/st info <team> : §7Affiche les informations de la team"
       - "§a/st list : §7Affiche la liste des teams"
       - "§a/st visual <texte en couleur> : §7Affiche le visuel du texte en couleur"
+      - "§a/tt <message> : §7Envoie un message dans le tchat de la team"
       - "§7------------------------------------"
   stelyteam_admin:
     output:

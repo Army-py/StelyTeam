@@ -20,7 +20,7 @@ public class ColorsBuilder {
         this.config = plugin.getConfig();
     }
 
-    public String replaceColor(final String input) {
+    public static String replaceColor(final String input) {
         final StringBuffer legacyBuilder = new StringBuffer();
         final Pattern allPattern = Pattern.compile("(&)?&([0-9a-fk-orA-FK-OR])");
         final Matcher legacyMatcher = allPattern.matcher(input);
@@ -185,7 +185,7 @@ public class ColorsBuilder {
     }
 
 
-    private String parseHexColor(String hexColor) {
+    private static String parseHexColor(String hexColor) {
         Color.fromRGB(Integer.decode("#" + hexColor));
         final StringBuilder assembledColorCode = new StringBuilder();
         assembledColorCode.append(ChatColor.COLOR_CHAR + "x");

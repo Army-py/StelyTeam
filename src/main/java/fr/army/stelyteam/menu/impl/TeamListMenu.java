@@ -21,19 +21,12 @@ import fr.army.stelyteam.team.Page;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
 import fr.army.stelyteam.utils.builder.ItemBuilder;
-import fr.army.stelyteam.utils.manager.CacheManager;
-import fr.army.stelyteam.utils.manager.MessageManager;
 import fr.army.stelyteam.utils.manager.database.DatabaseManager;
-import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
 
 
 public class TeamListMenu extends PagedMenu {
 
-    final DatabaseManager databaseManager = plugin.getDatabaseManager();
-    final SQLiteDataManager sqliteManager = plugin.getSQLiteManager();
-    final CacheManager cacheManager = plugin.getCacheManager();
-    final ColorsBuilder colorsBuilder = plugin.getColorsBuilder();
-    final MessageManager messageManager = plugin.getMessageManager();
+    private final DatabaseManager databaseManager = plugin.getDatabaseManager();
 
     public TeamListMenu(Player viewer, TeamMenu previousMenu) {
         super(
@@ -91,12 +84,12 @@ public class TeamListMenu extends PagedMenu {
             
             lore = replaceInLore(lore, "%OWNER%", teamOwnerName);
             lore = replaceInLore(lore, "%NAME%", team.getTeamName());
-            lore = replaceInLore(lore, "%PREFIX%", colorsBuilder.replaceColor(teamPrefix));
+            lore = replaceInLore(lore, "%PREFIX%", ColorsBuilder.replaceColor(teamPrefix));
             lore = replaceInLore(lore, "%DATE%", team.getCreationDate());
             lore = replaceInLore(lore, "%MEMBER_COUNT%", IntegerToString(team.getTeamMembers().size()));
             lore = replaceInLore(lore, "%MAX_MEMBERS%", IntegerToString(maxMembers+team.getImprovLvlMembers()));
             lore = replaceInLore(lore, "%MEMBERS%", teamMembers.isEmpty() ? messageManager.getMessageWithoutPrefix("common.no_members") : String.join(", ", playerNames));
-            lore = replaceInLore(lore, "%DESCRIPTION%", colorsBuilder.replaceColor(team.getTeamDescription()));
+            lore = replaceInLore(lore, "%DESCRIPTION%", ColorsBuilder.replaceColor(team.getTeamDescription()));
             
             item = ItemBuilder.getPlayerHead(playerUUID, itemName, lore);
 

@@ -23,19 +23,12 @@ import fr.army.stelyteam.utils.TemporaryActionNames;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
 import fr.army.stelyteam.utils.builder.ItemBuilder;
 import fr.army.stelyteam.utils.builder.conversation.ConversationBuilder;
-import fr.army.stelyteam.utils.manager.CacheManager;
-import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 
 
 public class MemberMenu extends FixedMenu {
 
-    final DatabaseManager mySqlManager = plugin.getDatabaseManager();
-    final CacheManager cacheManager = plugin.getCacheManager();
-    final MessageManager messageManager = plugin.getMessageManager();
-    final ConversationBuilder conversationBuilder = plugin.getConversationBuilder();
-    final ColorsBuilder colorsBuilder = plugin.getColorsBuilder();
+    private final ConversationBuilder conversationBuilder = plugin.getConversationBuilder();
 
     public MemberMenu(Player viewer, TeamMenu previousMenu) {
         super(
@@ -77,13 +70,13 @@ public class MemberMenu extends FixedMenu {
                 lore = replaceInLore(lore, "%MAX_MONEY%", DoubleToString(config.getDouble("teamMaxMoney")));
             }else if (displayName.equals(config.getString("inventories.member.teamInfos.itemName"))){
                 lore = replaceInLore(lore, "%NAME%", teamName);
-                lore = replaceInLore(lore, "%PREFIX%", colorsBuilder.replaceColor(teamPrefix));
+                lore = replaceInLore(lore, "%PREFIX%", ColorsBuilder.replaceColor(teamPrefix));
                 lore = replaceInLore(lore, "%OWNER%", teamOwner);
                 lore = replaceInLore(lore, "%RANK%", rankColor + memberRankName);
                 lore = replaceInLore(lore, "%DATE%", membershipDate);
                 lore = replaceInLore(lore, "%MEMBER_COUNT%", IntegerToString(teamMembers));
                 lore = replaceInLore(lore, "%MAX_MEMBERS%", IntegerToString(maxMembers+teamMembersLelvel));
-                lore = replaceInLore(lore, "%DESCRIPTION%", colorsBuilder.replaceColor(teamDescription));
+                lore = replaceInLore(lore, "%DESCRIPTION%", ColorsBuilder.replaceColor(teamDescription));
             }
 
             if (plugin.playerHasPermission(playerName, team, buttonName)){ 

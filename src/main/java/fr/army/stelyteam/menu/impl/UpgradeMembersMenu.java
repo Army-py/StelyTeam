@@ -17,13 +17,10 @@ import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.TemporaryActionNames;
 import fr.army.stelyteam.utils.builder.ItemBuilder;
-import fr.army.stelyteam.utils.manager.MessageManager;
 
 
 
 public class UpgradeMembersMenu extends FixedMenu {
-
-    final MessageManager messageManager = plugin.getMessageManager();
 
     public UpgradeMembersMenu(Player viewer, TeamMenu previousMenu) {
         super(

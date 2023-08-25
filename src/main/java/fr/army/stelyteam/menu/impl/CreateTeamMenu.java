@@ -21,7 +21,6 @@ import fr.army.stelyteam.utils.builder.ItemBuilder;
 
 public class CreateTeamMenu extends FixedMenu {
 
-
     public CreateTeamMenu(Player viewer, TeamMenu previousMenu) {
         super(
             viewer,

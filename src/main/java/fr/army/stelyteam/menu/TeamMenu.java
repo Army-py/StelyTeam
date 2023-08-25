@@ -22,6 +22,7 @@ import org.bukkit.persistence.PersistentDataType;
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
+import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
 
 
@@ -31,6 +32,7 @@ public abstract class TeamMenu implements ITeamMenu {
     protected final ColorsBuilder colorsBuilder = plugin.getColorsBuilder();
     protected final YamlConfiguration config = plugin.getConfig();
     protected final MessageManager messageManager = plugin.getMessageManager();
+    protected final CacheManager cacheManager = plugin.getCacheManager();
 
     protected InventoryHolder menu;
 
