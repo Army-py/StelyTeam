@@ -89,8 +89,8 @@ public class StorageDirectoryMenu extends FixedMenu {
                 Integer storageId = config.getInt("inventories.storageDirectory."+str+".storageId");
 
                 if (itemName.equals(name) && itemType.equals(type)){
-                    if (!player.isOp()){
-                        player.sendMessage("§cCette fonctionnalité est temporairement désactivée.");
+                    if (!config.getBoolean("allowTeamStorage")) {
+                        player.sendMessage(messageManager.getMessage("common.functionnality_disabled"));
                     }else{
                         if (cacheManager.containsStorage(team.getTeamUuid(), storageId)){
                             final Storage storage = cacheManager.getStorage(team.getTeamUuid(), storageId);

@@ -1,8 +1,13 @@
 package fr.army.stelyteam.utils.network.task.chat;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
+
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.chat.Message;
 import fr.army.stelyteam.chat.TeamChatManager;
+import fr.army.stelyteam.utils.network.ChannelRegistry;
 import fr.army.stelyteam.utils.network.chat.MessageReader;
 import fr.army.stelyteam.utils.network.order.Order;
 import fr.army.stelyteam.utils.network.order.OrderReader;
@@ -31,7 +36,11 @@ public class ReceiveChatRunnable implements Runnable {
                 return;
             }
 
-            teamChatManager.sendMessage(message.senderUuid(), message.messageFormat(), message.recipients());
+            final Set<UUID> recicipients = new HashSet<UUID>();
+            recicipients.addAll(message.recipients());
+            recicipients.addAll(plugin.getAllowedPlayers("essentials.chat.receive."+ChannelRegistry.TEAM_CHAT_CHANNEL.getChannel()));
+
+            teamChatManager.sendMessage(message.senderUuid(), message.messageFormat(), recicipients);
             // System.out.println("Receive chat");
         } catch (Exception e) {
             e.printStackTrace();

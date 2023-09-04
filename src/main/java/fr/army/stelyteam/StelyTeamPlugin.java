@@ -4,7 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -235,6 +238,17 @@ public class StelyTeamPlugin extends JavaPlugin {
             }
         }
         return false;
+    }
+
+
+    public Set<UUID> getAllowedPlayers(String permissionName){
+        final Set<UUID> players = new HashSet<UUID>();
+        for (Player player : Bukkit.getOnlinePlayers()){
+            if (player.hasPermission(permissionName)){
+                players.add(player.getUniqueId());
+            }
+        }
+        return players;
     }
 
 

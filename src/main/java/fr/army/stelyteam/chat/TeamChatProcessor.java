@@ -29,7 +29,8 @@ public class TeamChatProcessor {
             if (receiver == null) {
                 continue;
             }
-            receiver.sendMessage(ColorsBuilder.replaceColor(messageFormat));
+            receiver.sendMessage(ColorsBuilder.replaceColor(messageFormat)
+                    .replace("&", ""));
         }
     }
 
