@@ -12,10 +12,11 @@ import fr.army.stelyteam.command.SubCommand;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.manager.MessageManager;
 
-public class SubCmdMoney extends SubCommand {
+public class SubCmdClaim extends SubCommand {
+    
     private MessageManager messageManager;
 
-    public SubCmdMoney(StelyTeamPlugin plugin) {
+    public SubCmdClaim(StelyTeamPlugin plugin) {
         super(plugin);
         this.messageManager = plugin.getMessageManager();
     }
@@ -31,17 +32,17 @@ public class SubCmdMoney extends SubCommand {
             String teamName = String.join("", args);
             Team team = Team.init(teamName);
             if (team != null){
-                player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_money.output", DoubleToString(team.getTeamMoney())));
+                final String hasUnlocked;
+                if (team.isUnlockedTeamClaim())
+                    hasUnlocked = messageManager.getMessageWithoutPrefix("commands.stelyteam_claim.true");
+                else
+                    hasUnlocked = messageManager.getMessageWithoutPrefix("commands.stelyteam_claim.false");
+                player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_claim.output", hasUnlocked));
             }else{
                 player.sendMessage(messageManager.getMessage("common.team_not_exist"));
             }
         }
         return true;
-    }
-
-
-    private String DoubleToString(double value){
-        return NumberFormat.getNumberInstance(Locale.US).format(value);
     }
 
     @Override

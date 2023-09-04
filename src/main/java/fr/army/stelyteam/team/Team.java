@@ -26,7 +26,8 @@ public class Team {
     private String creationDate = getCurrentDate();
     private Integer improvLvlMembers = 0;
     private Integer teamStorageLvl = 0;
-    private Boolean unlockedTeamBank = false;
+    private boolean unlockedTeamBank = false;
+    private boolean unlockedTeamClaim = false;
     private String teamOwnerName;
     private Collection<Member> teamMembers = new ArrayList<>();
     private Set<Permission> teamPermissions = new HashSet<>();
@@ -34,7 +35,9 @@ public class Team {
     private Map<Integer, Storage> teamStorages;
 
     // Existing team
-    public Team(UUID teamUuid, String teamName, String teamPrefix, String teamDescription, double teamMoney, String creationDate, int improvLvlMembers, int teamStorageLvl, boolean unlockedTeamBank, String teamOwnerName){
+    public Team(UUID teamUuid, String teamName, String teamPrefix, String teamDescription, double teamMoney,
+            String creationDate, int improvLvlMembers, int teamStorageLvl, boolean unlockedTeamBank,
+            boolean unlockedTeamClaim, String teamOwnerName) {
         this.teamUuid = teamUuid;
         this.teamName = teamName;
         this.teamPrefix = teamPrefix;
@@ -44,6 +47,7 @@ public class Team {
         this.improvLvlMembers = improvLvlMembers;
         this.teamStorageLvl = teamStorageLvl;
         this.unlockedTeamBank = unlockedTeamBank;
+        this.unlockedTeamClaim = unlockedTeamClaim;
         this.teamOwnerName = teamOwnerName;
 
         this.teamMembers = plugin.getDatabaseManager().getTeamMembers(teamUuid);
@@ -170,6 +174,11 @@ public class Team {
     public void unlockedTeamBank(){
         plugin.getDatabaseManager().updateUnlockedTeamBank(teamUuid);
         this.unlockedTeamBank = true;
+    }
+
+    public void unlockedTeamClaim(){
+        plugin.getDatabaseManager().updateUnlockedTeamClaim(teamUuid);
+        this.unlockedTeamClaim = true;
     }
 
 
@@ -432,6 +441,10 @@ public class Team {
 
     public boolean isUnlockedTeamBank() {
         return unlockedTeamBank;
+    }
+
+    public boolean isUnlockedTeamClaim(){
+        return unlockedTeamClaim;
     }
 
     public String getTeamOwnerName() {

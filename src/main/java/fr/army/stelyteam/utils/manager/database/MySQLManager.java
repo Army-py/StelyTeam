@@ -83,7 +83,7 @@ public class MySQLManager extends DatabaseManager {
         if (isConnected()){
             try {
                 PreparedStatement queryCreatePlayers = connection.prepareStatement("CREATE TABLE IF NOT EXISTS player (playerId INTEGER AUTO_INCREMENT, playerName VARCHAR(255), teamRank INTEGER, joinDate VARCHAR(255), teamId INTEGER, PRIMARY KEY (playerId));");
-                PreparedStatement queryCreateTeams = connection.prepareStatement("CREATE TABLE IF NOT EXISTS team (teamId INTEGER AUTO_INCREMENT, teamUuid VARCHAR(255) UNIQUE, teamName VARCHAR(255) UNIQUE, teamPrefix VARCHAR(255), teamDescription VARCHAR(255), teamMoney INTEGER, creationDate VARCHAR(255), improvLvlMembers INTEGER, teamStorageLvl INTEGER, unlockedTeamBank INTEGER, teamOwnerPlayerId INTEGER UNIQUE, PRIMARY KEY(teamId));");
+                PreparedStatement queryCreateTeams = connection.prepareStatement("CREATE TABLE IF NOT EXISTS team (teamId INTEGER AUTO_INCREMENT, teamUuid VARCHAR(255) UNIQUE, teamName VARCHAR(255) UNIQUE, teamPrefix VARCHAR(255), teamDescription VARCHAR(255), teamMoney INTEGER, creationDate VARCHAR(255), improvLvlMembers INTEGER, teamStorageLvl INTEGER, unlockedTeamBank INTEGER, unlockedTeamClaim INTEGER, teamOwnerPlayerId INTEGER UNIQUE, PRIMARY KEY(teamId));");
                 PreparedStatement queryCreateTeamStorages = connection.prepareStatement("CREATE TABLE IF NOT EXISTS teamStorage (storageId INTEGER, teamId INTEGER, storageContent BLOB, openedServer VARCHAR(255) DEFAULT NULL, PRIMARY KEY (storageId,teamId));");
                 PreparedStatement queryCreateAlliances = connection.prepareStatement("CREATE TABLE IF NOT EXISTS alliance (teamId INTEGER, teamAllianceId INTEGER, allianceDate VARCHAR(255), PRIMARY KEY(teamId,teamAllianceId));");
                 PreparedStatement queryCreateAssignements = connection.prepareStatement("CREATE TABLE IF NOT EXISTS assignement (teamId INTEGER, permLabel VARCHAR(255), teamRank INTEGER, PRIMARY KEY (permLabel,teamId));");
@@ -157,10 +157,10 @@ public class MySQLManager extends DatabaseManager {
                 //     queryAlterTeams2.executeUpdate();
                 //     queryAlterTeams2.close();
                 // }
-                PreparedStatement queryIfColumnExists = connection.prepareStatement("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'teamStorage' AND COLUMN_NAME = 'openedServer'");
+                PreparedStatement queryIfColumnExists = connection.prepareStatement("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'team' AND COLUMN_NAME = 'unlockedTeamClaim'");
                 ResultSet result = queryIfColumnExists.executeQuery();
                 if(!result.next()){
-                    PreparedStatement queryAlterStorage = connection.prepareStatement("ALTER TABLE teamStorage ADD openedServer VARCHAR(255) DEFAULT NULL AFTER storageContent");
+                    PreparedStatement queryAlterStorage = connection.prepareStatement("ALTER TABLE team ADD unlockedTeamClaim INTEGER DEFAULT 0 AFTER unlockedTeamBank");
                     queryAlterStorage.executeUpdate();
                     queryAlterStorage.close();
                 }
@@ -412,6 +412,21 @@ public class MySQLManager extends DatabaseManager {
         if(isConnected()){
             try {
                 PreparedStatement queryTeam = connection.prepareStatement("UPDATE team SET unlockedTeamBank = ? WHERE teamUuid = ?");
+                queryTeam.setInt(1, 1);
+                queryTeam.setString(2, teamUuid.toString());
+                queryTeam.executeUpdate();
+                queryTeam.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void updateUnlockedTeamClaim(UUID teamUuid){
+        if(isConnected()){
+            try {
+                PreparedStatement queryTeam = connection.prepareStatement("UPDATE team SET unlockedTeamClaim = ? WHERE teamUuid = ?");
                 queryTeam.setInt(1, 1);
                 queryTeam.setString(2, teamUuid.toString());
                 queryTeam.executeUpdate();
@@ -837,7 +852,7 @@ public class MySQLManager extends DatabaseManager {
     public Team getTeamFromPlayerName(String playerName){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("SELECT t.teamUuid, t.teamName, t.teamPrefix, t.teamDescription, t.teamMoney, t.creationDate, t.improvLvlMembers, t.teamStorageLvl, t.unlockedTeamBank, o.playerName AS 'ownerName' FROM team AS t INNER JOIN player p ON t.teamId = p.teamId INNER JOIN player o ON t.teamOwnerPlayerId = o.playerId WHERE p.playerName = ?");
+                PreparedStatement query = connection.prepareStatement("SELECT t.teamUuid, t.teamName, t.teamPrefix, t.teamDescription, t.teamMoney, t.creationDate, t.improvLvlMembers, t.teamStorageLvl, t.unlockedTeamBank, t.unlockedTeamClaim, o.playerName AS 'ownerName' FROM team AS t INNER JOIN player p ON t.teamId = p.teamId INNER JOIN player o ON t.teamOwnerPlayerId = o.playerId WHERE p.playerName = ?");
                 query.setString(1, playerName);
                 ResultSet result = query.executeQuery();
                 if(result.next()){
@@ -851,6 +866,7 @@ public class MySQLManager extends DatabaseManager {
                         result.getInt("improvLvlMembers"),
                         result.getInt("teamStorageLvl"),
                         (1 == result.getInt("unlockedTeamBank")),
+                        (1 == result.getInt("unlockedTeamClaim")),
                         result.getString("ownerName")
                     );
                 }
@@ -866,7 +882,7 @@ public class MySQLManager extends DatabaseManager {
     public Team getTeamFromTeamName(String teamName){
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("SELECT t.teamUuid, t.teamName, t.teamPrefix, t.teamDescription, t.teamMoney, t.creationDate, t.improvLvlMembers, t.teamStorageLvl, t.unlockedTeamBank, o.playerName AS 'ownerName' FROM team AS t INNER JOIN player o ON t.teamOwnerPlayerId = o.playerId WHERE t.teamName = ?");
+                PreparedStatement query = connection.prepareStatement("SELECT t.teamUuid, t.teamName, t.teamPrefix, t.teamDescription, t.teamMoney, t.creationDate, t.improvLvlMembers, t.teamStorageLvl, t.unlockedTeamBank, t.unlockedTeamClaim, o.playerName AS 'ownerName' FROM team AS t INNER JOIN player o ON t.teamOwnerPlayerId = o.playerId WHERE t.teamName = ?");
                 query.setString(1, teamName);
                 ResultSet result = query.executeQuery();
                 if(result.next()){
@@ -880,6 +896,7 @@ public class MySQLManager extends DatabaseManager {
                         result.getInt("improvLvlMembers"),
                         result.getInt("teamStorageLvl"),
                         (1 == result.getInt("unlockedTeamBank")),
+                        (1 == result.getInt("unlockedTeamClaim")),
                         result.getString("ownerName")
                     );
                 }
@@ -909,6 +926,7 @@ public class MySQLManager extends DatabaseManager {
                         result.getInt("improvLvlMembers"),
                         result.getInt("teamStorageLvl"),
                         (1 == result.getInt("unlockedTeamBank")),
+                        (1 == result.getInt("unlockedTeamClaim")),
                         result.getString("playerName")
                     ));
                 }
@@ -1080,7 +1098,7 @@ public class MySQLManager extends DatabaseManager {
     public Team getTeamFromTeamUuid(UUID teamUuid) {
         if(isConnected()){
             try {
-                PreparedStatement query = connection.prepareStatement("SELECT t.teamUuid, t.teamName, t.teamPrefix, t.teamDescription, t.teamMoney, t.creationDate, t.improvLvlMembers, t.teamStorageLvl, t.unlockedTeamBank, o.playerName AS 'ownerName' FROM team AS t INNER JOIN player o ON t.teamOwnerPlayerId = o.playerId WHERE t.teamUuid = ?");
+                PreparedStatement query = connection.prepareStatement("SELECT t.teamUuid, t.teamName, t.teamPrefix, t.teamDescription, t.teamMoney, t.creationDate, t.improvLvlMembers, t.teamStorageLvl, t.unlockedTeamBank, t.unlockedTeamClaim, o.playerName AS 'ownerName' FROM team AS t INNER JOIN player o ON t.teamOwnerPlayerId = o.playerId WHERE t.teamUuid = ?");
                 query.setString(1, teamUuid.toString());
                 ResultSet result = query.executeQuery();
                 if(result.next()){
@@ -1094,6 +1112,7 @@ public class MySQLManager extends DatabaseManager {
                         result.getInt("improvLvlMembers"),
                         result.getInt("teamStorageLvl"),
                         (1 == result.getInt("unlockedTeamBank")),
+                        (1 == result.getInt("unlockedTeamClaim")),
                         result.getString("ownerName")
                     );
                 }

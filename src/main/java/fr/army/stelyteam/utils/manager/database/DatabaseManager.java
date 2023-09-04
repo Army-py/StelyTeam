@@ -76,6 +76,8 @@ public abstract class DatabaseManager {
 
     public abstract void updateUnlockedTeamBank(UUID teamUuid);
 
+    public abstract void updateUnlockedTeamClaim(UUID teamUuid);
+
     public abstract void incrementImprovLvlMembers(UUID teamUuid);
 
     public abstract void incrementTeamStorageLvl(UUID teamUuid);

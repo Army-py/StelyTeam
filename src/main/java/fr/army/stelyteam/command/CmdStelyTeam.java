@@ -15,6 +15,7 @@ import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.command.subCommand.dev.SubCmdDebug;
 import fr.army.stelyteam.command.subCommand.help.SubCmdAdmin;
 import fr.army.stelyteam.command.subCommand.help.SubCmdHelp;
+import fr.army.stelyteam.command.subCommand.info.SubCmdClaim;
 import fr.army.stelyteam.command.subCommand.info.SubCmdInfo;
 import fr.army.stelyteam.command.subCommand.info.SubCmdMoney;
 import fr.army.stelyteam.command.subCommand.manage.SubCmdDelete;
@@ -158,5 +159,6 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
         subCommands.put("addmember", new SubCmdAddMember(plugin));
         subCommands.put("removemember", new SubCmdRemoveMember(plugin));
         subCommands.put("debug", new SubCmdDebug(plugin));
+        subCommands.put("claim", new SubCmdClaim(plugin));
     }
 }

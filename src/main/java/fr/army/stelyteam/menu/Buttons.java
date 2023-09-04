@@ -22,6 +22,7 @@ public enum Buttons {
     SET_TEAM_HOME_BUTTON("setTeamHome"),
     REMOVE_TEAM_HOME_BUTTON("removeTeamHome"),
     BUY_TEAM_BANK_BUTTON("buyTeamBank"),
+    BUY_TEAM_CLAIM_BUTTON("buyTeamClaim"),
     UPGRADE_LVL_MEMBERS_MENU_BUTTON("upgradeTotalMembers"),
     UPGRADE_LVL_STORAGE_MENU_BUTTON("upgradeStorageAmount"),
     EDIT_TEAM_NAME_BUTTON("editName"),

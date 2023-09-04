@@ -29,6 +29,7 @@ common:
   owner_already_action: "§cLe chef de la team a déjà une demande en cours."
   no_members: "§cAucun membre"
   storage_already_open: "§cCe coffre est déjà ouvert sur un autre serveur."
+  functionnality_disabled: "§cCette fonctionnalité est désactivée."
 
 # Messages concernant la gestions des membres
 manage_members:
@@ -94,6 +95,9 @@ manage_team:
   team_bank:
     already_unlocked: "§cLa banque de team est déjà débloqué."
     unlock: "§aVous avez débloqué la banque de team."
+  team_claim:
+    already_unlocked: "§cLe claim de team est déjà débloqué."
+    unlock: "§aVous avez débloqué le claim de team."
   upgrade_member_amount:
     must_unlock_previous_level: "§cVous devez débloquer l'amélioration précédente pour pouvoir acheter cette amélioration."
     new_upgrade: "§aL'amélioration du nombre de membre de la team est acheté."
@@ -117,6 +121,7 @@ broadcasts:
   player_remove_alliance: "§e%AUTHOR% §aa supprimé §e%TEAM% §ade l'alliance de la team."
   player_leave_team: "§e%AUTHOR% §aa quitté la team."
   team_bank_unlocked: "§e%AUTHOR% a débloqué la banque de la team."
+  team_claim_unlocked: "§e%AUTHOR% a débloqué le claim de la team."
   team_deleted: "§aLa team §e%TEAM_ID% §aa été supprimée."
   new_member_amount_upgrade: "§aUne nouvelle place dans la team §e%TEAM_ID% §aa été débloquée."
   new_storage_upgrade: "§aUn nouveau stockage de la team §e%TEAM_ID% §aa été débloqué."
@@ -209,6 +214,11 @@ commands:
   stelyteam_money:
     usage: "§7/stelyteam money <nom de la team>"
     output: "§7Cette team a %VALUE%€"
+  stelyteam_claim:
+    true: "§aOui"
+    false: "§cNon"
+    usage: "§7/stelyteam claim <nom de la team>"
+    output: "§7Cette team a débloqué le claim : %VALUE%"
   stelyteam_upgrade:
     usage: "§7/stelyteam upgrade <nom de la team>"
     max_level: "§cCette team est déjà au niveau maximum."

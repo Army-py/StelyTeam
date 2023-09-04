@@ -47,6 +47,12 @@ commands:
       aliases: ["balance", "bal"]
       permissions:
         default: "op"
+    claim:
+      description: "Affiche si la team a débloqué le claim ou non"
+      usage: "/stelyteam claim <team>"
+      aliases: []
+      permissions:
+        default: "op"
     upgrade:
       description: "Améliore le nombre de membre max dans une team"
       usage: "/stelyteam upgrade <team>"

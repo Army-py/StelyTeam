@@ -76,6 +76,7 @@ prices:
   editTeamPrefix: 3000.0
   editTeamDescription: 1000.0
   buyTeamBank: 40000.0
+  buyTeamClaim: 100000.0
   upgrade:
     teamPlaces:
       level1: 25000.0
@@ -101,6 +102,11 @@ teamChat:
   format: "&b[Team] {TEAM_PREFIX} &8{USERNAME} &7> {MESSAGE}"
 
 
+# Allow or disallow the use of team chat
+allowTeamChat: true
+
+# Allow or disallow the use of team storage
+allowTeamStorage: true
 
 # Pour pouvoir mettre une tête custom il faudra juste la texture de la tête entre les guillemets de headTexture
 # et mettre comme type d'item PLAYER_HEAD
@@ -338,6 +344,15 @@ inventories:
         - "§aCréer le compte banquaire"
         - "§ade la team"
         - "§b§oPrix : 40 000€"
+    buyTeamClaim:
+      itemName: "§5§nDébloquer le claim"
+      itemType: DIAMOND
+      headTexture: ""
+      slot: 32
+      lore:
+        - "§aDébloquer le claim"
+        - "§ade la team"
+        - "§b§oPrix : 100 000€"
     upgradeTotalMembers:
       itemName: "§5§nAjouter des places"
       itemType: TOTEM_OF_UNDYING
@@ -379,7 +394,7 @@ inventories:
       itemName: "§5§nModifier la description"
       itemType: WRITABLE_BOOK
       headTexture: ""
-      slot: 31
+      slot: 30
       lore:
         - "§aModifier la description de la team"
         - "§b§oPrix : 1 000€"

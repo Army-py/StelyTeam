@@ -117,9 +117,10 @@
         </repository>
 
         <repository>
-            <id>essentials-snapshots</id>
-            <url>https://repo.essentialsx.net/snapshots/</url>
-        </repository>
+            <id>essentialsx-snapshots</id>
+            <name>EssentialsX API Repository</name>
+            <url>https://repo.essentialsx.net/snapshots</url>
+        </repository> 
 
         <repository>
             <id>paper-repo</id>

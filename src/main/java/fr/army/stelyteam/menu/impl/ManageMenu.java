@@ -61,6 +61,8 @@ public class ManageMenu extends FixedMenu {
             }else if (plugin.playerHasPermission(playerName, team, buttonName)){ 
                 if (buttonName.equals("buyTeamBank")){
                     item = ItemBuilder.getItem(material, buttonName, displayName, lore, headTexture, team.isUnlockedTeamBank());
+                }else if (buttonName.equals("buyTeamClaim")){
+                    item = ItemBuilder.getItem(material, buttonName, displayName, lore, headTexture, team.isUnlockedTeamClaim());
                 }else {
                     item = ItemBuilder.getItem(material, buttonName, displayName, lore, headTexture, false);
                 }
@@ -138,6 +140,18 @@ public class ManageMenu extends FixedMenu {
                 player.sendMessage(messageManager.getMessage("manage_team.team_bank.already_unlocked"));
             }
 
+        }else if (Buttons.BUY_TEAM_CLAIM_BUTTON.isClickedButton(clickEvent)){
+            if (!team.isUnlockedTeamClaim()){
+                if (economyManager.checkMoneyPlayer(player, config.getDouble("prices.buyTeamClaim"))){
+                    cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.BUY_TEAM_CLAIM, team));
+
+                    new ConfirmMenu(player, this).openMenu();
+                }else{
+                    player.sendMessage(messageManager.getMessage("common.not_enough_money"));
+                }
+            }else{
+                player.sendMessage(messageManager.getMessage("manage_team.team_claim.already_unlocked"));
+            }
 
         }else if (Buttons.UPGRADE_LVL_MEMBERS_MENU_BUTTON.isClickedButton(clickEvent)){
             new UpgradeMembersMenu(player, this).openMenu();

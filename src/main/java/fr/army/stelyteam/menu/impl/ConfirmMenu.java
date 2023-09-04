@@ -153,6 +153,15 @@ public class ConfirmMenu extends FixedMenu {
                     team.refreshTeamMembersInventory(playerName);
                     team.teamBroadcast(playerName, messageManager.replaceAuthor("broadcasts.team_bank_unlocked", playerName));
                     break;
+                case BUY_TEAM_CLAIM:
+                    economyManager.removeMoneyPlayer(player, config.getDouble("prices.buyTeamClaim"));
+                    team.unlockedTeamClaim();
+                    player.sendMessage(messageManager.getMessage("manage_team.team_claim.unlock"));
+
+                    new ManageMenu(player, previousMenu).openMenu();
+                    team.refreshTeamMembersInventory(playerName);
+                    team.teamBroadcast(playerName, messageManager.replaceAuthor("broadcasts.team_claim_unlocked", playerName));
+                    break;
                 case EDIT_NAME:
                     player.closeInventory();
                     conversationBuilder.getNameInput(player, new ConvEditTeamName(plugin));
