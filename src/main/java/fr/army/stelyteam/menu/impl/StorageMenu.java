@@ -11,10 +11,10 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import fr.army.stelyteam.menu.Buttons;
-import fr.army.stelyteam.menu.Menus;
+import fr.army.stelyteam.menu.MenusOLD;
 import fr.army.stelyteam.menu.PagedMenu;
-import fr.army.stelyteam.menu.TeamMenu;
+import fr.army.stelyteam.menu.TeamMenuOLD;
+import fr.army.stelyteam.menu.button.Buttons;
 import fr.army.stelyteam.team.Storage;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.builder.ItemBuilder;
@@ -25,10 +25,10 @@ public class StorageMenu extends PagedMenu {
 
     private final ItemStackSerializer serializeManager = plugin.getSerializeManager();
 
-    public StorageMenu(Player viewer, TeamMenu previousMenu) {
+    public StorageMenu(Player viewer, TeamMenuOLD previousMenu) {
         super(
             viewer,
-            Menus.STORAGE_MENU.getSlots(),
+            MenusOLD.STORAGE_MENU.getSlots(),
             previousMenu
         );
     }
@@ -36,7 +36,7 @@ public class StorageMenu extends PagedMenu {
 
     public Inventory createInventory(int storageId) {
         // String inventoryName = config.getString(config.getString("inventories.storageDirectory."+plugin.getStorageFromId(storageId)+".itemName"));
-        String inventoryName = Menus.getStorageMenuName(storageId);
+        String inventoryName = MenusOLD.getStorageMenuName(storageId);
         UUID teamUuid = team.getTeamUuid();
         Storage storage = Storage.getStorageFromCache(teamUuid, storageId);
         Inventory inventory;

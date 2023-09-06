@@ -19,9 +19,15 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.Property;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.menu.button.ButtonItem;
 
 
 public class ItemBuilder {
+
+	public static ItemStack getItem(ButtonItem buttonItem){
+		return getItem(buttonItem.getMaterial(), "", buttonItem.getName(), buttonItem.getLore(), buttonItem.getSkullTexture(), buttonItem.isGlow());
+	}
+
 	public static ItemStack getItem(Material material, String buttonName, String displayName, List<String> lore, String headTexture, boolean isEnchanted) {
 		if (material.equals(Material.PLAYER_HEAD) && !headTexture.isBlank()) return getCustomHead(headTexture, buttonName, displayName, lore, null);
 

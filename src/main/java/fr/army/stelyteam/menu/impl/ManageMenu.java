@@ -10,10 +10,10 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import fr.army.stelyteam.menu.Buttons;
 import fr.army.stelyteam.menu.FixedMenu;
-import fr.army.stelyteam.menu.Menus;
-import fr.army.stelyteam.menu.TeamMenu;
+import fr.army.stelyteam.menu.MenusOLD;
+import fr.army.stelyteam.menu.TeamMenuOLD;
+import fr.army.stelyteam.menu.button.Buttons;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.TemporaryActionNames;
@@ -27,11 +27,11 @@ public class ManageMenu extends FixedMenu {
     private final SQLiteDataManager sqliteManager = plugin.getSQLiteManager();
     private final EconomyManager economyManager = plugin.getEconomyManager();
 
-    public ManageMenu(Player viewer, TeamMenu previousMenu){
+    public ManageMenu(Player viewer, TeamMenuOLD previousMenu){
         super(
             viewer,
-            Menus.MANAGE_MENU.getName(),
-            Menus.MANAGE_MENU.getSlots(),
+            MenusOLD.MANAGE_MENU.getName(),
+            MenusOLD.MANAGE_MENU.getSlots(),
             previousMenu
         );
     }

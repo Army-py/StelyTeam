@@ -1,11 +1,7 @@
 package fr.army.stelyteam;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.sql.SQLException;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -19,13 +15,14 @@ import fr.army.stelyteam.chat.TeamChatManager;
 import fr.army.stelyteam.command.CommandManager;
 import fr.army.stelyteam.external.ExternalManager;
 import fr.army.stelyteam.listener.ListenerLoader;
-import fr.army.stelyteam.menu.TeamMenu;
+import fr.army.stelyteam.menu.TeamMenuOLD;
 import fr.army.stelyteam.menu.impl.AdminMenu;
 import fr.army.stelyteam.menu.impl.CreateTeamMenu;
 import fr.army.stelyteam.menu.impl.MemberMenu;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
 import fr.army.stelyteam.utils.builder.conversation.ConversationBuilder;
+import fr.army.stelyteam.utils.loader.ConfigLoader;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.EconomyManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
@@ -42,6 +39,7 @@ public class StelyTeamPlugin extends JavaPlugin {
     private String teamChatFormat;
 
     private static StelyTeamPlugin plugin;
+    private ConfigLoader configLoader;
     private YamlConfiguration config;
     private YamlConfiguration messages;
     private CacheManager cacheManager;
@@ -61,8 +59,10 @@ public class StelyTeamPlugin extends JavaPlugin {
     public void onEnable() {
         plugin = this;
 
-        this.config = initFile(this.getDataFolder(), "config.yml");
-        this.messages = initFile(this.getDataFolder(), "messages.yml");
+        this.configLoader = new ConfigLoader(this);
+
+        this.config = this.configLoader.initFile("config.yml");
+        this.messages = this.configLoader.initFile("messages.yml");
 
         this.currentServerName = Bukkit.getServer().getMotd();
         this.serverNames = this.config.getStringList("serverNames").toArray(new String[0]);
@@ -121,21 +121,9 @@ public class StelyTeamPlugin extends JavaPlugin {
     }
 
 
-    private YamlConfiguration initFile(File dataFolder, String fileName) {
-        final File file = new File(dataFolder, fileName);
-        if (!file.exists()) {
-            try {
-                Files.copy(Objects.requireNonNull(getResource(fileName)), file.toPath());
-            } catch (IOException ignored) {
-            }
-        }
-        return YamlConfiguration.loadConfiguration(file);
-    }
-
-
     private void closeAllPlayerInventories(){
         for (Player player : Bukkit.getOnlinePlayers()){
-            if (player.getOpenInventory().getTopInventory().getHolder() instanceof TeamMenu){
+            if (player.getOpenInventory().getTopInventory().getHolder() instanceof TeamMenuOLD){
                 player.closeInventory();
             }
         }
@@ -251,6 +239,10 @@ public class StelyTeamPlugin extends JavaPlugin {
         return players;
     }
 
+
+    public ConfigLoader getConfigLoader() {
+        return configLoader;
+    }
 
     public YamlConfiguration getConfig() {
         return config;

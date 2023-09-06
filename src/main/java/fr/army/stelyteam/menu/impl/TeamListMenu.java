@@ -13,10 +13,10 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import fr.army.stelyteam.menu.Buttons;
-import fr.army.stelyteam.menu.Menus;
+import fr.army.stelyteam.menu.MenusOLD;
 import fr.army.stelyteam.menu.PagedMenu;
-import fr.army.stelyteam.menu.TeamMenu;
+import fr.army.stelyteam.menu.TeamMenuOLD;
+import fr.army.stelyteam.menu.button.Buttons;
 import fr.army.stelyteam.team.Page;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
@@ -28,11 +28,11 @@ public class TeamListMenu extends PagedMenu {
 
     private final DatabaseManager databaseManager = plugin.getDatabaseManager();
 
-    public TeamListMenu(Player viewer, TeamMenu previousMenu) {
+    public TeamListMenu(Player viewer, TeamMenuOLD previousMenu) {
         super(
             viewer,
-            Menus.TEAM_LIST_MENU.getName(),
-            Menus.TEAM_LIST_MENU.getSlots(),
+            MenusOLD.TEAM_LIST_MENU.getName(),
+            MenusOLD.TEAM_LIST_MENU.getSlots(),
             previousMenu
         );
     }

@@ -14,10 +14,10 @@ import fr.army.stelyteam.conversation.ConvEditTeamDesc;
 import fr.army.stelyteam.conversation.ConvEditTeamName;
 import fr.army.stelyteam.conversation.ConvEditTeamPrefix;
 import fr.army.stelyteam.conversation.ConvGetTeamName;
-import fr.army.stelyteam.menu.Buttons;
 import fr.army.stelyteam.menu.FixedMenu;
-import fr.army.stelyteam.menu.Menus;
-import fr.army.stelyteam.menu.TeamMenu;
+import fr.army.stelyteam.menu.MenusOLD;
+import fr.army.stelyteam.menu.TeamMenuOLD;
+import fr.army.stelyteam.menu.button.Buttons;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.TemporaryActionNames;
@@ -33,11 +33,11 @@ public class ConfirmMenu extends FixedMenu {
     private final EconomyManager economyManager = plugin.getEconomyManager();
     private final ConversationBuilder conversationBuilder = plugin.getConversationBuilder();
 
-    public ConfirmMenu(Player viewer, TeamMenu previousMenu){
+    public ConfirmMenu(Player viewer, TeamMenuOLD previousMenu){
         super(
             viewer,
-            Menus.CONFIRM_MENU.getName(),
-            Menus.CONFIRM_MENU.getSlots(),
+            MenusOLD.CONFIRM_MENU.getName(),
+            MenusOLD.CONFIRM_MENU.getSlots(),
             previousMenu
         );
     }

@@ -1,4 +1,4 @@
-package fr.army.stelyteam.menu;
+package fr.army.stelyteam.menu.button;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -11,48 +11,78 @@ import org.bukkit.persistence.PersistentDataType;
 import fr.army.stelyteam.StelyTeamPlugin;
 
 public enum Buttons {
-
+    
+    /* CREATE / REMOVE TEAM */
     CREATE_TEAM_BUTTON("create"),
+    REMOVE_TEAM_BUTTON("removeTeam"),
+
+    /* OPEN MENU */
     MANAGE_MENU_BUTTON("manage"),
     TEAM_LIST_MENU_BUTTON("teamList"),
     MEMBER_MENU_BUTTON("member"),
-    CLOSE_ADMIN_MENU_BUTTON("close"),
     EDIT_MEMBERS_MENU_BUTTON("editMembers"),
     EDIT_ALLIANCES_MENU_BUTTON("editAlliances"),
+    EDIT_TEAM_PERMISSIONS_MENU_BUTTON("editPermissions"),
+    TEAM_MEMBERS_BUTTON("seeTeamMembers"),
+    TEAM_ALLIANCES_BUTTON("seeTeamAlliances"),
+    STORAGE_DIRECTORY_BUTTON("storageDirectory"),
+
+    /* CLOSE MENU */
+    CLOSE_ADMIN_MENU_BUTTON("close"),
+    CLOSE_MANAGE_MENU_BUTTON("close"),
+    CLOSE_MEMBER_MENU_BUTTON("close"),
+    CLOSE_UPGRADE_LVL_MEMBERS_MENU_BUTTON("close"),
+    CLOSE_UPGRADE_LVL_STORAGE_MENU_BUTTON("close"),
+    CLOSE_TEAM_MEMBERS_MENU_BUTTON("close"),
+    CLOSE_TEAM_ALLIANCES_MENU_BUTTON("close"),
+    CLOSE_EDIT_MEMBERS_MENU_BUTTON("close"),
+    CLOSE_EDIT_ALLIANCES_MENU_BUTTON("close"),
+    CLOSE_PERMISSIONS_MENU_BUTTON("close"),
+    CLOSE_STORAGE_MENU_BUTTON("close"),
+    CLOSE_STORAGE_DIRECTORY_MENU_BUTTON("close"),
+    CLOSE_TEAM_LIST_MENU_BUTTON("close"),
+
+    /* CREATE / REMOVE HOME */
     SET_TEAM_HOME_BUTTON("setTeamHome"),
     REMOVE_TEAM_HOME_BUTTON("removeTeamHome"),
+
+    /* BUY AN UPGRADE */
     BUY_TEAM_BANK_BUTTON("buyTeamBank"),
     BUY_TEAM_CLAIM_BUTTON("buyTeamClaim"),
     UPGRADE_LVL_MEMBERS_MENU_BUTTON("upgradeTotalMembers"),
     UPGRADE_LVL_STORAGE_MENU_BUTTON("upgradeStorageAmount"),
+    
+    /* EDIT ATTRIBUTES */
     EDIT_TEAM_NAME_BUTTON("editName"),
     EDIT_TEAM_PREFIX_BUTTON("editPrefix"),
     EDIT_TEAM_DESCRIPTION_BUTTON("editDescription"),
-    EDIT_TEAM_PERMISSIONS_MENU_BUTTON("editPermissions"),
-    REMOVE_TEAM_BUTTON("removeTeam"),
-    CLOSE_MANAGE_MENU_BUTTON("close"),
+    
+    /* BLANK BUTTON (no action) */
     TEAM_INFOS_BUTTON("teamInfos"),
-    TEAM_MEMBERS_BUTTON("seeTeamMembers"),
-    TEAM_ALLIANCES_BUTTON("seeTeamAlliances"),
     TEAM_BANK_BUTTON("seeTeamBank"),
+    EMPTY_CASE("emptyCase"),
+
+    /* ADD / WITHDRAW MONEY */
     ADD_MONEY_TEAM_BANK_BUTTON("addTeamMoney"),
     WITHDRAW_MONEY_TEAM_BANK_BUTTON("withdrawTeamMoney"),
-    STORAGE_DIRECTORY_BUTTON("storageDirectory"),
+    
+    /* ADD / REMOVE MEMBER */
     LEAVE_TEAM_BUTTON("leaveTeam"),
-    CLOSE_MEMBER_MENU_BUTTON("close"),
-    CLOSE_UPGRADE_LVL_MEMBERS_MENU_BUTTON("close"),
-    CLOSE_UPGRADE_LVL_STORAGE_MENU_BUTTON("close"),
-    CONFIRM_BUTTON("confirm"),
-    CANCEL_BUTTON("cancel"),
-    CLOSE_TEAM_MEMBERS_MENU_BUTTON("close"),
-    CLOSE_TEAM_ALLIANCES_MENU_BUTTON("close"),
     ADD_MEMBER_BUTTON("addMember"),
     REMOVE_MEMBER_BUTTON("removeMember"),
+
+    /* CONFIRM / CANCEL */
+    CONFIRM_BUTTON("confirm"),
+    CANCEL_BUTTON("cancel"),
+
+    /* PROMOTE / DEMOTE MEMBER */
     EDIT_OWNER_BUTTON("editOwner"),
-    CLOSE_EDIT_MEMBERS_MENU_BUTTON("close"),
+
+    /* ADD / REMOVE ALLIANCE */
     ADD_ALLIANCE_BUTTON("addAlliance"),
     REMOVE_ALLIANCE_BUTTON("removeAlliance"),
-    CLOSE_EDIT_ALLIANCES_MENU_BUTTON("close"),
+    
+    /* PERMISSIONS */
     PERMISSION_ADD_TEAM_MONEY_BUTTON("addTeamMoney"),
     PERMISSION_WITHDRAW_TEAM_MONEY_BUTTON("withdrawTeamMoney"),
     PERMISSION_SEE_TEAM_BANK_BUTTON("seeTeamBank"),
@@ -72,15 +102,13 @@ public enum Buttons {
     PERMISSION_ADD_ALLIANCE_BUTTON("addAlliance"),
     PERMISSION_REMOVE_ALLIANCE_BUTTON("removeAlliance"),
     PERMISSION_SEE_TEAM_ALLIANCES_BUTTON("seeTeamAlliances"),
-    CLOSE_PERMISSIONS_MENU_BUTTON("close"),
+
+    /* NEXT / PREVIOUS BUTTONS (must be reviewed) */
     PREVIOUS_STORAGE_BUTTON("previous"),
     NEXT_STORAGE_BUTTON("next"),
-    CLOSE_STORAGE_MENU_BUTTON("close"),
-    CLOSE_STORAGE_DIRECTORY_MENU_BUTTON("close"),
-    NEXT_TEAM_LIST_BUTTON("next"),
     PREVIOUS_TEAM_LIST_BUTTON("previous"),
-    CLOSE_TEAM_LIST_MENU_BUTTON("close"),
-    EMPTY_CASE("emptyCase");
+    NEXT_TEAM_LIST_BUTTON("next"),
+    ;
 
     private final String name;
     

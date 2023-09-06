@@ -6,7 +6,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.menu.TeamMenu;
+import fr.army.stelyteam.menu.TeamMenuOLD;
 
 public class InventoryCloseListener implements Listener {
 
@@ -16,8 +16,8 @@ public class InventoryCloseListener implements Listener {
 
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent event) {       
-        if (event.getView().getTopInventory().getHolder() instanceof TeamMenu) {
-            ((TeamMenu) event.getView().getTopInventory().getHolder()).onClose(event);
+        if (event.getView().getTopInventory().getHolder() instanceof TeamMenuOLD) {
+            ((TeamMenuOLD) event.getView().getTopInventory().getHolder()).onClose(event);
             return;
         }
     }

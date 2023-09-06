@@ -18,10 +18,10 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.menu.Buttons;
 import fr.army.stelyteam.menu.FixedMenu;
-import fr.army.stelyteam.menu.Menus;
-import fr.army.stelyteam.menu.TeamMenu;
+import fr.army.stelyteam.menu.MenusOLD;
+import fr.army.stelyteam.menu.TeamMenuOLD;
+import fr.army.stelyteam.menu.button.Buttons;
 import fr.army.stelyteam.team.Alliance;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.TemporaryAction;
@@ -35,20 +35,20 @@ public class AlliancesMenu extends FixedMenu {
 
     private final DatabaseManager mySqlManager = plugin.getDatabaseManager();
 
-    public AlliancesMenu(Player viewer, TeamMenu previousMenu){
+    public AlliancesMenu(Player viewer, TeamMenuOLD previousMenu){
         super(
             viewer,
-            Menus.TEAM_ALLIANCES_MENU.getName(),
-            Menus.TEAM_ALLIANCES_MENU.getSlots(),
+            MenusOLD.TEAM_ALLIANCES_MENU.getName(),
+            MenusOLD.TEAM_ALLIANCES_MENU.getSlots(),
             previousMenu
         );
     }
 
-    public AlliancesMenu(Player viewer, String menuName, TeamMenu previousMenu){
+    public AlliancesMenu(Player viewer, String menuName, TeamMenuOLD previousMenu){
         super(
             viewer,
             menuName,
-            Menus.TEAM_ALLIANCES_MENU.getSlots(),
+            MenusOLD.TEAM_ALLIANCES_MENU.getSlots(),
             previousMenu
         );
     }
@@ -136,7 +136,7 @@ public class AlliancesMenu extends FixedMenu {
         String playerName = player.getName();
         Material material = clickEvent.getCurrentItem().getType();
 
-        if (clickEvent.getView().getTitle().equals(Menus.REMOVE_ALLIANCES_MENU.getName())){
+        if (clickEvent.getView().getTitle().equals(MenusOLD.REMOVE_ALLIANCES_MENU.getName())){
             if (material.equals(Material.getMaterial("PLAYER_HEAD"))){
                 if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.CLICK_REMOVE_ALLIANCE)){
                     NamespacedKey key = new NamespacedKey(StelyTeamPlugin.getPlugin(), "uuid");

@@ -14,10 +14,10 @@ import org.bukkit.inventory.ItemStack;
 
 import fr.army.stelyteam.conversation.ConvAddMember;
 import fr.army.stelyteam.conversation.ConvEditOwner;
-import fr.army.stelyteam.menu.Buttons;
 import fr.army.stelyteam.menu.FixedMenu;
-import fr.army.stelyteam.menu.Menus;
-import fr.army.stelyteam.menu.TeamMenu;
+import fr.army.stelyteam.menu.MenusOLD;
+import fr.army.stelyteam.menu.TeamMenuOLD;
+import fr.army.stelyteam.menu.button.Buttons;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.TemporaryActionNames;
@@ -31,11 +31,11 @@ public class EditMembersMenu extends FixedMenu {
     private final DatabaseManager mySqlManager = plugin.getDatabaseManager();
     private final ConversationBuilder conversationBuilder = plugin.getConversationBuilder();
 
-    public EditMembersMenu(Player viewer, TeamMenu previousMenu){
+    public EditMembersMenu(Player viewer, TeamMenuOLD previousMenu){
         super(
             viewer,
-            Menus.EDIT_MEMBERS_MENU.getName(),
-            Menus.EDIT_MEMBERS_MENU.getSlots(),
+            MenusOLD.EDIT_MEMBERS_MENU.getName(),
+            MenusOLD.EDIT_MEMBERS_MENU.getSlots(),
             previousMenu
         );
     }
@@ -152,7 +152,7 @@ public class EditMembersMenu extends FixedMenu {
             cacheManager.addTempAction(
                 new TemporaryAction(playerName, TemporaryActionNames.CLICK_REMOVE_MEMBER, team)
             );
-            new MembersMenu(player, Menus.REMOVE_MEMBERS_MENU.getName(), this).openMenu();
+            new MembersMenu(player, MenusOLD.REMOVE_MEMBERS_MENU.getName(), this).openMenu();
             return;
         }else if (Buttons.EDIT_OWNER_BUTTON.isClickedButton(clickEvent)){
             player.closeInventory();

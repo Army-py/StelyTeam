@@ -9,21 +9,21 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 
-import fr.army.stelyteam.menu.Buttons;
 import fr.army.stelyteam.menu.FixedMenu;
-import fr.army.stelyteam.menu.Menus;
-import fr.army.stelyteam.menu.TeamMenu;
+import fr.army.stelyteam.menu.MenusOLD;
+import fr.army.stelyteam.menu.TeamMenuOLD;
+import fr.army.stelyteam.menu.button.Buttons;
 import fr.army.stelyteam.team.Storage;
 import fr.army.stelyteam.utils.builder.ItemBuilder;
 
 
 public class StorageDirectoryMenu extends FixedMenu {
 
-    public StorageDirectoryMenu(Player viewer, TeamMenu previousMenu) {
+    public StorageDirectoryMenu(Player viewer, TeamMenuOLD previousMenu) {
         super(
             viewer,
-            Menus.STORAGE_DIRECTORY_MENU.getName(),
-            Menus.STORAGE_DIRECTORY_MENU.getSlots(),
+            MenusOLD.STORAGE_DIRECTORY_MENU.getName(),
+            MenusOLD.STORAGE_DIRECTORY_MENU.getSlots(),
             previousMenu
         );
     }

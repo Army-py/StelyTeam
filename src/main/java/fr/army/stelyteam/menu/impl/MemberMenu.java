@@ -13,10 +13,10 @@ import org.bukkit.inventory.ItemStack;
 
 import fr.army.stelyteam.conversation.ConvAddMoney;
 import fr.army.stelyteam.conversation.ConvWithdrawMoney;
-import fr.army.stelyteam.menu.Buttons;
 import fr.army.stelyteam.menu.FixedMenu;
-import fr.army.stelyteam.menu.Menus;
-import fr.army.stelyteam.menu.TeamMenu;
+import fr.army.stelyteam.menu.MenusOLD;
+import fr.army.stelyteam.menu.TeamMenuOLD;
+import fr.army.stelyteam.menu.button.Buttons;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.TemporaryActionNames;
@@ -30,11 +30,11 @@ public class MemberMenu extends FixedMenu {
 
     private final ConversationBuilder conversationBuilder = plugin.getConversationBuilder();
 
-    public MemberMenu(Player viewer, TeamMenu previousMenu) {
+    public MemberMenu(Player viewer, TeamMenuOLD previousMenu) {
         super(
             viewer,
-            Menus.MEMBER_MENU.getName(),
-            Menus.MEMBER_MENU.getSlots(),
+            MenusOLD.MEMBER_MENU.getName(),
+            MenusOLD.MEMBER_MENU.getSlots(),
             previousMenu
         );
     }

@@ -12,10 +12,10 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 
-import fr.army.stelyteam.menu.Buttons;
 import fr.army.stelyteam.menu.FixedMenu;
-import fr.army.stelyteam.menu.Menus;
-import fr.army.stelyteam.menu.TeamMenu;
+import fr.army.stelyteam.menu.MenusOLD;
+import fr.army.stelyteam.menu.TeamMenuOLD;
+import fr.army.stelyteam.menu.button.Buttons;
 import fr.army.stelyteam.team.Member;
 import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.TemporaryActionNames;
@@ -25,20 +25,20 @@ import fr.army.stelyteam.utils.builder.ItemBuilder;
 public class MembersMenu extends FixedMenu {
 
 
-    public MembersMenu(Player viewer, TeamMenu previousMenu) {
+    public MembersMenu(Player viewer, TeamMenuOLD previousMenu) {
         super(
             viewer,
-            Menus.TEAM_MEMBERS_MENU.getName(),
-            Menus.TEAM_MEMBERS_MENU.getSlots(),
+            MenusOLD.TEAM_MEMBERS_MENU.getName(),
+            MenusOLD.TEAM_MEMBERS_MENU.getSlots(),
             previousMenu
         );
     }
 
-    public MembersMenu(Player viewer, String menuName, TeamMenu previousMenu){
+    public MembersMenu(Player viewer, String menuName, TeamMenuOLD previousMenu){
         super(
             viewer,
             menuName,
-            Menus.TEAM_MEMBERS_MENU.getSlots(),
+            MenusOLD.TEAM_MEMBERS_MENU.getSlots(),
             previousMenu
         );
     }

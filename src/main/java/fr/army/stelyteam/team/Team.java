@@ -1,7 +1,7 @@
 package fr.army.stelyteam.team;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.menu.TeamMenu;
+import fr.army.stelyteam.menu.TeamMenuOLD;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -291,8 +291,8 @@ public class Team {
                 }
                 
                 InventoryView inventoryView = player.getOpenInventory();
-                if (inventoryView.getTopInventory().getHolder() instanceof TeamMenu){
-                    ((TeamMenu) inventoryView.getTopInventory().getHolder()).openMenu();
+                if (inventoryView.getTopInventory().getHolder() instanceof TeamMenuOLD){
+                    ((TeamMenuOLD) inventoryView.getTopInventory().getHolder()).openMenu();
                     // System.out.println("refreshed");
                 }
                 // if (openInventoryTitle.equals(config.getString("inventoriesName.admin"))){

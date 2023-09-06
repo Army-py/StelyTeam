@@ -10,20 +10,20 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import fr.army.stelyteam.menu.Buttons;
 import fr.army.stelyteam.menu.FixedMenu;
-import fr.army.stelyteam.menu.Menus;
-import fr.army.stelyteam.menu.TeamMenu;
+import fr.army.stelyteam.menu.MenusOLD;
+import fr.army.stelyteam.menu.TeamMenuOLD;
+import fr.army.stelyteam.menu.button.Buttons;
 import fr.army.stelyteam.utils.builder.ItemBuilder;
 
 
 public class AdminMenu extends FixedMenu {
 
-    public AdminMenu(Player viewer, TeamMenu previousMenu) {
+    public AdminMenu(Player viewer, TeamMenuOLD previousMenu) {
         super(
             viewer,
-            Menus.ADMIN_MENU.getName(),
-            Menus.ADMIN_MENU.getSlots(),
+            MenusOLD.ADMIN_MENU.getName(),
+            MenusOLD.ADMIN_MENU.getSlots(),
             previousMenu
         );
     }

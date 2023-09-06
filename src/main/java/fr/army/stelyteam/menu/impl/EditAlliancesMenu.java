@@ -13,10 +13,10 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import fr.army.stelyteam.conversation.ConvAddAlliance;
-import fr.army.stelyteam.menu.Buttons;
 import fr.army.stelyteam.menu.FixedMenu;
-import fr.army.stelyteam.menu.Menus;
-import fr.army.stelyteam.menu.TeamMenu;
+import fr.army.stelyteam.menu.MenusOLD;
+import fr.army.stelyteam.menu.TeamMenuOLD;
+import fr.army.stelyteam.menu.button.Buttons;
 import fr.army.stelyteam.team.Alliance;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.TemporaryAction;
@@ -33,11 +33,11 @@ public class EditAlliancesMenu extends FixedMenu {
     private final ConversationBuilder conversationBuilder = plugin.getConversationBuilder();
 
 
-    public EditAlliancesMenu(Player viewer, TeamMenu previousMenu) {
+    public EditAlliancesMenu(Player viewer, TeamMenuOLD previousMenu) {
         super(
             viewer,
-            Menus.EDIT_ALLIANCES_MENU.getName(),
-            Menus.EDIT_ALLIANCES_MENU.getSlots(),
+            MenusOLD.EDIT_ALLIANCES_MENU.getName(),
+            MenusOLD.EDIT_ALLIANCES_MENU.getSlots(),
             previousMenu
         );
     }
@@ -156,7 +156,7 @@ public class EditAlliancesMenu extends FixedMenu {
             cacheManager.addTempAction(
                 new TemporaryAction(playerName, TemporaryActionNames.CLICK_REMOVE_ALLIANCE, team)
             );
-            new AlliancesMenu(player, Menus.REMOVE_ALLIANCES_MENU.getName(), this).openMenu();
+            new AlliancesMenu(player, MenusOLD.REMOVE_ALLIANCES_MENU.getName(), this).openMenu();
             return;
         }
     }

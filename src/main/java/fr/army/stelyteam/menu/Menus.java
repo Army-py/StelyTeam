@@ -1,55 +1,23 @@
 package fr.army.stelyteam.menu;
 
-import fr.army.stelyteam.StelyTeamPlugin;
-
-public enum Menus {
+public class Menus {
     
-    CREATE_TEAM_MENU("createTeam"),
-    TEAM_LIST_MENU("teamList"),
-    ADMIN_MENU("admin"),
-    MANAGE_MENU("manage"),
-    MEMBER_MENU("member"),
-    TEAM_MEMBERS_MENU("teamMembers"),
-    REMOVE_MEMBERS_MENU("removeMembers"),
-    TEAM_ALLIANCES_MENU("teamAlliances"),
-    REMOVE_ALLIANCES_MENU("removeAlliances"),
-    EDIT_MEMBERS_MENU("editMembers"),
-    EDIT_ALLIANCES_MENU("editAlliances"),
-    UPGRADE_LVL_MEMBERS_MENU("upgradeTotalMembers"),
-    CONFIRM_MENU("confirmInventory"),
-    PERMISSIONS_MENU("permissions"),
-    UPGRADE_LVL_STORAGE_MENU("upgradeStorageAmount"),
-    STORAGE_DIRECTORY_MENU("storageDirectory"),
-    STORAGE_MENU("storage"),
-    STORAGE_ONE_MENU("storages.storageOne"),
-    STORAGE_TWO_MENU("storages.storageTwo"),
-    STORAGE_THREE_MENU("storages.storageThree"),
-    STORAGE_FOUR_MENU("storages.storageFour"),
-    STORAGE_FIVE_MENU("storages.storageFive");
+    public static TeamMenu MENU_CREATE_TEAM;
+    public static TeamMenu MENU_TEAMS;
+    public static TeamMenu MENU_TEAM_MANAGE;
+    public static TeamMenu MENU_HOME; // previously MEMBER_MENU
+    public static TeamMenu MENU_TEAM_MEMBERS;
+    public static TeamMenu MENU_TEAM_ALLIANCES;
+    public static TeamMenu MENU_MEMBERS_MANAGE;
+    public static TeamMenu MENU_ALLIANCES_MANAGE;
+    public static TeamMenu MENU_IMPROVE_MEMBER_LENGTH;
+    public static TeamMenu MENU_IMPROVE_STORAGE_LENGTH;
+    public static TeamMenu MENU_CONFIRM;
+    public static TeamMenu MENU_TEAM_PERMISSIONS;
+    public static TeamMenu MENU_STORAGE_DIRECTORY;
+    public static TeamMenu MENU_STORAGE;
+    
 
-
-    private final StelyTeamPlugin plugin = StelyTeamPlugin.getPlugin();
-    private final String configPath;
-
-
-    Menus(String configPath){
-        this.configPath = configPath;
-    }
-
-
-    public String getName(){
-        return this.plugin.getConfig().getString("inventoriesName." + this.configPath);
-    }
-
-    public int getSlots(){
-        return this.plugin.getConfig().getInt("inventoriesSlots." + this.configPath);
-    }
-
-    public static String getStorageMenuName(int storageId){
-        return StelyTeamPlugin.getPlugin().getConfig().getString(
-            StelyTeamPlugin.getPlugin().getConfig().getString(
-                "inventories.storageDirectory."+StelyTeamPlugin.getPlugin().getStorageFromId(storageId)+".itemName"
-            )
-        );
+    public static void init() {
     }
 }
