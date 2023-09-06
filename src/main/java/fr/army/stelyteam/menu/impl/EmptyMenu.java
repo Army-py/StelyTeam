@@ -1,9 +1,7 @@
 package fr.army.stelyteam.menu.impl;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.inventory.Inventory;
 
 import fr.army.stelyteam.menu.TeamMenu;
 import fr.army.stelyteam.menu.view.MenuView;
@@ -20,7 +18,7 @@ public class EmptyMenu extends TeamMenu {
     }
 
     public MenuView createView(Player player) {
-        return new MenuView(player, createInventory());
+        return new MenuView(player, this);
     }
 
     public static EmptyMenu createInstance() {
@@ -29,11 +27,5 @@ public class EmptyMenu extends TeamMenu {
 
     @Override
     public void onClick(InventoryClickEvent clickEvent) {
-    }
-
-    protected Inventory createInventory() {
-        final Inventory inventory = Bukkit.createInventory(this, size, title);
-
-        return inventory;
     }
 }

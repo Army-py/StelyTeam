@@ -5,19 +5,25 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 public abstract class Button {
     
     private final char character;
-    private final ButtonItem item;
 
-    public Button(char character, ButtonItem item) {
+    private ButtonItem buttonItem;
+
+    public Button(char character, ButtonItem buttonItem) {
         this.character = character;
-        this.item = item;
+        this.buttonItem = buttonItem;
     }
 
     public char getCharacter() {
         return character;
     }
 
-    public ButtonItem getItem() {
-        return item;
+    public ButtonItem getButtonItem() {
+        return buttonItem;
+    }
+
+    public Button setButtonItem(ButtonItem buttonItem) {
+        this.buttonItem = buttonItem;
+        return this;
     }
 
     public abstract void onClick(InventoryClickEvent clickEvent);

@@ -7,10 +7,11 @@ import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.menu.TeamMenuOLD;
+import fr.army.stelyteam.menu.TeamMenu;
 import fr.army.stelyteam.menu.button.Button;
 import fr.army.stelyteam.menu.button.ButtonItem;
 import fr.army.stelyteam.menu.button.impl.BlankButton;
+import fr.army.stelyteam.menu.impl.EmptyMenu;
 
 public class MenuBuilder {
     
@@ -42,12 +43,10 @@ public class MenuBuilder {
 
                 final String path = "items." + character + ".";
 
-                final int slot = row * 9 + column;
                 final String material = config.getString(path + "material");
                 final String name = config.getString(path + "name");
                 final int amount = config.getInt(path + "amount");
                 final List<String> lore = config.getStringList(path + "lore");
-                final String buttonType = config.getString(path + "button-type");
                 final boolean glow = config.getBoolean(path + "is-glowing");
                 final String skullTexture = config.getString(path + "skull-texture");
 
@@ -59,7 +58,7 @@ public class MenuBuilder {
             }
         }
 
-        TeamMenuOLD menu = new EmptyMenu(title, size);
+        TeamMenu menu = new EmptyMenu(title, size);
         menu.addButtons(buttons.toArray(Button[]::new));
 
         return new MenuBuilderResult(menu, config);
