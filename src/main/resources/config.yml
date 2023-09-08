@@ -838,6 +838,12 @@ inventories:
       rank: 3
       lore:
         - "§aVoir les alliances de la team"
+    buyTeamClaim:
+      itemName: "§5§nAchat du claim"
+      slot: 42
+      rank: 1
+      lore:
+        - "§aAchat du claim de team"
     removeTeam:
       itemName: "§5§nSupprimer la team"
       slot: -1
