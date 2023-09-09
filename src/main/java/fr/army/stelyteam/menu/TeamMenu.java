@@ -24,6 +24,10 @@ public abstract class TeamMenu {
     public abstract void onClick(InventoryClickEvent clickEvent);
 
 
+    public Button getButton(int slot) {
+        return buttons[slot];
+    }
+
     public void addButtons(Button... buttons){
         for (int i = 0; i < buttons.length; i++) {
             this.buttons[i] = buttons[i];
