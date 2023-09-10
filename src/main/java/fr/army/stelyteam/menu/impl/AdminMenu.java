@@ -10,14 +10,14 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import fr.army.stelyteam.menu.FixedMenu;
+import fr.army.stelyteam.menu.FixedMenuOLD;
 import fr.army.stelyteam.menu.MenusOLD;
 import fr.army.stelyteam.menu.TeamMenuOLD;
 import fr.army.stelyteam.menu.button.Buttons;
 import fr.army.stelyteam.utils.builder.ItemBuilder;
 
 
-public class AdminMenu extends FixedMenu {
+public class AdminMenu extends FixedMenuOLD {
 
     public AdminMenu(Player viewer, TeamMenuOLD previousMenu) {
         super(

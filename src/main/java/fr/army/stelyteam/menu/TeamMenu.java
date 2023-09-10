@@ -1,57 +1,30 @@
 package fr.army.stelyteam.menu;
 
+import java.util.Optional;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.jetbrains.annotations.NotNull;
 
-import fr.army.stelyteam.menu.button.Button;
-import fr.army.stelyteam.menu.button.impl.BlankButton;
 import fr.army.stelyteam.menu.view.MenuView;
+import fr.army.stelyteam.team.Team;
+import fr.army.stelyteam.utils.builder.menu.MenuBuilderResult;
 
-public abstract class TeamMenu {
+public abstract class TeamMenu<T extends MenuView> {
     
-    private final String title;
-    private final int size;
-    private final Button[] buttons;
+    private final MenuBuilderResult menuBuilderResult;
 
-    public TeamMenu(String title, int size) {
-        this.title = title;
-        this.size = size;
-        this.buttons = new Button[size];
+    public TeamMenu(MenuBuilderResult menuBuilderResult) {
+        this.menuBuilderResult = menuBuilderResult;
     }
 
-    public abstract MenuView createView(Player player);
+    public abstract T createView(Player player, Optional<Team> team);
 
     public abstract void onClick(InventoryClickEvent clickEvent);
 
 
-    public Button getButton(int slot) {
-        return buttons[slot];
-    }
-
-    public void addButtons(Button... buttons){
-        for (int i = 0; i < buttons.length; i++) {
-            this.buttons[i] = buttons[i];
-        }
-    }
-
-    public void mapButton(int slot, Button button) {
-        if (button instanceof BlankButton)
-            this.buttons[slot] = button;
-        else
-            this.buttons[slot] = button.setButtonItem(this.buttons[slot].getButtonItem());
-    }
-
-
-
-    public String getTitle() {
-        return title;
-    }
-
-    public int getSize() {
-        return size;
-    }
-
-    public Button[] getButtons() {
-        return buttons;
+    @NotNull
+    public MenuBuilderResult getMenuBuilderResult() {
+        return menuBuilderResult;
     }
 }

@@ -13,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
 
 import fr.army.stelyteam.conversation.ConvAddMoney;
 import fr.army.stelyteam.conversation.ConvWithdrawMoney;
-import fr.army.stelyteam.menu.FixedMenu;
+import fr.army.stelyteam.menu.FixedMenuOLD;
 import fr.army.stelyteam.menu.MenusOLD;
 import fr.army.stelyteam.menu.TeamMenuOLD;
 import fr.army.stelyteam.menu.button.Buttons;
@@ -26,7 +26,7 @@ import fr.army.stelyteam.utils.builder.conversation.ConversationBuilder;
 
 
 
-public class MemberMenu extends FixedMenu {
+public class MemberMenu extends FixedMenuOLD {
 
     private final ConversationBuilder conversationBuilder = plugin.getConversationBuilder();
 

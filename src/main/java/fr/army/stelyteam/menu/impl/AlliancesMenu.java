@@ -18,7 +18,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.menu.FixedMenu;
+import fr.army.stelyteam.menu.FixedMenuOLD;
 import fr.army.stelyteam.menu.MenusOLD;
 import fr.army.stelyteam.menu.TeamMenuOLD;
 import fr.army.stelyteam.menu.button.Buttons;
@@ -31,7 +31,7 @@ import fr.army.stelyteam.utils.builder.ItemBuilder;
 import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 
-public class AlliancesMenu extends FixedMenu {
+public class AlliancesMenu extends FixedMenuOLD {
 
     private final DatabaseManager mySqlManager = plugin.getDatabaseManager();
 

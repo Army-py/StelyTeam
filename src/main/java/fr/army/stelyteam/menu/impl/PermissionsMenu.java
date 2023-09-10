@@ -9,7 +9,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 
-import fr.army.stelyteam.menu.FixedMenu;
+import fr.army.stelyteam.menu.FixedMenuOLD;
 import fr.army.stelyteam.menu.MenusOLD;
 import fr.army.stelyteam.menu.TeamMenuOLD;
 import fr.army.stelyteam.menu.button.Buttons;
@@ -17,7 +17,7 @@ import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.builder.ItemBuilder;
 
 
-public class PermissionsMenu extends FixedMenu {
+public class PermissionsMenu extends FixedMenuOLD {
 
     public PermissionsMenu(Player viewer, TeamMenuOLD previousMenu) {
         super(

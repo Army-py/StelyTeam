@@ -1,23 +1,24 @@
 package fr.army.stelyteam.menu.impl;
 
+import java.util.Optional;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 import fr.army.stelyteam.menu.TeamMenu;
+import fr.army.stelyteam.menu.template.MenuTemplate;
 import fr.army.stelyteam.menu.view.MenuView;
+import fr.army.stelyteam.team.Team;
+import fr.army.stelyteam.utils.builder.menu.MenuBuilderResult;
 
-public class EmptyMenu extends TeamMenu {
-    
-    private final String title;
-    private final int size;
+public class EmptyMenu extends TeamMenu<MenuView> {
 
-    public EmptyMenu(String title, int size) {
-        super(title, size);
-        this.title = title;
-        this.size = size;
+    private EmptyMenu(MenuBuilderResult menuBuilderResult) {
+        super(menuBuilderResult);
     }
 
-    public MenuView createView(Player player) {
+    @Override
+    public MenuView createView(Player player, Optional<Team> team) {
         return new MenuView(player, this);
     }
 

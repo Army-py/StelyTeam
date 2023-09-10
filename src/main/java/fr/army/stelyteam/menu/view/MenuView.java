@@ -11,11 +11,11 @@ import fr.army.stelyteam.menu.button.Button;
 public class MenuView implements IMenuView {
     
     private final Player viewer;
-    private final TeamMenu menu;
+    private final TeamMenu<?> menu;
 
     private Inventory inventory;
 
-    public MenuView(Player player, TeamMenu menu) {
+    public MenuView(Player player, TeamMenu<?> menu) {
         this.viewer = player;
         this.menu = menu;
     }

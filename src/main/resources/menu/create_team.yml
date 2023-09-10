@@ -1,0 +1,40 @@
+
+
+title: "§5§lCréation de Team"
+
+pattern:
+  - "$ $ $ $ $ $ $ $ $"
+  - "$ $ $ $ % $ $ $ $"
+  - "$ $ $ $ $ $ $ $ *"
+
+
+# Available button types
+# Any other type of button will be considered EMPTY
+# - BACK
+# - CREATE_TEAM
+items:
+  "$":
+    button-type: EMPTY
+    material: LIGHT_BLUE_STAINED_GLASS_PANE
+    name: " "
+    skull-texture: ""
+    amount: 1
+    is-glowing: false
+  "%":
+    button-type: CREATE_TEAM
+    material: LIME_BANNER
+    name: "§5§nCréer une team"
+    skull-texture: ""
+    amount: 1
+    is-glowing: false
+    lore: 
+      - "§aPrix : 20 000€"
+  "*":
+    button-type: BACK
+    material: ARROW
+    name: "§cFermer"
+    skull-texture: ""
+    amount: 1
+    is-glowing: false
+    lore:
+      - ""

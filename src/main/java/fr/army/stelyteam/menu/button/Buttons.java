@@ -13,101 +13,101 @@ import fr.army.stelyteam.StelyTeamPlugin;
 public enum Buttons {
     
     /* CREATE / REMOVE TEAM */
-    CREATE_TEAM_BUTTON("create"),
-    REMOVE_TEAM_BUTTON("removeTeam"),
+    BUTTON_CREATE_TEAM("create"),
+    BUTTON_REMOVE_TEAM("removeTeam"),
 
     /* OPEN MENU */
-    MANAGE_MENU_BUTTON("manage"),
-    TEAM_LIST_MENU_BUTTON("teamList"),
-    MEMBER_MENU_BUTTON("member"),
-    EDIT_MEMBERS_MENU_BUTTON("editMembers"),
-    EDIT_ALLIANCES_MENU_BUTTON("editAlliances"),
-    EDIT_TEAM_PERMISSIONS_MENU_BUTTON("editPermissions"),
-    TEAM_MEMBERS_BUTTON("seeTeamMembers"),
-    TEAM_ALLIANCES_BUTTON("seeTeamAlliances"),
-    STORAGE_DIRECTORY_BUTTON("storageDirectory"),
+    BUTTON_MANAGE_MENU("manage"),
+    BUTTON_TEAM_LIST_MENU("teamList"),
+    BUTTON_MEMBER_MENU("member"),
+    BUTTON_EDIT_MEMBERS_MENU("editMembers"),
+    BUTTON_EDIT_ALLIANCES_MENU("editAlliances"),
+    BUTTON_EDIT_TEAM_PERMISSIONS_MENU("editPermissions"),
+    BUTTON_TEAM_MEMBERS("seeTeamMembers"),
+    BUTTON_TEAM_ALLIANCES("seeTeamAlliances"),
+    BUTTON_STORAGE_DIRECTORY("storageDirectory"),
 
     /* CLOSE MENU */
-    CLOSE_ADMIN_MENU_BUTTON("close"),
-    CLOSE_MANAGE_MENU_BUTTON("close"),
-    CLOSE_MEMBER_MENU_BUTTON("close"),
-    CLOSE_UPGRADE_LVL_MEMBERS_MENU_BUTTON("close"),
-    CLOSE_UPGRADE_LVL_STORAGE_MENU_BUTTON("close"),
-    CLOSE_TEAM_MEMBERS_MENU_BUTTON("close"),
-    CLOSE_TEAM_ALLIANCES_MENU_BUTTON("close"),
-    CLOSE_EDIT_MEMBERS_MENU_BUTTON("close"),
-    CLOSE_EDIT_ALLIANCES_MENU_BUTTON("close"),
-    CLOSE_PERMISSIONS_MENU_BUTTON("close"),
-    CLOSE_STORAGE_MENU_BUTTON("close"),
-    CLOSE_STORAGE_DIRECTORY_MENU_BUTTON("close"),
-    CLOSE_TEAM_LIST_MENU_BUTTON("close"),
+    BUTTON_CLOSE_ADMIN_MENU("close"),
+    BUTTON_CLOSE_MANAGE_MENU("close"),
+    BUTTON_CLOSE_MEMBER_MENU("close"),
+    BUTTON_CLOSE_UPGRADE_LVL_MEMBERS_MENU("close"),
+    BUTTON_CLOSE_UPGRADE_LVL_STORAGE_MENU("close"),
+    BUTTON_CLOSE_TEAM_MEMBERS_MENU("close"),
+    BUTTON_CLOSE_TEAM_ALLIANCES_MENU("close"),
+    BUTTON_CLOSE_EDIT_MEMBERS_MENU("close"),
+    BUTTON_CLOSE_EDIT_ALLIANCES_MENU("close"),
+    BUTTON_CLOSE_PERMISSIONS_MENU("close"),
+    BUTTON_CLOSE_STORAGE_MENU("close"),
+    BUTTON_CLOSE_STORAGE_DIRECTORY_MENU("close"),
+    BUTTON_CLOSE_TEAM_LIST_MENU("close"),
 
     /* CREATE / REMOVE HOME */
-    SET_TEAM_HOME_BUTTON("setTeamHome"),
-    REMOVE_TEAM_HOME_BUTTON("removeTeamHome"),
+    BUTTON_SET_TEAM_HOME("setTeamHome"),
+    BUTTON_REMOVE_TEAM_HOME("removeTeamHome"),
 
     /* BUY AN UPGRADE */
-    BUY_TEAM_BANK_BUTTON("buyTeamBank"),
-    BUY_TEAM_CLAIM_BUTTON("buyTeamClaim"),
-    UPGRADE_LVL_MEMBERS_MENU_BUTTON("upgradeTotalMembers"),
-    UPGRADE_LVL_STORAGE_MENU_BUTTON("upgradeStorageAmount"),
+    BUTTON_BUY_TEAM_BANK("buyTeamBank"),
+    BUTTON_BUY_TEAM_CLAIM("buyTeamClaim"),
+    BUTTON_UPGRADE_LVL_MEMBERS_MENU("upgradeTotalMembers"),
+    BUTTON_UPGRADE_LVL_STORAGE_MENU("upgradeStorageAmount"),
     
     /* EDIT ATTRIBUTES */
-    EDIT_TEAM_NAME_BUTTON("editName"),
-    EDIT_TEAM_PREFIX_BUTTON("editPrefix"),
-    EDIT_TEAM_DESCRIPTION_BUTTON("editDescription"),
+    BUTTON_EDIT_TEAM_NAME("editName"),
+    BUTTON_EDIT_TEAM_PREFIX("editPrefix"),
+    BUTTON_EDIT_TEAM_DESCRIPTION("editDescription"),
     
     /* BLANK BUTTON (no action) */
-    TEAM_INFOS_BUTTON("teamInfos"),
-    TEAM_BANK_BUTTON("seeTeamBank"),
-    EMPTY_CASE("emptyCase"),
+    BUTTON_TEAM_INFOS("teamInfos"),
+    BUTTON_TEAM_BANK("seeTeamBank"),
+    BUTTON_EMPTY_CASE("emptyCase"),
 
     /* ADD / WITHDRAW MONEY */
-    ADD_MONEY_TEAM_BANK_BUTTON("addTeamMoney"),
-    WITHDRAW_MONEY_TEAM_BANK_BUTTON("withdrawTeamMoney"),
+    BUTTON_ADD_MONEY_TEAM_BANK("addTeamMoney"),
+    BUTTON_WITHDRAW_MONEY_TEAM_BANK("withdrawTeamMoney"),
     
     /* ADD / REMOVE MEMBER */
-    LEAVE_TEAM_BUTTON("leaveTeam"),
-    ADD_MEMBER_BUTTON("addMember"),
-    REMOVE_MEMBER_BUTTON("removeMember"),
+    BUTTON_LEAVE_TEAM("leaveTeam"),
+    BUTTON_ADD_MEMBER("addMember"),
+    BUTTON_REMOVE_MEMBER("removeMember"),
 
     /* CONFIRM / CANCEL */
-    CONFIRM_BUTTON("confirm"),
-    CANCEL_BUTTON("cancel"),
+    BUTTON_CONFIRM("confirm"),
+    BUTTON_CANCEL("cancel"),
 
     /* PROMOTE / DEMOTE MEMBER */
-    EDIT_OWNER_BUTTON("editOwner"),
+    BUTTON_EDIT_OWNER("editOwner"),
 
     /* ADD / REMOVE ALLIANCE */
-    ADD_ALLIANCE_BUTTON("addAlliance"),
-    REMOVE_ALLIANCE_BUTTON("removeAlliance"),
+    BUTTON_ADD_ALLIANCE("addAlliance"),
+    BUTTON_REMOVE_ALLIANCE("removeAlliance"),
     
     /* PERMISSIONS */
-    PERMISSION_ADD_TEAM_MONEY_BUTTON("addTeamMoney"),
-    PERMISSION_WITHDRAW_TEAM_MONEY_BUTTON("withdrawTeamMoney"),
-    PERMISSION_SEE_TEAM_BANK_BUTTON("seeTeamBank"),
-    PERMISSION_BUY_TEAM_BANK_BUTTON("buyTeamBank"),
-    PERMISSION_ADD_MEMBER_BUTTON("addMember"),
-    PERMISSION_REMOVE_MEMBER_BUTTON("removeMember"),
-    PERMISSION_SEE_TEAM_MEMBERS_BUTTON("seeTeamMembers"),
-    PERMISSION_UPGRADE_LVL_MEMBERS_BUTTON("upgradeTotalMembers"),
-    PERMISSION_EDIT_MEMBERS_BUTTON("editMembers"),
-    PERMISSION_EDIT_TEAM_NAME_BUTTON("editName"),
-    PERMISSION_EDIT_TEAM_PREFIX_BUTTON("editPrefix"),
-    PERMISSION_SET_TEAM_HOME_BUTTON("setTeamHome"),
-    PERMISSION_REMOVE_TEAM_HOME_BUTTON("removeTeamHome"),
-    PERMISSION_EDIT_PERMISSIONS_BUTTON("editPermissions"),
-    PERMISSION_STORAGE_DIRECTORY_BUTTON("storageDirectory"),
-    PERMISSION_UPGRADE_LVL_STORAGE_BUTTON("upgradeStorageAmount"),
-    PERMISSION_ADD_ALLIANCE_BUTTON("addAlliance"),
-    PERMISSION_REMOVE_ALLIANCE_BUTTON("removeAlliance"),
-    PERMISSION_SEE_TEAM_ALLIANCES_BUTTON("seeTeamAlliances"),
+    BUTTON_PERMISSION_ADD_TEAM_MONEY("addTeamMoney"),
+    BUTTON_PERMISSION_WITHDRAW_TEAM_MONEY("withdrawTeamMoney"),
+    BUTTON_PERMISSION_SEE_TEAM_BANK("seeTeamBank"),
+    BUTTON_PERMISSION_BUY_TEAM_BANK("buyTeamBank"),
+    BUTTON_PERMISSION_ADD_MEMBER("addMember"),
+    BUTTON_PERMISSION_REMOVE_MEMBER("removeMember"),
+    BUTTON_PERMISSION_SEE_TEAM_MEMBERS("seeTeamMembers"),
+    BUTTON_PERMISSION_UPGRADE_LVL_MEMBERS("upgradeTotalMembers"),
+    BUTTON_PERMISSION_EDIT_MEMBERS("editMembers"),
+    BUTTON_PERMISSION_EDIT_TEAM_NAME("editName"),
+    BUTTON_PERMISSION_EDIT_TEAM_PREFIX("editPrefix"),
+    BUTTON_PERMISSION_SET_TEAM_HOME("setTeamHome"),
+    BUTTON_PERMISSION_REMOVE_TEAM_HOME("removeTeamHome"),
+    BUTTON_PERMISSION_EDIT_PERMISSIONS("editPermissions"),
+    BUTTON_PERMISSION_STORAGE_DIRECTORY("storageDirectory"),
+    BUTTON_PERMISSION_UPGRADE_LVL_STORAGE("upgradeStorageAmount"),
+    BUTTON_PERMISSION_ADD_ALLIANCE("addAlliance"),
+    BUTTON_PERMISSION_REMOVE_ALLIANCE("removeAlliance"),
+    BUTTON_PERMISSION_SEE_TEAM_ALLIANCES("seeTeamAlliances"),
 
     /* NEXT / PREVIOUS BUTTONS (must be reviewed) */
-    PREVIOUS_STORAGE_BUTTON("previous"),
-    NEXT_STORAGE_BUTTON("next"),
-    PREVIOUS_TEAM_LIST_BUTTON("previous"),
-    NEXT_TEAM_LIST_BUTTON("next"),
+    BUTTON_PREVIOUS_STORAGE("previous"),
+    BUTTON_NEXT_STORAGE("next"),
+    BUTTON_PREVIOUS_TEAM_LIST("previous"),
+    BUTTON_NEXT_TEAM_LIST("next"),
     ;
 
     private final String name;
@@ -153,5 +153,10 @@ public enum Buttons {
             && container.get(key, PersistentDataType.INTEGER).equals(1)) return true;
         
         return false;
+    }
+
+
+    public static Buttons getButtonType(String name){
+        return valueOf("BUTTON_" + name.toUpperCase());
     }
 }

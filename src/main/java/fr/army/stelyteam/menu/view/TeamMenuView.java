@@ -9,7 +9,7 @@ public class TeamMenuView extends MenuView {
     
     private final Team team;
 
-    public TeamMenuView(Player player, TeamMenu menu, Team team) {
+    public TeamMenuView(Player player, TeamMenu<?> menu, Team team) {
         super(player, menu);
         this.team = team;
     }

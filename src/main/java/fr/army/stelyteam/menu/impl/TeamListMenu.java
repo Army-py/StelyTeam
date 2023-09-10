@@ -14,7 +14,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import fr.army.stelyteam.menu.MenusOLD;
-import fr.army.stelyteam.menu.PagedMenu;
+import fr.army.stelyteam.menu.PagedMenuOLD;
 import fr.army.stelyteam.menu.TeamMenuOLD;
 import fr.army.stelyteam.menu.button.Buttons;
 import fr.army.stelyteam.team.Page;
@@ -24,7 +24,7 @@ import fr.army.stelyteam.utils.builder.ItemBuilder;
 import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 
-public class TeamListMenu extends PagedMenu {
+public class TeamListMenu extends PagedMenuOLD {
 
     private final DatabaseManager databaseManager = plugin.getDatabaseManager();
 

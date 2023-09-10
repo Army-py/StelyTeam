@@ -7,11 +7,12 @@ import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.menu.TeamMenu;
 import fr.army.stelyteam.menu.button.Button;
 import fr.army.stelyteam.menu.button.ButtonItem;
+import fr.army.stelyteam.menu.button.container.EmptyButtonContainer;
 import fr.army.stelyteam.menu.button.impl.BlankButton;
-import fr.army.stelyteam.menu.impl.EmptyMenu;
+import fr.army.stelyteam.menu.button.template.ButtonTemplate;
+import fr.army.stelyteam.menu.template.MenuTemplate;
 
 public class MenuBuilder {
     
@@ -32,7 +33,7 @@ public class MenuBuilder {
     private MenuBuilderResult buildMenu(YamlConfiguration config) {
         final String title = config.getString("title");
         final String[] pattern = config.getStringList("pattern").toArray(String[]::new);
-        final List<Button> buttons = new ArrayList<>();
+        final List<Button<EmptyButtonContainer>> buttons = new ArrayList<>();
 
         int size = 0;
         for (int row = 0; row < pattern.length && row < 6; row++) {
@@ -51,17 +52,17 @@ public class MenuBuilder {
                 final String skullTexture = config.getString(path + "skull-texture");
 
                 final ButtonItem buttonItem = new ButtonItem(Material.valueOf(material), name, amount, lore, glow, skullTexture);
-                final Button button = new BlankButton(character, buttonItem);
-
+                final ButtonTemplate buttonTemplate = new ButtonTemplate(character, buttonItem);
+                final Button<EmptyButtonContainer> button = new BlankButton(buttonTemplate);
                 buttons.add(button);
                 size++;
             }
         }
 
-        TeamMenu menu = new EmptyMenu(title, size);
-        menu.addButtons(buttons.toArray(Button[]::new));
+        final MenuTemplate menuTemplate = new MenuTemplate(title, size);
+        menuTemplate.addButtons(buttons.toArray(Button[]::new));
 
-        return new MenuBuilderResult(menu, config);
+        return new MenuBuilderResult(menuTemplate, config);
     }
 }
 

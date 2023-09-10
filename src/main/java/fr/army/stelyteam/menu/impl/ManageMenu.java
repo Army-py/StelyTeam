@@ -10,7 +10,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import fr.army.stelyteam.menu.FixedMenu;
+import fr.army.stelyteam.menu.FixedMenuOLD;
 import fr.army.stelyteam.menu.MenusOLD;
 import fr.army.stelyteam.menu.TeamMenuOLD;
 import fr.army.stelyteam.menu.button.Buttons;
@@ -22,7 +22,7 @@ import fr.army.stelyteam.utils.manager.EconomyManager;
 import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
 
 
-public class ManageMenu extends FixedMenu {
+public class ManageMenu extends FixedMenuOLD {
 
     private final SQLiteDataManager sqliteManager = plugin.getSQLiteManager();
     private final EconomyManager economyManager = plugin.getEconomyManager();

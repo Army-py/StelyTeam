@@ -1,30 +1,51 @@
 package fr.army.stelyteam.menu.button;
 
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public abstract class Button {
+import fr.army.stelyteam.menu.button.container.ButtonContainer;
+import fr.army.stelyteam.menu.button.template.ButtonTemplate;
+import fr.army.stelyteam.menu.view.MenuView;
+
+public abstract class Button<T extends ButtonContainer<?>> {
     
-    private final char character;
+    private final ButtonTemplate buttonTemplate;
+    private final T buttonContainer;
 
-    private ButtonItem buttonItem;
-
-    public Button(char character, ButtonItem buttonItem) {
-        this.character = character;
-        this.buttonItem = buttonItem;
-    }
-
-    public char getCharacter() {
-        return character;
-    }
-
-    public ButtonItem getButtonItem() {
-        return buttonItem;
-    }
-
-    public Button setButtonItem(ButtonItem buttonItem) {
-        this.buttonItem = buttonItem;
-        return this;
+    private MenuView menuView;
+    
+    public Button(ButtonTemplate buttonTemplate, T buttonContainer) {
+        this.buttonTemplate = buttonTemplate;
+        this.buttonContainer = buttonContainer;
     }
 
     public abstract void onClick(InventoryClickEvent clickEvent);
+
+
+    public Button<T> setButtonItem(ButtonItem buttonItem) {
+        buttonTemplate.setButtonItem(buttonItem);
+        return this;
+    }
+
+
+    @NotNull
+    public ButtonTemplate getButtonTemplate() {
+        return buttonTemplate;
+    }
+
+    @NotNull
+    public T getButtonContainer() {
+        return buttonContainer;
+    }
+
+    @Nullable
+    public MenuView getMenuView() {
+        return menuView;
+    }
+
+    public Button<T> setMenuView(MenuView menuView) {
+        this.menuView = menuView;
+        return this;
+    }
 }

@@ -14,7 +14,7 @@ import fr.army.stelyteam.conversation.ConvEditTeamDesc;
 import fr.army.stelyteam.conversation.ConvEditTeamName;
 import fr.army.stelyteam.conversation.ConvEditTeamPrefix;
 import fr.army.stelyteam.conversation.ConvGetTeamName;
-import fr.army.stelyteam.menu.FixedMenu;
+import fr.army.stelyteam.menu.FixedMenuOLD;
 import fr.army.stelyteam.menu.MenusOLD;
 import fr.army.stelyteam.menu.TeamMenuOLD;
 import fr.army.stelyteam.menu.button.Buttons;
@@ -27,7 +27,7 @@ import fr.army.stelyteam.utils.manager.EconomyManager;
 import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
 
 
-public class ConfirmMenu extends FixedMenu {
+public class ConfirmMenu extends FixedMenuOLD {
 
     private final SQLiteDataManager sqliteManager = plugin.getSQLiteManager();
     private final EconomyManager economyManager = plugin.getEconomyManager();

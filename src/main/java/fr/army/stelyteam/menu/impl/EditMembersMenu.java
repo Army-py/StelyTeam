@@ -14,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
 
 import fr.army.stelyteam.conversation.ConvAddMember;
 import fr.army.stelyteam.conversation.ConvEditOwner;
-import fr.army.stelyteam.menu.FixedMenu;
+import fr.army.stelyteam.menu.FixedMenuOLD;
 import fr.army.stelyteam.menu.MenusOLD;
 import fr.army.stelyteam.menu.TeamMenuOLD;
 import fr.army.stelyteam.menu.button.Buttons;
@@ -26,7 +26,7 @@ import fr.army.stelyteam.utils.builder.conversation.ConversationBuilder;
 import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 
-public class EditMembersMenu extends FixedMenu {
+public class EditMembersMenu extends FixedMenuOLD {
 
     private final DatabaseManager mySqlManager = plugin.getDatabaseManager();
     private final ConversationBuilder conversationBuilder = plugin.getConversationBuilder();
