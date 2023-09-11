@@ -25,7 +25,8 @@ public class MenuView implements IMenuView {
         final Inventory inventory = Bukkit.createInventory(this, menu.getSize(), menu.getTitle());
 
         for (int slot = 0; slot < inventory.getSize(); slot++) {
-            final Button button = menu.getButton(slot);
+            final Button<?> button = menu.getButton(slot);
+            button.setMenuView(this);
             final ItemStack itemStack = button.getButtonItem().build();
             inventory.setItem(slot, itemStack);
         }
