@@ -4,20 +4,17 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import fr.army.stelyteam.menu.button.container.ButtonContainer;
 import fr.army.stelyteam.menu.button.template.ButtonTemplate;
-import fr.army.stelyteam.menu.view.MenuView;
+import fr.army.stelyteam.menu.view.AbstractMenuView;
 
-public abstract class Button<T extends ButtonContainer<?>> {
+public abstract class Button<T extends AbstractMenuView<T>> {
     
     private final ButtonTemplate buttonTemplate;
-    private final T buttonContainer;
-
-    private MenuView menuView;
     
-    public Button(ButtonTemplate buttonTemplate, T buttonContainer) {
+    private T menuView;
+    
+    public Button(ButtonTemplate buttonTemplate) {
         this.buttonTemplate = buttonTemplate;
-        this.buttonContainer = buttonContainer;
     }
 
     public abstract void onClick(InventoryClickEvent clickEvent);
@@ -34,17 +31,12 @@ public abstract class Button<T extends ButtonContainer<?>> {
         return buttonTemplate;
     }
 
-    @NotNull
-    public T getButtonContainer() {
-        return buttonContainer;
-    }
-
     @Nullable
-    public MenuView getMenuView() {
+    public AbstractMenuView<T> getMenuView() {
         return menuView;
     }
 
-    public Button<T> setMenuView(MenuView menuView) {
+    public Button<T> setMenuView(T menuView) {
         this.menuView = menuView;
         return this;
     }

@@ -10,7 +10,7 @@ public class ButtonTemplate {
     private final char character;
     private ButtonItem buttonItem;
 
-    public ButtonTemplate(char character, ButtonItem buttonItem) {
+    public ButtonTemplate(@NotNull char character, @Nullable ButtonItem buttonItem) {
         this.character = character;
         this.buttonItem = buttonItem;
     }

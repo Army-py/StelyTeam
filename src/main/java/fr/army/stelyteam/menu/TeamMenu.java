@@ -6,15 +6,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.jetbrains.annotations.NotNull;
 
-import fr.army.stelyteam.menu.view.MenuView;
+import fr.army.stelyteam.menu.view.AbstractMenuView;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.builder.menu.MenuBuilderResult;
 
-public abstract class TeamMenu<T extends MenuView> {
+public abstract class TeamMenu<T extends AbstractMenuView<T>> {
     
-    private final MenuBuilderResult menuBuilderResult;
+    private final MenuBuilderResult<T> menuBuilderResult;
 
-    public TeamMenu(MenuBuilderResult menuBuilderResult) {
+    public TeamMenu(@NotNull MenuBuilderResult<T> menuBuilderResult) {
         this.menuBuilderResult = menuBuilderResult;
     }
 
@@ -24,7 +24,7 @@ public abstract class TeamMenu<T extends MenuView> {
 
 
     @NotNull
-    public MenuBuilderResult getMenuBuilderResult() {
+    public MenuBuilderResult<T> getMenuBuilderResult() {
         return menuBuilderResult;
     }
 }

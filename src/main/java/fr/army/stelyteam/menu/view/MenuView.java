@@ -7,43 +7,24 @@ import org.bukkit.inventory.ItemStack;
 
 import fr.army.stelyteam.menu.TeamMenu;
 import fr.army.stelyteam.menu.button.Button;
+import fr.army.stelyteam.menu.template.MenuTemplate;
 
-public class MenuView implements IMenuView {
+public class MenuView extends AbstractMenuView<MenuView>{
+
+    public MenuView(Player player, TeamMenu<MenuView> menu) {
+        super(player, menu);
+    }    
     
-    private final Player viewer;
-    private final TeamMenu<?> menu;
-
-    private Inventory inventory;
-
-    public MenuView(Player player, TeamMenu<?> menu) {
-        this.viewer = player;
-        this.menu = menu;
-    }
-
-
     public Inventory createInventory() {
-        final Inventory inventory = Bukkit.createInventory(this, menu.getSize(), menu.getTitle());
+        final MenuTemplate<MenuView> menuTemplate = menu.getMenuBuilderResult().getMenuTemplate();
+        final Inventory inventory = Bukkit.createInventory(this, menuTemplate.getSize(), menuTemplate.getTitle());
 
         for (int slot = 0; slot < inventory.getSize(); slot++) {
-            final Button<?> button = menu.getButton(slot);
-            button.setMenuView(this);
-            final ItemStack itemStack = button.getButtonItem().build();
+            final Button<MenuView> button = menuTemplate.getButton(slot).setMenuView(this);
+            final ItemStack itemStack = button.getButtonTemplate().getButtonItem().build();
             inventory.setItem(slot, itemStack);
         }
 
-        return inventory;
-    }
-
-
-    public Player getViewer() {
-        return viewer;
-    }
-
-    public TeamMenu getMenu() {
-        return menu;
-    }
-
-    public Inventory getInventory() {
         return inventory;
     }
 }
