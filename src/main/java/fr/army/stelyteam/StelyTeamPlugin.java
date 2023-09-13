@@ -83,8 +83,8 @@ public class StelyTeamPlugin extends JavaPlugin {
         
         this.serializeManager = new ItemStackSerializer();
         this.cacheManager = new CacheManager(this);
-        this.economyManager = new EconomyManager(this);
         this.messageManager = new MessageManager(this);
+        this.economyManager = new EconomyManager(messageManager);
         final TeamChatLoader teamChatLoader = new TeamChatLoader(this);
         this.teamChatManager = teamChatLoader.load();
         this.commandManager = new CommandManager(this);

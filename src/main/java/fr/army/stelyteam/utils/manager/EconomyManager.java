@@ -7,7 +7,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
-import fr.army.stelyteam.StelyTeamPlugin;
 import net.milkbowl.vault.economy.Economy;
 
 
@@ -15,9 +14,9 @@ public class EconomyManager {
     private Economy economy = null;
     private MessageManager messageManager;
 
-    public EconomyManager(StelyTeamPlugin plugin){
+    public EconomyManager(MessageManager messageManager){
         setupEconomy();
-        this.messageManager = new MessageManager(plugin);
+        this.messageManager = messageManager;
     }
 
     public boolean checkMoneyPlayer(Player player, Double money) {
