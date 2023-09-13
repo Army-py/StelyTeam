@@ -6,6 +6,7 @@ import java.util.Locale;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
+import org.jetbrains.annotations.NotNull;
 
 import net.milkbowl.vault.economy.Economy;
 
@@ -19,8 +20,8 @@ public class EconomyManager {
         this.messageManager = messageManager;
     }
 
-    public boolean checkMoneyPlayer(Player player, Double money) {
-        return economy.getBalance(player) >= ((double) money);
+    public boolean hasEnough(@NotNull Player player, @NotNull double money) {
+        return economy.getBalance(player) >= money;
     }
 
     public void removeMoneyPlayer(Player player, double money) {
