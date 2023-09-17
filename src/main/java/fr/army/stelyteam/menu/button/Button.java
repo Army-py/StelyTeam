@@ -32,7 +32,7 @@ public abstract class Button<T extends AbstractMenuView<T>> {
     }
 
     @Nullable
-    public AbstractMenuView<T> getMenuView() {
+    public T getMenuView() {
         return menuView;
     }
 

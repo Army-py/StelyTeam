@@ -30,6 +30,13 @@ import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
 import fr.army.stelyteam.utils.manager.serializer.ItemStackSerializer;
 
+
+// TODO: Remplacer la conversation pour promouvoir un membre owner par un menu
+// TODO: Ajouter un message de téléportation lorsqu'un membre se tp au home de team
+// TODO: Ajouter des sons sur les boutons
+// TODO: Maybe ajouter un son lors de la téléportation au home de team ?
+
+
 public class StelyTeamPlugin extends JavaPlugin {
 
     private static boolean debug = false;

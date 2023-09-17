@@ -13,7 +13,6 @@ import fr.army.stelyteam.menu.button.impl.BlankButton;
 import fr.army.stelyteam.menu.button.template.ButtonTemplate;
 import fr.army.stelyteam.menu.template.MenuTemplate;
 import fr.army.stelyteam.menu.view.AbstractMenuView;
-import fr.army.stelyteam.menu.view.MenuView;
 
 public class MenuBuilder {
     

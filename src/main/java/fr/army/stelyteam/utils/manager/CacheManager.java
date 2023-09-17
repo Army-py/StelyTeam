@@ -137,7 +137,6 @@ public class CacheManager {
         return cachedStorage.stream().filter(storage -> storage.getTeamUuid().equals(teamUuid) && storage.getStorageId() == storageId).findFirst().orElse(null);
     }
 
-    // TODO : Régler l'erreur
     public void replaceStorage(Storage storage){
         for (Storage cStorage : cachedStorage){
             final UUID teamUuid = cStorage.getTeamUuid();
