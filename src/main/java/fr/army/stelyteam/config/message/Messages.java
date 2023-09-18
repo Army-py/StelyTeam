@@ -5,7 +5,7 @@ import java.util.Map;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.config.message.exception.MessageNotFound;
+import fr.army.stelyteam.config.message.exception.MessageNotFoundException;
 
 public enum Messages {
     
@@ -151,11 +151,11 @@ public enum Messages {
     COMMAND_TEAMCHAT_NO_TEAM
     ;
 
-    public String getMessage(Map<Placeholders, String> args) throws MessageNotFound {
+    public String getMessage(Map<Placeholders, String> args) throws MessageNotFoundException {
         final YamlConfiguration messages = StelyTeamPlugin.getPlugin().getMessages();
 
         String message = messages.getString(this.toString());
-        if (message == null) throw new MessageNotFound(this, message);
+        if (message == null) throw new MessageNotFoundException(this, message);
 
         for(Placeholders placeholder : args.keySet()){
             message = message.replace("{" + placeholder.toString() + "}", args.get(placeholder));
@@ -164,11 +164,11 @@ public enum Messages {
         return message;
     }
 
-    public String getMessage(String... args) throws MessageNotFound {
+    public String getMessage(String... args) throws MessageNotFoundException {
         final YamlConfiguration messages = StelyTeamPlugin.getPlugin().getMessages();
 
         String message = messages.getString(this.toString());
-        if (message == null) throw new MessageNotFound(this, message);
+        if (message == null) throw new MessageNotFoundException(this, message);
 
         for(int i = 0; i < args.length; i++){
             message = message.replace("{" + i + "}", args[i]);
