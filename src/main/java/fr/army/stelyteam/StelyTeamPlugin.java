@@ -35,6 +35,7 @@ import fr.army.stelyteam.utils.manager.serializer.ItemStackSerializer;
 // TODO: Ajouter un message de téléportation lorsqu'un membre se tp au home de team
 // TODO: Ajouter des sons sur les boutons
 // TODO: Maybe ajouter un son lors de la téléportation au home de team ?
+// TODO: rajouter une commande pour modifier la description d'une team
 
 
 public class StelyTeamPlugin extends JavaPlugin {
