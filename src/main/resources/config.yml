@@ -12,8 +12,24 @@ sqlite:
   file: "bungeecord_StelyTeam.db"
 
 
+# Available languages :
+# - fr_fr
+language: "fr_fr"
+
+
 # Nom des serveurs où les stockages seront envoyés
-serverNames: ["Survie16", "Survie16B", "SurvieUsine"]
+server-names: ["Survie16", "Survie16B", "SurvieUsine"]
+
+
+# The format of the message sent in the chat when a player send a message in the team chat
+# Placeholders
+# {DISPLAYNAME} : The sender displayname
+# {MESSAGE} : The message sent
+# {USERNAME} : The sender name
+# {TEAM_PREFIX} : The team prefix
+team-chat: 
+  enable: true
+  format: "&b[Team] {TEAM_PREFIX} &8{DISPLAYNAME} &7> {MESSAGE}"
 
 
 # Timeout des conversations (message demandant une information aux joueurs lors de la création de team par exemple)
@@ -31,6 +47,8 @@ conversationCancelWords:
 blockedColors:
   - "&4"
   - "&c"
+  - "&k"
+
 
 # Liste des couleurs hexadécimales bloquées
 # Les couleurs hexa sont convertis en HSV
@@ -91,19 +109,6 @@ prices:
       level4: 80000.0
       level5: 100000.0
 
-
-# The format of the message sent in the chat when a player send a message in the team chat
-# Placeholders
-# {DISPLAYNAME} : The sender displayname
-# {MESSAGE} : The message sent
-# {USERNAME} : The sender name
-# {TEAM_PREFIX} : The team prefix
-teamChat: 
-  format: "&b[Team] {TEAM_PREFIX} &8{USERNAME} &7> {MESSAGE}"
-
-
-# Allow or disallow the use of team chat
-allowTeamChat: true
 
 # Allow or disallow the use of team storage
 allowTeamStorage: true
