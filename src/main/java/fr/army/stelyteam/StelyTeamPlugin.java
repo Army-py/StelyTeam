@@ -13,6 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import fr.army.stelyteam.chat.TeamChatLoader;
 import fr.army.stelyteam.chat.TeamChatManager;
 import fr.army.stelyteam.command.CommandManager;
+import fr.army.stelyteam.config.Config;
 import fr.army.stelyteam.external.ExternalManager;
 import fr.army.stelyteam.listener.ListenerLoader;
 import fr.army.stelyteam.menu.TeamMenuOLD;
@@ -23,6 +24,7 @@ import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
 import fr.army.stelyteam.utils.builder.conversation.ConversationBuilder;
 import fr.army.stelyteam.utils.loader.ConfigLoader;
+import fr.army.stelyteam.utils.loader.exception.UnableLoadConfigException;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.EconomyManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
@@ -36,6 +38,7 @@ import fr.army.stelyteam.utils.manager.serializer.ItemStackSerializer;
 // TODO: Ajouter des sons sur les boutons
 // TODO: Maybe ajouter un son lors de la téléportation au home de team ?
 // TODO: rajouter une commande pour modifier la description d'une team
+// TODO: mettre de l'ordre dans onEnable()
 
 
 public class StelyTeamPlugin extends JavaPlugin {
@@ -48,7 +51,7 @@ public class StelyTeamPlugin extends JavaPlugin {
 
     private static StelyTeamPlugin plugin;
     private ConfigLoader configLoader;
-    private YamlConfiguration config;
+    private Config config;
     private YamlConfiguration messages;
     private CacheManager cacheManager;
     private SQLiteDataManager sqliteManager;
@@ -69,12 +72,28 @@ public class StelyTeamPlugin extends JavaPlugin {
 
         this.configLoader = new ConfigLoader(this);
 
-        this.config = this.configLoader.initFile("config.yml");
-        this.messages = this.configLoader.initFile("messages.yml");
+        try {
+            this.config = new Config(this.configLoader.initFile("config.yml"));
+        } catch (UnableLoadConfigException e) {
+            getLogger().severe("Unable to load config.yml");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+
+        this.config.load();
+        Config.language = Config.language == null ? "en_us" : Config.language;
+        
+        try {
+            this.messages = this.configLoader.initFile(Config.language + ".yml");
+        } catch (UnableLoadConfigException e) {
+            getLogger().severe("Unable to load messages.yml");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
 
         this.currentServerName = Bukkit.getServer().getMotd();
-        this.serverNames = this.config.getStringList("serverNames").toArray(new String[0]);
-        this.teamChatFormat = this.config.getString("teamChat.format");
+        this.serverNames = Config.serverNames;
+        this.teamChatFormat = Config.teamChatFormat;
 
         this.sqliteManager = new SQLiteDataManager(this);
 
@@ -252,7 +271,7 @@ public class StelyTeamPlugin extends JavaPlugin {
         return configLoader;
     }
 
-    public YamlConfiguration getConfig() {
+    public Config getConfiguration() {
         return config;
     }
 
@@ -294,6 +313,10 @@ public class StelyTeamPlugin extends JavaPlugin {
 
     public TeamChatManager getTeamChatManager() {
         return teamChatManager;
+    }
+
+    public CommandManager getCommandManager() {
+        return commandManager;
     }
 
     public String[] getServerNames(){
