@@ -7,6 +7,9 @@ import java.util.Objects;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
+
+import fr.army.stelyteam.utils.loader.exception.UnableLoadConfigException;
 
 public class ConfigLoader {
     
@@ -17,12 +20,13 @@ public class ConfigLoader {
         this.plugin = plugin;
     }
 
-    public YamlConfiguration initFile(String fileName) {
+    public YamlConfiguration initFile(@NotNull String fileName) throws UnableLoadConfigException {
         final File file = new File(plugin.getDataFolder(), fileName);
         if (!file.exists()) {
             try {
                 Files.copy(Objects.requireNonNull(plugin.getResource(fileName)), file.toPath());
             } catch (IOException ignored) {
+                throw new UnableLoadConfigException(fileName, "Unable to copy file from resources");
             }
         }
         return YamlConfiguration.loadConfiguration(file);
