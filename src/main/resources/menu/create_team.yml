@@ -20,6 +20,7 @@ items:
     skull-texture: ""
     amount: 1
     is-glowing: false
+    lore: []
   "%":
     button-type: CREATE_TEAM
     material: LIME_BANNER
@@ -36,5 +37,4 @@ items:
     skull-texture: ""
     amount: 1
     is-glowing: false
-    lore:
-      - ""
+    lore: []
