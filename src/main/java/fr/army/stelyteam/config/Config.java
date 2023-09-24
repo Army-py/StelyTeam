@@ -73,6 +73,7 @@ public class Config {
         conversationTimeout = this.config.getInt("conversation-timeout");
         conversationCancelWords = this.config.getStringList("conversation-cancel-words").toArray(new String[0]);
         blockedColors = this.config.getStringList("blocked-colors").toArray(new String[0]);
+        // TODO: ajouter le blocage des couleurs hexa 
 
         openMenuWhenCreated = this.config.getBoolean("open-menu-when-created");
         teamNameMinLength = this.config.getInt("team-name.min-length");
