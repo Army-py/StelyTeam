@@ -50,6 +50,12 @@ public class ButtonItem {
     }
 
     public ItemStack build(){
-        return ItemBuilder.getItem(this);
+        return new ItemBuilder(material)
+            .setDisplayName(name)
+            .setAmount(amount)
+            .setLore(lore)
+            .setGlow(glow)
+            .setSkullTexture(skullTexture)
+            .buildItem();
     }
 }
