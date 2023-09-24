@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.config.Config;
 import fr.army.stelyteam.menu.button.Button;
 import fr.army.stelyteam.menu.button.template.ButtonTemplate;
 import fr.army.stelyteam.menu.view.TeamMenuView;
@@ -22,8 +23,8 @@ public class CreateTeamButton extends Button<TeamMenuView> {
         final Player player = (Player) clickEvent.getWhoClicked();
         final Team team = getMenuView().getTeam();
 
-        // TODO: Review config and set team price creation just below
-        if (plugin.getEconomyManager().hasEnough(player, 0)){
+        final double teamCreationPrice = Config.priceCreateTeam;
+        if (plugin.getEconomyManager().hasEnough(player, teamCreationPrice)){
             // TODO: add instructions to create team
         }else{
             // TODO: Review messages
