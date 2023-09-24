@@ -22,7 +22,7 @@ import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.TemporaryActionNames;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
-import fr.army.stelyteam.utils.builder.ItemBuilder;
+import fr.army.stelyteam.utils.builder.ItemBuilderOLD;
 import fr.army.stelyteam.utils.builder.conversation.ConversationBuilder;
 import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
@@ -84,7 +84,7 @@ public class EditAlliancesMenu extends FixedMenuOLD {
             lore = replaceInLore(lore, "%DESCRIPTION%", ColorsBuilder.replaceColor(allianceDescription));
             
             
-            item = ItemBuilder.getPlayerHead(playerUUID, itemName, lore);
+            item = ItemBuilderOLD.getPlayerHead(playerUUID, itemName, lore);
             // if (plugin.playerHasPermission(playerName, team, "seeTeamAlliances")){ 
             //     item = ItemBuilder.getPlayerHead(allianceOwner, itemName, lore);
             // }else{
@@ -109,7 +109,7 @@ public class EditAlliancesMenu extends FixedMenuOLD {
             ItemStack item;
 
             if (plugin.playerHasPermission(playerName, team, buttonName)){ 
-                item = ItemBuilder.getItem(
+                item = ItemBuilderOLD.getItem(
                     material,
                     buttonName,
                     displayName,
@@ -117,7 +117,7 @@ public class EditAlliancesMenu extends FixedMenuOLD {
                     headTexture,
                     false);
             }else{
-                item = ItemBuilder.getItem(
+                item = ItemBuilderOLD.getItem(
                     Material.getMaterial(config.getString("noPermission.itemType")),
                     "noPermission",
                     displayName, 

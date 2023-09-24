@@ -27,7 +27,7 @@ import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.TemporaryActionNames;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
-import fr.army.stelyteam.utils.builder.ItemBuilder;
+import fr.army.stelyteam.utils.builder.ItemBuilderOLD;
 import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 
@@ -96,9 +96,9 @@ public class AlliancesMenu extends FixedMenuOLD {
             
             
             if (plugin.playerHasPermission(playerName, team, "seeTeamAlliances")){ 
-                item = ItemBuilder.getPlayerHead(playerUUID, displayName, lore);
+                item = ItemBuilderOLD.getPlayerHead(playerUUID, displayName, lore);
             }else{
-                item = ItemBuilder.getItem(
+                item = ItemBuilderOLD.getItem(
                     Material.getMaterial(config.getString("noPermission.itemType")),
                     "noPermission",
                     displayName, 
@@ -118,7 +118,7 @@ public class AlliancesMenu extends FixedMenuOLD {
             String displayName = config.getString("inventories.teamAlliances."+buttonName+".itemName");
             String headTexture = config.getString("inventories.teamAlliances."+buttonName+".headTexture");
             
-            inventory.setItem(slot, ItemBuilder.getItem(material, buttonName, displayName, Collections.emptyList(), headTexture, false));
+            inventory.setItem(slot, ItemBuilderOLD.getItem(material, buttonName, displayName, Collections.emptyList(), headTexture, false));
         }
         return inventory;
     }

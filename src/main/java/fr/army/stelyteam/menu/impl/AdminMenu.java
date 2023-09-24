@@ -14,7 +14,7 @@ import fr.army.stelyteam.menu.FixedMenuOLD;
 import fr.army.stelyteam.menu.MenusOLD;
 import fr.army.stelyteam.menu.TeamMenuOLD;
 import fr.army.stelyteam.menu.button.Buttons;
-import fr.army.stelyteam.utils.builder.ItemBuilder;
+import fr.army.stelyteam.utils.builder.ItemBuilderOLD;
 
 
 public class AdminMenu extends FixedMenuOLD {
@@ -44,9 +44,9 @@ public class AdminMenu extends FixedMenuOLD {
 
             if (plugin.playerHasPermissionInSection(playerName, team, buttonName)
                 || plugin.playerHasPermission(playerName, team, buttonName)){
-                    item = ItemBuilder.getItem(material, buttonName, displayName, lore, headTexture, false);
+                    item = ItemBuilderOLD.getItem(material, buttonName, displayName, lore, headTexture, false);
             }else{
-                item = ItemBuilder.getItem(
+                item = ItemBuilderOLD.getItem(
                     Material.getMaterial(config.getString("noPermission.itemType")),
                     "noPermission",
                     displayName, 

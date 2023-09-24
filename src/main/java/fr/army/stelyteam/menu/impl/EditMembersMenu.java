@@ -21,7 +21,7 @@ import fr.army.stelyteam.menu.button.Buttons;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.TemporaryActionNames;
-import fr.army.stelyteam.utils.builder.ItemBuilder;
+import fr.army.stelyteam.utils.builder.ItemBuilderOLD;
 import fr.army.stelyteam.utils.builder.conversation.ConversationBuilder;
 import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
@@ -69,9 +69,9 @@ public class EditMembersMenu extends FixedMenuOLD {
             lore.add(0, config.getString("prefixRankLore") + rankColor + config.getString("ranks." + memberRankName + ".name"));
             
             if (plugin.playerHasPermission(playerName, team, "manageMembers")){ 
-                item = ItemBuilder.getPlayerHead(playerUUID, itemName, lore);
+                item = ItemBuilderOLD.getPlayerHead(playerUUID, itemName, lore);
             }else{
-                item = ItemBuilder.getItem(
+                item = ItemBuilderOLD.getItem(
                     Material.getMaterial(config.getString("noPermission.itemType")), 
                     "noPermission",
                     itemName, 
@@ -93,7 +93,7 @@ public class EditMembersMenu extends FixedMenuOLD {
             ItemStack item;
 
             if (plugin.playerHasPermission(playerName, team, buttonName)){ 
-                item = ItemBuilder.getItem(
+                item = ItemBuilderOLD.getItem(
                     material,
                     buttonName,
                     displayName,
@@ -101,7 +101,7 @@ public class EditMembersMenu extends FixedMenuOLD {
                     headTexture,
                     false);
             }else{
-                item = ItemBuilder.getItem(
+                item = ItemBuilderOLD.getItem(
                     Material.getMaterial(config.getString("noPermission.itemType")), 
                     "noPermission",
                     displayName, 

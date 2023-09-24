@@ -19,7 +19,7 @@ import fr.army.stelyteam.menu.button.Buttons;
 import fr.army.stelyteam.team.Member;
 import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.TemporaryActionNames;
-import fr.army.stelyteam.utils.builder.ItemBuilder;
+import fr.army.stelyteam.utils.builder.ItemBuilderOLD;
 
 
 public class MembersMenu extends FixedMenuOLD {
@@ -64,7 +64,7 @@ public class MembersMenu extends FixedMenuOLD {
             itemName = rankColor + memberName;
             
             lore.add(config.getString("prefixRankLore") + rankColor + config.getString("ranks." + memberRank + ".name"));
-            inventory.setItem(headSlot, ItemBuilder.getPlayerHead(playerUUID, itemName, lore));
+            inventory.setItem(headSlot, ItemBuilderOLD.getPlayerHead(playerUUID, itemName, lore));
             headSlot ++;
         }
 
@@ -74,7 +74,7 @@ public class MembersMenu extends FixedMenuOLD {
             String displayName = config.getString("inventories.teamMembers."+buttonName+".itemName");
             String headTexture = config.getString("inventories.teamMembers."+buttonName+".headTexture");
             
-            inventory.setItem(slot, ItemBuilder.getItem(material, buttonName, displayName, Collections.emptyList(), headTexture, false));
+            inventory.setItem(slot, ItemBuilderOLD.getItem(material, buttonName, displayName, Collections.emptyList(), headTexture, false));
         }
         return inventory;
     }

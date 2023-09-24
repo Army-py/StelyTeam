@@ -17,7 +17,7 @@ import fr.army.stelyteam.menu.TeamMenuOLD;
 import fr.army.stelyteam.menu.button.Buttons;
 import fr.army.stelyteam.team.Storage;
 import fr.army.stelyteam.team.Team;
-import fr.army.stelyteam.utils.builder.ItemBuilder;
+import fr.army.stelyteam.utils.builder.ItemBuilderOLD;
 import fr.army.stelyteam.utils.manager.serializer.ItemStackSerializer;
 
 
@@ -93,7 +93,7 @@ public class StorageMenu extends PagedMenuOLD {
                 continue;
             }
 
-            inventory.setItem(slot, ItemBuilder.getItem(material, buttonName, displayName, lore, headTexture, false));
+            inventory.setItem(slot, ItemBuilderOLD.getItem(material, buttonName, displayName, lore, headTexture, false));
         }
 
         return inventory;

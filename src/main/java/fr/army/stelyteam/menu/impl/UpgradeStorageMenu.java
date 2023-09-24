@@ -16,7 +16,7 @@ import fr.army.stelyteam.menu.button.Buttons;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.TemporaryActionNames;
-import fr.army.stelyteam.utils.builder.ItemBuilder;
+import fr.army.stelyteam.utils.builder.ItemBuilderOLD;
 
 
 public class UpgradeStorageMenu extends FixedMenuOLD {
@@ -55,7 +55,7 @@ public class UpgradeStorageMenu extends FixedMenuOLD {
                 headTexture = config.getString("inventories.upgradeStorageAmount."+buttonName+".lock.headTexture");
             }
 
-            inventory.setItem(slot, ItemBuilder.getItem(material, buttonName, displayName, lore, headTexture, false));
+            inventory.setItem(slot, ItemBuilderOLD.getItem(material, buttonName, displayName, lore, headTexture, false));
         }
         return inventory;
     }

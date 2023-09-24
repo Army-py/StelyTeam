@@ -21,7 +21,7 @@ import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.TemporaryActionNames;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
-import fr.army.stelyteam.utils.builder.ItemBuilder;
+import fr.army.stelyteam.utils.builder.ItemBuilderOLD;
 import fr.army.stelyteam.utils.builder.conversation.ConversationBuilder;
 
 
@@ -80,9 +80,9 @@ public class MemberMenu extends FixedMenuOLD {
             }
 
             if (plugin.playerHasPermission(playerName, team, buttonName)){ 
-                item = ItemBuilder.getItem(material, buttonName, displayName, lore, headTexture, false);
+                item = ItemBuilderOLD.getItem(material, buttonName, displayName, lore, headTexture, false);
             }else{
-                item = ItemBuilder.getItem(
+                item = ItemBuilderOLD.getItem(
                     Material.getMaterial(config.getString("noPermission.itemType")),
                     buttonName,
                     displayName, 
@@ -94,7 +94,7 @@ public class MemberMenu extends FixedMenuOLD {
 
             if (buttonName.equals("seeTeamBank")){
                 if (!team.isUnlockedTeamBank()){
-                    item = ItemBuilder.getItem(
+                    item = ItemBuilderOLD.getItem(
                         Material.getMaterial(config.getString("teamBankNotUnlock.itemType")),
                         "teamBankNotUnlock",
                         config.getString("teamBankNotUnlock.itemName"),

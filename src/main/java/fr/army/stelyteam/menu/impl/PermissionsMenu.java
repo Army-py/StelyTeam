@@ -14,7 +14,7 @@ import fr.army.stelyteam.menu.MenusOLD;
 import fr.army.stelyteam.menu.TeamMenuOLD;
 import fr.army.stelyteam.menu.button.Buttons;
 import fr.army.stelyteam.team.Team;
-import fr.army.stelyteam.utils.builder.ItemBuilder;
+import fr.army.stelyteam.utils.builder.ItemBuilderOLD;
 
 
 public class PermissionsMenu extends FixedMenuOLD {
@@ -69,7 +69,7 @@ public class PermissionsMenu extends FixedMenuOLD {
                 isDefault = true;
             }
 
-            inventory.setItem(slot, ItemBuilder.getItem(material, buttonName, displayName, lore, headTexture, isDefault));
+            inventory.setItem(slot, ItemBuilderOLD.getItem(material, buttonName, displayName, lore, headTexture, isDefault));
         }
         return inventory;
     }

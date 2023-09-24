@@ -20,7 +20,7 @@ import fr.army.stelyteam.menu.button.Buttons;
 import fr.army.stelyteam.team.Page;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
-import fr.army.stelyteam.utils.builder.ItemBuilder;
+import fr.army.stelyteam.utils.builder.ItemBuilderOLD;
 import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 
@@ -91,7 +91,7 @@ public class TeamListMenu extends PagedMenuOLD {
             lore = replaceInLore(lore, "%MEMBERS%", teamMembers.isEmpty() ? messageManager.getMessageWithoutPrefix("common.no_members") : String.join(", ", playerNames));
             lore = replaceInLore(lore, "%DESCRIPTION%", ColorsBuilder.replaceColor(team.getTeamDescription()));
             
-            item = ItemBuilder.getPlayerHead(playerUUID, itemName, lore);
+            item = ItemBuilderOLD.getPlayerHead(playerUUID, itemName, lore);
 
             inventory.setItem(headSlots.get(slotIndex), item);
             slotIndex ++;
@@ -112,7 +112,7 @@ public class TeamListMenu extends PagedMenuOLD {
                 if (page.getCurrentPage() >= pages.size()-1) continue;
             }
 
-            inventory.setItem(slot, ItemBuilder.getItem(material, buttonName, displayName, lore, headTexture, false));
+            inventory.setItem(slot, ItemBuilderOLD.getItem(material, buttonName, displayName, lore, headTexture, false));
         }
 
         return inventory;

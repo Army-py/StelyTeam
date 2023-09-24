@@ -17,7 +17,7 @@ import fr.army.stelyteam.menu.button.Buttons;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.TemporaryActionNames;
-import fr.army.stelyteam.utils.builder.ItemBuilder;
+import fr.army.stelyteam.utils.builder.ItemBuilderOLD;
 import fr.army.stelyteam.utils.manager.EconomyManager;
 import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
 
@@ -54,20 +54,20 @@ public class ManageMenu extends FixedMenuOLD {
             
             if (buttonName.equals("editAlliances") 
                     && plugin.playerHasPermissionInSection(playerName, team, "editAlliances")) {
-                item = ItemBuilder.getItem(material, buttonName, displayName, lore, headTexture, false);
+                item = ItemBuilderOLD.getItem(material, buttonName, displayName, lore, headTexture, false);
             }else if (buttonName.equals("editMembers") 
                     && plugin.playerHasPermissionInSection(playerName, team, "editMembers")) {
-                item = ItemBuilder.getItem(material, buttonName, displayName, lore, headTexture, false);
+                item = ItemBuilderOLD.getItem(material, buttonName, displayName, lore, headTexture, false);
             }else if (plugin.playerHasPermission(playerName, team, buttonName)){ 
                 if (buttonName.equals("buyTeamBank")){
-                    item = ItemBuilder.getItem(material, buttonName, displayName, lore, headTexture, team.isUnlockedTeamBank());
+                    item = ItemBuilderOLD.getItem(material, buttonName, displayName, lore, headTexture, team.isUnlockedTeamBank());
                 }else if (buttonName.equals("buyTeamClaim")){
-                    item = ItemBuilder.getItem(material, buttonName, displayName, lore, headTexture, team.isUnlockedTeamClaim());
+                    item = ItemBuilderOLD.getItem(material, buttonName, displayName, lore, headTexture, team.isUnlockedTeamClaim());
                 }else {
-                    item = ItemBuilder.getItem(material, buttonName, displayName, lore, headTexture, false);
+                    item = ItemBuilderOLD.getItem(material, buttonName, displayName, lore, headTexture, false);
                 }
             }else{
-                item = ItemBuilder.getItem(
+                item = ItemBuilderOLD.getItem(
                     Material.getMaterial(config.getString("noPermission.itemType")),
                     "noPermission",
                     displayName, 

@@ -14,7 +14,7 @@ import fr.army.stelyteam.menu.MenusOLD;
 import fr.army.stelyteam.menu.TeamMenuOLD;
 import fr.army.stelyteam.menu.button.Buttons;
 import fr.army.stelyteam.team.Storage;
-import fr.army.stelyteam.utils.builder.ItemBuilder;
+import fr.army.stelyteam.utils.builder.ItemBuilderOLD;
 
 
 public class StorageDirectoryMenu extends FixedMenuOLD {
@@ -52,14 +52,14 @@ public class StorageDirectoryMenu extends FixedMenuOLD {
                 }
                 lore = config.getStringList("inventories.storageDirectory."+buttonName+".lore");
 
-                inventory.setItem(slot, ItemBuilder.getItem(material, buttonName, displayName, lore, headTexture, false));
+                inventory.setItem(slot, ItemBuilderOLD.getItem(material, buttonName, displayName, lore, headTexture, false));
             }else{
                 material = Material.getMaterial(config.getString("storageNotUnlock.itemType"));
                 displayName = config.getString("storageNotUnlock.itemName");
                 lore = config.getStringList("storageNotUnlock.lore");
                 headTexture = config.getString("storageNotUnlock.headTexture");
 
-                inventory.setItem(slot, ItemBuilder.getItem(material, buttonName, displayName, lore, headTexture, false));
+                inventory.setItem(slot, ItemBuilderOLD.getItem(material, buttonName, displayName, lore, headTexture, false));
             }
         }
         return inventory;
