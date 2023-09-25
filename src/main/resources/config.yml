@@ -133,7 +133,7 @@ ranks:
       is-glowing: false
       lore:
         - "{RANK_NAME}"
-  co_owner:
+  co-owner:
     inversed-priority: 1
     rank-name: "§6Chef adjoint"
     item:
@@ -172,7 +172,7 @@ ranks:
         - "{RANK_NAME}"
         - "§7§oClique gauche pour promouvoir"
         - "§7§oClique droit pour rétrograder"
-  new_member:
+  new-member:
     inversed-priority: 4
     rank-name: "§7Nouveau Membre"
     item:
