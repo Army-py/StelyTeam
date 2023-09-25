@@ -1,6 +1,7 @@
 package fr.army.stelyteam.utils.builder.menu;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.bukkit.Material;
@@ -13,6 +14,7 @@ import fr.army.stelyteam.menu.button.impl.BlankButton;
 import fr.army.stelyteam.menu.button.template.ButtonTemplate;
 import fr.army.stelyteam.menu.template.MenuTemplate;
 import fr.army.stelyteam.menu.view.AbstractMenuView;
+import fr.army.stelyteam.utils.loader.exception.UnableLoadConfigException;
 
 public class MenuBuilder {
     
@@ -25,8 +27,13 @@ public class MenuBuilder {
     }
 
 
-    public <T extends AbstractMenuView<T>> MenuBuilderResult<T> loadMenu(String configName){
-        return buildMenu(plugin.getConfigLoader().initFile("menus/" + configName));
+    public <T extends AbstractMenuView<T>> MenuBuilderResult<T> loadMenu(String configName) {
+        try {
+            return buildMenu(plugin.getConfigLoader().initFile("menus/" + configName));
+        } catch (UnableLoadConfigException e) {
+            e.printStackTrace();
+            return buildEmptyMenu();
+        }
     }
 
 
@@ -63,6 +70,22 @@ public class MenuBuilder {
         menuTemplate.addButtons(buttons.toArray(Button[]::new));
 
         return new MenuBuilderResult<>(menuTemplate, config);
+    }
+
+    private <T extends AbstractMenuView<T>> MenuBuilderResult<T> buildEmptyMenu(){
+        final MenuTemplate<T> menuTemplate = new MenuTemplate<>("Empty", 9);
+        final ButtonItem buttonItem = new ButtonItem(Material.valueOf("AIR"), " ", 1, Collections.emptyList(), false, null);
+        final ButtonTemplate buttonTemplate = new ButtonTemplate('!', buttonItem);
+        final BlankButton<T> button = new BlankButton<>(buttonTemplate);
+
+        ArrayList<Button<T>> buttons = new ArrayList<>();
+        for (int i = 0; i < 9; i++) {
+            buttons.add(button);
+        }
+
+        menuTemplate.addButtons(buttons.toArray(Button[]::new));
+
+        return new MenuBuilderResult<>(menuTemplate, null);
     }
 }
 
