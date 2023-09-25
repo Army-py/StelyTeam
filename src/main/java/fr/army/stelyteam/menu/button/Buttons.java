@@ -71,9 +71,10 @@ public enum Buttons {
     BUTTON_ADD_MEMBER("addMember"),
     BUTTON_REMOVE_MEMBER("removeMember"),
 
-    /* CONFIRM / CANCEL */
-    BUTTON_CONFIRM("confirm"),
+    /* CONFIRM */
+    // BUTTON_CONFIRM("confirm"),
     BUTTON_CANCEL("cancel"),
+    BUTTON_CONFIRM_CREATE_TEAM("confirm-create-team"),
 
     /* PROMOTE / DEMOTE MEMBER */
     BUTTON_EDIT_OWNER("editOwner"),
