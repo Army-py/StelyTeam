@@ -153,11 +153,14 @@ public enum Messages {
     COMMAND_TEAMCHAT_NO_TEAM
     ;
 
-    public String getMessage(Map<Placeholders, String> args) throws MessageNotFoundException {
+    public String getMessage(Map<Placeholders, String> args) {
         final YamlConfiguration messages = StelyTeamPlugin.getPlugin().getMessages();
 
         String message = messages.getString(this.toString());
-        if (message == null) throw new MessageNotFoundException(this, Config.language);
+        if (message == null){
+            new MessageNotFoundException(this, Config.language);
+            return " ";
+        }
 
         for(Placeholders placeholder : args.keySet()){
             message = message.replace("{" + placeholder.toString() + "}", args.get(placeholder));
@@ -166,11 +169,14 @@ public enum Messages {
         return message;
     }
 
-    public String getMessage(String... args) throws MessageNotFoundException {
+    public String getMessage(String... args) {
         final YamlConfiguration messages = StelyTeamPlugin.getPlugin().getMessages();
 
         String message = messages.getString(this.toString());
-        if (message == null) throw new MessageNotFoundException(this, Config.language);
+        if (message == null){
+            new MessageNotFoundException(this, Config.language);
+            return " ";
+        }
 
         for(int i = 0; i < args.length; i++){
             message = message.replace("{" + i + "}", args[i]);
@@ -179,11 +185,14 @@ public enum Messages {
         return message;
     }
 
-    public String getMessage() throws MessageNotFoundException {
+    public String getMessage() {
         final YamlConfiguration messages = StelyTeamPlugin.getPlugin().getMessages();
 
-        String message = messages.getString(this.toString());
-        if (message == null) throw new MessageNotFoundException(this, Config.language);
+        final String message = messages.getString(this.toString());
+        if (message == null){
+            new MessageNotFoundException(this, Config.language);
+            return " ";
+        }
 
         return message;
     }
