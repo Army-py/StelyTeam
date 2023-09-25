@@ -1,18 +1,19 @@
 package fr.army.stelyteam.menu.button.impl;
 
+import java.util.Optional;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.config.Config;
 import fr.army.stelyteam.config.message.Messages;
-import fr.army.stelyteam.config.message.exception.MessageNotFoundException;
+import fr.army.stelyteam.menu.Menus;
 import fr.army.stelyteam.menu.button.Button;
 import fr.army.stelyteam.menu.button.template.ButtonTemplate;
-import fr.army.stelyteam.menu.view.TeamMenuView;
-import fr.army.stelyteam.team.Team;
+import fr.army.stelyteam.menu.view.MenuView;
 
-public class CreateTeamButton extends Button<TeamMenuView> {
+public class CreateTeamButton extends Button<MenuView> {
 
     private final StelyTeamPlugin plugin = StelyTeamPlugin.getPlugin();
 
@@ -23,19 +24,12 @@ public class CreateTeamButton extends Button<TeamMenuView> {
     @Override
     public void onClick(InventoryClickEvent clickEvent) {
         final Player player = (Player) clickEvent.getWhoClicked();
-        final Team team = getMenuView().getTeam();
 
         final double teamCreationPrice = Config.priceCreateTeam;
         if (plugin.getEconomyManager().hasEnough(player, teamCreationPrice)){
-            
+            Menus.MENU_CONFIRM_CREATE_TEAM.createView(player, Optional.empty());
         }else{
-            try {
-                player.sendMessage(Messages.PREFIX.getMessage() + Messages.NOT_ENOUGH_MONEY.getMessage());
-            } catch (MessageNotFoundException e) {
-                e.printStackTrace();
-            }
+            player.sendMessage(Messages.PREFIX.getMessage() + Messages.NOT_ENOUGH_MONEY.getMessage());
         }
     }
-
-    
 }

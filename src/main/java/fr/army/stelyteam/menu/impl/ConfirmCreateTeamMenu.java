@@ -16,20 +16,20 @@ import fr.army.stelyteam.menu.button.impl.CancelButton;
 import fr.army.stelyteam.menu.button.impl.ConfirmCreateTeamButton;
 import fr.army.stelyteam.menu.button.template.ButtonTemplate;
 import fr.army.stelyteam.menu.template.MenuTemplate;
-import fr.army.stelyteam.menu.view.TeamMenuView;
+import fr.army.stelyteam.menu.view.MenuView;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.builder.menu.MenuBuilder;
 import fr.army.stelyteam.utils.builder.menu.MenuBuilderResult;
 
-public class ConfirmCreateTeamMenu extends TeamMenu<TeamMenuView> {
+public class ConfirmCreateTeamMenu extends TeamMenu<MenuView> {
 
-    public ConfirmCreateTeamMenu(@NotNull MenuBuilderResult<TeamMenuView> menuBuilderResult) {
+    public ConfirmCreateTeamMenu(@NotNull MenuBuilderResult<MenuView> menuBuilderResult) {
         super(menuBuilderResult);
     }
 
     @Override
-    public TeamMenuView createView(Player player, Optional<Team> team) {
-        return new TeamMenuView(player, this, team.orElse(null));
+    public MenuView createView(Player player, Optional<Team> team) {
+        return new MenuView(player, this);
     }
 
     @Override
@@ -39,8 +39,8 @@ public class ConfirmCreateTeamMenu extends TeamMenu<TeamMenuView> {
 
 
     public static ConfirmCreateTeamMenu createInstance(String configName) {
-        final MenuBuilderResult<TeamMenuView> builderResult = MenuBuilder.getInstance().loadMenu(configName + ".yml");
-        final MenuTemplate<TeamMenuView> menuTemplate = builderResult.getMenuTemplate();
+        final MenuBuilderResult<MenuView> builderResult = MenuBuilder.getInstance().loadMenu(configName + ".yml");
+        final MenuTemplate<MenuView> menuTemplate = builderResult.getMenuTemplate();
         final YamlConfiguration config = builderResult.getConfig();
 
         for (String chrSection : config.getConfigurationSection("items").getKeys(false)) {
@@ -49,7 +49,7 @@ public class ConfirmCreateTeamMenu extends TeamMenu<TeamMenuView> {
             final Buttons buttonType = Buttons.getButtonType(itemSection.getString("button-type"));
             
             final ButtonTemplate buttonTemplate = new ButtonTemplate(chr, null);
-            final Button<TeamMenuView> button;
+            final Button<MenuView> button;
             switch (buttonType) {
                 case BUTTON_CONFIRM_CREATE_TEAM:
                     button = new ConfirmCreateTeamButton(buttonTemplate);
