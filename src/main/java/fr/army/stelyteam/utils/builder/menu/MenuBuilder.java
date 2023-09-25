@@ -31,7 +31,6 @@ public class MenuBuilder {
         try {
             return buildMenu(plugin.getConfigLoader().initFile("menus/" + configName));
         } catch (UnableLoadConfigException e) {
-            e.printStackTrace();
             return buildEmptyMenu();
         }
     }
