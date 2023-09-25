@@ -5,10 +5,12 @@ import java.util.Map;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.config.Config;
 import fr.army.stelyteam.config.message.exception.MessageNotFoundException;
 
 public enum Messages {
     
+    PREFIX,
     COMMAND_INVALID,
     NO_COMMAND_IN_CONVERSATION,
     NOT_ENOUGH_MONEY,
@@ -155,7 +157,7 @@ public enum Messages {
         final YamlConfiguration messages = StelyTeamPlugin.getPlugin().getMessages();
 
         String message = messages.getString(this.toString());
-        if (message == null) throw new MessageNotFoundException(this, message);
+        if (message == null) throw new MessageNotFoundException(this, Config.language);
 
         for(Placeholders placeholder : args.keySet()){
             message = message.replace("{" + placeholder.toString() + "}", args.get(placeholder));
@@ -168,11 +170,20 @@ public enum Messages {
         final YamlConfiguration messages = StelyTeamPlugin.getPlugin().getMessages();
 
         String message = messages.getString(this.toString());
-        if (message == null) throw new MessageNotFoundException(this, message);
+        if (message == null) throw new MessageNotFoundException(this, Config.language);
 
         for(int i = 0; i < args.length; i++){
             message = message.replace("{" + i + "}", args[i]);
         }
+
+        return message;
+    }
+
+    public String getMessage() throws MessageNotFoundException {
+        final YamlConfiguration messages = StelyTeamPlugin.getPlugin().getMessages();
+
+        String message = messages.getString(this.toString());
+        if (message == null) throw new MessageNotFoundException(this, Config.language);
 
         return message;
     }
