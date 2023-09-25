@@ -39,6 +39,8 @@
 #                                                               #
 #################################################################
 
+PREFIX: "§7[§5StelyTeam§7] "
+# The prefix before each message
 
 COMMAND_INVALID: "§cCommande invalide."
 # Called when a player tries to execute an invalid command
