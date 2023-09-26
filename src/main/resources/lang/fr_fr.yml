@@ -141,6 +141,9 @@ TEAM_NAME_ALREADY_EXISTS: "§cCe nom de team existe déjà."
 TEAM_NAME_CONTAINS_SPACE: "§cLe nom de la team ne doit pas contenir d'espace."
 # Called when a member tries to set a name that contains spaces
 
+TEAM_NAME_TOO_SHORT: "§cLe nom de la team est trop court."
+# Called when a member tries to set a name that is too long
+
 TEAM_NAME_TOO_LONG: "§cLe nom de la team est trop long."
 # Called when a member tries to set a name that is too long
 
