@@ -126,6 +126,9 @@ PLAYER_OFFLINE: "§cCe joueur n'est pas connecté."
 #############################################
 
 
+NO_TEAM: "§cVous n'êtes dans aucune team."
+# Called when a player tries to interact with a feature but he is not in a team
+
 UPGRADE_ALREADY_UNLOCKED: "§cVous avez déjà débloqué cette amélioration."
 # Called when a member tries to upgrade a feature that has already been unlocked
 
