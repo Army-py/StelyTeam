@@ -23,12 +23,12 @@ public class Config {
     public static String mysqlPassword;
     public static String sqliteFile;
     public static String language;
-    public static String[] serverNames;
+    public static List<String> serverNames;
     public static boolean enableTeamChat;
     public static String teamChatFormat;
     public static int conversationTimeout;
-    public static String[] conversationCancelWords;
-    public static String[] blockedColors;
+    public static List<String> conversationCancelWords;
+    public static List<String> blockedColors;
     public static boolean openMenuWhenCreated;
     public static int teamNameMinLength;
     public static int teamNameMaxLength;
@@ -65,14 +65,14 @@ public class Config {
         mysqlPassword = this.config.getString("mysql.password");
         sqliteFile = this.config.getString("sqlite.file");
         language = this.config.getString("language");
-        serverNames = this.config.getStringList("server-names").toArray(new String[0]);
+        serverNames = this.config.getStringList("server-names");
         // TODO: voir pour changer new String[0] par String[]::new
 
         enableTeamChat = this.config.getBoolean("team-chat.enable");
         teamChatFormat = this.config.getString("team-chat.format");
         conversationTimeout = this.config.getInt("conversation-timeout");
-        conversationCancelWords = this.config.getStringList("conversation-cancel-words").toArray(new String[0]);
-        blockedColors = this.config.getStringList("blocked-colors").toArray(new String[0]);
+        conversationCancelWords = this.config.getStringList("conversation-cancel-words");
+        blockedColors = this.config.getStringList("blocked-colors");
         // TODO: ajouter le blocage des couleurs hexa 
 
         openMenuWhenCreated = this.config.getBoolean("open-menu-when-created");
