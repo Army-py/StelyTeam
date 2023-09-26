@@ -1,18 +1,15 @@
 package fr.army.stelyteam.utils.builder.conversation;
 
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationCanceller;
 import org.bukkit.conversations.ConversationContext;
 
-import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.config.Config;
 
 public class ConversationSetCanceller implements ConversationCanceller {
 
-    private YamlConfiguration config;
 
-    public ConversationSetCanceller(StelyTeamPlugin plugin) {
-        this.config = plugin.getConfig();
+    public ConversationSetCanceller() {
     }
 
     @Override
@@ -22,7 +19,7 @@ public class ConversationSetCanceller implements ConversationCanceller {
 
     @Override
     public boolean cancelBasedOnInput(ConversationContext context, String input) {
-        return config.getStringList("conversationCancelWords").contains(input);
+        return Config.conversationCancelWords.contains(input);
     }
 
     @Override
