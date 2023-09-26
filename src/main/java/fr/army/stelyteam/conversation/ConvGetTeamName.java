@@ -1,37 +1,34 @@
 package fr.army.stelyteam.conversation;
 
-import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.team.Team;
-import fr.army.stelyteam.utils.TemporaryAction;
-import fr.army.stelyteam.utils.builder.conversation.ConversationBuilder;
-import fr.army.stelyteam.utils.manager.CacheManager;
-import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.database.DatabaseManager;
-
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
 
+import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.config.Config;
+import fr.army.stelyteam.config.message.Messages;
+import fr.army.stelyteam.team.Team;
+import fr.army.stelyteam.utils.TemporaryActionNames;
+import fr.army.stelyteam.utils.builder.conversation.ConversationBuilder;
+import fr.army.stelyteam.utils.manager.CacheManager;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
+
 public class ConvGetTeamName extends StringPrompt {
 
-    private StelyTeamPlugin plugin;
-    private CacheManager cacheManager;
-    private DatabaseManager sqlManager;
-    private YamlConfiguration config;
-    private MessageManager messageManager;
-    private ConversationBuilder conversationBuilder;
+    private final StelyTeamPlugin plugin;
+    private final CacheManager cacheManager;
+    private final DatabaseManager sqlManager;
+    private final ConversationBuilder conversationBuilder;
 
 
     public ConvGetTeamName(StelyTeamPlugin plugin) {
         this.plugin = plugin;
         this.cacheManager = plugin.getCacheManager();
         this.sqlManager = plugin.getDatabaseManager();
-        this.config = plugin.getConfig();
-        this.messageManager = plugin.getMessageManager();
-        this.conversationBuilder = new ConversationBuilder(plugin);
+        this.conversationBuilder = plugin.getConversationBuilder();
     }
+
 
     @Override
     public Prompt acceptInput(ConversationContext con, String answer) {
@@ -39,37 +36,36 @@ public class ConvGetTeamName extends StringPrompt {
         String authorName = author.getName();
 
         if (nameTeamIsTooLong(answer)) {
-            con.getForWhom().sendRawMessage(messageManager.getMessage("common.name_is_too_long"));
+            con.getForWhom().sendRawMessage(Messages.TEAM_NAME_TOO_LONG.getMessage());
+            return this;
+        }else if (nameIsToShoort(answer)){
+            con.getForWhom().sendRawMessage(Messages.TEAM_NAME_TOO_SHORT.getMessage());
             return this;
         }else if (sqlManager.teamNameExists(answer)){
-            con.getForWhom().sendRawMessage(messageManager.getMessage("common.name_already_exists"));
+            con.getForWhom().sendRawMessage(Messages.TEAM_NAME_ALREADY_EXISTS.getMessage());
             return this;
         }else if (answer.contains(" ")){
-            con.getForWhom().sendRawMessage(messageManager.getMessage("common.name_cannot_contain_space"));
+            con.getForWhom().sendRawMessage(Messages.TEAM_NAME_CONTAINS_SPACE.getMessage());
             return this;
         }
 
-
-        if (cacheManager.playerHasAction(authorName)){
-            cacheManager.removePlayerAction(authorName);
-        }
-        cacheManager.addTempAction(
-            new TemporaryAction(
-                authorName, 
-                new Team(answer, authorName)
-            )
-        );
-        conversationBuilder.getNameInput(author, new ConvGetTeamPrefix(plugin));
+        Team team = new Team(answer, authorName);
+        conversationBuilder.getNameInput(author, new ConvGetTeamPrefix(plugin, team));
         return null;
     }
 
+
     @Override
     public String getPromptText(ConversationContext arg0) {
-        return messageManager.getMessage("manage_team.creation.send_team_id");
+        return Messages.SEND_TEAM_NAME.getMessage();
     }
 
 
     private boolean nameTeamIsTooLong(String teamName){
-        return teamName.length() > config.getInt("teamNameMaxLength");
+        return teamName.length() > Config.teamNameMaxLength;
+    }
+
+    private boolean nameIsToShoort(String teamName){
+        return teamName.length() < Config.teamNameMinLength;
     }
 }
