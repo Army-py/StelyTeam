@@ -1,13 +1,12 @@
 package fr.army.stelyteam.chat;
 
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.locks.Lock;
+
+import org.jetbrains.annotations.NotNull;
 
 public class TeamChatTask implements Runnable {
 

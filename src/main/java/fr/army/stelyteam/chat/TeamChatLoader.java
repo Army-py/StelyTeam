@@ -1,19 +1,14 @@
 package fr.army.stelyteam.chat;
 
-import org.bukkit.configuration.file.YamlConfiguration;
-
-import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.config.Config;
 
 public class TeamChatLoader {
 
-    private final YamlConfiguration config;
-
-    public TeamChatLoader(StelyTeamPlugin plugin) {
-        this.config = plugin.getConfig();
+    public TeamChatLoader() {
     }
 
     public TeamChatManager load() {
-        final String format = config.getString("teamChat.format");
+        final String format = Config.teamChatFormat;
         final TeamChatProcessor processor = new TeamChatProcessor(format);
         return new TeamChatManager(processor);
     }
