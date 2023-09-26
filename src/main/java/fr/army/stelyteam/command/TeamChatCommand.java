@@ -9,7 +9,6 @@ import java.util.UUID;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -17,31 +16,27 @@ import org.jetbrains.annotations.Nullable;
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.chat.TeamChatFormatHandler;
 import fr.army.stelyteam.chat.TeamChatManager;
+import fr.army.stelyteam.config.Config;
+import fr.army.stelyteam.config.message.Messages;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.manager.CacheManager;
-import fr.army.stelyteam.utils.manager.MessageManager;
 import fr.army.stelyteam.utils.network.ChannelRegistry;
 import fr.army.stelyteam.utils.network.task.chat.AsyncChatSender;
 
 public class TeamChatCommand implements TabExecutor {
 
     private final StelyTeamPlugin plugin;
-    private final YamlConfiguration config;
     private final TeamChatManager teamChatManager;
     private final CacheManager cacheManager;
-    private final MessageManager messageManager;
 
     private final String[] serverNames;
     private final String chatTeamFormat;
 
-    public TeamChatCommand(@NotNull StelyTeamPlugin plugin, @NotNull YamlConfiguration config, @NotNull TeamChatManager teamChatManager,
-            @NotNull CacheManager cacheManager, @NotNull MessageManager messageManager, @NotNull String[] serverNames,
-            @NotNull String chatTeamFormat) {
+    public TeamChatCommand(@NotNull StelyTeamPlugin plugin, @NotNull TeamChatManager teamChatManager,
+            @NotNull CacheManager cacheManager, @NotNull String[] serverNames, @NotNull String chatTeamFormat) {
         this.plugin = plugin;
-        this.config = config;
         this.teamChatManager = teamChatManager;
         this.cacheManager = cacheManager;
-        this.messageManager = messageManager;
         this.serverNames = serverNames;
         this.chatTeamFormat = chatTeamFormat;
     }
@@ -53,25 +48,25 @@ public class TeamChatCommand implements TabExecutor {
             return true;
         }
 
-        if (!config.getBoolean("allowTeamChat")) {
-            player.sendMessage(messageManager.getMessage("common.functionnality_disabled"));
+        if (!Config.enableTeamChat) {
+            player.sendMessage(Messages.FEATURE_DISABLED.getMessage());
             return true;
         }
         
         final Team team = Team.init(player);
 
         if (team == null) {
-            player.sendMessage(messageManager.getMessage("commands.teamChat.not_in_team"));
+            player.sendMessage(Messages.NO_TEAM.getMessage());
             return true;
         }
 
         if (cacheManager.isInConversation(player.getName())) {
-            player.sendRawMessage(messageManager.getMessage("common.no_command_in_conv"));
+            player.sendRawMessage(Messages.NO_COMMAND_IN_CONVERSATION.getMessage());
             return true;
         }
         
         if (args.length == 0) {
-            player.sendMessage(messageManager.getMessage("commands.teamChat.blank_message"));
+            player.sendMessage(Messages.COMMAND_TEAMCHAT_BLANK_MESSAGE.getMessage());
             return true;
         }
 
@@ -85,7 +80,7 @@ public class TeamChatCommand implements TabExecutor {
         message = message.substring(messageStart);
 
         if (message.isBlank()){
-            player.sendMessage(messageManager.getMessage("commands.teamChat.blank_message"));
+            player.sendMessage(Messages.COMMAND_TEAMCHAT_BLANK_MESSAGE.getMessage());
             return true;
         }
 
