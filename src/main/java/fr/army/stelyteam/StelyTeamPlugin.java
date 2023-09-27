@@ -39,6 +39,7 @@ import fr.army.stelyteam.utils.manager.serializer.ItemStackSerializer;
 // TODO: Maybe ajouter un son lors de la téléportation au home de team ?
 // TODO: rajouter une commande pour modifier la description d'une team
 // TODO: mettre de l'ordre dans onEnable()
+// TODO: changer le type des dates dans la bdd
 
 
 public class StelyTeamPlugin extends JavaPlugin {
