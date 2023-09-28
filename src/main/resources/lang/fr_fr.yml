@@ -82,6 +82,9 @@ VALUE_TRUE: "§aOui"
 VALUE_FALSE: "§cNon"
 # Called when the value of a boolean is false
 
+WRONG_AMOUNT: "§cMontant invalide."
+# Called when a player enters an invalid amount of money
+
 
 
 #####################################################
@@ -103,14 +106,19 @@ NO_RECEIVED_INVITATION: "§cVous n'avez reçu aucune invitation."
 PLAYER_ALREADY_IN_TEAM: "§cCe joueur est déjà dans une team."
 # Called when a player tries to invite a player that is already in a team
 
-PLAYER_REPONDS_INVITATION: "§cCe joueur a déjà une demande en cours."
+PLAYER_RESPONDS_INVITATION: "§cCe joueur a déjà une demande en cours."
 # Called when a player tries to invite a player who is in the process of responding to an invitation.
 
 PLAYER_NOT_IN_TEAM: "§cLe joueur n'est pas dans ta team."
 # Called when a player tries to interact with a player who is not in his team
 
-PLAYER_OFFLINE: "§cCe joueur n'est pas connecté."
+PLAYER_NOT_IN_THIS_TEAM: "§cLe joueur n'est pas dans cette team."
+# Called when a player tries to interact with a player who is not in the team
+
+PLAYER_OFFLINE: "§c{0} n'est pas connecté."
 # Called when a player tries to interact with a player who is not connected
+# Available placeholders :
+#     {0} : the given player name
 
 
 
@@ -141,7 +149,7 @@ TEAM_DESCRIPTION_HAS_BLOCKED_COLORS: "§cLa description contient des couleurs in
 TEAM_NAME_ALREADY_EXISTS: "§cCe nom de team existe déjà."
 # Called when a member tries to set a name that already exists
 
-TEAM_NAME_CONTAINS_SPACE: "§cLe nom de la team ne doit pas contenir d'espace."
+TEAM_NAME_CANNOT_CONTAINS_SPACE: "§cLe nom de la team ne doit pas contenir d'espace."
 # Called when a member tries to set a name that contains spaces
 
 TEAM_NAME_TOO_SHORT: "§cLe nom de la team est trop court."
@@ -180,7 +188,7 @@ TEAM_STORAGE_ALREADY_OPEN: "§cCe coffre est déjà ouvert sur un autre serveur.
 # Called when a member tries to open the team storage but it is already open on another server
 
 TEAM_REACHED_MAX_MEMBERS: "§cLa team a atteind le nombre maximum de membres."
-# Called when a member tries to add a member but the team has reached the maximum number of members
+# Called when a member or admin tries to add a member but the team has reached the maximum number of members
 
 TEAM_BANK_MONEY_ADDED: "§aLe montant a été ajouté."
 # Called when a member has added money to the team bank
@@ -193,6 +201,8 @@ TEAM_BANK_REACHED_MAX_MONEY: "§cLa team a atteind le plafond de son compte."
 
 TEAM_BANK_MONEY_WITHDRAWN: "§aLe montant a été retiré."
 # Called when a member has withdrawn money from the team bank
+# Available placeholders :
+#     {0} : the amount of money withdrawn
 
 SEND_WITHDRAW_MONEY_AMOUNT: "§aÉcris dans le tchat le montant que tu souhaites retirer."
 # Called when a member must send the amount of money to withdraw from the team bank
@@ -298,7 +308,7 @@ SEND_TEAM_ALLIED_NAME_TO_ADD: "§aÉcris dans le tchat le nom de la team à ajou
 ALLIANCE_INVITATION_SENT: "§aL'invitation a été envoyée."
 # Called when a owner sends an invitation to a team to be allied with it
 
-ALLIANCE_INVITATION_RECEIVED: "§e%PLAYER_DISPLAY_NAME% §avous a envoyé une invitation pour rejoindre son alliance."
+ALLIANCE_INVITATION_RECEIVED: "§e{PLAYER_DISPLAY_NAME} §avous a envoyé une invitation pour rejoindre son alliance."
 ACCEPT_ALLIANCE_INVITATION: "\n                §e>> §2§oClique ici pour accepter"
 REFUSE_ALLIANCE_INVITATION: "\n                §e>> §c§oClique ici pour refuser"
 # Called when team owners receives an invitation to be allied with another team
@@ -526,26 +536,26 @@ COMMAND_STELYTEAM_INFO_USAGE: "§7/stelyteam info <team>|<joueur>"
 
 COMMAND_STELYTEAM_INFO_OUTPUT:
   - "§7--- §5Informations de la team §7---" 
-  - "§aChef : §e{TEAM_OWNER}"     
-  - "§aNom : §e{TEAM_NAME}"
-  - "§aPréfixe : §e{TEAM_PREFIX}"
-  - "§aCompte : §e{TEAM_UNLOCKED_BANK}"
-  - "§aNombre de membre : §e{TEAM_MEMBER_COUNT} sur {0}"
-  - "§aMembre(s) : §e{TEAM_MEMBERS}"
-  - "§aDate de création : §e{TEAM_CREATION_DATE}"
-  - "§aDescription : §e{TEAM_DESCRIPTION}"
+  - "§aChef : §e{1}"     
+  - "§aNom : §e{2}"
+  - "§aPréfixe : §e{3}"
+  - "§aCompte : §e{4}"
+  - "§aNombre de membre : §e{5} sur {0}"
+  - "§aMembre(s) : §e{6}"
+  - "§aDate de création : §e{7}"
+  - "§aDescription : §e{8}"
   - "§7---------------------------"
 # Called when a player executes the command /stelyteam info
 # Available placeholders :
 #     {0} : the maximum number of members in the team
-#     {TEAM_OWNER} : the name of the team owner
-#     {TEAM_NAME} : the name of the team
-#     {TEAM_PREFIX} : the prefix of the team
-#     {TEAM_UNLOCKED_BANK} : the amount of money in the team bank
-#     {TEAM_MEMBER_COUNT} : the number of members in the team
-#     {TEAM_MEMBERS} : the list of members in the team
-#     {TEAM_CREATION_DATE} : the date of creation of the team
-#     {TEAM_DESCRIPTION} : the description of the team
+#     {1} : the name of the team owner
+#     {2} : the name of the team
+#     {3} : the prefix of the team
+#     {4} : if the team bank is unlocked
+#     {5} : the number of members in the team
+#     {6} : the list of members in the team
+#     {7} : the date of creation of the team
+#     {8} : the description of the team
 
 COMMAND_STELYTEAM_ACCEPT_OUTPUT: "§aVous avez accepté l'invitation."
 # Called when a player accepts an invitation

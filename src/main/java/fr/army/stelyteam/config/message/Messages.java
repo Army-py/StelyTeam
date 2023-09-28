@@ -1,5 +1,8 @@
 package fr.army.stelyteam.config.message;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -23,17 +26,19 @@ public enum Messages {
     RECEIVED,
     VALUE_TRUE,
     VALUE_FALSE,
+    WRONG_AMOUNT,
     NO_RECEIVED_INVITATION,
     PLAYER_ALREADY_IN_TEAM,
     PLAYER_REPONDS_INVITATION,
     PLAYER_NOT_IN_TEAM,
-    PLAYER_OFFLINE,
+    PLAYER_NOT_IN_THIS_TEAM,
+    PLAYER_OFFLINE, // Placeholders
     NO_TEAM,
     UPGRADE_ALREADY_UNLOCKED,
     TEAM_DESCRIPTION_TOO_LONG,
     TEAM_DESCRIPTION_HAS_BLOCKED_COLORS,
     TEAM_NAME_ALREADY_EXISTS,
-    TEAM_NAME_CONTAINS_SPACE,
+    TEAM_NAME_CANNOT_CONTAINS_SPACE,
     TEAM_NAME_TOO_SHORT,
     TEAM_NAME_TOO_LONG,
     TEAM_PREFIX_TOO_LONG,
@@ -49,7 +54,7 @@ public enum Messages {
     TEAM_BANK_MONEY_ADDED,
     SEND_DEPOSIT_MONEY_AMOUNT,
     TEAM_BANK_REACHED_MAX_MONEY,
-    TEAM_BANK_MONEY_WITHDRAWN,
+    TEAM_BANK_MONEY_WITHDRAWN, // Placeholders
     SEND_WITHDRAW_MONEY_AMOUNT,
     TEAM_BANK_REACHED_MIN_MONEY,
     SEND_TEAM_NAME,
@@ -57,7 +62,7 @@ public enum Messages {
     TEAM_CREATED,
     TEAM_DELETED,
     SEND_NEW_TEAM_NAME,
-    TEAM_NAME_EDITED,
+    TEAM_NAME_EDITED, // Placeholders
     SEND_NEW_TEAM_PREFIX,
     TEAM_PREFIX_EDITED,
     SEND_NEW_TEAM_DESCRIPTION,
@@ -91,7 +96,7 @@ public enum Messages {
     CANNOT_EXCLUDE_YOURSELF,
     CANNOT_EXCLUDE_HIGHER_RANK,
     MEMBER_KICKED,
-    MEMBER_INVITATION_RECEIVED,
+    MEMBER_INVITATION_RECEIVED, // Placeholders
     ACCEPT_MEMBER_INVITATION,
     REFUSE_MEMBER_INVITATION,
     ACCEPTED_INVITATION,
@@ -197,5 +202,45 @@ public enum Messages {
         }
 
         return message;
+    }
+
+    public List<String> getListMessage(Map<Placeholders, String> args){
+        final YamlConfiguration messages = StelyTeamPlugin.getPlugin().getMessages();
+        List<String> listMessages = new ArrayList<>();
+
+        List<String> msgs = messages.getStringList(this.toString());
+        if (msgs == null){
+            new MessageNotFoundException(this, Config.language);
+            return Collections.emptyList();
+        }
+
+        for(String message : msgs){
+            for(Placeholders placeholder : args.keySet()){
+                message = message.replace("{" + placeholder.toString() + "}", args.get(placeholder));
+            }
+            listMessages.add(message);
+        }
+
+        return listMessages;
+    }
+
+    public List<String> getListMessage(String... args){
+        final YamlConfiguration messages = StelyTeamPlugin.getPlugin().getMessages();
+        List<String> listMessages = new ArrayList<>();
+
+        List<String> msgs = messages.getStringList(this.toString());
+        if (msgs == null){
+            new MessageNotFoundException(this, Config.language);
+            return Collections.emptyList();
+        }
+
+        for(String message : msgs){
+            for(int i = 0; i < args.length; i++){
+                message = message.replace("{" + i + "}", args[i]);
+            }
+            listMessages.add(message);
+        }
+
+        return listMessages;
     }
 }
