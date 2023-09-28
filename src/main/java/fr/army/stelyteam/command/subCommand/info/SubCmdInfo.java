@@ -6,31 +6,23 @@ import java.util.List;
 import java.util.Locale;
 
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.command.SubCommand;
+import fr.army.stelyteam.config.Config;
+import fr.army.stelyteam.config.message.Messages;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
-import fr.army.stelyteam.utils.manager.MessageManager;
 import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 public class SubCmdInfo extends SubCommand {
     private DatabaseManager sqlManager;
-    private YamlConfiguration config;
-    private YamlConfiguration messages;
-    private MessageManager messageManager;
-    private ColorsBuilder colorsBuilder;
 
 
     public SubCmdInfo(StelyTeamPlugin plugin) {
         super(plugin);
         this.sqlManager = plugin.getDatabaseManager();
-        this.config = plugin.getConfig();
-        this.messages = plugin.getMessages();
-        this.messageManager = plugin.getMessageManager();
-        this.colorsBuilder = new ColorsBuilder(plugin);
     }
 
 
@@ -39,39 +31,49 @@ public class SubCmdInfo extends SubCommand {
         Player player = (Player) sender;
         args[0] = "";
         if (args.length == 1){
-            player.sendMessage(messageManager.getMessage("commands.stelyteam_info.usage"));
+            player.sendMessage(Messages.COMMAND_STELYTEAM_INFO_USAGE.getMessage());
         }else{
             String answer = String.join("", args);
             Team team = Team.initFromPlayerName(answer) == null ? Team.init(answer) : Team.initFromPlayerName(answer);
             if (team != null){
-                String yesMessage = messages.getString("commands.stelyteam_info.true");
-                String noMessage = messages.getString("commands.stelyteam_info.false");
-                Integer maxMembers = config.getInt("teamMaxMembers");
+                String yesMessage = Messages.VALUE_TRUE.getMessage();
+                String noMessage = Messages.VALUE_FALSE.getMessage();
+                Integer maxMembers = Config.teamMaxMembersLimit;
 
                 String teamName = team.getTeamName();
                 String teamPrefix = team.getTeamPrefix();
                 String teamOwner = team.getTeamOwnerName();
-                String creationDate = team.getCreationDate();
+                String teamCreationDate = team.getCreationDate();
                 String teamDescription = team.getTeamDescription();
                 Integer teamMembersLelvel = team.getImprovLvlMembers();
-                String hasUnlockBank = (team.isUnlockedTeamBank() ? yesMessage : noMessage);
+                String unlockedBank = (team.isUnlockedTeamBank() ? yesMessage : noMessage);
                 List<String> teamMembers = team.getMembersName();
                 teamMembers.remove(teamOwner);
-                List<String> lore = messages.getStringList("commands.stelyteam_info.output");
 
-                lore = replaceInLore(lore, "%NAME%", teamName);
-                lore = replaceInLore(lore, "%PREFIX%", colorsBuilder.replaceColor(teamPrefix));
-                lore = replaceInLore(lore, "%OWNER%", teamOwner);
-                lore = replaceInLore(lore, "%DATE%", creationDate);
-                lore = replaceInLore(lore, "%UNLOCK_BANK%", hasUnlockBank);
-                lore = replaceInLore(lore, "%MEMBER_COUNT%", IntegerToString(teamMembers.size()+1));
-                lore = replaceInLore(lore, "%MAX_MEMBERS%", IntegerToString(maxMembers+teamMembersLelvel));
-                lore = replaceInLore(lore, "%MEMBERS%", teamMembers.isEmpty() ? messageManager.getMessageWithoutPrefix("common.no_members") : String.join(", ", teamMembers));
-                lore = replaceInLore(lore, "%DESCRIPTION%", colorsBuilder.replaceColor(teamDescription));
+                String teamMembersStr = teamMembers.isEmpty() ? Messages.NO_TEAM_MEMBERS.getMessage()
+                        : String.join(", ", teamMembers);
+
+                List<String> lore = Messages.COMMAND_STELYTEAM_INFO_OUTPUT.getListMessage(
+                        IntegerToString(maxMembers + teamMembersLelvel), maxMembers.toString(),
+                        teamOwner,
+                        teamName, ColorsBuilder.replaceColor(teamPrefix), unlockedBank,
+                        IntegerToString(teamMembers.size() + 1), teamMembersStr, teamCreationDate, teamDescription);
+
+                
+                // TODO: delete
+                // lore = replaceInLore(lore, "%NAME%", teamName);
+                // lore = replaceInLore(lore, "%PREFIX%", colorsBuilder.replaceColor(teamPrefix));
+                // lore = replaceInLore(lore, "%OWNER%", teamOwner);
+                // lore = replaceInLore(lore, "%DATE%", creationDate);
+                // lore = replaceInLore(lore, "%UNLOCK_BANK%", hasUnlockBank);
+                // lore = replaceInLore(lore, "%MEMBER_COUNT%", IntegerToString(teamMembers.size()+1));
+                // lore = replaceInLore(lore, "%MAX_MEMBERS%", IntegerToString(maxMembers+teamMembersLelvel));
+                // lore = replaceInLore(lore, "%MEMBERS%", teamMembers.isEmpty() ? messageManager.getMessageWithoutPrefix("common.no_members") : String.join(", ", teamMembers));
+                // lore = replaceInLore(lore, "%DESCRIPTION%", colorsBuilder.replaceColor(teamDescription));
 
                 player.sendMessage(String.join("\n", lore));
             }else{
-                player.sendMessage(messageManager.getMessage("common.team_not_exist"));
+                player.sendMessage(Messages.TEAM_DOES_NOT_EXIST.getMessage());
             }
         }
         return true;
@@ -106,16 +108,8 @@ public class SubCmdInfo extends SubCommand {
     }
 
 
-    private List<String> replaceInLore(List<String> lore, String value, String replace){
-        List<String> newLore = new ArrayList<>();
-        for(String str : lore){
-            newLore.add(str.replace(value, replace));
-        }
-        return newLore;
-    }
-
-
     private String IntegerToString(Integer value){
+        // TODO: voir pour mettre le local en config
         return NumberFormat.getNumberInstance(Locale.US).format(value);
     }
 

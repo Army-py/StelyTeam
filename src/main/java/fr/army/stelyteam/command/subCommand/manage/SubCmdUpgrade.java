@@ -1,25 +1,23 @@
 package fr.army.stelyteam.command.subCommand.manage;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.command.SubCommand;
+import fr.army.stelyteam.config.Config;
+import fr.army.stelyteam.config.message.Messages;
+import fr.army.stelyteam.config.message.Placeholders;
 import fr.army.stelyteam.team.Team;
-import fr.army.stelyteam.utils.manager.MessageManager;
 
 public class SubCmdUpgrade extends SubCommand {
 
-    private YamlConfiguration config;
-    private MessageManager messageManager;
-
     public SubCmdUpgrade(StelyTeamPlugin plugin) {
         super(plugin);
-        this.config = plugin.getConfig();
-        this.messageManager = plugin.getMessageManager();
     }
 
     @Override
@@ -28,21 +26,24 @@ public class SubCmdUpgrade extends SubCommand {
         args[0] = "";
 
         if (args.length == 1){
-            player.sendMessage(messageManager.getMessage("commands.stelyteam_upgrade.usage"));
+            player.sendMessage(Messages.COMMAND_STELYTEAM_UPGRADE_USAGE.getMessage());
         }else{
             String teamName = String.join("", args);
             Team team = Team.init(teamName);
             if (team != null){
-                Integer maxUpgrades = config.getConfigurationSection("inventories.upgradeTotalMembers").getValues(false).size() - 1;
+                Integer maxUpgrades = Config.pricesUpgradeMembersLimit.length - 1;
                 Integer teamUpgrades = team.getImprovLvlMembers();
                 if (maxUpgrades == teamUpgrades){
-                    player.sendMessage(messageManager.getMessage("commands.stelyteam_upgrade.max_level"));
+                    player.sendMessage(Messages.COMMAND_STELYTEAM_UPGRADE_MAX_LEVEL.getMessage());
                 }else{
                     team.incrementImprovLvlMembers();
-                    player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_upgrade.output", teamName));
+                    Map<Placeholders, String> replaces = new HashMap<>();
+                    replaces.put(Placeholders.TEAM_NAME, team.getTeamName());
+                    replaces.put(Placeholders.TEAM_PREFIX, team.getTeamPrefix());
+                    player.sendMessage(Messages.COMMAND_STELYTEAM_UPGRADE_OUTPUT.getMessage(replaces));
                 }
             }else{
-                player.sendMessage(messageManager.getMessage("common.team_not_exist"));
+                player.sendMessage(Messages.TEAM_DOES_NOT_EXIST.getMessage());
             }
         }
         return true;
