@@ -19,7 +19,7 @@ public class MenuTemplate<T extends AbstractMenuView<T>> {
     public MenuTemplate(String title, int size) {
         this.title = title;
         this.size = size;
-        this.buttons = new Button[size];
+        this.buttons = new Button<T>[size];
     }
 
     @NotNull

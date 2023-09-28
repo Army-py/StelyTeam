@@ -43,6 +43,8 @@ public class ConfirmCreateTeamMenu extends TeamMenu<MenuView> {
         final MenuTemplate<MenuView> menuTemplate = builderResult.getMenuTemplate();
         final YamlConfiguration config = builderResult.getConfig();
 
+        if (config == null) return new ConfirmCreateTeamMenu(builderResult);
+
         for (String chrSection : config.getConfigurationSection("items").getKeys(false)) {
             final char chr = chrSection.charAt(0);
             final ConfigurationSection itemSection = config.getConfigurationSection("items." + chr);

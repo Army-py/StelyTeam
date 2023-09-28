@@ -36,6 +36,8 @@ public class CreateTeamMenu extends TeamMenu<MenuView> {
         final MenuBuilderResult<MenuView> builderResult = MenuBuilder.getInstance().loadMenu(configName + ".yml");
         final MenuTemplate<MenuView> menuTemplate = builderResult.getMenuTemplate();
         final YamlConfiguration config = builderResult.getConfig();
+        
+        if (config == null) return new CreateTeamMenu(builderResult);
 
         for (String chrSection : config.getConfigurationSection("items").getKeys(false)) {
             final char chr = chrSection.charAt(0);
