@@ -9,22 +9,18 @@ import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.config.Config;
 import fr.army.stelyteam.config.message.Messages;
 import fr.army.stelyteam.team.Team;
-import fr.army.stelyteam.utils.TemporaryActionNames;
 import fr.army.stelyteam.utils.builder.conversation.ConversationBuilder;
-import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 public class ConvGetTeamName extends StringPrompt {
 
     private final StelyTeamPlugin plugin;
-    private final CacheManager cacheManager;
     private final DatabaseManager sqlManager;
     private final ConversationBuilder conversationBuilder;
 
 
     public ConvGetTeamName(StelyTeamPlugin plugin) {
         this.plugin = plugin;
-        this.cacheManager = plugin.getCacheManager();
         this.sqlManager = plugin.getDatabaseManager();
         this.conversationBuilder = plugin.getConversationBuilder();
     }
@@ -36,16 +32,16 @@ public class ConvGetTeamName extends StringPrompt {
         String authorName = author.getName();
 
         if (nameTeamIsTooLong(answer)) {
-            con.getForWhom().sendRawMessage(Messages.TEAM_NAME_TOO_LONG.getMessage());
+            con.getForWhom().sendRawMessage(Messages.PREFIX.getMessage() + Messages.TEAM_NAME_TOO_LONG.getMessage());
             return this;
         }else if (nameIsToShoort(answer)){
-            con.getForWhom().sendRawMessage(Messages.TEAM_NAME_TOO_SHORT.getMessage());
+            con.getForWhom().sendRawMessage(Messages.PREFIX.getMessage() + Messages.TEAM_NAME_TOO_SHORT.getMessage());
             return this;
         }else if (sqlManager.teamNameExists(answer)){
-            con.getForWhom().sendRawMessage(Messages.TEAM_NAME_ALREADY_EXISTS.getMessage());
+            con.getForWhom().sendRawMessage(Messages.PREFIX.getMessage() + Messages.TEAM_NAME_ALREADY_EXISTS.getMessage());
             return this;
         }else if (answer.contains(" ")){
-            con.getForWhom().sendRawMessage(Messages.TEAM_NAME_CONTAINS_SPACE.getMessage());
+            con.getForWhom().sendRawMessage(Messages.PREFIX.getMessage() + Messages.TEAM_NAME_CANNOT_CONTAINS_SPACE.getMessage());
             return this;
         }
 
@@ -57,7 +53,7 @@ public class ConvGetTeamName extends StringPrompt {
 
     @Override
     public String getPromptText(ConversationContext arg0) {
-        return Messages.SEND_TEAM_NAME.getMessage();
+        return Messages.PREFIX.getMessage() + Messages.SEND_TEAM_NAME.getMessage();
     }
 
 

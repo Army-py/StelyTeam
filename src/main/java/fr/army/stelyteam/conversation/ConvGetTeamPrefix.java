@@ -31,16 +31,16 @@ public class ConvGetTeamPrefix extends StringPrompt {
         Player author = (Player) con.getForWhom();
         
         if (colorBuilder.prefixTeamIsTooLong(answer)) {
-            con.getForWhom().sendRawMessage(Messages.TEAM_PREFIX_TOO_LONG.getMessage());
+            con.getForWhom().sendRawMessage(Messages.PREFIX.getMessage() + Messages.TEAM_PREFIX_TOO_LONG.getMessage());
             return this;
         }else if (colorBuilder.containsBlockedColors(answer)) {
-            con.getForWhom().sendRawMessage(Messages.TEAM_PREFIX_HAS_BLOCKED_COLORS.getMessage());
+            con.getForWhom().sendRawMessage(Messages.PREFIX.getMessage() + Messages.TEAM_PREFIX_HAS_BLOCKED_COLORS.getMessage());
             return this;
         }
 
 
         economyManager.removeMoneyPlayer(author, Config.priceCreateTeam);
-        con.getForWhom().sendRawMessage(Messages.TEAM_CREATED.getMessage());
+        con.getForWhom().sendRawMessage(Messages.PREFIX.getMessage() + Messages.TEAM_CREATED.getMessage());
 
         
         //TODO: Modifier la méthode
@@ -51,6 +51,6 @@ public class ConvGetTeamPrefix extends StringPrompt {
 
     @Override
     public String getPromptText(ConversationContext arg0) {
-        return Messages.SEND_TEAM_PREFIX.getMessage();
+        return Messages.PREFIX.getMessage() + Messages.SEND_TEAM_PREFIX.getMessage();
     }
 }
