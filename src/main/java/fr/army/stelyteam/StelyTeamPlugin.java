@@ -40,6 +40,7 @@ import fr.army.stelyteam.utils.manager.serializer.ItemStackSerializer;
 // TODO: rajouter une commande pour modifier la description d'une team
 // TODO: mettre de l'ordre dans onEnable()
 // TODO: changer le type des dates dans la bdd
+// TODO: ajouter un menu avec toutes les demandes d'alliance, au lieu d'attendre qu'un owner soit co
 
 
 public class StelyTeamPlugin extends JavaPlugin {
