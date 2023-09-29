@@ -1,0 +1,136 @@
+
+
+title: "§5§lCréation de Team"
+
+previous: true
+
+pattern:
+  - ". . . . . . . . ."
+  - ". . . + $ - . . ."
+  - ". . / . % . : . ."
+  - ". . . ! . # . . ."
+  - ". . . . . . . . *"
+
+
+# Available button types
+# Any other type of button will be considered EMPTY
+# - BACK
+# - TEAM_MEMBERS
+# - TEAM_ALLIANCE
+# - TEAM_BANK_ADD_MONEY
+# - TEAM_BANK_WITHDRAW_MONEY
+# - TEAM_STORAGES
+# - TEAM_LEAVE
+items:
+  ".":
+    button-type: EMPTY
+    material: LIGHT_BLUE_STAINED_GLASS_PANE
+    name: " "
+    skull-texture: ""
+    amount: 1
+    is-glowing: false
+    lore: []
+  "%":
+    button-type: EMPTY
+    material: BOOK
+    name: "§5§nInformations"
+    skull-texture: ""
+    amount: 1
+    is-glowing: false
+    lore:
+      - "§aChef de la team : §e{0}"
+      - "§aNom : §e{1}"
+      - "§aPréfixe : §r{2}"
+      - "§aDescription : §e{3}"
+      - "§aNombre de membre : §e{4} sur {7}"
+      - "§aDate de la création : §e{5}"
+      - ""
+      - "§aTon grade : §r{6}"
+    # Available placeholders :
+    #   {0} : Team owner
+    #   {1} : Team name
+    #   {2} : Team prefix
+    #   {3} : Team description
+    #   {4} : Team members count
+    #   {5} : Team creation date
+    #   {6} : Your team rank
+    #   {7} : Maximum members count
+  "/":
+    button-type: TEAM_MEMBERS
+    material: TOTEM_OF_UNDYING
+    name: "§5§nMembres"
+    skull-texture: ""
+    amount: 1
+    is-glowing: false
+    lore:
+      - "§aClique pour voir les"
+      - "§amembres de la team"
+  ":":
+    button-type: TEAM_ALLIANCE
+    material: FEATHER
+    name: "§5§nAlliances"
+    skull-texture: ""
+    amount: 1
+    is-glowing: false
+    lore:
+      - "§aClique pour voir les"
+      - "§aalliances de la team"
+  "$":
+    button-type: EMPTY
+    material: EMERALD
+    name: "§5§nArgent de la team"
+    skull-texture: ""
+    amount: 1
+    is-glowing: false
+    lore:
+      - "§aCompte : §6{0}€"
+      - "§aPlafond du compte : §6{1}€"
+    # Available placeholders :
+    #   {0} : Team money
+    #   {1} : Team money limit
+  "+":
+    button-type: TEAM_BANK_ADD_MONEY
+    material: GOLD_NUGGET
+    name: "§5§nAjout d'argent"
+    skull-texture: ""
+    amount: 1
+    is-glowing: false
+    lore:
+      - "§aAjouter de l'argent dans"
+      - "§ale compte de la team"
+  "-":
+    button-type: TEAM_BANK_WITHDRAW_MONEY
+    material: PAPER
+    name: "§5§nRetrait d'argent"
+    skull-texture: ""
+    amount: 1
+    is-glowing: false
+    lore:
+      - "§aRetirer de l'argent dans"
+      - "§ale compte de la team"
+  "!":
+    button-type: TEAM_STORAGES
+    material: CHEST
+    name: "§5§nStockage"
+    skull-texture: ""
+    amount: 1
+    is-glowing: false
+    lore:
+      - "§aClique pour voir les"
+      - "§astockages de la team"
+  "#":
+    button-type: TEAM_LEAVE
+    material: DARK_OAK_DOOR
+    name: "§c§nQuitter la team"
+    skull-texture: ""
+    amount: 1
+    is-glowing: false
+    lore: []
+  "*":
+    button-type: BACK
+    material: ARROW
+    name: "§cFermer"
+    skull-texture: ""
+    amount: 1
+    is-glowing: false
+    lore: []
