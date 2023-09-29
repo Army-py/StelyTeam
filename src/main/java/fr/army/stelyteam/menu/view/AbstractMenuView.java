@@ -21,6 +21,11 @@ public abstract class AbstractMenuView<T extends AbstractMenuView<T>> implements
     public abstract Inventory createInventory();
 
 
+    public void open(){
+        viewer.openInventory(createInventory());
+    }
+
+
     public Player getViewer() {
         return viewer;
     }

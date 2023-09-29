@@ -19,6 +19,7 @@ public class TeamMenuView extends AbstractMenuView<TeamMenuView> {
         this.team = team;
     }
 
+    @Override
     public Inventory createInventory() {
         final MenuTemplate<TeamMenuView> menuTemplate = menu.getMenuBuilderResult().getMenuTemplate();
         final Inventory inventory = Bukkit.createInventory(this, menuTemplate.getSize(), menuTemplate.getTitle());

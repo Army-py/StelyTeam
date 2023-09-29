@@ -15,6 +15,7 @@ public class MenuView extends AbstractMenuView<MenuView>{
         super(player, menu);
     }    
     
+    @Override
     public Inventory createInventory() {
         final MenuTemplate<MenuView> menuTemplate = menu.getMenuBuilderResult().getMenuTemplate();
         final Inventory inventory = Bukkit.createInventory(this, menuTemplate.getSize(), menuTemplate.getTitle());

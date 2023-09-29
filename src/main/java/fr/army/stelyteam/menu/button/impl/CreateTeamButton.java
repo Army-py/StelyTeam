@@ -27,8 +27,7 @@ public class CreateTeamButton extends Button<MenuView> {
 
         final double teamCreationPrice = Config.priceCreateTeam;
         if (plugin.getEconomyManager().hasEnough(player, teamCreationPrice)){
-            player.openInventory(Menus.MENU_CONFIRM_CREATE_TEAM.createView(player, Optional.empty())
-                    .createInventory());
+            Menus.MENU_CONFIRM_CREATE_TEAM.createView(player, Optional.empty()).open();
         }else{
             player.sendMessage(Messages.PREFIX.getMessage() + Messages.NOT_ENOUGH_MONEY.getMessage());
         }

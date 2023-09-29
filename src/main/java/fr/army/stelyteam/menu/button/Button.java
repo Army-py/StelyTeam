@@ -50,7 +50,7 @@ public abstract class Button<T extends AbstractMenuView<T>> {
         final MenuTemplate<T> menuTemplate = menuView.getMenu().getMenuBuilderResult().getMenuTemplate();
         final Player viewer = menuView.getViewer();
         if (menuTemplate.canPrecede() && menuTemplate.getPrecedingMenu() != null){
-            viewer.openInventory(menuTemplate.getPrecedingMenu().createView(viewer, team).createInventory());
+            menuTemplate.getPrecedingMenu().createView(viewer, team).open();
         }
     }
 }
