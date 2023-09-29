@@ -1,5 +1,7 @@
 package fr.army.stelyteam.menu.button.impl;
 
+import java.util.Optional;
+
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 import fr.army.stelyteam.menu.button.Button;
@@ -14,7 +16,7 @@ public class CancelButton<T extends AbstractMenuView<T>> extends Button<T> {
 
     @Override
     public void onClick(InventoryClickEvent clickEvent) {
-        
+        openPreviousMenu(Optional.empty());
     }
     
 }

@@ -2,11 +2,12 @@ package fr.army.stelyteam.menu;
 
 import fr.army.stelyteam.menu.impl.ConfirmCreateTeamMenu;
 import fr.army.stelyteam.menu.impl.CreateTeamMenu;
+import fr.army.stelyteam.menu.view.MenuView;
 
 public class Menus {
     
-    public static TeamMenu<?> MENU_CREATE_TEAM;
-    public static TeamMenu<?> MENU_CONFIRM_CREATE_TEAM;
+    public static TeamMenu<MenuView> MENU_CREATE_TEAM;
+    public static TeamMenu<MenuView> MENU_CONFIRM_CREATE_TEAM;
     public static TeamMenu MENU_TEAMS;
     public static TeamMenu MENU_TEAM_MANAGE;
     public static TeamMenu MENU_HOME; // previously MEMBER_MENU

@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import fr.army.stelyteam.menu.TeamMenu;
 import fr.army.stelyteam.menu.button.Button;
 import fr.army.stelyteam.menu.button.impl.BlankButton;
 import fr.army.stelyteam.menu.button.template.ButtonTemplate;
@@ -13,13 +15,19 @@ import fr.army.stelyteam.menu.view.AbstractMenuView;
 public class MenuTemplate<T extends AbstractMenuView<T>> {
     
     private final String title;
+    private final boolean precede;
     private final int size;
     private final Button<T>[] buttons;
 
-    public MenuTemplate(String title, int size) {
+    private TeamMenu<T> precedingMenu;
+
+    public MenuTemplate(@NotNull String title, @NotNull boolean precede, @NotNull int size) {
         this.title = title;
         this.size = size;
-        this.buttons = new Button<T>[size];
+        this.precede = precede;
+        this.buttons = new Button[size];
+
+        this.precedingMenu = null;
     }
 
     @NotNull
@@ -70,6 +78,11 @@ public class MenuTemplate<T extends AbstractMenuView<T>> {
     }
 
     @NotNull
+    public boolean canPrecede(){
+        return precede;
+    }
+
+    @NotNull
     public int getSize() {
         return size;
     }
@@ -77,5 +90,14 @@ public class MenuTemplate<T extends AbstractMenuView<T>> {
     @NotNull
     public Button<T>[] getButtons() {
         return buttons;
+    }
+
+    @Nullable
+    public TeamMenu<T> getPrecedingMenu() {
+        return precedingMenu;
+    }
+
+    public void setPrecedingMenu(@NotNull TeamMenu<T> precedingMenu) {
+        this.precedingMenu = precedingMenu;
     }
 }

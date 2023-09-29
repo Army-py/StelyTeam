@@ -38,6 +38,7 @@ public class MenuBuilder {
 
     private <T extends AbstractMenuView<T>> MenuBuilderResult<T> buildMenu(YamlConfiguration config) {
         final String title = config.getString("title");
+        final boolean precede = config.getBoolean("previous");
         final String[] pattern = config.getStringList("pattern").toArray(String[]::new);
         final List<Button<T>> buttons = new ArrayList<>();
 
@@ -65,14 +66,14 @@ public class MenuBuilder {
             }
         }
 
-        final MenuTemplate<T> menuTemplate = new MenuTemplate<>(title, size);
+        final MenuTemplate<T> menuTemplate = new MenuTemplate<>(title, precede, size);
         menuTemplate.addButtons(buttons.toArray(Button[]::new));
 
         return new MenuBuilderResult<>(menuTemplate, config);
     }
 
     private <T extends AbstractMenuView<T>> MenuBuilderResult<T> buildEmptyMenu(){
-        final MenuTemplate<T> menuTemplate = new MenuTemplate<>("Empty", 9);
+        final MenuTemplate<T> menuTemplate = new MenuTemplate<>("Empty", false, 9);
         final ButtonItem buttonItem = new ButtonItem(Material.valueOf("AIR"), " ", 1, Collections.emptyList(), false, null);
         final ButtonTemplate buttonTemplate = new ButtonTemplate('!', buttonItem);
         final BlankButton<T> button = new BlankButton<>(buttonTemplate);

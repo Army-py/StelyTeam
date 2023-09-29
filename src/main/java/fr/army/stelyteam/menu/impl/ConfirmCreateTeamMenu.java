@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.jetbrains.annotations.NotNull;
 
+import fr.army.stelyteam.menu.Menus;
 import fr.army.stelyteam.menu.TeamMenu;
 import fr.army.stelyteam.menu.button.Button;
 import fr.army.stelyteam.menu.button.Buttons;
@@ -67,6 +68,7 @@ public class ConfirmCreateTeamMenu extends TeamMenu<MenuView> {
 
             menuTemplate.mapButtons(menuTemplate.getSlots(chr), button);
         }
+        menuTemplate.setPrecedingMenu(Menus.MENU_CREATE_TEAM);
 
         return new ConfirmCreateTeamMenu(builderResult);
     }

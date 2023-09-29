@@ -2,6 +2,8 @@
 
 title: "§5§lCréation de Team"
 
+previous: true
+
 pattern:
   - "$ $ $ $ $ $ $ $ $"
   - "$ $ $ $ % $ $ $ $"

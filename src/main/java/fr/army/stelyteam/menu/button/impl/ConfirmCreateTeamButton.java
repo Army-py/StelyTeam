@@ -1,5 +1,7 @@
 package fr.army.stelyteam.menu.button.impl;
 
+import java.util.Optional;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
@@ -25,5 +27,7 @@ public class ConfirmCreateTeamButton extends Button<MenuView> {
 
         player.closeInventory();
         conv.getNameInput(player, new ConvGetTeamName(plugin));
+
+        openPreviousMenu(Optional.empty());
     }
 }

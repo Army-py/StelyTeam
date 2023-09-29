@@ -1,11 +1,16 @@
 package fr.army.stelyteam.menu.button;
 
+import java.util.Optional;
+
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import fr.army.stelyteam.menu.button.template.ButtonTemplate;
+import fr.army.stelyteam.menu.template.MenuTemplate;
 import fr.army.stelyteam.menu.view.AbstractMenuView;
+import fr.army.stelyteam.team.Team;
 
 public abstract class Button<T extends AbstractMenuView<T>> {
     
@@ -39,5 +44,13 @@ public abstract class Button<T extends AbstractMenuView<T>> {
     public Button<T> setMenuView(T menuView) {
         this.menuView = menuView;
         return this;
+    }
+
+    protected void openPreviousMenu(Optional<Team> team){
+        final MenuTemplate<T> menuTemplate = menuView.getMenu().getMenuBuilderResult().getMenuTemplate();
+        final Player viewer = menuView.getViewer();
+        if (menuTemplate.canPrecede() && menuTemplate.getPrecedingMenu() != null){
+            viewer.openInventory(menuTemplate.getPrecedingMenu().createView(viewer, team).createInventory());
+        }
     }
 }
