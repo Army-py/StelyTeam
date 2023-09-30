@@ -11,7 +11,7 @@ import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.builder.menu.MenuBuilderResult;
 
 public abstract class TeamMenu<T extends AbstractMenuView<T>> {
-    
+
     private final MenuBuilderResult<T> menuBuilderResult;
 
     public TeamMenu(@NotNull MenuBuilderResult<T> menuBuilderResult) {

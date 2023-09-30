@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 import fr.army.stelyteam.chat.Message;
