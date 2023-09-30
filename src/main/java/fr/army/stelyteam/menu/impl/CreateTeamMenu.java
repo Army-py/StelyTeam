@@ -10,6 +10,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import fr.army.stelyteam.menu.TeamMenu;
 import fr.army.stelyteam.menu.button.Button;
 import fr.army.stelyteam.menu.button.Buttons;
+import fr.army.stelyteam.menu.button.impl.BackButton;
 import fr.army.stelyteam.menu.button.impl.BlankButton;
 import fr.army.stelyteam.menu.button.impl.CreateTeamButton;
 import fr.army.stelyteam.menu.button.template.ButtonTemplate;
@@ -49,6 +50,9 @@ public class CreateTeamMenu extends TeamMenu<MenuView> {
             switch (buttonType) {
                 case BUTTON_CREATE_TEAM:
                     button = new CreateTeamButton(buttonTemplate);
+                    break;
+                case BUTTON_BACK:
+                    button = new BackButton<>(buttonTemplate);
                     break;
             
                 default: 

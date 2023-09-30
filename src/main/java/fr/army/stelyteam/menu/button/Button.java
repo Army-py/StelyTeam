@@ -46,11 +46,13 @@ public abstract class Button<T extends AbstractMenuView<T>> {
         return this;
     }
 
-    protected void openPreviousMenu(Optional<Team> team){
-        final MenuTemplate<T> menuTemplate = menuView.getMenu().getMenuBuilderResult().getMenuTemplate();
-        final Player viewer = menuView.getViewer();
-        if (menuTemplate.canPrecede() && menuTemplate.getPrecedingMenu() != null){
-            menuTemplate.getPrecedingMenu().createView(viewer, team).open();
-        }
-    }
+    // protected void openPreviousMenu(Optional<Team> team){
+    //     final MenuTemplate<T> menuTemplate = menuView.getMenu().getMenuBuilderResult().getMenuTemplate();
+    //     final Player viewer = menuView.getViewer();
+    //     if (menuTemplate.canPrecede() && menuTemplate.getPrecedingMenu() != null){
+    //         menuTemplate.getPrecedingMenu().createView(viewer, team).open();
+    //     }else{
+    //         viewer.closeInventory();
+    //     }
+    // }
 }
