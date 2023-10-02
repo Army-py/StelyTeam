@@ -1,14 +1,15 @@
 package fr.army.stelyteam.config.message;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.jetbrains.annotations.NotNull;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.config.Config;
+import fr.army.stelyteam.config.PlaceholdersUtils;
 import fr.army.stelyteam.config.message.exception.MessageNotFoundException;
 
 public enum Messages {
@@ -160,7 +161,7 @@ public enum Messages {
     COMMAND_TEAMCHAT_NO_TEAM
     ;
 
-    public String getMessage(Map<Placeholders, String> args) {
+    public String getMessage(@NotNull Map<Placeholders, String> args) {
         final YamlConfiguration messages = StelyTeamPlugin.getPlugin().getMessages();
 
         String message = messages.getString(this.toString());
@@ -169,14 +170,10 @@ public enum Messages {
             return " ";
         }
 
-        for(Placeholders placeholder : args.keySet()){
-            message = message.replace("{" + placeholder.toString() + "}", args.get(placeholder));
-        }
-
-        return message;
+        return PlaceholdersUtils.replace(message, args);
     }
 
-    public String getMessage(String... args) {
+    public String getMessage(@NotNull String... args) {
         final YamlConfiguration messages = StelyTeamPlugin.getPlugin().getMessages();
 
         String message = messages.getString(this.toString());
@@ -185,11 +182,7 @@ public enum Messages {
             return " ";
         }
 
-        for(int i = 0; i < args.length; i++){
-            message = message.replace("{" + i + "}", args[i]);
-        }
-
-        return message;
+        return PlaceholdersUtils.replace(message, args);
     }
 
     public String getMessage() {
@@ -206,7 +199,6 @@ public enum Messages {
 
     public List<String> getListMessage(Map<Placeholders, String> args){
         final YamlConfiguration messages = StelyTeamPlugin.getPlugin().getMessages();
-        List<String> listMessages = new ArrayList<>();
 
         List<String> msgs = messages.getStringList(this.toString());
         if (msgs == null){
@@ -214,19 +206,11 @@ public enum Messages {
             return Collections.emptyList();
         }
 
-        for(String message : msgs){
-            for(Placeholders placeholder : args.keySet()){
-                message = message.replace("{" + placeholder.toString() + "}", args.get(placeholder));
-            }
-            listMessages.add(message);
-        }
-
-        return listMessages;
+        return PlaceholdersUtils.replaceList(msgs, args);
     }
 
     public List<String> getListMessage(String... args){
         final YamlConfiguration messages = StelyTeamPlugin.getPlugin().getMessages();
-        List<String> listMessages = new ArrayList<>();
 
         List<String> msgs = messages.getStringList(this.toString());
         if (msgs == null){
@@ -234,13 +218,6 @@ public enum Messages {
             return Collections.emptyList();
         }
 
-        for(String message : msgs){
-            for(int i = 0; i < args.length; i++){
-                message = message.replace("{" + i + "}", args[i]);
-            }
-            listMessages.add(message);
-        }
-
-        return listMessages;
+        return PlaceholdersUtils.replaceList(msgs, args);
     }
 }
