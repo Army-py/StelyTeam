@@ -2,15 +2,20 @@ package fr.army.stelyteam.config.message;
 
 public enum Placeholders {
 
+    PLAYER_NAME,
+    PLAYER_DISPLAY_NAME,
     TEAM_NAME,
     TEAM_PREFIX,
     TEAM_DESCRIPTION,
-    PLAYER_NAME,
-    PLAYER_DISPLAY_NAME,
-    TEAM_OWNER,
+    TEAM_OWNER_NAME,
+    TEAM_OWNER_DISPLAY_NAME,
     TEAM_UNLOCKED_BANK,
     TEAM_MEMBER_COUNT,
     TEAM_MEMBERS,
     TEAM_CREATION_DATE,
+
+    MEMBER_RANK,
+
+    CONFIG_MAX_MEMBERS_COUNT,
     ;
 }

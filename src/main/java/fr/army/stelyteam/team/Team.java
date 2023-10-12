@@ -28,7 +28,7 @@ public class Team {
     private Integer teamStorageLvl = 0;
     private boolean unlockedTeamBank = false;
     private boolean unlockedTeamClaim = false;
-    private String teamOwnerName;
+    private Member teamOwner;
     private Collection<Member> teamMembers = new ArrayList<>();
     private Set<Permission> teamPermissions = new HashSet<>();
     private Collection<Alliance> teamAlliances = new ArrayList<>();
@@ -48,7 +48,7 @@ public class Team {
         this.teamStorageLvl = teamStorageLvl;
         this.unlockedTeamBank = unlockedTeamBank;
         this.unlockedTeamClaim = unlockedTeamClaim;
-        this.teamOwnerName = teamOwnerName;
+        this.teamOwner = plugin.getDatabaseManager().getTeamMember(teamUuid, teamOwnerName);
 
         this.teamMembers = plugin.getDatabaseManager().getTeamMembers(teamUuid);
         this.teamPermissions = plugin.getDatabaseManager().getTeamAssignement(teamUuid);
@@ -60,7 +60,7 @@ public class Team {
     public Team(String teamName, String teamOwnerName){
         this.teamUuid = UUID.randomUUID();
         this.teamName = teamName;
-        this.teamOwnerName = teamOwnerName;
+        this.teamOwner = null; // TODO: revoir
     }
 
 
@@ -447,7 +447,7 @@ public class Team {
         return unlockedTeamClaim;
     }
 
-    public String getTeamOwnerName() {
+    public Member getTeamOwner() {
         return teamOwnerName;
     }
 

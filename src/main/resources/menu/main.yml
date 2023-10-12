@@ -15,6 +15,7 @@ pattern:
 # Available button types
 # Any other type of button will be considered EMPTY
 # - BACK
+# - TEAM_DETAILS
 # - TEAM_MEMBERS
 # - TEAM_ALLIANCE
 # - TEAM_BANK_ADD_MONEY
@@ -31,30 +32,31 @@ items:
     is-glowing: false
     lore: []
   "%":
-    button-type: EMPTY
+    button-type: TEAM_DETAILS
     material: BOOK
     name: "§5§nInformations"
     skull-texture: ""
     amount: 1
     is-glowing: false
     lore:
-      - "§aChef de la team : §e{0}"
-      - "§aNom : §e{1}"
-      - "§aPréfixe : §r{2}"
-      - "§aDescription : §e{3}"
-      - "§aNombre de membre : §e{4} sur {7}"
-      - "§aDate de la création : §e{5}"
+      - "§aChef de la team : §e{TEAM_OWNER_NAME}"
+      - "§aNom : §e{TEAM_NAME}"
+      - "§aPréfixe : §r{TEAM_PREFIX}"
+      - "§aDescription : §e{TEAM_DESCRIPTION}"
+      - "§aNombre de membre : §e{TEAM_MEMBERS_COUNT} sur {CONFIG_MAX_MEMBERS_COUNT}"
+      - "§aDate de la création : §e{TEAM_CREATION_DATE}"
       - ""
-      - "§aTon grade : §r{6}"
+      - "§aTon grade : §r{MEMBER_RANK}"
     # Available placeholders :
-    #   {0} : Team owner
-    #   {1} : Team name
-    #   {2} : Team prefix
-    #   {3} : Team description
-    #   {4} : Team members count
-    #   {5} : Team creation date
-    #   {6} : Your team rank
-    #   {7} : Maximum members count
+    #   {TEAM_OWNER_NAME} : Team owner name
+    #   {TEAM_OWNER_DISPLAY_NAME} : Team owner display name
+    #   {TEAM_NAME} : Team name
+    #   {TEAM_PREFIX} : Team prefix
+    #   {TEAM_DESCRIPTION} : Team description
+    #   {TEAM_MEMBERS_COUNT} : Team members count
+    #   {TEAM_CREATION_DATE} : Team creation date
+    #   {MEMBER_RANK} : Your team rank
+    #   {CONFIG_MAX_MEMBERS_COUNT} : Maximum members count
   "/":
     button-type: TEAM_MEMBERS
     material: TOTEM_OF_UNDYING

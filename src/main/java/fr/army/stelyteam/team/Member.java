@@ -6,29 +6,32 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.config.Config;
 
 public class Member {
 
     private String memberName;
-    private int teamRank;
+    private Rank rank;
     private String joinDate;
     private UUID uuid;
 
-    public Member(String memberName, int teamRank, String joinDate, UUID uuid){
+    public Member(String memberName, Rank rank, String joinDate, UUID uuid){
         this.memberName = memberName;
-        this.teamRank = teamRank;
+        this.rank = rank;
         this.joinDate = joinDate;
         this.uuid = uuid;
     }
 
 
     public void promoteMember(){
-        this.teamRank--;
+        // this.teamRank--; //TODO : revoir
+        this.rank = Config.ranks.get(Config.ranks.indexOf(this.rank) - 1);
         StelyTeamPlugin.getPlugin().getDatabaseManager().promoteMember(memberName);
     }
 
     public void demoteMember(){
-        this.teamRank++;
+        // this.teamRank++; // TODO: revoir
+        this.rank = Config.ranks.get(Config.ranks.indexOf(this.rank) + 1);
         StelyTeamPlugin.getPlugin().getDatabaseManager().demoteMember(memberName);
     }
 
@@ -41,8 +44,8 @@ public class Member {
         return memberName;
     }
 
-    public int getTeamRank() {
-        return teamRank;
+    public Rank getTeamRank() {
+        return rank;
     }
 
     public String getJoinDate() {
@@ -57,8 +60,8 @@ public class Member {
         this.memberName = memberName;
     }
 
-    public void setTeamRank(int teamRank) {
-        this.teamRank = teamRank;
+    public void setRank(Rank rank) {
+        this.rank = rank;
     }
 
     public void setJoinDate(String joinDate) {

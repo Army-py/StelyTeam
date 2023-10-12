@@ -31,6 +31,11 @@ public enum Buttons {
     // BUTTON_OPEN_TEAM_ALLIANCES("seeTeamAlliances"),
     // BUTTON_OPEN_STORAGE_DIRECTORY("storageDirectory"),
 
+    /* BLANK BUTTON (no action) */
+    BUTTON_TEAM_DETAILS,
+    // BUTTON_TEAM_BANK("seeTeamBank"),
+    // BUTTON_EMPTY_CASE("emptyCase"),
+
     /* BACK MENU */
     // BUTTON_CLOSE_ADMIN_MENU("close"),
     // BUTTON_CLOSE_MANAGE_MENU("close"),
@@ -61,11 +66,6 @@ public enum Buttons {
     // BUTTON_EDIT_TEAM_NAME("editName"),
     // BUTTON_EDIT_TEAM_PREFIX("editPrefix"),
     // BUTTON_EDIT_TEAM_DESCRIPTION("editDescription"),
-    
-    /* BLANK BUTTON (no action) */
-    // BUTTON_TEAM_INFOS("teamInfos"),
-    // BUTTON_TEAM_BANK("seeTeamBank"),
-    // BUTTON_EMPTY_CASE("emptyCase"),
 
     /* ADD / WITHDRAW MONEY */
     // BUTTON_ADD_MONEY_TEAM_BANK("addTeamMoney"),

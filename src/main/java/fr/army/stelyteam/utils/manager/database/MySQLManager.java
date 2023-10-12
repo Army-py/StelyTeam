@@ -939,6 +939,30 @@ public class MySQLManager extends DatabaseManager {
     }
 
     @Override
+    public Member getTeamMember(UUID teamUuid, String playerName) {
+        if(isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT p.playerName, p.teamRank, p.joinDate FROM player AS p INNER JOIN team AS t ON p.teamId = t.teamId WHERE t.teamUuid = ? AND p.playerName = ?");
+                query.setString(1, teamUuid.toString());
+                query.setString(2, playerName);
+                ResultSet result = query.executeQuery();
+                if(result.next()){
+                    return new Member(
+                        result.getString("playerName"),
+                        result.getInt("teamRank"),
+                        result.getString("joinDate"),
+                        getUUID(result.getString("playerName"))
+                    );
+                }
+                query.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    @Override
     public List<Member> getTeamMembers(UUID teamUuid){
         // List<Member> teamMembers = Collections.synchronizedList(new ArrayList<>());
         List<Member> teamMembers = new ArrayList<>();

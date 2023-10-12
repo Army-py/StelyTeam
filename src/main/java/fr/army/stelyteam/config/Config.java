@@ -1,6 +1,7 @@
 package fr.army.stelyteam.config;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import org.bukkit.Material;
@@ -48,7 +49,7 @@ public class Config {
     public static double priceUnlockTeamClaim;
     public static double[] pricesUpgradeMembersLimit;
     public static double[] pricesUpgradeStorageLimit;
-    public static Rank[] ranks;
+    public static List<Rank> ranks;
     public static ItemStack noPermissionItem;
 
 
@@ -99,11 +100,19 @@ public class Config {
     }
 
 
-    private Rank[] buildRanks(){
+    private List<Rank> buildRanks(){
+        List<Integer> inversedPriorities = new ArrayList<>();
         List<Rank> ranks = new ArrayList<>();
         for (String rank : config.getConfigurationSection("ranks").getKeys(false)){
             final ConfigurationSection rankDetails = config.getConfigurationSection("ranks." + rank);
             final int inversedPriority = rankDetails.getInt("inversed-priority");
+
+            if (inversedPriorities.contains(inversedPriority)){
+                StelyTeamPlugin.getPlugin().getLogger().severe("The inversed priority " + inversedPriority + " is already used for another rank !");
+                continue;
+            }
+            inversedPriorities.add(inversedPriority);
+
             final String rankName = rankDetails.getString("rank-name");
 
 
@@ -130,7 +139,8 @@ public class Config {
             ranks.add(new Rank(inversedPriority, rankName, item));
         }
 
-        return ranks.toArray(new Rank[0]);
+        ranks.sort(new SortRanks());
+        return ranks;
     }
 
     private ItemStack buildNoPermissionItem(){
@@ -155,5 +165,14 @@ public class Config {
             .setGlow(isGlow)
             .setLore(lore)
             .buildItem();
+    }
+
+
+    private class SortRanks implements Comparator<Rank>{
+
+        @Override
+        public int compare(Rank o1, Rank o2) {
+            return o1.getInversedPriority() - o2.getInversedPriority();
+        }
     }
 }

@@ -136,6 +136,8 @@ public abstract class DatabaseManager {
 
     public abstract Set<Team> getTeams();
 
+    public abstract Member getTeamMember(UUID teamUuid, String playerName);
+
     public abstract List<Member> getTeamMembers(UUID teamUuid);
 
     public abstract Set<Permission> getTeamAssignement(UUID teamUuid);

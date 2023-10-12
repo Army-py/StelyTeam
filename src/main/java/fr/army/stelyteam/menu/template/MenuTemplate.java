@@ -8,7 +8,6 @@ import org.jetbrains.annotations.Nullable;
 
 import fr.army.stelyteam.menu.TeamMenu;
 import fr.army.stelyteam.menu.button.Button;
-import fr.army.stelyteam.menu.button.impl.BlankButton;
 import fr.army.stelyteam.menu.button.template.ButtonTemplate;
 import fr.army.stelyteam.menu.view.AbstractMenuView;
 
@@ -46,11 +45,10 @@ public class MenuTemplate<T extends AbstractMenuView<T>> {
     }
 
     public void mapButton(int slot, Button<T> button) {
-        if (!(button instanceof BlankButton))
+        if (button.getButtonTemplate().getButtonItem() != null)
             this.buttons[slot] = button;
-        else{
+        else
             this.buttons[slot] = button.setButtonItem(this.buttons[slot].getButtonTemplate().getButtonItem());
-        }
     }
 
     public void mapButtons(int[] slots, Button<T> button) {
@@ -59,7 +57,7 @@ public class MenuTemplate<T extends AbstractMenuView<T>> {
         }
     }
 
-    public int[] getSlots(char itemSection) {
+    public int[] getSlots(char itemSection){
         List<Integer> slots = new ArrayList<>();
 
         for (int i = 0; i < buttons.length; i++) {
@@ -69,6 +67,16 @@ public class MenuTemplate<T extends AbstractMenuView<T>> {
         }
 
         return slots.stream().mapToInt(i -> i).toArray();
+    }
+
+    public int getSlot(char itemSection){
+        for (int i = 0; i < buttons.length; i++) {
+            final ButtonTemplate buttonTemplate = buttons[i].getButtonTemplate();
+            if (buttonTemplate.getCharacter() == itemSection)
+                return i;
+        }
+
+        return -1;
     }
 
 
