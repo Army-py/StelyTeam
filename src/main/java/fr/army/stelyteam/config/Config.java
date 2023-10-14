@@ -41,6 +41,10 @@ public class Config {
     public static double teamBankMaxMoneyLimit;
     public static int teamMaxMembersLimit;
     public static String teamDefaultDescription;
+    public static boolean confirmCreateTeam;
+    public static boolean confirmRemoveTeam;
+    public static boolean confirmAddMoney;
+    public static boolean confirmWithdrawMoney;
     public static double priceCreateTeam;
     public static double priceEditTeamName;
     public static double priceEditTeamPrefix;
@@ -87,6 +91,10 @@ public class Config {
         teamBankMaxMoneyLimit = this.config.getDouble("team-bank.max-money-limit");
         teamMaxMembersLimit = this.config.getInt("team-max-members-limit");
         teamDefaultDescription = this.config.getString("team-default-description");
+        confirmCreateTeam = this.config.getBoolean("confirmation.create-team");
+        confirmRemoveTeam = this.config.getBoolean("confirmation.remove-team");
+        confirmAddMoney = this.config.getBoolean("confirmation.add-money");
+        confirmWithdrawMoney = this.config.getBoolean("confirmation.withdraw-money");
         priceCreateTeam = this.config.getDouble("price.create-team");
         priceEditTeamName = this.config.getDouble("price.edit-team-name");
         priceEditTeamPrefix = this.config.getDouble("price.edit-team-prefix");

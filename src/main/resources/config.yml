@@ -99,6 +99,15 @@ team-max-members-limit: 10
 # Default team description
 team-default-description: "Aucune description"
 
+
+# Confirmation of important actions
+confirmation:
+  create-team: true
+  remove-team: true
+  add-money: true
+  withdraw-money: true
+
+
 # Prix des différentes actions
 prices:
   create-team: 20000.0
