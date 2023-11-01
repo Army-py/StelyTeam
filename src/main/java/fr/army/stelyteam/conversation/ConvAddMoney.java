@@ -38,8 +38,8 @@ public class ConvAddMoney extends StringPrompt {
         }
 
         economy.removeMoneyPlayer(author, money);
-        con.getForWhom().sendRawMessage(Messages.PREFIX.getMessage() + Messages.TEAM_BANK_MONEY_ADDED.getMessage());
         team.incrementTeamMoney(money);
+        con.getForWhom().sendRawMessage(Messages.PREFIX.getMessage() + Messages.TEAM_BANK_MONEY_ADDED.getMessage());
         return null;
     }
 

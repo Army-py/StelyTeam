@@ -78,18 +78,18 @@ items:
       - "§aClique pour voir les"
       - "§aalliances de la team"
   "$":
-    button-type: EMPTY
+    button-type: TEAM_BANK_DETAILS
     material: EMERALD
     name: "§5§nArgent de la team"
     skull-texture: ""
     amount: 1
     is-glowing: false
     lore:
-      - "§aCompte : §6{0}€"
-      - "§aPlafond du compte : §6{1}€"
+      - "§aCompte : §6{TEAM_MONEY}€"
+      - "§aPlafond du compte : §6{CONFIG_MAX_MONEY_LIMIT}€"
     # Available placeholders :
-    #   {0} : Team money
-    #   {1} : Team money limit
+    #   {TEAM_MONEY} : Team money
+    #   {CONFIG_MAX_MONEY_LIMIT} : Maximum money limit
   "+":
     button-type: TEAM_BANK_ADD_MONEY
     material: GOLD_NUGGET

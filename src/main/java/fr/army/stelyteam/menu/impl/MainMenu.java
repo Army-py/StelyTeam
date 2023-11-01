@@ -13,6 +13,8 @@ import fr.army.stelyteam.menu.button.Button;
 import fr.army.stelyteam.menu.button.Buttons;
 import fr.army.stelyteam.menu.button.impl.BackButton;
 import fr.army.stelyteam.menu.button.impl.BlankButton;
+import fr.army.stelyteam.menu.button.impl.TeamAlliancesButton;
+import fr.army.stelyteam.menu.button.impl.TeamMembersButton;
 import fr.army.stelyteam.menu.button.template.ButtonTemplate;
 import fr.army.stelyteam.menu.template.MenuTemplate;
 import fr.army.stelyteam.menu.view.TeamMenuView;
@@ -55,6 +57,15 @@ public class MainMenu extends TeamMenu<TeamMenuView> {
                     button = new BackButton<>(buttonTemplate);
                     break;
                 case BUTTON_TEAM_DETAILS:
+                    button = new BlankButton<>(buttonTemplate);
+                    break;
+                case BUTTON_TEAM_MEMBERS:
+                    button = new TeamMembersButton(buttonTemplate);
+                    break;
+                case BUTTON_TEAM_ALLIANCES:
+                    button = new TeamAlliancesButton(buttonTemplate);
+                    break;
+                case BUTTON_TEAM_BANK_DETAILS:
                     button = new BlankButton<>(buttonTemplate);
                     break;
             

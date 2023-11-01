@@ -49,6 +49,9 @@ public class TeamMenuView extends AbstractMenuView<TeamMenuView> {
             replaceMap.put(Placeholders.TEAM_CREATION_DATE, team.getCreationDate());
             replaceMap.put(Placeholders.MEMBER_RANK, null); // TODO: ajouter rank member (revoir cache, Member, Rank, Team)
             replaceMap.put(Placeholders.CONFIG_MAX_MEMBERS_COUNT, ((Integer) Config.teamMaxMembersLimit).toString());
+
+            replaceMap.put(Placeholders.TEAM_MONEY, ((Double) team.getTeamMoney()).toString());
+            replaceMap.put(Placeholders.CONFIG_MAX_MONEY_LIMIT, ((Double) Config.teamBankMaxMoneyLimit).toString());
             buttonItem.setLore(PlaceholdersUtils.replaceList(lore, replaceMap));
 
             inventory.setItem(slot, itemStack);

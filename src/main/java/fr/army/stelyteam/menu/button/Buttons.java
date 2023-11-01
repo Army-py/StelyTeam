@@ -21,8 +21,8 @@ public enum Buttons {
     BUTTON_CONFIRM_CREATE_TEAM,
 
     /* OPEN MENU */
-    // BUTTON_OPEN_MANAGE_MENU("manage"),
-    // BUTTON_OPEN_TEAM_LIST_MENU("teamList"),
+    BUTTON_TEAM_MEMBERS,
+    BUTTON_TEAM_ALLIANCES,
     // BUTTON_OPEN_MEMBER_MENU("member"),
     // BUTTON_OPEN_EDIT_MEMBERS_MENU("editMembers"),
     // BUTTON_OPEN_EDIT_ALLIANCES_MENU("editAlliances"),
@@ -33,6 +33,7 @@ public enum Buttons {
 
     /* BLANK BUTTON (no action) */
     BUTTON_TEAM_DETAILS,
+    BUTTON_TEAM_BANK_DETAILS,
     // BUTTON_TEAM_BANK("seeTeamBank"),
     // BUTTON_EMPTY_CASE("emptyCase"),
 

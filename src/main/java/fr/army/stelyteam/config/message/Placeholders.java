@@ -13,9 +13,11 @@ public enum Placeholders {
     TEAM_MEMBER_COUNT,
     TEAM_MEMBERS,
     TEAM_CREATION_DATE,
+    TEAM_MONEY,
 
     MEMBER_RANK,
 
     CONFIG_MAX_MEMBERS_COUNT,
+    CONFIG_MAX_MONEY_LIMIT,
     ;
 }
