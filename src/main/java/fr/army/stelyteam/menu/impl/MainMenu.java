@@ -74,6 +74,9 @@ public class MainMenu extends TeamMenu<TeamMenuView> {
                 case BUTTON_TEAM_STORAGES_MENU:
                     button = new TeamStoragesButton(buttonTemplate);
                     break;
+                case BUTTON_TEAM_LEAVE:
+                    button = new TeamLeaveButton(buttonTemplate);
+                    break;
             
                 default: 
                     button = new BlankButton<>(buttonTemplate);

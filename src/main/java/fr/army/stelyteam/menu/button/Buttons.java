@@ -10,7 +10,7 @@ import org.bukkit.persistence.PersistentDataType;
 import fr.army.stelyteam.StelyTeamPlugin;
 
 public enum Buttons {
-    
+
     /* CREATE / REMOVE TEAM */
     BUTTON_CREATE_TEAM,
     BUTTON_REMOVE_TEAM,
@@ -62,7 +62,7 @@ public enum Buttons {
     // BUTTON_BUY_TEAM_CLAIM("buyTeamClaim"),
     // BUTTON_UPGRADE_LVL_MEMBERS_MENU("upgradeTotalMembers"),
     // BUTTON_UPGRADE_LVL_STORAGE_MENU("upgradeStorageAmount"),
-    
+
     /* EDIT ATTRIBUTES */
     // BUTTON_EDIT_TEAM_NAME("editName"),
     // BUTTON_EDIT_TEAM_PREFIX("editPrefix"),
@@ -71,9 +71,9 @@ public enum Buttons {
     /* ADD / WITHDRAW MONEY */
      BUTTON_TEAM_BANK_ADD_MONEY,
      BUTTON_TEAM_BANK_WITHDRAW_MONEY,
-    
+
     /* ADD / REMOVE MEMBER */
-    // BUTTON_LEAVE_TEAM("leaveTeam"),
+     BUTTON_TEAM_LEAVE,
     // BUTTON_ADD_MEMBER("addMember"),
     // BUTTON_REMOVE_MEMBER("removeMember"),
 
@@ -83,7 +83,7 @@ public enum Buttons {
     /* ADD / REMOVE ALLIANCE */
     // BUTTON_ADD_ALLIANCE("addAlliance"),
     // BUTTON_REMOVE_ALLIANCE("removeAlliance"),
-    
+
     /* PERMISSIONS */
     // BUTTON_PERMISSION_ADD_TEAM_MONEY("addTeamMoney"),
     // BUTTON_PERMISSION_WITHDRAW_TEAM_MONEY("withdrawTeamMoney"),
@@ -113,7 +113,7 @@ public enum Buttons {
     ;
 
     // private final String name;
-    
+
     // Buttons(String name){
     //     this.name = name;
     // }
@@ -151,9 +151,9 @@ public enum Buttons {
         ItemMeta meta = itemStack.getItemMeta();
         PersistentDataContainer container = meta.getPersistentDataContainer();
 
-        if(container.has(key , PersistentDataType.INTEGER) 
+        if(container.has(key , PersistentDataType.INTEGER)
             && container.get(key, PersistentDataType.INTEGER).equals(1)) return true;
-        
+
         return false;
     }
 
