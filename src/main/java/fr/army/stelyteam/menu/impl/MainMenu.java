@@ -71,6 +71,9 @@ public class MainMenu extends TeamMenu<TeamMenuView> {
                 case BUTTON_TEAM_BANK_WITHDRAW_MONEY:
                     button = new WithdrawMoneyButton(buttonTemplate);
                     break;
+                case BUTTON_TEAM_STORAGES_MENU:
+                    button = new TeamStoragesButton(buttonTemplate);
+                    break;
             
                 default: 
                     button = new BlankButton<>(buttonTemplate);
