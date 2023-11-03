@@ -16,8 +16,8 @@ pattern:
 # Any other type of button will be considered EMPTY
 # - BACK
 # - TEAM_DETAILS
-# - TEAM_MEMBERS
-# - TEAM_ALLIANCE
+# - TEAM_MEMBERS_MENU
+# - TEAM_ALLIANCES_MENU
 # - TEAM_BANK_ADD_MONEY
 # - TEAM_BANK_WITHDRAW_MONEY
 # - TEAM_STORAGES
@@ -58,7 +58,7 @@ items:
     #   {MEMBER_RANK} : Your team rank
     #   {CONFIG_MAX_MEMBERS_COUNT} : Maximum members count
   "/":
-    button-type: TEAM_MEMBERS
+    button-type: TEAM_MEMBERS_MENU
     material: TOTEM_OF_UNDYING
     name: "§5§nMembres"
     skull-texture: ""
@@ -68,7 +68,7 @@ items:
       - "§aClique pour voir les"
       - "§amembres de la team"
   ":":
-    button-type: TEAM_ALLIANCE
+    button-type: TEAM_ALLIANCES_MENU
     material: FEATHER
     name: "§5§nAlliances"
     skull-texture: ""

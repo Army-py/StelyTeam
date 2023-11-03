@@ -21,15 +21,15 @@ public enum Buttons {
     BUTTON_CONFIRM_CREATE_TEAM,
 
     /* OPEN MENU */
-    BUTTON_TEAM_MEMBERS,
-    BUTTON_TEAM_ALLIANCES,
+    BUTTON_TEAM_MEMBERS_MENU,
+    BUTTON_TEAM_ALLIANCES_MENU,
+    BUTTON_TEAM_STORAGES_MENU,
     // BUTTON_OPEN_MEMBER_MENU("member"),
     // BUTTON_OPEN_EDIT_MEMBERS_MENU("editMembers"),
     // BUTTON_OPEN_EDIT_ALLIANCES_MENU("editAlliances"),
     // BUTTON_OPEN_EDIT_TEAM_PERMISSIONS_MENU("editPermissions"),
     // BUTTON_OPEN_TEAM_MEMBERS("seeTeamMembers"),
-    // BUTTON_OPEN_TEAM_ALLIANCES("seeTeamAlliances"),
-    // BUTTON_OPEN_STORAGE_DIRECTORY("storageDirectory"),
+    // BUTTON_OPEN_TEAM_ALLIANCES("seeTeamAlliances"),// BUTTON_OPEN_STORAGE_DIRECTORY("storageDirectory"),
 
     /* BLANK BUTTON (no action) */
     BUTTON_TEAM_DETAILS,

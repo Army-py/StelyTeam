@@ -56,10 +56,10 @@ public class MainMenu extends TeamMenu<TeamMenuView> {
                 case BUTTON_TEAM_DETAILS:
                     button = new BlankButton<>(buttonTemplate);
                     break;
-                case BUTTON_TEAM_MEMBERS:
+                case BUTTON_TEAM_MEMBERS_MENU:
                     button = new TeamMembersButton(buttonTemplate);
                     break;
-                case BUTTON_TEAM_ALLIANCES:
+                case BUTTON_TEAM_ALLIANCES_MENU:
                     button = new TeamAlliancesButton(buttonTemplate);
                     break;
                 case BUTTON_TEAM_BANK_DETAILS:
