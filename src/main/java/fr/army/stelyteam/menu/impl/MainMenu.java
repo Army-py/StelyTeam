@@ -2,6 +2,7 @@ package fr.army.stelyteam.menu.impl;
 
 import java.util.Optional;
 
+import fr.army.stelyteam.menu.button.impl.*;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -11,10 +12,6 @@ import org.jetbrains.annotations.NotNull;
 import fr.army.stelyteam.menu.TeamMenu;
 import fr.army.stelyteam.menu.button.Button;
 import fr.army.stelyteam.menu.button.Buttons;
-import fr.army.stelyteam.menu.button.impl.BackButton;
-import fr.army.stelyteam.menu.button.impl.BlankButton;
-import fr.army.stelyteam.menu.button.impl.TeamAlliancesButton;
-import fr.army.stelyteam.menu.button.impl.TeamMembersButton;
 import fr.army.stelyteam.menu.button.template.ButtonTemplate;
 import fr.army.stelyteam.menu.template.MenuTemplate;
 import fr.army.stelyteam.menu.view.TeamMenuView;
@@ -67,6 +64,12 @@ public class MainMenu extends TeamMenu<TeamMenuView> {
                     break;
                 case BUTTON_TEAM_BANK_DETAILS:
                     button = new BlankButton<>(buttonTemplate);
+                    break;
+                case BUTTON_TEAM_BANK_ADD_MONEY:
+                    button = new AddMoneyButton(buttonTemplate);
+                    break;
+                case BUTTON_TEAM_BANK_WITHDRAW_MONEY:
+                    button = new WithdrawMoneyButton(buttonTemplate);
                     break;
             
                 default: 

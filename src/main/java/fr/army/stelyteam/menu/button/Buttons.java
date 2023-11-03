@@ -69,8 +69,8 @@ public enum Buttons {
     // BUTTON_EDIT_TEAM_DESCRIPTION("editDescription"),
 
     /* ADD / WITHDRAW MONEY */
-    // BUTTON_ADD_MONEY_TEAM_BANK("addTeamMoney"),
-    // BUTTON_WITHDRAW_MONEY_TEAM_BANK("withdrawTeamMoney"),
+     BUTTON_TEAM_BANK_ADD_MONEY,
+     BUTTON_TEAM_BANK_WITHDRAW_MONEY,
     
     /* ADD / REMOVE MEMBER */
     // BUTTON_LEAVE_TEAM("leaveTeam"),
