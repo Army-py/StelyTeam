@@ -20,7 +20,7 @@ pattern:
 # - TEAM_ALLIANCES_MENU
 # - TEAM_BANK_ADD_MONEY
 # - TEAM_BANK_WITHDRAW_MONEY
-# - TEAM_STORAGES
+# - TEAM_STORAGES_MENU
 # - TEAM_LEAVE
 items:
   ".":
@@ -111,7 +111,7 @@ items:
       - "§aRetirer de l'argent dans"
       - "§ale compte de la team"
   "!":
-    button-type: TEAM_STORAGES
+    button-type: TEAM_STORAGES_MENU
     material: CHEST
     name: "§5§nStockage"
     skull-texture: ""
