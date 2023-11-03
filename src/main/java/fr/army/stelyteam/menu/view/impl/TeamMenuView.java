@@ -1,9 +1,10 @@
-package fr.army.stelyteam.menu.view;
+package fr.army.stelyteam.menu.view.impl;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import fr.army.stelyteam.menu.view.AbstractMenuView;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;

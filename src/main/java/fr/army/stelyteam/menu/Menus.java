@@ -2,7 +2,7 @@ package fr.army.stelyteam.menu;
 
 import fr.army.stelyteam.menu.impl.ConfirmCreateTeamMenu;
 import fr.army.stelyteam.menu.impl.CreateTeamMenu;
-import fr.army.stelyteam.menu.view.MenuView;
+import fr.army.stelyteam.menu.view.impl.MenuView;
 
 public class Menus {
     

@@ -17,7 +17,7 @@ import fr.army.stelyteam.menu.button.impl.CancelButton;
 import fr.army.stelyteam.menu.button.impl.ConfirmCreateTeamButton;
 import fr.army.stelyteam.menu.button.template.ButtonTemplate;
 import fr.army.stelyteam.menu.template.MenuTemplate;
-import fr.army.stelyteam.menu.view.MenuView;
+import fr.army.stelyteam.menu.view.impl.MenuView;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.builder.menu.MenuBuilder;
 import fr.army.stelyteam.utils.builder.menu.MenuBuilderResult;

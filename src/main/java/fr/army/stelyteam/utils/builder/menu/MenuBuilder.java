@@ -7,11 +7,10 @@ import fr.army.stelyteam.menu.button.impl.BlankButton;
 import fr.army.stelyteam.menu.button.template.ButtonTemplate;
 import fr.army.stelyteam.menu.template.MenuTemplate;
 import fr.army.stelyteam.menu.view.AbstractMenuView;
-import fr.army.stelyteam.menu.view.TeamMenuView;
 import fr.army.stelyteam.utils.loader.exception.UnableLoadConfigException;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,7 +36,7 @@ public class MenuBuilder {
     }
 
 
-    private <T extends AbstractMenuView<T>> MenuBuilderResult<T> buildMenu(YamlConfiguration config) {
+    private <T extends AbstractMenuView<T>> @NotNull MenuBuilderResult<T> buildMenu(@NotNull YamlConfiguration config) {
         final String title = config.getString("title");
         final boolean precede = config.getBoolean("previous");
         final String[] pattern = config.getStringList("pattern").toArray(String[]::new);

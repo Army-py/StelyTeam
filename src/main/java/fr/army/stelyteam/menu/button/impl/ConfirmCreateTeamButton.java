@@ -7,7 +7,7 @@ import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.conversation.ConvGetTeamName;
 import fr.army.stelyteam.menu.button.Button;
 import fr.army.stelyteam.menu.button.template.ButtonTemplate;
-import fr.army.stelyteam.menu.view.MenuView;
+import fr.army.stelyteam.menu.view.impl.MenuView;
 import fr.army.stelyteam.utils.builder.conversation.ConversationBuilder;
 
 public class ConfirmCreateTeamButton extends Button<MenuView> {

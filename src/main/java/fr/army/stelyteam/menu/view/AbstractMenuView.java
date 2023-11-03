@@ -2,6 +2,7 @@ package fr.army.stelyteam.menu.view;
 
 import java.util.Optional;
 
+import fr.army.stelyteam.menu.view.impl.TeamMenuView;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;

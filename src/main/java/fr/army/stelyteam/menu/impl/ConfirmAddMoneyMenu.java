@@ -7,7 +7,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.jetbrains.annotations.NotNull;
 
 import fr.army.stelyteam.menu.TeamMenu;
-import fr.army.stelyteam.menu.view.TeamMenuView;
+import fr.army.stelyteam.menu.view.impl.TeamMenuView;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.builder.menu.MenuBuilderResult;
 

@@ -7,7 +7,7 @@ import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.config.message.Messages;
 import fr.army.stelyteam.menu.button.Button;
 import fr.army.stelyteam.menu.button.template.ButtonTemplate;
-import fr.army.stelyteam.menu.view.TeamMenuView;
+import fr.army.stelyteam.menu.view.impl.TeamMenuView;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.manager.EconomyManager;
 

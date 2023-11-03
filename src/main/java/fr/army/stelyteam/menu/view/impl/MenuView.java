@@ -1,5 +1,6 @@
-package fr.army.stelyteam.menu.view;
+package fr.army.stelyteam.menu.view.impl;
 
+import fr.army.stelyteam.menu.view.AbstractMenuView;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -9,7 +10,7 @@ import fr.army.stelyteam.menu.TeamMenu;
 import fr.army.stelyteam.menu.button.Button;
 import fr.army.stelyteam.menu.template.MenuTemplate;
 
-public class MenuView extends AbstractMenuView<MenuView>{
+public class MenuView extends AbstractMenuView<MenuView> {
 
     public MenuView(Player player, TeamMenu<MenuView> menu) {
         super(player, menu);
