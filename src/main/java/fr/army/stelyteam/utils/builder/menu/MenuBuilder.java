@@ -1,12 +1,5 @@
 package fr.army.stelyteam.utils.builder.menu;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import org.bukkit.Material;
-import org.bukkit.configuration.file.YamlConfiguration;
-
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.menu.button.Button;
 import fr.army.stelyteam.menu.button.ButtonItem;
@@ -14,7 +7,15 @@ import fr.army.stelyteam.menu.button.impl.BlankButton;
 import fr.army.stelyteam.menu.button.template.ButtonTemplate;
 import fr.army.stelyteam.menu.template.MenuTemplate;
 import fr.army.stelyteam.menu.view.AbstractMenuView;
+import fr.army.stelyteam.menu.view.TeamMenuView;
 import fr.army.stelyteam.utils.loader.exception.UnableLoadConfigException;
+import org.bukkit.Material;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class MenuBuilder {
     
