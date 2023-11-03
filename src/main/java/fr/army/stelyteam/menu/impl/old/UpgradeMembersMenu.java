@@ -1,7 +1,8 @@
-package fr.army.stelyteam.menu.impl;
+package fr.army.stelyteam.menu.impl.old;
 
 import java.util.List;
 
+import fr.army.stelyteam.menu.impl.old.ConfirmMenu;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
