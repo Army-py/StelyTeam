@@ -2,6 +2,7 @@ package fr.army.stelyteam.menu.button.impl;
 
 import java.util.Optional;
 
+import fr.army.stelyteam.menu.view.AbstractMenuView;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
@@ -14,6 +15,7 @@ import fr.army.stelyteam.menu.button.Button;
 import fr.army.stelyteam.menu.button.template.ButtonTemplate;
 import fr.army.stelyteam.menu.view.impl.MenuView;
 import fr.army.stelyteam.utils.builder.conversation.ConversationBuilder;
+import org.jetbrains.annotations.NotNull;
 
 public class CreateTeamButton extends Button<MenuView> {
 
@@ -39,5 +41,10 @@ public class CreateTeamButton extends Button<MenuView> {
         }else{
             player.sendMessage(Messages.PREFIX.getMessage() + Messages.NOT_ENOUGH_MONEY.getMessage());
         }
+    }
+
+    @Override
+    public @NotNull Button<MenuView> get(@NotNull ButtonTemplate buttonTemplate) {
+        return new CreateTeamButton(buttonTemplate);
     }
 }

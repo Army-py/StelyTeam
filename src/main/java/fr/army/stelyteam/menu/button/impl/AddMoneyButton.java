@@ -1,5 +1,6 @@
 package fr.army.stelyteam.menu.button.impl;
 
+import fr.army.stelyteam.menu.view.AbstractMenuView;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
@@ -9,6 +10,7 @@ import fr.army.stelyteam.menu.button.Button;
 import fr.army.stelyteam.menu.button.template.ButtonTemplate;
 import fr.army.stelyteam.menu.view.impl.TeamMenuView;
 import fr.army.stelyteam.utils.builder.conversation.ConversationBuilder;
+import org.jetbrains.annotations.NotNull;
 
 public class AddMoneyButton extends Button<TeamMenuView> {
 
@@ -26,5 +28,9 @@ public class AddMoneyButton extends Button<TeamMenuView> {
         player.closeInventory();
         conv.getNameInput(player, new ConvAddMoney(plugin));
     }
-    
+
+    @Override
+    public @NotNull Button<TeamMenuView> get(@NotNull ButtonTemplate buttonTemplate) {
+        return new AddMoneyButton(buttonTemplate);
+    }
 }

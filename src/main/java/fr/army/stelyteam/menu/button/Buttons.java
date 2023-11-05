@@ -1,5 +1,8 @@
 package fr.army.stelyteam.menu.button;
 
+import fr.army.stelyteam.menu.button.impl.*;
+import fr.army.stelyteam.menu.button.template.ButtonTemplate;
+import fr.army.stelyteam.menu.view.AbstractMenuView;
 import org.bukkit.NamespacedKey;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -8,22 +11,25 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.function.Function;
 
 public enum Buttons {
 
     /* CREATE / REMOVE TEAM */
-    BUTTON_CREATE_TEAM,
-    BUTTON_REMOVE_TEAM,
+    BUTTON_CREATE_TEAM(CreateTeamButton::new),
+    BUTTON_REMOVE_TEAM(RemoveTeamButton::new),
 
     /* CONFIRM */
-    BUTTON_CONFIRM,
-    BUTTON_CANCEL,
-    BUTTON_CONFIRM_CREATE_TEAM,
+    BUTTON_CANCEL(CancelButton::new),
+    BUTTON_CONFIRM_CREATE_TEAM(ConfirmCreateTeamButton::new),
 
     /* OPEN MENU */
-    BUTTON_TEAM_MEMBERS_MENU,
-    BUTTON_TEAM_ALLIANCES_MENU,
-    BUTTON_TEAM_STORAGES_MENU,
+    BUTTON_TEAM_MEMBERS_MENU(TeamMembersButton::new),
+    BUTTON_TEAM_ALLIANCES_MENU(TeamAlliancesButton::new),
+    BUTTON_TEAM_STORAGES_MENU(TeamStoragesButton::new),
     // BUTTON_OPEN_MEMBER_MENU("member"),
     // BUTTON_OPEN_EDIT_MEMBERS_MENU("editMembers"),
     // BUTTON_OPEN_EDIT_ALLIANCES_MENU("editAlliances"),
@@ -32,8 +38,8 @@ public enum Buttons {
     // BUTTON_OPEN_TEAM_ALLIANCES("seeTeamAlliances"),// BUTTON_OPEN_STORAGE_DIRECTORY("storageDirectory"),
 
     /* BLANK BUTTON (no action) */
-    BUTTON_TEAM_DETAILS,
-    BUTTON_TEAM_BANK_DETAILS,
+    BUTTON_TEAM_DETAILS(BlankButton::new),
+    BUTTON_TEAM_BANK_DETAILS(BlankButton::new),
     // BUTTON_TEAM_BANK("seeTeamBank"),
     // BUTTON_EMPTY_CASE("emptyCase"),
 
@@ -51,7 +57,7 @@ public enum Buttons {
     // BUTTON_CLOSE_STORAGE_MENU("close"),
     // BUTTON_CLOSE_STORAGE_DIRECTORY_MENU("close"),
     // BUTTON_CLOSE_TEAM_LIST_MENU("close"),
-    BUTTON_BACK,
+    BUTTON_BACK(BackButton::new),
 
     /* CREATE / REMOVE HOME */
     // BUTTON_SET_TEAM_HOME("setTeamHome"),
@@ -69,11 +75,12 @@ public enum Buttons {
     // BUTTON_EDIT_TEAM_DESCRIPTION("editDescription"),
 
     /* ADD / WITHDRAW MONEY */
-     BUTTON_TEAM_BANK_ADD_MONEY,
-     BUTTON_TEAM_BANK_WITHDRAW_MONEY,
+    BUTTON_TEAM_BANK_ADD_MONEY(AddMoneyButton::new),
+
+    BUTTON_TEAM_BANK_WITHDRAW_MONEY(WithdrawMoneyButton::new),
 
     /* ADD / REMOVE MEMBER */
-     BUTTON_TEAM_LEAVE,
+    BUTTON_TEAM_LEAVE(TeamLeaveButton::new),
     // BUTTON_ADD_MEMBER("addMember"),
     // BUTTON_REMOVE_MEMBER("removeMember"),
 
@@ -110,55 +117,45 @@ public enum Buttons {
     // BUTTON_NEXT_STORAGE("next"),
     // BUTTON_PREVIOUS_TEAM_LIST("previous"),
     // BUTTON_NEXT_TEAM_LIST("next"),
-    ;
 
-    // private final String name;
+    BUTTON_BLANK(BlankButton::new),
+            ;
 
-    // Buttons(String name){
-    //     this.name = name;
-    // }
+    private final Function<ButtonTemplate, Button<?>> buttonSupplier;
 
-    // public boolean isClickedButton(InventoryClickEvent event){
-    //     ItemStack itemStack = event.getCurrentItem();
-    //     if (itemStack == null) return false;
-    //     if (itemStack.getItemMeta() == null) return false;
+    Buttons(Function<ButtonTemplate, Button<?>> buttonSupplier) {
+        this.buttonSupplier = buttonSupplier;
+    }
 
-    //     ItemMeta meta = itemStack.getItemMeta();
-    //     if (itemStack.getItemMeta() instanceof SkullMeta){
-    //         meta = (SkullMeta) itemStack.getItemMeta();
-    //     }
+    @Nullable
+    public Button<?> createButton(@NotNull ButtonTemplate buttonTemplate){
+         try {
+             return buttonSupplier.apply(buttonTemplate);
+         } catch (Exception e) {
+             return null;
+         }
+    }
 
-    //     if (meta.getDisplayName() == null) return false;
-
-    //     NamespacedKey key = new NamespacedKey(StelyTeamPlugin.getPlugin(), "buttonName");
-    //     meta = event.getCurrentItem().getItemMeta();
-    //     PersistentDataContainer container = meta.getPersistentDataContainer();
-    //     String buttonName = container.get(key, PersistentDataType.STRING);
-
-    //     if (buttonName == null) return false;
-    //     if (buttonName.equals(this.name)) return true;
-
-    //     return false;
-    // }
-
-    public boolean isEmptyCase(InventoryClickEvent clickEvent){
+    public boolean isEmptyCase(InventoryClickEvent clickEvent) {
         ItemStack itemStack = clickEvent.getCurrentItem();
 
-        if(itemStack == null) return false;
-        if(itemStack.getItemMeta() == null) return false;
+        if (itemStack == null) return false;
+        if (itemStack.getItemMeta() == null) return false;
 
         NamespacedKey key = new NamespacedKey(StelyTeamPlugin.getPlugin(), "emptyCase");
         ItemMeta meta = itemStack.getItemMeta();
         PersistentDataContainer container = meta.getPersistentDataContainer();
 
-        if(container.has(key , PersistentDataType.INTEGER)
-            && container.get(key, PersistentDataType.INTEGER).equals(1)) return true;
+        if (container.has(key, PersistentDataType.INTEGER)
+                && container.get(key, PersistentDataType.INTEGER).equals(1)) return true;
 
         return false;
     }
 
 
-    public static Buttons getButtonType(String name){
+    @NotNull
+    public static Buttons getButtonType(@Nullable String name) throws IllegalArgumentException {
+        if (name == null) return BUTTON_BLANK;
         return valueOf("BUTTON_" + name.toUpperCase());
     }
 }

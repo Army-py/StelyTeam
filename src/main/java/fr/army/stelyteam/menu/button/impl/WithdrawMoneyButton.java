@@ -4,10 +4,12 @@ import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.conversation.ConvWithdrawMoney;
 import fr.army.stelyteam.menu.button.Button;
 import fr.army.stelyteam.menu.button.template.ButtonTemplate;
+import fr.army.stelyteam.menu.view.AbstractMenuView;
 import fr.army.stelyteam.menu.view.impl.TeamMenuView;
 import fr.army.stelyteam.utils.builder.conversation.ConversationBuilder;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.jetbrains.annotations.NotNull;
 
 public class WithdrawMoneyButton extends Button<TeamMenuView> {
 
@@ -24,5 +26,10 @@ public class WithdrawMoneyButton extends Button<TeamMenuView> {
 
         player.closeInventory();
         conv.getNameInput(player, new ConvWithdrawMoney(plugin));
+    }
+
+    @Override
+    public @NotNull Button<TeamMenuView> get(@NotNull ButtonTemplate buttonTemplate) {
+        return new WithdrawMoneyButton(buttonTemplate);
     }
 }

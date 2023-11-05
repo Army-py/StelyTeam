@@ -1,5 +1,6 @@
 package fr.army.stelyteam.menu.button.impl;
 
+import fr.army.stelyteam.menu.view.AbstractMenuView;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
@@ -10,6 +11,7 @@ import fr.army.stelyteam.menu.button.template.ButtonTemplate;
 import fr.army.stelyteam.menu.view.impl.TeamMenuView;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.manager.EconomyManager;
+import org.jetbrains.annotations.NotNull;
 
 public class ConfirmAddMoneyButton extends Button<TeamMenuView> {
 
@@ -28,5 +30,9 @@ public class ConfirmAddMoneyButton extends Button<TeamMenuView> {
         team.incrementTeamMoney(money);
         player.sendMessage(Messages.PREFIX.getMessage() + Messages.TEAM_BANK_MONEY_ADDED.getMessage());
     }
-    
+
+    @Override
+    public @NotNull Button<TeamMenuView> get(@NotNull ButtonTemplate buttonTemplate) {
+        return new ConfirmAddMoneyButton(buttonTemplate);
+    }
 }

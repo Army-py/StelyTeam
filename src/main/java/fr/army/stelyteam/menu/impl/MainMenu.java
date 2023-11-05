@@ -1,23 +1,17 @@
 package fr.army.stelyteam.menu.impl;
 
-import java.util.Optional;
-
-import fr.army.stelyteam.menu.button.impl.*;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.jetbrains.annotations.NotNull;
-
 import fr.army.stelyteam.menu.TeamMenu;
-import fr.army.stelyteam.menu.button.Button;
-import fr.army.stelyteam.menu.button.Buttons;
-import fr.army.stelyteam.menu.button.template.ButtonTemplate;
 import fr.army.stelyteam.menu.template.MenuTemplate;
 import fr.army.stelyteam.menu.view.impl.TeamMenuView;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.builder.menu.MenuBuilder;
 import fr.army.stelyteam.utils.builder.menu.MenuBuilderResult;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Optional;
 
 public class MainMenu extends TeamMenu<TeamMenuView> {
 
@@ -42,49 +36,49 @@ public class MainMenu extends TeamMenu<TeamMenuView> {
 
         if (config == null) return new MainMenu(builderResult);
 
-        for (String chrSection : config.getConfigurationSection("items").getKeys(false)) {
-            final char chr = chrSection.charAt(0);
-            final ConfigurationSection itemSection = config.getConfigurationSection("items." + chr);
-            final Buttons buttonType = Buttons.getButtonType(itemSection.getString("button-type"));
-            
-            final ButtonTemplate buttonTemplate = new ButtonTemplate(chr, null);
-            final Button<TeamMenuView> button;
-            switch (buttonType) {
-                case BUTTON_BACK:
-                    button = new BackButton<>(buttonTemplate);
-                    break;
-                case BUTTON_TEAM_DETAILS:
-                    button = new BlankButton<>(buttonTemplate);
-                    break;
-                case BUTTON_TEAM_MEMBERS_MENU:
-                    button = new TeamMembersButton(buttonTemplate);
-                    break;
-                case BUTTON_TEAM_ALLIANCES_MENU:
-                    button = new TeamAlliancesButton(buttonTemplate);
-                    break;
-                case BUTTON_TEAM_BANK_DETAILS:
-                    button = new BlankButton<>(buttonTemplate);
-                    break;
-                case BUTTON_TEAM_BANK_ADD_MONEY:
-                    button = new AddMoneyButton(buttonTemplate);
-                    break;
-                case BUTTON_TEAM_BANK_WITHDRAW_MONEY:
-                    button = new WithdrawMoneyButton(buttonTemplate);
-                    break;
-                case BUTTON_TEAM_STORAGES_MENU:
-                    button = new TeamStoragesButton(buttonTemplate);
-                    break;
-                case BUTTON_TEAM_LEAVE:
-                    button = new TeamLeaveButton(buttonTemplate);
-                    break;
-            
-                default: 
-                    button = new BlankButton<>(buttonTemplate);
-                    break;
-            }
-            
-            menuTemplate.mapButtons(menuTemplate.getSlots(chr), button);
-        }
+//        for (String chrSection : config.getConfigurationSection("items").getKeys(false)) {
+//            final char chr = chrSection.charAt(0);
+//            final ConfigurationSection itemSection = config.getConfigurationSection("items." + chr);
+//            final Buttons buttonType = Buttons.getButtonType(itemSection.getString("button-type"));
+//
+//            final ButtonTemplate buttonTemplate = new ButtonTemplate(chr, null);
+//            final Button<TeamMenuView> button;
+//            switch (buttonType) {
+//                case BUTTON_BACK:
+//                    button = new BackButton<>(buttonTemplate);
+//                    break;
+//                case BUTTON_TEAM_DETAILS:
+//                    button = new BlankButton<>(buttonTemplate);
+//                    break;
+//                case BUTTON_TEAM_MEMBERS_MENU:
+//                    button = new TeamMembersButton(buttonTemplate);
+//                    break;
+//                case BUTTON_TEAM_ALLIANCES_MENU:
+//                    button = new TeamAlliancesButton(buttonTemplate);
+//                    break;
+//                case BUTTON_TEAM_BANK_DETAILS:
+//                    button = new BlankButton<>(buttonTemplate);
+//                    break;
+//                case BUTTON_TEAM_BANK_ADD_MONEY:
+//                    button = new AddMoneyButton(buttonTemplate);
+//                    break;
+//                case BUTTON_TEAM_BANK_WITHDRAW_MONEY:
+//                    button = new WithdrawMoneyButton(buttonTemplate);
+//                    break;
+//                case BUTTON_TEAM_STORAGES_MENU:
+//                    button = new TeamStoragesButton(buttonTemplate);
+//                    break;
+//                case BUTTON_TEAM_LEAVE:
+//                    button = new TeamLeaveButton(buttonTemplate);
+//                    break;
+//
+//                default:
+//                    button = new BlankButton<>(buttonTemplate);
+//                    break;
+//            }
+//
+//            menuTemplate.mapButtons(menuTemplate.getSlots(chr), button);
+//        }
 
         return new MainMenu(builderResult);
     }

@@ -1,5 +1,6 @@
 package fr.army.stelyteam.menu.button;
 
+import fr.army.stelyteam.menu.button.impl.AddMoneyButton;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -7,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import fr.army.stelyteam.menu.button.template.ButtonTemplate;
 import fr.army.stelyteam.menu.view.AbstractMenuView;
 
-public abstract class Button<T extends AbstractMenuView<T>> {
+public abstract class Button<T extends AbstractMenuView<T>> implements ButtonSupplier {
     
     private final ButtonTemplate buttonTemplate;
     

@@ -1,5 +1,6 @@
 package fr.army.stelyteam.menu.button.impl;
 
+import fr.army.stelyteam.menu.view.AbstractMenuView;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
@@ -9,6 +10,7 @@ import fr.army.stelyteam.menu.button.Button;
 import fr.army.stelyteam.menu.button.template.ButtonTemplate;
 import fr.army.stelyteam.menu.view.impl.MenuView;
 import fr.army.stelyteam.utils.builder.conversation.ConversationBuilder;
+import org.jetbrains.annotations.NotNull;
 
 public class ConfirmCreateTeamButton extends Button<MenuView> {
 
@@ -28,5 +30,10 @@ public class ConfirmCreateTeamButton extends Button<MenuView> {
 
         // openPreviousMenu(Optional.empty());
         player.closeInventory();
+    }
+
+    @Override
+    public @NotNull Button<MenuView> get(@NotNull ButtonTemplate buttonTemplate) {
+        return new ConfirmCreateTeamButton(buttonTemplate);
     }
 }
