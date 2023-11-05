@@ -1,15 +1,15 @@
 package fr.army.stelyteam.menu.impl;
 
-import java.util.Optional;
-
+import fr.army.stelyteam.menu.TeamMenu;
+import fr.army.stelyteam.menu.view.impl.TeamMenuView;
+import fr.army.stelyteam.team.Team;
+import fr.army.stelyteam.utils.builder.menu.MenuBuilder;
+import fr.army.stelyteam.utils.builder.menu.MenuBuilderResult;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.jetbrains.annotations.NotNull;
 
-import fr.army.stelyteam.menu.TeamMenu;
-import fr.army.stelyteam.menu.view.impl.TeamMenuView;
-import fr.army.stelyteam.team.Team;
-import fr.army.stelyteam.utils.builder.menu.MenuBuilderResult;
+import java.util.Optional;
 
 public class ConfirmAddMoneyMenu extends TeamMenu<TeamMenuView> {
 
@@ -25,5 +25,9 @@ public class ConfirmAddMoneyMenu extends TeamMenu<TeamMenuView> {
     @Override
     public void onClick(InventoryClickEvent clickEvent) {
     }
-    
+
+    public static ConfirmAddMoneyMenu createInstance(String configName){
+        final MenuBuilderResult<TeamMenuView> builderResult = MenuBuilder.getInstance().loadMenu(configName + ".yml");
+        return new ConfirmAddMoneyMenu(builderResult);
+    }
 }
