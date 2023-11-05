@@ -25,7 +25,7 @@ pattern:
 # - TEAM_LEAVE
 items:
   ".":
-    button-type: EMPTY
+    button-type: BLANK
     material: LIGHT_BLUE_STAINED_GLASS_PANE
     name: " "
     skull-texture: ""

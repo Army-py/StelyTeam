@@ -13,7 +13,7 @@ pattern:
 
 
 # Available button types
-# Any other type of button will be considered EMPTY
+# Any other type of button will be considered BLANK
 # - BACK
 # - TEAM_DETAILS
 # - TEAM_MEMBERS_MENU
@@ -24,7 +24,7 @@ pattern:
 # - TEAM_LEAVE
 items:
   ".":
-    button-type: EMPTY
+    button-type: BLANK
     material: LIGHT_BLUE_STAINED_GLASS_PANE
     name: " "
     skull-texture: ""
