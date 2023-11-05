@@ -1,12 +1,10 @@
 package fr.army.stelyteam.menu.impl;
 
 import fr.army.stelyteam.menu.TeamMenu;
-import fr.army.stelyteam.menu.template.MenuTemplate;
 import fr.army.stelyteam.menu.view.impl.TeamMenuView;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.builder.menu.MenuBuilder;
 import fr.army.stelyteam.utils.builder.menu.MenuBuilderResult;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.jetbrains.annotations.NotNull;
@@ -31,11 +29,11 @@ public class MainMenu extends TeamMenu<TeamMenuView> {
 
     public static MainMenu createInstance(String configName){
         final MenuBuilderResult<TeamMenuView> builderResult = MenuBuilder.getInstance().loadMenu(configName + ".yml");
-        final MenuTemplate<TeamMenuView> menuTemplate = builderResult.getMenuTemplate();
-        final YamlConfiguration config = builderResult.getConfig();
-
-        if (config == null) return new MainMenu(builderResult);
-
+//        final MenuTemplate<TeamMenuView> menuTemplate = builderResult.getMenuTemplate();
+//        final YamlConfiguration config = builderResult.getConfig();
+//
+//        if (config == null) return new MainMenu(builderResult);
+//
 //        for (String chrSection : config.getConfigurationSection("items").getKeys(false)) {
 //            final char chr = chrSection.charAt(0);
 //            final ConfigurationSection itemSection = config.getConfigurationSection("items." + chr);
