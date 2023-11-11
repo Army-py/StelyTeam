@@ -29,7 +29,7 @@ public class ConfirmCreateTeamButton extends Button<MenuView> {
         conv.getNameInput(player, new ConvGetTeamName(plugin));
 
         // openPreviousMenu(Optional.empty());
-        player.closeInventory();
+//        player.closeInventory();
     }
 
     @Override
