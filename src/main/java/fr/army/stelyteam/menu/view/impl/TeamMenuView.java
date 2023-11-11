@@ -36,7 +36,6 @@ public class TeamMenuView extends AbstractMenuView<TeamMenuView> {
         for (int slot = 0; slot < inventory.getSize(); slot++) {
             final Button<TeamMenuView> button = menuTemplate.getButton(slot).setMenuView(this);
             final ButtonItem buttonItem = button.getButtonTemplate().getButtonItem();
-            final ItemStack itemStack = buttonItem.build();
 
             List<String> lore = buttonItem.getLore();
             
@@ -55,7 +54,7 @@ public class TeamMenuView extends AbstractMenuView<TeamMenuView> {
             replaceMap.put(Placeholders.CONFIG_MAX_MONEY_LIMIT, ((Double) Config.teamBankMaxMoneyLimit).toString());
             buttonItem.setLore(PlaceholdersUtils.replaceList(lore, replaceMap));
 
-            inventory.setItem(slot, itemStack);
+            inventory.setItem(slot, buttonItem.build());
         }
 
         return inventory;
