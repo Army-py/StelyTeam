@@ -39,7 +39,6 @@ items:
     skull-texture: "{TEAM_OWNER_SKULL_TEXTURE}"
     amount: 1
     is-glowing: false
-    page-component: true
     lore:
       - "§aChef de la team : §e{TEAM_OWNER_NAME}"
       - "§aNom : §e{TEAM_NAME}"
