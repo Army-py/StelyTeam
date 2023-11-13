@@ -20,7 +20,7 @@ public class MenuTemplate<T extends AbstractMenuView<T>> {
 
     private TeamMenu<T> precedingMenu;
 
-    public MenuTemplate(@NotNull String title, @NotNull boolean precede, @NotNull int size) {
+    public MenuTemplate(@NotNull String title, boolean precede, int size) {
         this.title = title;
         this.size = size;
         this.precede = precede;
@@ -44,18 +44,18 @@ public class MenuTemplate<T extends AbstractMenuView<T>> {
         }
     }
 
-    public void mapButton(int slot, Button<T> button) {
-        if (button.getButtonTemplate().getButtonItem() != null)
-            this.buttons[slot] = button;
-        else
-            this.buttons[slot] = button.setButtonItem(this.buttons[slot].getButtonTemplate().getButtonItem());
-    }
+//    public void mapButton(int slot, Button<T> button) {
+//        if (button.getButtonTemplate().getButtonItem() != null)
+//            this.buttons[slot] = button;
+//        else
+//            this.buttons[slot] = button.setButtonItem(this.buttons[slot].getButtonTemplate().getButtonItem());
+//    }
 
-    public void mapButtons(int[] slots, Button<T> button) {
-        for (int slot : slots) {
-            mapButton(slot, button);
-        }
-    }
+//    public void mapButtons(int[] slots, Button<T> button) {
+//        for (int slot : slots) {
+//            mapButton(slot, button);
+//        }
+//    }
 
     public int[] getSlots(char itemSection){
         List<Integer> slots = new ArrayList<>();
@@ -85,12 +85,10 @@ public class MenuTemplate<T extends AbstractMenuView<T>> {
         return title;
     }
 
-    @NotNull
     public boolean canPrecede(){
         return precede;
     }
 
-    @NotNull
     public int getSize() {
         return size;
     }
