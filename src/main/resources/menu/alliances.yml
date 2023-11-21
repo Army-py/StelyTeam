@@ -34,6 +34,7 @@ items:
     lore: []
   "-":
     button-type: TEAM_ALLIANCE
+    page-component: true
     material: BOOK
     name: "§5§nInformations"
     skull-texture: "{TEAM_OWNER_SKULL_TEXTURE}"
