@@ -3,6 +3,7 @@ package fr.army.stelyteam.menu.template;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.army.stelyteam.menu.button.ComponentButton;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -77,6 +78,16 @@ public class MenuTemplate<T extends AbstractMenuView<T>> {
         }
 
         return -1;
+    }
+
+    public int getComponentCount(){
+        int count = 0;
+        for (Button<T> button : buttons) {
+            if (button instanceof ComponentButton)
+                count++;
+        }
+
+        return count;
     }
 
 
