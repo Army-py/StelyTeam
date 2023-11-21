@@ -9,6 +9,7 @@ public class PageCache {
     private final Map<UUID, Integer> cachedPages;
 
     public PageCache() {
+        // todo: à implémenter dans StelyTeamPlugin une fois merge la branche cache
         this.cachedPages = new HashMap<>();
     }
 
