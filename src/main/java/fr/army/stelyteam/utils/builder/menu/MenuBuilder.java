@@ -57,7 +57,8 @@ public class MenuBuilder {
 
                 final String path = "items." + character + ".";
 
-                final Buttons buttonType = Buttons.getButtonType(config.getString(path + "button-type"));
+                final boolean pageComponent = config.getBoolean(path + "page-component");
+                final Buttons buttonType = Buttons.getButtonType(config.getString(path + "button-type"), pageComponent);
                 final String material = config.getString(path + "material");
                 final String name = config.getString(path + "name");
                 final int amount = config.getInt(path + "amount");
