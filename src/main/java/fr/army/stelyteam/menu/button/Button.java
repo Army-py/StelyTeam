@@ -10,9 +10,9 @@ import fr.army.stelyteam.menu.view.AbstractMenuView;
 
 public abstract class Button<T extends AbstractMenuView<T>> implements ButtonSupplier {
     
-    private final ButtonTemplate buttonTemplate;
+    protected final ButtonTemplate buttonTemplate;
     
-    private T menuView;
+    protected T menuView;
     
     public Button(ButtonTemplate buttonTemplate) {
         this.buttonTemplate = buttonTemplate;
@@ -21,7 +21,7 @@ public abstract class Button<T extends AbstractMenuView<T>> implements ButtonSup
     public abstract void onClick(InventoryClickEvent clickEvent);
 
 
-    public Button<T> setButtonItem(ButtonItem buttonItem) {
+    public Button<T> setButtonItem(@NotNull ButtonItem buttonItem) {
         buttonTemplate.setButtonItem(buttonItem);
         return this;
     }
