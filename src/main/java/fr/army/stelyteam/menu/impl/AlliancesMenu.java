@@ -28,7 +28,7 @@ public class AlliancesMenu<C> extends TeamMenu<PagedMenuView<C>> {
         if (team == null){
             pageBuilderResult = PageBuilder.getInstance().buildEmptyPage();
         }else{
-            // todo: fixe ici (une fois merge la branche cache, utiliser les nouveaux types et les étendres à une interface commune)
+            // TODO: fixe ici (une fois merge la branche cache, utiliser les nouveaux types et les étendres à une interface commune)
             pageBuilderResult = PageBuilder.getInstance().buildPage((List<C>) team.getTeamAlliances(), menuBuilderResult.getMenuTemplate().getComponentCount());
         }
 
