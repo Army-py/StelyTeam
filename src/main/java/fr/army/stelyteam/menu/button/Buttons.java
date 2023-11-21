@@ -43,6 +43,11 @@ public enum Buttons {
     // BUTTON_TEAM_BANK("seeTeamBank"),
     // BUTTON_EMPTY_CASE("emptyCase"),
 
+
+    /* COMPONENT BUTTON */
+    COMPONENT_BUTTON_TEAM_ALLIANCE(TeamAllianceComponentButton::new),
+
+
     /* BACK MENU */
     // BUTTON_CLOSE_ADMIN_MENU("close"),
     // BUTTON_CLOSE_MANAGE_MENU("close"),
@@ -119,7 +124,7 @@ public enum Buttons {
     // BUTTON_NEXT_TEAM_LIST("next"),
 
     BUTTON_BLANK(BlankButton::new),
-            ;
+    ;
 
     private final Function<ButtonTemplate, Button<?>> buttonSupplier;
 
@@ -136,26 +141,37 @@ public enum Buttons {
          }
     }
 
-    public boolean isEmptyCase(InventoryClickEvent clickEvent) {
-        ItemStack itemStack = clickEvent.getCurrentItem();
-
-        if (itemStack == null) return false;
-        if (itemStack.getItemMeta() == null) return false;
-
-        NamespacedKey key = new NamespacedKey(StelyTeamPlugin.getPlugin(), "emptyCase");
-        ItemMeta meta = itemStack.getItemMeta();
-        PersistentDataContainer container = meta.getPersistentDataContainer();
-
-        if (container.has(key, PersistentDataType.INTEGER)
-                && container.get(key, PersistentDataType.INTEGER).equals(1)) return true;
-
-        return false;
-    }
+//    public boolean isEmptyCase(InventoryClickEvent clickEvent) {
+//        ItemStack itemStack = clickEvent.getCurrentItem();
+//
+//        if (itemStack == null) return false;
+//        if (itemStack.getItemMeta() == null) return false;
+//
+//        NamespacedKey key = new NamespacedKey(StelyTeamPlugin.getPlugin(), "emptyCase");
+//        ItemMeta meta = itemStack.getItemMeta();
+//        PersistentDataContainer container = meta.getPersistentDataContainer();
+//
+//        if (container.has(key, PersistentDataType.INTEGER)
+//                && container.get(key, PersistentDataType.INTEGER).equals(1)) return true;
+//
+//        return false;
+//    }
 
 
     @NotNull
-    public static Buttons getButtonType(@Nullable String name) throws IllegalArgumentException {
+    public static Buttons getButtonType(@Nullable String name, boolean isComponent) {
         if (name == null) return BUTTON_BLANK;
-        return valueOf("BUTTON_" + name.toUpperCase());
+
+        final String buttonType;
+        if (isComponent)
+            buttonType = "COMPONENT_BUTTON_" + name.toUpperCase();
+        else
+            buttonType = "BUTTON_" + name.toUpperCase();
+
+        try {
+            return Buttons.valueOf(buttonType);
+        } catch (IllegalArgumentException e) {
+            return BUTTON_BLANK;
+        }
     }
 }
