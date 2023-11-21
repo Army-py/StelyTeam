@@ -31,7 +31,7 @@ public class Team {
     private Member teamOwner;
     private Collection<Member> teamMembers = new ArrayList<>();
     private Set<Permission> teamPermissions = new HashSet<>();
-    private Collection<Alliance> teamAlliances = new ArrayList<>();
+    private List<Alliance> teamAlliances = new ArrayList<>();
     private Map<Integer, Storage> teamStorages;
 
     // Existing team
@@ -459,7 +459,7 @@ public class Team {
         return teamPermissions;
     }
 
-    public Collection<Alliance> getTeamAlliances() {
+    public List<Alliance> getTeamAlliances() {
         return teamAlliances;
     }
 
