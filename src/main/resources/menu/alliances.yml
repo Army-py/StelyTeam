@@ -35,7 +35,7 @@ items:
   "-":
     button-type: TEAM_ALLIANCE
     page-component: true
-    material: BOOK
+    material: PLAYER_HEAD
     name: "§5§nInformations"
     skull-texture: "{TEAM_OWNER_SKULL_TEXTURE}"
     amount: 1
