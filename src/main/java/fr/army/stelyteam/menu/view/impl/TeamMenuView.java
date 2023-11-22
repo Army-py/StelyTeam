@@ -8,7 +8,6 @@ import fr.army.stelyteam.menu.view.AbstractMenuView;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 
 import fr.army.stelyteam.config.Config;
 import fr.army.stelyteam.config.PlaceholdersUtils;
@@ -45,7 +44,7 @@ public class TeamMenuView extends AbstractMenuView<TeamMenuView> {
             replaceMap.put(Placeholders.TEAM_DESCRIPTION, team.getTeamDescription());
             replaceMap.put(Placeholders.TEAM_OWNER_NAME, team.getTeamOwner().getMemberName());
             replaceMap.put(Placeholders.TEAM_OWNER_DISPLAY_NAME, team.getTeamOwner().asPlayer().getDisplayName()); // TODO: revoir
-            replaceMap.put(Placeholders.TEAM_MEMBER_COUNT, ((Integer) team.getTeamMembers().size()).toString());
+            replaceMap.put(Placeholders.TEAM_MEMBERS_COUNT, ((Integer) team.getTeamMembers().size()).toString());
             replaceMap.put(Placeholders.TEAM_CREATION_DATE, team.getCreationDate());
             replaceMap.put(Placeholders.MEMBER_RANK, null); // TODO: ajouter rank member (revoir cache, Member, Rank, Team)
             replaceMap.put(Placeholders.CONFIG_MAX_MEMBERS_COUNT, ((Integer) Config.teamMaxMembersLimit).toString());
