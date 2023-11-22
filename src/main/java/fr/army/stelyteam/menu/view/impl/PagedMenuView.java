@@ -60,20 +60,23 @@ public class PagedMenuView<C> extends AbstractMenuView<PagedMenuView<C>> {
 
 
             List<String> lore = buttonItem.getLore();
-
             Map<Placeholders, String> replaceMap = new HashMap<>();
-            replaceMap.put(Placeholders.TEAM_NAME, team.getTeamName());
-            replaceMap.put(Placeholders.TEAM_PREFIX, team.getTeamPrefix());
-            replaceMap.put(Placeholders.TEAM_DESCRIPTION, team.getTeamDescription());
-            replaceMap.put(Placeholders.TEAM_OWNER_NAME, team.getTeamOwner().getMemberName());
-            replaceMap.put(Placeholders.TEAM_OWNER_DISPLAY_NAME, team.getTeamOwner().asPlayer().getDisplayName()); // TODO: revoir
-            replaceMap.put(Placeholders.TEAM_MEMBERS_COUNT, ((Integer) team.getTeamMembers().size()).toString());
-            replaceMap.put(Placeholders.TEAM_CREATION_DATE, team.getCreationDate());
-            replaceMap.put(Placeholders.MEMBER_RANK, null); // TODO: ajouter rank member (revoir cache, Member, Rank, Team)
-            replaceMap.put(Placeholders.CONFIG_MAX_MEMBERS_COUNT, ((Integer) Config.teamMaxMembersLimit).toString());
 
-            replaceMap.put(Placeholders.TEAM_MONEY, ((Double) team.getTeamMoney()).toString());
-            replaceMap.put(Placeholders.CONFIG_MAX_MONEY_LIMIT, ((Double) Config.teamBankMaxMoneyLimit).toString());
+            if (team != null){
+                replaceMap.put(Placeholders.TEAM_NAME, team.getTeamName());
+                replaceMap.put(Placeholders.TEAM_PREFIX, team.getTeamPrefix());
+                replaceMap.put(Placeholders.TEAM_DESCRIPTION, team.getTeamDescription());
+                replaceMap.put(Placeholders.TEAM_OWNER_NAME, team.getTeamOwner().getMemberName());
+                replaceMap.put(Placeholders.TEAM_OWNER_DISPLAY_NAME, team.getTeamOwner().asPlayer().getDisplayName()); // TODO: revoir
+                replaceMap.put(Placeholders.TEAM_MEMBERS_COUNT, ((Integer) team.getTeamMembers().size()).toString());
+                replaceMap.put(Placeholders.TEAM_CREATION_DATE, team.getCreationDate());
+                replaceMap.put(Placeholders.MEMBER_RANK, null); // TODO: ajouter rank member (revoir cache, Member, Rank, Team)
+                replaceMap.put(Placeholders.CONFIG_MAX_MEMBERS_COUNT, ((Integer) Config.teamMaxMembersLimit).toString());
+
+                replaceMap.put(Placeholders.TEAM_MONEY, ((Double) team.getTeamMoney()).toString());
+                replaceMap.put(Placeholders.CONFIG_MAX_MONEY_LIMIT, ((Double) Config.teamBankMaxMoneyLimit).toString());
+            }
+
             buttonItem.setLore(PlaceholdersUtils.replaceList(lore, replaceMap));
 
             inventory.setItem(slot, buttonItem.build());
