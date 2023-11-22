@@ -46,6 +46,7 @@ public enum Buttons {
 
     /* COMPONENT BUTTON */
     COMPONENT_BUTTON_TEAM_ALLIANCE(TeamAllianceComponentButton::new),
+    COMPONENT_BUTTON_TEAM_MEMBER(TeamMemberComponentButton::new),
 
 
     /* BACK MENU */
@@ -81,7 +82,6 @@ public enum Buttons {
 
     /* ADD / WITHDRAW MONEY */
     BUTTON_TEAM_BANK_ADD_MONEY(AddMoneyButton::new),
-
     BUTTON_TEAM_BANK_WITHDRAW_MONEY(WithdrawMoneyButton::new),
 
     /* ADD / REMOVE MEMBER */
