@@ -1,4 +1,4 @@
-package fr.army.stelyteam.command.subCommand.team;
+package fr.army.stelyteam.command.subcommand.team;
 
 import java.util.List;
 
@@ -13,6 +13,7 @@ import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.TemporaryActionNames;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
+import org.jetbrains.annotations.NotNull;
 
 public class SubCmdAccept extends SubCommand {
 
@@ -26,14 +27,14 @@ public class SubCmdAccept extends SubCommand {
     }
 
     @Override
-    public boolean execute(CommandSender sender, String[] args) {
-        Player player = (Player) sender;
+    public boolean execute(@NotNull Player player, @NotNull String @NotNull [] args) {
         String playerName = player.getName();
 
+        // TODO Member work
         if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.ADD_MEMBER)){
             TemporaryAction tempAction = cacheManager.getTempAction(playerName);
             Team team = tempAction.getTeam();
-            String teamName = team.getTeamName();
+            String teamName = team.getName().get();
             String senderName = tempAction.getSenderName();
             Player invitationSender = Bukkit.getPlayer(senderName);
             cacheManager.removePlayerAction(playerName);
@@ -44,13 +45,13 @@ public class SubCmdAccept extends SubCommand {
             team.teamBroadcast(senderName, messageManager.replaceAuthorAndReceiver("broadcasts.player_add_new_member", senderName, playerName));
             team.insertMember(playerName);
             team.refreshTeamMembersInventory(playerName);
-            cacheManager.addTeam(team);
+        // TODO Alliance work
         }else if (cacheManager.playerHasActionName(playerName, TemporaryActionNames.ADD_ALLIANCE)){
             TemporaryAction tempAction = cacheManager.getTempAction(playerName);
             String senderName = tempAction.getSenderName();
             String receiverName = tempAction.getTargetName();
             Team team = tempAction.getTeam();
-            String teamName = team.getTeamName();
+            String teamName = team.getName().get();
             Player invitationSender = Bukkit.getPlayer(senderName);
             Team alliance = Team.initFromPlayerName(receiverName);
             cacheManager.removePlayerAction(playerName);
@@ -58,8 +59,8 @@ public class SubCmdAccept extends SubCommand {
             if (invitationSender != null){
                 invitationSender.sendMessage(messageManager.getReplaceMessage("sender.accepted_invitation", receiverName));
             }
-            team.teamBroadcast(senderName, messageManager.replaceAuthorAndTeamName("broadcasts.player_add_new_alliance", senderName, alliance.getTeamName()));
-            team.insertAlliance(alliance);
+            team.teamBroadcast(senderName, messageManager.replaceAuthorAndTeamName("broadcasts.player_add_new_alliance", senderName, alliance.getName()));
+            team.insertAlliance(alliance.getId());
             team.refreshTeamMembersInventory(playerName);
         }else{
             player.sendMessage(messageManager.getMessage("common.no_invitation"));
