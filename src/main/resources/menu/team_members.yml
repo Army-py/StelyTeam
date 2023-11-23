@@ -14,15 +14,12 @@ pattern:
 
 
 # Available button types
-# Any other type of button will be considered EMPTY
+# Any other type of button will be considered BLANK
 # - BACK
-# - TEAM_DETAILS
-# - TEAM_MEMBERS_MENU
-# - TEAM_ALLIANCES_MENU
-# - TEAM_BANK_ADD_MONEY
-# - TEAM_BANK_WITHDRAW_MONEY
-# - TEAM_STORAGES_MENU
-# - TEAM_LEAVE
+# - CURRENT_PAGE
+# - NEXT_PAGE
+# - PREVIOUS_PAGE
+# - TEAM_MEMBER
 items:
   ".":
     button-type: BLANK
