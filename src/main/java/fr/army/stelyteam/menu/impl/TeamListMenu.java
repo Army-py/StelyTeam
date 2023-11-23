@@ -1,4 +1,4 @@
-package fr.army.stelyteam.menu.impl.old;
+package fr.army.stelyteam.menu.impl;
 
 import java.util.ArrayList;
 import java.util.Collection;
