@@ -1,4 +1,4 @@
-package fr.army.stelyteam.command.subCommand.dev;
+package fr.army.stelyteam.command.subcommand.dev;
 
 import java.util.List;
 
