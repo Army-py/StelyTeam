@@ -47,6 +47,7 @@ public enum Buttons {
     /* COMPONENT BUTTON */
     COMPONENT_BUTTON_TEAM_ALLIANCE(TeamAllianceComponentButton::new),
     COMPONENT_BUTTON_TEAM_MEMBER(TeamMemberComponentButton::new),
+    COMPONENT_BUTTON_TEAM_STORAGE(TeamStorageComponentButton::new),
 
 
     /* BACK MENU */
