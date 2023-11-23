@@ -7,7 +7,7 @@ import fr.army.stelyteam.menu.view.impl.PagedMenuView;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.jetbrains.annotations.NotNull;
 
-public class PreviousPageButton extends Button<PagedMenuView> {
+public class PreviousPageButton<C> extends Button<PagedMenuView<C>> {
     public PreviousPageButton(ButtonTemplate buttonTemplate) {
         super(buttonTemplate);
     }
@@ -18,7 +18,7 @@ public class PreviousPageButton extends Button<PagedMenuView> {
     }
 
     @Override
-    public @NotNull Button<PagedMenuView> get(@NotNull ButtonTemplate buttonTemplate) {
-        return new PreviousPageButton(buttonTemplate);
+    public @NotNull Button<PagedMenuView<C>> get(@NotNull ButtonTemplate buttonTemplate) {
+        return new PreviousPageButton<>(buttonTemplate);
     }
 }
