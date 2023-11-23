@@ -1,8 +1,7 @@
-package fr.army.stelyteam.menu.impl;
+package fr.army.stelyteam.menu.impl.temp_new;
 
 import fr.army.stelyteam.menu.TeamMenu;
 import fr.army.stelyteam.menu.view.impl.PagedMenuView;
-import fr.army.stelyteam.menu.view.impl.TeamMenuView;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.builder.menu.MenuBuilder;
 import fr.army.stelyteam.utils.builder.menu.MenuBuilderResult;
@@ -15,9 +14,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Optional;
 
-public class AlliancesMenu<C> extends TeamMenu<PagedMenuView<C>> {
-
-    public AlliancesMenu(@NotNull MenuBuilderResult<PagedMenuView<C>> menuBuilderResult) {
+public class MembersMenu<C> extends TeamMenu<PagedMenuView<C>> {
+    public MembersMenu(@NotNull MenuBuilderResult<PagedMenuView<C>> menuBuilderResult) {
         super(menuBuilderResult);
     }
 
@@ -29,7 +27,7 @@ public class AlliancesMenu<C> extends TeamMenu<PagedMenuView<C>> {
             pageBuilderResult = PageBuilder.getInstance().buildEmptyPage();
         }else{
             // TODO: fixe ici (une fois merge la branche cache, utiliser les nouveaux types et les étendres à une interface commune)
-            pageBuilderResult = PageBuilder.getInstance().buildPage((List<C>) team.getTeamAlliances(), menuBuilderResult.getMenuTemplate().getComponentCount());
+            pageBuilderResult = PageBuilder.getInstance().buildPage((List<C>) team.getTeamMembers(), menuBuilderResult.getMenuTemplate().getComponentCount());
         }
 
         return new PagedMenuView<>(player, this, team, pageBuilderResult);
@@ -40,8 +38,8 @@ public class AlliancesMenu<C> extends TeamMenu<PagedMenuView<C>> {
 
     }
 
-    public static <C> AlliancesMenu<C> createInstance(String configName){
+    public static <C> @NotNull MembersMenu<C> createInstance(String configName){
         final MenuBuilderResult<PagedMenuView<C>> builderResult = MenuBuilder.getInstance().loadMenu(configName + ".yml");
-        return new AlliancesMenu<>(builderResult);
+        return new MembersMenu<>(builderResult);
     }
 }

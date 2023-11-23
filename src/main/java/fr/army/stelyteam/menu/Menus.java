@@ -1,6 +1,6 @@
 package fr.army.stelyteam.menu;
 
-import fr.army.stelyteam.menu.impl.*;
+import fr.army.stelyteam.menu.impl.temp_new.*;
 import fr.army.stelyteam.menu.view.impl.MenuView;
 import fr.army.stelyteam.menu.view.impl.PagedMenuView;
 import fr.army.stelyteam.team.Alliance;

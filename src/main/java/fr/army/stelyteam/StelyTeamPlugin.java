@@ -18,7 +18,7 @@ import fr.army.stelyteam.external.ExternalManager;
 import fr.army.stelyteam.listener.ListenerLoader;
 import fr.army.stelyteam.menu.TeamMenuOLD;
 import fr.army.stelyteam.menu.impl.old.AdminMenu;
-import fr.army.stelyteam.menu.impl.CreateTeamMenu;
+import fr.army.stelyteam.menu.impl.temp_new.CreateTeamMenu;
 import fr.army.stelyteam.menu.impl.old.MemberMenu;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
