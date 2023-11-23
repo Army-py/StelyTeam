@@ -1,5 +1,7 @@
 package fr.army.stelyteam;
 
+import fr.army.stelyteam.cache.StorageManager;
+import fr.army.stelyteam.cache.TeamCache;
 import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
@@ -21,6 +23,7 @@ import fr.army.stelyteam.menu.impl.AdminMenu;
 import fr.army.stelyteam.menu.impl.temp_new.CreateTeamMenu;
 import fr.army.stelyteam.menu.impl.MemberMenu;
 import fr.army.stelyteam.team.Team;
+import fr.army.stelyteam.team.TeamManager;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
 import fr.army.stelyteam.utils.builder.conversation.ConversationBuilder;
 import fr.army.stelyteam.utils.loader.ConfigLoader;
@@ -58,6 +61,9 @@ public class StelyTeamPlugin extends JavaPlugin {
     private CacheManager cacheManager;
     private SQLiteDataManager sqliteManager;
     private EconomyManager economyManager;
+    private StorageManager storageManager;
+    private TeamCache teamCache;
+    private TeamManager teamManager;
     private TeamChatManager teamChatManager;
     private CommandManager commandManager;
     private MessageManager messageManager;
@@ -84,7 +90,7 @@ public class StelyTeamPlugin extends JavaPlugin {
 
         this.config.load();
         Config.language = Config.language == null ? "en_us" : Config.language;
-        
+
         try {
             this.messages = this.configLoader.initFile(Config.language + ".yml");
         } catch (UnableLoadConfigException e) {
@@ -113,6 +119,10 @@ public class StelyTeamPlugin extends JavaPlugin {
         this.serializeManager = new ItemStackSerializer();
         this.cacheManager = new CacheManager(this);
         this.messageManager = new MessageManager(this);
+        storageManager = new StorageManager();
+        teamCache = new TeamCache(storageManager);
+        teamManager = new TeamManager(storageManager, teamCache);
+        final TeamChatLoader teamChatLoader = new TeamChatLoader();
         this.economyManager = new EconomyManager(messageManager);
         final TeamChatLoader teamChatLoader = new TeamChatLoader(this);
         this.teamChatManager = teamChatLoader.load();
@@ -127,9 +137,7 @@ public class StelyTeamPlugin extends JavaPlugin {
         final ListenerLoader listenerLoader = new ListenerLoader();
         listenerLoader.registerListeners(this);
 
-        
         getLogger().info("StelyTeam ON");
-        cacheAllTeams();
     }
 
 
@@ -155,15 +163,6 @@ public class StelyTeamPlugin extends JavaPlugin {
             if (player.getOpenInventory().getTopInventory().getHolder() instanceof TeamMenuOLD){
                 player.closeInventory();
             }
-        }
-    }
-
-
-    private void cacheAllTeams(){
-        for (Player player : Bukkit.getOnlinePlayers()){
-            final Team team = Team.init(player);
-            if (team == null) return;
-            cacheManager.addTeam(team);
         }
     }
 
@@ -313,8 +312,20 @@ public class StelyTeamPlugin extends JavaPlugin {
         return serializeManager;
     }
 
+    public StorageManager getStorageManager() {
+        return storageManager;
+    }
+
     public TeamChatManager getTeamChatManager() {
         return teamChatManager;
+    }
+
+    public TeamCache getTeamCache() {
+        return teamCache;
+    }
+
+    public TeamManager getTeamManager() {
+        return teamManager;
     }
 
     public CommandManager getCommandManager() {

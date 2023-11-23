@@ -215,7 +215,7 @@ public class CacheManager {
 
     public void removeTeam(Team team){
         for(Team cachedTeam : cachedTeams){
-            if(cachedTeam.getTeamUuid().equals(team.getTeamUuid())){
+            if(cachedTeam.getId().equals(team.getId())){
                 cachedTeams.remove(cachedTeam);
             }
         }
@@ -231,7 +231,7 @@ public class CacheManager {
 
     public Team getTeamByUuid(UUID teamUuid){
         for(Team team : cachedTeams){
-            if(team.getTeamUuid().equals(teamUuid)){
+            if(team.getId().equals(teamUuid)){
                 return team;
             }
         }
@@ -258,7 +258,7 @@ public class CacheManager {
 
     public Team getTeamByName(String teamName){
         for(Team team : cachedTeams){
-            if(team.getTeamName().equals(teamName)){
+            if(team.getName().equals(teamName)){
                 return team;
             }
         }

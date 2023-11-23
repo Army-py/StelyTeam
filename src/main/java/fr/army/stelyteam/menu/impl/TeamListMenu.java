@@ -7,121 +7,111 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import fr.army.stelyteam.menu.MenusOLD;
-import fr.army.stelyteam.menu.PagedMenuOLD;
-import fr.army.stelyteam.menu.TeamMenuOLD;
-import fr.army.stelyteam.menu.button.Buttons;
+import fr.army.stelyteam.menu.Buttons;
+import fr.army.stelyteam.menu.Menus;
+import fr.army.stelyteam.menu.TeamMenu;
 import fr.army.stelyteam.team.Page;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
-import fr.army.stelyteam.utils.builder.ItemBuilderOLD;
-import fr.army.stelyteam.utils.manager.database.DatabaseManager;
+import fr.army.stelyteam.utils.builder.ItemBuilder;
+import fr.army.stelyteam.utils.manager.CacheManager;
+import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
 
 
-public class TeamListMenu extends PagedMenuOLD {
+public class TeamListMenu extends TeamMenu {
 
-    private final DatabaseManager databaseManager = plugin.getDatabaseManager();
+    final SQLiteDataManager sqliteManager = plugin.getSQLiteManager();
+    final CacheManager cacheManager = plugin.getCacheManager();
+    final ColorsBuilder colorsBuilder = plugin.getColorsBuilder();
 
-    public TeamListMenu(Player viewer, TeamMenuOLD previousMenu) {
+    public TeamListMenu(Player viewer) {
         super(
             viewer,
-            MenusOLD.TEAM_LIST_MENU.getName(),
-            MenusOLD.TEAM_LIST_MENU.getSlots(),
-            previousMenu
+            Menus.TEAM_LIST_MENU.getName(),
+            Menus.TEAM_LIST_MENU.getSlots()
         );
     }
 
 
-    public Inventory createInventory(String playerName, int pageId) {
+    public Inventory createInventory(String playerName) {
         Collection<Team> teams = plugin.getDatabaseManager().getTeams();
         Inventory inventory = Bukkit.createInventory(this, this.menuSlots, this.menuName);
         List<Integer> headSlots = config.getIntegerList("inventories.teamList.teamOwnerHead.slots");
-        final int maxMembers = config.getInt("teamMaxMembers");
-        final int maxMembersPerLine = config.getInt("maxMembersInLore");
+        Integer maxMembers = config.getInt("teamMaxMembers");
         Page page;
 
         if (cacheManager.containsPage(playerName)){
             page = cacheManager.getPage(playerName);
-            page.setCurrentPage(pageId);
-            cacheManager.replacePage(page);
         }else{
             page = new Page(playerName, headSlots.size(), teams);
             cacheManager.addPage(page);
         }
-        List<List<Team>> pages = page.getPages();
-        
-        List<Team> currentPage;
-        if (!pages.isEmpty()) currentPage = pages.get(pageId);
-        else currentPage = new ArrayList<>();
+        ArrayList<List<Team>> pages = page.getPages();
         
         emptyCases(inventory, this.menuSlots, 0);
         Integer slotIndex = 0;
-        for(Team team : currentPage){
+        for(Team team : pages.get(page.getCurrentPage())){
             String teamOwnerName = team.getTeamOwnerName();
-            String teamPrefix = team.getTeamPrefix();
-            List<String> teamMembers = team.getMembersName();
-            teamMembers.remove(teamOwnerName);
-            UUID playerUUID = databaseManager.getUUID(teamOwnerName);
+            String teamPrefix = team.getPrefix();
+            UUID playerUUID = sqliteManager.getUUID(teamOwnerName);
             // String itemName = colorsBuilder.replaceColor(teamPrefix);
             String itemName = " ";
             List<String> lore = config.getStringList("teamListLore");
-            // OfflinePlayer teamOwner;
+            OfflinePlayer teamOwner;
             ItemStack item;
 
-            List<String> playerNames = new ArrayList<>();
-            for(int i = 0; i < teamMembers.size(); i++){
-                if (i != 0 && i % maxMembersPerLine == 0) playerNames.add("%BACKTOLINE%");
-                playerNames.add(teamMembers.get(i));
+            if (!sqliteManager.isRegistered(teamOwnerName)){
+                sqliteManager.registerPlayer(Bukkit.getOfflinePlayer(teamOwnerName));
             }
 
-            // System.out.println(String.join(", ", playerNames));
+            if (playerUUID == null) teamOwner = Bukkit.getOfflinePlayer(teamOwnerName);
+            else teamOwner = Bukkit.getOfflinePlayer(playerUUID);
             
             lore = replaceInLore(lore, "%OWNER%", teamOwnerName);
-            lore = replaceInLore(lore, "%NAME%", team.getTeamName());
-            lore = replaceInLore(lore, "%PREFIX%", ColorsBuilder.replaceColor(teamPrefix));
+            lore = replaceInLore(lore, "%NAME%", team.getName());
+            lore = replaceInLore(lore, "%PREFIX%", colorsBuilder.replaceColor(teamPrefix));
             lore = replaceInLore(lore, "%DATE%", team.getCreationDate());
             lore = replaceInLore(lore, "%MEMBER_COUNT%", IntegerToString(team.getTeamMembers().size()));
             lore = replaceInLore(lore, "%MAX_MEMBERS%", IntegerToString(maxMembers+team.getImprovLvlMembers()));
-            lore = replaceInLore(lore, "%MEMBERS%", teamMembers.isEmpty() ? messageManager.getMessageWithoutPrefix("common.no_members") : String.join(", ", playerNames));
-            lore = replaceInLore(lore, "%DESCRIPTION%", ColorsBuilder.replaceColor(team.getTeamDescription()));
+            lore = replaceInLore(lore, "%DESCRIPTION%", colorsBuilder.replaceColor(team.getDescription()));
             
-            item = ItemBuilderOLD.getPlayerHead(playerUUID, itemName, lore);
+            item = ItemBuilder.getPlayerHead(teamOwner, itemName, lore);
 
             inventory.setItem(headSlots.get(slotIndex), item);
             slotIndex ++;
         }
 
-        for(String buttonName : config.getConfigurationSection("inventories.teamList").getKeys(false)){
-            if (buttonName.equals("teamOwnerHead")) continue;
+        for(String str : config.getConfigurationSection("inventories.teamList").getKeys(false)){
+            if (str.equals("teamOwnerHead")) continue;
 
-            Integer slot = config.getInt("inventories.teamList."+buttonName+".slot");
-            Material material = Material.getMaterial(config.getString("inventories.teamList."+buttonName+".itemType"));
-            String displayName = config.getString("inventories.teamList."+buttonName+".itemName");
-            List<String> lore = config.getStringList("inventories.teamList."+buttonName+".lore");
-            String headTexture = config.getString("inventories.teamList."+buttonName+".headTexture");
+            Integer slot = config.getInt("inventories.teamList."+str+".slot");
+            Material material = Material.getMaterial(config.getString("inventories.teamList."+str+".itemType"));
+            String name = config.getString("inventories.teamList."+str+".itemName");
+            List<String> lore = config.getStringList("inventories.teamList."+str+".lore");
+            String headTexture = config.getString("inventories.teamList."+str+".headTexture");
 
-            if (buttonName.equals("previous")){
+            if (str.equals("previous")){
                 if (page.getCurrentPage() == 0) continue;
-            }else if (buttonName.equals("next")){
-                if (page.getCurrentPage() >= pages.size()-1) continue;
+            }else if (str.equals("next")){
+                if (page.getCurrentPage() == pages.size()-1) continue;
             }
 
-            inventory.setItem(slot, ItemBuilderOLD.getItem(material, buttonName, displayName, lore, headTexture, false));
+            inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, false));
         }
 
         return inventory;
     }
 
 
-    @Override
-    public void openMenu(int pageId){
-        this.open(createInventory(viewer.getName(), pageId));
+    public void openMenu(){
+        this.open(createInventory(viewer.getName()));
     }
 
 
@@ -132,18 +122,18 @@ public class TeamListMenu extends PagedMenuOLD {
         
         if (clickEvent.getCurrentItem() != null){
             if (Buttons.PREVIOUS_TEAM_LIST_BUTTON.isClickedButton(clickEvent)){
-                Page page = cacheManager.getPage(playerName)
-                    .previousPage();
+                Page page = cacheManager.getPage(playerName);
+                page.setCurrentPage(page.getCurrentPage()-1);
                 cacheManager.replacePage(page);
-                new TeamListMenu(player, previousMenu).openMenu(page.getCurrentPage());
+                new TeamListMenu(player).openMenu();
             }else if (Buttons.NEXT_TEAM_LIST_BUTTON.isClickedButton(clickEvent)){
-                Page page = cacheManager.getPage(playerName)
-                    .nextPage();
+                Page page = cacheManager.getPage(playerName);
+                page.setCurrentPage(page.getCurrentPage()+1);
                 cacheManager.replacePage(page);
-                new TeamListMenu(player, previousMenu).openMenu(page.getCurrentPage());
+                new TeamListMenu(player).openMenu();
             }else if (Buttons.CLOSE_TEAM_LIST_MENU_BUTTON.isClickedButton(clickEvent)){
                 cacheManager.removePage(cacheManager.getPage(playerName));
-                previousMenu.openMenu();
+                new AdminMenu(player).openMenu();
             }
         }
         clickEvent.setCancelled(true);
@@ -151,16 +141,5 @@ public class TeamListMenu extends PagedMenuOLD {
 
 
     @Override
-    public void onClose(InventoryCloseEvent closeEvent) {
-        // Player player = (Player) closeEvent.getPlayer();
-        // String playerName = player.getName();
-
-        // if (cacheManager.containsPage(playerName)){
-        //     cacheManager.removePage(cacheManager.getPage(playerName));
-        // }
-    }
-
-
-    @Override
-    public void openMenu() {}
+    public void onClose(InventoryCloseEvent closeEvent) {}
 }

@@ -1,32 +1,35 @@
-package fr.army.stelyteam.listener.impl;
+package fr.army.stelyteam.listener;
 
-import org.bukkit.entity.Player;
+import fr.army.stelyteam.cache.TeamCache;
+import fr.army.stelyteam.team.Team;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.jetbrains.annotations.NotNull;
 
-import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.team.Team;
-import fr.army.stelyteam.utils.builder.ColorsBuilder;
+import java.util.Optional;
 
 public class ChatPrefixListener implements Listener {
 
-    public static final String PREFIX_PLACEHOLDER = "{STELYTEAM_PREFIX}";
-    
+    private static final String PREFIX_PLACEHOLDER = "{STELYTEAM_PREFIX}";
+    private final TeamCache teamCache;
+
+    public ChatPrefixListener(@NotNull TeamCache teamCache) {
+        this.teamCache = teamCache;
+    }
 
     @SuppressWarnings("unused")
     @EventHandler(priority = EventPriority.NORMAL)
     private void onChat(AsyncPlayerChatEvent event) {
-        Player player = event.getPlayer();
-        Team team = Team.getFromCache(player);
-        String prefix = "";
-
-        if (team != null) {
-            prefix = ColorsBuilder.replaceColor(team.getTeamPrefix());
+        final Optional<Team> team = teamCache.getPlayerTeam(event.getPlayer().getUniqueId());
+        if (team.isEmpty()) {
+            return;
         }
-
-        // ChatColor.translateAlternateColorCodes(0, prefix)
+        final String prefix = team.get().getPrefix().get();
+        if (prefix == null) {
+            return;
+        }
         event.setFormat(event.getFormat().replace(PREFIX_PLACEHOLDER, prefix));
     }
 

@@ -119,7 +119,7 @@ public class ManageMenu extends FixedMenuOLD {
 
 
         }else if (Buttons.REMOVE_TEAM_HOME_BUTTON.isClickedButton(clickEvent)){
-            if (!sqliteManager.isSet(team.getTeamUuid())){
+            if (!sqliteManager.isSet(team.getId())){
                 player.sendMessage(messageManager.getMessage("manage_team.team_home.not_set"));
             }else{
                 cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.DELETE_HOME, team));

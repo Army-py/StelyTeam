@@ -1,37 +1,54 @@
 package fr.army.stelyteam.team;
 
+import fr.army.stelyteam.cache.PropertiesHolder;
+import fr.army.stelyteam.cache.Property;
+import fr.army.stelyteam.cache.SaveField;
+import fr.army.stelyteam.cache.SaveProperty;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
+public class Member implements PropertiesHolder {
 
-import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.config.Config;
+    private final UUID playerId;
+    private final Property<Integer> rank;
+    private final Property<Date> joiningDate;
 
-public class Member {
-
-    private String memberName;
-    private Rank rank;
-    private String joinDate;
-    private UUID uuid;
-
-    public Member(String memberName, Rank rank, String joinDate, UUID uuid){
-        this.memberName = memberName;
-        this.rank = rank;
-        this.joinDate = joinDate;
-        this.uuid = uuid;
+    public Member(@NotNull UUID playerId) {
+        this.playerId = playerId;
+        rank = new Property<>(SaveField.MEMBER_RANK);
+        joiningDate = new Property<>(SaveField.MEMBER_JOINING_DATE);
     }
 
+    @Override
+    public @NotNull UUID getId() {
+        return playerId;
+    }
 
+    @Override
+    public void save(@NotNull List<SaveProperty<?>> saveValues) {
+        rank.save(this, saveValues);
+        joiningDate.save(this, saveValues);
+    }
+
+    public Property<Integer> getRank() {
+        return rank;
+    }
+
+    public Property<Date> getJoiningDate() {
+        return joiningDate;
+    }
+
+    /*
     public void promoteMember(){
-        // this.teamRank--; //TODO : revoir
-        this.rank = Config.ranks.get(Config.ranks.indexOf(this.rank) - 1);
+        this.teamRank--;
         StelyTeamPlugin.getPlugin().getDatabaseManager().promoteMember(memberName);
     }
 
     public void demoteMember(){
-        // this.teamRank++; // TODO: revoir
-        this.rank = Config.ranks.get(Config.ranks.indexOf(this.rank) + 1);
+        this.teamRank++;
         StelyTeamPlugin.getPlugin().getDatabaseManager().demoteMember(memberName);
     }
 
@@ -44,8 +61,8 @@ public class Member {
         return memberName;
     }
 
-    public Rank getTeamRank() {
-        return rank;
+    public int getTeamRank() {
+        return teamRank;
     }
 
     public String getJoinDate() {
@@ -60,11 +77,14 @@ public class Member {
         this.memberName = memberName;
     }
 
-    public void setRank(Rank rank) {
-        this.rank = rank;
+    public void setTeamRank(int teamRank) {
+        this.teamRank = teamRank;
     }
 
     public void setJoinDate(String joinDate) {
         this.joinDate = joinDate;
     }
+ */
+
+
 }

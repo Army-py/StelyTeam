@@ -14,31 +14,35 @@ import fr.army.stelyteam.conversation.ConvEditTeamDesc;
 import fr.army.stelyteam.conversation.ConvEditTeamName;
 import fr.army.stelyteam.conversation.ConvEditTeamPrefix;
 import fr.army.stelyteam.conversation.ConvGetTeamName;
-import fr.army.stelyteam.menu.FixedMenuOLD;
-import fr.army.stelyteam.menu.MenusOLD;
-import fr.army.stelyteam.menu.TeamMenuOLD;
-import fr.army.stelyteam.menu.button.Buttons;
+import fr.army.stelyteam.menu.Buttons;
+import fr.army.stelyteam.menu.Menus;
+import fr.army.stelyteam.menu.TeamMenu;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.TemporaryActionNames;
-import fr.army.stelyteam.utils.builder.ItemBuilderOLD;
+import fr.army.stelyteam.utils.builder.ItemBuilder;
 import fr.army.stelyteam.utils.builder.conversation.ConversationBuilder;
+import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.EconomyManager;
+import fr.army.stelyteam.utils.manager.MessageManager;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
 
 
-public class ConfirmMenu extends FixedMenuOLD {
+public class ConfirmMenu extends TeamMenu {
 
-    private final SQLiteDataManager sqliteManager = plugin.getSQLiteManager();
-    private final EconomyManager economyManager = plugin.getEconomyManager();
-    private final ConversationBuilder conversationBuilder = plugin.getConversationBuilder();
+    final DatabaseManager mySqlManager = plugin.getDatabaseManager();
+    final SQLiteDataManager sqliteManager = plugin.getSQLiteManager();
+    final CacheManager cacheManager = plugin.getCacheManager();
+    final MessageManager messageManager = plugin.getMessageManager();
+    final EconomyManager economyManager = plugin.getEconomyManager();
+    final ConversationBuilder conversationBuilder = plugin.getConversationBuilder();
 
-    public ConfirmMenu(Player viewer, TeamMenuOLD previousMenu){
+    public ConfirmMenu(Player viewer){
         super(
             viewer,
-            MenusOLD.CONFIRM_MENU.getName(),
-            MenusOLD.CONFIRM_MENU.getSlots(),
-            previousMenu
+            Menus.CONFIRM_MENU.getName(),
+            Menus.CONFIRM_MENU.getSlots()
         );
     }
 
@@ -48,21 +52,20 @@ public class ConfirmMenu extends FixedMenuOLD {
 
         emptyCases(inventory, this.menuSlots, 0);
 
-        for(String buttonName : config.getConfigurationSection("inventories.confirmInventory").getKeys(false)){
-            Material material = Material.getMaterial(config.getString("inventories.confirmInventory."+buttonName+".itemType"));
-            String displayName = config.getString("inventories.confirmInventory."+buttonName+".itemName");
-            List<String> lore = config.getStringList("inventories.confirmInventory."+buttonName+".lore");
-            String headTexture = config.getString("inventories.confirmInventory."+buttonName+".headTexture");
+        for(String str : config.getConfigurationSection("inventories.confirmInventory").getKeys(false)){
+            Material material = Material.getMaterial(config.getString("inventories.confirmInventory."+str+".itemType"));
+            String name = config.getString("inventories.confirmInventory."+str+".itemName");
+            List<String> lore = config.getStringList("inventories.confirmInventory."+str+".lore");
+            String headTexture = config.getString("inventories.confirmInventory."+str+".headTexture");
 
-            for(Integer slot : config.getIntegerList("inventories.confirmInventory."+buttonName+".slots")){
-                inventory.setItem(slot, ItemBuilderOLD.getItem(material, buttonName, displayName, lore, headTexture, false));
+            for(Integer slot : config.getIntegerList("inventories.confirmInventory."+str+".slots")){
+                inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, false));
             }
         }
         return inventory;
     }
 
 
-    @Override
     public void openMenu(){
         this.open(createInventory());
     }
@@ -90,16 +93,17 @@ public class ConfirmMenu extends FixedMenuOLD {
                     team.removeMember(receiverName);
                     player.closeInventory();
                     player.sendMessage(messageManager.getReplaceMessage("sender.exclude_member", receiverName));
-                    if (receiver != null && receiver.getName().equals(receiverName)) receiver.sendMessage(messageManager.getReplaceMessage("receiver.exclude_from_team", team.getTeamName()));
+                    if (receiver != null && receiver.getName().equals(receiverName)) receiver.sendMessage(messageManager.getReplaceMessage("receiver.exclude_from_team", team.getName()));
                     team.refreshTeamMembersInventory(playerName);
                     team.teamBroadcast(playerName, messageManager.replaceAuthorAndReceiver("broadcasts.player_exclude_member", playerName, receiverName));
                     break;
                 case REMOVE_ALLIANCE:
                     Team alliance = Team.init(UUID.fromString(tempAction.getTargetName()));
-                    String allianceName = alliance.getTeamName();
-                    teamName = team.getTeamName();
+                    UUID allianceUuid = alliance.getId();
+                    String allianceName = alliance.getName();
+                    teamName = team.getName();
                     
-                    team.removeAlliance(alliance);
+                    team.removeAlliance(allianceUuid);
                     team.refreshTeamMembersInventory(playerName);
                     team.teamBroadcast(playerName, messageManager.replaceAuthorAndTeamName("broadcasts.player_remove_alliance", playerName, allianceName));
                     alliance.refreshTeamMembersInventory(playerName);
@@ -113,12 +117,12 @@ public class ConfirmMenu extends FixedMenuOLD {
                     team.updateTeamOwner(receiverName);
                     player.closeInventory();
                     player.sendMessage(messageManager.getReplaceMessage("sender.promote_owner", receiverName));
-                    if (receiver != null && receiver.getName().equals(receiverName)) receiver.sendMessage(messageManager.getReplaceMessage("receiver.promote_owner", team.getTeamName()));
+                    if (receiver != null && receiver.getName().equals(receiverName)) receiver.sendMessage(messageManager.getReplaceMessage("receiver.promote_owner", team.getName()));
                     team.refreshTeamMembersInventory(playerName);
                     break;
                 case CREATE_HOME:
                     player.closeInventory();
-                    teamUuid = team.getTeamUuid();
+                    teamUuid = team.getId();
                     String worldName = player.getWorld().getName();
                     Double x = player.getLocation().getX();
                     Double y = player.getLocation().getY();
@@ -134,7 +138,7 @@ public class ConfirmMenu extends FixedMenuOLD {
                     }
                     break;
                 case DELETE_HOME:
-                    teamUuid = team.getTeamUuid();
+                    teamUuid = team.getId();
                     player.closeInventory();
                     sqliteManager.removeHome(teamUuid);
                     player.sendMessage(messageManager.getMessage("manage_team.team_home.deleted"));
@@ -149,18 +153,9 @@ public class ConfirmMenu extends FixedMenuOLD {
                     team.unlockedTeamBank();
                     player.sendMessage(messageManager.getMessage("manage_team.team_bank.unlock"));
 
-                    new ManageMenu(player, previousMenu).openMenu();
+                    new ManageMenu(player).openMenu(team);
                     team.refreshTeamMembersInventory(playerName);
                     team.teamBroadcast(playerName, messageManager.replaceAuthor("broadcasts.team_bank_unlocked", playerName));
-                    break;
-                case BUY_TEAM_CLAIM:
-                    economyManager.removeMoneyPlayer(player, config.getDouble("prices.buyTeamClaim"));
-                    team.unlockedTeamClaim();
-                    player.sendMessage(messageManager.getMessage("manage_team.team_claim.unlock"));
-
-                    new ManageMenu(player, previousMenu).openMenu();
-                    team.refreshTeamMembersInventory(playerName);
-                    team.teamBroadcast(playerName, messageManager.replaceAuthor("broadcasts.team_claim_unlocked", playerName));
                     break;
                 case EDIT_NAME:
                     player.closeInventory();
@@ -178,7 +173,7 @@ public class ConfirmMenu extends FixedMenuOLD {
                     team.refreshTeamMembersInventory(playerName);
                     break;
                 case DELETE_TEAM:
-                    team.teamBroadcast(playerName, messageManager.replaceTeamId("broadcasts.team_deleted", team.getTeamName()));
+                    team.teamBroadcast(playerName, messageManager.replaceTeamId("broadcasts.team_deleted", team.getName()));
                     team.removeTeam();
                     player.closeInventory();
                     player.sendMessage(messageManager.getMessage("manage_team.team_delete.deleted"));
@@ -191,9 +186,9 @@ public class ConfirmMenu extends FixedMenuOLD {
                     economyManager.removeMoneyPlayer(player, config.getDouble("prices.upgrade.teamPlaces.level"+newLevel));
                     player.sendMessage(messageManager.getReplaceMessage("manage_team.upgrade_member_amount.new_upgrade", newLevel.toString()));
 
-                    new UpgradeMembersMenu(player, previousMenu).openMenu();
+                    new UpgradeMembersMenu(player).openMenu(team);
                     team.refreshTeamMembersInventory(playerName);
-                    team.teamBroadcast(playerName, messageManager.replaceTeamId("broadcasts.new_member_amount_upgrade", team.getTeamName()));
+                    team.teamBroadcast(playerName, messageManager.replaceTeamId("broadcasts.new_member_amount_upgrade", team.getName()));
                     break;
                 case IMPROV_LVL_STORAGE:
                     level = team.getTeamStorageLvl();
@@ -202,22 +197,21 @@ public class ConfirmMenu extends FixedMenuOLD {
                     economyManager.removeMoneyPlayer(player, config.getDouble("prices.upgrade.teamStorages.level"+newLevel));
                     player.sendMessage(messageManager.getReplaceMessage("manage_team.upgrade_storages.new_upgrade", newLevel.toString()));
 
-                    new UpgradeStorageMenu(player, previousMenu).openMenu();
+                    new UpgradeStorageMenu(player).openMenu(team);
                     team.refreshTeamMembersInventory(playerName);
-                    team.teamBroadcast(playerName, messageManager.replaceTeamId("broadcasts.new_storage_upgrade", team.getTeamName()));
+                    team.teamBroadcast(playerName, messageManager.replaceTeamId("broadcasts.new_storage_upgrade", team.getName()));
                     break;
                 case LEAVE_TEAM:
                     team.removeMember(playerName);
                     player.closeInventory();
                     team.refreshTeamMembersInventory(playerName);
                     team.teamBroadcast(playerName, messageManager.replaceAuthor("broadcasts.player_leave_team", playerName));
-                    player.sendMessage(messageManager.getReplaceMessage("other.leave_team", team.getTeamName()));
+                    player.sendMessage(messageManager.getReplaceMessage("other.leave_team", team.getName()));
                     break;
                 default:
                     break;
             }
             cacheManager.removePlayerActionName(playerName, actionName);
-            cacheManager.addTeam(team);
         }
 
         else if (Buttons.CANCEL_BUTTON.isClickedButton(clickEvent)){
@@ -232,48 +226,37 @@ public class ConfirmMenu extends FixedMenuOLD {
                     player.closeInventory();
                     break;
                 case CREATE_HOME:
-                    // new ManageMenu(player, this).openMenu();
-                    previousMenu.openMenu();
+                    new ManageMenu(player).openMenu(team);
                     break;
                 case DELETE_HOME:
-                    // new ManageMenu(player, this).openMenu();
-                    previousMenu.openMenu();
+                    new ManageMenu(player).openMenu(team);
                     break;
                 case CREATE_TEAM:
-                    // new CreateTeamMenu(player, this).openMenu();
-                    previousMenu.openMenu();
+                    new CreateTeamMenu(player).openMenu();
                     break;
                 case BUY_TEAM_BANK:
-                    // new ManageMenu(player, this).openMenu();
-                    previousMenu.openMenu();
+                    new ManageMenu(player).openMenu(team);
                     break;
                 case EDIT_NAME:
-                    // new ManageMenu(player, this).openMenu();
-                    previousMenu.openMenu();
+                    new ManageMenu(player).openMenu(team);
                     break;
                 case EDIT_PREFIX:
-                    // new ManageMenu(player, this).openMenu();
-                    previousMenu.openMenu();
+                    new ManageMenu(player).openMenu(team);
                     break;
                 case EDIT_DESCRIPTION:
-                    // new ManageMenu(player, this).openMenu();
-                    previousMenu.openMenu();
+                    new ManageMenu(player).openMenu(team);
                     break;
                 case DELETE_TEAM:
-                    // new ManageMenu(player, this).openMenu();
-                    previousMenu.openMenu();
+                    new ManageMenu(player).openMenu(team);
                     break;
                 case IMPROV_LVL_MEMBERS:
-                    // new UpgradeMembersMenu(player, this).openMenu();
-                    previousMenu.openMenu();
+                    new UpgradeMembersMenu(player).openMenu(team);
                     break;
                 case IMPROV_LVL_STORAGE:
-                    // new UpgradeStorageMenu(player, this).openMenu();
-                    previousMenu.openMenu();
+                    new UpgradeStorageMenu(player).openMenu(team);
                     break;
                 case LEAVE_TEAM:
-                    // new MemberMenu(player, this).openMenu();
-                    previousMenu.openMenu();
+                    new MemberMenu(player).openMenu(team);
                     break;
                 default:
                     break;

@@ -5,13 +5,12 @@ main: fr.army.stelyteam.StelyTeamPlugin
 api-version: "1.16"
 depend:
   - "Vault"
-  - "NoQueuePluginMessage"
 softdepend:
   - "Jobs"
   - "StelyClaim"
   - "WorldEdit"
   - "WorldGuard"
-  - "BungeeChatConnect"
+  - "NoQueuePluginMessage"
   - "Essentials"
   - "EssentialsChat"
 commands:
@@ -45,12 +44,6 @@ commands:
       description: "Affiche le solde de la team"
       usage: "/stelyteam money <team>"
       aliases: ["balance", "bal"]
-      permissions:
-        default: "op"
-    claim:
-      description: "Affiche si la team a débloqué le claim ou non"
-      usage: "/stelyteam claim <team>"
-      aliases: []
       permissions:
         default: "op"
     upgrade:

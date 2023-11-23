@@ -13,42 +13,47 @@ import org.bukkit.inventory.ItemStack;
 
 import fr.army.stelyteam.conversation.ConvAddMoney;
 import fr.army.stelyteam.conversation.ConvWithdrawMoney;
-import fr.army.stelyteam.menu.FixedMenuOLD;
-import fr.army.stelyteam.menu.MenusOLD;
-import fr.army.stelyteam.menu.TeamMenuOLD;
-import fr.army.stelyteam.menu.button.Buttons;
+import fr.army.stelyteam.menu.Buttons;
+import fr.army.stelyteam.menu.Menus;
+import fr.army.stelyteam.menu.TeamMenu;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.TemporaryActionNames;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
-import fr.army.stelyteam.utils.builder.ItemBuilderOLD;
+import fr.army.stelyteam.utils.builder.ItemBuilder;
 import fr.army.stelyteam.utils.builder.conversation.ConversationBuilder;
+import fr.army.stelyteam.utils.manager.CacheManager;
+import fr.army.stelyteam.utils.manager.MessageManager;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
 
 
-public class MemberMenu extends FixedMenuOLD {
+public class MemberMenu extends TeamMenu {
 
-    private final ConversationBuilder conversationBuilder = plugin.getConversationBuilder();
+    final DatabaseManager mySqlManager = plugin.getDatabaseManager();
+    final CacheManager cacheManager = plugin.getCacheManager();
+    final MessageManager messageManager = plugin.getMessageManager();
+    final ConversationBuilder conversationBuilder = plugin.getConversationBuilder();
+    final ColorsBuilder colorsBuilder = plugin.getColorsBuilder();
 
-    public MemberMenu(Player viewer, TeamMenuOLD previousMenu) {
+    public MemberMenu(Player viewer){
         super(
             viewer,
-            MenusOLD.MEMBER_MENU.getName(),
-            MenusOLD.MEMBER_MENU.getSlots(),
-            previousMenu
+            Menus.MEMBER_MENU.getName(),
+            Menus.MEMBER_MENU.getSlots()
         );
     }
 
 
-    public Inventory createInventory(String playerName) {
-        String teamName = team.getTeamName();
-        String teamPrefix = team.getTeamPrefix();
+    public Inventory createInventory(Team team, String playerName) {
+        String teamName = team.getName();
+        String teamPrefix = team.getPrefix();
         String teamOwner = team.getTeamOwnerName();
         Integer teamMembersLelvel = team.getImprovLvlMembers();
         Integer teamMembers = team.getTeamMembers().size();
         String membershipDate = team.getMembershipDate(playerName);
         Double teamMoney = team.getTeamMoney();
-        String teamDescription = team.getTeamDescription();
+        String teamDescription = team.getDescription();
         Integer maxMembers = config.getInt("teamMaxMembers");
         String memberRank = plugin.getRankFromId(team.getMemberRank(playerName));
         String memberRankName = config.getString("ranks." + memberRank + ".name");
@@ -57,46 +62,44 @@ public class MemberMenu extends FixedMenuOLD {
 
         emptyCases(inventory, this.menuSlots, 0);
 
-        for(String buttonName : config.getConfigurationSection("inventories.member").getKeys(false)){
-            Integer slot = config.getInt("inventories.member."+buttonName+".slot");
-            Material material = Material.getMaterial(config.getString("inventories.member."+buttonName+".itemType"));
-            String displayName = config.getString("inventories.member."+buttonName+".itemName");
-            List<String> lore = config.getStringList("inventories.member."+buttonName+".lore");
-            String headTexture = config.getString("inventories.member."+buttonName+".headTexture");
+        for(String str : config.getConfigurationSection("inventories.member").getKeys(false)){
+            Integer slot = config.getInt("inventories.member."+str+".slot");
+            Material material = Material.getMaterial(config.getString("inventories.member."+str+".itemType"));
+            String name = config.getString("inventories.member."+str+".itemName");
+            List<String> lore = config.getStringList("inventories.member."+str+".lore");
+            String headTexture = config.getString("inventories.member."+str+".headTexture");
             ItemStack item;
 
-            if (displayName.equals(config.getString("inventories.member.seeTeamBank.itemName"))){
+            if (name.equals(config.getString("inventories.member.seeTeamBank.itemName"))){
                 lore = replaceInLore(lore, "%TEAM_MONEY%", DoubleToString(teamMoney));
                 lore = replaceInLore(lore, "%MAX_MONEY%", DoubleToString(config.getDouble("teamMaxMoney")));
-            }else if (displayName.equals(config.getString("inventories.member.teamInfos.itemName"))){
+            }else if (name.equals(config.getString("inventories.member.teamInfos.itemName"))){
                 lore = replaceInLore(lore, "%NAME%", teamName);
-                lore = replaceInLore(lore, "%PREFIX%", ColorsBuilder.replaceColor(teamPrefix));
+                lore = replaceInLore(lore, "%PREFIX%", colorsBuilder.replaceColor(teamPrefix));
                 lore = replaceInLore(lore, "%OWNER%", teamOwner);
                 lore = replaceInLore(lore, "%RANK%", rankColor + memberRankName);
                 lore = replaceInLore(lore, "%DATE%", membershipDate);
                 lore = replaceInLore(lore, "%MEMBER_COUNT%", IntegerToString(teamMembers));
                 lore = replaceInLore(lore, "%MAX_MEMBERS%", IntegerToString(maxMembers+teamMembersLelvel));
-                lore = replaceInLore(lore, "%DESCRIPTION%", ColorsBuilder.replaceColor(teamDescription));
+                lore = replaceInLore(lore, "%DESCRIPTION%", colorsBuilder.replaceColor(teamDescription));
             }
 
-            if (plugin.playerHasPermission(playerName, team, buttonName)){ 
-                item = ItemBuilderOLD.getItem(material, buttonName, displayName, lore, headTexture, false);
+            if (plugin.playerHasPermission(playerName, team, str)){ 
+                item = ItemBuilder.getItem(material, name, lore, headTexture, false);
             }else{
-                item = ItemBuilderOLD.getItem(
-                    Material.getMaterial(config.getString("noPermission.itemType")),
-                    buttonName,
-                    displayName, 
+                item = ItemBuilder.getItem(
+                    Material.getMaterial(config.getString("noPermission.itemType")), 
+                    name, 
                     config.getStringList("noPermission.lore"),
                     config.getString("noPermission.headTexture"),
                     false
                 );
             }
 
-            if (buttonName.equals("seeTeamBank")){
+            if (name.equals(config.getString("inventories.member.seeTeamBank.itemName"))){
                 if (!team.isUnlockedTeamBank()){
-                    item = ItemBuilderOLD.getItem(
+                    item = ItemBuilder.getItem(
                         Material.getMaterial(config.getString("teamBankNotUnlock.itemType")),
-                        "teamBankNotUnlock",
                         config.getString("teamBankNotUnlock.itemName"),
                         Collections.emptyList(),
                         config.getString("teamBankNotUnlock.headTexture"),
@@ -111,9 +114,8 @@ public class MemberMenu extends FixedMenuOLD {
     }
 
 
-    @Override
-    public void openMenu(){
-        this.open(createInventory(viewer.getName()));
+    public void openMenu(Team team){
+        this.open(createInventory(team, viewer.getName()));
     }
 
 
@@ -134,17 +136,16 @@ public class MemberMenu extends FixedMenuOLD {
             if (team.isTeamOwner(playerName) 
                     || plugin.playerHasPermissionInSection(playerName, team, "manage")
                     || plugin.playerHasPermissionInSection(playerName, team, "editMembers")
-                    || plugin.playerHasPermissionInSection(playerName, team, "editAlliances")
-                    || plugin.playerHasPermission(playerName, team, "teamList")){
-                new AdminMenu(player, this).openMenu();
+                    || plugin.playerHasPermissionInSection(playerName, team, "editAlliances")){
+                new AdminMenu(player).openMenu();
             }else{
                 player.closeInventory();
             }
         }else if (Buttons.TEAM_MEMBERS_BUTTON.isClickedButton(clickEvent)){
-            new MembersMenu(player, this).openMenu();
+            new MembersMenu(player).openMenu(team);
         
         }else if (Buttons.TEAM_ALLIANCES_BUTTON.isClickedButton(clickEvent)){
-            new AlliancesMenu(player, this).openMenu();
+            new AlliancesMenu(player).openMenu(team);
         
         }else if (Buttons.ADD_MONEY_TEAM_BANK_BUTTON.isClickedButton(clickEvent)){
             if (!team.isUnlockedTeamBank()) {
@@ -164,12 +165,12 @@ public class MemberMenu extends FixedMenuOLD {
             player.closeInventory();
             if (!team.isTeamOwner(playerName)){
                 cacheManager.addTempAction(new TemporaryAction(playerName, TemporaryActionNames.LEAVE_TEAM, team));
-                new ConfirmMenu(player, this).openMenu();
+                new ConfirmMenu(player).openMenu();
             }else {
                 player.sendMessage(messageManager.getMessage("other.owner_cant_leave_team"));
             }
         }else if (Buttons.STORAGE_DIRECTORY_BUTTON.isClickedButton(clickEvent)){
-            new StorageDirectoryMenu(player, this).openMenu();
+            new StorageDirectoryMenu(player).openMenu(team);
         }
     }
 

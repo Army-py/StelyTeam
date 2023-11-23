@@ -7,16 +7,18 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.cache.SaveField;
 import fr.army.stelyteam.team.Alliance;
 import fr.army.stelyteam.team.Member;
 import fr.army.stelyteam.team.Permission;
 import fr.army.stelyteam.team.Storage;
 import fr.army.stelyteam.team.Team;
+import fr.army.stelyteam.utils.manager.database.builder.SQLResult;
 
 public abstract class DatabaseManager {
 
@@ -76,8 +78,6 @@ public abstract class DatabaseManager {
 
     public abstract void updateUnlockedTeamBank(UUID teamUuid);
 
-    public abstract void updateUnlockedTeamClaim(UUID teamUuid);
-
     public abstract void incrementImprovLvlMembers(UUID teamUuid);
 
     public abstract void incrementTeamStorageLvl(UUID teamUuid);
@@ -114,9 +114,9 @@ public abstract class DatabaseManager {
 
     public abstract byte[] getStorageContent(UUID teamUuid, Integer storageId);
 
-    public abstract void insertStorageContent(UUID teamUuid, Integer storageId, byte[] storageContent, String openedServer);
+    public abstract void insertStorageContent(UUID teamUuid, Integer storageId, byte[] storageContent);
 
-    public abstract void updateStorageContent(UUID teamUuid, Integer storageId, byte[] storageContent, String openedServer);
+    public abstract void updateStorageContent(UUID teamUuid, Integer storageId, byte[] storageContent);
 
     public abstract void saveStorage(Storage storage);
 
@@ -136,13 +136,11 @@ public abstract class DatabaseManager {
 
     public abstract Set<Team> getTeams();
 
-    public abstract Member getTeamMember(UUID teamUuid, String playerName);
-
     public abstract List<Member> getTeamMembers(UUID teamUuid);
 
     public abstract Set<Permission> getTeamAssignement(UUID teamUuid);
 
-    public abstract List<Alliance> getTeamAlliances(UUID teamUuid);
+    public abstract Set<Alliance> getTeamAlliances(UUID teamUuid);
 
     public abstract Map<Integer, Storage> getTeamStorages(UUID teamUuid);
 
@@ -150,17 +148,14 @@ public abstract class DatabaseManager {
 
     public abstract int getTeamId(UUID teamUuid);
 
+
+    public abstract SQLResult get(@NotNull String[] table, @NotNull SaveField[] columns, @Nullable String[] conditions, @Nullable String[] orders);
+
+    public abstract void insert(@NotNull String table, @NotNull SaveField[] columns, @NotNull Object[] values);
+
+    public abstract void update(@NotNull String table, @NotNull SaveField[] columns, @NotNull Object[] values, @Nullable String[] conditions);
+
+    public abstract void delete(@NotNull String table, @Nullable String[] conditions);
+
     public abstract String getCurrentDate();
-
-
-
-    public abstract void registerPlayer(Player player);
-
-    public abstract void registerPlayer(OfflinePlayer player);
-
-    public abstract boolean isRegistered(String playerName);
-
-    public abstract UUID getUUID(String playerName);
-
-    public abstract String getPlayerName(UUID uuid);
 }
