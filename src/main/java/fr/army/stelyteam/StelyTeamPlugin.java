@@ -5,6 +5,7 @@ import fr.army.stelyteam.cache.TeamCache;
 import fr.army.stelyteam.chat.TeamChatLoader;
 import fr.army.stelyteam.chat.TeamChatManager;
 import fr.army.stelyteam.command.CommandManager;
+import fr.army.stelyteam.controller.EMFLoader;
 import fr.army.stelyteam.external.ExternalManager;
 import fr.army.stelyteam.listener.ListenerLoader;
 import fr.army.stelyteam.menu.TeamMenu;
@@ -37,6 +38,7 @@ public class StelyTeamPlugin extends JavaPlugin {
     private static StelyTeamPlugin plugin;
     private YamlConfiguration config;
     private YamlConfiguration messages;
+    private EMFLoader emfLoader;
     private CacheManager cacheManager;
     private SQLiteDataManager sqliteManager;
     private EconomyManager economyManager;
@@ -59,6 +61,9 @@ public class StelyTeamPlugin extends JavaPlugin {
 
         this.config = initFile(this.getDataFolder(), "config.yml");
         this.messages = initFile(this.getDataFolder(), "messages.yml");
+
+        this.emfLoader = new EMFLoader();
+        this.emfLoader.setupEntityManagerFactory();
 
         this.sqliteManager = new SQLiteDataManager(this);
 
@@ -229,6 +234,10 @@ public class StelyTeamPlugin extends JavaPlugin {
 
     public YamlConfiguration getMessages() {
         return messages;
+    }
+
+    public EMFLoader getEmfLoader() {
+        return emfLoader;
     }
 
     public CacheManager getCacheManager() {
