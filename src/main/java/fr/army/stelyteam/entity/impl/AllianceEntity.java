@@ -1,40 +1,40 @@
-package fr.army.stelyteam.entity;
+package fr.army.stelyteam.entity.impl;
 
 
+import fr.army.stelyteam.entity.IEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 
 import java.util.Date;
 
 @Entity
-public class Alliance {
+public class AllianceEntity implements IEntity {
 
     @Id
     @ManyToOne(optional = false)
-    private Team team;
+    private TeamEntity team;
 
     @Id
     @ManyToOne(optional = false)
-    private Team allied;
+    private TeamEntity allied;
 
     private Date allianceDate;
 
 
-    public Team getTeam() {
+    public TeamEntity getTeam() {
         return team;
     }
 
-    public void setTeam(Team team) {
+    public void setTeam(TeamEntity team) {
         this.team = team;
     }
 
-    public Team getAllied() {
+    public TeamEntity getAllied() {
         return allied;
     }
 
-    public void setAllied(Team allied) {
+    public void setAllied(TeamEntity allied) {
         this.allied = allied;
     }
 

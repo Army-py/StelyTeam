@@ -1,4 +1,4 @@
-package fr.army.stelyteam.entity;
+package fr.army.stelyteam.entity.impl;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -6,32 +6,32 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 
 @Entity
-public class TeamStorage {
+public class TeamStorageEntity {
     @Id
     @OneToOne(optional = false)
-    private Storage storage;
+    private StorageEntity storageEntity;
 
     @Id
     @ManyToOne(optional = false)
-    private Team team;
+    private TeamEntity teamEntity;
 
     private byte[] storageContent;
 
 
-    public Storage getStorage() {
-        return storage;
+    public StorageEntity getStorage() {
+        return storageEntity;
     }
 
-    public void setStorage(Storage storage) {
-        this.storage = storage;
+    public void setStorage(StorageEntity storageEntity) {
+        this.storageEntity = storageEntity;
     }
 
-    public Team getTeam() {
-        return team;
+    public TeamEntity getTeamEntity() {
+        return teamEntity;
     }
 
-    public void setTeam(Team team) {
-        this.team = team;
+    public void setTeamEntity(TeamEntity team) {
+        this.teamEntity = team;
     }
 
     public byte[] getStorageContent() {

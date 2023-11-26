@@ -1,10 +1,11 @@
-package fr.army.stelyteam.entity;
+package fr.army.stelyteam.entity.impl;
 
+import fr.army.stelyteam.entity.IEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 @Entity
-public class Storage {
+public class StorageEntity implements IEntity {
     @Id
     private int id;
 

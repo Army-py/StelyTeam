@@ -1,26 +1,26 @@
-package fr.army.stelyteam.entity;
+package fr.army.stelyteam.entity.impl;
 
+import fr.army.stelyteam.entity.IEntity;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 
 @Entity
-public class BankAccount {
+public class BankAccountEntity implements IEntity {
 
     @Id
     @OneToOne(mappedBy = "bankAccount", optional = false)
-    private Team team;
+    private TeamEntity teamEntity;
     private boolean unlocked;
     private double balance;
 
 
-    public Team getTeam() {
-        return team;
+    public TeamEntity getTeamEntity() {
+        return teamEntity;
     }
 
-    public void setTeam(Team team) {
-        this.team = team;
+    public void setTeamEntity(TeamEntity team) {
+        this.teamEntity = team;
     }
 
     public boolean isUnlocked() {

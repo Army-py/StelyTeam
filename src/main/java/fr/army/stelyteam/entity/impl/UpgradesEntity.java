@@ -1,13 +1,13 @@
-package fr.army.stelyteam.entity;
+package fr.army.stelyteam.entity.impl;
 
 import jakarta.persistence.*;
 
 @Entity
-public class Upgrades {
+public class UpgradesEntity {
 
     @Id
     @OneToOne(mappedBy = "upgradeId", optional = false)
-    private Team team;
+    private TeamEntity teamEntity;
 
     @Column()
     private int membersAmount;
@@ -16,12 +16,12 @@ public class Upgrades {
     private int storagesAmount;
 
 
-    public Team getTeam() {
-        return team;
+    public TeamEntity getTeamEntity() {
+        return teamEntity;
     }
 
-    public void setTeam(Team team) {
-        this.team = team;
+    public void setTeamEntity(TeamEntity team) {
+        this.teamEntity = team;
     }
 
     public int getMembersAmount() {

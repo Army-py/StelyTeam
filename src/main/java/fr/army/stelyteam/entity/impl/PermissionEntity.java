@@ -1,15 +1,16 @@
-package fr.army.stelyteam.entity;
+package fr.army.stelyteam.entity.impl;
 
+import fr.army.stelyteam.entity.IEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 
 @Entity
-public class Permission {
+public class PermissionEntity implements IEntity {
 
     @Id
     @ManyToOne(optional = false)
-    private Team team;
+    private TeamEntity teamEntity;
 
     @Id
     private String name;
@@ -17,12 +18,12 @@ public class Permission {
     private int rank;
 
 
-    public Team getTeam() {
-        return team;
+    public TeamEntity getTeamEntity() {
+        return teamEntity;
     }
 
-    public void setTeam(Team team) {
-        this.team = team;
+    public void setTeamEntity(TeamEntity team) {
+        this.teamEntity = team;
     }
 
     public String getName() {

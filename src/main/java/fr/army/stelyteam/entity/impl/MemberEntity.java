@@ -1,6 +1,7 @@
-package fr.army.stelyteam.entity;
+package fr.army.stelyteam.entity.impl;
 
 
+import fr.army.stelyteam.entity.IEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -10,7 +11,7 @@ import java.util.Date;
 import java.util.UUID;
 
 @Entity
-public class Member {
+public class MemberEntity implements IEntity {
 
     @Id
     @GeneratedValue
@@ -20,7 +21,7 @@ public class Member {
     private int rank;
     private Date joiningDate;
     @ManyToOne(optional = false)
-    private Team team;
+    private TeamEntity teamEntity;
 
 
     public int getId() {
@@ -55,11 +56,11 @@ public class Member {
         this.joiningDate = joiningDate;
     }
 
-    public Team getTeam() {
-        return team;
+    public TeamEntity getTeamEntity() {
+        return teamEntity;
     }
 
-    public void setTeam(Team team) {
-        this.team = team;
+    public void setTeamEntity(TeamEntity team) {
+        this.teamEntity = team;
     }
 }
