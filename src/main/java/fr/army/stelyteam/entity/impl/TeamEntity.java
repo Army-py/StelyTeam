@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.Optional;
 import java.util.UUID;
 
 @Entity
@@ -27,7 +28,7 @@ public class TeamEntity {
     private Date creationDate;
 
     @OneToOne(cascade = CascadeType.ALL)
-    private UpgradesEntity upgradeId;
+    private UpgradesEntity upgradesEntities;
 
     @OneToOne(cascade = CascadeType.ALL)
     private BankAccountEntity bankAccountEntity;
@@ -39,13 +40,13 @@ public class TeamEntity {
     private Collection<PermissionEntity> permissionEntities;
 
     @OneToMany(mappedBy = "teamEntity")
-    private Collection<TeamStorageEntity> storages;
+    private Collection<TeamStorageEntity> storagesEntities;
 
     @OneToMany(mappedBy = "team")
     private Collection<AllianceEntity> allianceEntities;
 
     @OneToMany(mappedBy = "allied")
-    private Collection<AllianceEntity> allies;
+    private Collection<AllianceEntity> alliesEntities;
 
 
     public int getId() {
@@ -64,32 +65,32 @@ public class TeamEntity {
         this.uuid = uuid;
     }
 
-    public String getName() {
-        return name;
+    public Optional<String> getName() {
+        return Optional.ofNullable(name);
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
-    public String getDisplayName() {
-        return displayName;
+    public Optional<String> getDisplayName() {
+        return Optional.ofNullable(displayName);
     }
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
     }
 
-    public String getDescription() {
-        return description;
+    public Optional<String> getDescription() {
+        return Optional.ofNullable(description);
     }
 
     public void setDescription(String description) {
         this.description = description;
     }
 
-    public Date getCreationDate() {
-        return creationDate;
+    public Optional<Date> getCreationDate() {
+        return Optional.ofNullable(creationDate);
     }
 
     public void setCreationDate(Date creationDate) {
@@ -97,58 +98,58 @@ public class TeamEntity {
     }
 
     public UpgradesEntity getUpgradeId() {
-        return upgradeId;
+        return upgradesEntities;
     }
 
     public void setUpgradeId(UpgradesEntity upgradeId) {
-        this.upgradeId = upgradeId;
+        this.upgradesEntities = upgradeId;
     }
 
-    public BankAccountEntity getBankAccount() {
-        return bankAccountEntity;
+    public Optional<BankAccountEntity> getBankAccountEntity() {
+        return Optional.ofNullable(bankAccountEntity);
     }
 
-    public void setBankAccount(BankAccountEntity bankAccountEntity) {
+    public void setBankAccountEntity(BankAccountEntity bankAccountEntity) {
         this.bankAccountEntity = bankAccountEntity;
     }
 
-    public Collection<MemberEntity> getMembers() {
-        return memberEntities;
+    public Optional<Collection<MemberEntity>> getMembersEntities() {
+        return Optional.ofNullable(memberEntities);
     }
 
-    public void setMembers(Collection<MemberEntity> memberEntities) {
+    public void setMembersEntities(Collection<MemberEntity> memberEntities) {
         this.memberEntities = memberEntities;
     }
 
-    public Collection<PermissionEntity> getPermissions() {
+    public Collection<PermissionEntity> getPermissionsEntities() {
         return permissionEntities;
     }
 
-    public void setPermissions(Collection<PermissionEntity> permissionEntities) {
+    public void setPermissionsEntities(Collection<PermissionEntity> permissionEntities) {
         this.permissionEntities = permissionEntities;
     }
 
-    public Collection<TeamStorageEntity> getStorages() {
-        return storages;
+    public Collection<TeamStorageEntity> getStoragesEntities() {
+        return storagesEntities;
     }
 
-    public void setStorages(Collection<TeamStorageEntity> storages) {
-        this.storages = storages;
+    public void setStoragesEntities(Collection<TeamStorageEntity> storages) {
+        this.storagesEntities = storages;
     }
 
-    public Collection<AllianceEntity> getAlliances() {
+    public Collection<AllianceEntity> getAlliancesEntities() {
         return allianceEntities;
     }
 
-    public void setAlliances(Collection<AllianceEntity> allianceEntities) {
+    public void setAlliancesEntities(Collection<AllianceEntity> allianceEntities) {
         this.allianceEntities = allianceEntities;
     }
 
-    public Collection<AllianceEntity> getAllies() {
-        return allies;
+    public Collection<AllianceEntity> getAlliesEntities() {
+        return alliesEntities;
     }
 
-    public void setAllies(Collection<AllianceEntity> allies) {
-        this.allies = allies;
+    public void setAlliesEntities(Collection<AllianceEntity> allies) {
+        this.alliesEntities = allies;
     }
 }

@@ -22,19 +22,19 @@ public class AllianceEntity implements IEntity {
     private Date allianceDate;
 
 
-    public TeamEntity getTeam() {
+    public TeamEntity getTeamEntity() {
         return team;
     }
 
-    public void setTeam(TeamEntity team) {
+    public void setTeamEntity(TeamEntity team) {
         this.team = team;
     }
 
-    public TeamEntity getAllied() {
+    public TeamEntity getAlliedEntity() {
         return allied;
     }
 
-    public void setAllied(TeamEntity allied) {
+    public void setAlliedEntity(TeamEntity allied) {
         this.allied = allied;
     }
 
