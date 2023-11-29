@@ -1,6 +1,7 @@
 package fr.army.stelyteam.team;
 
 import fr.army.stelyteam.cache.*;
+import fr.army.stelyteam.entity.impl.BankAccountEntity;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -26,6 +27,11 @@ public class BankAccount {
     public void loadUnsafe(@NotNull BankAccountSnapShot snapshot) {
         snapshot.unlocked().ifPresent(unlocked::loadUnsafe);
         snapshot.balance().ifPresent(balance::loadUnsafe);
+    }
+
+    public void loadUnsafe(@NotNull BankAccountEntity entity) {
+        entity.isUnlocked().ifPresent(unlocked::loadUnsafe);
+        entity.getBalance().ifPresent(balance::loadUnsafe);
     }
 
     public void save(@NotNull PropertiesHolder holder, @NotNull List<SaveProperty<?>> values) {
