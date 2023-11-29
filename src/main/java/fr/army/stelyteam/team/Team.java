@@ -1,9 +1,14 @@
 package fr.army.stelyteam.team;
 
 import fr.army.stelyteam.cache.*;
+import fr.army.stelyteam.entity.impl.MemberEntity;
+import fr.army.stelyteam.entity.impl.TeamEntity;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class Team implements PropertiesHolder {
 
@@ -483,6 +488,21 @@ public class Team implements PropertiesHolder {
         snapshot.creationDate().ifPresent(creationDate::loadUnsafe);
         snapshot.bankAccount().ifPresent(bankAccount::loadUnsafe);
         snapshot.members().ifPresent(v -> members.loadUnsafe(v, Member::new));
+    }
+
+    public void loadUnsafe(@NotNull TeamEntity teamEntity) {
+        teamEntity.getName().ifPresent(name::loadUnsafe);
+        teamEntity.getDisplayName().ifPresent(prefix::loadUnsafe);
+        teamEntity.getDescription().ifPresent(description::loadUnsafe);
+        teamEntity.getCreationDate().ifPresent(creationDate::loadUnsafe);
+        teamEntity.getBankAccountEntity().ifPresent(bankAccount::loadUnsafe);
+
+        Function<Collection<MemberEntity>, Collection<UUID>> extractMembersUuid = collection -> {
+            return collection.stream()
+                    .map(MemberEntity::getPlayerUuid)
+                    .collect(Collectors.toList());
+        };
+        teamEntity.getMembersEntities().ifPresent(v -> members.loadUnsafe(extractMembersUuid.apply(v), Member::new));
     }
 
     @Override
