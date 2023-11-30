@@ -28,4 +28,16 @@ public class TeamRepository extends AbstractRepository<TeamEntity> {
                 callback);
     }
 
+
+    public synchronized void findByPlayerName(@NotNull String playerName, AsyncCallBackObject<TeamEntity> callback) {
+        executeQuery(() -> {
+                    CriteriaQuery<TeamEntity> query = criteriaBuilder.createQuery(entityClass);
+                    Root<TeamEntity> teamEntityRoot = query.from(entityClass);
+                    Join<TeamEntity, MemberEntity> teamMemberEntityJoin = teamEntityRoot.join("memberEntities");
+                    query.select(teamEntityRoot);
+                    query.where(criteriaBuilder.equal(teamMemberEntityJoin.get("name"), playerName));
+                    return entityManager.createQuery(query).getSingleResult();
+                },
+                callback);
+    }
 }
