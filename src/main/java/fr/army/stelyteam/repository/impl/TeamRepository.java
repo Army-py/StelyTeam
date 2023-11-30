@@ -15,7 +15,6 @@ public class TeamRepository extends AbstractRepository<TeamEntity> {
 
 
     public TeamEntity findByName(@NotNull String teamName) {
-
         CriteriaQuery<TeamEntity> query = criteriaBuilder.createQuery(entityClass);
         Root<TeamEntity> teamEntityRoot = query.from(entityClass);
         query.select(teamEntityRoot);
