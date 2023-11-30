@@ -1,7 +1,7 @@
 package fr.army.stelyteam.repository.callback;
 
-import fr.army.stelyteam.repository.exception.ControllerException;
+import fr.army.stelyteam.repository.exception.RepositoryException;
 
 public interface AsyncCallBackExceptionHandler {
-    void error(ControllerException e);
+    void error(RepositoryException e);
 }

@@ -1,7 +1,7 @@
 package fr.army.stelyteam.repository;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.repository.exception.ControllerException;
+import fr.army.stelyteam.repository.exception.RepositoryException;
 import fr.army.stelyteam.repository.exception.impl.EntityManagerNotInitializedException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -47,7 +47,7 @@ public class EMFLoader {
         }
     }
 
-    public EntityManager getEntityManager() throws ControllerException {
+    public EntityManager getEntityManager() throws RepositoryException {
         setupEntityManagerFactory();
         if (entityManagerFactory != null && entityManagerFactory.isOpen()) {
             return entityManagerFactory.createEntityManager();

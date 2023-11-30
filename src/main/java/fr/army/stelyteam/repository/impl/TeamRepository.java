@@ -1,15 +1,15 @@
 package fr.army.stelyteam.repository.impl;
 
-import fr.army.stelyteam.repository.AbstractController;
+import fr.army.stelyteam.repository.AbstractRepository;
 import fr.army.stelyteam.entity.impl.TeamEntity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import org.jetbrains.annotations.NotNull;
 
-public class TeamController extends AbstractController<TeamEntity> {
+public class TeamRepository extends AbstractRepository<TeamEntity> {
 
-    public TeamController(Class<TeamEntity> entityClass, EntityManager entityManager) {
+    public TeamRepository(Class<TeamEntity> entityClass, EntityManager entityManager) {
         super(entityClass, entityManager);
     }
 

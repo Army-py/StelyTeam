@@ -3,7 +3,7 @@ package fr.army.stelyteam.repository;
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.repository.callback.AsyncCallBackObject;
 import fr.army.stelyteam.repository.callback.AsyncCallBackObjectList;
-import fr.army.stelyteam.repository.exception.ControllerException;
+import fr.army.stelyteam.repository.exception.RepositoryException;
 import fr.army.stelyteam.repository.exception.impl.EntityNotFoundException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
@@ -13,20 +13,20 @@ import jakarta.transaction.Transactional;
 
 import java.util.List;
 
-public abstract class AbstractController<T> {
+public abstract class AbstractRepository<T> {
 
     protected final Class<T> entityClass;
     protected final EntityManager entityManager;
     protected final CriteriaBuilder criteriaBuilder;
 
-    public AbstractController(Class<T> entityClass, EntityManager entityManager) {
+    public AbstractRepository(Class<T> entityClass, EntityManager entityManager) {
         this.entityClass = entityClass;
         this.entityManager = entityManager;
         this.criteriaBuilder = entityManager.getCriteriaBuilder();
     }
 
     @Transactional
-    protected synchronized void persist(T entity) throws ControllerException {
+    protected synchronized void persist(T entity) throws RepositoryException {
         EntityTransaction entityTransaction = entityManager.getTransaction();
         entityTransaction.begin();
 
@@ -40,7 +40,7 @@ public abstract class AbstractController<T> {
         new Thread(() -> {
             try {
                 persist(entity);
-            } catch (ControllerException e) {
+            } catch (RepositoryException e) {
                 throw new RuntimeException(e);
             }
         }).start();
@@ -81,7 +81,7 @@ public abstract class AbstractController<T> {
         }).start();
     }
 
-    protected synchronized T find(Object id) throws ControllerException {
+    protected synchronized T find(Object id) throws RepositoryException {
         EntityTransaction entityTransaction = entityManager.getTransaction();
         entityTransaction.begin();
 
@@ -99,13 +99,13 @@ public abstract class AbstractController<T> {
         new Thread(() -> {
             try {
                 asyncCallBackObject.done(find(id));
-            } catch (ControllerException e) {
+            } catch (RepositoryException e) {
                 StelyTeamPlugin.getPlugin().getLogger().severe(e.getMessage());
             }
         }).start();
     }
 
-    protected synchronized List<T> findAll() throws ControllerException {
+    protected synchronized List<T> findAll() throws RepositoryException {
         EntityTransaction entityTransaction = entityManager.getTransaction();
         entityTransaction.begin();
 
@@ -125,7 +125,7 @@ public abstract class AbstractController<T> {
         new Thread(() -> {
             try {
                 asyncCallBackObjectList.done(findAll());
-            } catch (ControllerException e) {
+            } catch (RepositoryException e) {
                 StelyTeamPlugin.getPlugin().getLogger().severe(e.getMessage());
             }
         }).start();

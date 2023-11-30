@@ -1,10 +1,10 @@
 package fr.army.stelyteam.repository.exception;
 
-public abstract class ControllerException extends Exception {
+public abstract class RepositoryException extends Exception {
 
     private final String detailedMessage;
 
-    protected ControllerException(String message, String detailedMessage) {
+    protected RepositoryException(String message, String detailedMessage) {
         super(message);
         this.detailedMessage = detailedMessage;
     }
