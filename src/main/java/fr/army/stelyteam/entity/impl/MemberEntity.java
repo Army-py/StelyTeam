@@ -20,6 +20,7 @@ public class MemberEntity implements IEntity {
     private int id;
 
     private UUID playerUuid;
+    private String name;
     private Integer rank;
     private Date joiningDate;
     @ManyToOne(optional = false)
@@ -64,5 +65,13 @@ public class MemberEntity implements IEntity {
 
     public void setTeamEntity(TeamEntity team) {
         this.teamEntity = team;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
