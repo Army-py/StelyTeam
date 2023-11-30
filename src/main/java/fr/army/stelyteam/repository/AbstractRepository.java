@@ -81,7 +81,7 @@ public abstract class AbstractRepository<T> {
         }).start();
     }
 
-    protected synchronized T find(Object id) throws RepositoryException {
+    protected synchronized T find(int id) throws RepositoryException {
         EntityTransaction entityTransaction = entityManager.getTransaction();
         entityTransaction.begin();
 
@@ -95,7 +95,7 @@ public abstract class AbstractRepository<T> {
         return e;
     }
 
-    public void find(Object id, AsyncCallBackObject<T> asyncCallBackObject) {
+    public void find(int id, AsyncCallBackObject<T> asyncCallBackObject) {
         new Thread(() -> {
             try {
                 asyncCallBackObject.done(find(id));
