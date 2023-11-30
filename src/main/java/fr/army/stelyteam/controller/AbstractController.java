@@ -14,8 +14,8 @@ import java.util.List;
 
 public abstract class AbstractController<T> {
 
-    private final Class<T> entityClass;
-    private final EntityManager entityManager;
+    protected final Class<T> entityClass;
+    protected final EntityManager entityManager;
 
     public AbstractController(Class<T> entityClass, EntityManager entityManager) {
         this.entityClass = entityClass;
