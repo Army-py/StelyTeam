@@ -1,12 +1,13 @@
 package fr.army.stelyteam.controller;
 
-import fr.army.stelyteam.controller.callback.AsyncCallBackExceptionHandler;
+import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.controller.callback.AsyncCallBackObject;
 import fr.army.stelyteam.controller.callback.AsyncCallBackObjectList;
 import fr.army.stelyteam.controller.exception.ControllerException;
 import fr.army.stelyteam.controller.exception.impl.EntityNotFoundException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.transaction.Transactional;
 
@@ -16,10 +17,12 @@ public abstract class AbstractController<T> {
 
     protected final Class<T> entityClass;
     protected final EntityManager entityManager;
+    protected final CriteriaBuilder criteriaBuilder;
 
     public AbstractController(Class<T> entityClass, EntityManager entityManager) {
         this.entityClass = entityClass;
         this.entityManager = entityManager;
+        this.criteriaBuilder = entityManager.getCriteriaBuilder();
     }
 
     @Transactional
@@ -44,7 +47,7 @@ public abstract class AbstractController<T> {
     }
 
     @Transactional
-    protected synchronized T merge(T entity) throws ControllerException {
+    protected synchronized T merge(T entity) {
         EntityTransaction entityTransaction = entityManager.getTransaction();
         entityTransaction.begin();
 
@@ -55,18 +58,14 @@ public abstract class AbstractController<T> {
         return entity;
     }
 
-    public synchronized void edit(T entity, AsyncCallBackObject<T> asyncCallBackObject, AsyncCallBackExceptionHandler asyncCallBackExceptionHandler) {
+    public synchronized void edit(T entity, AsyncCallBackObject<T> asyncCallBackObject) {
         new Thread(() -> {
-            try {
-                asyncCallBackObject.done(merge(entity));
-            } catch (ControllerException e) {
-                asyncCallBackExceptionHandler.error(e);
-            }
+            asyncCallBackObject.done(merge(entity));
         }).start();
     }
 
     @Transactional
-    protected synchronized void remove(T entity) throws ControllerException {
+    protected synchronized void remove(T entity) {
         EntityTransaction entityTransaction = entityManager.getTransaction();
         entityTransaction.begin();
 
@@ -76,13 +75,9 @@ public abstract class AbstractController<T> {
         entityManager.close();
     }
 
-    public void remove(T entity, AsyncCallBackExceptionHandler asyncCallBackExceptionHandler) {
+    public void delete(T entity) {
         new Thread(() -> {
-            try {
-                remove(entity);
-            } catch (ControllerException e) {
-                asyncCallBackExceptionHandler.error(e);
-            }
+            remove(entity);
         }).start();
     }
 
@@ -95,17 +90,17 @@ public abstract class AbstractController<T> {
         entityTransaction.commit();
         entityManager.close();
         if (e == null) {
-            throw new EntityNotFoundException(getClass());
+            throw new EntityNotFoundException(entityClass);
         }
         return e;
     }
 
-    public void find(Object id, AsyncCallBackObject<T> asyncCallBackObject, AsyncCallBackExceptionHandler asyncCallBackExceptionHandler) {
+    public void find(Object id, AsyncCallBackObject<T> asyncCallBackObject) {
         new Thread(() -> {
             try {
                 asyncCallBackObject.done(find(id));
             } catch (ControllerException e) {
-                asyncCallBackExceptionHandler.error(e);
+                StelyTeamPlugin.getPlugin().getLogger().severe(e.getMessage());
             }
         }).start();
     }
@@ -117,18 +112,21 @@ public abstract class AbstractController<T> {
         CriteriaQuery<T> cq = entityManager.getCriteriaBuilder().createQuery(entityClass);
         cq.select(cq.from(entityClass));
         List<T> e = entityManager.createQuery(cq).getResultList();
+        if (e.isEmpty()){
+            throw new EntityNotFoundException(entityClass);
+        }
 
         entityTransaction.commit();
         entityManager.close();
         return e;
     }
 
-    public void findAll(AsyncCallBackObjectList<T> asyncCallBackObjectList, AsyncCallBackExceptionHandler asyncCallBackExceptionHandler) {
+    public void findAll(AsyncCallBackObjectList<T> asyncCallBackObjectList) {
         new Thread(() -> {
             try {
                 asyncCallBackObjectList.done(findAll());
             } catch (ControllerException e) {
-                asyncCallBackExceptionHandler.error(e);
+                StelyTeamPlugin.getPlugin().getLogger().severe(e.getMessage());
             }
         }).start();
     }
