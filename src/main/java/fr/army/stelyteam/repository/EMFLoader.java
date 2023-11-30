@@ -1,8 +1,8 @@
-package fr.army.stelyteam.controller;
+package fr.army.stelyteam.repository;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.controller.exception.ControllerException;
-import fr.army.stelyteam.controller.exception.impl.EntityManagerNotInitializedException;
+import fr.army.stelyteam.repository.exception.ControllerException;
+import fr.army.stelyteam.repository.exception.impl.EntityManagerNotInitializedException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;

@@ -1,10 +1,10 @@
-package fr.army.stelyteam.controller;
+package fr.army.stelyteam.repository;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.controller.callback.AsyncCallBackObject;
-import fr.army.stelyteam.controller.callback.AsyncCallBackObjectList;
-import fr.army.stelyteam.controller.exception.ControllerException;
-import fr.army.stelyteam.controller.exception.impl.EntityNotFoundException;
+import fr.army.stelyteam.repository.callback.AsyncCallBackObject;
+import fr.army.stelyteam.repository.callback.AsyncCallBackObjectList;
+import fr.army.stelyteam.repository.exception.ControllerException;
+import fr.army.stelyteam.repository.exception.impl.EntityNotFoundException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.criteria.CriteriaBuilder;

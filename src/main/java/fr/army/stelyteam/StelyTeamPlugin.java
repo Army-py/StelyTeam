@@ -5,7 +5,7 @@ import fr.army.stelyteam.cache.TeamCache;
 import fr.army.stelyteam.chat.TeamChatLoader;
 import fr.army.stelyteam.chat.TeamChatManager;
 import fr.army.stelyteam.command.CommandManager;
-import fr.army.stelyteam.controller.EMFLoader;
+import fr.army.stelyteam.repository.EMFLoader;
 import fr.army.stelyteam.external.ExternalManager;
 import fr.army.stelyteam.listener.ListenerLoader;
 import fr.army.stelyteam.menu.TeamMenu;

@@ -1,6 +1,6 @@
-package fr.army.stelyteam.controller.exception.impl;
+package fr.army.stelyteam.repository.exception.impl;
 
-import fr.army.stelyteam.controller.exception.ControllerException;
+import fr.army.stelyteam.repository.exception.ControllerException;
 
 public class EntityManagerNotInitializedException extends ControllerException {
 

@@ -1,4 +1,4 @@
-package fr.army.stelyteam.controller.exception;
+package fr.army.stelyteam.repository.exception;
 
 public abstract class ControllerException extends Exception {
 

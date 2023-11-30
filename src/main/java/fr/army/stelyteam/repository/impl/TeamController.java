@@ -1,6 +1,6 @@
-package fr.army.stelyteam.controller.impl;
+package fr.army.stelyteam.repository.impl;
 
-import fr.army.stelyteam.controller.AbstractController;
+import fr.army.stelyteam.repository.AbstractController;
 import fr.army.stelyteam.entity.impl.TeamEntity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaQuery;

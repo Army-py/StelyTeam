@@ -1,4 +1,4 @@
-package fr.army.stelyteam.controller.callback;
+package fr.army.stelyteam.repository.callback;
 
 public interface AsyncCallBackObject<T> {
 
