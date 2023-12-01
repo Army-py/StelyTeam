@@ -4,6 +4,7 @@ import fr.army.stelyteam.cache.SaveField;
 import fr.army.stelyteam.cache.SaveProperty;
 import fr.army.stelyteam.cache.StorageManager;
 import fr.army.stelyteam.cache.TeamCache;
+import fr.army.stelyteam.entity.impl.TeamEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,11 +30,11 @@ public class TeamManager {
         if (cachedTeam != null && needLoadFields.isEmpty()) {
             return cachedTeam;
         }
-        final TeamSnapshot storedTeam = storageManager.retrieveTeam(teamId, fields);
+        final TeamEntity storedTeam = storageManager.retrieveTeam(teamId);
         if (storedTeam == null) {
             return null;
         }
-        final Team team = cachedTeam == null ? new Team(storedTeam.uuid()) : cachedTeam;
+        final Team team = cachedTeam == null ? new Team(storedTeam.getUuid()) : cachedTeam;
         team.loadUnsafe(storedTeam);
         return team;
     }
@@ -42,12 +43,12 @@ public class TeamManager {
     public Team getTeam(@NotNull String teamName, @NotNull SaveField... fields) {
         // TODO First check from cache then load from storage if needed (need improvement in TeamCache)
         // Then the implementation of this method should be exactly like #getTeam(UUID, TeamField[])
-        final TeamSnapshot storedTeam = storageManager.retrieveTeam(teamName, fields);
+        final TeamEntity storedTeam = storageManager.retrieveTeam(teamName);
         if (storedTeam == null) {
             return null;
         }
-        final Team cachedTeam = teamCache.getTeam(storedTeam.uuid());
-        final Team team = cachedTeam == null ? new Team(storedTeam.uuid()) : cachedTeam;
+        final Team cachedTeam = teamCache.getTeam(storedTeam.getUuid());
+        final Team team = cachedTeam == null ? new Team(storedTeam.getUuid()) : cachedTeam;
         team.loadUnsafe(storedTeam);
         return team;
     }
