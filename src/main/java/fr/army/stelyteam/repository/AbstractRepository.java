@@ -12,7 +12,6 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.transaction.Transactional;
 
 import java.util.List;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public abstract class AbstractRepository<T> {
@@ -133,13 +132,13 @@ public abstract class AbstractRepository<T> {
         }).start();
     }
 
-    protected void executeQuery(Supplier<T> supplier, AsyncCallBackObject<T> asyncCallBackObject){
+    protected void executeAsyncQuery(Supplier<T> supplier, AsyncCallBackObject<T> asyncCallBackObject){
         new Thread(() -> {
             asyncCallBackObject.done(supplier.get());
         }).start();
     }
 
-    protected void executeQueryList(Supplier<List<T>> supplier, AsyncCallBackObjectList<T> asyncCallBackObjectList){
+    protected void executeAsyncQueryList(Supplier<List<T>> supplier, AsyncCallBackObjectList<T> asyncCallBackObjectList){
         new Thread(() -> {
             asyncCallBackObjectList.done(supplier.get());
         }).start();
