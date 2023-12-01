@@ -45,7 +45,7 @@ public class StorageManager {
         return teamRepository.findByTeamUuid(teamId);
     }
 
-    public <T> void retrieve(UUID teamId, @NotNull SetProperty<?>... properties) {
+    public <T> void retrieve(UUID teamId, @NotNull SetProperty<?, ?>... properties) {
         // TODO Fetch team informations base on the specified properties from the current storage
         throw new UnsupportedOperationException("Not implemented yet");
     }
