@@ -39,7 +39,7 @@ public abstract class AbstractRepository<T> {
         entityManager.close();
     }
 
-    public synchronized void create(T entity) {
+    public synchronized void insert(T entity) {
         new Thread(() -> {
             try {
                 persist(entity);
@@ -54,14 +54,14 @@ public abstract class AbstractRepository<T> {
         EntityTransaction entityTransaction = entityManager.getTransaction();
         entityTransaction.begin();
 
-        entityManager.merge(entity);
+        T mergedEntity = entityManager.merge(entity);
 
         entityTransaction.commit();
         entityManager.close();
-        return entity;
+        return mergedEntity;
     }
 
-    public synchronized void edit(T entity, AsyncCallBackObject<T> asyncCallBackObject) {
+    public synchronized void update(T entity, AsyncCallBackObject<T> asyncCallBackObject) {
         new Thread(() -> {
             asyncCallBackObject.done(merge(entity));
         }).start();
