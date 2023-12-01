@@ -12,6 +12,7 @@ import fr.army.stelyteam.menu.TeamMenu;
 import fr.army.stelyteam.menu.impl.AdminMenu;
 import fr.army.stelyteam.menu.impl.CreateTeamMenu;
 import fr.army.stelyteam.menu.impl.MemberMenu;
+import fr.army.stelyteam.repository.exception.RepositoryException;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.team.TeamManager;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
@@ -74,14 +75,23 @@ public class StelyTeamPlugin extends JavaPlugin {
             this.databaseManager.createTables();
             this.getLogger().info("SQL connectée au plugin !");
         } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
+            getLogger().severe(e.getMessage());
             getServer().getPluginManager().disablePlugin(this);
+            return;
         }
         
         this.cacheManager = new CacheManager();
         this.economyManager = new EconomyManager(this);
         this.messageManager = new MessageManager(this);
-        storageManager = new StorageManager();
+
+        try {
+            storageManager = new StorageManager(emfLoader.getEntityManager());
+        } catch (RepositoryException e) {
+            getLogger().severe(e.getMessage());
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+
         teamCache = new TeamCache(storageManager);
         teamManager = new TeamManager(storageManager, teamCache);
         final TeamChatLoader teamChatLoader = new TeamChatLoader();
