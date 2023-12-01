@@ -17,27 +17,29 @@ public class TeamRepository extends AbstractRepository<TeamEntity> {
     }
 
 
-    public synchronized void findByTeamName(@NotNull String teamName, AsyncCallBackObject<TeamEntity> callback) {
-        executeQuery(() -> {
-                    CriteriaQuery<TeamEntity> query = criteriaBuilder.createQuery(entityClass);
-                    Root<TeamEntity> teamEntityRoot = query.from(entityClass);
-                    query.select(teamEntityRoot);
-                    query.where(criteriaBuilder.equal(teamEntityRoot.get("name"), teamName));
-                    return entityManager.createQuery(query).getSingleResult();
-                },
-                callback);
+    public TeamEntity findByTeamName(@NotNull String teamName){
+        CriteriaQuery<TeamEntity> query = criteriaBuilder.createQuery(entityClass);
+        Root<TeamEntity> teamEntityRoot = query.from(entityClass);
+        query.select(teamEntityRoot);
+        query.where(criteriaBuilder.equal(teamEntityRoot.get("name"), teamName));
+        return entityManager.createQuery(query).getSingleResult();
+    }
+
+    public synchronized void asyncFindByTeamName(@NotNull String teamName, AsyncCallBackObject<TeamEntity> callback) {
+        executeAsyncQuery(() -> findByTeamName(teamName), callback);
     }
 
 
-    public synchronized void findByPlayerName(@NotNull String playerName, AsyncCallBackObject<TeamEntity> callback) {
-        executeQuery(() -> {
-                    CriteriaQuery<TeamEntity> query = criteriaBuilder.createQuery(entityClass);
-                    Root<TeamEntity> teamEntityRoot = query.from(entityClass);
-                    Join<TeamEntity, MemberEntity> teamMemberEntityJoin = teamEntityRoot.join("memberEntities");
-                    query.select(teamEntityRoot);
-                    query.where(criteriaBuilder.equal(teamMemberEntityJoin.get("name"), playerName));
-                    return entityManager.createQuery(query).getSingleResult();
-                },
-                callback);
+    public TeamEntity findByPlayerName(@NotNull String playerName){
+        CriteriaQuery<TeamEntity> query = criteriaBuilder.createQuery(entityClass);
+        Root<TeamEntity> teamEntityRoot = query.from(entityClass);
+        Join<TeamEntity, MemberEntity> teamMemberEntityJoin = teamEntityRoot.join("memberEntities");
+        query.select(teamEntityRoot);
+        query.where(criteriaBuilder.equal(teamMemberEntityJoin.get("name"), playerName));
+        return entityManager.createQuery(query).getSingleResult();
+    }
+
+    public synchronized void asyncFindByPlayerName(@NotNull String playerName, AsyncCallBackObject<TeamEntity> callback) {
+        executeAsyncQuery(() -> findByPlayerName(playerName), callback);
     }
 }
