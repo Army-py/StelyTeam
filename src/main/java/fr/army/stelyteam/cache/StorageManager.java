@@ -1,21 +1,11 @@
 package fr.army.stelyteam.cache;
 
-import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.entity.impl.TeamEntity;
-import fr.army.stelyteam.repository.EMFLoader;
 import fr.army.stelyteam.repository.impl.TeamRepository;
-import fr.army.stelyteam.team.Team;
-import fr.army.stelyteam.team.TeamSnapshot;
-import fr.army.stelyteam.utils.manager.database.DatabaseManager;
-import fr.army.stelyteam.utils.manager.database.builder.PreparedSQLRequest;
-import fr.army.stelyteam.utils.manager.database.builder.SQLResult;
-import fr.army.stelyteam.utils.manager.database.builder.impl.query.SelectQuery;
-
 import jakarta.persistence.EntityManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.sql.SQLException;
 import java.util.UUID;
 
 public class StorageManager {
