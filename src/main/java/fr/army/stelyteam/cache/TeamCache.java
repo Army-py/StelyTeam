@@ -1,5 +1,6 @@
 package fr.army.stelyteam.cache;
 
+import fr.army.stelyteam.entity.impl.TeamEntity;
 import fr.army.stelyteam.team.Team;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -32,6 +33,18 @@ public class TeamCache {
         }
     }
 
+    public Team getTeam(@NotNull String teamName) {
+        try {
+            lock.lock();
+            return cachedTeams.values().stream()
+                    .filter(team -> Objects.equals(team.getName().get(), teamName))
+                    .findFirst()
+                    .orElse(null);
+        } finally {
+            lock.unlock();
+        }
+    }
+
     public Optional<Team> getPlayerTeam(@NotNull UUID playerId) {
         try {
             lock.lock();
@@ -48,11 +61,13 @@ public class TeamCache {
     public void join(@NotNull Player player) {
         try {
             lock.lock();
-            final Team team = storageManager.retreivePlayerTeam(player.getName());
-            if (team == null) {
+            final TeamEntity teamEntity = storageManager.retrievePlayerTeam(player.getName());
+            if (teamEntity == null) {
                 playersTeam.put(player.getUniqueId(), Optional.empty());
                 return;
             }
+            final Team team = new Team(teamEntity.getUuid())
+                    .loadUnsafe(teamEntity);
             final Team cachedTeam = cachedTeams.computeIfAbsent(team.getId(), k -> team);
             playersTeam.put(player.getUniqueId(), Optional.of(cachedTeam));
         } finally {
