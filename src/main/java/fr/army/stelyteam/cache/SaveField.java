@@ -15,7 +15,11 @@ public enum SaveField {
     BANK_UNLOCKED(SaveFieldHolder.TEAM),
     BANK_BALANCE(SaveFieldHolder.TEAM),
     TEAM_UUID(SaveFieldHolder.TEAM),
-    MEMBER_UUID(SaveFieldHolder.MEMBER);
+    MEMBER_UUID(SaveFieldHolder.MEMBER),
+    PERMISSION_NAME(SaveFieldHolder.PERMISSION),
+    ALLIANCE_UUID(SaveFieldHolder.ALLIANCE),
+    STORAGE_ID(SaveFieldHolder.STORAGE),
+    ;
 
     private final SaveFieldHolder holder;
 
