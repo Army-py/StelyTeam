@@ -1,15 +1,16 @@
 package fr.army.stelyteam.team;
 
 import fr.army.stelyteam.cache.Property;
+import fr.army.stelyteam.cache.SaveField;
 
 public class Upgrades {
 
     private final Property<Integer> members;
-    private final Property<Integer> storage;
+    private final Property<Integer> storages;
 
     public Upgrades() {
-        members = new Property<>();
-        storage = new Property<>();
+        members = new Property<>(SaveField.UPGRADES_MEMBERS);
+        storages = new Property<>(SaveField.UPGRADES_STORAGES);
     }
 
     public Property<Integer> getMembers() {
@@ -17,6 +18,6 @@ public class Upgrades {
     }
 
     public Property<Integer> getStorage() {
-        return storage;
+        return storages;
     }
 }
