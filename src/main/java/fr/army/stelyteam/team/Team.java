@@ -490,7 +490,7 @@ public class Team implements PropertiesHolder {
         snapshot.members().ifPresent(v -> members.loadUnsafe(v, Member::new));
     }
 
-    public void loadUnsafe(@NotNull TeamEntity teamEntity) {
+    public Team loadUnsafe(@NotNull TeamEntity teamEntity) {
         teamEntity.getName().ifPresent(name::loadUnsafe);
         teamEntity.getDisplayName().ifPresent(prefix::loadUnsafe);
         teamEntity.getDescription().ifPresent(description::loadUnsafe);
@@ -503,6 +503,7 @@ public class Team implements PropertiesHolder {
                     .collect(Collectors.toList());
         };
         teamEntity.getMembersEntities().ifPresent(v -> members.loadUnsafe(extractMembersUuid.apply(v), Member::new));
+        return this;
     }
 
     @Override
