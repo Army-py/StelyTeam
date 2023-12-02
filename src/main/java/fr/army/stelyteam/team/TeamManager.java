@@ -34,23 +34,21 @@ public class TeamManager {
         if (storedTeam == null) {
             return null;
         }
-        final Team team = cachedTeam == null ? new Team(storedTeam.getUuid()) : cachedTeam;
-        team.loadUnsafe(storedTeam);
-        return team;
+        return cachedTeam == null ? new Team(storedTeam.getUuid()).loadUnsafe(storedTeam) : cachedTeam;
     }
 
     @Nullable
     public Team getTeam(@NotNull String teamName, @NotNull SaveField... fields) {
-        // TODO First check from cache then load from storage if needed (need improvement in TeamCache)
-        // Then the implementation of this method should be exactly like #getTeam(UUID, TeamField[])
+        final Team cachedTeam = teamCache.getTeam(teamName);
+        final List<SaveField> needLoadFields = cachedTeam == null ? Arrays.asList(fields) : cachedTeam.getNeedLoad(fields);
+        if (cachedTeam != null && needLoadFields.isEmpty()) {
+            return cachedTeam;
+        }
         final TeamEntity storedTeam = storageManager.retrieveTeam(teamName);
         if (storedTeam == null) {
             return null;
         }
-        final Team cachedTeam = teamCache.getTeam(storedTeam.getUuid());
-        final Team team = cachedTeam == null ? new Team(storedTeam.getUuid()) : cachedTeam;
-        team.loadUnsafe(storedTeam);
-        return team;
+        return cachedTeam == null ? new Team(storedTeam.getUuid()).loadUnsafe(storedTeam) : cachedTeam;
     }
 
     public void saveTeam(@NotNull Team team) {
