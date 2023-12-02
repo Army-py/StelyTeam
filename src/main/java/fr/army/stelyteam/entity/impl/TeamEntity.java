@@ -33,6 +33,9 @@ public class TeamEntity {
     @OneToOne(cascade = CascadeType.ALL)
     private BankAccountEntity bankAccountEntity;
 
+    @OneToOne(optional = false)
+    private MemberEntity owner;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "teamEntity")
     private Collection<MemberEntity> memberEntities;
 
@@ -151,5 +154,13 @@ public class TeamEntity {
 
     public void setAlliesEntities(Collection<AllianceEntity> allies) {
         this.alliesEntities = allies;
+    }
+
+    public MemberEntity getOwner() {
+        return owner;
+    }
+
+    public void setOwner(MemberEntity owner) {
+        this.owner = owner;
     }
 }
