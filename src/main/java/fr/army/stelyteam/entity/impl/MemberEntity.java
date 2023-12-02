@@ -3,10 +3,7 @@ package fr.army.stelyteam.entity.impl;
 
 import fr.army.stelyteam.cache.Property;
 import fr.army.stelyteam.entity.IEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 import java.util.Date;
 import java.util.Optional;
@@ -17,30 +14,21 @@ public class MemberEntity implements IEntity {
 
     @Id
     @GeneratedValue
-    private int id;
+    @OneToOne(cascade = CascadeType.ALL, optional = false)
+    private PlayerEntity player;
 
-    private UUID playerUuid;
-    private String name;
     private Integer rank;
     private Date joiningDate;
     @ManyToOne(optional = false)
     private TeamEntity teamEntity;
 
 
-    public int getId() {
-        return id;
+    public PlayerEntity getPlayer() {
+        return player;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public UUID getPlayerUuid() {
-        return playerUuid;
-    }
-
-    public void setPlayerUuid(UUID playerUuid) {
-        this.playerUuid = playerUuid;
+    public void setPlayer(PlayerEntity player) {
+        this.player = player;
     }
 
     public Optional<Integer> getRank() {
@@ -67,11 +55,7 @@ public class MemberEntity implements IEntity {
         this.teamEntity = team;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public UUID getPlayerUuid(){
+        return player.getUuid();
     }
 }
