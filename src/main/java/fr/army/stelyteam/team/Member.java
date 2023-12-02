@@ -35,7 +35,7 @@ public class Member implements PropertiesHolder {
     }
 
     public void loadUnsafe(@NotNull MemberEntity memberEntity){
-        playerId = memberEntity.getPlayerUuid();
+        playerId = memberEntity.getPlayer().getUuid();
         memberEntity.getRank().ifPresent(rank::loadUnsafe);
         memberEntity.getJoiningDate().ifPresent(joiningDate::loadUnsafe);
     }
