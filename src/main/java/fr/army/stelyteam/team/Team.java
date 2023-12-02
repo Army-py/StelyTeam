@@ -29,9 +29,9 @@ public class Team implements PropertiesHolder {
 
 
     private final SetProperty<UUID, Member> members;
-    private final SetProperty<Permission> permissions;
-    private final SetProperty<Alliance> alliances;
-    private Map<Integer, Storage> teamStorages;
+    private final SetProperty<String, Permission> permissions;
+    private final SetProperty<UUID, Alliance> alliances;
+    private final SetProperty<Integer, Storage> storages;
 
     public Team(@NotNull UUID uuid) {
         this.uuid = uuid;
@@ -44,10 +44,13 @@ public class Team implements PropertiesHolder {
         upgrades = new Upgrades();
 
         members = new SetProperty<>(SaveField.MEMBERS, Member::getId);
-        this.teamMembers = plugin.getDatabaseManager().getTeamMembers(uuid);
-        this.teamPermissions = plugin.getDatabaseManager().getTeamAssignement(uuid);
-        this.teamAlliances = plugin.getDatabaseManager().getTeamAlliances(uuid);
-        this.teamStorages = plugin.getDatabaseManager().getTeamStorages(uuid);
+        permissions = new SetProperty<>(SaveField.PERMISSION_NAME, Permission::getPermissionName);
+        alliances = new SetProperty<>(SaveField.ALLIANCE_UUID, Alliance::getTeamUuid);
+        storages = new SetProperty<>(SaveField.STORAGE_ID, Storage::getStorageId);
+        // this.teamMembers = plugin.getDatabaseManager().getTeamMembers(uuid);
+        // this.teamPermissions = plugin.getDatabaseManager().getTeamAssignement(uuid);
+        // this.teamAlliances = plugin.getDatabaseManager().getTeamAlliances(uuid);
+        // this.teamStorages = plugin.getDatabaseManager().getTeamStorages(uuid);
     }
 
     /*
@@ -472,12 +475,12 @@ public class Team implements PropertiesHolder {
     }
 
     @NotNull
-    public SetProperty<Permission> getPermissions() {
+    public SetProperty<String, Permission> getPermissions() {
         return permissions;
     }
 
     @NotNull
-    public SetProperty<Alliance> getAlliances() {
+    public SetProperty<UUID, Alliance> getAlliances() {
         return alliances;
     }
 
