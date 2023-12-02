@@ -1,7 +1,6 @@
 package fr.army.stelyteam.repository;
 
 import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.entity.impl.TeamEntity;
 import fr.army.stelyteam.repository.callback.AsyncCallBackObject;
 import fr.army.stelyteam.repository.callback.AsyncCallBackObjectList;
 import fr.army.stelyteam.repository.exception.RepositoryException;
@@ -10,7 +9,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.metamodel.EntityType;
 import jakarta.transaction.Transactional;
 
 import java.util.List;
