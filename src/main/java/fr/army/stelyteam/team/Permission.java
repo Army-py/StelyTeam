@@ -2,7 +2,7 @@ package fr.army.stelyteam.team;
 
 public class Permission {
     
-    private String permissionName;
+    private final String permissionName;
     private int teamRank;
 
     public Permission(String permissionName, int teamRank){
