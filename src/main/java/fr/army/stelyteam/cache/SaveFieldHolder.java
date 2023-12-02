@@ -2,18 +2,11 @@ package fr.army.stelyteam.cache;
 
 public enum SaveFieldHolder {
 
-    TEAM("team"),
-    MEMBER("player"),
+    TEAM,
+    MEMBER,
+    PERMISSION,
+    ALLIANCE,
+    STORAGE,
     ;
-
-    private final String tableName;
-
-    SaveFieldHolder(String tableName) {
-        this.tableName = name();
-    }
-
-    public String getTableName() {
-        return tableName;
-    }
 
 }
