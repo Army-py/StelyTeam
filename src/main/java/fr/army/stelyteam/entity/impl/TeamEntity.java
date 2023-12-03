@@ -56,111 +56,125 @@ public class TeamEntity {
         return id;
     }
 
-    public void setId(int id) {
+    public TeamEntity setId(int id) {
         this.id = id;
+        return this;
     }
 
     public UUID getUuid() {
         return uuid;
     }
 
-    public void setUuid(UUID uuid) {
+    public TeamEntity setUuid(UUID uuid) {
         this.uuid = uuid;
+        return this;
     }
 
     public Optional<String> getName() {
         return Optional.ofNullable(name);
     }
 
-    public void setName(String name) {
+    public TeamEntity setName(String name) {
         this.name = name;
+        return this;
     }
 
     public Optional<String> getDisplayName() {
         return Optional.ofNullable(displayName);
     }
 
-    public void setDisplayName(String displayName) {
+    public TeamEntity setDisplayName(String displayName) {
         this.displayName = displayName;
+        return this;
     }
 
     public Optional<String> getDescription() {
         return Optional.ofNullable(description);
     }
 
-    public void setDescription(String description) {
+    public TeamEntity setDescription(String description) {
         this.description = description;
+        return this;
     }
 
     public Optional<Date> getCreationDate() {
         return Optional.ofNullable(creationDate);
     }
 
-    public void setCreationDate(Date creationDate) {
+    public TeamEntity setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
+        return this;
     }
 
     public UpgradesEntity getUpgradeId() {
         return upgradesEntities;
     }
 
-    public void setUpgradeId(UpgradesEntity upgradeId) {
+    public TeamEntity setUpgradeId(UpgradesEntity upgradeId) {
         this.upgradesEntities = upgradeId;
+        return this;
     }
 
     public Optional<BankAccountEntity> getBankAccountEntity() {
         return Optional.ofNullable(bankAccountEntity);
     }
 
-    public void setBankAccountEntity(BankAccountEntity bankAccountEntity) {
+    public TeamEntity setBankAccountEntity(BankAccountEntity bankAccountEntity) {
         this.bankAccountEntity = bankAccountEntity;
+        return this;
     }
 
     public Optional<Collection<MemberEntity>> getMembersEntities() {
         return Optional.ofNullable(memberEntities);
     }
 
-    public void setMembersEntities(Collection<MemberEntity> memberEntities) {
+    public TeamEntity setMembersEntities(Collection<MemberEntity> memberEntities) {
         this.memberEntities = memberEntities;
+        return this;
     }
 
     public Collection<PermissionEntity> getPermissionsEntities() {
         return permissionEntities;
     }
 
-    public void setPermissionsEntities(Collection<PermissionEntity> permissionEntities) {
+    public TeamEntity setPermissionsEntities(Collection<PermissionEntity> permissionEntities) {
         this.permissionEntities = permissionEntities;
+        return this;
     }
 
     public Collection<TeamStorageEntity> getStoragesEntities() {
         return storagesEntities;
     }
 
-    public void setStoragesEntities(Collection<TeamStorageEntity> storages) {
+    public TeamEntity setStoragesEntities(Collection<TeamStorageEntity> storages) {
         this.storagesEntities = storages;
+        return this;
     }
 
     public Collection<AllianceEntity> getAlliancesEntities() {
         return allianceEntities;
     }
 
-    public void setAlliancesEntities(Collection<AllianceEntity> allianceEntities) {
+    public TeamEntity setAlliancesEntities(Collection<AllianceEntity> allianceEntities) {
         this.allianceEntities = allianceEntities;
+        return this;
     }
 
     public Collection<AllianceEntity> getAlliesEntities() {
         return alliesEntities;
     }
 
-    public void setAlliesEntities(Collection<AllianceEntity> allies) {
+    public TeamEntity setAlliesEntities(Collection<AllianceEntity> allies) {
         this.alliesEntities = allies;
+        return this;
     }
 
     public MemberEntity getOwner() {
         return owner;
     }
 
-    public void setOwner(MemberEntity owner) {
+    public TeamEntity setOwner(MemberEntity owner) {
         this.owner = owner;
+        return this;
     }
 }
