@@ -1,4 +1,4 @@
-package fr.army.stelyteam.conversation;
+package fr.army.stelyteam.conversation.old;
 
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;

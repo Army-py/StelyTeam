@@ -1,4 +1,4 @@
-package fr.army.stelyteam.conversation;
+package fr.army.stelyteam.conversation.old;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.team.Team;

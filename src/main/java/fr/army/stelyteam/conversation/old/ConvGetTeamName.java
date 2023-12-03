@@ -1,8 +1,10 @@
-package fr.army.stelyteam.conversation;
+package fr.army.stelyteam.conversation.old;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.team.Team;
-import fr.army.stelyteam.utils.manager.EconomyManager;
+import fr.army.stelyteam.utils.TemporaryAction;
+import fr.army.stelyteam.utils.builder.conversation.ConversationBuilder;
+import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
 import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 
@@ -11,27 +13,31 @@ import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
-public class ConvEditTeamName extends StringPrompt {
+public class ConvGetTeamName extends StringPrompt {
 
-    private DatabaseManager sqlManager;
-    private YamlConfiguration config;
-    private MessageManager messageManager;
-    private EconomyManager economyManager;
+    private final StelyTeamPlugin plugin;
+    private final CacheManager cacheManager;
+    private final DatabaseManager sqlManager;
+    private final YamlConfiguration config;
+    private final MessageManager messageManager;
+    private final ConversationBuilder conversationBuilder;
 
 
-    public ConvEditTeamName(StelyTeamPlugin plugin){
+    public ConvGetTeamName(StelyTeamPlugin plugin) {
+        this.plugin = plugin;
+        this.cacheManager = plugin.getCacheManager();
         this.sqlManager = plugin.getDatabaseManager();
         this.config = plugin.getConfig();
         this.messageManager = plugin.getMessageManager();
-        this.economyManager = plugin.getEconomyManager();
+        this.conversationBuilder = new ConversationBuilder(plugin);
     }
 
     @Override
     public Prompt acceptInput(ConversationContext con, String answer) {
         Player author = (Player) con.getForWhom();
         String authorName = author.getName();
-        Team team = Team.initFromPlayerName(authorName);
 
         if (nameTeamIsTooLong(answer)) {
             con.getForWhom().sendRawMessage(messageManager.getMessage("common.name_is_too_long"));
@@ -44,16 +50,23 @@ public class ConvEditTeamName extends StringPrompt {
             return this;
         }
 
-        economyManager.removeMoneyPlayer(author, config.getDouble("prices.editTeamId"));
-        con.getForWhom().sendRawMessage(messageManager.getReplaceMessage("manage_team.edit_team_id.team_name_edited", answer));
-        team.updateTeamName(answer);
-        team.refreshTeamMembersInventory(authorName);
+
+        if (cacheManager.playerHasAction(authorName)){
+            cacheManager.removePlayerAction(authorName);
+        }
+        cacheManager.addTempAction(
+            new TemporaryAction(
+                authorName, 
+                new Team(answer, authorName)
+            )
+        );
+        conversationBuilder.getNameInput(author, new ConvGetTeamPrefix(plugin));
         return null;
     }
 
     @Override
-    public String getPromptText(ConversationContext arg0) {
-        return messageManager.getMessage("manage_team.edit_team_id.send_team_id");
+    public @NotNull String getPromptText(@NotNull ConversationContext arg0) {
+        return messageManager.getMessage("manage_team.creation.send_team_id");
     }
 
 
