@@ -472,6 +472,11 @@ public class Team implements PropertiesHolder {
     }
 
     @NotNull
+    public Property<Member> getOwner(){
+        return owner;
+    }
+
+    @NotNull
     public SetProperty<UUID, Member> getMembers() {
         return members;
     }
@@ -540,6 +545,4 @@ public class Team implements PropertiesHolder {
         }
         return needLoad;
     }
-
-
 }
