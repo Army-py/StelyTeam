@@ -10,10 +10,10 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 
-import fr.army.stelyteam.conversation.ConvEditTeamDesc;
-import fr.army.stelyteam.conversation.ConvEditTeamName;
-import fr.army.stelyteam.conversation.ConvEditTeamPrefix;
-import fr.army.stelyteam.conversation.ConvGetTeamName;
+import fr.army.stelyteam.conversation.old.ConvEditTeamDesc;
+import fr.army.stelyteam.conversation.old.ConvEditTeamName;
+import fr.army.stelyteam.conversation.old.ConvEditTeamPrefix;
+import fr.army.stelyteam.conversation.old.ConvGetTeamName;
 import fr.army.stelyteam.menu.Buttons;
 import fr.army.stelyteam.menu.Menus;
 import fr.army.stelyteam.menu.TeamMenu;
