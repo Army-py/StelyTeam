@@ -22,23 +22,26 @@ public class MemberEntity extends PlayerEntity {
         return Optional.ofNullable(rank);
     }
 
-    public void setRank(int rank) {
+    public MemberEntity setRank(int rank) {
         this.rank = rank;
+        return this;
     }
 
     public Optional<Date> getJoiningDate() {
         return Optional.ofNullable(joiningDate);
     }
 
-    public void setJoiningDate(Date joiningDate) {
+    public MemberEntity setJoiningDate(Date joiningDate) {
         this.joiningDate = joiningDate;
+        return this;
     }
 
     public TeamEntity getTeamEntity() {
         return teamEntity;
     }
 
-    public void setTeamEntity(TeamEntity team) {
+    public MemberEntity setTeamEntity(TeamEntity team) {
         this.teamEntity = team;
+        return this;
     }
 }
