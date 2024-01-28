@@ -2,6 +2,7 @@ package fr.army.stelyteam.entity.impl;
 
 
 import jakarta.persistence.*;
+import org.bukkit.entity.Player;
 
 import java.util.Collection;
 import java.util.Date;
@@ -177,4 +178,52 @@ public class TeamEntity {
         this.owner = owner;
         return this;
     }
+
+
+    public static class Builder{
+        private String name;
+        private String displayName;
+        private Date creationDate;
+        private Player owner;
+
+        public Builder setName(String name){
+            this.name = name;
+            return this;
+        }
+
+        public Builder setDisplayName(String displayName){
+            this.displayName = displayName;
+            return this;
+        }
+
+        public Builder setCreationDate(Date creationDate){
+            this.creationDate = creationDate;
+            return this;
+        }
+
+        public Builder setOwner(Player owner){
+            this.owner = owner;
+            return this;
+        }
+
+        public TeamEntity build(){
+            final TeamEntity team = new TeamEntity()
+                .setUuid(UUID.randomUUID())
+                .setName(name)
+                .setDisplayName(displayName)
+                .setCreationDate(creationDate);
+
+            final MemberEntity member = new MemberEntity()
+                .setRank(0)
+                .setJoiningDate(new Date());
+            member.setUuid(owner.getUniqueId());
+            member.setName(owner.getName());
+            member.setTeamEntity(team);
+
+            team.setOwner(member);
+
+            return team;
+        }
+    }
+
 }

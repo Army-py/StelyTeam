@@ -47,20 +47,12 @@ public class CreationTeamConv extends Conversation {
 
         // TODO remove player money
 
-        final TeamEntity teamEntity = new TeamEntity()
-                .setUuid(UUID.randomUUID())
-                .setName(name)
-                .setDisplayName(displayName)
-                .setCreationDate(new Date());
-
-        final MemberEntity memberEntity = new MemberEntity()
-                .setRank(0)
-                .setJoiningDate(new Date());
-        memberEntity.setUuid(respondent.getUniqueId());
-        memberEntity.setName(respondent.getName());
-        memberEntity.setTeamEntity(teamEntity);
-
-        teamEntity.setOwner(memberEntity);
+        final TeamEntity teamEntity = new TeamEntity.Builder()
+            .setName(name)
+            .setDisplayName(displayName)
+            .setCreationDate(new Date())
+            .setOwner(respondent)
+            .build();
 
         storageManager.saveTeam(teamEntity);
     }
