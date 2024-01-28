@@ -1,6 +1,7 @@
 package fr.army.stelyteam.cache;
 
 import fr.army.stelyteam.entity.impl.TeamEntity;
+import fr.army.stelyteam.repository.callback.AsyncCallBackObject;
 import fr.army.stelyteam.repository.impl.TeamRepository;
 import jakarta.persistence.EntityManager;
 import org.jetbrains.annotations.NotNull;
@@ -33,6 +34,18 @@ public class StorageManager {
 
     public TeamEntity retrieveTeam(@NotNull UUID teamId) {
         return teamRepository.findByTeamUuid(teamId);
+    }
+
+    public void saveTeam(@NotNull TeamEntity team) {
+        if (teamRepository.findByTeamUuid(team.getUuid()) == null) {
+            teamRepository.insert(team);
+        } else {
+            teamRepository.update(team, new AsyncCallBackObject<TeamEntity>() {
+                @Override
+                public void done(TeamEntity result) {
+                }
+            });
+        }
     }
 
     public <T> void retrieve(UUID teamId, @NotNull SetProperty<?, ?>... properties) {
