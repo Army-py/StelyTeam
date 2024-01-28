@@ -4,12 +4,14 @@ import com.mrivanplays.conversations.base.ConversationContext;
 import com.mrivanplays.conversations.base.question.Question;
 import com.mrivanplays.conversations.spigot.BukkitConversationManager;
 import com.mrivanplays.conversations.spigot.BukkitConversationPartner;
+import fr.army.stelyteam.cache.StorageManager;
 import fr.army.stelyteam.conversation.Conversation;
-import fr.army.stelyteam.team.Member;
-import fr.army.stelyteam.team.Team;
+import fr.army.stelyteam.entity.impl.MemberEntity;
+import fr.army.stelyteam.entity.impl.TeamEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Date;
 import java.util.UUID;
 
 public class CreationTeamConv extends Conversation {
@@ -17,8 +19,8 @@ public class CreationTeamConv extends Conversation {
     private final String TEAM_NAME_IDENTIFIER = "teamName";
     private final String TEAM_DISPLAY_NAME_IDENTIFIER = "teamDisplayName";
 
-    public CreationTeamConv(BukkitConversationManager conversationManager) {
-        super(conversationManager);
+    public CreationTeamConv(BukkitConversationManager conversationManager, StorageManager storageManager) {
+        super(conversationManager, storageManager);
     }
 
     @Override
@@ -30,7 +32,7 @@ public class CreationTeamConv extends Conversation {
                 ))
                 .withQuestion(Question.of(
                         TEAM_DISPLAY_NAME_IDENTIFIER,
-                        "§aMaintenant envoi le préfixe que tu souhaites dans le tchat. §7§o(avec couleur)" // TODO remplacer par la nouvelle config
+                        "§aMaintenant envoie le préfixe que tu souhaites dans le tchat. §7§o(avec couleur)" // TODO remplacer par la nouvelle config
                 ))
                 .whenDone(this::done)
                 .build()
@@ -45,9 +47,22 @@ public class CreationTeamConv extends Conversation {
 
         // TODO remove player money
 
-        final Team team = new Team(UUID.randomUUID());
-        team.getOwner().set(new Member(respondent.getUniqueId()));
-        team.save();
+        final TeamEntity teamEntity = new TeamEntity()
+                .setUuid(UUID.randomUUID())
+                .setName(name)
+                .setDisplayName(displayName)
+                .setCreationDate(new Date());
+
+        final MemberEntity memberEntity = new MemberEntity()
+                .setRank(0)
+                .setJoiningDate(new Date());
+        memberEntity.setUuid(respondent.getUniqueId());
+        memberEntity.setName(respondent.getName());
+        memberEntity.setTeamEntity(teamEntity);
+
+        teamEntity.setOwner(memberEntity);
+
+        storageManager.saveTeam(teamEntity);
     }
 
 

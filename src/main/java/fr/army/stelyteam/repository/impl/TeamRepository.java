@@ -20,6 +20,7 @@ public class TeamRepository extends AbstractRepository<TeamEntity> {
         super(entityClass, entityManager);
     }
 
+    @Nullable
     public TeamEntity findByTeamUuid(@NotNull UUID uuid){
         CriteriaQuery<TeamEntity> query = criteriaBuilder.createQuery(entityClass);
         Root<TeamEntity> teamEntityRoot = query.from(entityClass);
@@ -34,6 +35,7 @@ public class TeamRepository extends AbstractRepository<TeamEntity> {
         executeAsyncQuery(() -> findByTeamUuid(uuid), callback);
     }
 
+    @Nullable
     public TeamEntity findByTeamName(@NotNull String name){
         CriteriaQuery<TeamEntity> query = criteriaBuilder.createQuery(entityClass);
         Root<TeamEntity> teamEntityRoot = query.from(entityClass);
