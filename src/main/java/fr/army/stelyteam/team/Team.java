@@ -45,7 +45,7 @@ public class Team implements PropertiesHolder {
         upgrades = new Upgrades();
 
         members = new SetProperty<>(SaveField.MEMBERS, Member::getId);
-        permissions = new SetProperty<>(SaveField.PERMISSION_NAME, Permission::getPermissionName);
+        permissions = new SetProperty<>(SaveField.PERMISSION_NAME, Permission::getName);
         alliances = new SetProperty<>(SaveField.ALLIANCE_UUID, Alliance::getTeamUuid);
         storages = new SetProperty<>(SaveField.STORAGE_ID, Storage::getStorageId);
         // this.teamMembers = plugin.getDatabaseManager().getTeamMembers(uuid);
