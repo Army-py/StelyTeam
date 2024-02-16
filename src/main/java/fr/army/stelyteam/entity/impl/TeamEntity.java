@@ -301,7 +301,7 @@ public class TeamEntity {
             if (permissions != null){
                 for (Permission p : permissions.toArray(new Permission[0])){
                     final PermissionEntity permissionEntity = new PermissionEntity()
-                        .setName(p.getName().get())
+                        .setName(p.getName())
                         .setRank(p.getTeamRank().get());
                     permissionEntity.setTeamEntity(team);
                     team.getPermissionsEntities().add(permissionEntity);
