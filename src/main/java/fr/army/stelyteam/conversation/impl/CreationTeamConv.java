@@ -8,6 +8,7 @@ import fr.army.stelyteam.cache.StorageManager;
 import fr.army.stelyteam.conversation.Conversation;
 import fr.army.stelyteam.entity.impl.MemberEntity;
 import fr.army.stelyteam.entity.impl.TeamEntity;
+import fr.army.stelyteam.team.Team;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -47,14 +48,10 @@ public class CreationTeamConv extends Conversation {
 
         // TODO remove player money
 
-        final TeamEntity teamEntity = new TeamEntity.Builder()
-            .setName(name)
-            .setDisplayName(displayName)
-            .setCreationDate(new Date())
-            .setOwner(respondent)
-            .build();
-
-        storageManager.saveTeam(teamEntity);
+        final Team team = new Team(UUID.randomUUID());
+        team.getName().set(name);
+        team.getDisplayName().set(displayName);
+        storageManager.saveTeam(team);
     }
 
 

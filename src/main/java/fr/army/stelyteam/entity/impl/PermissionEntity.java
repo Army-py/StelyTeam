@@ -22,23 +22,26 @@ public class PermissionEntity implements IEntity {
         return teamEntity;
     }
 
-    public void setTeamEntity(TeamEntity team) {
+    public PermissionEntity setTeamEntity(TeamEntity team) {
         this.teamEntity = team;
+        return this;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public PermissionEntity setName(String name) {
         this.name = name;
+        return this;
     }
 
     public int getRank() {
         return rank;
     }
 
-    public void setRank(int rank) {
+    public PermissionEntity setRank(Integer rank) {
         this.rank = rank;
+        return this;
     }
 }

@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 public enum SaveField {
 
     NAME(SaveFieldHolder.TEAM),
-    PREFIX(SaveFieldHolder.TEAM),
+    DISPLAY_NAME(SaveFieldHolder.TEAM),
     DESCRIPTION(SaveFieldHolder.TEAM),
     CREATION_DATE(SaveFieldHolder.TEAM),
     OWNER(SaveFieldHolder.TEAM),
@@ -21,7 +21,8 @@ public enum SaveField {
     PERMISSION_NAME(SaveFieldHolder.PERMISSION),
     ALLIANCE_UUID(SaveFieldHolder.ALLIANCE),
     STORAGE_ID(SaveFieldHolder.STORAGE),
-    ;
+    MEMBER_NAME(SaveFieldHolder.MEMBER),
+    PERMISSION_RANK(SaveFieldHolder.PERMISSION);
 
     private final SaveFieldHolder holder;
 

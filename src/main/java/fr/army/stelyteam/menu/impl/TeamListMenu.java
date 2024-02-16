@@ -59,7 +59,7 @@ public class TeamListMenu extends TeamMenu {
         Integer slotIndex = 0;
         for(Team team : pages.get(page.getCurrentPage())){
             String teamOwnerName = team.getTeamOwnerName();
-            String teamPrefix = team.getPrefix();
+            String teamPrefix = team.getDisplayName();
             UUID playerUUID = sqliteManager.getUUID(teamOwnerName);
             // String itemName = colorsBuilder.replaceColor(teamPrefix);
             String itemName = " ";

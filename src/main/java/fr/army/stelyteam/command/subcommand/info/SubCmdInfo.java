@@ -54,7 +54,7 @@ public class SubCmdInfo extends SubCommand {
 
         final Team team = teamManager.getTeam(combinedArgs,
                 SaveField.NAME,
-                SaveField.PREFIX,
+                SaveField.DISPLAY_NAME,
                 SaveField.CREATION_DATE,
                 SaveField.DESCRIPTION,
                 SaveField.UPGRADES_MEMBERS,
@@ -71,7 +71,7 @@ public class SubCmdInfo extends SubCommand {
         int maxMembers = config.getInt("teamMaxMembers");
 
         final String name = team.getName().get();
-        final String prefix = team.getPrefix().get();
+        final String prefix = team.getDisplayName().get();
         final String creationDate = new SimpleDateFormat("dd/MM/yyyy").format(team.getCreationDate().get());
         final String rawDescription = team.getDescription().get();
         final String description = rawDescription == null ? config.getString("team.defaultDescription") : rawDescription;

@@ -12,6 +12,7 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.transaction.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Supplier;
 
 public abstract class AbstractRepository<T> {
@@ -142,5 +143,9 @@ public abstract class AbstractRepository<T> {
         new Thread(() -> {
             asyncCallBackObjectList.done(supplier.get());
         }).start();
+    }
+
+    public T getReference(UUID id) {
+        return entityManager.getReference(entityClass, id);
     }
 }

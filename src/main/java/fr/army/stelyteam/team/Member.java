@@ -14,11 +14,13 @@ import java.util.UUID;
 public class Member implements PropertiesHolder {
 
     private UUID playerId;
+    private final Property<String> name;
     private final Property<Integer> rank;
     private final Property<Date> joiningDate;
 
     public Member(@NotNull UUID playerId) {
         this.playerId = playerId;
+        name = new Property<>(SaveField.MEMBER_NAME);
         rank = new Property<>(SaveField.MEMBER_RANK);
         joiningDate = new Property<>(SaveField.MEMBER_JOINING_DATE);
     }
@@ -35,9 +37,14 @@ public class Member implements PropertiesHolder {
     }
 
     public void loadUnsafe(@NotNull MemberEntity memberEntity){
-        playerId = memberEntity.getPlayer().getUuid();
+        playerId = memberEntity.getUuid();
+        name.loadUnsafe(memberEntity.getName());
         memberEntity.getRank().ifPresent(rank::loadUnsafe);
         memberEntity.getJoiningDate().ifPresent(joiningDate::loadUnsafe);
+    }
+
+    public Property<String> getName() {
+        return name;
     }
 
     public Property<Integer> getRank() {

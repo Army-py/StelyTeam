@@ -1,20 +1,17 @@
 package fr.army.stelyteam.entity.impl;
 
 
+import fr.army.stelyteam.cache.SetProperty;
+import fr.army.stelyteam.repository.impl.TeamRepository;
+import fr.army.stelyteam.team.*;
 import jakarta.persistence.*;
 import org.bukkit.entity.Player;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 public class TeamEntity {
     @Id
-    @GeneratedValue()
-    private int id;
-
     @Column(unique = true)
     private UUID uuid;
 
@@ -52,15 +49,6 @@ public class TeamEntity {
     @OneToMany(mappedBy = "allied")
     private Collection<AllianceEntity> alliesEntities;
 
-
-    public int getId() {
-        return id;
-    }
-
-    public TeamEntity setId(int id) {
-        this.id = id;
-        return this;
-    }
 
     public UUID getUuid() {
         return uuid;
@@ -181,10 +169,24 @@ public class TeamEntity {
 
 
     public static class Builder{
-        private String name;
-        private String displayName;
-        private Date creationDate;
-        private Player owner;
+
+        private final TeamRepository teamRepository;
+        private String name = null;
+        private String displayName = null;
+        private String description = null;
+        private Date creationDate = null;
+        private UUID ownerUuid = null;
+        private String ownerName = null;
+        private Upgrades upgrades = null;
+        private BankAccount bankAccount = null;
+        private SetProperty<UUID, Member> members = null;
+        private SetProperty<String, Permission> permissions = null;
+        private SetProperty<UUID, Alliance> alliances = null;
+        private SetProperty<Integer, Storage> storages = null;
+
+        public Builder(TeamRepository teamRepository){
+            this.teamRepository = teamRepository;
+        }
 
         public Builder setName(String name){
             this.name = name;
@@ -196,13 +198,61 @@ public class TeamEntity {
             return this;
         }
 
+        public Builder setDescription(String description){
+            this.description = description;
+            return this;
+        }
+
         public Builder setCreationDate(Date creationDate){
             this.creationDate = creationDate;
             return this;
         }
 
         public Builder setOwner(Player owner){
-            this.owner = owner;
+            this.ownerUuid = owner.getUniqueId();
+            this.ownerName = owner.getName();
+            return this;
+        }
+
+        public Builder setOwner(UUID ownerUuid, String ownerName){
+            this.ownerUuid = ownerUuid;
+            this.ownerName = ownerName;
+            return this;
+        }
+
+        public Builder setOwner(Member owner){
+            this.ownerUuid = owner.getId();
+            this.ownerName = owner.getName().get();
+            return this;
+        }
+
+        public Builder setUpgrades(Upgrades upgrades){
+            this.upgrades = upgrades;
+            return this;
+        }
+
+        public Builder setBankAccount(BankAccount bankAccount){
+            this.bankAccount = bankAccount;
+            return this;
+        }
+
+        public Builder setMembers(SetProperty<UUID, Member> members){
+            this.members = members;
+            return this;
+        }
+
+        public Builder setPermissions(SetProperty<String, Permission> permissions){
+            this.permissions = permissions;
+            return this;
+        }
+
+        public Builder setAlliances(SetProperty<UUID, Alliance> alliances){
+            this.alliances = alliances;
+            return this;
+        }
+
+        public Builder setStorages(SetProperty<Integer, Storage> storages){
+            this.storages = storages;
             return this;
         }
 
@@ -211,18 +261,89 @@ public class TeamEntity {
                 .setUuid(UUID.randomUUID())
                 .setName(name)
                 .setDisplayName(displayName)
+                .setDescription(description)
                 .setCreationDate(creationDate);
 
             final MemberEntity member = new MemberEntity()
                 .setRank(0)
                 .setJoiningDate(new Date());
-            member.setUuid(owner.getUniqueId());
-            member.setName(owner.getName());
+            member.setUuid(ownerUuid);
+            member.setName(ownerName);
             member.setTeamEntity(team);
-
             team.setOwner(member);
 
+            if (upgrades != null)
+                team.setUpgradeId(
+                        new UpgradesEntity()
+                                .setMembersAmount(upgrades.getMembers().get())
+                                .setStoragesAmount(upgrades.getStorage().get())
+                        );
+
+            if (bankAccount != null)
+                team.setBankAccountEntity(
+                        new BankAccountEntity()
+                                .setBalance(bankAccount.getBalance().get())
+                                .setUnlocked(bankAccount.getUnlocked().get())
+                        );
+
+            if (members != null){
+                for (Member me : members.toArray(new Member[0])){
+                    final MemberEntity memberEntity = new MemberEntity()
+                        .setRank(me.getRank().get())
+                        .setJoiningDate(me.getJoiningDate().get());
+                    memberEntity.setUuid(me.getId());
+                    memberEntity.setName(me.getName().get());
+                    memberEntity.setTeamEntity(team);
+                    team.getMembersEntities().ifPresent(membersEntities -> membersEntities.add(memberEntity));
+                }
+            }
+
+            if (permissions != null){
+                for (Permission p : permissions.toArray(new Permission[0])){
+                    final PermissionEntity permissionEntity = new PermissionEntity()
+                        .setName(p.getName().get())
+                        .setRank(p.getTeamRank().get());
+                    permissionEntity.setTeamEntity(team);
+                    team.getPermissionsEntities().add(permissionEntity);
+                }
+            }
+
+            if (alliances != null){
+                for (Alliance a : alliances.toArray(new Alliance[0])){
+                    final AllianceEntity allianceEntity = new AllianceEntity()
+                        .setTeamEntity(team)
+                        .setAlliedEntity(teamRepository.getReference(a.getTeamUuid()));
+                    team.getAlliancesEntities().add(allianceEntity);
+                }
+            }
+
+            if (storages != null){
+                for (Storage s : storages.toArray(new Storage[0])){
+                    final TeamStorageEntity storageEntity = new TeamStorageEntity()
+                        .setTeamEntity(team)
+                        .setStorage(new StorageEntity().setId(s.getStorageId()))  // TODO: check if this is correct and works
+                        .setStorageContent(s.getStorageContent());
+                    team.getStoragesEntities().add(storageEntity);
+                }
+            }
+
             return team;
+        }
+
+        public static TeamEntity fromTeam(Team team, TeamRepository teamRepository){
+            return new Builder(teamRepository)
+                .setName(team.getName().get())
+                .setDisplayName(team.getDisplayName().get())
+                .setDescription(team.getDescription().get())
+                .setCreationDate(team.getCreationDate().get())
+                .setOwner(Objects.requireNonNull(team.getOwner().get()))
+                .setUpgrades(team.getUpgrades())
+                .setBankAccount(team.getBankAccount())
+                .setMembers(team.getMembers())
+                .setPermissions(team.getPermissions())
+                .setAlliances(team.getAlliances())
+                .setStorages(team.getStorages())
+                .build();
         }
     }
 

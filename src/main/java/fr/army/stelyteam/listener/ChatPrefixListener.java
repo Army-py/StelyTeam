@@ -26,7 +26,7 @@ public class ChatPrefixListener implements Listener {
         if (team.isEmpty()) {
             return;
         }
-        final String prefix = team.get().getPrefix().get();
+        final String prefix = team.get().getDisplayName().get();
         if (prefix == null) {
             return;
         }

@@ -57,7 +57,7 @@ public class EditAlliancesMenu extends TeamMenu {
         for(Alliance alliance : team.getTeamAlliances()){
             Team teamAlliance = Team.init(alliance.getTeamUuid());
             String allianceName = teamAlliance.getName();
-            String alliancePrefix = teamAlliance.getPrefix();
+            String alliancePrefix = teamAlliance.getDisplayName();
             String allianceOwnerName = teamAlliance.getTeamOwnerName();
             String allianceDate = alliance.getAllianceDate();
             String allianceDescription = teamAlliance.getDescription();

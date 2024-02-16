@@ -21,23 +21,26 @@ public class BankAccountEntity implements IEntity {
         return teamEntity;
     }
 
-    public void setTeamEntity(TeamEntity team) {
+    public BankAccountEntity setTeamEntity(TeamEntity team) {
         this.teamEntity = team;
+        return this;
     }
 
     public Optional<Boolean> isUnlocked() {
         return Optional.ofNullable(unlocked);
     }
 
-    public void setUnlocked(boolean unlocked) {
+    public BankAccountEntity setUnlocked(Boolean unlocked) {
         this.unlocked = unlocked;
+        return this;
     }
 
     public Optional<Double> getBalance() {
         return Optional.ofNullable(balance);
     }
 
-    public void setBalance(double balance) {
+    public BankAccountEntity setBalance(Double balance) {
         this.balance = balance;
+        return this;
     }
 }

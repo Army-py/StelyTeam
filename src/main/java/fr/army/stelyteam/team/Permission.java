@@ -1,31 +1,34 @@
 package fr.army.stelyteam.team;
 
+import fr.army.stelyteam.cache.Property;
+import fr.army.stelyteam.cache.SaveField;
+
 public class Permission {
     
-    private final String permissionName;
-    private int teamRank;
+    private final Property<String> name;
+    private final Property<Integer> rank;
 
     public Permission(String permissionName, int teamRank){
-        this.permissionName = permissionName;
-        this.teamRank = teamRank;
+        this.name = new Property<>(SaveField.PERMISSION_NAME);
+        this.rank = new Property<>(SaveField.PERMISSION_RANK);
     }
 
+
+    public Property<String> getName() {
+        return name;
+    }
+
+    public Property<Integer> getTeamRank() {
+        return rank;
+    }
 
     public void incrementTeamRank(){
-        this.teamRank++;
+        int value = this.rank.get() == null ? 0 : this.rank.get();
+        this.rank.set(value + 1);
     }
-
 
     public void decrementTeamRank(){
-        this.teamRank--;
-    }
-
-
-    public String getPermissionName() {
-        return permissionName;
-    }
-
-    public int getTeamRank() {
-        return teamRank;
+        int value = this.rank.get() == null ? 0 : this.rank.get();
+        this.rank.set(value - 1);
     }
 }

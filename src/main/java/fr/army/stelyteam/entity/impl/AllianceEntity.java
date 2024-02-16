@@ -26,23 +26,26 @@ public class AllianceEntity implements IEntity {
         return team;
     }
 
-    public void setTeamEntity(TeamEntity team) {
+    public AllianceEntity setTeamEntity(TeamEntity team) {
         this.team = team;
+        return this;
     }
 
     public TeamEntity getAlliedEntity() {
         return allied;
     }
 
-    public void setAlliedEntity(TeamEntity allied) {
+    public AllianceEntity setAlliedEntity(TeamEntity allied) {
         this.allied = allied;
+        return this;
     }
 
     public Date getAllianceDate() {
         return allianceDate;
     }
 
-    public void setAllianceDate(Date allianceDate) {
+    public AllianceEntity setAllianceDate(Date allianceDate) {
         this.allianceDate = allianceDate;
+        return this;
     }
 }

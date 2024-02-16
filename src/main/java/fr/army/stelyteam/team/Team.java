@@ -6,7 +6,6 @@ import fr.army.stelyteam.entity.impl.TeamEntity;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -19,7 +18,7 @@ public class Team implements PropertiesHolder {
 
     private final UUID uuid;
     private final Property<String> name;
-    private final Property<String> prefix;
+    private final Property<String> displayName;
     private final Property<String> description;
     private final Property<Date> creationDate;
 
@@ -37,7 +36,7 @@ public class Team implements PropertiesHolder {
     public Team(@NotNull UUID uuid) {
         this.uuid = uuid;
         name = new Property<>(SaveField.NAME);
-        prefix = new Property<>(SaveField.PREFIX); // null
+        displayName = new Property<>(SaveField.DISPLAY_NAME); // null
         description = new Property<>(SaveField.DESCRIPTION); // config.getString("team.defaultDescription")
         creationDate = new Property<>(SaveField.CREATION_DATE); // getCurrentDate()
         owner = new Property<>(SaveField.OWNER);
@@ -447,8 +446,8 @@ public class Team implements PropertiesHolder {
     }
 
     @NotNull
-    public Property<String> getPrefix() {
-        return prefix;
+    public Property<String> getDisplayName() {
+        return displayName;
     }
 
     @NotNull
@@ -491,9 +490,13 @@ public class Team implements PropertiesHolder {
         return alliances;
     }
 
+    public SetProperty<Integer, Storage> getStorages() {
+        return storages;
+    }
+
     public void loadUnsafe(@NotNull TeamSnapshot snapshot) {
         snapshot.name().ifPresent(name::loadUnsafe);
-        snapshot.prefix().ifPresent(prefix::loadUnsafe);
+        snapshot.prefix().ifPresent(displayName::loadUnsafe);
         snapshot.description().ifPresent(description::loadUnsafe);
         snapshot.creationDate().ifPresent(creationDate::loadUnsafe);
         snapshot.bankAccount().ifPresent(bankAccount::loadUnsafe);
@@ -502,14 +505,14 @@ public class Team implements PropertiesHolder {
 
     public Team loadUnsafe(@NotNull TeamEntity teamEntity) {
         teamEntity.getName().ifPresent(name::loadUnsafe);
-        teamEntity.getDisplayName().ifPresent(prefix::loadUnsafe);
+        teamEntity.getDisplayName().ifPresent(displayName::loadUnsafe);
         teamEntity.getDescription().ifPresent(description::loadUnsafe);
         teamEntity.getCreationDate().ifPresent(creationDate::loadUnsafe);
         teamEntity.getBankAccountEntity().ifPresent(bankAccount::loadUnsafe);
 
         Function<Collection<MemberEntity>, Collection<UUID>> extractMembersUuid = collection -> {
             return collection.stream()
-                    .map(MemberEntity::getPlayerUuid)
+                    .map(MemberEntity::getUuid)
                     .collect(Collectors.toList());
         };
         teamEntity.getMembersEntities().ifPresent(v -> members.loadUnsafe(extractMembersUuid.apply(v), Member::new));
@@ -519,7 +522,7 @@ public class Team implements PropertiesHolder {
     @Override
     public void save(@NotNull List<SaveProperty<?>> values) {
         name.save(this, values);
-        prefix.save(this, values);
+        displayName.save(this, values);
         description.save(this, values);
         creationDate.save(this, values);
         bankAccount.save(this, values);
@@ -527,7 +530,7 @@ public class Team implements PropertiesHolder {
     }
 
     public void getProperties(final IProperty[] properties) {
-        for (IProperty property : new IProperty[]{name, prefix, description, creationDate, owner}) {
+        for (IProperty property : new IProperty[]{name, displayName, description, creationDate, owner}) {
             properties[property.getField().ordinal()] = property;
         }
         bankAccount.getProperties(properties);

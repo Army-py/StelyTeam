@@ -22,23 +22,26 @@ public class TeamStorageEntity {
         return storageEntity;
     }
 
-    public void setStorage(StorageEntity storageEntity) {
+    public TeamStorageEntity setStorage(StorageEntity storageEntity) {
         this.storageEntity = storageEntity;
+        return this;
     }
 
     public TeamEntity getTeamEntity() {
         return teamEntity;
     }
 
-    public void setTeamEntity(TeamEntity team) {
+    public TeamStorageEntity setTeamEntity(TeamEntity team) {
         this.teamEntity = team;
+        return this;
     }
 
     public byte[] getStorageContent() {
         return storageContent;
     }
 
-    public void setStorageContent(byte[] storageContent) {
+    public TeamStorageEntity setStorageContent(byte[] storageContent) {
         this.storageContent = storageContent;
+        return this;
     }
 }

@@ -95,7 +95,7 @@ public class SQLResult {
             team = new TeamSnapshot(
                 teamUuid, 
                 Optional.of(result.getString(SaveField.NAME.getColumnName())), 
-                Optional.of(result.getString(SaveField.PREFIX.getColumnName())), 
+                Optional.of(result.getString(SaveField.DISPLAY_NAME.getColumnName())),
                 Optional.of(result.getString(SaveField.DESCRIPTION.getColumnName())),
                 Optional.of(Date.from(result.getTimestamp(SaveField.CREATION_DATE.getColumnName()).toInstant())),
                 Optional.of(bank),

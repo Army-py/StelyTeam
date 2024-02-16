@@ -22,7 +22,7 @@ public class MemberEntity extends PlayerEntity {
         return Optional.ofNullable(rank);
     }
 
-    public MemberEntity setRank(int rank) {
+    public MemberEntity setRank(Integer rank) {
         this.rank = rank;
         return this;
     }

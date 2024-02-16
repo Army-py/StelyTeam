@@ -35,13 +35,13 @@ public class SubCmdEditPrefix extends SubCommand {
             player.sendMessage(messageManager.getMessage("commands.stelyteam_editprefix.usage"));
             return true;
         }
-        final Team team = teamManager.getTeam(args[1], SaveField.PREFIX);
+        final Team team = teamManager.getTeam(args[1], SaveField.DISPLAY_NAME);
         if (team == null) {
             player.sendMessage(messageManager.getMessage("common.team_not_exist"));
             return true;
         }
         final String newPrefix = args[2];
-        team.getPrefix().set(newPrefix);
+        team.getDisplayName().set(newPrefix);
         teamManager.saveTeam(team);
         player.sendMessage(messageManager.getReplaceMessage("commands.stelyteam_editprefix.output", colorsBuilder.replaceColor(newPrefix)));
         return true;

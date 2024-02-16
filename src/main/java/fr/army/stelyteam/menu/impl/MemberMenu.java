@@ -47,7 +47,7 @@ public class MemberMenu extends TeamMenu {
 
     public Inventory createInventory(Team team, String playerName) {
         String teamName = team.getName();
-        String teamPrefix = team.getPrefix();
+        String teamPrefix = team.getDisplayName();
         String teamOwner = team.getTeamOwnerName();
         Integer teamMembersLelvel = team.getImprovLvlMembers();
         Integer teamMembers = team.getTeamMembers().size();

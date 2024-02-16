@@ -28,15 +28,17 @@ public class UpgradesEntity {
         return membersAmount;
     }
 
-    public void setMembersAmount(int membersAmount) {
+    public UpgradesEntity setMembersAmount(Integer membersAmount) {
         this.membersAmount = membersAmount;
+        return this;
     }
 
     public int getStoragesAmount() {
         return storagesAmount;
     }
 
-    public void setStoragesAmount(int storagesAmount) {
+    public UpgradesEntity setStoragesAmount(Integer storagesAmount) {
         this.storagesAmount = storagesAmount;
+        return this;
     }
 }
