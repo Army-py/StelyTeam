@@ -81,7 +81,7 @@ public class StelyTeamPlugin extends JavaPlugin {
         }
         
         this.cacheManager = new CacheManager();
-        this.economyManager = new EconomyManager(this);
+        this.economyManager = new EconomyManager();
         this.messageManager = new MessageManager(this);
 
         try {
