@@ -4,10 +4,12 @@ import com.mrivanplays.conversations.base.ConversationContext;
 import com.mrivanplays.conversations.base.question.Question;
 import com.mrivanplays.conversations.spigot.BukkitConversationManager;
 import com.mrivanplays.conversations.spigot.BukkitConversationPartner;
+import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.cache.StorageManager;
 import fr.army.stelyteam.conversation.Conversation;
 import fr.army.stelyteam.entity.impl.MemberEntity;
 import fr.army.stelyteam.entity.impl.TeamEntity;
+import fr.army.stelyteam.team.TPlayer;
 import fr.army.stelyteam.team.Team;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -20,8 +22,8 @@ public class CreationTeamConv extends Conversation {
     private final String TEAM_NAME_IDENTIFIER = "teamName";
     private final String TEAM_DISPLAY_NAME_IDENTIFIER = "teamDisplayName";
 
-    public CreationTeamConv(BukkitConversationManager conversationManager, StorageManager storageManager) {
-        super(conversationManager, storageManager);
+    public CreationTeamConv(BukkitConversationManager conversationManager, StelyTeamPlugin plugin) {
+        super(conversationManager, plugin);
     }
 
     @Override
@@ -43,10 +45,21 @@ public class CreationTeamConv extends Conversation {
     @Override
     protected void done(ConversationContext<String, BukkitConversationPartner> context) {
         final Player respondent = context.getConversationPartner().getPlayer();
+        final TPlayer tPlayer = teamCache.getTPlayer(respondent.getUniqueId());
         final String name = context.getInput(TEAM_NAME_IDENTIFIER);
         final String displayName = context.getInput(TEAM_DISPLAY_NAME_IDENTIFIER);
 
-        // TODO remove player money
+        if (tPlayer.hasTeam()) {
+            respondent.sendMessage("§cTu es déjà dans une team."); // TODO remplacer par la nouvelle config
+            return;
+        }
+
+        try {
+            tPlayer.withdraw(1000);
+        } catch (IllegalStateException e) {
+            respondent.sendMessage("§cTu n'as pas assez d'argent pour créer une team."); // TODO remplacer par la nouvelle config
+            return;
+        }
 
         final Team team = new Team(UUID.randomUUID());
         team.getName().set(name);
