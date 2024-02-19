@@ -16,7 +16,7 @@ public class TeamCache {
     private final StorageManager storageManager;
     private final Lock lock;
     private final Map<UUID, Team> cachedTeams;
-    private final Map<UUID, Optional<Team>> playersTeam;
+    private final Map<UUID, Optional<Team>> playersTeam; // TODO : maybe delete this in future, replaced by cachedPlayers
     private final Map<UUID, TPlayer> cachedPlayers;
 
     public TeamCache(@NotNull StorageManager storageManager) {

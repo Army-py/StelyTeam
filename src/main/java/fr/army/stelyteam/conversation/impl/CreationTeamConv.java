@@ -66,6 +66,4 @@ public class CreationTeamConv extends Conversation {
         team.getDisplayName().set(displayName);
         storageManager.saveTeam(team);
     }
-
-
 }
