@@ -1,6 +1,7 @@
 package fr.army.stelyteam.cache;
 
 import fr.army.stelyteam.entity.impl.TeamEntity;
+import fr.army.stelyteam.team.TPlayer;
 import fr.army.stelyteam.team.Team;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -16,12 +17,14 @@ public class TeamCache {
     private final Lock lock;
     private final Map<UUID, Team> cachedTeams;
     private final Map<UUID, Optional<Team>> playersTeam;
+    private final Map<UUID, TPlayer> cachedPlayers;
 
     public TeamCache(@NotNull StorageManager storageManager) {
         this.storageManager = storageManager;
         lock = new ReentrantLock();
         cachedTeams = new HashMap<>();
         playersTeam = new HashMap<>();
+        cachedPlayers = new HashMap<>();
     }
 
     public Team getTeam(@NotNull UUID teamId) {
@@ -58,6 +61,19 @@ public class TeamCache {
         }
     }
 
+    public TPlayer getTPlayer(@NotNull UUID playerId) {
+        try {
+            lock.lock();
+            final TPlayer cachedPlayer = cachedPlayers.get(playerId);
+            if (cachedPlayer == null) {
+                throw new IllegalStateException("Player '" + playerId + "' is not loaded");
+            }
+            return cachedPlayer;
+        } finally {
+            lock.unlock();
+        }
+    }
+
     public void join(@NotNull Player player) {
         try {
             lock.lock();
@@ -70,6 +86,7 @@ public class TeamCache {
                     .loadUnsafe(teamEntity);
             final Team cachedTeam = cachedTeams.computeIfAbsent(team.getId(), k -> team);
             playersTeam.put(player.getUniqueId(), Optional.of(cachedTeam));
+            cachedPlayers.put(player.getUniqueId(), new TPlayer(player, Optional.of(cachedTeam)));
         } finally {
             lock.unlock();
         }
@@ -79,6 +96,7 @@ public class TeamCache {
         try {
             lock.lock();
             final Optional<Team> team = playersTeam.remove(player.getUniqueId());
+            cachedPlayers.remove(player.getUniqueId());
             if (team.isEmpty()) {
                 return;
             }
