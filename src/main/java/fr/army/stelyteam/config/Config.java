@@ -176,7 +176,7 @@ public class Config {
     }
 
 
-    private class SortRanks implements Comparator<Rank>{
+    private static class SortRanks implements Comparator<Rank>{
 
         @Override
         public int compare(Rank o1, Rank o2) {
