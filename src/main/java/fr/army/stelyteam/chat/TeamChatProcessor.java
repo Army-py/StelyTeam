@@ -1,16 +1,16 @@
 package fr.army.stelyteam.chat;
 
-import fr.army.stelyteam.api.event.PlayerTeamChatEvent;
+import java.util.Set;
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashSet;
-import java.util.Set;
+import fr.army.stelyteam.api.event.PlayerTeamChatEvent;
+import fr.army.stelyteam.utils.builder.ColorsBuilder;
 
 public class TeamChatProcessor {
-
-
 
     private final String format;
 
@@ -18,17 +18,18 @@ public class TeamChatProcessor {
         this.format = format;
     }
 
-    public void process(@NotNull Player sender, @NotNull String message) {
-        final PlayerTeamChatEvent event = new PlayerTeamChatEvent(!Bukkit.isPrimaryThread(), sender, format, message);
+    public void process(@NotNull UUID senderUuid, @NotNull String messageFormat, @NotNull Set<UUID> recipients) {
+        final PlayerTeamChatEvent event = new PlayerTeamChatEvent(!Bukkit.isPrimaryThread(), Bukkit.getOfflinePlayer(senderUuid), format, messageFormat);
         if (event.isCancelled()) {
             return;
         }
-        final TeamChatFormatHandler formatHandler = new TeamChatFormatHandler();
-        final String toSendMessage = formatHandler.handle(sender, event.getFormat(), event.getMessage());
-        // TODO Get all receivers (here probably team members)
-        final Set<Player> recipients = new HashSet<>();
-        for (Player receiver : recipients) {
-            receiver.sendMessage(toSendMessage);
+        for (UUID recipientUuid : recipients) {
+            final Player receiver = Bukkit.getPlayer(recipientUuid);
+            if (receiver == null) {
+                continue;
+            }
+            receiver.sendMessage(ColorsBuilder.replaceColor(messageFormat)
+                    .replace("&", ""));
         }
     }
 

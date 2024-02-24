@@ -9,78 +9,79 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 
-import fr.army.stelyteam.menu.Buttons;
-import fr.army.stelyteam.menu.Menus;
-import fr.army.stelyteam.menu.TeamMenu;
-import fr.army.stelyteam.team.Team;
-import fr.army.stelyteam.utils.builder.ItemBuilder;
+import fr.army.stelyteam.menu.FixedMenuOLD;
+import fr.army.stelyteam.menu.MenusOLD;
+import fr.army.stelyteam.menu.TeamMenuOLD;
+import fr.army.stelyteam.menu.button.Buttons;
+import fr.army.stelyteam.team.Storage;
+import fr.army.stelyteam.utils.builder.ItemBuilderOLD;
 
 
-public class StorageDirectoryMenu extends TeamMenu {
+public class StorageDirectoryMenu extends FixedMenuOLD {
 
-
-    public StorageDirectoryMenu(Player viewer){
+    public StorageDirectoryMenu(Player viewer, TeamMenuOLD previousMenu) {
         super(
             viewer,
-            Menus.STORAGE_DIRECTORY_MENU.getName(),
-            Menus.STORAGE_DIRECTORY_MENU.getSlots()
+            MenusOLD.STORAGE_DIRECTORY_MENU.getName(),
+            MenusOLD.STORAGE_DIRECTORY_MENU.getSlots(),
+            previousMenu
         );
     }
 
 
-    public Inventory createInventory(Team team) {
+    public Inventory createInventory() {
         Inventory inventory = Bukkit.createInventory(this, this.menuSlots, this.menuName);
         Integer level = team.getTeamStorageLvl();
 
         emptyCases(inventory, this.menuSlots, 0);
 
-        for(String str : config.getConfigurationSection("inventories.storageDirectory").getKeys(false)){
-            Integer slot = config.getInt("inventories.storageDirectory."+str+".slot");
+        for(String buttonName : config.getConfigurationSection("inventories.storageDirectory").getKeys(false)){
+            Integer slot = config.getInt("inventories.storageDirectory."+buttonName+".slot");
             String headTexture;
             Material material;
-            String name;
+            String displayName;
             List<String> lore;
 
-            if (level >= config.getInt("inventories.storageDirectory."+str+".level") || str.equals("close")){
-                material = Material.getMaterial(config.getString("inventories.storageDirectory."+str+".itemType"));
-                headTexture = config.getString("inventories.storageDirectory."+str+".headTexture");
-                if (str.equals("close")){
-                    name = config.getString("inventories.storageDirectory."+str+".itemName");
+            if (level >= config.getInt("inventories.storageDirectory."+buttonName+".level") || buttonName.equals("close")){
+                material = Material.getMaterial(config.getString("inventories.storageDirectory."+buttonName+".itemType"));
+                headTexture = config.getString("inventories.storageDirectory."+buttonName+".headTexture");
+                if (buttonName.equals("close")){
+                    displayName = config.getString("inventories.storageDirectory."+buttonName+".itemName");
                 }else{
-                    name = config.getString(config.getString("inventories.storageDirectory."+str+".itemName"));
+                    displayName = config.getString(config.getString("inventories.storageDirectory."+buttonName+".itemName"));
                 }
-                lore = config.getStringList("inventories.storageDirectory."+str+".lore");
+                lore = config.getStringList("inventories.storageDirectory."+buttonName+".lore");
 
-                inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, false));
+                inventory.setItem(slot, ItemBuilderOLD.getItem(material, buttonName, displayName, lore, headTexture, false));
             }else{
                 material = Material.getMaterial(config.getString("storageNotUnlock.itemType"));
-                name = config.getString("storageNotUnlock.itemName");
+                displayName = config.getString("storageNotUnlock.itemName");
                 lore = config.getStringList("storageNotUnlock.lore");
                 headTexture = config.getString("storageNotUnlock.headTexture");
 
-                inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, false));
+                inventory.setItem(slot, ItemBuilderOLD.getItem(material, buttonName, displayName, lore, headTexture, false));
             }
         }
         return inventory;
     }
 
 
-    public void openMenu(Team team){
-        this.open(createInventory(team));
+    @Override
+    public void openMenu(){
+        this.open(createInventory());
     }
 
 
     @Override
     public void onClick(InventoryClickEvent clickEvent) {
         Player player = (Player) clickEvent.getWhoClicked();
-        String playerName = player.getName();
-        Team team = Team.initFromPlayerName(playerName);
         String itemName = clickEvent.getCurrentItem().getItemMeta().getDisplayName();
         Material itemType = clickEvent.getCurrentItem().getType();
 
         // Fermeture ou retour en arrière de l'inventaire
         if (Buttons.CLOSE_STORAGE_DIRECTORY_MENU_BUTTON.isClickedButton(clickEvent)){
-            new MemberMenu(player).openMenu(team);
+            // new MemberMenu(player, this).openMenu();
+            previousMenu.openMenu();
         }else{
             for(String str : config.getConfigurationSection("inventories.storageDirectory").getKeys(false)){
                 String name = config.getString(config.getString("inventories.storageDirectory."+str+".itemName"));
@@ -88,7 +89,21 @@ public class StorageDirectoryMenu extends TeamMenu {
                 Integer storageId = config.getInt("inventories.storageDirectory."+str+".storageId");
 
                 if (itemName.equals(name) && itemType.equals(type)){
-                    new StorageMenu(player).openMenu(team, storageId);
+                    if (!config.getBoolean("allowTeamStorage")) {
+                        player.sendMessage(messageManager.getMessage("common.functionnality_disabled"));
+                    }else{
+                        if (cacheManager.containsStorage(team.getTeamUuid(), storageId)){
+                            final Storage storage = cacheManager.getStorage(team.getTeamUuid(), storageId);
+                            storage.sendStorageAcrossServers(plugin, player);
+                            if (storage.getOpenedServerName() == null || storage.getOpenedServerName().equals(serverName)){
+                                new StorageMenu(player, this).openMenu(storageId);
+                            }else{
+                                player.sendMessage(messageManager.getMessage("common.storage_already_open"));
+                            }
+                        }else{
+                            new StorageMenu(player, this).openMenu(storageId);
+                        }
+                    }
                     return;
                 }
             }

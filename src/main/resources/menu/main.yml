@@ -1,0 +1,138 @@
+
+
+title: "§5§lCréation de Team"
+
+previous: true
+
+pattern:
+  - ". . . . . . . . ."
+  - ". . . + $ - . . ."
+  - ". . / . % . : . ."
+  - ". . . ! . # . . ."
+  - ". . . . . . . . *"
+
+
+# Available button types
+# Any other type of button will be considered BLANK
+# - BACK
+# - TEAM_DETAILS
+# - TEAM_MEMBERS_MENU
+# - TEAM_ALLIANCES_MENU
+# - TEAM_BANK_ADD_MONEY
+# - TEAM_BANK_WITHDRAW_MONEY
+# - TEAM_STORAGES_MENU
+# - TEAM_LEAVE
+items:
+  ".":
+    button-type: BLANK
+    material: LIGHT_BLUE_STAINED_GLASS_PANE
+    name: " "
+    skull-texture: ""
+    amount: 1
+    is-glowing: false
+    lore: []
+  "%":
+    button-type: TEAM_DETAILS
+    material: BOOK
+    name: "§5§nInformations"
+    skull-texture: ""
+    amount: 1
+    is-glowing: false
+    lore:
+      - "§aChef de la team : §e{TEAM_OWNER_NAME}"
+      - "§aNom : §e{TEAM_NAME}"
+      - "§aPréfixe : §r{TEAM_PREFIX}"
+      - "§aDescription : §e{TEAM_DESCRIPTION}"
+      - "§aNombre de membre : §e{TEAM_MEMBERS_COUNT} sur {CONFIG_MAX_MEMBERS_COUNT}"
+      - "§aDate de la création : §e{TEAM_CREATION_DATE}"
+      - ""
+      - "§aTon grade : §r{MEMBER_RANK}"
+    # Available placeholders :
+    #   {TEAM_OWNER_NAME} : Team owner name
+    #   {TEAM_OWNER_DISPLAY_NAME} : Team owner display name
+    #   {TEAM_NAME} : Team name
+    #   {TEAM_PREFIX} : Team prefix
+    #   {TEAM_DESCRIPTION} : Team description
+    #   {TEAM_MEMBERS_COUNT} : Team members count
+    #   {TEAM_CREATION_DATE} : Team creation date
+    #   {MEMBER_RANK} : Your team rank
+    #   {CONFIG_MAX_MEMBERS_COUNT} : Maximum members count
+  "/":
+    button-type: TEAM_MEMBERS_MENU
+    material: TOTEM_OF_UNDYING
+    name: "§5§nMembres"
+    skull-texture: ""
+    amount: 1
+    is-glowing: false
+    lore:
+      - "§aClique pour voir les"
+      - "§amembres de la team"
+  ":":
+    button-type: TEAM_ALLIANCES_MENU
+    material: FEATHER
+    name: "§5§nAlliances"
+    skull-texture: ""
+    amount: 1
+    is-glowing: false
+    lore:
+      - "§aClique pour voir les"
+      - "§aalliances de la team"
+  "$":
+    button-type: TEAM_BANK_DETAILS
+    material: EMERALD
+    name: "§5§nArgent de la team"
+    skull-texture: ""
+    amount: 1
+    is-glowing: false
+    lore:
+      - "§aCompte : §6{TEAM_MONEY}€"
+      - "§aPlafond du compte : §6{CONFIG_MAX_MONEY_LIMIT}€"
+    # Available placeholders :
+    #   {TEAM_MONEY} : Team money
+    #   {CONFIG_MAX_MONEY_LIMIT} : Maximum money limit
+  "+":
+    button-type: TEAM_BANK_ADD_MONEY
+    material: GOLD_NUGGET
+    name: "§5§nAjout d'argent"
+    skull-texture: ""
+    amount: 1
+    is-glowing: false
+    lore:
+      - "§aAjouter de l'argent dans"
+      - "§ale compte de la team"
+  "-":
+    button-type: TEAM_BANK_WITHDRAW_MONEY
+    material: PAPER
+    name: "§5§nRetrait d'argent"
+    skull-texture: ""
+    amount: 1
+    is-glowing: false
+    lore:
+      - "§aRetirer de l'argent dans"
+      - "§ale compte de la team"
+  "!":
+    button-type: TEAM_STORAGES_MENU
+    material: CHEST
+    name: "§5§nStockage"
+    skull-texture: ""
+    amount: 1
+    is-glowing: false
+    lore:
+      - "§aClique pour voir les"
+      - "§astockages de la team"
+  "#":
+    button-type: TEAM_LEAVE
+    material: DARK_OAK_DOOR
+    name: "§c§nQuitter la team"
+    skull-texture: ""
+    amount: 1
+    is-glowing: false
+    lore: []
+  "*":
+    button-type: BACK
+    material: ARROW
+    name: "§cFermer"
+    skull-texture: ""
+    amount: 1
+    is-glowing: false
+    lore: []

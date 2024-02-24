@@ -1,0 +1,74 @@
+
+
+title: "§5§lStockages"
+
+previous: true
+paged: true
+
+pattern:
+  - ". . . . . . . . ."
+  - ". - - - - - - - ."
+  - ". - - - - - - - ."
+  - ". - - - - - - - ."
+  - ". . . < / > . . *"
+
+
+# Available button types
+# Any other type of button will be considered BLANK
+# - BACK
+# - CURRENT_PAGE
+# - NEXT_PAGE
+# - PREVIOUS_PAGE
+# - TEAM_STORAGE
+items:
+  ".":
+    button-type: BLANK
+    material: LIGHT_BLUE_STAINED_GLASS_PANE
+    name: " "
+    skull-texture: ""
+    amount: 1
+    is-glowing: false
+    lore: []
+  "-":
+    button-type: TEAM_STORAGE
+    page-component: true
+    material: CHEST
+    name: "§5§nStockage {0}"
+    skull-texture: ""
+    amount: 1
+    is-glowing: false
+    lore: []
+    # Available placeholders :
+    #   {0} : Storage amount
+  "<":
+    button-type: PREVIOUS_PAGE
+    material: ARROW
+    name: "§cPage précédente"
+    skull-texture: ""
+    amount: 1
+    is-glowing: false
+    lore: []
+  "/":
+    button-type: CURRENT_PAGE
+    material: PAPER
+    name: "§ePage {CURRENT_PAGE} / {MAX_PAGE}"
+    skull-texture: ""
+    amount: 1
+    is-glowing: false
+    lore: []
+  ">":
+    button-type: NEXT_PAGE
+    material: ARROW
+    name: "§cPage suivante"
+    skull-texture: ""
+    amount: 1
+    is-glowing: false
+    lore: []
+  "*":
+    button-type: BACK
+    material: ARROW
+    name: "§cRetour"
+    skull-texture: ""
+    amount: 1
+    is-glowing: false
+    lore: []

@@ -1,10 +1,14 @@
 package fr.army.stelyteam.chat;
 
+import fr.army.stelyteam.config.Config;
+
 public class TeamChatLoader {
 
+    public TeamChatLoader() {
+    }
+
     public TeamChatManager load() {
-        // TODO Init with the config
-        final String format = "[Team] {USERNAME} > {MESSAGE}";
+        final String format = Config.teamChatFormat;
         final TeamChatProcessor processor = new TeamChatProcessor(format);
         return new TeamChatManager(processor);
     }

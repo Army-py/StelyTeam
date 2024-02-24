@@ -1,0 +1,673 @@
+
+# https://www.messletters.com/en/big-text/
+# big
+
+
+
+
+
+# Each message has a certain number of placeholders available. Some have, some don't
+# Refer to the messages to see if the placeholders are available or not.
+# If there are no instructions mentioning placeholders at the top of the 
+# message, then no placeholders are available for that message.
+# 
+# List of all available placeholders :
+# {TEAM_NAME} : the name of the team
+# {TEAM_PREFIX} : the prefix of the team
+# {TEAM_DESCRIPTION} : the description of the team
+# {PLAYER_NAME} : the name of the player
+# {PLAYER_DISPLAY_NAME} : the display name of the player
+# {TEAM_OWNER} : the name of the team owner
+# {TEAM_UNLOCKED_BANK} : the amount of money in the team bank
+# {TEAM_MEMBER_COUNT} : the number of members in the team
+# {TEAM_MEMBERS} : the list of members in the team
+# {TEAM_CREATION_DATE} : the date of creation of the team
+
+
+
+
+
+
+
+#################################################################
+#    _____                                                      #
+#   / ____|                                                     #
+#  | |        ___    _ __ ___    _ __ ___     ___    _ __       #
+#  | |       / _ \  | '_ ` _ \  | '_ ` _ \   / _ \  | '_ \      #
+#  | |____  | (_) | | | | | | | | | | | | | | (_) | | | | |     #
+#   \_____|  \___/  |_| |_| |_| |_| |_| |_|  \___/  |_| |_|     #
+#                                                               #
+#################################################################
+
+PREFIX: "§7[§5StelyTeam§7] "
+# The prefix before each message
+
+COMMAND_INVALID: "§cCommande invalide."
+# Called when a player tries to execute an invalid command
+
+NO_COMMAND_IN_CONVERSATION: "§cVous ne pouvez pas utiliser de commande dans une conversation."
+# Called when a player tries to execute a command in a conversation
+
+NOT_ENOUGH_MONEY: "§cVous n'avez pas assez d'argent."
+# Called when a player tries to buy something but doesn't have enough money
+
+FEATURE_DISABLED: "§cCette fonctionnalité est désactivée."
+# Called when a player tries to use a feature that is disabled
+
+CANNOT_ADD_NEGATIVE_MONEY: "§cVous ne pouvez pas ajouter de montant négatif."
+# Called when a player tries to add a negative amount of money 
+
+CANNOT_WITHDRAW_NEGATIVE_MONEY: "§cVous ne pouvez pas retirer un montant négatif."
+# Called when a player tries to withdraw a negative amount of money
+
+CONVERSATION_TIMEOUT: "§cTu as mis trop de temps pour valider ton choix."
+# Called when a player does not validate his choice in time during a conversation
+
+CONVERSATION_CANCEL: "§cAction annulée."
+# Called when a player cancels a conversation
+
+PAID: "§aVous avez payé §6{0}€§a."
+# Called when a player pays for something
+# Available placeholders :
+#     {0} : the amount of money paid
+
+RECEIVED: "§aVous avez reçu §6{0}€§a."
+# Called when a player receives money
+# Available placeholders :
+#     {0} : the amount of money received
+
+VALUE_TRUE: "§aOui"
+# Called when the value of a boolean is true
+
+VALUE_FALSE: "§cNon"
+# Called when the value of a boolean is false
+
+WRONG_AMOUNT: "§cMontant invalide."
+# Called when a player enters an invalid amount of money
+
+
+
+#####################################################
+#   _____    _                                      #
+#  |  __ \  | |                                     #
+#  | |__) | | |   __ _   _   _    ___   _ __        #
+#  |  ___/  | |  / _` | | | | |  / _ \ | '__|       #
+#  | |      | | | (_| | | |_| | |  __/ | |          #
+#  |_|      |_|  \__,_|  \__, |  \___| |_|          #
+#                         __/ |                     #
+#                        |___/                      #
+#                                                   #
+#####################################################
+
+
+NO_RECEIVED_INVITATION: "§cVous n'avez reçu aucune invitation."
+# Called when a player tries to accept or refuse an invitation but has not received any
+
+PLAYER_ALREADY_IN_TEAM: "§cCe joueur est déjà dans une team."
+# Called when a player tries to invite a player that is already in a team
+
+PLAYER_RESPONDS_INVITATION: "§cCe joueur a déjà une demande en cours."
+# Called when a player tries to invite a player who is in the process of responding to an invitation.
+
+PLAYER_NOT_IN_TEAM: "§cLe joueur n'est pas dans ta team."
+# Called when a player tries to interact with a player who is not in his team
+
+PLAYER_NOT_IN_THIS_TEAM: "§cLe joueur n'est pas dans cette team."
+# Called when a player tries to interact with a player who is not in the team
+
+PLAYER_OFFLINE: "§c{0} n'est pas connecté."
+# Called when a player tries to interact with a player who is not connected
+# Available placeholders :
+#     {0} : the given player name
+
+
+
+
+#############################################
+#   _______                                 #
+#  |__   __|                                #
+#     | |    ___    __ _   _ __ ___         #
+#     | |   / _ \  / _` | | '_ ` _ \        #
+#     | |  |  __/ | (_| | | | | | | |       #
+#     |_|   \___|  \__,_| |_| |_| |_|       #
+#                                           #
+#############################################
+
+
+NO_TEAM: "§cVous n'êtes dans aucune team."
+# Called when a player tries to interact with a feature but he is not in a team
+
+UPGRADE_ALREADY_UNLOCKED: "§cVous avez déjà débloqué cette amélioration."
+# Called when a member tries to upgrade a feature that has already been unlocked
+
+TEAM_DESCRIPTION_TOO_LONG: "§cLa description est trop longue. §7§o(30 caractères maximum)"
+# Called when a member tries to set a description that is too long
+
+TEAM_DESCRIPTION_HAS_BLOCKED_COLORS: "§cLa description contient des couleurs interdites. §7§o(toutes les couleurs rouge)"
+# Called when a member tries to set a description that contains blocked colors
+
+TEAM_NAME_ALREADY_EXISTS: "§cCe nom de team existe déjà."
+# Called when a member tries to set a name that already exists
+
+TEAM_NAME_CANNOT_CONTAINS_SPACE: "§cLe nom de la team ne doit pas contenir d'espace."
+# Called when a member tries to set a name that contains spaces
+
+TEAM_NAME_TOO_SHORT: "§cLe nom de la team est trop court."
+# Called when a member tries to set a name that is too long
+
+TEAM_NAME_TOO_LONG: "§cLe nom de la team est trop long."
+# Called when a member tries to set a name that is too long
+
+TEAM_PREFIX_TOO_LONG: "§cLe préfixe est trop long. §7§o(12 caractères maximum)"
+# Called when a member tries to set a prefix that is too long
+
+TEAM_PREFIX_TOO_SHORT: "§cLe préfixe est trop court."
+# Called when a member tries to set a prefix that is too short
+
+TEAM_PREFIX_HAS_BLOCKED_COLORS: "§cLe préfixe contient des couleurs interdites. §7§o(toutes les couleurs rouge)"
+# Called when a member tries to set a prefix that contains blocked colors
+
+TEAM_DOES_NOT_EXIST: "§cLa team n'existe pas."
+# Called when a player tries to interact with a team that does not exist
+
+TEAM_BANK_NOT_UNLOCKED: "§cVous n'avez pas débloqué le compte de team."
+# Called when a player tries to interact with the team bank but it is not unlocked
+
+TEAM_OWNERS_OFFLINE: "§cLes gérants de la team ne sont pas connectés." # TODO: changer pour ceux qui ont la permission d'ajouter une alliance
+# Called when a member sends an invitation to be allied with another team but 
+# the owners of the team are not connected
+
+TEAM_OWNERS_RESPONDS_INVITATION: "§cLe chef de la team a déjà une demande en cours." # TODO: changer pour ceux qui ont la permission d'ajouter une alliance
+# Called when a member sends an invitation to be allied with another team but 
+# the owners of the team is in the process of responding to an invitation
+
+NO_TEAM_MEMBERS: "§cAucun membre"
+# Called when a player tries to interact with a team but there are no members
+
+TEAM_STORAGE_ALREADY_OPEN: "§cCe coffre est déjà ouvert sur un autre serveur."
+# Called when a member tries to open the team storage but it is already open on another server
+
+TEAM_REACHED_MAX_MEMBERS: "§cLa team a atteind le nombre maximum de membres."
+# Called when a member or admin tries to add a member but the team has reached the maximum number of members
+
+TEAM_BANK_MONEY_ADDED: "§aLe montant a été ajouté."
+# Called when a member has added money to the team bank
+
+SEND_DEPOSIT_MONEY_AMOUNT: "§aÉcris dans le tchat le montant que tu veux déposer dans le compte."
+# Called when a member must send the amount of money to deposit in the team bank
+
+TEAM_BANK_REACHED_MAX_MONEY: "§cLa team a atteind le plafond de son compte."
+# Called when a member tries to add money to the team bank but it has reached the maximum amount of money
+
+TEAM_BANK_MONEY_WITHDRAWN: "§aLe montant a été retiré."
+# Called when a member has withdrawn money from the team bank
+# Available placeholders :
+#     {0} : the amount of money withdrawn
+
+SEND_WITHDRAW_MONEY_AMOUNT: "§aÉcris dans le tchat le montant que tu souhaites retirer."
+# Called when a member must send the amount of money to withdraw from the team bank
+
+TEAM_BANK_REACHED_MIN_MONEY: "§aVous ne pouvez pas retirer plus de §6{0}€§a."
+# Called when a member tries to withdraw money from the team bank but it has reached the minimum amount of money
+# Available placeholders : 
+#   {0} : the minimum amount of money that can be withdrawn from the team bank
+
+SEND_TEAM_NAME: "§aÉcris le nom de la team dans le tchat. §7§o(sans couleur)"
+# Called when a member must send the name of a team
+
+SEND_TEAM_PREFIX: "§aMaintenant envoi le préfixe que tu souhaites dans le tchat. §7§o(avec couleur)"
+# Called when a member must send the prefix of a team
+
+TEAM_CREATED: "§aLa team a été créée."
+# Called when a member creates a team
+
+TEAM_DELETED: "§aLa team a été supprimée."
+# Called when a member deletes a team
+
+SEND_NEW_TEAM_NAME: "§cÉcris dans le tchat le nouveau nom de la team."
+# Called when a member must send the new name of a team to edit it
+
+TEAM_NAME_EDITED: "§aLe nom de la team a été modifié par §e{0}§a."
+# Called when a member edits the name of a team
+# Available placeholders : 
+#   {0} : the new name of the team
+
+SEND_NEW_TEAM_PREFIX: "§aÉcris dans le tchat le nouveau préfixe de la team."
+# Called when a member must send the new prefix of a team to edit it
+
+TEAM_PREFIX_EDITED: "§aLe préfixe de la team a été modifié par §e{0}§a."
+# Called when a member edits the prefix of a team
+# Available placeholders : 
+#   {0} : the new prefix of the team
+
+SEND_NEW_TEAM_DESCRIPTION: "§aÉcris dans le tchat la nouvelle description de la team."
+# Called when a member must send the description of a team to edit it
+
+TEAM_DESCRIPTION_EDITED: "§aLa description de la team a été modifié par {0}."
+# Called when a member edits the description of a team
+# Available placeholders : 
+#   {0} : the new description of the team
+
+TEAM_HOME_REDEFINE: "§aLe home de team a été redéfini."
+# Called when a member redefines the team home
+
+TEAM_HOME_CREATED: "§aLe home de team a été créé."
+# Called when a member creates the team home
+
+TEAM_HOME_DELETED: "§aLe home de team a été supprimé."
+# Called when a member deletes the team home
+
+TEAM_HOME_NOT_SET: "§cLe home de team n'a pas été défini."
+# Called when a member tries to teleport to the team home but it has not been set
+
+TEAM_BANK_ALREADY_UNLOCKED: "§cLa banque de team est déjà débloqué."
+# Called when a member tries to unlock the team bank but it is already unlocked
+
+TEAM_BANK_UNLOCKED: "§aVous avez débloqué la banque de team."
+# Called when a member unlocks the team bank
+
+TEAM_CLAIM_ALREADY_UNLOCKED: "§cLe claim de team est déjà débloqué."
+# Called when a member tries to unlock the team claim but it is already unlocked
+# TODO: CLAIM DE TEAM à revoir
+
+TEAM_CLAIM_UNLOCKED: "§aVous avez débloqué le claim de team."
+# Called when a member unlocks the team claim
+
+MUST_UNLOCK_PREVIOUS_LEVEL: "§cVous devez débloquer l'amélioration précédente pour pouvoir acheter cette amélioration."
+# Called when a member tries to upgrade a feature but the previous level has not been unlocked
+
+INCREASE_MEMBERS_LIMIT: "§aL'amélioration du nombre de membre de la team est acheté."
+# Called when a member upgrades the number of members of the team
+
+INCREASE_STORAGES_LIMIT: "§aL'amélioration de stockage de la team est acheté."
+# Called when a member upgrades the number of storages of the team
+
+
+
+
+#############################################################
+#              _   _   _                                    #
+#      /\     | | | | (_)                                   #
+#     /  \    | | | |  _    __ _   _ __     ___    ___      #
+#    / /\ \   | | | | | |  / _` | | '_ \   / __|  / _ \     #
+#   / ____ \  | | | | | | | (_| | | | | | | (__  |  __/     #
+#  /_/    \_\ |_| |_| |_|  \__,_| |_| |_|  \___|  \___|     #
+#                                                           #
+#############################################################
+
+
+ALREADY_ALLIED_WITH_TEAM: "§cVous êtes déjà en alliance avec cette team."
+# Called when a team is already allied with another team
+
+NOT_ALLIED_WITH_TEAM: "§cVous n'êtes pas en alliance avec cette team."
+# Called when a team is not allied with another team
+
+SEND_TEAM_ALLIED_NAME_TO_ADD: "§aÉcris dans le tchat le nom de la team à ajouter en alliance."
+# Called when a member must send the name of a team to add it to the alliance
+
+ALLIANCE_INVITATION_SENT: "§aL'invitation a été envoyée."
+# Called when a owner sends an invitation to a team to be allied with it
+
+ALLIANCE_INVITATION_RECEIVED: "§e{PLAYER_DISPLAY_NAME} §avous a envoyé une invitation pour rejoindre son alliance."
+ACCEPT_ALLIANCE_INVITATION: "\n                §e>> §2§oClique ici pour accepter"
+REFUSE_ALLIANCE_INVITATION: "\n                §e>> §c§oClique ici pour refuser"
+# Called when team owners receives an invitation to be allied with another team
+# Available placeholders : {PLAYER_NAME}, {PLAYER_DISPLAY_NAME}
+
+TEAM_ISNT_ALLIED: "§cCette team n'est pas allié avec votre team."
+# Called when a member tries to interact with a team that is not allied with his team
+
+ALLIANCE_REMOVED: "§aL'alliance avec §e{TEAM_NAME} §aest supprimé."
+# Called when a member removes an alliance with another team
+# Available placeholders : {TEAM_NAME}, {TEAM_PREFIX}
+
+REMOVE_ALLIANCE: "§aVous avez supprimé l'alliance avec {TEAM_DISPLAY_NAME}§a."
+# Called when a member removes an alliance with another team, to inform the member who was performed the action
+# Available placeholders : {TEAM_NAME}, {TEAM_PREFIX}
+
+ALLIANCE_HAS_BEEN_REMOVE: "§aL'alliance avec §e{TEAM_NAME} §aa été supprimée."
+# Called when a member removes an alliance with another team, to inform the member who was performed the action
+# Available placeholders : {TEAM_NAME}, {TEAM_PREFIX}
+
+
+
+
+#########################################################
+#   __  __                      _                       #
+#  |  \/  |                    | |                      #
+#  | \  / |   ___   _ __ ___   | |__     ___   _ __     #
+#  | |\/| |  / _ \ | '_ ` _ \  | '_ \   / _ \ | '__|    #
+#  | |  | | |  __/ | | | | | | | |_) | |  __/ | |       #
+#  |_|  |_|  \___| |_| |_| |_| |_.__/   \___| |_|       #
+#                                                       #
+#########################################################
+
+
+JOINED_TEAM: "§aVous avez rejoint la team {TEAM_NAME}."
+# Called when a player joins a team
+# Available placeholders : {TEAM_NAME}, {TEAM_PREFIX}
+
+SEND_PLAYER_NAME_TO_PROMOTE: "§aÉcris dans le tchat le nom du joueur à passer chef."
+# Called when a member must send the name of a player to promote him to owner
+# TODO: message temporaire, devra être remplacé par un menu
+
+SEND_PLAYER_NAME_TO_ADD: "§aÉcris dans le tchat le pseudo du joueur que tu veux ajouter dans la team."
+# Called when a member must send the name of a player to add him to the team
+
+MEMBER_INVITATION_SENT: "§aL'invitation a été envoyée."
+# Called when a member sends an invitation to a player
+
+CANNOT_EXCLUDE_YOURSELF: "§cVous ne pouvez pas vous exclure vous-même."
+# Called when a member tries to exclude himself from the team
+
+CANNOT_EXCLUDE_HIGHER_RANK: "§cVous ne pouvez pas exclure un membre plus haut gradé que vous."
+# Called when a member tries to exclude a member with a higher rank than him
+
+MEMBER_KICKED: "§cLe membre a été éjecté de la team."
+# Called when a member kicks another member
+
+MEMBER_INVITATION_RECEIVED: "§e%VALUE% §avous a envoyé une invitation pour rejoindre sa team."
+ACCEPT_MEMBER_INVITATION: "\n                §e>> §2§oClique ici pour accepter"
+REFUSE_MEMBER_INVITATION: "\n                §e>> §c§oClique ici pour refuser"
+# Called when a player receives an invitation to join a team
+# TODO: voir pour changer la structure de ce message
+
+ACCEPTED_INVITATION: "§e{PLAYER_DISPLAY_NAME} §aa accepté l'invitation."
+# Called when a player accepts an invitation, to inform the member who sent the invitation
+# Available placeholders : {PLAYER_NAME}, {PLAYER_DISPLAY_NAME}
+
+REFUSED_INVITATION: "§c{PLAYER_DISPLAY_NAME} a refusé l'invitation."
+# Called when a player refuses an invitation, to inform the member who sent the invitation
+# Available placeholders : {PLAYER_NAME}, {PLAYER_DISPLAY_NAME}
+
+KICK_MEMBER: "§aVous avez exclu {PLAYER_DISPLAY_NAME} §ade la team."
+# Called when a member kicks a member from the team, to inform the member who was performed the action
+# Available placeholders : {PLAYER_NAME}, {PLAYER_DISPLAY_NAME}
+
+PROMOTE_OWNER: "§aVous avez promu {PLAYER_DISPLAY_NAME} §achef de la team."
+# Called when a member promotes a member to owner, to inform the member who was performed the action
+# Available placeholders : {PLAYER_NAME}, {PLAYER_DISPLAY_NAME}
+
+HAVE_BEEN_KICKED_FROM_TEAM: "§aVous avez été exclu de la team §e{TEAM_NAME}§a."
+# Called when a member kicks a member from the team, to inform the member who was kicked
+# Available placeholders : {TEAM_NAME}, {TEAM_PREFIX}
+
+HAVE_BEEN_PROMOTED_OWNER: "§aVous avez été promu chef de la team §e{TEAM_NAME}§a."
+# Called when a member promotes a member to owner, to inform the member who was promoted
+# Available placeholders : {TEAM_NAME}, {TEAM_PREFIX}
+
+HAVE_BEEN_PROMOTED: "§aVous avez été promu §e{0}§a."
+# Called when a member promotes a member to a rank, to inform the member who was promoted
+# Available placeholders : 
+#   {0} : the name of the rank
+
+HAVE_BEEN_DEMOTE: "§aVous avez été rétrogradé §e{0}§a."
+# Called when a member demotes a member to a rank, to inform the member who was demoted
+# Available placeholders : 
+#   {0} : the name of the rank
+
+LEFT_TEAM: "§aVous avez quitté la team §e{TEAM_NAME}§a."
+# Called when a member leaves the team
+# Available placeholders : {TEAM_NAME}, {TEAM_PREFIX}
+
+OWNER_CANNOT_LEAVE_TEAM: "§cTu ne peux pas quitter la team car tu es le chef."
+# Called when a member tries to leave the team but he is the owner
+
+DELETED_TEAM: "§aTu as supprimé la team."
+# Called when a member deletes a team
+
+
+
+
+#########################################################################
+#   ____                               _                        _       #
+#  |  _ \                             | |                      | |      #
+#  | |_) |  _ __    ___     __ _    __| |   ___    __ _   ___  | |_     #
+#  |  _ <  | '__|  / _ \   / _` |  / _` |  / __|  / _` | / __| | __|    #       
+#  | |_) | | |    | (_) | | (_| | | (_| | | (__  | (_| | \__ \ | |_     #
+#  |____/  |_|     \___/   \__,_|  \__,_|  \___|  \__,_| |___/  \__|    #
+#                                                                       #
+#########################################################################
+# TODO: revoir les placeholders ici
+
+
+BROADCAST_ADD_NEW_MEMBER: "§e{0} §aa ajouté §e{1} §aà la team."
+# Called when a member adds a new member to the team
+# Available placeholders :
+#     {0} : the name of the member who performed the action
+#     {1} : the name of the member who was added
+
+BROADCAST_KICK_MEMBER: "§e{0} §aa exclu §e{1} §ade la team."
+# Called when a member kicks a member from the team
+# Available placeholders :
+#     {0} : the name of the member who performed the action
+#     {1} : the name of the member who was kicked
+
+BROADCAST_ADD_NEW_ALLIANCE: "§e{0} §aa ajouté §e{TEAM_NAME} §aà l'alliance de la team."
+# Called when a member adds a new alliance to the team
+# Available placeholders : {TEAM_NAME}, {TEAM_PREFIX}
+#     {0} : the name of the member who performed the action
+
+BROADCAST_REMOVE_ALLIANCE: "§e{0} §aa supprimé §e{TEAM_NAME} §ade l'alliance de la team."
+# Called when a member removes an alliance from the team
+# Available placeholders : {TEAM_NAME}, {TEAM_PREFIX}
+#     {0} : the name of the member who performed the action
+
+BROADCAST_MEMBER_LEAVE_TEAM: "§e{0} §aa quitté la team."
+# Called when a member leaves the team
+# Available placeholders :
+#     {0} : the name of the member who performed the action
+
+BROADCAST_TEAM_BANK_UNLOCKED: "§e{0} a débloqué la banque de la team."
+# Called when a member unlocks the team bank
+# Available placeholders :
+#     {0} : the name of the member who performed the action
+
+BROADCAST_TEAM_CLAIM_UNLOCKED: "§e{0} a débloqué le claim de la team."
+# Called when a member unlocks the team claim
+# TODO : team claim à revoir
+# Available placeholders :
+#     {0} : the name of the member who performed the action
+
+BROADCAST_TEAM_DELETED: "§aLa team §e{TEAM_NAME} §aa été supprimée."
+# Called when a member deletes a team
+# Available placeholders : {TEAM_NAME}, {TEAM_PREFIX}
+
+BROADCAST_NEW_MEMBER_UPGRADE_UNLOCKED: "§aUne nouvelle place dans la team a été débloquée."
+# Called when a member unlocks a new member upgrade
+
+BROADCAST_NEW_STORAGE_UPGRADE_UNLOCKED: "§aUn nouveau stockage de la team a été débloqué."
+# Called when a member unlocks a new storage upgrade
+
+
+
+
+#################################################################################
+#    _____                                                       _              #
+#   / ____|                                                     | |             #
+#  | |        ___    _ __ ___    _ __ ___     __ _   _ __     __| |  ___        #
+#  | |       / _ \  | '_ ` _ \  | '_ ` _ \   / _` | | '_ \   / _` | / __|       #
+#  | |____  | (_) | | | | | | | | | | | | | | (_| | | | | | | (_| | \__ \       #
+#   \_____|  \___/  |_| |_| |_| |_| |_| |_|  \__,_| |_| |_|  \__,_| |___/       #
+#                                                                               #
+#################################################################################
+
+
+COMMAND_STELYTEAM_HELP_OUTPUT:
+  - "§7-------- §5Commandes StelyTeam §7--------"
+  - "§a/st : §7Ouvre le menu de la team"
+  - "§a/st home : §7Se téléporter au home de la team"
+  - "§a/st info <team> : §7Affiche les informations de la team"
+  - "§a/st list : §7Affiche la liste des teams"
+  - "§a/st visual <texte en couleur> : §7Affiche le visuel du texte en couleur"
+  - "§a/tt <message> : §7Envoie un message dans le tchat de la team"
+  - "§7------------------------------------"
+# Called when a player executes the command /stelyteam help
+
+COMMAND_STELYTEAM_ADMIN_OUTPUT:
+  - "§7-- §5Commandes Admin StelyTeam §7--"
+  - "§a/st delete <team> : §7Supprimer la team"
+  - "§a/st money <team> : §7Affiche l'argent de la team"
+  - "§a/st upgrade <team> : §7Améliore de 1 niveau les améliorations de la team"
+  - "§a/st downgrade <team> : §7Rétrograde de 1 niveau les améliorations de la team"
+  - "§a/st editname <team> <nom> : §7Modifie le nom de la team"
+  - "§a/st editprefix <team> <prefixe> : §7Affiche les informations de la team"
+  - "§a/st changeowner <team> <membre> : §7Change le propriétaire de la team"
+  - "§a/st addmember <team> <joueur> : §7Ajoute un membre dans la team"
+  - "§a/st removemember <team> <joueur> : §7Retire un membre de la team"
+# Called when a admin executes the command /stelyteam admin
+
+COMMAND_STELYTEAM_HOME_NOT_SET: "§cLe home n'est pas défini."
+# Called when a player tries to teleport to the team home but it has not been set
+
+COMMAND_STELYTEAM_HOME_TELEPORT: "§aTéléportation au home de la team."
+# Called when a player teleports to the team home
+
+COMMAND_STELYTEAM_VISUAL_USAGE: "§7/stelyteam visual <texte avec couleur>"
+# Called when a player executes the command /stelyteam visual with an invalid usage
+
+COMMAND_STELYTEAM_VISUAL_OUTPUT: "§7Ton texte : {0}"
+# Called when a player executes the command /stelyteam visual
+# Available placeholders :
+#     {0} : the text with colors
+
+COMMAND_STELYTEAM_INFO_USAGE: "§7/stelyteam info <team>|<joueur>"
+# Called when a player executes the command /stelyteam info with an invalid usage
+
+COMMAND_STELYTEAM_INFO_OUTPUT:
+  - "§7--- §5Informations de la team §7---" 
+  - "§aChef : §e{1}"     
+  - "§aNom : §e{2}"
+  - "§aPréfixe : §e{3}"
+  - "§aCompte : §e{4}"
+  - "§aNombre de membre : §e{5} sur {0}"
+  - "§aMembre(s) : §e{6}"
+  - "§aDate de création : §e{7}"
+  - "§aDescription : §e{8}"
+  - "§7---------------------------"
+# Called when a player executes the command /stelyteam info
+# Available placeholders :
+#     {0} : the maximum number of members in the team
+#     {1} : the name of the team owner
+#     {2} : the name of the team
+#     {3} : the prefix of the team
+#     {4} : if the team bank is unlocked
+#     {5} : the number of members in the team
+#     {6} : the list of members in the team
+#     {7} : the date of creation of the team
+#     {8} : the description of the team
+
+COMMAND_STELYTEAM_ACCEPT_OUTPUT: "§aVous avez accepté l'invitation."
+# Called when a player accepts an invitation
+
+COMMAND_STELYTEAM_DENY_OUTPUT: "§cVous avez refusé l'invitation."
+# Called when a player denies an invitation
+
+COMMAND_STELYTEAM_DELETE_USAGE: "§7/stelyteam delete <nom de la team>"
+# Called when a admin executes the command /stelyteam delete with an invalid usage
+
+COMMAND_STELYTEAM_DELETE_OUTPUT: "§7La team {TEAM_NAME} a été supprimée"
+# Called when a admin executes the command /stelyteam delete
+# Available placeholders : {TEAM_NAME}, {TEAM_PREFIX}
+
+COMMAND_STELYTEAM_MONEY_USAGE: "§7/stelyteam money <nom de la team>"
+# Called when a admin executes the command /stelyteam money with an invalid usage
+
+COMMAND_STELYTEAM_MONEY_OUTPUT: "§7Cette team a {0}€"
+# Called when a admin executes the command /stelyteam money
+# Available placeholders :
+#     {0} : the amount of money of the team
+
+COMMAND_STELYTEAM_CLAIM_USAGE: "§7/stelyteam claim <nom de la team>"
+# Called when a admin executes the command /stelyteam claim with an invalid usage
+
+COMMAND_STELYTEAM_CLAIM_OUTPUT: "§7Cette team a débloqué le claim : {0}"
+# Called when a admin executes the command /stelyteam claim
+# Available placeholders :
+#     {0} : true if the team has unlocked the claim, false otherwise
+
+COMMAND_STELYTEAM_UPGRADE_USAGE: "§7/stelyteam upgrade <nom de la team>"
+# Called when a admin executes the command /stelyteam upgrade with an invalid usage
+
+COMMAND_STELYTEAM_UPGRADE_MAX_LEVEL: "§cCette team est déjà au niveau maximum."
+# Called when a admin tries to upgrade a team but it has reached the maximum level
+
+COMMAND_STELYTEAM_UPGRADE_OUTPUT: "§aLe nombre de membre a été augmenté pour la team §e{TEAM_NAME}§a."
+# Called when a admin upgrades a team
+# Available placeholders : {TEAM_NAME}, {TEAM_PREFIX}
+
+COMMAND_STELYTEAM_DOWNGRADE_USAGE: "§7/stelyteam downgrade <nom de la team>"
+# Called when a admin executes the command /stelyteam downgrade with an invalid usage
+
+COMMAND_STELYTEAM_DOWNGRADE_MIN_LEVEL: "§7Cette team est déjà au niveau minimum"
+# Called when a admin tries to downgrade a team but it has reached the minimum level
+
+COMMAND_STELYTEAM_DOWNGRADE_OUTPUT: "§aLe nombre de membre a diminué pour la team §e{TEAM_NAME}§a."
+# Called when a admin downgrades a team
+# Available placeholders : {TEAM_NAME}, {TEAM_PREFIX}
+
+COMMAND_STELYTEAM_EDITNAME_USAGE: "§7/stelyteam editname <nom de la team> <nouveau nom>"
+# Called when a admin executes the command /stelyteam editname with an invalid usage
+
+COMMAND_STELYTEAM_EDITNAME_OUTPUT: "§aNom de la team modifié en §e{TEAM_PREFIX}§a."
+# Called when a admin edits the name of a team
+# Available placeholders : {TEAM_PREFIX}
+
+COMMAND_STELYTEAM_EDITPREFIX_USAGE: "§7/stelyteam editprefix <nom de la team> <nouveau préfixe>"
+# Called when a admin executes the command /stelyteam editprefix with an invalid usage
+
+COMMAND_STELYTEAM_EDITPREFIX_OUTPUT: "§aPréfixe de la team modifié en §e{TEAM_PREFIX}§a."
+# Called when a admin edits the prefix of a team
+# Available placeholders : {TEAM_PREFIX}
+
+COMMAND_STELYTEAM_CHANGEOWNER_USAGE: "§7/stelyteam changeowner <nom de la team> <pseudo du nouveau gérant>"
+# Called when a admin executes the command /stelyteam changeowner with an invalid usage
+
+COMMAND_STELYTEAM_CHANGEOWNER_ALREADY_OWNER: "§cCe joueur est déjà le chef de la team."
+# Called when a admin tries to change the owner of a team but the new owner is already the owner
+
+COMMAND_STELYTEAM_CHANGEOWNER_NOT_IN_TEAM: "§cCe joueur n'est pas dans cette team."
+# Called when a admin tries to change the owner of a team but the new owner is not in the team
+
+COMMAND_STELYTEAM_CHANGEOWNER_OUTPUT: "§aLe nouveau gérant est §e{PLAYER_DISPLAY_NAME}§a."
+# Called when a admin changes the owner of a team
+# Available placeholders : {PLAYER_NAME}, {PLAYER_DISPLAY_NAME}
+
+COMMAND_STELYTEAM_ADDMEMBER_USAGE: "§7/stelyteam addmember <nom de la team> <pseudo du membre>"
+# Called when a admin executes the command /stelyteam addmember with an invalid usage
+
+COMMAND_STELYTEAM_ADDMEMBER_OUTPUT: "§e{PLAYER_DISPLAY_NAME} §aest ajouté dans la team."
+# Called when a admin adds a member to the team
+# Available placeholders : {PLAYER_NAME}, {PLAYER_DISPLAY_NAME}
+
+COMMAND_STELYTEAM_REMOVEMEMBER_USAGE: "§7/stelyteam removemember <nom de la team> <pseudo du membre>"
+# Called when a admin executes the command /stelyteam removemember with an invalid usage
+
+COMMAND_STELYTEAM_REMOVEMEMBER_NOT_IN_TEAM: "§7Ce joueur n'est pas dans cette team"
+# Called when a admin tries to remove a member from the team but the member is not in the team
+
+COMMAND_STELYTEAM_REMOVEMEMBER_OUTPUT: "§e{PLAYER_DISPLAY_NAME} §aest retiré de la team."
+# Called when a admin removes a member from the team
+# Available placeholders : {PLAYER_NAME}, {PLAYER_DISPLAY_NAME}
+
+COMMAND_TEAMCHAT_USAGE: "§7/teamchat <message>"
+# Called when a player executes the command /teamchat with an invalid usage
+
+COMMAND_TEAMCHAT_BLANK_MESSAGE: "§cVous ne pouvez pas envoyer de message vide."
+# Called when a player tries to send a blank message
+
+COMMAND_TEAMCHAT_NO_TEAM: "§cVous n'avez pas de team."
+# Called when a player tries to send a message in the team chat but he is not in a team
+
+
+
+
+
+
+
+# Glossary:
+# 
+# Member : a player that is in a team
+# Admin : a player that has the permission to execute some commands
+# Conversation : the action of sending messages when the plugin asks a player or member to send 
+#                   information (for example, the name or description of a team)

@@ -43,7 +43,8 @@ public class ItemStackSerializer {
             final ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
 
             final BukkitObjectOutputStream objectOutputStream = new BukkitObjectOutputStream(arrayOutputStream);
-            objectOutputStream.writeObject(removeUnsedSlots(itemStack));
+            // objectOutputStream.writeObject(removeUnsedSlots(itemStack));
+            objectOutputStream.writeObject(itemStack);
             objectOutputStream.flush();
 
 
@@ -55,6 +56,7 @@ public class ItemStackSerializer {
 
 
     public ItemStack[] deserializeFromByte(byte[] bytes) {
+        if (bytes.length == 0) return new ItemStack[0];
         try {
             final ByteArrayInputStream arrayInputStream = new ByteArrayInputStream(bytes);
             final BukkitObjectInputStream objectInputStream = new BukkitObjectInputStream(arrayInputStream);

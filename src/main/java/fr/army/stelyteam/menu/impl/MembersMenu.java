@@ -7,84 +7,82 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 
-import fr.army.stelyteam.menu.Buttons;
-import fr.army.stelyteam.menu.Menus;
-import fr.army.stelyteam.menu.TeamMenu;
+import fr.army.stelyteam.menu.FixedMenuOLD;
+import fr.army.stelyteam.menu.MenusOLD;
+import fr.army.stelyteam.menu.TeamMenuOLD;
+import fr.army.stelyteam.menu.button.Buttons;
 import fr.army.stelyteam.team.Member;
-import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.TemporaryActionNames;
-import fr.army.stelyteam.utils.builder.ItemBuilder;
-import fr.army.stelyteam.utils.manager.CacheManager;
-import fr.army.stelyteam.utils.manager.MessageManager;
+import fr.army.stelyteam.utils.builder.ItemBuilderOLD;
 
 
-public class MembersMenu extends TeamMenu {
+public class MembersMenu extends FixedMenuOLD {
 
-    final CacheManager cacheManager = plugin.getCacheManager();
-    final MessageManager messageManager = plugin.getMessageManager();
 
-    public MembersMenu(Player viewer) {
+    public MembersMenu(Player viewer, TeamMenuOLD previousMenu) {
         super(
             viewer,
-            Menus.TEAM_MEMBERS_MENU.getName(),
-            Menus.TEAM_MEMBERS_MENU.getSlots()
+            MenusOLD.TEAM_MEMBERS_MENU.getName(),
+            MenusOLD.TEAM_MEMBERS_MENU.getSlots(),
+            previousMenu
         );
     }
 
-    public MembersMenu(Player viewer, String menuName){
+    public MembersMenu(Player viewer, String menuName, TeamMenuOLD previousMenu){
         super(
             viewer,
             menuName,
-            Menus.TEAM_MEMBERS_MENU.getSlots()
+            MenusOLD.TEAM_MEMBERS_MENU.getSlots(),
+            previousMenu
         );
     }
 
 
-    public Inventory createInventory(Team team) {
+    public Inventory createInventory() {
         Inventory inventory = Bukkit.createInventory(this, this.menuSlots, this.menuName);
 
         emptyCases(inventory, this.menuSlots, 0);
         Integer headSlot = 0;
         for(Member member : team.getTeamMembers()){
             String memberName = member.getMemberName();
-            UUID playerUUID = plugin.getSQLiteManager().getUUID(member.getMemberName());
+            UUID playerUUID = plugin.getDatabaseManager().getUUID(member.getMemberName());
             String itemName;
             List<String> lore = new ArrayList<>();
-            OfflinePlayer offlinePlayer;
+            // OfflinePlayer offlinePlayer;
 
-            if (playerUUID == null) offlinePlayer = Bukkit.getOfflinePlayer(memberName);
-            else offlinePlayer = Bukkit.getOfflinePlayer(playerUUID);
+            // if (playerUUID == null) offlinePlayer = Bukkit.getOfflinePlayer(memberName);
+            // else offlinePlayer = Bukkit.getOfflinePlayer(playerUUID);
 
             String memberRank = plugin.getRankFromId(team.getMemberRank(memberName));
             String rankColor = config.getString("ranks." + memberRank + ".color");
             itemName = rankColor + memberName;
             
             lore.add(config.getString("prefixRankLore") + rankColor + config.getString("ranks." + memberRank + ".name"));
-            inventory.setItem(headSlot, ItemBuilder.getPlayerHead(offlinePlayer, itemName, lore));
+            inventory.setItem(headSlot, ItemBuilderOLD.getPlayerHead(playerUUID, itemName, lore));
             headSlot ++;
         }
 
-        for(String str : config.getConfigurationSection("inventories.teamMembers").getKeys(false)){
-            Integer slot = config.getInt("inventories.teamMembers."+str+".slot");
-            Material material = Material.getMaterial(config.getString("inventories.teamMembers."+str+".itemType"));
-            String name = config.getString("inventories.teamMembers."+str+".itemName");
-            String headTexture = config.getString("inventories.teamMembers."+str+".headTexture");
+        for(String buttonName : config.getConfigurationSection("inventories.teamMembers").getKeys(false)){
+            Integer slot = config.getInt("inventories.teamMembers."+buttonName+".slot");
+            Material material = Material.getMaterial(config.getString("inventories.teamMembers."+buttonName+".itemType"));
+            String displayName = config.getString("inventories.teamMembers."+buttonName+".itemName");
+            String headTexture = config.getString("inventories.teamMembers."+buttonName+".headTexture");
             
-            inventory.setItem(slot, ItemBuilder.getItem(material, name, Collections.emptyList(), headTexture, false));
+            inventory.setItem(slot, ItemBuilderOLD.getItem(material, buttonName, displayName, Collections.emptyList(), headTexture, false));
         }
         return inventory;
     }
 
 
-    public void openMenu(Team team) {
-        this.open(createInventory(team));
+    @Override
+    public void openMenu() {
+        this.open(createInventory());
     }
 
 
@@ -94,7 +92,7 @@ public class MembersMenu extends TeamMenu {
         String playerName = player.getName();
         String itemName = clickEvent.getCurrentItem().getItemMeta().getDisplayName();
         Material material = clickEvent.getCurrentItem().getType();
-        Team team = Team.init(player);
+        // Team team = Team.init(player);
         String memberName = removeFirstColors(itemName);
 
         if (clickEvent.getView().getTitle().equals(config.getString("inventoriesName.removeMembers"))){
@@ -120,15 +118,14 @@ public class MembersMenu extends TeamMenu {
                                 team
                             )
                         );
-                    new ConfirmMenu(player).openMenu();
+                    new ConfirmMenu(player, this).openMenu();
                 }
             }else if (Buttons.CLOSE_TEAM_MEMBERS_MENU_BUTTON.isClickedButton(clickEvent)){
-                // new EditMembersMenu(player).openMenu(team);
-                new EditMembersMenu(player).openMenu(team);
+                previousMenu.openMenu();
             }
         }else{
             if (Buttons.CLOSE_TEAM_MEMBERS_MENU_BUTTON.isClickedButton(clickEvent)){
-                new MemberMenu(player).openMenu(team);
+                previousMenu.openMenu();
             }
         }
     }

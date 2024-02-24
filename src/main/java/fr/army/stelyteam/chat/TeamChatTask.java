@@ -1,11 +1,12 @@
 package fr.army.stelyteam.chat;
 
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.locks.Lock;
+
+import org.jetbrains.annotations.NotNull;
 
 public class TeamChatTask implements Runnable {
 
@@ -34,7 +35,7 @@ public class TeamChatTask implements Runnable {
             } finally {
                 lock.unlock();
             }
-            processor.process(message.sender(), message.message());
+            processor.process(message.senderUuid(), message.messageFormat(), message.recipients());
         }
     }
 
@@ -42,15 +43,12 @@ public class TeamChatTask implements Runnable {
         return finished;
     }
 
-    public void subscribe(@NotNull Player player, @NotNull String message) {
+    public void subscribe(@NotNull UUID playerUuid, @NotNull String message, @NotNull Set<UUID> recipients) {
         try {
             lock.lock();
-            messageQueue.offer(new Message(player, message));
+            messageQueue.offer(new Message(playerUuid, message, recipients));
         } finally {
             lock.unlock();
         }
-    }
-
-    private record Message(@NotNull Player sender, @NotNull String message) {
     }
 }

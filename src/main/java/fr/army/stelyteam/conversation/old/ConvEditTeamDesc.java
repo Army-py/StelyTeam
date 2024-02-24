@@ -1,29 +1,25 @@
 package fr.army.stelyteam.conversation.old;
 
-import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.team.Team;
-import fr.army.stelyteam.utils.builder.ColorsBuilder;
-import fr.army.stelyteam.utils.manager.EconomyManager;
-import fr.army.stelyteam.utils.manager.MessageManager;
-
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
 
+import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.config.Config;
+import fr.army.stelyteam.config.message.Messages;
+import fr.army.stelyteam.team.Team;
+import fr.army.stelyteam.utils.builder.ColorsBuilder;
+import fr.army.stelyteam.utils.manager.EconomyManager;
+
 
 public class ConvEditTeamDesc extends StringPrompt {
 
-    private YamlConfiguration config;
-    private MessageManager messageManager;
     private EconomyManager economyManager;
     private ColorsBuilder colorBuilder;
 
 
     public ConvEditTeamDesc(StelyTeamPlugin plugin) {
-        this.config = plugin.getConfig();
-        this.messageManager = plugin.getMessageManager();
         this.economyManager = plugin.getEconomyManager();
         this.colorBuilder = new ColorsBuilder(plugin);
     }
@@ -35,15 +31,15 @@ public class ConvEditTeamDesc extends StringPrompt {
         Team team = Team.initFromPlayerName(authorName);
         
         if (colorBuilder.descriptionTeamIsTooLong(answer)) {
-            con.getForWhom().sendRawMessage(messageManager.getMessage("common.description_is_too_long"));
+            con.getForWhom().sendRawMessage(Messages.PREFIX.getMessage() + Messages.TEAM_DESCRIPTION_TOO_LONG.getMessage());
             return this;
         }else if (colorBuilder.containsBlockedColors(answer)) {
-            con.getForWhom().sendRawMessage(messageManager.getMessage("common.description_contains_blocked_colors"));
+            con.getForWhom().sendRawMessage(Messages.PREFIX.getMessage() + Messages.TEAM_DESCRIPTION_HAS_BLOCKED_COLORS.getMessage());
             return this;
         }
 
-        economyManager.removeMoneyPlayer(author, config.getDouble("prices.editTeamDescription"));
-        con.getForWhom().sendRawMessage(messageManager.getReplaceMessage("manage_team.edit_team_description.team_description_edited", colorBuilder.replaceColor(answer)));
+        economyManager.removeMoneyPlayer(author, Config.priceEditTeamDescription);
+        con.getForWhom().sendRawMessage(Messages.PREFIX.getMessage() + Messages.TEAM_DESCRIPTION_EDITED.getMessage(ColorsBuilder.replaceColor(answer)));
         team.updateTeamDescription(answer);
         team.refreshTeamMembersInventory(authorName);
         return null;
@@ -51,6 +47,6 @@ public class ConvEditTeamDesc extends StringPrompt {
 
     @Override
     public String getPromptText(ConversationContext arg0) {
-        return messageManager.getMessage("manage_team.edit_team_description.send_team_description");
+        return Messages.PREFIX.getMessage() + Messages.SEND_NEW_TEAM_DESCRIPTION.getMessage();
     }
 }

@@ -1,29 +1,25 @@
 package fr.army.stelyteam.conversation.old;
 
-import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.team.Team;
-import fr.army.stelyteam.utils.manager.EconomyManager;
-import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.database.DatabaseManager;
-
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
 
+import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.config.Config;
+import fr.army.stelyteam.config.message.Messages;
+import fr.army.stelyteam.team.Team;
+import fr.army.stelyteam.utils.manager.EconomyManager;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
+
 public class ConvEditTeamName extends StringPrompt {
 
     private DatabaseManager sqlManager;
-    private YamlConfiguration config;
-    private MessageManager messageManager;
     private EconomyManager economyManager;
 
 
     public ConvEditTeamName(StelyTeamPlugin plugin){
         this.sqlManager = plugin.getDatabaseManager();
-        this.config = plugin.getConfig();
-        this.messageManager = plugin.getMessageManager();
         this.economyManager = plugin.getEconomyManager();
     }
 
@@ -34,18 +30,21 @@ public class ConvEditTeamName extends StringPrompt {
         Team team = Team.initFromPlayerName(authorName);
 
         if (nameTeamIsTooLong(answer)) {
-            con.getForWhom().sendRawMessage(messageManager.getMessage("common.name_is_too_long"));
+            con.getForWhom().sendRawMessage(Messages.PREFIX.getMessage() + Messages.TEAM_NAME_TOO_LONG.getMessage());
+            return this;
+        }else if (nameIsToShoort(answer)){
+            con.getForWhom().sendRawMessage(Messages.PREFIX.getMessage() + Messages.TEAM_NAME_TOO_SHORT.getMessage());
             return this;
         }else if (sqlManager.teamNameExists(answer)){
-            con.getForWhom().sendRawMessage(messageManager.getMessage("common.name_already_exists"));
+            con.getForWhom().sendRawMessage(Messages.PREFIX.getMessage() + Messages.TEAM_NAME_ALREADY_EXISTS.getMessage());
             return this;
         }else if (answer.contains(" ")){
-            con.getForWhom().sendRawMessage(messageManager.getMessage("common.name_cannot_contain_space"));
+            con.getForWhom().sendRawMessage(Messages.PREFIX.getMessage() + Messages.TEAM_NAME_CANNOT_CONTAINS_SPACE.getMessage());
             return this;
         }
 
-        economyManager.removeMoneyPlayer(author, config.getDouble("prices.editTeamId"));
-        con.getForWhom().sendRawMessage(messageManager.getReplaceMessage("manage_team.edit_team_id.team_name_edited", answer));
+        economyManager.removeMoneyPlayer(author, Config.priceEditTeamName);
+        con.getForWhom().sendRawMessage(Messages.PREFIX.getMessage() + Messages.TEAM_NAME_EDITED.getMessage(answer));
         team.updateTeamName(answer);
         team.refreshTeamMembersInventory(authorName);
         return null;
@@ -53,11 +52,14 @@ public class ConvEditTeamName extends StringPrompt {
 
     @Override
     public String getPromptText(ConversationContext arg0) {
-        return messageManager.getMessage("manage_team.edit_team_id.send_team_id");
+        return Messages.PREFIX.getMessage() + Messages.SEND_TEAM_NAME.getMessage();
     }
 
-
     private boolean nameTeamIsTooLong(String teamName){
-        return teamName.length() > config.getInt("teamNameMaxLength");
+        return teamName.length() > Config.teamNameMaxLength;
+    }
+
+    private boolean nameIsToShoort(String teamName){
+        return teamName.length() < Config.teamNameMinLength;
     }
 }

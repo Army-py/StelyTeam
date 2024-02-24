@@ -1,10 +1,11 @@
 package fr.army.stelyteam.chat;
 
-import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
-
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+
+import org.jetbrains.annotations.NotNull;
 
 public class TeamChatManager {
 
@@ -18,14 +19,14 @@ public class TeamChatManager {
         teamChatTask = null;
     }
 
-    public void sendMessage(@NotNull Player player, @NotNull String message) {
+    public void sendMessage(@NotNull UUID playerUuid, @NotNull String messageFormat, @NotNull Set<UUID> recipients) {
         try {
             lock.lock();
             final boolean isNew = teamChatTask == null || teamChatTask.isFinished();
             if (isNew) {
                 teamChatTask = new TeamChatTask(lock, teamChatProcessor);
             }
-            teamChatTask.subscribe(player, message);
+            teamChatTask.subscribe(playerUuid, messageFormat, recipients);
             if(isNew) {
                 new Thread(teamChatTask, "StelyTeam-Chat").start();
             }

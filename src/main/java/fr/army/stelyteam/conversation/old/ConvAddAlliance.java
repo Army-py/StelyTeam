@@ -1,60 +1,68 @@
 package fr.army.stelyteam.conversation.old;
 
-import fr.army.stelyteam.StelyTeamPlugin;
-import fr.army.stelyteam.team.Team;
-import fr.army.stelyteam.utils.TemporaryAction;
-import fr.army.stelyteam.utils.TemporaryActionNames;
-import fr.army.stelyteam.utils.manager.CacheManager;
-import fr.army.stelyteam.utils.manager.MessageManager;
-import fr.army.stelyteam.utils.manager.database.DatabaseManager;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.ClickEvent.Action;
-import net.md_5.bungee.api.chat.ComponentBuilder;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.UUID;
+import fr.army.stelyteam.StelyTeamPlugin;
+import fr.army.stelyteam.config.message.Messages;
+import fr.army.stelyteam.config.message.Placeholders;
+import fr.army.stelyteam.team.Team;
+import fr.army.stelyteam.utils.TemporaryAction;
+import fr.army.stelyteam.utils.TemporaryActionNames;
+import fr.army.stelyteam.utils.manager.CacheManager;
+import fr.army.stelyteam.utils.manager.database.DatabaseManager;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ClickEvent.Action;
+import net.md_5.bungee.api.chat.ComponentBuilder;
 
 public class ConvAddAlliance extends StringPrompt {
 
     private CacheManager cacheManager;
     private DatabaseManager sqlManager;
-    private MessageManager messageManager;
 
 
     public ConvAddAlliance(StelyTeamPlugin plugin){
         this.cacheManager = plugin.getCacheManager();
         this.sqlManager = plugin.getDatabaseManager();
-        this.messageManager = plugin.getMessageManager();
     }
 
 
     @Override
     public Prompt acceptInput(ConversationContext con, String answer) {
-        Player author = (Player) con.getForWhom();
-        String authorName = author.getName();
+        final Player author = (Player) con.getForWhom();
+        final String authorName = author.getName();
+        final String displayName = author.getDisplayName();
         Team team = Team.initFromPlayerName(authorName);
-
+        
         Team teamAnswer = Team.init(answer);
         if (teamAnswer == null) {
-            con.getForWhom().sendRawMessage(messageManager.getMessage("common.team_not_exist"));
+            con.getForWhom().sendRawMessage(Messages.PREFIX.getMessage() + Messages.TEAM_DOES_NOT_EXIST.getMessage());
             return null;
-        } else if (team.isTeamAlliance(teamAnswer.getId())) {
-            con.getForWhom().sendRawMessage(messageManager.getMessage("common.already_alliance"));
+        }else if (team.isTeamAlliance(teamAnswer.getTeamUuid())) {
+            con.getForWhom().sendRawMessage(Messages.PREFIX.getMessage() + Messages.ALREADY_ALLIED_WITH_TEAM.getMessage());
             return null;
         }
+        
+        UUID teamAllianceUuid = teamAnswer.getTeamUuid();
 
-        UUID teamAllianceUuid = teamAnswer.getId();
+        Map<Placeholders, String> replaces = new HashMap<>();
+        replaces.put(Placeholders.PLAYER_NAME, authorName);
+        replaces.put(Placeholders.PLAYER_DISPLAY_NAME, displayName);
+        BaseComponent[] components = new ComponentBuilder(Messages.PREFIX.getMessage() + Messages.ALLIANCE_INVITATION_RECEIVED.getMessage(replaces))
+            .append(Messages.ACCEPT_ALLIANCE_INVITATION.getMessage()).event(new ClickEvent(Action.RUN_COMMAND, "/st accept"))
+            .append(Messages.REFUSE_ALLIANCE_INVITATION.getMessage()).event(new ClickEvent(Action.RUN_COMMAND, "/st deny"))
+            .create();
 
-        BaseComponent[] components = new ComponentBuilder(messageManager.replaceAuthor("manage_alliances.add_alliance.invitation_received", authorName)).append(messageManager.getMessageWithoutPrefix("manage_alliances.add_alliance.accept_invitation")).event(new ClickEvent(Action.RUN_COMMAND, "/st accept")).append(messageManager.getMessageWithoutPrefix("manage_alliances.add_alliance.refuse_invitation")).event(new ClickEvent(Action.RUN_COMMAND, "/st deny")).create();
-
-
-        for (String playerName : sqlManager.getTeamMembersWithRank(teamAllianceUuid, 1)) {
+            
+        for (String playerName: sqlManager.getTeamMembersWithRank(teamAllianceUuid, 1)){
             Player player = Bukkit.getPlayer(playerName);
             if (player != null && !cacheManager.playerHasActionName(playerName, TemporaryActionNames.ADD_ALLIANCE)) {
                 cacheManager.addTempAction(
@@ -66,19 +74,18 @@ public class ConvAddAlliance extends StringPrompt {
                     )
                 );
                 player.spigot().sendMessage(components);
-                con.getForWhom().sendRawMessage(messageManager.getMessage("manage_alliances.add_alliance.invitation_sent"));
+                con.getForWhom().sendRawMessage(Messages.PREFIX.getMessage() + Messages.ALLIANCE_INVITATION_SENT.getMessage());
                 return null;
             }
         }
 
-        con.getForWhom().sendRawMessage(messageManager.getMessage("common.owners_not_connected"));
+        con.getForWhom().sendRawMessage(Messages.PREFIX.getMessage() + Messages.TEAM_OWNERS_OFFLINE.getMessage());
 
         return null;
     }
 
-    @NotNull
     @Override
     public String getPromptText(ConversationContext arg0) {
-        return messageManager.getMessage("manage_alliances.add_alliance.send_team_name");
+        return Messages.PREFIX.getMessage() + Messages.SEND_TEAM_NAME.getMessage();
     }
 }

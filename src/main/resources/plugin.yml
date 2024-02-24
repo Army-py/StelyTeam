@@ -11,6 +11,8 @@ softdepend:
   - "WorldEdit"
   - "WorldGuard"
   - "NoQueuePluginMessage"
+  - "Essentials"
+  - "EssentialsChat"
 commands:
   teamtchat:
     description: "Envoie un message dans le tchat de team"

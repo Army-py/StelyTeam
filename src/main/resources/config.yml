@@ -1,39 +1,62 @@
 # Connection à la base de donnée
 
-database_type: "sqlite" # mysql ou sqlite
-sql:
+database-type: "sqlite" # mysql ou sqlite
+mysql:
   host: "127.0.0.1:3306"
-  database: "stelyteam_test"
-  user: "admin"
-  password: "@%MerSus"
-  port: 3306
+  database: "stelyteam"
+  user: "user"
+  password: "password"
 
 sqlite:
   file: "bungeecord_StelyTeam.db"
 
 
-# Timeout des conversations (message demandant une information aux joueurs lors de la création de team par exemple)
-conversationTimeout: 60
+# Available languages :
+# - fr_fr
+language: "fr_fr"
 
-# Mots permettant d'annuler une conversation (message demandant une information aux joueurs lors de la création de team par exemple)
-conversationCancelWords:
+
+# Nom des serveurs où les stockages seront envoyés
+server-names: ["Survie16", "Survie16B", "SurvieUsine"]
+
+
+# The format of the message sent in the chat when a player send a message in the team chat
+# Placeholders
+# {DISPLAYNAME} : The sender displayname
+# {MESSAGE} : The message sent
+# {USERNAME} : The sender name
+# {TEAM_PREFIX} : The team prefix
+team-chat: 
+  enable: true
+  format: "&b[Team] {TEAM_PREFIX} &8{DISPLAYNAME} &7> {MESSAGE}"
+
+
+
+# Time in seconds before a conversation is automatically canceled
+conversation-timeout: 60
+
+
+# Words that allow to cancel a conversation
+conversation-cancel-words:
   - "cancel"
   - "annuler"
   - "stop"
   - "quit"
 
 
-# Liste des couleurs bloquées
-blockedColors:
+# List of blocked colors
+blocked-colors:
   - "&4"
   - "&c"
+  - "&k"
 
-# Liste des couleurs hexadécimales bloquées
-# Les couleurs hexa sont convertis en HSV
-# h: une valeur min et max, en degré (min: 0, max: 360)
-# s: une valeur min en pourcentage (min: 0, max: 100)
-# v: une valeur min en pourcentage (min: 0, max: 100)
-blockedHexColors:
+
+# List of blocked hexadecimal colors
+# Hexadecimal colors are converted to HSV
+# h: a min and max value, in degree (min: 0, max: 360)
+# s: a min value in percentage (min: 0, max: 100)
+# v: a min value in percentage (min: 0, max: 100)
+blocked-hex-colors:
   range_1:
     h:
       min: 15
@@ -42,879 +65,932 @@ blockedHexColors:
     v: 35
 
 
-# Permet d'ouvrir le menu de la team après après la création de la team
-openTeamAfterCreate: true
+# Allow to open the team menu after the creation of the team
+open-menu-when-created: true
 
-# Nombre maximum de caracteres dans les noms de team (les couleurs ne sont pas prises en compte dans la limite)
-teamNameMaxLength: 12
-teamPrefixMaxLength: 10
-teamPrefixMinLength: 0
 
-# Longueur max de la description d'une team (sans compter les couleurs)
-teamDescriptionMaxLength: 30
+# Minimum length of team names (colors are counted in the limit)
+team-name-min-length: 0
+# Maximum length of team names (colors are counted in the limit)
+team-name-max-length: 12
 
-# Argent maximal d'une team
-teamMaxMoney: 1000000.0
+# Minimum length of team prefixes (colors are not counted in the limit)
+team-prefix-min-length: 0
+# Maximum length of team prefixes (colors are not counted in the limit)
+team-prefix-max-length: 10
 
-# Nombre de membres maximum dans une team
-teamMaxMembers: 10
+# Minimum length of team descriptions (colors are counted in the limit)
+team-description-min-length: 0
+# Maximum length of team descriptions (colors are counted in the limit)
+team-description-max-length: 30
 
-# Description par défaut d'une team
-teamDefaultDescription: "Aucune description"
+
+# Number of members displayed in a single line in lore
+lore-split-members-lenght: 3
+
+
+
+# Limit of money that can the team bank can contain
+team-bank-max-money-limit: 1000000.0
+
+# Limit of members that can be in a team
+team-max-members-limit: 10
+
+# Default team description
+team-default-description: "Aucune description"
+
+
+# Confirmation of important actions
+confirmation:
+  create-team: true
+  remove-team: true
+  add-money: true
+  withdraw-money: true
+
 
 # Prix des différentes actions
 prices:
-  createTeam: 20000.0
-  editTeamId: 2000.0
-  editTeamPrefix: 3000.0
-  editTeamDescription: 1000.0
-  buyTeamBank: 40000.0
-  upgrade:
-    teamPlaces:
-      level1: 25000.0
-      level2: 50000.0
-      level3: 100000.0
-      level4: 125000.0
-      level5: 150000.0
-    teamStorages:
-      level1: 10000.0
-      level2: 25000.0
-      level3: 50000.0
-      level4: 80000.0
-      level5: 100000.0
-
-
-# The format of the message
-# Leave it blank or comment the line to use the defined chat format
-# Placeholders
-# {DISPLAYNAME} : The sender displayname
-# {MESSAGE} : The message sent
-# {FORMAT} : The defined chat format
-# {USERNAME} : The sender name
-# {TEAM} : The team prefix
-format: "&b[Team]{TEAM}&8{USERNAME}&7>{MESSAGE}"
-
-
-
-# Pour pouvoir mettre une tête custom il faudra juste la texture de la tête entre les guillemets de headTexture
-# et mettre comme type d'item PLAYER_HEAD
-# Exemples
-# seeTeamBank:
-#   itemName: "§5§nArgent de la team"
-#   itemType: PLAYER_HEAD
-#   headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZmFjNGI3ZjQ2YTA2N2QxMGViMjQzMGEwMzE5MTA0ZWU4MDFhNjY4ZTRmOTAxZTkyNTJhYWZkOGU1YTE2Zjk3In19fQ"
-#   slot: 13
-
-
-# Item à la place des cases vide
-emptyCase: LIGHT_BLUE_STAINED_GLASS_PANE
-
-# Item en cas de permission insuffisante
-noPermission:
-  itemName: "§cPermission insuffisante"
-  itemType: RED_STAINED_GLASS_PANE
-  headTexture: ""
-  lore: 
-    - "§cPermission insuffisante"
-
-
-# Item si le compte de la team n'a pas encore été débloquée
-teamBankNotUnlock:
-  itemName: "§c§nCompte non débloqué"
-  itemType: EMERALD
-  headTexture: ""
-  lore: 
-    - "§cDébloquer le compte de"
-    - "§cla team pour pouvoir"
-    - "§cy avoir accès"
-
-# Item si l'un des stockage de la team n'a pas encore été débloqué
-storageNotUnlock:
-  itemName: "§c§nStockage non débloqué"
-  itemType: ENDER_CHEST
-  headTexture: ""
-
-# Préfixe à gauche du rang, affiché dans le menu de la gestion des membres de la team et dans la liste des membres
-prefixRankLore: "§r§e>> "
-
-# Description des teams dans la liste des teams
-teamListLore:
-  - "§aChef de la team : §e%OWNER%"
-  - "§aNom : §e%NAME%"
-  - "§aPréfixe : §r%PREFIX%"
-  - "§aDescription : §e%DESCRIPTION%"  
-  - "§aNombre de membre : §e%MEMBER_COUNT% sur %MAX_MEMBERS%"
-  - "§aCréé depuis le §e%DATE%"
-
-# Description des teams dans la liste des alliances
-teamAllianceLore:
-  - "§aChef de la team : §e%OWNER%"
-  - "§aNom : §e%NAME%"
-  - "§aPréfixe : §r%PREFIX%"
-  - "§aDescription : §e%DESCRIPTION%"  
-  - "§aNombre de membre : §e%MEMBER_COUNT% sur %MAX_MEMBERS%"
-  - "§aMembre(s) : §e%MEMBERS%"
-  - "§aAllié depuis le §e%DATE%"
-
-# Titre des menus et leur nombre de slots
-# Le nombre de slots peut être augmenté en fonction du tombre d'item dans le menu *
-# * Respecter le nombre de slots en fonction de la taille d'une ligne de coffre (9 * nombre de lignes)
-inventoriesName:
-  createTeam: "§5§lCréation de Team"
-  teamList : "§5§lListe des Teams"
-  admin: "§5§lMenu principal"
-  manage: "§5§lGérer la team"
-  member: "§5§lOptions de la team"
-  teamMembers: "§5§lMembres"
-  removeMembers: "§5§lRetirer un membre"
-  teamAlliances: "§5§lAlliances"
-  removeAlliances: "§5§lRetirer une alliance"
-  editMembers: "§5§lGestion des membres"
-  editAlliances: "§5§lGestion des alliances"
-  upgradeTotalMembers: "§5§lPlaces disponibles"
-  confirmInventory: "§5§lConfirmation"
-  permissions: "§5§lPermissions"
-  upgradeStorageAmount: "§5§lAméliorations du stockage"
-  storageDirectory: "§5§lStockages disponibles"
-  storages:
-    storageOne: "§5§lStockage 1"
-    storageTwo: "§5§lStockage 2"
-    storageThree: "§5§lStockage 3"
-    storageFour: "§5§lStockage 4"
-    storageFive: "§5§lStockage 5"
-
-
-# Nombre de slots dans chaque inventaires. A modifier en fonction de la taille d'une ligne de coffre (9 * nombre de lignes) 
-inventoriesSlots:
-  createTeam: 27
-  teamList : 54
-  admin: 27
-  manage: 45
-  member: 45
-  teamMembers: 27
-  teamAlliances: 27
-  editMembers: 36
-  editAlliances: 36
-  upgradeTotalMembers: 27
-  confirmInventory: 27
-  permissions: 45
-  upgradeStorageAmount: 27
-  storageDirectory: 27
-  storage: 54
+  create-team: 20000.0
+  edit-team-name: 2000.0
+  edit-team-prefix: 3000.0
+  edit-team-description: 1000.0
+  unlock-team-bank: 40000.0
+  unlock-team-claim: 100000.0
+  team-places:
+    level-1: 25000.0
+    level-2: 50000.0
+    level-3: 100000.0
+    level-4: 125000.0
+    level-5: 150000.0
+  team-storages:
+    level-1: 10000.0
+    level-2: 25000.0
+    level-3: 50000.0
+    level-4: 80000.0
+    level-5: 100000.0
 
 
 ranks:
   owner:
-    id: 0
-    priority: 4
-    name: "Chef"
-    color: "§c"
-    itemType: RED_DYE
-    headTexture: ""
-  co_owner:
-    id: 1
-    priority: 3
-    name: "Chef adjoint"
-    color: "§6"
-    itemType: ORANGE_DYE
-    headTexture: ""
-  moderator:
-    id: 2
-    priority: 2
-    name: "Ainé"
-    color: "§e"
-    itemType: YELLOW_DYE
-    headTexture: ""
-  member:
-    id: 3
-    priority: 1
-    name: "Membre"
-    color: "§d"
-    itemType: PINK_DYE
-    headTexture: ""
-  new_member:
-    id: 4
-    priority: 0
-    name: "Nouveau Membre"
-    color: "§7"
-    itemType: GRAY_DYE
-    headTexture: ""
-
-
-# Description des items en fonction des grades, dans le menu d'éition des membres
-editMembersLores:
-  - "§7§oClique gauche pour promouvoir"
-  - "§7§oClique droit pour rétrograder"
-
-
-inventories:
-  createTeam:
-    create:
-      itemName: "§5§nCréer une team"
-      itemType: LIME_BANNER
-      headTexture: ""
-      slot: 13
+    inversed-priority: 0
+    rank-name: "§cChef"
+    item:
+      material: RED_DYE
+      name: "§c{PLAYER_NAME}"
+      skull-texture: ""
+      amount: 1
+      is-glowing: false
+      lore:
+        - "{RANK_NAME}"
+  co-owner:
+    inversed-priority: 1
+    rank-name: "§6Chef adjoint"
+    item:
+      material: ORANGE_DYE
+      name: "§6{PLAYER_NAME}"
+      skull-texture: ""
+      amount: 1
+      is-glowing: false
       lore: 
-        - "§aPrix : 20 000€"
-
-  admin:
-    manage:
-      itemName: "§5§nMenu de gestion"
-      itemType: WRITABLE_BOOK
-      headTexture: ""
-      slot: 11
-      lore:
-        - "§aGére les différents"
-        - "§aparamètres de la team"
-    teamList:
-      itemName: "§5§nListe des teams"
-      itemType: BOOK
-      headTexture: ""
-      slot: 13
-      lore:
-        - "§aVisualise les teams"
-        - "§aet leurs informations"
-    member:
-      itemName: "§5§nMenu de la team"
-      itemType: PLAYER_HEAD
-      headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYWQzYzdjYjdlOGU5MDhiNzVjNWYzNWYzOTdlMDEwNGJjNzhjNDNiZmI1M2ZlYTVkZWY3YjFjM2M5ZGZlNjg2In19fQ=="
-      slot: 15
-      lore:
-        - "§aVisualise les options"
-        - "§ade la team"
-    close:
-      itemName: "§c§oFermer"
-      itemType: ARROW
-      headTexture: ""
-      slot: 26
-
-
-  manage:
-    editMembers:
-      itemName: "§5§nGestion des membres"
-      itemType: TOTEM_OF_UNDYING
-      headTexture: ""
-      slot: 9
-      lore:
-        - "§aGérer les membres"
-        - "§ade la team"
-    editAlliances:
-      itemName: "§5§nGestion des alliances"
-      itemType: FEATHER
-      headTexture: ""
-      slot: 18
-      lore:
-        - "§aGérer les alliances"
-        - "§ade la team"
-    setTeamHome:
-      itemName: "§5§nCréer le home"
-      itemType: GREEN_BED
-      headTexture: ""
-      slot: 11
-      lore:
-        - "§aCréer le home de team"
-    removeTeamHome:
-      itemName: "§5§nSupprimer le home"
-      itemType: RED_BED
-      headTexture: ""
-      slot: 20
-      lore:
-        - "§aRetirer le home de team"
-    buyTeamBank:
-      itemName: "§5§nOuvrir le compte"
-      itemType: EMERALD
-      headTexture: ""
-      slot: 13
-      lore:
-        - "§aCréer le compte banquaire"
-        - "§ade la team"
-        - "§b§oPrix : 40 000€"
-    upgradeTotalMembers:
-      itemName: "§5§nAjouter des places"
-      itemType: TOTEM_OF_UNDYING
-      headTexture: ""
-      slot: 15
-      lore:
-        - "§aAméliorer le nombre de"
-        - "§amembres maximum dans la team"
-    upgradeStorageAmount:
-      itemName: "§5§nAjouter du stockage"
-      itemType: CHEST
-      headTexture: ""
-      slot: 24
-      lore:
-        - "§aAméliorer le nombre de"
-        - "§astockage maximum dans la team"
-    editName:
-      itemName: "§5§nModifier le nom"
-      itemType: PAPER
-      headTexture: ""
-      slot: 17
-      lore:
-        - "§aModifier le nom de la team"
-        - "§b§oPrix : 2 000€"
-    editPrefix:
-      itemName: "§5§nModifier le préfixe"
-      itemType: NAME_TAG
-      headTexture: ""
-      slot: 26
-      lore:
-        - "§aModifier le préfixe de la team"
-        - "§aqui s'affiche dans le tchat"
-        - "§b§oPrix : 3 000€"
-        - ""
-        - "§7§oVous pouvez prévisualiser"
-        - "§7§ole préfixe avec la commande :"
-        - "§7§o/stelyteam visual <texte>"
-    editDescription:
-      itemName: "§5§nModifier la description"
-      itemType: WRITABLE_BOOK
-      headTexture: ""
-      slot: 31
-      lore:
-        - "§aModifier la description de la team"
-        - "§b§oPrix : 1 000€"
-        - ""
-        - "§7§oVous pouvez prévisualiser"
-        - "§7§ole préfixe avec la commande :"
-        - "§7§o/stelyteam visual <texte>"        
-    editPermissions:
-      itemName: "§5§nPermissions"
-      itemType: RED_BANNER
-      headTexture: ""
-      slot: 22
-      lore:
-        - "§aGérer les permissions"
-        - "§ade la team"
-    removeTeam:
-      itemName: "§c§nSupprimer la team"
-      itemType: COMPOSTER
-      headTexture: ""
-      slot: 40
-    close:
-      itemName: "§c§oFermer"
-      itemType: ARROW
-      headTexture: ""
-      slot: 44
-
-
+        - "{RANK_NAME}"
+        - "§7§oClique gauche pour promouvoir"
+        - "§7§oClique droit pour rétrograder"
+  moderator:
+    inversed-priority: 2
+    rank-name: "§eAiné"
+    item:
+      material: YELLOW_DYE
+      name: "§e{PLAYER_NAME}"
+      skull-texture: ""
+      amount: 1
+      is-glowing: false
+      lore: 
+        - "{RANK_NAME}"
+        - "§7§oClique gauche pour promouvoir"
+        - "§7§oClique droit pour rétrograder"
   member:
-    teamInfos:
-      itemName: "§5§nInformations"
-      itemType: BOOK
-      headTexture: ""
-      slot: 11
-      lore:
-        - "§aChef de la team : §e%OWNER%"
-        - "§aNom : §e%NAME%"
-        - "§aPréfixe : §r%PREFIX%"
-        - "§aDescription : §e%DESCRIPTION%"
-        - "§aNombre de membre : §e%MEMBER_COUNT% sur %MAX_MEMBERS%"
-        - "§aDate de la création : §e%DATE%"
-        - ""
-        - "§aTon grade : §r%RANK%"
-    seeTeamMembers:
-      itemName: "§5§nMembres"
-      itemType: TOTEM_OF_UNDYING
-      headTexture: ""
-      slot: 20
-      lore:
-        - "§aClique pour voir les"  
-        - "§amembres de la team"      
-    seeTeamAlliances:
-      itemName: "§5§nAlliances"
-      itemType: FEATHER
-      headTexture: ""
-      slot: 29
-      lore:
-        - "§aClique pour voir les"  
-        - "§aalliances de la team"        
-    seeTeamBank:
-      itemName: "§5§nArgent de la team"
-      itemType: EMERALD
-      headTexture: ""
-      slot: 13
-      lore:
-        - "§aCompte : §6%TEAM_MONEY%€"
-        - "§aPlafond du compte : §6%MAX_MONEY%€"
-    addTeamMoney:
-      itemName: "§5§nAjout d'argent"
-      itemType: GOLD_NUGGET
-      headTexture: ""
-      slot: 22
-      lore:
-        - "§aAjouter de l'argent dans"
-        - "§ale compte de la team"
-    withdrawTeamMoney:
-      itemName: "§5§nRetrait d'argent"
-      itemType: PAPER
-      headTexture: ""
-      slot: 31
-      lore:
-        - "§aRetirer de l'argent dans"
-        - "§ale compte de la team"
-    storageDirectory:
-      itemName: "§5§nStockage"
-      itemType: CHEST
-      headTexture: ""
-      slot: 15
-      lore:
-        - "§aClique pour voir le"
-        - "§astockage de la team"
-    leaveTeam:
-      itemName: "§c§nQuitter la team"
-      itemType: DARK_OAK_DOOR
-      headTexture: ""
-      slot: 33
-    close:
-      itemName: "§c§oFermer"
-      itemType: ARROW
-      headTexture: ""
-      slot: 44
+    inversed-priority: 3
+    rank-name: "§dMembre"
+    item:
+      material: PINK_DYE
+      name: "§d{PLAYER_NAME}"
+      skull-texture: ""
+      amount: 1
+      is-glowing: false
+      lore: 
+        - "{RANK_NAME}"
+        - "§7§oClique gauche pour promouvoir"
+        - "§7§oClique droit pour rétrograder"
+  new-member:
+    inversed-priority: 4
+    rank-name: "§7Nouveau Membre"
+    item:
+      material: GRAY_DYE
+      name: "§7{PLAYER_NAME}"
+      skull-texture: ""
+      amount: 1
+      is-glowing: false
+      lore: 
+        - "{RANK_NAME}"
+        - "§7§oClique gauche pour promouvoir"
 
 
-  upgradeTotalMembers:
-    levelOne:
-      itemName: "§5§n11 places"
-      lock:
-        itemType: PLAYER_HEAD
-        headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOGQyNDU0ZTRjNjdiMzIzZDViZTk1M2I1YjNkNTQxNzRhYTI3MTQ2MDM3NGVlMjg0MTBjNWFlYWUyYzExZjUifX19"
-      unlock:
-        itemType: PLAYER_HEAD
-        headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODg5OTE2OTc0Njk2NTNjOWFmODM1MmZkZjE4ZDBjYzljNjc3NjNjZmU2NjE3NWMxNTU2YWVkMzMyNDZjNyJ9fX0="
-      slot: 11
-      level: 1
-      lore:
-        - "§b§oPrix : 25 000€"
-    levelTwo:
-      itemName: "§5§n12 places"
-      lock:
-        itemType: PLAYER_HEAD
-        headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYjEzYjc3OGM2ZTUxMjgwMjQyMTRmODU5YjRmYWRjNzczOGM3YmUzNjdlZTRiOWI4ZGJhZDc5NTRjZmYzYSJ9fX0="
-      unlock:
-        itemType: PLAYER_HEAD
-        headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTQ5NmMxNjJkN2M5ZTFiYzhjZjM2M2YxYmZhNmY0YjJlZTVkZWM2MjI2YzIyOGY1MmViNjVkOTZhNDYzNWMifX19"
-      slot: 12
-      level: 2
-      lore:
-        - "§b§oPrix : 50 000€"
-    levelThree:
-      itemName: "§5§n13 places"
-      lock:
-        itemType: PLAYER_HEAD
-        headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMDMxZjY2YmUwOTUwNTg4NTk4ZmVlZWE3ZTZjNjc3OTM1NWU1N2NjNmRlOGI5MWE0NDM5MWIyZTlmZDcyIn19fQ=="
-      unlock:
-        itemType: PLAYER_HEAD
-        headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzQyMjZmMmViNjRhYmM4NmIzOGI2MWQxNDk3NzY0Y2JhMDNkMTc4YWZjMzNiN2I4MDIzY2Y0OGI0OTMxMSJ9fX0="
-      slot: 13
-      level: 3
-      lore:
-        - "§b§oPrix : 100 000€"
-    levelFour:
-      itemName: "§5§n14 places"
-      lock:
-        itemType: PLAYER_HEAD
-        headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTViYzQyYzY5ODQ2YzNkYTk1MzFhYzdkYmEyYjU1MzYzZjhmOTQ3MjU3NmUxN2Q0MjNiN2E5YjgxYzkxNTEifX19"
-      unlock:
-        itemType: PLAYER_HEAD
-        headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjkyMGVjY2UxYzhjZGU1ZGJjYTU5MzhjNTM4NGY3MTRlNTViZWU0Y2NhODY2YjcyODNiOTVkNjllZWQzZDJjIn19fQ=="
-      slot: 14
-      level: 4
-      lore:
-        - "§b§oPrix : 125 000€"
-    levelFive:
-      itemName: "§5§n15 places"
-      lock:
-        itemType: PLAYER_HEAD
-        headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZGYzZjU2NWE4ODkyOGVlNWE5ZDY4NDNkOTgyZDc4ZWFlNmI0MWQ5MDc3ZjJhMWU1MjZhZjg2N2Q3OGZiIn19fQ=="
-      unlock:
-        itemType: PLAYER_HEAD
-        headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTJjMTQyYWY1OWYyOWViMzVhYjI5YzZhNDVlMzM2MzVkY2ZjMmE5NTZkYmQ0ZDJlNTU3MmIwZDM4ODkxYjM1NCJ9fX0="
-      slot: 15
-      level: 5
-      lore:
-        - "§b§oPrix : 150 000€"
-    close:
-      itemName: "§c§oRetour"
-      itemType: ARROW
-      headTexture: ""
-      slot: 26
+
+# Item en cas de permission insuffisante
+no-permission-item:
+  material: RED_STAINED_GLASS_PANE
+  name: "§cPermission insuffisante"
+  skull-texture: ""
+  amount: 1
+  is-glowing: false
+  lore: 
+    - "§cPermission insuffisante"
 
 
-  upgradeStorageAmount:
-    storageOne:
-      itemName: "§5§n1 stockage"
-      lock:
-        itemType: PLAYER_HEAD
-        headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOGQyNDU0ZTRjNjdiMzIzZDViZTk1M2I1YjNkNTQxNzRhYTI3MTQ2MDM3NGVlMjg0MTBjNWFlYWUyYzExZjUifX19"
-      unlock:
-        itemType: PLAYER_HEAD
-        headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODg5OTE2OTc0Njk2NTNjOWFmODM1MmZkZjE4ZDBjYzljNjc3NjNjZmU2NjE3NWMxNTU2YWVkMzMyNDZjNyJ9fX0="
-      slot: 11
-      level: 1
-      lore:
-        - "§b§oPrix : 10 000€"
-    storageTwo:
-      itemName: "§5§n2 stockages"
-      lock:
-        itemType: PLAYER_HEAD
-        headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYjEzYjc3OGM2ZTUxMjgwMjQyMTRmODU5YjRmYWRjNzczOGM3YmUzNjdlZTRiOWI4ZGJhZDc5NTRjZmYzYSJ9fX0="
-      unlock:
-        itemType: PLAYER_HEAD
-        headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTQ5NmMxNjJkN2M5ZTFiYzhjZjM2M2YxYmZhNmY0YjJlZTVkZWM2MjI2YzIyOGY1MmViNjVkOTZhNDYzNWMifX19"
-      slot: 12
-      level: 2
-      lore:
-        - "§b§oPrix : 25 000€"
-    storageThree:
-      itemName: "§5§n3 stockages"
-      lock:
-        itemType: PLAYER_HEAD
-        headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMDMxZjY2YmUwOTUwNTg4NTk4ZmVlZWE3ZTZjNjc3OTM1NWU1N2NjNmRlOGI5MWE0NDM5MWIyZTlmZDcyIn19fQ=="
-      unlock:
-        itemType: PLAYER_HEAD
-        headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzQyMjZmMmViNjRhYmM4NmIzOGI2MWQxNDk3NzY0Y2JhMDNkMTc4YWZjMzNiN2I4MDIzY2Y0OGI0OTMxMSJ9fX0="
-      slot: 13
-      level: 3
-      lore:
-        - "§b§oPrix : 50 000€"
-    storageFour:
-      itemName: "§5§n4 stockages"
-      lock:
-        itemType: PLAYER_HEAD
-        headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTViYzQyYzY5ODQ2YzNkYTk1MzFhYzdkYmEyYjU1MzYzZjhmOTQ3MjU3NmUxN2Q0MjNiN2E5YjgxYzkxNTEifX19"
-      unlock:
-        itemType: PLAYER_HEAD
-        headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjkyMGVjY2UxYzhjZGU1ZGJjYTU5MzhjNTM4NGY3MTRlNTViZWU0Y2NhODY2YjcyODNiOTVkNjllZWQzZDJjIn19fQ=="
-      slot: 14
-      level: 4
-      lore:
-        - "§b§oPrix : 80 000€"
-    storageFive:
-      itemName: "§5§n5 stockages"
-      lock:
-        itemType: PLAYER_HEAD
-        headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZGYzZjU2NWE4ODkyOGVlNWE5ZDY4NDNkOTgyZDc4ZWFlNmI0MWQ5MDc3ZjJhMWU1MjZhZjg2N2Q3OGZiIn19fQ=="
-      unlock:
-        itemType: PLAYER_HEAD
-        headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTJjMTQyYWY1OWYyOWViMzVhYjI5YzZhNDVlMzM2MzVkY2ZjMmE5NTZkYmQ0ZDJlNTU3MmIwZDM4ODkxYjM1NCJ9fX0="
-      slot: 15
-      level: 5
-      lore:
-        - "§b§oPrix : 100 000€"
-    close:
-      itemName: "§c§oRetour"
-      itemType: ARROW
-      headTexture: ""
-      slot: 26
+
+# TODO: dans config menu
+# team-bank-not-unlock:
+#   itemName: "§c§nCompte non débloqué"
+#   itemType: EMERALD
+#   headTexture: ""
+#   lore: 
+#     - "§cDébloquer le compte de"
+#     - "§cla team pour pouvoir"
+#     - "§cy avoir accès"
+
+# team-bank-unlock:
+#   itemName: "§a§nCompte débloqué"
+#   itemType: EMERALD
+#   headTexture: ""
+#   lore: 
+#     - "§aCompte débloqué"
+#     - "§aVous pouvez maintenant"
+#     - "§aaccéder au compte de la team"
+
+# storageNotUnlock:
+#   itemName: "§c§nStockage non débloqué"
+#   itemType: ENDER_CHEST
+#   headTexture: ""
+
+# TODO: dans config menu
+# Préfixe à gauche du rang, affiché dans le menu de la gestion des membres de la team et dans la liste des membres
+# prefixRankLore: "§r§e>> "
+
+# Description des teams dans la liste des teams
+# teamListLore:
+#   - "§aChef de la team : §e%OWNER%"
+#   - "§aNom : §e%NAME%"
+#   - "§aPréfixe : §r%PREFIX%"
+#   - "§aDescription : §e%DESCRIPTION%"  
+#   - "§aNombre de membre : §e%MEMBER_COUNT% sur %MAX_MEMBERS%"
+#   - "§aCréé depuis le §e%DATE%"
+
+# Description des teams dans la liste des alliances
+# teamAllianceLore:
+#   - "§aChef de la team : §e%OWNER%"
+#   - "§aNom : §e%NAME%"
+#   - "§aPréfixe : §r%PREFIX%"
+#   - "§aDescription : §e%DESCRIPTION%"  
+#   - "§aNombre de membre : §e%MEMBER_COUNT% sur %MAX_MEMBERS%"
+#   - "§aMembre(s) : §e%MEMBERS%"
+#   - "§aAllié depuis le §e%DATE%"
+
+# Titre des menus et leur nombre de slots
+# Le nombre de slots peut être augmenté en fonction du tombre d'item dans le menu *
+# * Respecter le nombre de slots en fonction de la taille d'une ligne de coffre (9 * nombre de lignes)
+# inventoriesName:
+#   createTeam: "§5§lCréation de Team"
+#   teamList : "§5§lListe des Teams"
+#   admin: "§5§lMenu principal"
+#   manage: "§5§lGérer la team"
+#   member: "§5§lOptions de la team"
+#   teamMembers: "§5§lMembres"
+#   removeMembers: "§5§lRetirer un membre"
+#   teamAlliances: "§5§lAlliances"
+#   removeAlliances: "§5§lRetirer une alliance"
+#   editMembers: "§5§lGestion des membres"
+#   editAlliances: "§5§lGestion des alliances"
+#   upgradeTotalMembers: "§5§lPlaces disponibles"
+#   confirmInventory: "§5§lConfirmation"
+#   permissions: "§5§lPermissions"
+#   upgradeStorageAmount: "§5§lAméliorations du stockage"
+#   storageDirectory: "§5§lStockages disponibles"
+#   storages:
+#     storageOne: "§5§lStockage 1"
+#     storageTwo: "§5§lStockage 2"
+#     storageThree: "§5§lStockage 3"
+#     storageFour: "§5§lStockage 4"
+#     storageFive: "§5§lStockage 5"
 
 
-  confirmInventory:
-    confirm:
-      itemName: "§a§nConfirmer"
-      itemType: LIME_STAINED_GLASS_PANE
-      headTexture: ""
-      slots: [13]
-    cancel:
-      itemName: "§c§lAnnuler"
-      itemType: RED_STAINED_GLASS_PANE
-      headTexture: ""
-      slots: [9, 10, 11, 12, 14, 15, 16, 17]
+# Nombre de slots dans chaque inventaires. A modifier en fonction de la taille d'une ligne de coffre (9 * nombre de lignes) 
+# inventoriesSlots:
+#   createTeam: 27
+#   teamList : 54
+#   admin: 27
+#   manage: 45
+#   member: 45
+#   teamMembers: 27
+#   teamAlliances: 27
+#   editMembers: 36
+#   editAlliances: 36
+#   upgradeTotalMembers: 27
+#   confirmInventory: 27
+#   permissions: 45
+#   upgradeStorageAmount: 27
+#   storageDirectory: 27
+#   storage: 54
 
 
-  teamMembers:
-    close:
-      itemName: "§c§oRetour"
-      itemType: ARROW
-      headTexture: ""
-      slot: 26
+# inventories:
+#   createTeam:
+#     create:
+#       itemName: "§5§nCréer une team"
+#       itemType: LIME_BANNER
+#       headTexture: ""
+#       slot: 12
+#       lore: 
+#         - "§aPrix : 20 000€"
+#     teamList:
+#       itemName: "§5§nListe des teams"
+#       itemType: BOOK
+#       headTexture: ""
+#       slot: 14
+#       lore:
+#         - "§aVisualise les teams"
+#         - "§aet leurs informations"
+
+#   admin:
+#     manage:
+#       itemName: "§5§nMenu de gestion"
+#       itemType: WRITABLE_BOOK
+#       headTexture: ""
+#       slot: 11
+#       lore:
+#         - "§aGére les différents"
+#         - "§aparamètres de la team"
+#     teamList:
+#       itemName: "§5§nListe des teams"
+#       itemType: BOOK
+#       headTexture: ""
+#       slot: 13
+#       lore:
+#         - "§aVisualise les teams"
+#         - "§aet leurs informations"
+#     member:
+#       itemName: "§5§nMenu de la team"
+#       itemType: PLAYER_HEAD
+#       headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYWQzYzdjYjdlOGU5MDhiNzVjNWYzNWYzOTdlMDEwNGJjNzhjNDNiZmI1M2ZlYTVkZWY3YjFjM2M5ZGZlNjg2In19fQ=="
+#       slot: 15
+#       lore:
+#         - "§aVisualise les options"
+#         - "§ade la team"
+#     close:
+#       itemName: "§c§oFermer"
+#       itemType: ARROW
+#       headTexture: ""
+#       slot: 26
 
 
-  teamAlliances:
-    close:
-      itemName: "§c§oRetour"
-      itemType: ARROW
-      headTexture: ""
-      slot: 26
+#   manage:
+#     editMembers:
+#       itemName: "§5§nGestion des membres"
+#       itemType: TOTEM_OF_UNDYING
+#       headTexture: ""
+#       slot: 9
+#       lore:
+#         - "§aGérer les membres"
+#         - "§ade la team"
+#     editAlliances:
+#       itemName: "§5§nGestion des alliances"
+#       itemType: FEATHER
+#       headTexture: ""
+#       slot: 18
+#       lore:
+#         - "§aGérer les alliances"
+#         - "§ade la team"
+#     setTeamHome:
+#       itemName: "§5§nCréer le home"
+#       itemType: GREEN_BED
+#       headTexture: ""
+#       slot: 11
+#       lore:
+#         - "§aCréer le home de team"
+#     removeTeamHome:
+#       itemName: "§5§nSupprimer le home"
+#       itemType: RED_BED
+#       headTexture: ""
+#       slot: 20
+#       lore:
+#         - "§aRetirer le home de team"
+#     buyTeamBank:
+#       itemName: "§5§nOuvrir le compte"
+#       itemType: EMERALD
+#       headTexture: ""
+#       slot: 13
+#       lore:
+#         - "§aCréer le compte banquaire"
+#         - "§ade la team"
+#         - "§b§oPrix : 40 000€"
+#     buyTeamClaim:
+#       itemName: "§5§nDébloquer le claim"
+#       itemType: DIAMOND
+#       headTexture: ""
+#       slot: 32
+#       lore:
+#         - "§aDébloquer le claim"
+#         - "§ade la team"
+#         - "§b§oPrix : 100 000€"
+#     upgradeTotalMembers:
+#       itemName: "§5§nAjouter des places"
+#       itemType: TOTEM_OF_UNDYING
+#       headTexture: ""
+#       slot: 15
+#       lore:
+#         - "§aAméliorer le nombre de"
+#         - "§amembres maximum dans la team"
+#     upgradeStorageAmount:
+#       itemName: "§5§nAjouter du stockage"
+#       itemType: CHEST
+#       headTexture: ""
+#       slot: 24
+#       lore:
+#         - "§aAméliorer le nombre de"
+#         - "§astockage maximum dans la team"
+#     editName:
+#       itemName: "§5§nModifier le nom"
+#       itemType: PAPER
+#       headTexture: ""
+#       slot: 17
+#       lore:
+#         - "§aModifier le nom de la team"
+#         - "§b§oPrix : 2 000€"
+#     editPrefix:
+#       itemName: "§5§nModifier le préfixe"
+#       itemType: NAME_TAG
+#       headTexture: ""
+#       slot: 26
+#       lore:
+#         - "§aModifier le préfixe de la team"
+#         - "§aqui s'affiche dans le tchat"
+#         - "§b§oPrix : 3 000€"
+#         - ""
+#         - "§7§oVous pouvez prévisualiser"
+#         - "§7§ole préfixe avec la commande :"
+#         - "§7§o/stelyteam visual <texte>"
+#     editDescription:
+#       itemName: "§5§nModifier la description"
+#       itemType: WRITABLE_BOOK
+#       headTexture: ""
+#       slot: 30
+#       lore:
+#         - "§aModifier la description de la team"
+#         - "§b§oPrix : 1 000€"
+#         - ""
+#         - "§7§oVous pouvez prévisualiser"
+#         - "§7§ole préfixe avec la commande :"
+#         - "§7§o/stelyteam visual <texte>"        
+#     editPermissions:
+#       itemName: "§5§nPermissions"
+#       itemType: RED_BANNER
+#       headTexture: ""
+#       slot: 22
+#       lore:
+#         - "§aGérer les permissions"
+#         - "§ade la team"
+#     removeTeam:
+#       itemName: "§c§nSupprimer la team"
+#       itemType: COMPOSTER
+#       headTexture: ""
+#       slot: 40
+#     close:
+#       itemName: "§c§oFermer"
+#       itemType: ARROW
+#       headTexture: ""
+#       slot: 44
 
 
-  editMembers:
-    addMember:
-      itemName: "§5§nAjouter un membre"
-      itemType: PLAYER_HEAD
-      headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNWZmMzE0MzFkNjQ1ODdmZjZlZjk4YzA2NzU4MTA2ODFmOGMxM2JmOTZmNTFkOWNiMDdlZDc4NTJiMmZmZDEifX19"
-      slot: 27
-      lore:
-        - "§aAjouter un membre à la team"
-    removeMember:
-      itemName: "§5§nRetirer un membre"
-      itemType: PLAYER_HEAD
-      headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNGU0YjhiOGQyMzYyYzg2NGUwNjIzMDE0ODdkOTRkMzI3MmE2YjU3MGFmYmY4MGMyYzViMTQ4Yzk1NDU3OWQ0NiJ9fX0="
-      slot: 28
-      lore:
-        - "§aRetirer un membre de la team"
-    editOwner:
-      itemName: "§5§nChanger de créateur"
-      itemType: LECTERN
-      headTexture: ""
-      slot: 31
-      lore:
-        - "§aModifier le créateur"
-        - "§ade la team"
-    close:
-      itemName: "§c§oRetour"
-      itemType: ARROW
-      headTexture: ""
-      slot: 35
+#   member:
+#     teamInfos:
+#       itemName: "§5§nInformations"
+#       itemType: BOOK
+#       headTexture: ""
+#       slot: 11
+#       lore:
+#         - "§aChef de la team : §e%OWNER%"
+#         - "§aNom : §e%NAME%"
+#         - "§aPréfixe : §r%PREFIX%"
+#         - "§aDescription : §e%DESCRIPTION%"
+#         - "§aNombre de membre : §e%MEMBER_COUNT% sur %MAX_MEMBERS%"
+#         - "§aDate de la création : §e%DATE%"
+#         - ""
+#         - "§aTon grade : §r%RANK%"
+#     seeTeamMembers:
+#       itemName: "§5§nMembres"
+#       itemType: TOTEM_OF_UNDYING
+#       headTexture: ""
+#       slot: 20
+#       lore:
+#         - "§aClique pour voir les"  
+#         - "§amembres de la team"      
+#     seeTeamAlliances:
+#       itemName: "§5§nAlliances"
+#       itemType: FEATHER
+#       headTexture: ""
+#       slot: 29
+#       lore:
+#         - "§aClique pour voir les"  
+#         - "§aalliances de la team"        
+#     seeTeamBank:
+#       itemName: "§5§nArgent de la team"
+#       itemType: EMERALD
+#       headTexture: ""
+#       slot: 13
+#       lore:
+#         - "§aCompte : §6%TEAM_MONEY%€"
+#         - "§aPlafond du compte : §6%MAX_MONEY%€"
+#     addTeamMoney:
+#       itemName: "§5§nAjout d'argent"
+#       itemType: GOLD_NUGGET
+#       headTexture: ""
+#       slot: 22
+#       lore:
+#         - "§aAjouter de l'argent dans"
+#         - "§ale compte de la team"
+#     withdrawTeamMoney:
+#       itemName: "§5§nRetrait d'argent"
+#       itemType: PAPER
+#       headTexture: ""
+#       slot: 31
+#       lore:
+#         - "§aRetirer de l'argent dans"
+#         - "§ale compte de la team"
+#     storageDirectory:
+#       itemName: "§5§nStockage"
+#       itemType: CHEST
+#       headTexture: ""
+#       slot: 15
+#       lore:
+#         - "§aClique pour voir le"
+#         - "§astockage de la team"
+#     leaveTeam:
+#       itemName: "§c§nQuitter la team"
+#       itemType: DARK_OAK_DOOR
+#       headTexture: ""
+#       slot: 33
+#     close:
+#       itemName: "§c§oFermer"
+#       itemType: ARROW
+#       headTexture: ""
+#       slot: 44
 
 
-  editAlliances:
-    addAlliance:
-      itemName: "§5§nAjouter une alliance"
-      itemType: PLAYER_HEAD
-      headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNWZmMzE0MzFkNjQ1ODdmZjZlZjk4YzA2NzU4MTA2ODFmOGMxM2JmOTZmNTFkOWNiMDdlZDc4NTJiMmZmZDEifX19"
-      slot: 27
-      lore:
-        - "§aAjouter une alliance à la team"
-    removeAlliance:
-      itemName: "§5§nRetirer une alliance"
-      itemType: PLAYER_HEAD
-      headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNGU0YjhiOGQyMzYyYzg2NGUwNjIzMDE0ODdkOTRkMzI3MmE2YjU3MGFmYmY4MGMyYzViMTQ4Yzk1NDU3OWQ0NiJ9fX0="
-      slot: 28
-      lore:
-        - "§aRetirer une alliance de la team"
-    close:
-      itemName: "§c§oRetour"
-      itemType: ARROW
-      headTexture: ""
-      slot: 35
+#   upgradeTotalMembers:
+#     levelOne:
+#       itemName: "§5§n11 places"
+#       lock:
+#         itemType: PLAYER_HEAD
+#         headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOGQyNDU0ZTRjNjdiMzIzZDViZTk1M2I1YjNkNTQxNzRhYTI3MTQ2MDM3NGVlMjg0MTBjNWFlYWUyYzExZjUifX19"
+#       unlock:
+#         itemType: PLAYER_HEAD
+#         headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODg5OTE2OTc0Njk2NTNjOWFmODM1MmZkZjE4ZDBjYzljNjc3NjNjZmU2NjE3NWMxNTU2YWVkMzMyNDZjNyJ9fX0="
+#       slot: 11
+#       level: 1
+#       lore:
+#         - "§b§oPrix : 25 000€"
+#     levelTwo:
+#       itemName: "§5§n12 places"
+#       lock:
+#         itemType: PLAYER_HEAD
+#         headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYjEzYjc3OGM2ZTUxMjgwMjQyMTRmODU5YjRmYWRjNzczOGM3YmUzNjdlZTRiOWI4ZGJhZDc5NTRjZmYzYSJ9fX0="
+#       unlock:
+#         itemType: PLAYER_HEAD
+#         headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTQ5NmMxNjJkN2M5ZTFiYzhjZjM2M2YxYmZhNmY0YjJlZTVkZWM2MjI2YzIyOGY1MmViNjVkOTZhNDYzNWMifX19"
+#       slot: 12
+#       level: 2
+#       lore:
+#         - "§b§oPrix : 50 000€"
+#     levelThree:
+#       itemName: "§5§n13 places"
+#       lock:
+#         itemType: PLAYER_HEAD
+#         headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMDMxZjY2YmUwOTUwNTg4NTk4ZmVlZWE3ZTZjNjc3OTM1NWU1N2NjNmRlOGI5MWE0NDM5MWIyZTlmZDcyIn19fQ=="
+#       unlock:
+#         itemType: PLAYER_HEAD
+#         headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzQyMjZmMmViNjRhYmM4NmIzOGI2MWQxNDk3NzY0Y2JhMDNkMTc4YWZjMzNiN2I4MDIzY2Y0OGI0OTMxMSJ9fX0="
+#       slot: 13
+#       level: 3
+#       lore:
+#         - "§b§oPrix : 100 000€"
+#     levelFour:
+#       itemName: "§5§n14 places"
+#       lock:
+#         itemType: PLAYER_HEAD
+#         headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTViYzQyYzY5ODQ2YzNkYTk1MzFhYzdkYmEyYjU1MzYzZjhmOTQ3MjU3NmUxN2Q0MjNiN2E5YjgxYzkxNTEifX19"
+#       unlock:
+#         itemType: PLAYER_HEAD
+#         headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjkyMGVjY2UxYzhjZGU1ZGJjYTU5MzhjNTM4NGY3MTRlNTViZWU0Y2NhODY2YjcyODNiOTVkNjllZWQzZDJjIn19fQ=="
+#       slot: 14
+#       level: 4
+#       lore:
+#         - "§b§oPrix : 125 000€"
+#     levelFive:
+#       itemName: "§5§n15 places"
+#       lock:
+#         itemType: PLAYER_HEAD
+#         headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZGYzZjU2NWE4ODkyOGVlNWE5ZDY4NDNkOTgyZDc4ZWFlNmI0MWQ5MDc3ZjJhMWU1MjZhZjg2N2Q3OGZiIn19fQ=="
+#       unlock:
+#         itemType: PLAYER_HEAD
+#         headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTJjMTQyYWY1OWYyOWViMzVhYjI5YzZhNDVlMzM2MzVkY2ZjMmE5NTZkYmQ0ZDJlNTU3MmIwZDM4ODkxYjM1NCJ9fX0="
+#       slot: 15
+#       level: 5
+#       lore:
+#         - "§b§oPrix : 150 000€"
+#     close:
+#       itemName: "§c§oRetour"
+#       itemType: ARROW
+#       headTexture: ""
+#       slot: 26
 
 
-  permissions:
-    addTeamMoney:
-      itemName: "§5§nAjouter de l'argent"
-      slot: 20
-      rank: 3
-      lore:
-        - "§aAjouter de l'argent dans la team"
-    withdrawTeamMoney:
-      itemName: "§5§nRetirer de l'argent"
-      slot: 29
-      rank: 2
-      lore:
-        - "§aRetirer de l'argent de la team"
-    seeTeamBank:
-      itemName: "§5§nVoir l'argent"
-      slot: 11
-      rank: 3
-      lore:
-        - "§aVoir l'argent de la team"
-    buyTeamBank:
-      itemName: "§5§nAchat du compte"
-      slot: 2
-      rank: 1
-      lore:
-        - "§aAchat du compte de team"
-    addMember:
-      itemName: "§5§nAjouter un membre"
-      slot: 18
-      rank: 2
-      lore:
-        - "§aAjouter un membre à la team"
-    removeMember:
-      itemName: "§5§nRetirer un membre"
-      slot: 27
-      rank: 2
-      lore:
-        - "§aRetirer un membre de la team"
-    seeTeamMembers:
-      itemName: "§5§nVoir les membres"
-      slot: 36
-      rank: 3
-      lore:
-        - "§aVoir les membres de la team"
-    upgradeTotalMembers:
-      itemName: "§5§nAugmenter les places disponibles"
-      slot: 9
-      rank: 1
-      lore:
-        - "§aAugmenter le nombre de places"
-        - "§adisponible dans la team"
-    manageMembers:
-      itemName: "§5§nGestion des membres"
-      slot: 0
-      rank: 1
-      lore:
-        - "§aGérer les membres de la team"
-    editName:
-      itemName: "§5§nModifier le nom"
-      slot: 17
-      rank: 0
-      lore:
-        - "§aModifier le nom de la team"
-    editPrefix:
-      itemName: "§5§nModifier le préfixe"
-      slot: 26
-      rank: 0
-      lore:
-        - "§aModifier le préfixe de la team"
-    editDescription:
-      itemName: "§5§nModifier la description"
-      slot: 35
-      rank: 0
-      lore:
-        - "§aModifier la description de la team"
-    setTeamHome:
-      itemName: "§5§nCréer le home"
-      slot: 31
-      rank: 1
-      lore:
-        - "§aDéfinir le home de la team"
-    removeTeamHome:
-      itemName: "§5§nSupprimer le home"
-      slot: 40
-      rank: 1
-      lore:
-        - "§aRetirer le home de la team"
-    editPermissions:
-      itemName: "§5§nModifier les permissions"
-      slot: 8
-      rank: 0
-      lore:
-        - "§aModifier les permissions de la team"
-    storageDirectory:
-      itemName: "§5§nAccès aux stockages"
-      slot: 13
-      rank: 2
-      lore:
-        - "§aPermet d'avoir accès aux"
-        - "§astockages de la team"
-    upgradeStorageAmount:
-      itemName: "§5§nAugmenter les stockages disponibles"
-      slot: 4
-      rank: 1
-      lore:
-        - "§aAugmenter le nombre de stockages"
-        - "§adisponible dans la team"
-    addAlliance:
-      itemName: "§5§nAjouter une alliance"
-      slot: 6
-      rank: 1
-      lore:
-        - "§aAjouter une alliance à la team"
-    removeAlliance:
-      itemName: "§5§nRetirer une alliance"
-      slot: 15
-      rank: 1
-      lore:
-        - "§aRetirer une alliance de la team"
-    seeTeamAlliances:
-      itemName: "§5§nVoir les alliances"
-      slot: 24
-      rank: 3
-      lore:
-        - "§aVoir les alliances de la team"
-    removeTeam:
-      itemName: "§5§nSupprimer la team"
-      slot: -1
-      rank: 0
-    editOwner:
-      itemName: "§5§nChanger de créateur"
-      slot: -1
-      rank: 0
-    teamInfos:
-      itemName: "§5§nVoir les infos"
-      slot: -1
-      rank: -1
-    leaveTeam:
-      itemName: "§5§nQuitter la team"
-      slot: -1
-      rank: -1
-    close:
-      itemName: "§c§oRetour"
-      itemType: ARROW
-      headTexture: ""
-      slot: 44
+#   upgradeStorageAmount:
+#     storageOne:
+#       itemName: "§5§n1 stockage"
+#       lock:
+#         itemType: PLAYER_HEAD
+#         headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOGQyNDU0ZTRjNjdiMzIzZDViZTk1M2I1YjNkNTQxNzRhYTI3MTQ2MDM3NGVlMjg0MTBjNWFlYWUyYzExZjUifX19"
+#       unlock:
+#         itemType: PLAYER_HEAD
+#         headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODg5OTE2OTc0Njk2NTNjOWFmODM1MmZkZjE4ZDBjYzljNjc3NjNjZmU2NjE3NWMxNTU2YWVkMzMyNDZjNyJ9fX0="
+#       slot: 11
+#       level: 1
+#       lore:
+#         - "§b§oPrix : 10 000€"
+#     storageTwo:
+#       itemName: "§5§n2 stockages"
+#       lock:
+#         itemType: PLAYER_HEAD
+#         headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYjEzYjc3OGM2ZTUxMjgwMjQyMTRmODU5YjRmYWRjNzczOGM3YmUzNjdlZTRiOWI4ZGJhZDc5NTRjZmYzYSJ9fX0="
+#       unlock:
+#         itemType: PLAYER_HEAD
+#         headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTQ5NmMxNjJkN2M5ZTFiYzhjZjM2M2YxYmZhNmY0YjJlZTVkZWM2MjI2YzIyOGY1MmViNjVkOTZhNDYzNWMifX19"
+#       slot: 12
+#       level: 2
+#       lore:
+#         - "§b§oPrix : 25 000€"
+#     storageThree:
+#       itemName: "§5§n3 stockages"
+#       lock:
+#         itemType: PLAYER_HEAD
+#         headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMDMxZjY2YmUwOTUwNTg4NTk4ZmVlZWE3ZTZjNjc3OTM1NWU1N2NjNmRlOGI5MWE0NDM5MWIyZTlmZDcyIn19fQ=="
+#       unlock:
+#         itemType: PLAYER_HEAD
+#         headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzQyMjZmMmViNjRhYmM4NmIzOGI2MWQxNDk3NzY0Y2JhMDNkMTc4YWZjMzNiN2I4MDIzY2Y0OGI0OTMxMSJ9fX0="
+#       slot: 13
+#       level: 3
+#       lore:
+#         - "§b§oPrix : 50 000€"
+#     storageFour:
+#       itemName: "§5§n4 stockages"
+#       lock:
+#         itemType: PLAYER_HEAD
+#         headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOTViYzQyYzY5ODQ2YzNkYTk1MzFhYzdkYmEyYjU1MzYzZjhmOTQ3MjU3NmUxN2Q0MjNiN2E5YjgxYzkxNTEifX19"
+#       unlock:
+#         itemType: PLAYER_HEAD
+#         headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjkyMGVjY2UxYzhjZGU1ZGJjYTU5MzhjNTM4NGY3MTRlNTViZWU0Y2NhODY2YjcyODNiOTVkNjllZWQzZDJjIn19fQ=="
+#       slot: 14
+#       level: 4
+#       lore:
+#         - "§b§oPrix : 80 000€"
+#     storageFive:
+#       itemName: "§5§n5 stockages"
+#       lock:
+#         itemType: PLAYER_HEAD
+#         headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZGYzZjU2NWE4ODkyOGVlNWE5ZDY4NDNkOTgyZDc4ZWFlNmI0MWQ5MDc3ZjJhMWU1MjZhZjg2N2Q3OGZiIn19fQ=="
+#       unlock:
+#         itemType: PLAYER_HEAD
+#         headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYTJjMTQyYWY1OWYyOWViMzVhYjI5YzZhNDVlMzM2MzVkY2ZjMmE5NTZkYmQ0ZDJlNTU3MmIwZDM4ODkxYjM1NCJ9fX0="
+#       slot: 15
+#       level: 5
+#       lore:
+#         - "§b§oPrix : 100 000€"
+#     close:
+#       itemName: "§c§oRetour"
+#       itemType: ARROW
+#       headTexture: ""
+#       slot: 26
 
 
-  storage:
-    emptyCase:
-      slots: [45, 46, 47, 48, 49, 50, 51, 52, 53]
-    previous:
-      itemName: "§c§oStockage précédent"
-      itemType: PLAYER_HEAD
-      headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMzJmZjhhYWE0YjJlYzMwYmM1NTQxZDQxYzg3ODIxOTliYWEyNWFlNmQ4NTRjZGE2NTFmMTU5OWU2NTRjZmM3OSJ9fX0="
-      slot: 48
-    next:
-      itemName: "§c§oStockage suivant"
-      itemType: PLAYER_HEAD
-      headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYWFiOTVhODc1MWFlYWEzYzY3MWE4ZTkwYjgzZGU3NmEwMjA0ZjFiZTY1NzUyYWMzMWJlMmY5OGZlYjY0YmY3ZiJ9fX0="
-      slot: 50
-    close:
-      itemName: "§c§oRetour"
-      itemType: ARROW
-      headTexture: ""
-      slot: 53
+#   confirmInventory:
+#     confirm:
+#       itemName: "§a§nConfirmer"
+#       itemType: LIME_STAINED_GLASS_PANE
+#       headTexture: ""
+#       slots: [13]
+#     cancel:
+#       itemName: "§c§lAnnuler"
+#       itemType: RED_STAINED_GLASS_PANE
+#       headTexture: ""
+#       slots: [9, 10, 11, 12, 14, 15, 16, 17]
 
 
-  storageDirectory: 
-    storageOne:
-      itemName: inventoriesName.storages.storageOne
-      itemType: CHEST
-      headTexture: ""
-      level: 1
-      storageId: 1
-      slot: 11
-    storageTwo:
-      itemName: inventoriesName.storages.storageTwo
-      itemType: CHEST
-      headTexture: ""
-      level: 2
-      storageId: 2
-      slot: 12
-    storageThree:
-      itemName: inventoriesName.storages.storageThree
-      itemType: CHEST
-      headTexture: ""
-      level: 3
-      storageId: 3
-      slot: 13
-    storageFour:
-      itemName: inventoriesName.storages.storageFour
-      itemType: CHEST
-      headTexture: ""
-      level: 4
-      storageId: 4
-      slot: 14
-    storageFive:
-      itemName: inventoriesName.storages.storageFive
-      itemType: CHEST
-      headTexture: ""
-      level: 5
-      storageId: 5
-      slot: 15
-    close:
-      itemName: "§c§oRetour"
-      itemType: ARROW
-      headTexture: ""
-      slot: 26
+#   teamMembers:
+#     close:
+#       itemName: "§c§oRetour"
+#       itemType: ARROW
+#       headTexture: ""
+#       slot: 26
 
 
-  teamList:
-    teamOwnerHead:
-      slots: [10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34, 37, 38, 39, 40, 41, 42, 43]
-    previous:
-      itemName: "§c§oPage précédente"
-      itemType: PLAYER_HEAD
-      headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMzJmZjhhYWE0YjJlYzMwYmM1NTQxZDQxYzg3ODIxOTliYWEyNWFlNmQ4NTRjZGE2NTFmMTU5OWU2NTRjZmM3OSJ9fX0="
-      slot: 48
-    next:
-      itemName: "§c§oPage suivante"
-      itemType: PLAYER_HEAD
-      headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYWFiOTVhODc1MWFlYWEzYzY3MWE4ZTkwYjgzZGU3NmEwMjA0ZjFiZTY1NzUyYWMzMWJlMmY5OGZlYjY0YmY3ZiJ9fX0="
-      slot: 50
-    close:
-      itemName: "§c§oRetour"
-      itemType: ARROW
-      headTexture: ""
-      slot: 53
+#   teamAlliances:
+#     close:
+#       itemName: "§c§oRetour"
+#       itemType: ARROW
+#       headTexture: ""
+#       slot: 26
+
+
+#   editMembers:
+#     addMember:
+#       itemName: "§5§nAjouter un membre"
+#       itemType: PLAYER_HEAD
+#       headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNWZmMzE0MzFkNjQ1ODdmZjZlZjk4YzA2NzU4MTA2ODFmOGMxM2JmOTZmNTFkOWNiMDdlZDc4NTJiMmZmZDEifX19"
+#       slot: 27
+#       lore:
+#         - "§aAjouter un membre à la team"
+#     removeMember:
+#       itemName: "§5§nRetirer un membre"
+#       itemType: PLAYER_HEAD
+#       headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNGU0YjhiOGQyMzYyYzg2NGUwNjIzMDE0ODdkOTRkMzI3MmE2YjU3MGFmYmY4MGMyYzViMTQ4Yzk1NDU3OWQ0NiJ9fX0="
+#       slot: 28
+#       lore:
+#         - "§aRetirer un membre de la team"
+#     editOwner:
+#       itemName: "§5§nChanger de créateur"
+#       itemType: LECTERN
+#       headTexture: ""
+#       slot: 31
+#       lore:
+#         - "§aModifier le créateur"
+#         - "§ade la team"
+#     close:
+#       itemName: "§c§oRetour"
+#       itemType: ARROW
+#       headTexture: ""
+#       slot: 35
+
+
+#   editAlliances:
+#     addAlliance:
+#       itemName: "§5§nAjouter une alliance"
+#       itemType: PLAYER_HEAD
+#       headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNWZmMzE0MzFkNjQ1ODdmZjZlZjk4YzA2NzU4MTA2ODFmOGMxM2JmOTZmNTFkOWNiMDdlZDc4NTJiMmZmZDEifX19"
+#       slot: 27
+#       lore:
+#         - "§aAjouter une alliance à la team"
+#     removeAlliance:
+#       itemName: "§5§nRetirer une alliance"
+#       itemType: PLAYER_HEAD
+#       headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNGU0YjhiOGQyMzYyYzg2NGUwNjIzMDE0ODdkOTRkMzI3MmE2YjU3MGFmYmY4MGMyYzViMTQ4Yzk1NDU3OWQ0NiJ9fX0="
+#       slot: 28
+#       lore:
+#         - "§aRetirer une alliance de la team"
+#     close:
+#       itemName: "§c§oRetour"
+#       itemType: ARROW
+#       headTexture: ""
+#       slot: 35
+
+
+#   permissions:
+#     addTeamMoney:
+#       itemName: "§5§nAjouter de l'argent"
+#       slot: 20
+#       rank: 3
+#       lore:
+#         - "§aAjouter de l'argent dans la team"
+#     withdrawTeamMoney:
+#       itemName: "§5§nRetirer de l'argent"
+#       slot: 29
+#       rank: 2
+#       lore:
+#         - "§aRetirer de l'argent de la team"
+#     seeTeamBank:
+#       itemName: "§5§nVoir l'argent"
+#       slot: 11
+#       rank: 3
+#       lore:
+#         - "§aVoir l'argent de la team"
+#     buyTeamBank:
+#       itemName: "§5§nAchat du compte"
+#       slot: 2
+#       rank: 1
+#       lore:
+#         - "§aAchat du compte de team"
+#     addMember:
+#       itemName: "§5§nAjouter un membre"
+#       slot: 18
+#       rank: 2
+#       lore:
+#         - "§aAjouter un membre à la team"
+#     removeMember:
+#       itemName: "§5§nRetirer un membre"
+#       slot: 27
+#       rank: 2
+#       lore:
+#         - "§aRetirer un membre de la team"
+#     seeTeamMembers:
+#       itemName: "§5§nVoir les membres"
+#       slot: 36
+#       rank: 3
+#       lore:
+#         - "§aVoir les membres de la team"
+#     upgradeTotalMembers:
+#       itemName: "§5§nAugmenter les places disponibles"
+#       slot: 9
+#       rank: 1
+#       lore:
+#         - "§aAugmenter le nombre de places"
+#         - "§adisponible dans la team"
+#     manageMembers:
+#       itemName: "§5§nGestion des membres"
+#       slot: 0
+#       rank: 1
+#       lore:
+#         - "§aGérer les membres de la team"
+#     editName:
+#       itemName: "§5§nModifier le nom"
+#       slot: 17
+#       rank: 0
+#       lore:
+#         - "§aModifier le nom de la team"
+#     editPrefix:
+#       itemName: "§5§nModifier le préfixe"
+#       slot: 26
+#       rank: 0
+#       lore:
+#         - "§aModifier le préfixe de la team"
+#     editDescription:
+#       itemName: "§5§nModifier la description"
+#       slot: 35
+#       rank: 0
+#       lore:
+#         - "§aModifier la description de la team"
+#     setTeamHome:
+#       itemName: "§5§nCréer le home"
+#       slot: 31
+#       rank: 1
+#       lore:
+#         - "§aDéfinir le home de la team"
+#     removeTeamHome:
+#       itemName: "§5§nSupprimer le home"
+#       slot: 40
+#       rank: 1
+#       lore:
+#         - "§aRetirer le home de la team"
+#     editPermissions:
+#       itemName: "§5§nModifier les permissions"
+#       slot: 8
+#       rank: 0
+#       lore:
+#         - "§aModifier les permissions de la team"
+#     storageDirectory:
+#       itemName: "§5§nAccès aux stockages"
+#       slot: 13
+#       rank: 2
+#       lore:
+#         - "§aPermet d'avoir accès aux"
+#         - "§astockages de la team"
+#     upgradeStorageAmount:
+#       itemName: "§5§nAugmenter les stockages disponibles"
+#       slot: 4
+#       rank: 1
+#       lore:
+#         - "§aAugmenter le nombre de stockages"
+#         - "§adisponible dans la team"
+#     addAlliance:
+#       itemName: "§5§nAjouter une alliance"
+#       slot: 6
+#       rank: 1
+#       lore:
+#         - "§aAjouter une alliance à la team"
+#     removeAlliance:
+#       itemName: "§5§nRetirer une alliance"
+#       slot: 15
+#       rank: 1
+#       lore:
+#         - "§aRetirer une alliance de la team"
+#     seeTeamAlliances:
+#       itemName: "§5§nVoir les alliances"
+#       slot: 24
+#       rank: 3
+#       lore:
+#         - "§aVoir les alliances de la team"
+#     removeTeam:
+#       itemName: "§5§nSupprimer la team"
+#       slot: -1
+#       rank: 0
+#     editOwner:
+#       itemName: "§5§nChanger de créateur"
+#       slot: -1
+#       rank: 0
+#     teamInfos:
+#       itemName: "§5§nVoir les infos"
+#       slot: -1
+#       rank: -1
+#     leaveTeam:
+#       itemName: "§5§nQuitter la team"
+#       slot: -1
+#       rank: -1
+#     teamList:
+#       itemName: "§5§nListe des teams"
+#       slot: -1
+#       rank: -1
+#     close:
+#       itemName: "§c§oRetour"
+#       itemType: ARROW
+#       headTexture: ""
+#       slot: 44
+
+
+#   storage:
+#     emptyCase:
+#       slots: [45, 46, 47, 48, 49, 50, 51, 52, 53]
+#     previous:
+#       itemName: "§c§oStockage précédent"
+#       itemType: PLAYER_HEAD
+#       headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMzJmZjhhYWE0YjJlYzMwYmM1NTQxZDQxYzg3ODIxOTliYWEyNWFlNmQ4NTRjZGE2NTFmMTU5OWU2NTRjZmM3OSJ9fX0="
+#       slot: 48
+#     next:
+#       itemName: "§c§oStockage suivant"
+#       itemType: PLAYER_HEAD
+#       headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYWFiOTVhODc1MWFlYWEzYzY3MWE4ZTkwYjgzZGU3NmEwMjA0ZjFiZTY1NzUyYWMzMWJlMmY5OGZlYjY0YmY3ZiJ9fX0="
+#       slot: 50
+#     close:
+#       itemName: "§c§oRetour"
+#       itemType: ARROW
+#       headTexture: ""
+#       slot: 53
+
+
+#   storageDirectory: 
+#     storageOne:
+#       itemName: inventoriesName.storages.storageOne
+#       itemType: CHEST
+#       headTexture: ""
+#       level: 1
+#       storageId: 1
+#       slot: 11
+#     storageTwo:
+#       itemName: inventoriesName.storages.storageTwo
+#       itemType: CHEST
+#       headTexture: ""
+#       level: 2
+#       storageId: 2
+#       slot: 12
+#     storageThree:
+#       itemName: inventoriesName.storages.storageThree
+#       itemType: CHEST
+#       headTexture: ""
+#       level: 3
+#       storageId: 3
+#       slot: 13
+#     storageFour:
+#       itemName: inventoriesName.storages.storageFour
+#       itemType: CHEST
+#       headTexture: ""
+#       level: 4
+#       storageId: 4
+#       slot: 14
+#     storageFive:
+#       itemName: inventoriesName.storages.storageFive
+#       itemType: CHEST
+#       headTexture: ""
+#       level: 5
+#       storageId: 5
+#       slot: 15
+#     close:
+#       itemName: "§c§oRetour"
+#       itemType: ARROW
+#       headTexture: ""
+#       slot: 26
+
+
+#   teamList:
+#     teamOwnerHead:
+#       slots: [10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34, 37, 38, 39, 40, 41, 42, 43]
+#     previous:
+#       itemName: "§c§oPage précédente"
+#       itemType: PLAYER_HEAD
+#       headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMzJmZjhhYWE0YjJlYzMwYmM1NTQxZDQxYzg3ODIxOTliYWEyNWFlNmQ4NTRjZGE2NTFmMTU5OWU2NTRjZmM3OSJ9fX0="
+#       slot: 48
+#     next:
+#       itemName: "§c§oPage suivante"
+#       itemType: PLAYER_HEAD
+#       headTexture: "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYWFiOTVhODc1MWFlYWEzYzY3MWE4ZTkwYjgzZGU3NmEwMjA0ZjFiZTY1NzUyYWMzMWJlMmY5OGZlYjY0YmY3ZiJ9fX0="
+#       slot: 50
+#     close:
+#       itemName: "§c§oRetour"
+#       itemType: ARROW
+#       headTexture: ""
+#       slot: 53

@@ -2,42 +2,63 @@ package fr.army.stelyteam;
 
 import fr.army.stelyteam.cache.StorageManager;
 import fr.army.stelyteam.cache.TeamCache;
+import java.sql.SQLException;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
+
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
+
 import fr.army.stelyteam.chat.TeamChatLoader;
 import fr.army.stelyteam.chat.TeamChatManager;
 import fr.army.stelyteam.command.CommandManager;
 import fr.army.stelyteam.repository.EMFLoader;
+import fr.army.stelyteam.config.Config;
 import fr.army.stelyteam.external.ExternalManager;
 import fr.army.stelyteam.listener.ListenerLoader;
-import fr.army.stelyteam.menu.TeamMenu;
+import fr.army.stelyteam.menu.TeamMenuOLD;
 import fr.army.stelyteam.menu.impl.AdminMenu;
-import fr.army.stelyteam.menu.impl.CreateTeamMenu;
+import fr.army.stelyteam.menu.impl.temp_new.CreateTeamMenu;
 import fr.army.stelyteam.menu.impl.MemberMenu;
 import fr.army.stelyteam.repository.exception.RepositoryException;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.team.TeamManager;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
 import fr.army.stelyteam.utils.builder.conversation.ConversationBuilder;
+import fr.army.stelyteam.utils.loader.ConfigLoader;
+import fr.army.stelyteam.utils.loader.exception.UnableLoadConfigException;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.EconomyManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
 import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
 import fr.army.stelyteam.utils.manager.serializer.ItemStackSerializer;
-import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.sql.SQLException;
-import java.util.Objects;
+
+// TODO: Remplacer la conversation pour promouvoir un membre owner par un menu
+// TODO: Ajouter un message de téléportation lorsqu'un membre se tp au home de team
+// TODO: Ajouter des sons sur les boutons
+// TODO: Maybe ajouter un son lors de la téléportation au home de team ?
+// TODO: rajouter une commande pour modifier la description d'une team
+// TODO: mettre de l'ordre dans onEnable()
+// TODO: changer le type des dates dans la bdd
+// TODO: ajouter un menu avec toutes les demandes d'alliance, au lieu d'attendre qu'un owner soit co
+
 
 public class StelyTeamPlugin extends JavaPlugin {
 
+    private static boolean debug = false;
+
+    private String currentServerName;
+    private String[] serverNames;
+    private String teamChatFormat;
+
     private static StelyTeamPlugin plugin;
-    private YamlConfiguration config;
+    private ConfigLoader configLoader;
+    private Config config;
     private YamlConfiguration messages;
     private EMFLoader emfLoader;
     private CacheManager cacheManager;
@@ -60,8 +81,30 @@ public class StelyTeamPlugin extends JavaPlugin {
     public void onEnable() {
         plugin = this;
 
-        this.config = initFile(this.getDataFolder(), "config.yml");
-        this.messages = initFile(this.getDataFolder(), "messages.yml");
+        this.configLoader = new ConfigLoader(this);
+
+        try {
+            this.config = new Config(this.configLoader.initFile("config.yml"));
+        } catch (UnableLoadConfigException e) {
+            getLogger().severe("Unable to load config.yml");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+
+        this.config.load();
+        Config.language = Config.language == null ? "en_us" : Config.language;
+
+        try {
+            this.messages = this.configLoader.initFile(Config.language + ".yml");
+        } catch (UnableLoadConfigException e) {
+            getLogger().severe("Unable to load messages.yml");
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+
+        this.currentServerName = Bukkit.getServer().getMotd();
+        this.serverNames = Config.serverNames;
+        this.teamChatFormat = Config.teamChatFormat;
 
         this.emfLoader = new EMFLoader();
         this.emfLoader.setupEntityManagerFactory();
@@ -80,7 +123,8 @@ public class StelyTeamPlugin extends JavaPlugin {
             return;
         }
         
-        this.cacheManager = new CacheManager();
+        this.serializeManager = new ItemStackSerializer();
+        this.cacheManager = new CacheManager(this);
         this.economyManager = new EconomyManager();
         this.messageManager = new MessageManager(this);
 
@@ -95,11 +139,12 @@ public class StelyTeamPlugin extends JavaPlugin {
         teamCache = new TeamCache(storageManager);
         teamManager = new TeamManager(storageManager, teamCache);
         final TeamChatLoader teamChatLoader = new TeamChatLoader();
+        this.economyManager = new EconomyManager(messageManager);
+        final TeamChatLoader teamChatLoader = new TeamChatLoader(this);
         this.teamChatManager = teamChatLoader.load();
         this.commandManager = new CommandManager(this);
         this.colorsBuilder = new ColorsBuilder(this);
         this.conversationBuilder = new ConversationBuilder(this);
-        this.serializeManager = new ItemStackSerializer();
 
 
         this.externalManager = new ExternalManager();
@@ -129,21 +174,9 @@ public class StelyTeamPlugin extends JavaPlugin {
     }
 
 
-    private YamlConfiguration initFile(File dataFolder, String fileName) {
-        final File file = new File(dataFolder, fileName);
-        if (!file.exists()) {
-            try {
-                Files.copy(Objects.requireNonNull(getResource(fileName)), file.toPath());
-            } catch (IOException ignored) {
-            }
-        }
-        return YamlConfiguration.loadConfiguration(file);
-    }
-
-
     private void closeAllPlayerInventories(){
         for (Player player : Bukkit.getOnlinePlayers()){
-            if (player.getOpenInventory().getTopInventory().getHolder() instanceof TeamMenu){
+            if (player.getOpenInventory().getTopInventory().getHolder() instanceof TeamMenuOLD){
                 player.closeInventory();
             }
         }
@@ -154,15 +187,16 @@ public class StelyTeamPlugin extends JavaPlugin {
         String playerName = player.getName();
 
         if (team == null){
-            new CreateTeamMenu(player).openMenu();
+            new CreateTeamMenu(player, null).openMenu();
         }else if(team.isTeamOwner(playerName)){
-            new AdminMenu(player).openMenu();
-        }else if (plugin.playerHasPermissionInSection(playerName, team, "manage")
-            || plugin.playerHasPermissionInSection(playerName, team, "editMembers")
-            || plugin.playerHasPermissionInSection(playerName, team, "editAlliances")){
-            new AdminMenu(player).openMenu();
+            new AdminMenu(player, null).openMenu();
+        }else if (playerHasPermissionInSection(playerName, team, "manage")
+            || playerHasPermissionInSection(playerName, team, "editMembers")
+            || playerHasPermissionInSection(playerName, team, "editAlliances")
+            || playerHasPermission(playerName, team, "teamList")){
+            new AdminMenu(player, null).openMenu();
         }else{
-            new MemberMenu(player).openMenu(team);
+            new MemberMenu(player, null).openMenu();
         }
     }
 
@@ -229,6 +263,7 @@ public class StelyTeamPlugin extends JavaPlugin {
 
 
     public boolean playerHasPermissionInSection(String playerName, Team team, String sectionName){
+        if (sectionName.equals("close")) return true;
         for (String section : config.getConfigurationSection("inventories." + sectionName).getKeys(false)){
             if (playerHasPermission(playerName, team, section) && !section.equals("close")){
                 return true;
@@ -238,7 +273,22 @@ public class StelyTeamPlugin extends JavaPlugin {
     }
 
 
-    public YamlConfiguration getConfig() {
+    public Set<UUID> getAllowedPlayers(String permissionName){
+        final Set<UUID> players = new HashSet<UUID>();
+        for (Player player : Bukkit.getOnlinePlayers()){
+            if (player.hasPermission(permissionName)){
+                players.add(player.getUniqueId());
+            }
+        }
+        return players;
+    }
+
+
+    public ConfigLoader getConfigLoader() {
+        return configLoader;
+    }
+
+    public Config getConfiguration() {
         return config;
     }
 
@@ -297,4 +347,30 @@ public class StelyTeamPlugin extends JavaPlugin {
     public TeamManager getTeamManager() {
         return teamManager;
     }
+
+    public CommandManager getCommandManager() {
+        return commandManager;
+    }
+
+    public String[] getServerNames(){
+        return serverNames;
+    }
+
+    public String getCurrentServerName(){
+        return currentServerName;
+    }
+
+    public String getTeamChatFormat(){
+        return teamChatFormat;
+    }
+
+
+    public void toggleDebug(){
+        debug = !debug;
+    }
+
+    public boolean isDebug() {
+        return debug;
+    }
+
 }

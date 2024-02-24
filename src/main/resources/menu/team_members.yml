@@ -1,0 +1,77 @@
+
+
+title: "§5§lMembres"
+
+previous: true
+paged: true
+
+pattern:
+  - ". . . . . . . . ."
+  - ". - - - - - - - ."
+  - ". - - - - - - - ."
+  - ". - - - - - - - ."
+  - ". . . < / > . . *"
+
+
+# Available button types
+# Any other type of button will be considered BLANK
+# - BACK
+# - CURRENT_PAGE
+# - NEXT_PAGE
+# - PREVIOUS_PAGE
+# - TEAM_MEMBER
+items:
+  ".":
+    button-type: BLANK
+    material: LIGHT_BLUE_STAINED_GLASS_PANE
+    name: " "
+    skull-texture: ""
+    amount: 1
+    is-glowing: false
+    lore: []
+  "-":
+    button-type: TEAM_MEMBER
+    page-component: true
+    material: PLAYER_HEAD
+    name: "{TEAM_MEMBER_DISPLAY_NAME}"
+    skull-texture: "{TEAM_MEMBER_SKULL_TEXTURE}"
+    amount: 1
+    is-glowing: false
+    lore:
+      - "§e>> §r{TEAM_MEMBER_RANK}"
+    # Available placeholders :
+    #   {TEAM_MEMBER_SKULL_TEXTURE} : Skull texture of the team member
+    #   {TEAM_MEMBER_DISPLAY_NAME} : Team member display name
+    #   {TEAM_MEMBER_RANK} : Team member rank
+  "<":
+    button-type: PREVIOUS_PAGE
+    material: ARROW
+    name: "§cPage précédente"
+    skull-texture: ""
+    amount: 1
+    is-glowing: false
+    lore: []
+  "/":
+    button-type: CURRENT_PAGE
+    material: PAPER
+    name: "§ePage {CURRENT_PAGE} / {MAX_PAGE}"
+    skull-texture: ""
+    amount: 1
+    is-glowing: false
+    lore: []
+  ">":
+    button-type: NEXT_PAGE
+    material: ARROW
+    name: "§cPage suivante"
+    skull-texture: ""
+    amount: 1
+    is-glowing: false
+    lore: []
+  "*":
+    button-type: BACK
+    material: ARROW
+    name: "§cRetour"
+    skull-texture: ""
+    amount: 1
+    is-glowing: false
+    lore: []

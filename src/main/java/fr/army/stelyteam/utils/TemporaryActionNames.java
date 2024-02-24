@@ -7,6 +7,7 @@ public enum TemporaryActionNames {
     EDIT_OWNER,
     CREATE_TEAM,
     BUY_TEAM_BANK,
+    BUY_TEAM_CLAIM,
     EDIT_NAME,
     EDIT_PREFIX,
     DELETE_TEAM,

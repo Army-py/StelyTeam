@@ -9,45 +9,47 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 
-import fr.army.stelyteam.menu.Buttons;
-import fr.army.stelyteam.menu.Menus;
-import fr.army.stelyteam.menu.TeamMenu;
+import fr.army.stelyteam.menu.FixedMenuOLD;
+import fr.army.stelyteam.menu.MenusOLD;
+import fr.army.stelyteam.menu.TeamMenuOLD;
+import fr.army.stelyteam.menu.button.Buttons;
 import fr.army.stelyteam.team.Team;
-import fr.army.stelyteam.utils.builder.ItemBuilder;
+import fr.army.stelyteam.utils.builder.ItemBuilderOLD;
 
 
-public class PermissionsMenu extends TeamMenu {
+public class PermissionsMenu extends FixedMenuOLD {
 
-    public PermissionsMenu(Player viewer) {
+    public PermissionsMenu(Player viewer, TeamMenuOLD previousMenu) {
         super(
             viewer,
-            Menus.PERMISSIONS_MENU.getName(),
-            Menus.PERMISSIONS_MENU.getSlots()
+            MenusOLD.PERMISSIONS_MENU.getName(),
+            MenusOLD.PERMISSIONS_MENU.getSlots(),
+            previousMenu
         );
     }
 
 
-    public Inventory createInventory(Team team) {
+    public Inventory createInventory() {
         Inventory inventory = Bukkit.createInventory(this, this.menuSlots, this.menuName);
 
         emptyCases(inventory, this.menuSlots, 0);
 
-        for(String str : config.getConfigurationSection("inventories.permissions").getKeys(false)){
-            Integer slot = config.getInt("inventories.permissions."+str+".slot");
+        for(String buttonName : config.getConfigurationSection("inventories.permissions").getKeys(false)){
+            Integer slot = config.getInt("inventories.permissions."+buttonName+".slot");
             if (slot == -1) continue;
 
-            String name = config.getString("inventories.permissions."+str+".itemName");
-            List<String> lore = config.getStringList("inventories.permissions."+str+".lore");
+            String displayName = config.getString("inventories.permissions."+buttonName+".itemName");
+            List<String> lore = config.getStringList("inventories.permissions."+buttonName+".lore");
             String headTexture;
             
-            Integer defaultRankId = config.getInt("inventories.permissions."+str+".rank");
-            Integer permissionRank = team.getPermissionRank(str);
+            Integer defaultRankId = config.getInt("inventories.permissions."+buttonName+".rank");
+            Integer permissionRank = team.getPermissionRank(buttonName);
             String lorePrefix = config.getString("prefixRankLore");
             Material material;
 
-            if (str.equals("close")){
-                material = Material.getMaterial(config.getString("inventories.permissions."+str+".itemType"));
-                headTexture = config.getString("inventories.permissions."+str+".headTexture");
+            if (buttonName.equals("close")){
+                material = Material.getMaterial(config.getString("inventories.permissions."+buttonName+".itemType"));
+                headTexture = config.getString("inventories.permissions."+buttonName+".headTexture");
             }else{
                 material = Material.getMaterial(config.getString("ranks."+plugin.getRankFromId(permissionRank != null ? permissionRank : defaultRankId)+".itemType"));
                 headTexture = config.getString("ranks."+plugin.getRankFromId(permissionRank != null ? permissionRank : defaultRankId)+".headTexture");
@@ -63,18 +65,19 @@ public class PermissionsMenu extends TeamMenu {
 
 
             boolean isDefault = false;
-            if (!str.equals("close") && (permissionRank == null || defaultRankId == permissionRank)){
+            if (!buttonName.equals("close") && (permissionRank == null || defaultRankId == permissionRank)){
                 isDefault = true;
             }
 
-            inventory.setItem(slot, ItemBuilder.getItem(material, name, lore, headTexture, isDefault));
+            inventory.setItem(slot, ItemBuilderOLD.getItem(material, buttonName, displayName, lore, headTexture, isDefault));
         }
         return inventory;
     }
 
 
-    public void openMenu(Team team) {
-        this.open(createInventory(team));
+    @Override
+    public void openMenu() {
+        this.open(createInventory());
     }
 
 
@@ -87,7 +90,8 @@ public class PermissionsMenu extends TeamMenu {
 
         // Fermeture ou retour en arrière de l'inventaire
         if (Buttons.CLOSE_PERMISSIONS_MENU_BUTTON.isClickedButton(clickEvent)){
-            new ManageMenu(player).openMenu(team);
+            // new ManageMenu(player, previousMenu).openMenu();
+            previousMenu.openMenu();
             return;
         }
 
@@ -125,7 +129,7 @@ public class PermissionsMenu extends TeamMenu {
                     team.insertAssignement(permission, defaultRankId);
                 }
             }else return;
-            new PermissionsMenu(player).openMenu(team);
+            new PermissionsMenu(player, previousMenu).openMenu();
             team.refreshTeamMembersInventory(playerName);
         }
     }

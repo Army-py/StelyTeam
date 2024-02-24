@@ -10,8 +10,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>20</maven.compiler.source>
-        <maven.compiler.target>20</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
     </properties>
 
     <dependencies>
@@ -25,7 +25,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.19-R0.1-SNAPSHOT</version>
+            <version>1.20.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 
@@ -64,6 +64,28 @@
             <artifactId>StelyClaim</artifactId>
             <version>2ca3c5ed05</version>
         </dependency>
+
+        <!-- NoQueuePluginMessage -->
+        <dependency>
+            <groupId>com.github.Flowsqy</groupId>
+            <artifactId>NoQueuePluginMessage</artifactId>
+            <version>3afd3393e2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>net.essentialsx</groupId>
+            <artifactId>EssentialsX</artifactId>
+            <version>2.20.0-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>net.essentialsx</groupId>
+            <artifactId>EssentialsXChat</artifactId>
+            <version>2.20.0-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+
         <dependency>
             <groupId>com.sk89q.worldedit</groupId>
             <artifactId>worldedit-bukkit</artifactId>
@@ -112,6 +134,17 @@
         <repository>
             <id>worldedit-bukkit</id>
             <url>https://maven.enginehub.org/repo/</url>
+        </repository>
+
+        <repository>
+            <id>essentialsx-snapshots</id>
+            <name>EssentialsX API Repository</name>
+            <url>https://repo.essentialsx.net/snapshots</url>
+        </repository>
+
+        <repository>
+            <id>paper-repo</id>
+            <url>https://papermc.io/repo/repository/maven-public/</url>
         </repository>
 
         <repository>
