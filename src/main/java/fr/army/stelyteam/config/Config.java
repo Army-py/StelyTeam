@@ -3,9 +3,11 @@ package fr.army.stelyteam.config;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 
@@ -111,8 +113,22 @@ public class Config {
     private List<Rank> buildRanks(){
         List<Integer> inversedPriorities = new ArrayList<>();
         List<Rank> ranks = new ArrayList<>();
-        for (String rank : config.getConfigurationSection("ranks").getKeys(false)){
+
+        ConfigurationSection ranksSection = config.getConfigurationSection("ranks");
+
+        if (ranksSection == null){
+            StelyTeamPlugin.getPlugin().getLogger().severe("The ranks section is not defined !");
+            return ranks;
+        }
+
+        for (String rank : ranksSection.getKeys(false)){
             final ConfigurationSection rankDetails = config.getConfigurationSection("ranks." + rank);
+
+            if (rankDetails == null){
+                StelyTeamPlugin.getPlugin().getLogger().severe("The rank " + rank + " is not defined !");
+                continue;
+            }
+
             final int inversedPriority = rankDetails.getInt("inversed-priority");
 
             if (inversedPriorities.contains(inversedPriority)){
@@ -122,10 +138,19 @@ public class Config {
             inversedPriorities.add(inversedPriority);
 
             final String rankName = rankDetails.getString("rank-name");
-
+            if (rankName == null){
+                StelyTeamPlugin.getPlugin().getLogger().severe("The rank name for the rank " + rank + " is not valid !");
+                continue;
+            }
 
             final ConfigurationSection itemSection = config.getConfigurationSection("ranks." + rank + ".item");
-            final Material material = Material.getMaterial(itemSection.getString("material"));
+
+            if (itemSection == null){
+                StelyTeamPlugin.getPlugin().getLogger().severe("The item section for the rank " + rank + " is not defined !");
+                continue;
+            }
+
+            final Material material = Material.getMaterial(Objects.requireNonNull(itemSection.getString("material")));
             final String name = itemSection.getString("name");
             final String skullTexture = itemSection.getString("skull-texture");
             final int amount = itemSection.getInt("amount");
@@ -153,7 +178,19 @@ public class Config {
 
     private ItemStack buildNoPermissionItem(){
         final ConfigurationSection noPermSection = config.getConfigurationSection("no-permission-item");
-        Material material = Material.getMaterial(noPermSection.getString("material"));
+
+        if (noPermSection == null){
+            StelyTeamPlugin.getPlugin().getLogger().severe("The no permission item section is not defined !");
+            return new ItemStack(Material.AIR);
+        }
+
+        final String materialName = noPermSection.getString("material");
+        if (materialName == null){
+            StelyTeamPlugin.getPlugin().getLogger().severe("The material for the no permission item is not defined !");
+            return new ItemStack(Material.AIR);
+        }
+        Material material = Material.getMaterial(materialName);
+
 
         if (material == null){
             StelyTeamPlugin.getPlugin().getLogger().severe("The material " + noPermSection.getString("material") + " is not valid for the no permission item !");
