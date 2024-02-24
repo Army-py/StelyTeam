@@ -55,7 +55,7 @@ public class CreationTeamConv extends Conversation {
         }
 
         try {
-            tPlayer.withdraw(1000);
+            tPlayer.withdraw(1000); // TODO remplacer par la nouvelle config
         } catch (IllegalStateException e) {
             respondent.sendMessage("§cTu n'as pas assez d'argent pour créer une team."); // TODO remplacer par la nouvelle config
             return;
