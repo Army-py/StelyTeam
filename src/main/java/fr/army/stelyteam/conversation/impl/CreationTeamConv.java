@@ -6,6 +6,9 @@ import com.mrivanplays.conversations.spigot.BukkitConversationManager;
 import com.mrivanplays.conversations.spigot.BukkitConversationPartner;
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.cache.StorageManager;
+import fr.army.stelyteam.chat.Message;
+import fr.army.stelyteam.config.Config;
+import fr.army.stelyteam.config.message.Messages;
 import fr.army.stelyteam.conversation.Conversation;
 import fr.army.stelyteam.entity.impl.MemberEntity;
 import fr.army.stelyteam.entity.impl.TeamEntity;
@@ -31,11 +34,11 @@ public class CreationTeamConv extends Conversation {
         conversationManager.newConversationBuilder(player)
                 .withQuestion(Question.of(
                         TEAM_NAME_IDENTIFIER,
-                        "§aÉcris le nom de la team dans le tchat. §7§o(sans couleur)" // TODO remplacer par la nouvelle config
+                        Messages.SEND_TEAM_NAME.getMessage()
                 ))
                 .withQuestion(Question.of(
                         TEAM_DISPLAY_NAME_IDENTIFIER,
-                        "§aMaintenant envoie le préfixe que tu souhaites dans le tchat. §7§o(avec couleur)" // TODO remplacer par la nouvelle config
+                        Messages.SEND_TEAM_PREFIX.getMessage()
                 ))
                 .whenDone(this::done)
                 .build()
@@ -50,14 +53,14 @@ public class CreationTeamConv extends Conversation {
         final String displayName = context.getInput(TEAM_DISPLAY_NAME_IDENTIFIER);
 
         if (tPlayer.hasTeam()) {
-            respondent.sendMessage("§cTu es déjà dans une team."); // TODO remplacer par la nouvelle config
+            respondent.sendMessage(Messages.PREFIX.getMessage() + Messages.ALREADY_IN_TEAM.getMessage());
             return;
         }
 
         try {
-            tPlayer.withdraw(1000); // TODO remplacer par la nouvelle config
+            tPlayer.withdraw(Config.priceCreateTeam);
         } catch (IllegalStateException e) {
-            respondent.sendMessage("§cTu n'as pas assez d'argent pour créer une team."); // TODO remplacer par la nouvelle config
+            respondent.sendMessage(Messages.PREFIX.getMessage() + Messages.NOT_ENOUGH_MONEY.getMessage());
             return;
         }
 

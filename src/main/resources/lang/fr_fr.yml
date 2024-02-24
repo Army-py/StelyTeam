@@ -85,6 +85,9 @@ VALUE_FALSE: "§cNon"
 WRONG_AMOUNT: "§cMontant invalide."
 # Called when a player enters an invalid amount of money
 
+ALREADY_IN_TEAM: "§cVous êtes déjà dans une team."
+# Called when a player tries to join a team, but he is already in a team
+
 
 
 #####################################################
