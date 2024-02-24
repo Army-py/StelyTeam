@@ -2,29 +2,15 @@ package fr.army.stelyteam;
 
 import fr.army.stelyteam.cache.StorageManager;
 import fr.army.stelyteam.cache.TeamCache;
-import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
-
-import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
-
 import fr.army.stelyteam.chat.TeamChatLoader;
 import fr.army.stelyteam.chat.TeamChatManager;
 import fr.army.stelyteam.command.CommandManager;
-import fr.army.stelyteam.repository.EMFLoader;
 import fr.army.stelyteam.config.Config;
 import fr.army.stelyteam.external.ExternalManager;
 import fr.army.stelyteam.listener.ListenerLoader;
 import fr.army.stelyteam.menu.TeamMenuOLD;
-import fr.army.stelyteam.menu.impl.AdminMenu;
-import fr.army.stelyteam.menu.impl.temp_new.CreateTeamMenu;
-import fr.army.stelyteam.menu.impl.MemberMenu;
+import fr.army.stelyteam.repository.EMFLoader;
 import fr.army.stelyteam.repository.exception.RepositoryException;
-import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.team.TeamManager;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
 import fr.army.stelyteam.utils.builder.conversation.ConversationBuilder;
@@ -36,6 +22,12 @@ import fr.army.stelyteam.utils.manager.MessageManager;
 import fr.army.stelyteam.utils.manager.database.DatabaseManager;
 import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
 import fr.army.stelyteam.utils.manager.serializer.ItemStackSerializer;
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import java.sql.SQLException;
 
 
 // TODO: Remplacer la conversation pour promouvoir un membre owner par un menu
@@ -103,7 +95,7 @@ public class StelyTeamPlugin extends JavaPlugin {
         }
 
         this.currentServerName = Bukkit.getServer().getMotd();
-        this.serverNames = Config.serverNames;
+        this.serverNames = Config.serverNames.toArray(new String[0]);
         this.teamChatFormat = Config.teamChatFormat;
 
         this.emfLoader = new EMFLoader();
@@ -139,8 +131,7 @@ public class StelyTeamPlugin extends JavaPlugin {
         teamCache = new TeamCache(storageManager);
         teamManager = new TeamManager(storageManager, teamCache);
         final TeamChatLoader teamChatLoader = new TeamChatLoader();
-        this.economyManager = new EconomyManager(messageManager);
-        final TeamChatLoader teamChatLoader = new TeamChatLoader(this);
+        this.economyManager = new EconomyManager();
         this.teamChatManager = teamChatLoader.load();
         this.commandManager = new CommandManager(this);
         this.colorsBuilder = new ColorsBuilder(this);
@@ -183,105 +174,105 @@ public class StelyTeamPlugin extends JavaPlugin {
     }
 
 
-    public void openMainInventory(Player player, Team team){
-        String playerName = player.getName();
-
-        if (team == null){
-            new CreateTeamMenu(player, null).openMenu();
-        }else if(team.isTeamOwner(playerName)){
-            new AdminMenu(player, null).openMenu();
-        }else if (playerHasPermissionInSection(playerName, team, "manage")
-            || playerHasPermissionInSection(playerName, team, "editMembers")
-            || playerHasPermissionInSection(playerName, team, "editAlliances")
-            || playerHasPermission(playerName, team, "teamList")){
-            new AdminMenu(player, null).openMenu();
-        }else{
-            new MemberMenu(player, null).openMenu();
-        }
-    }
-
-
-    public String getRankFromId(Integer value) {
-        for (String key : config.getConfigurationSection("ranks").getKeys(false)) {
-            if (config.getInt("ranks." + key + ".id") == value) {
-                return key;
-            }
-        }
-        return null;
-    }
+    // public void openMainInventory(Player player, Team team){
+    //     String playerName = player.getName();
+    //
+    //     if (team == null){
+    //         new CreateTeamMenu(player, null).openMenu();
+    //     }else if(team.isTeamOwner(playerName)){
+    //         new AdminMenu(player, null).openMenu();
+    //     }else if (playerHasPermissionInSection(playerName, team, "manage")
+    //         || playerHasPermissionInSection(playerName, team, "editMembers")
+    //         || playerHasPermissionInSection(playerName, team, "editAlliances")
+    //         || playerHasPermission(playerName, team, "teamList")){
+    //         new AdminMenu(player, null).openMenu();
+    //     }else{
+    //         new MemberMenu(player, null).openMenu();
+    //     }
+    // }
 
 
-    public String getStorageFromId(Integer storageId){
-        for (String key : config.getConfigurationSection("inventories.storageDirectory").getKeys(false)) {
-            if (config.getInt("inventories.storageDirectory." + key + ".storageId") == storageId) {
-                return key;
-            }
-        }
-        return null;
-    }
+    // public String getRankFromId(Integer value) {
+    //     for (String key : config.getConfigurationSection("ranks").getKeys(false)) {
+    //         if (config.getInt("ranks." + key + ".id") == value) {
+    //             return key;
+    //         }
+    //     }
+    //     return null;
+    // }
 
 
-    public Integer getLastRank(){
-        Integer lastRank = 0;
-        for (String key : config.getConfigurationSection("ranks").getKeys(false)) {
-            if (config.getInt("ranks." + key + ".id") > lastRank) {
-                lastRank = config.getInt("ranks." + key + ".id");
-            }
-        }
-        return lastRank;
-    }
+    // public String getStorageFromId(Integer storageId){
+    //     for (String key : config.getConfigurationSection("inventories.storageDirectory").getKeys(false)) {
+    //         if (config.getInt("inventories.storageDirectory." + key + ".storageId") == storageId) {
+    //             return key;
+    //         }
+    //     }
+    //     return null;
+    // }
 
 
-    public Integer getMinStorageId(){
-        Integer minStorageId = Integer.MAX_VALUE;
-        for (String key : config.getConfigurationSection("inventories.storageDirectory").getKeys(false)) {
-            if (config.getInt("inventories.storageDirectory." + key + ".storageId") < minStorageId) {
-                if (key.equals("close")) continue;
-                minStorageId = config.getInt("inventories.storageDirectory." + key + ".storageId");
-            }
-        }
-        return minStorageId;
-    }
+    // public Integer getLastRank(){
+    //     Integer lastRank = 0;
+    //     for (String key : config.getConfigurationSection("ranks").getKeys(false)) {
+    //         if (config.getInt("ranks." + key + ".id") > lastRank) {
+    //             lastRank = config.getInt("ranks." + key + ".id");
+    //         }
+    //     }
+    //     return lastRank;
+    // }
+    //
+    //
+    // public Integer getMinStorageId(){
+    //     Integer minStorageId = Integer.MAX_VALUE;
+    //     for (String key : config.getConfigurationSection("inventories.storageDirectory").getKeys(false)) {
+    //         if (config.getInt("inventories.storageDirectory." + key + ".storageId") < minStorageId) {
+    //             if (key.equals("close")) continue;
+    //             minStorageId = config.getInt("inventories.storageDirectory." + key + ".storageId");
+    //         }
+    //     }
+    //     return minStorageId;
+    // }
 
 
-    public boolean playerHasPermission(String playerName, Team team, String permissionName){
-        if (permissionName.equals("close")) return true;
-
-        Integer permissionRank = team.getPermissionRank(permissionName);
-
-        if (permissionRank != null){
-            return permissionRank >= team.getMemberRank(playerName);
-        }
-
-        if (team.isTeamOwner(playerName) || config.getInt("inventories.permissions."+permissionName+".rank") == -1){
-            return true;
-        }else if (config.getInt("inventories.permissions."+permissionName+".rank") >= team.getMemberRank(playerName)){
-            return true;
-        }
-        return false;
-    }
-
-
-    public boolean playerHasPermissionInSection(String playerName, Team team, String sectionName){
-        if (sectionName.equals("close")) return true;
-        for (String section : config.getConfigurationSection("inventories." + sectionName).getKeys(false)){
-            if (playerHasPermission(playerName, team, section) && !section.equals("close")){
-                return true;
-            }
-        }
-        return false;
-    }
-
-
-    public Set<UUID> getAllowedPlayers(String permissionName){
-        final Set<UUID> players = new HashSet<UUID>();
-        for (Player player : Bukkit.getOnlinePlayers()){
-            if (player.hasPermission(permissionName)){
-                players.add(player.getUniqueId());
-            }
-        }
-        return players;
-    }
+    // public boolean playerHasPermission(String playerName, Team team, String permissionName){
+    //     if (permissionName.equals("close")) return true;
+    //
+    //     Integer permissionRank = team.getPermissionRank(permissionName);
+    //
+    //     if (permissionRank != null){
+    //         return permissionRank >= team.getMemberRank(playerName);
+    //     }
+    //
+    //     if (team.isTeamOwner(playerName) || config.getInt("inventories.permissions."+permissionName+".rank") == -1){
+    //         return true;
+    //     }else if (config.getInt("inventories.permissions."+permissionName+".rank") >= team.getMemberRank(playerName)){
+    //         return true;
+    //     }
+    //     return false;
+    // }
+    //
+    //
+    // public boolean playerHasPermissionInSection(String playerName, Team team, String sectionName){
+    //     if (sectionName.equals("close")) return true;
+    //     for (String section : config.getConfigurationSection("inventories." + sectionName).getKeys(false)){
+    //         if (playerHasPermission(playerName, team, section) && !section.equals("close")){
+    //             return true;
+    //         }
+    //     }
+    //     return false;
+    // }
+    //
+    //
+    // public Set<UUID> getAllowedPlayers(String permissionName){
+    //     final Set<UUID> players = new HashSet<UUID>();
+    //     for (Player player : Bukkit.getOnlinePlayers()){
+    //         if (player.hasPermission(permissionName)){
+    //             players.add(player.getUniqueId());
+    //         }
+    //     }
+    //     return players;
+    // }
 
 
     public ConfigLoader getConfigLoader() {
