@@ -1,4 +1,4 @@
-package fr.army.stelyteam.listener;
+package fr.army.stelyteam.listener.impl;
 
 import fr.army.stelyteam.cache.TeamCache;
 import fr.army.stelyteam.team.Team;

@@ -1,4 +1,4 @@
-package fr.army.stelyteam.listener;
+package fr.army.stelyteam.listener.impl;
 
 import fr.army.stelyteam.utils.manager.CacheManager;
 import org.bukkit.event.EventHandler;
