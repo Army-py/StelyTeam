@@ -1,4 +1,4 @@
-package fr.army.stelyteam.menu.impl.temp_new;
+package fr.army.stelyteam.menu.impl;
 
 import fr.army.stelyteam.menu.Menus;
 import fr.army.stelyteam.menu.TeamMenu;

@@ -1,4 +1,4 @@
-package fr.army.stelyteam.menu.impl.temp_new;
+package fr.army.stelyteam.menu.impl;
 
 import fr.army.stelyteam.menu.TeamMenu;
 import fr.army.stelyteam.menu.view.impl.PagedMenuView;
@@ -14,8 +14,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Optional;
 
-public class MembersMenu<C> extends TeamMenu<PagedMenuView<C>> {
-    public MembersMenu(@NotNull MenuBuilderResult<PagedMenuView<C>> menuBuilderResult) {
+public class AlliancesMenu<C> extends TeamMenu<PagedMenuView<C>> {
+
+    public AlliancesMenu(@NotNull MenuBuilderResult<PagedMenuView<C>> menuBuilderResult) {
         super(menuBuilderResult);
     }
 
@@ -27,7 +28,7 @@ public class MembersMenu<C> extends TeamMenu<PagedMenuView<C>> {
             pageBuilderResult = PageBuilder.getInstance().buildEmptyPage();
         }else{
             // TODO: fixe ici (une fois merge la branche cache, utiliser les nouveaux types et les étendres à une interface commune)
-            pageBuilderResult = PageBuilder.getInstance().buildPage((List<C>) team.getTeamMembers(), menuBuilderResult.getMenuTemplate().getComponentCount());
+            pageBuilderResult = PageBuilder.getInstance().buildPage((List<C>) team.getTeamAlliances(), menuBuilderResult.getMenuTemplate().getComponentCount());
         }
 
         return new PagedMenuView<>(player, this, team, pageBuilderResult);
@@ -38,8 +39,8 @@ public class MembersMenu<C> extends TeamMenu<PagedMenuView<C>> {
 
     }
 
-    public static <C> @NotNull MembersMenu<C> createInstance(String configName){
+    public static <C> AlliancesMenu<C> createInstance(String configName){
         final MenuBuilderResult<PagedMenuView<C>> builderResult = MenuBuilder.getInstance().loadMenu(configName + ".yml");
-        return new MembersMenu<>(builderResult);
+        return new AlliancesMenu<>(builderResult);
     }
 }

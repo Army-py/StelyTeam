@@ -1,4 +1,4 @@
-package fr.army.stelyteam.menu.impl.temp_new;
+package fr.army.stelyteam.menu.impl;
 
 import java.util.Optional;
 
