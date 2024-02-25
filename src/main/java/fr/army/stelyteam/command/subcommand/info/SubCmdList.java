@@ -2,7 +2,7 @@ package fr.army.stelyteam.command.subcommand.info;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.command.SubCommand;
-import fr.army.stelyteam.menu.impl.TeamListMenu;
+import fr.army.stelyteam.menu.impl.old.TeamListMenu;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
