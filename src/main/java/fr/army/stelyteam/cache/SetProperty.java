@@ -176,6 +176,16 @@ public class SetProperty<I, T> implements IProperty {
         }
     }
 
+    @NotNull
+    public List<T> values() {
+        try {
+            lock.lock();
+            return new ArrayList<>(values.values());
+        } finally {
+            lock.unlock();
+        }
+    }
+
     private void computeChange(@NotNull I id, @NotNull T value, boolean val) {
         this.changes.merge(id, new ChangeValue<>(value, val), (k, v) -> null);
     }

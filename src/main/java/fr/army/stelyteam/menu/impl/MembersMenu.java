@@ -27,7 +27,7 @@ public class MembersMenu<C> extends TeamMenu<PagedMenuView<C>> {
             pageBuilderResult = PageBuilder.getInstance().buildEmptyPage();
         }else{
             // TODO: fixe ici (une fois merge la branche cache, utiliser les nouveaux types et les étendres à une interface commune)
-            pageBuilderResult = PageBuilder.getInstance().buildPage((List<C>) team.getTeamMembers(), menuBuilderResult.getMenuTemplate().getComponentCount());
+            pageBuilderResult = PageBuilder.getInstance().buildPage((List<C>) team.getMembers().values(), menuBuilderResult.getMenuTemplate().getComponentCount());
         }
 
         return new PagedMenuView<>(player, this, team, pageBuilderResult);
