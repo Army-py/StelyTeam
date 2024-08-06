@@ -31,7 +31,7 @@ public class ItemBuilder {
 		meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
 		meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 		meta.addItemFlags(ItemFlag.HIDE_PLACED_ON);
-		meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+		meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
 		meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 		if(!lore.isEmpty()) {
 			List<String> loreList = (List<String>) lore;
@@ -39,7 +39,7 @@ public class ItemBuilder {
 		}
 
 		if (isEnchanted) {
-			meta.addEnchant(Enchantment.ARROW_INFINITE, 1, true);
+			meta.addEnchant(Enchantment.INFINITY, 1, true);
 		}
 
 		NamespacedKey key = new NamespacedKey(StelyTeamPlugin.getPlugin(), "buttonName");
@@ -64,7 +64,7 @@ public class ItemBuilder {
 
         SkullMeta skullMeta = (SkullMeta) item.getItemMeta();
 		GameProfile profile = new GameProfile(uuid == null ? UUID.randomUUID() : uuid,
-				uuid == null ? null : Bukkit.getOfflinePlayer(uuid).getName());
+				uuid == null ? "" : Bukkit.getOfflinePlayer(uuid).getName());
 
 		if (texture != null) {
 			profile.getProperties().put("textures", new Property("textures", texture));
@@ -82,7 +82,7 @@ public class ItemBuilder {
 		skullMeta.addItemFlags(ItemFlag.HIDE_DESTROYS);
 		skullMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 		skullMeta.addItemFlags(ItemFlag.HIDE_PLACED_ON);
-		skullMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+		skullMeta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
 		skullMeta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 		if(!lore.isEmpty()) {
 			List<String> loreList = (List<String>) lore;
