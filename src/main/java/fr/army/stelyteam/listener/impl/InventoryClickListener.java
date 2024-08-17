@@ -41,7 +41,6 @@ public class InventoryClickListener implements Listener{
         if (!databaseManager.isRegistered(player.getName())) databaseManager.registerPlayer(player);
 
         ((TeamMenu) event.getView().getTopInventory().getHolder()).onClick(event);
-        return;
     }
 
 }
