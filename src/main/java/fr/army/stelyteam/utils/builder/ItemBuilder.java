@@ -31,7 +31,6 @@ public class ItemBuilder {
 		meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
 		meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 		meta.addItemFlags(ItemFlag.HIDE_PLACED_ON);
-		meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
 		meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 		if(!lore.isEmpty()) {
 			List<String> loreList = (List<String>) lore;
