@@ -15,6 +15,7 @@ import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
 import fr.army.stelyteam.utils.manager.MessageManager;
 import fr.army.stelyteam.utils.manager.database.DatabaseManager;
+import org.jetbrains.annotations.NotNull;
 
 public class SubCmdInfo extends SubCommand {
     private DatabaseManager sqlManager;
@@ -79,7 +80,7 @@ public class SubCmdInfo extends SubCommand {
 
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, String[] args) {
+    public @NotNull List<String> onTabComplete(CommandSender sender, String[] args) {
         if (args.length == 2){
             if (args[0].equals("info")){
                 List<String> result = new ArrayList<>();
@@ -96,7 +97,7 @@ public class SubCmdInfo extends SubCommand {
                 return result;
             }
         }
-        return null;
+        return List.of();
     }
 
 

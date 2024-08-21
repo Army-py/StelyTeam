@@ -9,6 +9,7 @@ import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.command.SubCommand;
 import fr.army.stelyteam.menu.impl.TeamListMenu;
 import fr.army.stelyteam.utils.manager.CacheManager;
+import org.jetbrains.annotations.NotNull;
 
 public class SubCmdList extends SubCommand {
 
@@ -31,8 +32,8 @@ public class SubCmdList extends SubCommand {
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, String[] args) {
-        return null;
+    public @NotNull List<String> onTabComplete(CommandSender sender, String[] args) {
+        return List.of();
     }
 
     @Override

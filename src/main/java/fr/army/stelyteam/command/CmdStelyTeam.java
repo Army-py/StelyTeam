@@ -97,7 +97,7 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
                 player.sendMessage(messageManager.getMessage("common.invalid_command"));
             }
         }
-    return true;
+        return true;
     }
 
 
@@ -135,7 +135,7 @@ public class CmdStelyTeam implements CommandExecutor, TabCompleter {
             List<String> results = ((SubCommand) subCommands.get(args[0])).onTabComplete(sender, args);
             return results;
         } 
-        return null;
+        return List.of();
     }
 
 

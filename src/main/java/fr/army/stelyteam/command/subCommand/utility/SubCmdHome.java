@@ -15,6 +15,7 @@ import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.manager.MessageManager;
 import fr.army.stelyteam.utils.manager.database.SQLiteDataManager;
 import fr.army.stelyteam.utils.manager.database.DatabaseManager;
+import org.jetbrains.annotations.NotNull;
 
 public class SubCmdHome extends SubCommand {
 
@@ -57,8 +58,8 @@ public class SubCmdHome extends SubCommand {
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, String[] args) {
-        return null;
+    public @NotNull List<String> onTabComplete(CommandSender sender, String[] args) {
+        return List.of();
     }
 
     @Override

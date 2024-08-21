@@ -9,6 +9,7 @@ import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.command.SubCommand;
 import fr.army.stelyteam.utils.builder.ColorsBuilder;
 import fr.army.stelyteam.utils.manager.MessageManager;
+import org.jetbrains.annotations.NotNull;
 
 public class SubCmdVisual extends SubCommand {
 
@@ -35,8 +36,8 @@ public class SubCmdVisual extends SubCommand {
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, String[] args) {
-        return null;
+    public @NotNull List<String> onTabComplete(CommandSender sender, String[] args) {
+        return List.of();
     }
 
     @Override

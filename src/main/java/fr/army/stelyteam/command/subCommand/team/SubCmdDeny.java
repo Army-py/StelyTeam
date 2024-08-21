@@ -12,6 +12,7 @@ import fr.army.stelyteam.utils.TemporaryAction;
 import fr.army.stelyteam.utils.TemporaryActionNames;
 import fr.army.stelyteam.utils.manager.CacheManager;
 import fr.army.stelyteam.utils.manager.MessageManager;
+import org.jetbrains.annotations.NotNull;
 
 public class SubCmdDeny extends SubCommand {
 
@@ -46,8 +47,8 @@ public class SubCmdDeny extends SubCommand {
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, String[] args) {
-        return null;
+    public @NotNull List<String> onTabComplete(CommandSender sender, String[] args) {
+        return List.of();
     }
 
     @Override

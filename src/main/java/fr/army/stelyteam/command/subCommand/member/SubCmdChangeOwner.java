@@ -11,6 +11,7 @@ import fr.army.stelyteam.command.SubCommand;
 import fr.army.stelyteam.team.Member;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.manager.MessageManager;
+import org.jetbrains.annotations.NotNull;
 
 public class SubCmdChangeOwner extends SubCommand {
 
@@ -51,7 +52,7 @@ public class SubCmdChangeOwner extends SubCommand {
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, String[] args) {
+    public @NotNull List<String> onTabComplete(CommandSender sender, String[] args) {
         if (sender.isOp() && args.length == 3){
             if (args[0].equals("changeowner")){
                 Team team = Team.init(args[1]);
@@ -66,7 +67,7 @@ public class SubCmdChangeOwner extends SubCommand {
                 return result;
             }
         }
-        return null;
+        return List.of();
     }
 
     @Override

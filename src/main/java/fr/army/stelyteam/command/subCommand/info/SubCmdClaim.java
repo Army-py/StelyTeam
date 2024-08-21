@@ -1,8 +1,6 @@
 package fr.army.stelyteam.command.subCommand.info;
 
-import java.text.NumberFormat;
 import java.util.List;
-import java.util.Locale;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -11,6 +9,7 @@ import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.command.SubCommand;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.manager.MessageManager;
+import org.jetbrains.annotations.NotNull;
 
 public class SubCmdClaim extends SubCommand {
     
@@ -46,8 +45,8 @@ public class SubCmdClaim extends SubCommand {
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, String[] args) {
-        return null;
+    public @NotNull List<String> onTabComplete(CommandSender sender, String[] args) {
+        return List.of();
     }
 
     @Override

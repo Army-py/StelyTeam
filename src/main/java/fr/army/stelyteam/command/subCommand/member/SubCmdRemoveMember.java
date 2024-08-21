@@ -11,6 +11,7 @@ import fr.army.stelyteam.command.SubCommand;
 import fr.army.stelyteam.team.Member;
 import fr.army.stelyteam.team.Team;
 import fr.army.stelyteam.utils.manager.MessageManager;
+import org.jetbrains.annotations.NotNull;
 
 public class SubCmdRemoveMember extends SubCommand {
 
@@ -45,7 +46,7 @@ public class SubCmdRemoveMember extends SubCommand {
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, String[] args) {
+    public @NotNull List<String> onTabComplete(CommandSender sender, String[] args) {
         if (sender.isOp() && args.length == 3){
             if (args[0].equals("removemember")){
                 Team team = Team.init(args[1]);
@@ -60,7 +61,7 @@ public class SubCmdRemoveMember extends SubCommand {
                 return result;
             }
         }
-        return null;
+        return List.of();
     }
 
     @Override

@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 
 import fr.army.stelyteam.StelyTeamPlugin;
 import fr.army.stelyteam.command.SubCommand;
+import org.jetbrains.annotations.NotNull;
 
 public class SubCmdAdmin extends SubCommand {
     private YamlConfiguration messages;
@@ -28,8 +29,8 @@ public class SubCmdAdmin extends SubCommand {
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, String[] args) {
-        return null;
+    public @NotNull List<String> onTabComplete(CommandSender sender, String[] args) {
+        return List.of();
     }
 
     @Override
