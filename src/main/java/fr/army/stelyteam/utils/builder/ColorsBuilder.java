@@ -56,14 +56,14 @@ public class ColorsBuilder {
         int colors = getPrefixColors(prefixTeam).size();
         int hexColors = getPrefixHexColors(prefixTeam).size();
 
-        return prefixTeam.length() - (colors * 2 + hexColors * 8) > config.getInt("teamPrefixMaxLength");
+        return prefixTeam.codePointCount(0, prefixTeam.length()) - (colors * 2 + hexColors * 8) > config.getInt("teamPrefixMaxLength");
     }
 
     public boolean prefixTeamIsTooShort(String prefixTeam){
         int colors = getPrefixColors(prefixTeam).size();
         int hexColors = getPrefixHexColors(prefixTeam).size();
 
-        return prefixTeam.length() - (colors * 2 + hexColors * 8) <= config.getInt("teamPrefixMinLength");
+        return prefixTeam.codePointCount(0, prefixTeam.length()) - (colors * 2 + hexColors * 8) <= config.getInt("teamPrefixMinLength");
     }
 
 
@@ -71,7 +71,7 @@ public class ColorsBuilder {
         int colors = getPrefixColors(prefixTeam).size();
         int hexColors = getPrefixHexColors(prefixTeam).size();
 
-        return prefixTeam.length() - (colors * 2 + hexColors * 8) > config.getInt("teamDescriptionMaxLength");
+        return prefixTeam.codePointCount(0, prefixTeam.length()) - (colors * 2 + hexColors * 8) > config.getInt("teamDescriptionMaxLength");
     }
 
 

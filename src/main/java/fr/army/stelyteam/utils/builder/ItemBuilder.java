@@ -85,7 +85,7 @@ public class ItemBuilder {
 		skullMeta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
 		skullMeta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
 		if(!lore.isEmpty()) {
-			List<String> loreList = (List<String>) lore;
+			List<String> loreList = lore;
 			skullMeta.setLore(loreList);
 		}
 
