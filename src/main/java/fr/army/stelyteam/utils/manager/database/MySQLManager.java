@@ -57,7 +57,7 @@ public class MySQLManager extends DatabaseManager {
     @Override
     public void init() throws ClassNotFoundException, SQLException{
         if(!isConnected()){
-            this.connection = DriverManager.getConnection("jdbc:mysql://"+this.host+"/"+this.database, this.user, this.password);
+            this.connection = DriverManager.getConnection("jdbc:mysql://"+this.host+"/"+this.database+"?autoReconnect=true", this.user, this.password);
         }
     }
 
