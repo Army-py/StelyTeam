@@ -62,15 +62,25 @@
         <dependency>
             <groupId>net.essentialsx</groupId>
             <artifactId>EssentialsX</artifactId>
-            <version>2.20.0-SNAPSHOT</version>
-            <scope>provided</scope>
+            <version>2.20.1</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.bstats</groupId>
+                    <artifactId>bstats-bukkit</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
             <groupId>net.essentialsx</groupId>
             <artifactId>EssentialsXChat</artifactId>
-            <version>2.20.0-SNAPSHOT</version>
-            <scope>provided</scope>
+            <version>2.20.1</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.bstats</groupId>
+                    <artifactId>bstats-bukkit</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -119,8 +129,8 @@
         <repository>
             <id>essentialsx-snapshots</id>
             <name>EssentialsX API Repository</name>
-            <url>https://repo.essentialsx.net/snapshots</url>
-        </repository> 
+            <url>https://repo.essentialsx.net/releases/</url>
+        </repository>
 
         <repository>
             <id>paper-repo</id>
